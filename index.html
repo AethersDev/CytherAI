@@ -23,19 +23,123 @@
             --card-bg: rgba(255,255,255,0.02);
             --card-border: rgba(255,255,255,0.08);
             --success: #20c997;
+            --hologram-cyan: #00fff9;
+            --hologram-magenta: #ff00ff;
         }
 
-        body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;background:var(--quantum-black);color:var(--thought-white);overflow-x:hidden;line-height:1.6;position:relative}
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+            background:var(--quantum-black);
+            color:var(--thought-white);
+            overflow-x:hidden;
+            line-height:1.6;
+            position:relative;
+        }
+
+        /* CRT Scanlines & Film Grain */
+        body::before{
+            content:'';
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            background:
+                repeating-linear-gradient(0deg, rgba(0,0,0,.1) 0px, transparent 1px, transparent 2px, rgba(0,0,0,.1) 3px),
+                repeating-linear-gradient(90deg, rgba(255,255,255,.03) 0px, transparent 1px);
+            pointer-events:none;
+            z-index:9999;
+            animation: scanlines 8s linear infinite;
+            opacity:.4;
+        }
+
+        @keyframes scanlines{
+            0%{ transform: translateY(0); }
+            100%{ transform: translateY(10px); }
+        }
+
+        /* Film grain noise */
+        body::after{
+            content:'';
+            position:fixed;
+            top:-50%;
+            left:-50%;
+            width:200%;
+            height:200%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.05"/></svg>');
+            pointer-events:none;
+            z-index:9998;
+            animation: grain 8s steps(10) infinite;
+        }
+
+        @keyframes grain{
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            20% { transform: translate(-15%, 5%); }
+            30% { transform: translate(7%, -25%); }
+            40% { transform: translate(-5%, 25%); }
+            50% { transform: translate(-15%, 10%); }
+            60% { transform: translate(15%, 0%); }
+            70% { transform: translate(0%, 15%); }
+            80% { transform: translate(3%, 35%); }
+            90% { transform: translate(-10%, 10%); }
+        }
+
         a{color:inherit}
 
-        /* Custom Cursor */
-        .thought-cursor{width:20px;height:20px;border:1px solid var(--synaptic-silver);border-radius:50%;position:fixed;pointer-events:none;z-index:10000;transition:transform .15s cubic-bezier(.25,.46,.45,.94);mix-blend-mode:difference}
-        .thought-trail{width:40px;height:40px;border:1px solid var(--consciousness-gold);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;opacity:.3;transition:transform .3s cubic-bezier(.25,.46,.45,.94)}
-        .cursor-ripple{position:fixed;width:20px;height:20px;border:1px solid var(--consciousness-gold);border-radius:50%;pointer-events:none;z-index:9998;animation:rippleExpand 1s ease-out forwards}
-        @keyframes rippleExpand{to{width:80px;height:80px;opacity:0;transform:translate(-30px,-30px)}}
+        /* Enhanced Custom Cursor with trails */
+        .thought-cursor{
+            width:20px;
+            height:20px;
+            border:1px solid var(--synaptic-silver);
+            border-radius:50%;
+            position:fixed;
+            pointer-events:none;
+            z-index:10000;
+            transition:transform .15s cubic-bezier(.25,.46,.45,.94);
+            mix-blend-mode:difference;
+            background: radial-gradient(circle, var(--hologram-cyan) 0%, transparent 70%);
+        }
 
-        /* Breathing */
-        .neural-breathe{animation:consciousnessBreathing var(--resonance-frequency) ease-in-out infinite}
+        .thought-trail{
+            width:40px;
+            height:40px;
+            border:1px solid var(--consciousness-gold);
+            border-radius:50%;
+            position:fixed;
+            pointer-events:none;
+            z-index:9999;
+            opacity:.3;
+            transition:transform .3s cubic-bezier(.25,.46,.45,.94);
+            background: radial-gradient(circle, var(--hologram-magenta) 0%, transparent 70%);
+        }
+
+        .cursor-ripple{
+            position:fixed;
+            width:20px;
+            height:20px;
+            border:1px solid var(--consciousness-gold);
+            border-radius:50%;
+            pointer-events:none;
+            z-index:9998;
+            animation:rippleExpand 1s ease-out forwards;
+            box-shadow: 0 0 20px var(--consciousness-gold);
+        }
+
+        @keyframes rippleExpand{
+            to{
+                width:80px;
+                height:80px;
+                opacity:0;
+                transform:translate(-30px,-30px);
+            }
+        }
+
+        /* Breathing with chromatic aberration */
+        .neural-breathe{
+            animation:consciousnessBreathing var(--resonance-frequency) ease-in-out infinite;
+        }
+
         @keyframes consciousnessBreathing{
             0%{opacity:.6;transform:scale(1);filter:brightness(.8)}
             25%{opacity:.7;transform:scale(1.02);filter:brightness(.9)}
@@ -43,131 +147,1062 @@
             100%{opacity:1;transform:scale(1);filter:brightness(1.1)}
         }
 
-        /* Nav */
-        nav{position:fixed;top:0;width:100%;padding:2rem 4rem;z-index:1000;background:transparent;backdrop-filter:blur(10px) brightness(.8);transition:all .5s cubic-bezier(.4,0,.2,1);border-bottom:1px solid rgba(255,255,255,.05)}
-        .nav-container{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
-        .nav-brand{font-size:1.2rem;font-weight:300;letter-spacing:.3em;color:var(--thought-white);position:relative;cursor:pointer}
-        .nav-brand::before{content:'◈';position:absolute;left:-30px;color:var(--consciousness-gold);animation:symbolRotate 10s linear infinite}
+        /* Enhanced Nav with glassmorphism */
+        nav{
+            position:fixed;
+            top:0;
+            width:100%;
+            padding:2rem 4rem;
+            z-index:1000;
+            background:rgba(0,0,0,.6);
+            backdrop-filter:blur(20px) saturate(180%) brightness(.8);
+            transition:all .5s cubic-bezier(.4,0,.2,1);
+            border-bottom:1px solid rgba(255,255,255,.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,.3);
+        }
+
+        .nav-container{
+            max-width:1400px;
+            margin:0 auto;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .nav-brand{
+            font-size:1.2rem;
+            font-weight:300;
+            letter-spacing:.3em;
+            color:var(--thought-white);
+            position:relative;
+            cursor:pointer;
+            transition: all .3s ease;
+        }
+
+        .nav-brand:hover{
+            text-shadow:
+                0 0 10px var(--hologram-cyan),
+                0 0 20px var(--hologram-cyan),
+                0 0 30px var(--consciousness-gold);
+            animation: chromatic-text .3s ease;
+        }
+
+        @keyframes chromatic-text{
+            0%, 100% { text-shadow: 0 0 10px var(--hologram-cyan); }
+            50% { text-shadow: -2px 0 var(--hologram-cyan), 2px 0 var(--hologram-magenta); }
+        }
+
+        .nav-brand::before{
+            content:'◈';
+            position:absolute;
+            left:-30px;
+            color:var(--consciousness-gold);
+            animation:symbolRotate 10s linear infinite;
+            filter: drop-shadow(0 0 10px var(--consciousness-gold));
+        }
+
         @keyframes symbolRotate{to{transform:rotate(360deg)}}
+
         .nav-links{display:flex;gap:3rem;list-style:none}
-        .nav-links a{color:var(--synaptic-silver);text-decoration:none;font-size:.9rem;letter-spacing:.15em;transition:all .3s ease;position:relative;cursor:pointer}
-        .nav-links a::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:0;height:1px;background:linear-gradient(90deg,transparent,var(--consciousness-gold),transparent);transition:width .3s ease}
-        .nav-links a:hover{color:var(--thought-white);text-shadow:0 0 10px rgba(255,255,255,.3)}
+
+        .nav-links a{
+            color:var(--synaptic-silver);
+            text-decoration:none;
+            font-size:.9rem;
+            letter-spacing:.15em;
+            transition:all .3s ease;
+            position:relative;
+            cursor:pointer;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a::after{
+            content:'';
+            position:absolute;
+            bottom:-5px;
+            left:50%;
+            transform:translateX(-50%);
+            width:0;
+            height:1px;
+            background:linear-gradient(90deg,transparent,var(--consciousness-gold),transparent);
+            transition:width .3s ease;
+            box-shadow: 0 0 10px var(--consciousness-gold);
+        }
+
+        .nav-links a:hover{
+            color:var(--thought-white);
+            text-shadow:0 0 10px rgba(255,255,255,.3);
+            transform: translateY(-2px);
+        }
+
         .nav-links a:hover::after{width:120%}
 
-        /* Hero */
-        .hero{min-height:100vh;position:relative;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:4rem 2rem;perspective:2000px}
-        .neural-field{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden}
-        .synapse-node{position:absolute;width:4px;height:4px;background:var(--synaptic-silver);border-radius:50%;opacity:.3;animation:synapticFire 8s ease-in-out infinite}
-        @keyframes synapticFire{0%,100%{opacity:.1;transform:scale(1);box-shadow:0 0 0 0 var(--neural-pulse)}50%{opacity:.8;transform:scale(1.5);box-shadow:0 0 20px 5px var(--emergence-glow)}}
-        .neural-connection{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--synaptic-silver),transparent);opacity:.1;transform-origin:left center;animation:neuralPulse 4s ease-in-out infinite}
-        @keyframes neuralPulse{0%,100%{opacity:.05}50%{opacity:.3}}
-        .quantum-grid{position:absolute;top:50%;left:50%;width:200%;height:200%;transform:translate(-50%,-50%) rotateX(75deg);transform-style:preserve-3d;opacity:.15;pointer-events:none}
-        .grid-plane{position:absolute;width:100%;height:100%;background-image:linear-gradient(var(--synaptic-silver) .5px,transparent .5px),linear-gradient(90deg,var(--synaptic-silver) .5px,transparent .5px);background-size:60px 60px;animation:gridFlow 20s linear infinite}
-        @keyframes gridFlow{to{transform:translate(60px,60px)}}
-        .grid-plane:nth-child(2){transform:translateZ(-100px);opacity:.5;animation-duration:25s}
-        .grid-plane:nth-child(3){transform:translateZ(-200px);opacity:.25;animation-duration:30s}
+        /* Hero with enhanced parallax */
+        .hero{
+            min-height:100vh;
+            position:relative;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            padding:4rem 2rem;
+            perspective:2000px;
+        }
 
-        /* Logo */
-        .logo-container{position:relative;margin-bottom:4rem;transform-style:preserve-3d;animation:logoFloat 6s ease-in-out infinite;z-index:100}
-        @keyframes logoFloat{0%,100%{transform:translateY(0) rotateY(0) scale(1)}25%{transform:translateY(-5px) rotateY(90deg) scale(1.05)}50%{transform:translateY(-10px) rotateY(180deg) scale(1.1)}75%{transform:translateY(-5px) rotateY(270deg) scale(1.05)}}
-        .crowned-nexus{width:200px;height:200px;position:relative;cursor:pointer}
-        .crown-structure{position:absolute;top:20%;left:50%;transform:translateX(-50%);width:120px;height:80px}
-        .crown-peak{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:0;border-left:25px solid transparent;border-right:25px solid transparent;border-bottom:45px solid var(--thought-white);filter:drop-shadow(0 0 20px var(--emergence-glow));animation:crownPulse 3s ease-in-out infinite}
-        @keyframes crownPulse{0%,100%{filter:drop-shadow(0 0 20px var(--emergence-glow));transform:translateX(-50%) scale(1)}50%{filter:drop-shadow(0 0 40px var(--consciousness-gold));transform:translateX(-50%) scale(1.1)}}
-        .crown-peak::before,.crown-peak::after{content:'';position:absolute;bottom:0;width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-bottom:35px solid var(--thought-white)}
-        .crown-peak::before{left:-40px} .crown-peak::after{right:-40px}
+        .neural-field{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            overflow:hidden;
+        }
 
-        .nexus-sphere{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);width:80px;height:80px;cursor:pointer}
-        .nexus-outer{width:100%;height:100%;border:2px solid var(--thought-white);border-radius:50%;position:relative;animation:nexusRotate 10s linear infinite;background:radial-gradient(circle at 30% 30%,var(--emergence-glow) 0%,transparent 50%)}
+        /* Enhanced synapse nodes with glow */
+        .synapse-node{
+            position:absolute;
+            width:4px;
+            height:4px;
+            background:var(--synaptic-silver);
+            border-radius:50%;
+            opacity:.3;
+            animation:synapticFire 8s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--hologram-cyan);
+            transition: all .3s ease;
+        }
+
+        @keyframes synapticFire{
+            0%,100%{
+                opacity:.1;
+                transform:scale(1);
+                box-shadow:0 0 0 0 var(--neural-pulse);
+            }
+            50%{
+                opacity:.8;
+                transform:scale(1.5);
+                box-shadow:0 0 20px 5px var(--emergence-glow), 0 0 30px var(--hologram-cyan);
+            }
+        }
+
+        /* Active neural connections to cursor */
+        .neural-connection{
+            position:absolute;
+            height:1px;
+            background:linear-gradient(90deg,transparent,var(--synaptic-silver),transparent);
+            opacity:.1;
+            transform-origin:left center;
+            animation:neuralPulse 4s ease-in-out infinite;
+            box-shadow: 0 0 5px var(--hologram-cyan);
+        }
+
+        .neural-connection.active{
+            background:linear-gradient(90deg,transparent,var(--hologram-cyan),transparent);
+            opacity:.6;
+            height:2px;
+            box-shadow: 0 0 10px var(--hologram-cyan), 0 0 20px var(--hologram-cyan);
+            animation: electricPulse .5s ease-in-out;
+        }
+
+        @keyframes electricPulse{
+            0%, 100%{ opacity: .3; }
+            50%{ opacity: 1; }
+        }
+
+        @keyframes neuralPulse{
+            0%,100%{opacity:.05}
+            50%{opacity:.3}
+        }
+
+        /* Enhanced 3D quantum grid with more depth */
+        .quantum-grid{
+            position:absolute;
+            top:50%;
+            left:50%;
+            width:200%;
+            height:200%;
+            transform:translate(-50%,-50%) rotateX(75deg);
+            transform-style:preserve-3d;
+            opacity:.15;
+            pointer-events:none;
+        }
+
+        .grid-plane{
+            position:absolute;
+            width:100%;
+            height:100%;
+            background-image:
+                linear-gradient(var(--consciousness-gold) .5px,transparent .5px),
+                linear-gradient(90deg,var(--consciousness-gold) .5px,transparent .5px);
+            background-size:60px 60px;
+            animation:gridFlow 20s linear infinite;
+            filter: drop-shadow(0 0 20px rgba(212,175,55,.3));
+        }
+
+        @keyframes gridFlow{
+            to{transform:translate(60px,60px)}
+        }
+
+        .grid-plane:nth-child(2){
+            transform:translateZ(-100px);
+            opacity:.5;
+            animation-duration:25s;
+        }
+
+        .grid-plane:nth-child(3){
+            transform:translateZ(-200px);
+            opacity:.25;
+            animation-duration:30s;
+        }
+
+        .grid-plane:nth-child(4){
+            transform:translateZ(-300px);
+            opacity:.15;
+            animation-duration:35s;
+            background-size: 80px 80px;
+        }
+
+        /* Enhanced Logo with holographic effect */
+        .logo-container{
+            position:relative;
+            margin-bottom:4rem;
+            transform-style:preserve-3d;
+            animation:logoFloat 6s ease-in-out infinite;
+            z-index:100;
+            filter: drop-shadow(0 20px 40px rgba(212,175,55,.4));
+        }
+
+        @keyframes logoFloat{
+            0%,100%{transform:translateY(0) rotateY(0) scale(1)}
+            25%{transform:translateY(-5px) rotateY(90deg) scale(1.05)}
+            50%{transform:translateY(-10px) rotateY(180deg) scale(1.1)}
+            75%{transform:translateY(-5px) rotateY(270deg) scale(1.05)}
+        }
+
+        .crowned-nexus{
+            width:200px;
+            height:200px;
+            position:relative;
+            cursor:pointer;
+        }
+
+        .crowned-nexus:hover{
+            animation: hologramGlitch .3s ease;
+        }
+
+        @keyframes hologramGlitch{
+            0%, 100%{ filter: none; }
+            25%{ filter: hue-rotate(90deg) drop-shadow(0 0 20px var(--hologram-cyan)); }
+            75%{ filter: hue-rotate(-90deg) drop-shadow(0 0 20px var(--hologram-magenta)); }
+        }
+
+        .crown-structure{
+            position:absolute;
+            top:20%;
+            left:50%;
+            transform:translateX(-50%);
+            width:120px;
+            height:80px;
+        }
+
+        .crown-peak{
+            position:absolute;
+            bottom:0;
+            left:50%;
+            transform:translateX(-50%);
+            width:0;
+            height:0;
+            border-left:25px solid transparent;
+            border-right:25px solid transparent;
+            border-bottom:45px solid var(--thought-white);
+            filter:drop-shadow(0 0 20px var(--emergence-glow)) drop-shadow(0 0 40px var(--hologram-cyan));
+            animation:crownPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes crownPulse{
+            0%,100%{
+                filter:drop-shadow(0 0 20px var(--emergence-glow));
+                transform:translateX(-50%) scale(1)
+            }
+            50%{
+                filter:drop-shadow(0 0 40px var(--consciousness-gold)) drop-shadow(0 0 60px var(--hologram-cyan));
+                transform:translateX(-50%) scale(1.1)
+            }
+        }
+
+        .crown-peak::before,.crown-peak::after{
+            content:'';
+            position:absolute;
+            bottom:0;
+            width:0;
+            height:0;
+            border-left:20px solid transparent;
+            border-right:20px solid transparent;
+            border-bottom:35px solid var(--thought-white);
+        }
+
+        .crown-peak::before{left:-40px}
+        .crown-peak::after{right:-40px}
+
+        .nexus-sphere{
+            position:absolute;
+            bottom:10%;
+            left:50%;
+            transform:translateX(-50%);
+            width:80px;
+            height:80px;
+            cursor:pointer;
+        }
+
+        .nexus-outer{
+            width:100%;
+            height:100%;
+            border:2px solid var(--thought-white);
+            border-radius:50%;
+            position:relative;
+            animation:nexusRotate 10s linear infinite;
+            background:radial-gradient(circle at 30% 30%,var(--emergence-glow) 0%,transparent 50%);
+            box-shadow:
+                inset 0 0 20px rgba(0,255,249,.2),
+                0 0 20px rgba(0,255,249,.3);
+        }
+
         @keyframes nexusRotate{to{transform:rotate(360deg)}}
-        .nexus-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:60%;height:60%;border:1px solid var(--consciousness-gold);border-radius:50%;animation:nexusRotate 7s linear infinite reverse}
-        .nexus-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:var(--consciousness-gold);border-radius:50%;box-shadow:0 0 30px var(--consciousness-gold),0 0 60px var(--emergence-glow);animation:corePulse 2s ease-in-out infinite}
-        @keyframes corePulse{0%,100%{transform:translate(-50%,-50%) scale(1);box-shadow:0 0 30px var(--consciousness-gold),0 0 60px var(--emergence-glow)}50%{transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 40px var(--consciousness-gold),0 0 80px var(--emergence-glow),0 0 120px rgba(212,175,55,.2)}}
-        .thought-particle{position:absolute;width:2px;height:2px;background:var(--consciousness-gold);border-radius:50%;pointer-events:none;animation:particleOrbit 20s linear infinite}
-        @keyframes particleOrbit{from{transform:rotate(0) translateX(100px) rotate(0)}to{transform:rotate(360deg) translateX(100px) rotate(-360deg)}}
 
-        /* Typography */
-        .hero-content{text-align:center;max-width:1000px;position:relative;z-index:10}
-        .hero-headline{font-size:4rem;font-weight:100;letter-spacing:.2em;margin-bottom:1rem;background:linear-gradient(180deg,var(--thought-white) 0%,var(--synaptic-silver) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:fadeInUp 1s ease-out;position:relative;cursor:default}
-        .hero-headline::before{content:attr(data-text);position:absolute;inset:0;background:linear-gradient(180deg,var(--consciousness-gold) 0%,transparent 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;opacity:0;animation:thoughtGlimmer 6s ease-in-out infinite}
-        @keyframes thoughtGlimmer{0%,100%{opacity:0}50%{opacity:.3}}
-        @keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-        .hero-subline{font-size:1.1rem;font-weight:200;letter-spacing:.4em;color:var(--synaptic-silver);margin-bottom:2rem;animation:fadeInUp 1s ease-out .2s both;position:relative}
-        .consciousness-indicator{display:inline-block;width:6px;height:6px;background:var(--consciousness-gold);border-radius:50%;margin:0 1rem;animation:consciousPulse 2s ease-in-out infinite}
-        @keyframes consciousPulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 var(--emergence-glow)}50%{transform:scale(1.5);box-shadow:0 0 0 10px transparent}}
-        .hero-description{font-size:.95rem;line-height:2;color:var(--synaptic-silver);letter-spacing:.1em;margin-bottom:3rem;animation:fadeInUp 1s ease-out .4s both}
-        .concept-tag{display:inline-block;padding:.2rem 1rem;margin:0 .5rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.02);border-radius:20px;transition:all .3s ease;cursor:default}
-        .concept-tag:hover{border-color:var(--consciousness-gold);background:var(--emergence-glow);transform:translateY(-2px);box-shadow:0 5px 20px rgba(212,175,55,.2)}
+        .nexus-inner{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:60%;
+            height:60%;
+            border:1px solid var(--consciousness-gold);
+            border-radius:50%;
+            animation:nexusRotate 7s linear infinite reverse;
+            box-shadow:
+                inset 0 0 10px rgba(255,0,255,.2),
+                0 0 10px rgba(255,0,255,.3);
+        }
 
-        /* Buttons */
-        .neural-interface{display:inline-block;padding:1.2rem 4rem;background:transparent;color:var(--thought-white);text-decoration:none;letter-spacing:.2em;font-size:.9rem;font-weight:300;position:relative;overflow:hidden;border:1px solid var(--synaptic-silver);animation:fadeInUp 1s ease-out .6s both;transition:all .5s cubic-bezier(.4,0,.2,1);cursor:pointer}
-        .neural-interface::before{content:'';position:absolute;top:50%;left:50%;width:0;height:0;background:radial-gradient(circle,var(--consciousness-gold),transparent);transition:all .5s ease;transform:translate(-50%,-50%);border-radius:50%}
-        .neural-interface:hover{color:var(--quantum-black);border-color:var(--consciousness-gold);box-shadow:0 0 30px var(--emergence-glow)}
-        .neural-interface:hover::before{width:400px;height:400px}
-        .neural-interface span{position:relative;z-index:1}
+        .nexus-core{
+            position:absolute;
+            top:50%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:12px;
+            height:12px;
+            background:var(--consciousness-gold);
+            border-radius:50%;
+            box-shadow:
+                0 0 30px var(--consciousness-gold),
+                0 0 60px var(--emergence-glow),
+                0 0 90px var(--hologram-cyan);
+            animation:corePulse 2s ease-in-out infinite;
+        }
 
-        /* Scroll Cue */
-        .consciousness-scroll{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);cursor:pointer}
-        .scroll-neural{width:30px;height:50px;border:2px solid var(--synaptic-silver);border-radius:25px;position:relative;animation:scrollPulse 2s ease-in-out infinite}
-        @keyframes scrollPulse{0%,100%{opacity:.5}50%{opacity:1}}
-        .scroll-synapse{width:4px;height:8px;background:var(--consciousness-gold);border-radius:2px;position:absolute;top:8px;left:50%;transform:translateX(-50%);animation:synapseScroll 2s ease-in-out infinite}
-        @keyframes synapseScroll{0%{top:8px;opacity:0}50%{opacity:1}100%{top:32px;opacity:0}}
+        @keyframes corePulse{
+            0%,100%{
+                transform:translate(-50%,-50%) scale(1);
+                box-shadow:
+                    0 0 30px var(--consciousness-gold),
+                    0 0 60px var(--emergence-glow)
+            }
+            50%{
+                transform:translate(-50%,-50%) scale(1.3);
+                box-shadow:
+                    0 0 40px var(--consciousness-gold),
+                    0 0 80px var(--emergence-glow),
+                    0 0 120px rgba(212,175,55,.2),
+                    0 0 150px var(--hologram-cyan)
+            }
+        }
 
-        /* Sections (placeholders to anchor nav) */
-        section.anchor{min-height:40vh;padding:6rem 2rem 4rem;max-width:1100px;margin:0 auto}
-        .section-title{font-weight:300;letter-spacing:.4em;color:var(--synaptic-silver);margin-bottom:1.5rem}
-        .section-body{color:var(--synaptic-silver)}
+        .thought-particle{
+            position:absolute;
+            width:2px;
+            height:2px;
+            background:var(--consciousness-gold);
+            border-radius:50%;
+            pointer-events:none;
+            animation:particleOrbit 20s linear infinite;
+            box-shadow: 0 0 10px var(--consciousness-gold);
+        }
 
-        /* Contact / Nexus */
+        @keyframes particleOrbit{
+            from{transform:rotate(0) translateX(100px) rotate(0)}
+            to{transform:rotate(360deg) translateX(100px) rotate(-360deg)}
+        }
+
+        /* Enhanced Typography with glitch effect */
+        .hero-content{
+            text-align:center;
+            max-width:1000px;
+            position:relative;
+            z-index:10;
+        }
+
+        .hero-headline{
+            font-size:4rem;
+            font-weight:100;
+            letter-spacing:.2em;
+            margin-bottom:1rem;
+            background:linear-gradient(180deg,var(--thought-white) 0%,var(--synaptic-silver) 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            animation:fadeInUp 1s ease-out;
+            position:relative;
+            cursor:default;
+        }
+
+        .hero-headline::before{
+            content:attr(data-text);
+            position:absolute;
+            inset:0;
+            background:linear-gradient(180deg,var(--consciousness-gold) 0%,transparent 100%);
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            opacity:0;
+            animation:thoughtGlimmer 6s ease-in-out infinite;
+        }
+
+        @keyframes thoughtGlimmer{
+            0%,100%{opacity:0}
+            50%{opacity:.3}
+        }
+
+        @keyframes fadeInUp{
+            from{opacity:0;transform:translateY(30px)}
+            to{opacity:1;transform:translateY(0)}
+        }
+
+        .hero-subline{
+            font-size:1.1rem;
+            font-weight:200;
+            letter-spacing:.4em;
+            color:var(--synaptic-silver);
+            margin-bottom:2rem;
+            animation:fadeInUp 1s ease-out .2s both;
+            position:relative;
+            text-shadow: 0 0 20px rgba(0,255,249,.3);
+        }
+
+        .consciousness-indicator{
+            display:inline-block;
+            width:6px;
+            height:6px;
+            background:var(--consciousness-gold);
+            border-radius:50%;
+            margin:0 1rem;
+            animation:consciousPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--consciousness-gold);
+        }
+
+        @keyframes consciousPulse{
+            0%,100%{
+                transform:scale(1);
+                box-shadow:0 0 0 0 var(--emergence-glow)
+            }
+            50%{
+                transform:scale(1.5);
+                box-shadow:0 0 0 10px transparent, 0 0 20px var(--consciousness-gold)
+            }
+        }
+
+        .hero-description{
+            font-size:.95rem;
+            line-height:2;
+            color:var(--synaptic-silver);
+            letter-spacing:.1em;
+            margin-bottom:3rem;
+            animation:fadeInUp 1s ease-out .4s both;
+        }
+
+        .concept-tag{
+            display:inline-block;
+            padding:.2rem 1rem;
+            margin:0 .5rem;
+            border:1px solid rgba(255,255,255,.1);
+            background:rgba(255,255,255,.02);
+            border-radius:20px;
+            transition:all .3s ease;
+            cursor:default;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .concept-tag::before{
+            content:'';
+            position:absolute;
+            top:-50%;
+            left:-50%;
+            width:200%;
+            height:200%;
+            background:conic-gradient(
+                transparent,
+                var(--hologram-cyan),
+                transparent 30%
+            );
+            animation: rotate 4s linear infinite;
+            opacity:0;
+            transition:opacity .3s ease;
+        }
+
+        @keyframes rotate{
+            100%{ transform:rotate(360deg); }
+        }
+
+        .concept-tag::after{
+            content:'';
+            position:absolute;
+            inset:1px;
+            background:var(--quantum-black);
+            border-radius:20px;
+        }
+
+        .concept-tag span{
+            position:relative;
+            z-index:1;
+        }
+
+        .concept-tag:hover{
+            border-color:var(--consciousness-gold);
+            background:var(--emergence-glow);
+            transform:translateY(-2px);
+            box-shadow:0 5px 20px rgba(212,175,55,.2);
+        }
+
+        .concept-tag:hover::before{
+            opacity:1;
+        }
+
+        /* Magnetic button with advanced effects */
+        .neural-interface{
+            display:inline-block;
+            padding:1.2rem 4rem;
+            background:transparent;
+            color:var(--thought-white);
+            text-decoration:none;
+            letter-spacing:.2em;
+            font-size:.9rem;
+            font-weight:300;
+            position:relative;
+            overflow:hidden;
+            border:1px solid var(--synaptic-silver);
+            animation:fadeInUp 1s ease-out .6s both;
+            transition:all .3s cubic-bezier(.4,0,.2,1);
+            cursor:pointer;
+        }
+
+        .neural-interface::before{
+            content:'';
+            position:absolute;
+            top:50%;
+            left:50%;
+            width:0;
+            height:0;
+            background:radial-gradient(circle,var(--consciousness-gold),transparent);
+            transition:all .5s ease;
+            transform:translate(-50%,-50%);
+            border-radius:50%;
+        }
+
+        .neural-interface::after{
+            content:'';
+            position:absolute;
+            inset:0;
+            background:linear-gradient(45deg, transparent, var(--hologram-cyan), transparent);
+            opacity:0;
+            transition:opacity .3s ease;
+        }
+
+        .neural-interface:hover{
+            color:var(--quantum-black);
+            border-color:var(--consciousness-gold);
+            box-shadow:
+                0 0 30px var(--emergence-glow),
+                0 0 60px rgba(0,255,249,.3),
+                0 10px 40px rgba(212,175,55,.4);
+            transform:translateY(-3px);
+        }
+
+        .neural-interface:hover::before{
+            width:400px;
+            height:400px;
+        }
+
+        .neural-interface:hover::after{
+            opacity:.3;
+            animation:shimmer 1.5s ease infinite;
+        }
+
+        @keyframes shimmer{
+            0%{ transform:translateX(-100%); }
+            100%{ transform:translateX(100%); }
+        }
+
+        .neural-interface span{
+            position:relative;
+            z-index:1;
+        }
+
+        /* Enhanced Scroll Cue */
+        .consciousness-scroll{
+            position:absolute;
+            bottom:2rem;
+            left:50%;
+            transform:translateX(-50%);
+            cursor:pointer;
+        }
+
+        .scroll-neural{
+            width:30px;
+            height:50px;
+            border:2px solid var(--synaptic-silver);
+            border-radius:25px;
+            position:relative;
+            animation:scrollPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(0,255,249,.3);
+        }
+
+        @keyframes scrollPulse{
+            0%,100%{opacity:.5}
+            50%{opacity:1}
+        }
+
+        .scroll-synapse{
+            width:4px;
+            height:8px;
+            background:var(--consciousness-gold);
+            border-radius:2px;
+            position:absolute;
+            top:8px;
+            left:50%;
+            transform:translateX(-50%);
+            animation:synapseScroll 2s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--consciousness-gold);
+        }
+
+        @keyframes synapseScroll{
+            0%{top:8px;opacity:0}
+            50%{opacity:1}
+            100%{top:32px;opacity:0}
+        }
+
+        /* Enhanced Sections with 3D cards */
+        section.anchor{
+            min-height:60vh;
+            padding:8rem 2rem 4rem;
+            max-width:1400px;
+            margin:0 auto;
+            position:relative;
+        }
+
+        .section-title{
+            font-weight:300;
+            letter-spacing:.4em;
+            color:var(--thought-white);
+            margin-bottom:3rem;
+            font-size:2.5rem;
+            text-align:center;
+            position:relative;
+            display:inline-block;
+            left:50%;
+            transform:translateX(-50%);
+        }
+
+        .section-title::after{
+            content:'';
+            position:absolute;
+            bottom:-10px;
+            left:0;
+            width:100%;
+            height:1px;
+            background:linear-gradient(90deg, transparent, var(--consciousness-gold), transparent);
+            box-shadow: 0 0 10px var(--consciousness-gold);
+        }
+
+        .section-body{
+            color:var(--synaptic-silver);
+            text-align:center;
+            font-size:1.1rem;
+            line-height:2;
+            margin-bottom:3rem;
+        }
+
+        /* 3D Holographic Cards */
+        .feature-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+            gap:2rem;
+            margin-top:3rem;
+        }
+
+        .feature-card{
+            background:rgba(255,255,255,.02);
+            border:1px solid rgba(255,255,255,.08);
+            padding:2rem;
+            border-radius:20px;
+            position:relative;
+            overflow:hidden;
+            transition:all .5s cubic-bezier(.4,0,.2,1);
+            transform-style:preserve-3d;
+            cursor:pointer;
+        }
+
+        .feature-card::before{
+            content:'';
+            position:absolute;
+            top:-50%;
+            left:-50%;
+            width:200%;
+            height:200%;
+            background:conic-gradient(
+                from 0deg,
+                transparent,
+                var(--hologram-cyan),
+                var(--hologram-magenta),
+                transparent 50%
+            );
+            animation:cardRotate 6s linear infinite;
+            opacity:0;
+            transition:opacity .5s ease;
+        }
+
+        @keyframes cardRotate{
+            100%{ transform:rotate(360deg); }
+        }
+
+        .feature-card::after{
+            content:'';
+            position:absolute;
+            inset:1px;
+            background:rgba(0,0,0,.9);
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+        }
+
+        .feature-card:hover{
+            transform:translateY(-10px) rotateX(5deg);
+            border-color:var(--consciousness-gold);
+            box-shadow:
+                0 20px 60px rgba(212,175,55,.3),
+                0 0 60px rgba(0,255,249,.2),
+                inset 0 0 60px rgba(212,175,55,.05);
+        }
+
+        .feature-card:hover::before{
+            opacity:.6;
+        }
+
+        .feature-content{
+            position:relative;
+            z-index:1;
+        }
+
+        .feature-icon{
+            width:60px;
+            height:60px;
+            margin:0 auto 1.5rem;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:2rem;
+            background:linear-gradient(135deg, var(--consciousness-gold), var(--hologram-cyan));
+            -webkit-background-clip:text;
+            -webkit-text-fill-color:transparent;
+            background-clip:text;
+            filter:drop-shadow(0 0 20px var(--consciousness-gold));
+        }
+
+        .feature-title{
+            font-size:1.3rem;
+            font-weight:300;
+            letter-spacing:.2em;
+            margin-bottom:1rem;
+            color:var(--thought-white);
+        }
+
+        .feature-desc{
+            color:var(--synaptic-silver);
+            line-height:1.8;
+            font-size:.95rem;
+        }
+
+        /* Contact / Nexus enhancements */
         #nexus{padding-top:8rem}
-        .contact-wrap{display:grid;grid-template-columns:1.4fr .6fr;gap:2rem}
-        .contact-card{background:var(--card-bg);border:1px solid var(--card-border);padding:2rem;border-radius:14px;backdrop-filter:blur(6px);transition:transform .3s ease, border-color .3s ease, box-shadow .3s ease}
-        .contact-card:hover{transform:translateY(-3px);border-color:var(--consciousness-gold);box-shadow:0 10px 30px rgba(212,175,55,.08)}
-        .contact-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
-        .contact-email{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;letter-spacing:.02em}
-        .pill{display:inline-block;padding:.25rem .7rem;border:1px solid var(--card-border);border-radius:999px;font-size:.75rem;color:var(--synaptic-silver)}
-        .cta{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem}
-        .btn{border:1px solid var(--synaptic-silver);padding:.7rem 1rem;border-radius:10px;background:transparent;letter-spacing:.12em;font-size:.85rem;cursor:pointer;transition:all .25s ease}
-        .btn:hover{border-color:var(--consciousness-gold);box-shadow:0 0 20px var(--emergence-glow)}
-        .btn.success{border-color:var(--success)}
-        .tiny{font-size:.8rem;color:var(--synaptic-silver)}
-        .form{display:grid;gap:.8rem;margin-top:1rem}
-        .input, .textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--card-border);color:var(--thought-white);padding:.9rem 1rem;border-radius:10px;outline:none}
-        .input:focus, .textarea:focus{border-color:var(--consciousness-gold);box-shadow:0 0 0 3px rgba(212,175,55,.1)}
-        .textarea{min-height:120px;resize:vertical}
-        .link-row{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1rem}
-        .ext-link{font-size:.9rem;color:var(--synaptic-silver);text-decoration:none;border-bottom:1px dotted var(--card-border)}
-        .ext-link:hover{color:var(--thought-white);border-bottom-color:var(--consciousness-gold)}
+
+        .contact-wrap{
+            display:grid;
+            grid-template-columns:1.4fr .6fr;
+            gap:2rem;
+        }
+
+        .contact-card{
+            background:rgba(255,255,255,.02);
+            border:1px solid rgba(255,255,255,.08);
+            padding:2rem;
+            border-radius:14px;
+            backdrop-filter:blur(10px);
+            transition:all .3s ease;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .contact-card::before{
+            content:'';
+            position:absolute;
+            top:0;
+            left:-100%;
+            width:100%;
+            height:100%;
+            background:linear-gradient(90deg, transparent, rgba(0,255,249,.1), transparent);
+            transition:left .6s ease;
+        }
+
+        .contact-card:hover{
+            transform:translateY(-3px);
+            border-color:var(--consciousness-gold);
+            box-shadow:0 10px 30px rgba(212,175,55,.08);
+        }
+
+        .contact-card:hover::before{
+            left:100%;
+        }
+
+        .contact-row{
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:1rem;
+            flex-wrap:wrap;
+            position:relative;
+            z-index:1;
+        }
+
+        .contact-email{
+            font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            letter-spacing:.02em;
+        }
+
+        .pill{
+            display:inline-block;
+            padding:.25rem .7rem;
+            border:1px solid rgba(255,255,255,.15);
+            border-radius:999px;
+            font-size:.75rem;
+            color:var(--synaptic-silver);
+            background:rgba(0,255,249,.05);
+            box-shadow:0 0 10px rgba(0,255,249,.1);
+        }
+
+        .cta{
+            display:flex;
+            gap:.8rem;
+            flex-wrap:wrap;
+            margin-top:1rem;
+        }
+
+        .btn{
+            border:1px solid var(--synaptic-silver);
+            padding:.7rem 1rem;
+            border-radius:10px;
+            background:transparent;
+            letter-spacing:.12em;
+            font-size:.85rem;
+            cursor:pointer;
+            transition:all .3s ease;
+            position:relative;
+            overflow:hidden;
+            color:var(--thought-white);
+            text-decoration:none;
+        }
+
+        .btn::before{
+            content:'';
+            position:absolute;
+            top:50%;
+            left:50%;
+            width:0;
+            height:0;
+            background:radial-gradient(circle, var(--consciousness-gold), transparent);
+            transform:translate(-50%, -50%);
+            transition:all .4s ease;
+            border-radius:50%;
+        }
+
+        .btn:hover{
+            border-color:var(--consciousness-gold);
+            box-shadow:0 0 20px var(--emergence-glow);
+            transform:translateY(-2px);
+        }
+
+        .btn:hover::before{
+            width:200px;
+            height:200px;
+        }
+
+        .btn span{
+            position:relative;
+            z-index:1;
+        }
+
+        .btn.success{
+            border-color:var(--success);
+            box-shadow:0 0 20px rgba(32,201,151,.3);
+        }
+
+        .tiny{
+            font-size:.8rem;
+            color:var(--synaptic-silver);
+        }
+
+        .form{
+            display:grid;
+            gap:.8rem;
+            margin-top:1rem;
+            position:relative;
+            z-index:1;
+        }
+
+        .input, .textarea{
+            width:100%;
+            background:rgba(255,255,255,.03);
+            border:1px solid rgba(255,255,255,.1);
+            color:var(--thought-white);
+            padding:.9rem 1rem;
+            border-radius:10px;
+            outline:none;
+            transition:all .3s ease;
+            font-family:inherit;
+        }
+
+        .input:focus, .textarea:focus{
+            border-color:var(--consciousness-gold);
+            box-shadow:
+                0 0 0 3px rgba(212,175,55,.1),
+                0 0 20px rgba(212,175,55,.2);
+            background:rgba(255,255,255,.05);
+        }
+
+        .textarea{
+            min-height:120px;
+            resize:vertical;
+        }
+
+        .link-row{
+            display:flex;
+            gap:1rem;
+            flex-wrap:wrap;
+            margin-top:1rem;
+        }
+
+        .ext-link{
+            font-size:.9rem;
+            color:var(--synaptic-silver);
+            text-decoration:none;
+            border-bottom:1px dotted rgba(255,255,255,.2);
+            transition:all .3s ease;
+            position:relative;
+        }
+
+        .ext-link:hover{
+            color:var(--thought-white);
+            border-bottom-color:var(--consciousness-gold);
+            text-shadow:0 0 10px rgba(0,255,249,.5);
+        }
 
         /* Footer */
-        footer{margin:4rem auto 2rem;max-width:1100px;padding:0 2rem;color:var(--synaptic-silver);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.06);padding-top:1.2rem}
+        footer{
+            margin:4rem auto 2rem;
+            max-width:1100px;
+            padding:0 2rem;
+            color:var(--synaptic-silver);
+            display:flex;
+            justify-content:space-between;
+            gap:1rem;
+            flex-wrap:wrap;
+            border-top:1px solid rgba(255,255,255,.06);
+            padding-top:1.2rem;
+        }
+
         .foot-left{letter-spacing:.18em}
         .foot-right{display:flex;gap:1rem;flex-wrap:wrap}
 
         /* Entanglement */
-        .quantum-entangle{position:fixed;pointer-events:none;z-index:10001;mix-blend-mode:screen}
-        .entangle-line{position:absolute;height:1px;background:linear-gradient(90deg,transparent,var(--consciousness-gold),transparent);transform-origin:left center;animation:entanglePulse 1s ease-out forwards}
-        @keyframes entanglePulse{0%{width:0;opacity:1}100%{width:200px;opacity:0}}
+        .quantum-entangle{
+            position:fixed;
+            pointer-events:none;
+            z-index:10001;
+            mix-blend-mode:screen;
+        }
+
+        .entangle-line{
+            position:absolute;
+            height:2px;
+            background:linear-gradient(90deg,transparent,var(--consciousness-gold),transparent);
+            transform-origin:left center;
+            animation:entanglePulse 1s ease-out forwards;
+            box-shadow:0 0 10px var(--consciousness-gold);
+        }
+
+        @keyframes entanglePulse{
+            0%{width:0;opacity:1}
+            100%{width:200px;opacity:0}
+        }
 
         /* Accessibility: reduced motion */
         @media (prefers-reduced-motion: reduce){
-            *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+            *,*::before,*::after{
+                animation-duration:.01ms !important;
+                animation-iteration-count:1 !important;
+                transition-duration:.01ms !important;
+            }
         }
 
         /* Responsive */
-        @media (max-width: 980px){ .contact-wrap{grid-template-columns:1fr} }
+        @media (max-width: 980px){
+            .contact-wrap{grid-template-columns:1fr}
+            .feature-grid{grid-template-columns:1fr}
+        }
+
         @media (max-width: 768px){
             .hero-headline{font-size:2.5rem;letter-spacing:.1em}
             .crowned-nexus{width:150px;height:150px}
             .concept-tag{display:block;margin:.5rem auto;max-width:200px}
+            nav{padding:1.5rem 2rem}
+            .nav-links{gap:1.5rem}
+            body::before, body::after{display:none}
         }
 
         /* Loading */
-        .neural-init{position:fixed;inset:0;background:var(--quantum-black);z-index:20000;display:flex;justify-content:center;align-items:center;animation:initFade 2s ease-out 1s forwards}
-        @keyframes initFade{to{opacity:0;visibility:hidden}}
-        .init-text{font-size:.9rem;letter-spacing:.3em;color:var(--synaptic-silver);animation:initPulse 1s ease-in-out infinite}
-        @keyframes initPulse{0%,100%{opacity:.3}50%{opacity:1}}
+        .neural-init{
+            position:fixed;
+            inset:0;
+            background:var(--quantum-black);
+            z-index:20000;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            animation:initFade 2s ease-out 1s forwards;
+        }
+
+        @keyframes initFade{
+            to{opacity:0;visibility:hidden}
+        }
+
+        .init-text{
+            font-size:.9rem;
+            letter-spacing:.3em;
+            color:var(--synaptic-silver);
+            animation:initPulse 1s ease-in-out infinite;
+            text-shadow:0 0 20px var(--hologram-cyan);
+        }
+
+        @keyframes initPulse{
+            0%,100%{opacity:.3}
+            50%{opacity:1}
+        }
     </style>
 
     <!-- Organization JSON-LD with contact -->
@@ -214,7 +1249,10 @@
             <div class="neural-field" id="neuralField"></div>
 
             <div class="quantum-grid" aria-hidden="true">
-                <div class="grid-plane"></div><div class="grid-plane"></div><div class="grid-plane"></div>
+                <div class="grid-plane"></div>
+                <div class="grid-plane"></div>
+                <div class="grid-plane"></div>
+                <div class="grid-plane"></div>
             </div>
 
             <div class="logo-container">
@@ -237,9 +1275,9 @@
                 <h1 class="hero-headline" data-text="WHERE THOUGHT BECOMES FORM">WHERE THOUGHT BECOMES FORM</h1>
                 <p class="hero-subline">CYTHERAI <span class="consciousness-indicator" aria-hidden="true"></span> NEURAL-SYMBOLIC CONSCIOUSNESS</p>
                 <div class="hero-description">
-                    <span class="concept-tag">VERIFIABLE REASONING</span>
-                    <span class="concept-tag">SOVEREIGN INTELLIGENCE</span>
-                    <span class="concept-tag">EMERGENT CONSCIOUSNESS</span>
+                    <span class="concept-tag"><span>VERIFIABLE REASONING</span></span>
+                    <span class="concept-tag"><span>SOVEREIGN INTELLIGENCE</span></span>
+                    <span class="concept-tag"><span>EMERGENT CONSCIOUSNESS</span></span>
                 </div>
                 <a href="#nexus" class="neural-interface"><span>INITIALIZE NEURAL INTERFACE</span></a>
             </div>
@@ -249,20 +1287,100 @@
             </div>
         </section>
 
-        <!-- Placeholder anchors (optional copy you can adjust later) -->
+        <!-- FOUNDATION -->
         <section id="foundation" class="anchor">
             <h2 class="section-title">FOUNDATION</h2>
             <p class="section-body">Local-first, proof-aware architecture. Deterministic cores; zero egress by default.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="feature-title">LOCAL-FIRST</h3>
+                        <p class="feature-desc">All processing happens on your infrastructure. No cloud dependency, no vendor lock-in. True data sovereignty.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">🔐</div>
+                        <h3 class="feature-title">PROOF-AWARE</h3>
+                        <p class="feature-desc">Every inference carries cryptographic proof. Verify reasoning chains, detect contradictions, replay any decision.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">⚙️</div>
+                        <h3 class="feature-title">DETERMINISTIC</h3>
+                        <p class="feature-desc">Same input, same output. Every time. Reproducible intelligence for mission-critical applications.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
+        <!-- INTELLIGENCE -->
         <section id="intelligence" class="anchor">
             <h2 class="section-title">INTELLIGENCE</h2>
             <p class="section-body">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">🧠</div>
+                        <h3 class="feature-title">NEURAL-SYMBOLIC</h3>
+                        <p class="feature-desc">Hybrid architecture combining deep learning intuition with symbolic logic precision.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">🔍</div>
+                        <h3 class="feature-title">CONTRADICTION DETECTION</h3>
+                        <p class="feature-desc">Built-in consistency checking prevents hallucinations and maintains logical coherence across reasoning chains.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">📜</div>
+                        <h3 class="feature-title">REPLAYABLE RECEIPTS</h3>
+                        <p class="feature-desc">Every decision includes an audit trail. Step through reasoning, verify conclusions, trust the process.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
+        <!-- SOVEREIGNTY -->
         <section id="sovereignty" class="anchor">
             <h2 class="section-title">SOVEREIGNTY</h2>
             <p class="section-body">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">🏠</div>
+                        <h3 class="feature-title">YOUR INFRASTRUCTURE</h3>
+                        <p class="feature-desc">Deploy on-premise or in your private cloud. Zero external API calls. Complete network isolation.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">💾</div>
+                        <h3 class="feature-title">YOUR WEIGHTS</h3>
+                        <p class="feature-desc">Model parameters stay with you. Fine-tune, adapt, evolve your intelligence without sharing proprietary data.</p>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-content">
+                        <div class="feature-icon">🌐</div>
+                        <h3 class="feature-title">YOUR MEMORY</h3>
+                        <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds over time.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- CONTACT / NEXUS -->
@@ -275,7 +1393,7 @@
                     <div class="contact-row">
                         <div>
                             <div class="pill" aria-hidden="true">PRIMARY CHANNEL</div>
-                            <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em">Reach the Team</h3>
+                            <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em;position:relative;z-index:1">Reach the Team</h3>
                         </div>
                         <div class="tiny">Riyadh (UTC+3)</div>
                     </div>
@@ -285,8 +1403,8 @@
                         <div class="contact-row" style="margin-top:.2rem">
                             <code id="contactEmail" class="contact-email">Aethersdev@cytherAi.com</code>
                             <div class="cta">
-                                <button class="btn" id="copyBtn" type="button" aria-label="Copy email">COPY</button>
-                                <a class="btn" id="mailtoBtn" href="mailto:Aethersdev@cytherAi.com?subject=CytherAI%20Inquiry&body=Hello%20CytherAI%20team%2C%0A%0A" rel="nofollow">EMAIL</a>
+                                <button class="btn" id="copyBtn" type="button" aria-label="Copy email"><span>COPY</span></button>
+                                <a class="btn" id="mailtoBtn" href="mailto:Aethersdev@cytherAi.com?subject=CytherAI%20Inquiry&body=Hello%20CytherAI%20team%2C%0A%0A" rel="nofollow"><span>EMAIL</span></a>
                             </div>
                         </div>
                     </div>
@@ -298,13 +1416,12 @@
                         <input class="input" id="qSubject" name="subject" placeholder="Subject (e.g., Pilot, Partnership, Press)" />
                         <textarea class="textarea" id="qMessage" name="message" placeholder="A few lines about your request…"></textarea>
                         <div class="cta">
-                            <button class="btn" type="submit">COMPOSE EMAIL</button>
+                            <button class="btn" type="submit"><span>COMPOSE EMAIL</span></button>
                             <span id="copyNotice" class="tiny" role="status" aria-live="polite"></span>
                         </div>
                     </form>
 
                     <div class="link-row" aria-label="External links">
-                        <!-- Replace # with real profiles when ready -->
                         <a class="ext-link" href="#" aria-label="CytherAI on LinkedIn">LinkedIn</a>
                         <a class="ext-link" href="#" aria-label="CytherAI on X">X</a>
                         <a class="ext-link" href="#" aria-label="CytherAI on GitHub">GitHub</a>
@@ -314,8 +1431,8 @@
                 <!-- Right: Signals Card -->
                 <div class="contact-card">
                     <div class="pill" aria-hidden="true">SIGNALS</div>
-                    <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em">Status & Signals</h3>
-                    <ul class="tiny" style="margin-top:.8rem;list-style:none;display:grid;gap:.35rem">
+                    <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em;position:relative;z-index:1">Status & Signals</h3>
+                    <ul class="tiny" style="margin-top:.8rem;list-style:none;display:grid;gap:.35rem;position:relative;z-index:1">
                         <li>• Local-first mode: <strong>ENABLED</strong></li>
                         <li>• Egress: <strong>0</strong></li>
                         <li>• Proof-gate: <strong>ACTIVE</strong></li>
@@ -323,13 +1440,13 @@
                     </ul>
 
                     <div class="cta" style="margin-top:1rem">
-                        <a class="btn" href="#foundation">FOUNDATION</a>
-                        <a class="btn" href="#intelligence">INTELLIGENCE</a>
-                        <a class="btn" href="#sovereignty">SOVEREIGNTY</a>
+                        <a class="btn" href="#foundation"><span>FOUNDATION</span></a>
+                        <a class="btn" href="#intelligence"><span>INTELLIGENCE</span></a>
+                        <a class="btn" href="#sovereignty"><span>SOVEREIGNTY</span></a>
                     </div>
 
-                    <p class="tiny" style="margin-top:1rem">
-                        Prefer encrypted mail? Let us know in your subject (e.g., “PGP REQUEST”), and we’ll reply with a key and fingerprint.
+                    <p class="tiny" style="margin-top:1rem;position:relative;z-index:1">
+                        Prefer encrypted mail? Let us know in your subject (e.g., "PGP REQUEST"), and we'll reply with a key and fingerprint.
                     </p>
                 </div>
             </div>
@@ -351,24 +1468,40 @@
         // Year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Neural Field Generation
+        // Neural Field Generation with cursor attraction
+        let nodes = [];
+        let mousePos = {x: 0, y: 0};
+
         function generateNeuralField(){
             const field = document.getElementById('neuralField');
-            const nodeCount = 50; const nodes=[];
+            const nodeCount = 60;
+
             for(let i=0;i<nodeCount;i++){
                 const node=document.createElement('div');
                 node.className='synapse-node';
-                node.style.left=Math.random()*100+'%';
-                node.style.top=Math.random()*100+'%';
+                const x = Math.random()*100;
+                const y = Math.random()*100;
+                node.style.left = x + '%';
+                node.style.top = y + '%';
                 node.style.animationDelay=Math.random()*8+'s';
                 field.appendChild(node);
-                nodes.push({element:node,x:parseFloat(node.style.left),y:parseFloat(node.style.top)});
+                nodes.push({
+                    element: node,
+                    x: x,
+                    y: y,
+                    baseX: x,
+                    baseY: y
+                });
             }
+
+            // Create connections
             for(let i=0;i<nodes.length;i++){
                 for(let j=i+1;j<nodes.length;j++){
-                    const dx=nodes[j].x-nodes[i].x; const dy=nodes[j].y-nodes[i].y;
+                    const dx=nodes[j].x-nodes[i].x;
+                    const dy=nodes[j].y-nodes[i].y;
                     const distance=Math.sqrt(dx*dx+dy*dy);
-                    if(distance<30&&Math.random()>.5){
+
+                    if(distance<25&&Math.random()>.6){
                         const connection=document.createElement('div');
                         connection.className='neural-connection';
                         connection.style.left=nodes[i].x+'%';
@@ -376,164 +1509,391 @@
                         connection.style.width=distance+'%';
                         connection.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
                         connection.style.animationDelay=Math.random()*4+'s';
+                        connection.dataset.from = i;
+                        connection.dataset.to = j;
                         field.appendChild(connection);
                     }
                 }
             }
         }
 
-        // Cursor
+        // Enhanced cursor with magnetic effect
         const cursor=document.querySelector('.thought-cursor');
         const trail=document.querySelector('.thought-trail');
-        let mouseX=0,mouseY=0,cursorX=0,cursorY=0,trailX=0,trailY=0;
-        document.addEventListener('mousemove',e=>{mouseX=e.clientX;mouseY=e.clientY;if(Math.random()>.95){createRipple(mouseX,mouseY);}});
+        let mouseX=0, mouseY=0, cursorX=0, cursorY=0, trailX=0, trailY=0;
+
+        document.addEventListener('mousemove', e => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            // Update mouse position for neural field
+            mousePos.x = (e.clientX / window.innerWidth) * 100;
+            mousePos.y = ((e.clientY + window.scrollY) / document.body.scrollHeight) * 100;
+
+            if(Math.random() > .97){
+                createRipple(mouseX, mouseY);
+            }
+
+            // Attract nearby nodes
+            attractNodes();
+
+            // Magnetic button effect
+            magneticButtons(e);
+        });
+
+        function attractNodes(){
+            const field = document.getElementById('neuralField');
+            if(!field) return;
+
+            const connections = field.querySelectorAll('.neural-connection');
+
+            nodes.forEach((node, index) => {
+                const dx = mousePos.x - node.x;
+                const dy = mousePos.y - node.y;
+                const distance = Math.sqrt(dx*dx + dy*dy);
+
+                if(distance < 20){
+                    // Attract node towards cursor
+                    const force = (20 - distance) / 20;
+                    node.x = node.baseX + dx * force * 0.3;
+                    node.y = node.baseY + dy * force * 0.3;
+                    node.element.style.left = node.x + '%';
+                    node.element.style.top = node.y + '%';
+                    node.element.style.transform = 'scale(1.5)';
+                    node.element.style.opacity = '1';
+
+                    // Highlight connections
+                    connections.forEach(conn => {
+                        if(conn.dataset.from == index || conn.dataset.to == index){
+                            conn.classList.add('active');
+                            setTimeout(() => conn.classList.remove('active'), 500);
+                        }
+                    });
+                } else {
+                    // Return to base position
+                    node.x += (node.baseX - node.x) * 0.1;
+                    node.y += (node.baseY - node.y) * 0.1;
+                    node.element.style.left = node.x + '%';
+                    node.element.style.top = node.y + '%';
+                    node.element.style.transform = 'scale(1)';
+                }
+            });
+        }
+
+        function magneticButtons(e){
+            document.querySelectorAll('.btn, .neural-interface').forEach(btn => {
+                const rect = btn.getBoundingClientRect();
+                const btnCenterX = rect.left + rect.width / 2;
+                const btnCenterY = rect.top + rect.height / 2;
+                const distanceX = e.clientX - btnCenterX;
+                const distanceY = e.clientY - btnCenterY;
+                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+                if(distance < 150){
+                    const force = (150 - distance) / 150;
+                    const moveX = distanceX * force * 0.3;
+                    const moveY = distanceY * force * 0.3;
+                    btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                } else {
+                    btn.style.transform = 'translate(0, 0)';
+                }
+            });
+        }
+
         function animateCursor(){
-            cursorX+=(mouseX-cursorX)*0.2; cursorY+=(mouseY-cursorY)*0.2;
-            cursor.style.left=(cursorX-10)+'px'; cursor.style.top=(cursorY-10)+'px';
-            trailX+=(mouseX-trailX)*0.08; trailY+=(mouseY-trailY)*0.08;
-            trail.style.left=(trailX-20)+'px'; trail.style.top=(trailY-20)+'px';
+            cursorX += (mouseX - cursorX) * 0.2;
+            cursorY += (mouseY - cursorY) * 0.2;
+            cursor.style.left = (cursorX - 10) + 'px';
+            cursor.style.top = (cursorY - 10) + 'px';
+
+            trailX += (mouseX - trailX) * 0.08;
+            trailY += (mouseY - trailY) * 0.08;
+            trail.style.left = (trailX - 20) + 'px';
+            trail.style.top = (trailY - 20) + 'px';
+
             requestAnimationFrame(animateCursor);
-        } animateCursor();
-        function createRipple(x,y){
-            const ripple=document.createElement('div');
-            ripple.className='cursor-ripple'; ripple.style.left=(x-10)+'px'; ripple.style.top=(y-10)+'px';
-            document.body.appendChild(ripple); setTimeout(()=>ripple.remove(),1000);
+        }
+        animateCursor();
+
+        function createRipple(x, y){
+            const ripple = document.createElement('div');
+            ripple.className = 'cursor-ripple';
+            ripple.style.left = (x - 10) + 'px';
+            ripple.style.top = (y - 10) + 'px';
+            document.body.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 1000);
         }
 
-        // Grid Parallax
-        document.addEventListener('mousemove',e=>{
-            const grid=document.querySelector('.quantum-grid');
-            const x=(e.clientX/window.innerWidth-0.5)*30;
-            const y=(e.clientY/window.innerHeight-0.5)*30;
-            if(grid){grid.style.transform=`translate(-50%,-50%) rotateX(${75+y}deg) rotateZ(${x}deg)`;}
-        });
-
-        // CTA Entanglement
-        document.querySelector('.neural-interface').addEventListener('click',e=>{
-            e.preventDefault();
-            const rect=e.target.getBoundingClientRect();
-            const cx=rect.left+rect.width/2; const cy=rect.top+rect.height/2;
-            for(let i=0;i<8;i++){ setTimeout(()=>createEntanglementLine(cx,cy,i*45), i*50); }
-            setTimeout(()=>{ document.body.style.filter='brightness(2)'; setTimeout(()=>{document.body.style.filter='brightness(1)';},200); },400);
-            document.querySelector('#nexus').scrollIntoView({behavior:'smooth',block:'start'});
-        });
-        function createEntanglementLine(x,y,angle){
-            const c=document.getElementById('quantumEntangle'); const line=document.createElement('div');
-            line.className='entangle-line'; line.style.left=x+'px'; line.style.top=y+'px';
-            line.style.transform=`rotate(${angle}deg)`; c.appendChild(line); setTimeout(()=>line.remove(),1000);
-        }
-
-        // Logo interactions
-        const nexus=document.querySelector('.crowned-nexus');
-        nexus.addEventListener('mouseenter',()=>{document.querySelectorAll('.thought-particle').forEach(p=>p.style.animationDuration='5s');});
-        nexus.addEventListener('mouseleave',()=>{document.querySelectorAll('.thought-particle').forEach(p=>p.style.animationDuration='20s');});
-        nexus.addEventListener('click',()=>{
-            const core=document.querySelector('.nexus-core'); core.style.animation='none';
-            setTimeout(()=>{core.style.animation='corePulse .5s ease-in-out infinite';},10);
-            for(let i=0;i<3;i++){
-                setTimeout(()=>{
-                    const wave=document.createElement('div');
-                    wave.style.cssText=`position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border:1px solid var(--consciousness-gold);border-radius:50%;animation:consciousnessWave 2s ease-out forwards;pointer-events:none;`;
-                    nexus.appendChild(wave); setTimeout(()=>wave.remove(),2000);
-                }, i*200);
+        // Enhanced Grid Parallax with depth
+        document.addEventListener('mousemove', e => {
+            const grid = document.querySelector('.quantum-grid');
+            const x = (e.clientX / window.innerWidth - 0.5) * 40;
+            const y = (e.clientY / window.innerHeight - 0.5) * 40;
+            if(grid){
+                grid.style.transform = `translate(-50%, -50%) rotateX(${75 + y}deg) rotateZ(${x}deg)`;
             }
         });
-        const style=document.createElement('style'); style.textContent=`@keyframes consciousnessWave{to{width:400px;height:400px;opacity:0;border-width:.5px}}`; document.head.appendChild(style);
 
-        // Nav on scroll
-        let ticking=false;
-        function updateNav(){
-            const nav=document.querySelector('nav'); const y=window.pageYOffset;
-            if(y>100){nav.style.background='rgba(0,0,0,.95)'; nav.style.backdropFilter='blur(20px) brightness(.6)';}
-            else{nav.style.background='transparent'; nav.style.backdropFilter='blur(10px) brightness(.8)';}
-            ticking=false;
+        // Enhanced CTA Entanglement
+        document.querySelector('.neural-interface').addEventListener('click', e => {
+            e.preventDefault();
+            const rect = e.target.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            // Create more entanglement lines
+            for(let i = 0; i < 12; i++){
+                setTimeout(() => createEntanglementLine(cx, cy, i * 30), i * 40);
+            }
+
+            // Enhanced flash effect
+            setTimeout(() => {
+                document.body.style.filter = 'brightness(1.5) saturate(2)';
+                setTimeout(() => {
+                    document.body.style.filter = 'brightness(1)';
+                }, 200);
+            }, 480);
+
+            document.querySelector('#nexus').scrollIntoView({behavior: 'smooth', block: 'start'});
+        });
+
+        function createEntanglementLine(x, y, angle){
+            const c = document.getElementById('quantumEntangle');
+            const line = document.createElement('div');
+            line.className = 'entangle-line';
+            line.style.left = x + 'px';
+            line.style.top = y + 'px';
+            line.style.transform = `rotate(${angle}deg)`;
+            c.appendChild(line);
+            setTimeout(() => line.remove(), 1000);
         }
-        window.addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(updateNav); ticking=true; } });
 
-        // Smooth section scroll + blink synapses
-        document.querySelectorAll('a[href^="#"]').forEach(a=>{
-            a.addEventListener('click',function(e){
-                if(this.getAttribute('href')==='#') return;
+        // Enhanced Logo interactions
+        const nexus = document.querySelector('.crowned-nexus');
+
+        nexus.addEventListener('mouseenter', () => {
+            document.querySelectorAll('.thought-particle').forEach(p => {
+                p.style.animationDuration = '5s';
+            });
+        });
+
+        nexus.addEventListener('mouseleave', () => {
+            document.querySelectorAll('.thought-particle').forEach(p => {
+                p.style.animationDuration = '20s';
+            });
+        });
+
+        nexus.addEventListener('click', () => {
+            const core = document.querySelector('.nexus-core');
+            core.style.animation = 'none';
+            setTimeout(() => {
+                core.style.animation = 'corePulse .5s ease-in-out infinite';
+            }, 10);
+
+            // Create consciousness waves
+            for(let i = 0; i < 5; i++){
+                setTimeout(() => {
+                    const wave = document.createElement('div');
+                    wave.style.cssText = `
+                        position:absolute;
+                        top:50%;
+                        left:50%;
+                        transform:translate(-50%,-50%);
+                        width:80px;
+                        height:80px;
+                        border:2px solid var(--consciousness-gold);
+                        border-radius:50%;
+                        animation:consciousnessWave 2s ease-out forwards;
+                        pointer-events:none;
+                        box-shadow: 0 0 20px var(--consciousness-gold);
+                    `;
+                    nexus.appendChild(wave);
+                    setTimeout(() => wave.remove(), 2000);
+                }, i * 150);
+            }
+        });
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes consciousnessWave{
+                to{
+                    width:400px;
+                    height:400px;
+                    opacity:0;
+                    border-width:.5px
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Nav on scroll with enhanced effect
+        let ticking = false;
+
+        function updateNav(){
+            const nav = document.querySelector('nav');
+            const y = window.pageYOffset;
+
+            if(y > 100){
+                nav.style.background = 'rgba(0,0,0,.95)';
+                nav.style.backdropFilter = 'blur(30px) saturate(180%) brightness(.6)';
+                nav.style.boxShadow = '0 10px 60px rgba(0,0,0,.5)';
+            } else {
+                nav.style.background = 'rgba(0,0,0,.6)';
+                nav.style.backdropFilter = 'blur(20px) saturate(180%) brightness(.8)';
+                nav.style.boxShadow = '0 10px 40px rgba(0,0,0,.3)';
+            }
+
+            ticking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if(!ticking){
+                requestAnimationFrame(updateNav);
+                ticking = true;
+            }
+        });
+
+        // Smooth section scroll + enhanced blink synapses
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e){
+                if(this.getAttribute('href') === '#') return;
                 e.preventDefault();
-                const target=document.querySelector(this.getAttribute('href'));
+
+                const target = document.querySelector(this.getAttribute('href'));
                 if(target){
-                    document.querySelectorAll('.synapse-node').forEach(node=>{
-                        node.style.animation='none'; setTimeout(()=>{ node.style.animation='synapticFire .5s ease-in-out'; }, Math.random()*200);
+                    // Enhanced synapse firing
+                    document.querySelectorAll('.synapse-node').forEach((node, index) => {
+                        setTimeout(() => {
+                            node.style.animation = 'none';
+                            setTimeout(() => {
+                                node.style.animation = 'synapticFire .5s ease-in-out';
+                            }, 10);
+                        }, index * 20);
                     });
-                    target.scrollIntoView({behavior:'smooth',block:'start'});
+
+                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
                 }
             });
         });
 
-        // Breathing sync
-        let breathPhase=0;
-        setInterval(()=>{
-            breathPhase=(breathPhase+1)%4;
-            document.documentElement.style.setProperty('--breath-phase',breathPhase);
-            if(breathPhase===0){
-                document.querySelectorAll('.neural-connection').forEach((c,i)=>{
-                    setTimeout(()=>{ c.style.opacity='.3'; setTimeout(()=>{ c.style.opacity='.1'; },1000); }, i*10);
+        // Breathing sync with enhanced effects
+        let breathPhase = 0;
+
+        setInterval(() => {
+            breathPhase = (breathPhase + 1) % 4;
+            document.documentElement.style.setProperty('--breath-phase', breathPhase);
+
+            if(breathPhase === 0){
+                document.querySelectorAll('.neural-connection').forEach((c, i) => {
+                    setTimeout(() => {
+                        c.style.opacity = '.4';
+                        c.style.boxShadow = '0 0 10px var(--hologram-cyan)';
+                        setTimeout(() => {
+                            c.style.opacity = '.1';
+                            c.style.boxShadow = '0 0 5px var(--hologram-cyan)';
+                        }, 1000);
+                    }, i * 8);
                 });
             }
-        },1500);
+        }, 1500);
 
-        // Init
-        window.addEventListener('load',()=>{
-            generateNeuralField();
-            setTimeout(()=>{
-                const init=document.querySelector('.neural-init');
-                if(init){ init.style.animation='initFade 1s ease-out forwards'; setTimeout(()=>init.remove(),1000); }
-            },1500);
+        // Parallax scrolling for sections
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.feature-card');
+
+            parallaxElements.forEach((el, index) => {
+                const rect = el.getBoundingClientRect();
+                const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
+
+                if(scrollPercent > 0 && scrollPercent < 1){
+                    const translateY = (scrollPercent - 0.5) * 50;
+                    el.style.transform = `translateY(${translateY}px)`;
+                }
+            });
         });
 
-        // Perf loop (placeholder)
-        let rafId; function optimizedAnimation(){ rafId=requestAnimationFrame(optimizedAnimation); } optimizedAnimation();
-        window.addEventListener('beforeunload',()=>cancelAnimationFrame(rafId));
+        // Init
+        window.addEventListener('load', () => {
+            generateNeuralField();
+
+            setTimeout(() => {
+                const init = document.querySelector('.neural-init');
+                if(init){
+                    init.style.animation = 'initFade 1s ease-out forwards';
+                    setTimeout(() => init.remove(), 1000);
+                }
+            }, 1500);
+        });
 
         // --- CONTACT HELPERS ---
         function copyToClipboard(text){
             try{
-                navigator.clipboard.writeText(text).then(()=>{
-                    flashCopy('Copied'); setBtnSuccess();
-                }).catch(()=>{
+                navigator.clipboard.writeText(text).then(() => {
+                    flashCopy('Copied');
+                    setBtnSuccess();
+                }).catch(() => {
                     // Fallback
-                    const ta=document.createElement('textarea');
-                    ta.value=text; document.body.appendChild(ta); ta.select();
-                    try{ document.execCommand('copy'); flashCopy('Copied'); setBtnSuccess(); }
-                    catch(e){ flashCopy('Select & copy failed'); }
-                    finally{ ta.remove(); }
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    document.body.appendChild(ta);
+                    ta.select();
+                    try{
+                        document.execCommand('copy');
+                        flashCopy('Copied');
+                        setBtnSuccess();
+                    } catch(e){
+                        flashCopy('Select & copy failed');
+                    } finally{
+                        ta.remove();
+                    }
                 });
-            }catch{ flashCopy('Copy not available'); }
+            } catch{
+                flashCopy('Copy not available');
+            }
         }
+
         function setBtnSuccess(){
-            const btn=document.getElementById('copyBtn');
-            btn.classList.add('success'); btn.textContent='COPIED';
-            setTimeout(()=>{ btn.classList.remove('success'); btn.textContent='COPY'; },1500);
+            const btn = document.getElementById('copyBtn');
+            btn.classList.add('success');
+            btn.querySelector('span').textContent = 'COPIED';
+            setTimeout(() => {
+                btn.classList.remove('success');
+                btn.querySelector('span').textContent = 'COPY';
+            }, 1500);
         }
+
         function flashCopy(msg){
-            const n=document.getElementById('copyNotice'); n.textContent=msg; setTimeout(()=>{n.textContent='';},1600);
+            const n = document.getElementById('copyNotice');
+            n.textContent = msg;
+            setTimeout(() => {n.textContent = '';}, 1600);
         }
-        document.getElementById('copyBtn').addEventListener('click',()=>copyToClipboard(document.getElementById('contactEmail').textContent.trim()));
+
+        document.getElementById('copyBtn').addEventListener('click', () => {
+            copyToClipboard(document.getElementById('contactEmail').textContent.trim());
+        });
 
         function composeMail(e){
             e.preventDefault();
-            const name=encodeURIComponent(document.getElementById('qName').value.trim());
-            const org=encodeURIComponent(document.getElementById('qCompany').value.trim());
-            const subjRaw=document.getElementById('qSubject').value.trim() || 'CytherAI Inquiry';
-            const subject=encodeURIComponent(subjRaw);
-            const message=document.getElementById('qMessage').value.trim();
-            const body=encodeURIComponent(
+            const name = encodeURIComponent(document.getElementById('qName').value.trim());
+            const org = encodeURIComponent(document.getElementById('qCompany').value.trim());
+            const subjRaw = document.getElementById('qSubject').value.trim() || 'CytherAI Inquiry';
+            const subject = encodeURIComponent(subjRaw);
+            const message = document.getElementById('qMessage').value.trim();
+
+            const body = encodeURIComponent(
 `Hello CytherAI team,
 
-Name: ${decodeURIComponent(name)||'-'}
-Organization: ${decodeURIComponent(org)||'-'}
+Name: ${decodeURIComponent(name) || '-'}
+Organization: ${decodeURIComponent(org) || '-'}
 
 ${message || '(your message here)'}
 
 — Sent from cytherai.com`
             );
-            const mailto=`mailto:Aethersdev@cytherAi.com?subject=${subject}&body=${body}`;
-            window.location.href=mailto;
+
+            const mailto = `mailto:Aethersdev@cytherAi.com?subject=${subject}&body=${body}`;
+            window.location.href = mailto;
             return false;
         }
     </script>
