@@ -15,6 +15,15 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
 
+        /* Performance: CSS Containment for better rendering */
+        .feature-card, .contact-card, .crowned-nexus { contain: layout style paint; }
+        .neural-field { contain: layout paint; will-change: auto; }
+
+        /* Performance: Optimize frequently animated elements */
+        .thought-cursor, .thought-trail { will-change: transform; }
+        .synapse-node { will-change: transform, opacity; }
+        .quantum-grid { will-change: transform; contain: layout style paint; }
+
         :root{
             --quantum-black:#000; --void-black:#050505; --neural-grey:#1a1a1a;
             --synaptic-silver:#8a8a8a; --thought-white:#fff; --consciousness-gold:#D4AF37;
@@ -1172,7 +1181,25 @@
             .concept-tag{display:block;margin:.5rem auto;max-width:200px}
             nav{padding:1.5rem 2rem}
             .nav-links{gap:1.5rem}
+
+            /* Performance: Disable expensive effects on mobile */
             body::before, body::after{display:none}
+            .quantum-grid{opacity:.05 !important}
+            .grid-plane:nth-child(3), .grid-plane:nth-child(4){display:none}
+            .feature-card::before{animation:none !important}
+            .thought-cursor, .thought-trail{display:none}
+            *{cursor:auto !important}
+
+            /* Simplify animations on mobile */
+            .synapse-node{animation-duration:12s !important}
+            .neural-connection{display:none}
+            .logo-container{animation:logoFloatSimple 8s ease-in-out infinite}
+        }
+
+        /* Simplified logo animation for mobile */
+        @keyframes logoFloatSimple{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-10px)}
         }
 
         /* Loading */
@@ -1465,16 +1492,40 @@
     <div class="quantum-entangle" id="quantumEntangle" aria-hidden="true"></div>
 
     <script>
+        /*
+         * PERFORMANCE OPTIMIZATIONS:
+         * - Mobile device detection to reduce expensive effects
+         * - Reduced neural nodes: 25 on mobile vs 60 on desktop
+         * - Disabled custom cursor and trails on touch devices
+         * - Throttled mousemove events (16ms/60fps) with passive listeners
+         * - Simplified backdrop-filter on mobile
+         * - Disabled neural connections on mobile
+         * - Reduced entanglement lines: 6 on mobile vs 12 on desktop
+         * - Slower animation intervals on mobile (3s vs 1.5s)
+         * - Disabled parallax effects on mobile and reduced-motion preference
+         * - CSS containment for better paint performance
+         * - will-change properties for frequently animated elements
+         * - Passive scroll listeners for better scroll performance
+         * - Cached DOM queries to reduce reflows
+         */
+
+        // Performance: Device detection
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         // Year
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        // Neural Field Generation with cursor attraction
+        // Neural Field Generation with cursor attraction (optimized)
         let nodes = [];
         let mousePos = {x: 0, y: 0};
+        let animationFrameId = null;
 
         function generateNeuralField(){
             const field = document.getElementById('neuralField');
-            const nodeCount = 60;
+            // Performance: Reduce nodes on mobile devices
+            const nodeCount = isMobile ? 25 : (prefersReducedMotion ? 30 : 60);
 
             for(let i=0;i<nodeCount;i++){
                 const node=document.createElement('div');
@@ -1494,52 +1545,61 @@
                 });
             }
 
-            // Create connections
-            for(let i=0;i<nodes.length;i++){
-                for(let j=i+1;j<nodes.length;j++){
-                    const dx=nodes[j].x-nodes[i].x;
-                    const dy=nodes[j].y-nodes[i].y;
-                    const distance=Math.sqrt(dx*dx+dy*dy);
+            // Create connections (skip on mobile for performance)
+            if(!isMobile){
+                for(let i=0;i<nodes.length;i++){
+                    for(let j=i+1;j<nodes.length;j++){
+                        const dx=nodes[j].x-nodes[i].x;
+                        const dy=nodes[j].y-nodes[i].y;
+                        const distance=Math.sqrt(dx*dx+dy*dy);
 
-                    if(distance<25&&Math.random()>.6){
-                        const connection=document.createElement('div');
-                        connection.className='neural-connection';
-                        connection.style.left=nodes[i].x+'%';
-                        connection.style.top=nodes[i].y+'%';
-                        connection.style.width=distance+'%';
-                        connection.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
-                        connection.style.animationDelay=Math.random()*4+'s';
-                        connection.dataset.from = i;
-                        connection.dataset.to = j;
-                        field.appendChild(connection);
+                        if(distance<25&&Math.random()>.6){
+                            const connection=document.createElement('div');
+                            connection.className='neural-connection';
+                            connection.style.left=nodes[i].x+'%';
+                            connection.style.top=nodes[i].y+'%';
+                            connection.style.width=distance+'%';
+                            connection.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
+                            connection.style.animationDelay=Math.random()*4+'s';
+                            connection.dataset.from = i;
+                            connection.dataset.to = j;
+                            field.appendChild(connection);
+                        }
                     }
                 }
             }
         }
 
-        // Enhanced cursor with magnetic effect
+        // Enhanced cursor with magnetic effect (disabled on touch devices)
         const cursor=document.querySelector('.thought-cursor');
         const trail=document.querySelector('.thought-trail');
         let mouseX=0, mouseY=0, cursorX=0, cursorY=0, trailX=0, trailY=0;
 
-        document.addEventListener('mousemove', e => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
+        // Performance: Only enable expensive mouse effects on desktop
+        if(!isTouchDevice && !isMobile){
+            // Throttle mousemove for performance
+            let mouseMoveThrottle = null;
+            document.addEventListener('mousemove', e => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
 
-            // Update mouse position for neural field
-            mousePos.x = (e.clientX / window.innerWidth) * 100;
-            mousePos.y = ((e.clientY + window.scrollY) / document.body.scrollHeight) * 100;
+                // Update mouse position for neural field
+                mousePos.x = (e.clientX / window.innerWidth) * 100;
+                mousePos.y = ((e.clientY + window.scrollY) / document.body.scrollHeight) * 100;
 
-            if(Math.random() > .97){
-                createRipple(mouseX, mouseY);
-            }
-
-            // Attract nearby nodes
-            attractNodes();
-
-            // Magnetic button effect
-            magneticButtons(e);
-        });
+                // Performance: Throttle expensive operations
+                if(!mouseMoveThrottle){
+                    mouseMoveThrottle = setTimeout(() => {
+                        if(Math.random() > .97){
+                            createRipple(mouseX, mouseY);
+                        }
+                        attractNodes();
+                        magneticButtons(e);
+                        mouseMoveThrottle = null;
+                    }, 16); // ~60fps
+                }
+            }, {passive: true});
+        }
 
         function attractNodes(){
             const field = document.getElementById('neuralField');
@@ -1601,19 +1661,24 @@
         }
 
         function animateCursor(){
-            cursorX += (mouseX - cursorX) * 0.2;
-            cursorY += (mouseY - cursorY) * 0.2;
-            cursor.style.left = (cursorX - 10) + 'px';
-            cursor.style.top = (cursorY - 10) + 'px';
+            if(!isTouchDevice && cursor && trail){
+                cursorX += (mouseX - cursorX) * 0.2;
+                cursorY += (mouseY - cursorY) * 0.2;
+                cursor.style.left = (cursorX - 10) + 'px';
+                cursor.style.top = (cursorY - 10) + 'px';
 
-            trailX += (mouseX - trailX) * 0.08;
-            trailY += (mouseY - trailY) * 0.08;
-            trail.style.left = (trailX - 20) + 'px';
-            trail.style.top = (trailY - 20) + 'px';
+                trailX += (mouseX - trailX) * 0.08;
+                trailY += (mouseY - trailY) * 0.08;
+                trail.style.left = (trailX - 20) + 'px';
+                trail.style.top = (trailY - 20) + 'px';
 
-            requestAnimationFrame(animateCursor);
+                animationFrameId = requestAnimationFrame(animateCursor);
+            }
         }
-        animateCursor();
+        // Only animate cursor on non-touch devices
+        if(!isTouchDevice && !isMobile){
+            animateCursor();
+        }
 
         function createRipple(x, y){
             const ripple = document.createElement('div');
@@ -1624,26 +1689,35 @@
             setTimeout(() => ripple.remove(), 1000);
         }
 
-        // Enhanced Grid Parallax with depth
-        document.addEventListener('mousemove', e => {
-            const grid = document.querySelector('.quantum-grid');
-            const x = (e.clientX / window.innerWidth - 0.5) * 40;
-            const y = (e.clientY / window.innerHeight - 0.5) * 40;
-            if(grid){
-                grid.style.transform = `translate(-50%, -50%) rotateX(${75 + y}deg) rotateZ(${x}deg)`;
-            }
-        });
+        // Enhanced Grid Parallax with depth (disabled on mobile)
+        if(!isMobile && !isTouchDevice){
+            let gridThrottle = null;
+            document.addEventListener('mousemove', e => {
+                if(!gridThrottle){
+                    gridThrottle = setTimeout(() => {
+                        const grid = document.querySelector('.quantum-grid');
+                        const x = (e.clientX / window.innerWidth - 0.5) * 40;
+                        const y = (e.clientY / window.innerHeight - 0.5) * 40;
+                        if(grid){
+                            grid.style.transform = `translate(-50%, -50%) rotateX(${75 + y}deg) rotateZ(${x}deg)`;
+                        }
+                        gridThrottle = null;
+                    }, 32); // ~30fps for this effect
+                }
+            }, {passive: true});
+        }
 
-        // Enhanced CTA Entanglement
+        // Enhanced CTA Entanglement (reduced on mobile)
         document.querySelector('.neural-interface').addEventListener('click', e => {
             e.preventDefault();
             const rect = e.target.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
-            // Create more entanglement lines
-            for(let i = 0; i < 12; i++){
-                setTimeout(() => createEntanglementLine(cx, cy, i * 30), i * 40);
+            // Create entanglement lines (fewer on mobile for performance)
+            const lineCount = isMobile ? 6 : 12;
+            for(let i = 0; i < lineCount; i++){
+                setTimeout(() => createEntanglementLine(cx, cy, i * (360 / lineCount)), i * 40);
             }
 
             // Enhanced flash effect
@@ -1726,20 +1800,21 @@
         `;
         document.head.appendChild(style);
 
-        // Nav on scroll with enhanced effect
+        // Nav on scroll with enhanced effect (optimized with passive listener)
         let ticking = false;
+        const nav = document.querySelector('nav'); // Cache DOM query
 
         function updateNav(){
-            const nav = document.querySelector('nav');
             const y = window.pageYOffset;
 
             if(y > 100){
                 nav.style.background = 'rgba(0,0,0,.95)';
-                nav.style.backdropFilter = 'blur(30px) saturate(180%) brightness(.6)';
+                // Performance: Simplify backdrop-filter on mobile
+                nav.style.backdropFilter = isMobile ? 'blur(10px)' : 'blur(30px) saturate(180%) brightness(.6)';
                 nav.style.boxShadow = '0 10px 60px rgba(0,0,0,.5)';
             } else {
                 nav.style.background = 'rgba(0,0,0,.6)';
-                nav.style.backdropFilter = 'blur(20px) saturate(180%) brightness(.8)';
+                nav.style.backdropFilter = isMobile ? 'blur(8px)' : 'blur(20px) saturate(180%) brightness(.8)';
                 nav.style.boxShadow = '0 10px 40px rgba(0,0,0,.3)';
             }
 
@@ -1751,7 +1826,7 @@
                 requestAnimationFrame(updateNav);
                 ticking = true;
             }
-        });
+        }, {passive: true});
 
         // Smooth section scroll + enhanced blink synapses
         document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1776,15 +1851,18 @@
             });
         });
 
-        // Breathing sync with enhanced effects
+        // Breathing sync with enhanced effects (optimized for mobile)
         let breathPhase = 0;
+        const breathInterval = isMobile ? 3000 : 1500; // Slower on mobile
 
         setInterval(() => {
             breathPhase = (breathPhase + 1) % 4;
             document.documentElement.style.setProperty('--breath-phase', breathPhase);
 
-            if(breathPhase === 0){
-                document.querySelectorAll('.neural-connection').forEach((c, i) => {
+            // Skip neural connection animations on mobile
+            if(breathPhase === 0 && !isMobile){
+                const connections = document.querySelectorAll('.neural-connection');
+                connections.forEach((c, i) => {
                     setTimeout(() => {
                         c.style.opacity = '.4';
                         c.style.boxShadow = '0 0 10px var(--hologram-cyan)';
@@ -1795,23 +1873,33 @@
                     }, i * 8);
                 });
             }
-        }, 1500);
+        }, breathInterval);
 
-        // Parallax scrolling for sections
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.feature-card');
+        // Parallax scrolling for sections (disabled on mobile, optimized on desktop)
+        if(!isMobile && !prefersReducedMotion){
+            let parallaxTicking = false;
+            const parallaxElements = document.querySelectorAll('.feature-card'); // Cache query
 
-            parallaxElements.forEach((el, index) => {
-                const rect = el.getBoundingClientRect();
-                const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
+            function updateParallax(){
+                parallaxElements.forEach((el, index) => {
+                    const rect = el.getBoundingClientRect();
+                    const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
 
-                if(scrollPercent > 0 && scrollPercent < 1){
-                    const translateY = (scrollPercent - 0.5) * 50;
-                    el.style.transform = `translateY(${translateY}px)`;
+                    if(scrollPercent > 0 && scrollPercent < 1){
+                        const translateY = (scrollPercent - 0.5) * 50;
+                        el.style.transform = `translateY(${translateY}px)`;
+                    }
+                });
+                parallaxTicking = false;
+            }
+
+            window.addEventListener('scroll', () => {
+                if(!parallaxTicking){
+                    requestAnimationFrame(updateParallax);
+                    parallaxTicking = true;
                 }
-            });
-        });
+            }, {passive: true});
+        }
 
         // Init
         window.addEventListener('load', () => {
