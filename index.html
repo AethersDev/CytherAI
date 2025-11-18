@@ -24,6 +24,139 @@
         .synapse-node { will-change: transform, opacity; }
         .quantum-grid { will-change: transform; contain: layout style paint; }
 
+        /* DNA Helix Loading Animation */
+        .dna-helix{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 200px;
+            perspective: 1000px;
+        }
+
+        .dna-strand{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: dnaRotate 4s linear infinite;
+        }
+
+        .dna-base{
+            position: absolute;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--hologram-cyan), var(--consciousness-gold), var(--hologram-magenta));
+            left: 10%;
+            transform-origin: center;
+        }
+
+        @keyframes dnaRotate{
+            0%{ transform: rotateY(0deg); }
+            100%{ transform: rotateY(360deg); }
+        }
+
+        /* Advanced Glitch Text Effect */
+        .glitch-text{
+            position: relative;
+            display: inline-block;
+        }
+
+        .glitch-text::before,
+        .glitch-text::after{
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
+        .glitch-text:hover::before{
+            animation: glitchTop 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            color: var(--hologram-cyan);
+            z-index: -1;
+        }
+
+        .glitch-text:hover::after{
+            animation: glitchBottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+            color: var(--hologram-magenta);
+            z-index: -2;
+        }
+
+        @keyframes glitchTop{
+            0%, 100%{ clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0.7; }
+            20%{ clip-path: inset(0 0 85% 0); transform: translate(-2px, -2px); }
+            40%{ clip-path: inset(0 0 65% 0); transform: translate(2px, 1px); }
+            60%{ clip-path: inset(0 0 45% 0); transform: translate(-1px, 2px); }
+            80%{ clip-path: inset(0 0 25% 0); transform: translate(1px, -1px); }
+        }
+
+        @keyframes glitchBottom{
+            0%, 100%{ clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0.7; }
+            20%{ clip-path: inset(85% 0 0 0); transform: translate(2px, 2px); }
+            40%{ clip-path: inset(65% 0 0 0); transform: translate(-2px, -1px); }
+            60%{ clip-path: inset(45% 0 0 0); transform: translate(1px, -2px); }
+            80%{ clip-path: inset(25% 0 0 0); transform: translate(-1px, 1px); }
+        }
+
+        /* Keyboard Focus Enhancement */
+        *:focus-visible{
+            outline: 2px solid var(--consciousness-gold);
+            outline-offset: 4px;
+            box-shadow: 0 0 20px var(--emergence-glow);
+        }
+
+        .nav-links a:focus-visible,
+        .btn:focus-visible,
+        .neural-interface:focus-visible{
+            outline: 2px solid var(--consciousness-gold);
+            outline-offset: 6px;
+            box-shadow: 0 0 30px var(--emergence-glow), 0 0 60px rgba(212,175,55,.3);
+        }
+
+        /* Scroll-driven depth theming */
+        body[data-depth="shallow"]{
+            --quantum-black: #000;
+            --consciousness-gold: #D4AF37;
+        }
+
+        body[data-depth="medium"]{
+            --quantum-black: #0a0014;
+            --consciousness-gold: #9d7cc4;
+        }
+
+        body[data-depth="deep"]{
+            --quantum-black: #001414;
+            --consciousness-gold: #00d9ff;
+        }
+
+        /* Viewport reveal animations */
+        .reveal{
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .reveal.active{
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Procedural neural web background */
+        .neural-web-canvas{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+            mix-blend-mode: screen;
+        }
+
         :root{
             --quantum-black:#000; --void-black:#050505; --neural-grey:#1a1a1a;
             --synaptic-silver:#8a8a8a; --thought-white:#fff; --consciousness-gold:#D4AF37;
@@ -1252,8 +1385,13 @@
     </script>
 </head>
 <body>
-    <!-- Neural Initialization Screen -->
-    <div class="neural-init"><div class="init-text">INITIALIZING NEURAL INTERFACE</div></div>
+    <!-- Neural Initialization Screen with DNA Helix -->
+    <div class="neural-init">
+        <div class="dna-helix">
+            <div class="dna-strand" id="dnaStrand"></div>
+        </div>
+        <div class="init-text">INITIALIZING NEURAL INTERFACE</div>
+    </div>
 
     <!-- Custom Cursor -->
     <div class="thought-cursor" aria-hidden="true"></div>
@@ -1273,6 +1411,7 @@
 
     <main>
         <section class="hero" role="main" aria-label="Consciousness Field">
+            <canvas class="neural-web-canvas" id="neuralWebCanvas"></canvas>
             <div class="neural-field" id="neuralField"></div>
 
             <div class="quantum-grid" aria-hidden="true">
@@ -1299,7 +1438,7 @@
             </div>
 
             <div class="hero-content">
-                <h1 class="hero-headline" data-text="WHERE THOUGHT BECOMES FORM">WHERE THOUGHT BECOMES FORM</h1>
+                <h1 class="hero-headline glitch-text" data-text="WHERE THOUGHT BECOMES FORM">WHERE THOUGHT BECOMES FORM</h1>
                 <p class="hero-subline">CYTHERAI <span class="consciousness-indicator" aria-hidden="true"></span> NEURAL-SYMBOLIC CONSCIOUSNESS</p>
                 <div class="hero-description">
                     <span class="concept-tag"><span>VERIFIABLE REASONING</span></span>
@@ -1315,8 +1454,8 @@
         </section>
 
         <!-- FOUNDATION -->
-        <section id="foundation" class="anchor">
-            <h2 class="section-title">FOUNDATION</h2>
+        <section id="foundation" class="anchor reveal">
+            <h2 class="section-title glitch-text" data-text="FOUNDATION">FOUNDATION</h2>
             <p class="section-body">Local-first, proof-aware architecture. Deterministic cores; zero egress by default.</p>
 
             <div class="feature-grid">
@@ -1347,8 +1486,8 @@
         </section>
 
         <!-- INTELLIGENCE -->
-        <section id="intelligence" class="anchor">
-            <h2 class="section-title">INTELLIGENCE</h2>
+        <section id="intelligence" class="anchor reveal">
+            <h2 class="section-title glitch-text" data-text="INTELLIGENCE">INTELLIGENCE</h2>
             <p class="section-body">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
 
             <div class="feature-grid">
@@ -1379,8 +1518,8 @@
         </section>
 
         <!-- SOVEREIGNTY -->
-        <section id="sovereignty" class="anchor">
-            <h2 class="section-title">SOVEREIGNTY</h2>
+        <section id="sovereignty" class="anchor reveal">
+            <h2 class="section-title glitch-text" data-text="SOVEREIGNTY">SOVEREIGNTY</h2>
             <p class="section-body">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
 
             <div class="feature-grid">
@@ -1411,8 +1550,8 @@
         </section>
 
         <!-- CONTACT / NEXUS -->
-        <section id="nexus" class="anchor" aria-label="Contact and Nexus">
-            <h2 class="section-title">NEXUS</h2>
+        <section id="nexus" class="anchor reveal" aria-label="Contact and Nexus">
+            <h2 class="section-title glitch-text" data-text="NEXUS">NEXUS</h2>
 
             <div class="contact-wrap">
                 <!-- Left: Primary Contact Card -->
@@ -1516,6 +1655,129 @@
 
         // Year
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // DNA Helix Loading Animation
+        function generateDNAHelix(){
+            const strand = document.getElementById('dnaStrand');
+            if(!strand) return;
+
+            for(let i = 0; i < 20; i++){
+                const base = document.createElement('div');
+                base.className = 'dna-base';
+                base.style.top = (i * 10) + 'px';
+                base.style.transform = `rotateY(${i * 18}deg)`;
+                base.style.animationDelay = (i * 0.1) + 's';
+                strand.appendChild(base);
+            }
+        }
+
+        // Intersection Observer for reveal animations
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting){
+                    entry.target.classList.add('active');
+                    // Optional: Stop observing after reveal
+                    // revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        });
+
+        // Observe all reveal elements
+        document.querySelectorAll('.reveal').forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Scroll-driven color theming
+        function updateDepthTheming(){
+            const scrollPercent = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+
+            if(scrollPercent < 0.33){
+                document.body.setAttribute('data-depth', 'shallow');
+            } else if(scrollPercent < 0.66){
+                document.body.setAttribute('data-depth', 'medium');
+            } else {
+                document.body.setAttribute('data-depth', 'deep');
+            }
+        }
+
+        // Procedural Neural Web Canvas
+        function initNeuralWebCanvas(){
+            const canvas = document.getElementById('neuralWebCanvas');
+            if(!canvas || isMobile) return; // Skip on mobile for performance
+
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 50;
+
+            for(let i = 0; i < particleCount; i++){
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    radius: Math.random() * 2 + 1
+                });
+            }
+
+            function drawNeuralWeb(){
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Update and draw particles
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                    // Draw particle
+                    ctx.fillStyle = 'rgba(0, 255, 249, 0.6)';
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // Draw connections
+                ctx.strokeStyle = 'rgba(212, 175, 55, 0.2)';
+                ctx.lineWidth = 0.5;
+
+                for(let i = 0; i < particles.length; i++){
+                    for(let j = i + 1; j < particles.length; j++){
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+
+                        if(dist < 150){
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.globalAlpha = 1 - (dist / 150);
+                            ctx.stroke();
+                            ctx.globalAlpha = 1;
+                        }
+                    }
+                }
+
+                requestAnimationFrame(drawNeuralWeb);
+            }
+
+            drawNeuralWeb();
+
+            // Handle resize
+            window.addEventListener('resize', () => {
+                if(!isMobile){
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+            }, {passive: true});
+        }
 
         // Neural Field Generation with cursor attraction (optimized)
         let nodes = [];
@@ -1823,7 +2085,10 @@
 
         window.addEventListener('scroll', () => {
             if(!ticking){
-                requestAnimationFrame(updateNav);
+                requestAnimationFrame(() => {
+                    updateNav();
+                    updateDepthTheming();
+                });
                 ticking = true;
             }
         }, {passive: true});
@@ -1903,8 +2168,19 @@
 
         // Init
         window.addEventListener('load', () => {
+            // Generate DNA helix for loading screen
+            generateDNAHelix();
+
+            // Initialize neural field
             generateNeuralField();
 
+            // Initialize procedural neural web canvas
+            initNeuralWebCanvas();
+
+            // Set initial depth theming
+            updateDepthTheming();
+
+            // Remove loading screen
             setTimeout(() => {
                 const init = document.querySelector('.neural-init');
                 if(init){
