@@ -153,7 +153,7 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            opacity: 0.3;
+            opacity: 0.15; /* Reduced for clarity */
             mix-blend-mode: screen;
         }
 
@@ -167,11 +167,11 @@
             pointer-events: none;
             z-index: 0;
             opacity: 0;
-            transition: opacity 2s ease-out;
+            transition: opacity 3s ease-out;
         }
 
         .consciousness-field-3d.active{
-            opacity: 1;
+            opacity: 0.25; /* Subtle presence, not overwhelming */
         }
 
         :root{
@@ -481,7 +481,7 @@
             height:200%;
             transform:translate(-50%,-50%) rotateX(75deg);
             transform-style:preserve-3d;
-            opacity:.15;
+            opacity:.08; /* Reduced for elegance */
             pointer-events:none;
         }
 
@@ -1718,17 +1718,17 @@
             revealObserver.observe(el);
         });
 
-        // Scroll-driven color theming
+        // Scroll-driven color theming (disabled for clarity)
         function updateDepthTheming(){
-            const scrollPercent = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
-
-            if(scrollPercent < 0.33){
-                document.body.setAttribute('data-depth', 'shallow');
-            } else if(scrollPercent < 0.66){
-                document.body.setAttribute('data-depth', 'medium');
-            } else {
-                document.body.setAttribute('data-depth', 'deep');
-            }
+            // Disabled to maintain consistent, readable color scheme
+            // const scrollPercent = window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight);
+            // if(scrollPercent < 0.33){
+            //     document.body.setAttribute('data-depth', 'shallow');
+            // } else if(scrollPercent < 0.66){
+            //     document.body.setAttribute('data-depth', 'medium');
+            // } else {
+            //     document.body.setAttribute('data-depth', 'deep');
+            // }
         }
 
         // Procedural Neural Web Canvas
@@ -2316,14 +2316,14 @@ ${message || '(your message here)'}
             const scene = new THREE.Scene();
             scene.fog = new THREE.FogExp2(0x000000, 0.0008);
 
-            // Camera with CytherAI perspective
+            // Camera with CytherAI perspective (pulled back for subtlety)
             const camera = new THREE.PerspectiveCamera(
-                60,
+                50, // Narrower FOV for more depth
                 window.innerWidth / window.innerHeight,
                 0.1,
                 2000
             );
-            camera.position.set(0, 80, 350);
+            camera.position.set(0, 100, 600); // Further back = less overwhelming
             camera.lookAt(0, 0, 0);
 
             // Renderer
@@ -2338,41 +2338,40 @@ ${message || '(your message here)'}
             renderer.toneMappingExposure = 0.8;
             container.appendChild(renderer.domElement);
 
-            // Particle System - Neural Consciousness Nodes
-            const particleCount = 12000; // Optimized for web
+            // Particle System - Neural Consciousness Nodes (Minimalist)
+            const particleCount = 3500; // Drastically reduced for performance
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
             const velocities = new Float32Array(particleCount * 3);
 
-            // CytherAI Brand Colors
+            // Elegant monochromatic palette (gold with subtle variations)
             const colorGold = new THREE.Color(0xD4AF37); // consciousness-gold
-            const colorCyan = new THREE.Color(0x00fff9); // hologram-cyan
-            const colorMagenta = new THREE.Color(0xff00ff); // hologram-magenta
+            const colorGoldDim = new THREE.Color(0x8a7324); // dimmer gold
+            const colorGoldBright = new THREE.Color(0xffd700); // brighter accent
 
-            // Create layered particle field (inspired by our quantum grid)
+            // Create elegant sparse field
             for(let i = 0; i < particleCount; i++){
                 const i3 = i * 3;
 
-                // Distribute in neural network layers
-                const layer = Math.floor(i / (particleCount / 4));
+                // Wider, more spacious distribution
                 const angle = Math.random() * Math.PI * 2;
-                const radius = 200 + (layer * 80) + (Math.random() * 100);
+                const radius = 300 + (Math.random() * 400);
 
-                positions[i3] = Math.cos(angle) * radius + (Math.random() - 0.5) * 200;
-                positions[i3 + 1] = (Math.random() - 0.5) * 300;
-                positions[i3 + 2] = Math.sin(angle) * radius + (Math.random() - 0.5) * 200;
+                positions[i3] = Math.cos(angle) * radius;
+                positions[i3 + 1] = (Math.random() - 0.5) * 250;
+                positions[i3 + 2] = Math.sin(angle) * radius;
 
                 // Store initial velocities for wave motion
                 velocities[i3] = positions[i3];
                 velocities[i3 + 1] = positions[i3 + 1];
                 velocities[i3 + 2] = positions[i3 + 2];
 
-                // Color gradient based on depth (shallow/medium/deep concept)
-                const depth = (positions[i3 + 1] + 150) / 300;
-                const mixColor = depth < 0.33 ? colorGold :
-                               depth < 0.66 ? colorCyan :
-                               colorMagenta;
+                // Monochromatic gold gradient (subtle)
+                const brightness = Math.random();
+                const mixColor = brightness < 0.3 ? colorGoldDim :
+                                brightness < 0.85 ? colorGold :
+                                colorGoldBright;
 
                 colors[i3] = mixColor.r;
                 colors[i3 + 1] = mixColor.g;
@@ -2382,12 +2381,12 @@ ${message || '(your message here)'}
             geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            // Shader material for consciousness particles
+            // Shader material for consciousness particles (subtle)
             const material = new THREE.PointsMaterial({
-                size: 2.0,
+                size: 1.2, // Smaller, more elegant
                 vertexColors: true,
                 transparent: true,
-                opacity: 0.8,
+                opacity: 0.5, // Much more transparent
                 blending: THREE.AdditiveBlending,
                 depthWrite: false,
                 sizeAttenuation: true
@@ -2403,9 +2402,9 @@ ${message || '(your message here)'}
 
             const bloomPass = new UnrealBloomPass(
                 new THREE.Vector2(window.innerWidth, window.innerHeight),
-                1.8,  // strength
-                0.6,  // radius
-                0.1   // threshold
+                0.6,  // strength (dramatically reduced)
+                0.4,  // radius
+                0.3   // threshold (higher = less glow)
             );
             composer.addPass(bloomPass);
 
@@ -2420,13 +2419,18 @@ ${message || '(your message here)'}
                 mouseY = (e.clientY - window.innerHeight / 2);
             }, {passive: true});
 
-            // Animation Loop
+            // Animation Loop with performance throttling
+            let frameCount = 0;
             function animate(){
                 requestAnimationFrame(animate);
+                frameCount++;
+
+                // Skip every other frame for 30fps (better performance)
+                if(frameCount % 2 !== 0) return;
 
                 const time = clock.getElapsedTime();
 
-                // Wave-based breathing animation (inspired by reference's sine waves)
+                // Subtle wave-based breathing (reduced amplitude)
                 const positions = particleSystem.geometry.attributes.position.array;
 
                 for(let i = 0; i < particleCount; i++){
@@ -2435,13 +2439,13 @@ ${message || '(your message here)'}
                     const iy = velocities[i3 + 1];
                     const iz = velocities[i3 + 2];
 
-                    // Consciousness breathing effect
+                    // Gentle breathing effect (reduced movement)
                     positions[i3 + 1] = iy +
-                        Math.sin((ix + time) * 0.002) * 15 +
-                        Math.cos((iz + time) * 0.0015) * 15;
+                        Math.sin((ix + time) * 0.001) * 8 +
+                        Math.cos((iz + time) * 0.0008) * 8;
 
-                    // Subtle rotation drift
-                    const rotationAngle = time * 0.0001;
+                    // Very subtle rotation drift
+                    const rotationAngle = time * 0.00005;
                     const cos = Math.cos(rotationAngle);
                     const sin = Math.sin(rotationAngle);
                     const x = ix - 0;
@@ -2451,15 +2455,15 @@ ${message || '(your message here)'}
                 }
                 particleSystem.geometry.attributes.position.needsUpdate = true;
 
-                // Gentle system rotation
-                particleSystem.rotation.y = time * 0.03;
+                // Minimal system rotation
+                particleSystem.rotation.y = time * 0.01;
 
-                // Smooth camera parallax (weighted movement like reference)
-                targetCameraX = mouseX * 0.04;
-                targetCameraY = 80 - (mouseY * 0.03);
+                // Reduced parallax sensitivity
+                targetCameraX = mouseX * 0.02;
+                targetCameraY = 100 - (mouseY * 0.015);
 
-                camera.position.x += (targetCameraX - camera.position.x) * 0.03;
-                camera.position.y += (targetCameraY - camera.position.y) * 0.03;
+                camera.position.x += (targetCameraX - camera.position.x) * 0.02;
+                camera.position.y += (targetCameraY - camera.position.y) * 0.02;
                 camera.lookAt(0, 0, 0);
 
                 // Render with bloom
