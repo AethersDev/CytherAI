@@ -157,6 +157,23 @@
             mix-blend-mode: screen;
         }
 
+        /* 3D Consciousness Field (Three.js) */
+        .consciousness-field-3d{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 2s ease-out;
+        }
+
+        .consciousness-field-3d.active{
+            opacity: 1;
+        }
+
         :root{
             --quantum-black:#000; --void-black:#050505; --neural-grey:#1a1a1a;
             --synaptic-silver:#8a8a8a; --thought-white:#fff; --consciousness-gold:#D4AF37;
@@ -1383,6 +1400,16 @@
       }]
     }
     </script>
+
+    <!-- Three.js Import Map for 3D Consciousness Field -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
 </head>
 <body>
     <!-- Neural Initialization Screen with DNA Helix -->
@@ -1411,6 +1438,7 @@
 
     <main>
         <section class="hero" role="main" aria-label="Consciousness Field">
+            <div class="consciousness-field-3d" id="consciousnessField3D"></div>
             <canvas class="neural-web-canvas" id="neuralWebCanvas"></canvas>
             <div class="neural-field" id="neuralField"></div>
 
@@ -2259,6 +2287,198 @@ ${message || '(your message here)'}
             const mailto = `mailto:Aethersdev@cytherAi.com?subject=${subject}&body=${body}`;
             window.location.href = mailto;
             return false;
+        }
+    </script>
+
+    <!-- 3D Consciousness Field (Three.js Module) -->
+    <script type="module">
+        import * as THREE from 'three';
+        import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+        import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+        import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+
+        // Performance check - only run on desktop
+        const shouldRun3D = !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) &&
+                           window.innerWidth >= 768 &&
+                           !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if(!shouldRun3D){
+            console.log('3D Consciousness Field: Skipped for performance');
+        } else {
+            init3DConsciousnessField();
+        }
+
+        function init3DConsciousnessField(){
+            const container = document.getElementById('consciousnessField3D');
+            if(!container) return;
+
+            // Scene Setup
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x000000, 0.0008);
+
+            // Camera with CytherAI perspective
+            const camera = new THREE.PerspectiveCamera(
+                60,
+                window.innerWidth / window.innerHeight,
+                0.1,
+                2000
+            );
+            camera.position.set(0, 80, 350);
+            camera.lookAt(0, 0, 0);
+
+            // Renderer
+            const renderer = new THREE.WebGLRenderer({
+                antialias: false,
+                alpha: true,
+                powerPreference: 'high-performance'
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 0.8;
+            container.appendChild(renderer.domElement);
+
+            // Particle System - Neural Consciousness Nodes
+            const particleCount = 12000; // Optimized for web
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const velocities = new Float32Array(particleCount * 3);
+
+            // CytherAI Brand Colors
+            const colorGold = new THREE.Color(0xD4AF37); // consciousness-gold
+            const colorCyan = new THREE.Color(0x00fff9); // hologram-cyan
+            const colorMagenta = new THREE.Color(0xff00ff); // hologram-magenta
+
+            // Create layered particle field (inspired by our quantum grid)
+            for(let i = 0; i < particleCount; i++){
+                const i3 = i * 3;
+
+                // Distribute in neural network layers
+                const layer = Math.floor(i / (particleCount / 4));
+                const angle = Math.random() * Math.PI * 2;
+                const radius = 200 + (layer * 80) + (Math.random() * 100);
+
+                positions[i3] = Math.cos(angle) * radius + (Math.random() - 0.5) * 200;
+                positions[i3 + 1] = (Math.random() - 0.5) * 300;
+                positions[i3 + 2] = Math.sin(angle) * radius + (Math.random() - 0.5) * 200;
+
+                // Store initial velocities for wave motion
+                velocities[i3] = positions[i3];
+                velocities[i3 + 1] = positions[i3 + 1];
+                velocities[i3 + 2] = positions[i3 + 2];
+
+                // Color gradient based on depth (shallow/medium/deep concept)
+                const depth = (positions[i3 + 1] + 150) / 300;
+                const mixColor = depth < 0.33 ? colorGold :
+                               depth < 0.66 ? colorCyan :
+                               colorMagenta;
+
+                colors[i3] = mixColor.r;
+                colors[i3 + 1] = mixColor.g;
+                colors[i3 + 2] = mixColor.b;
+            }
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            // Shader material for consciousness particles
+            const material = new THREE.PointsMaterial({
+                size: 2.0,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                sizeAttenuation: true
+            });
+
+            const particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+
+            // Post-Processing: Bloom for that neural glow
+            const composer = new EffectComposer(renderer);
+            const renderPass = new RenderPass(scene, camera);
+            composer.addPass(renderPass);
+
+            const bloomPass = new UnrealBloomPass(
+                new THREE.Vector2(window.innerWidth, window.innerHeight),
+                1.8,  // strength
+                0.6,  // radius
+                0.1   // threshold
+            );
+            composer.addPass(bloomPass);
+
+            // Animation State
+            const clock = new THREE.Clock();
+            let mouseX = 0, mouseY = 0;
+            let targetCameraX = 0, targetCameraY = 80;
+
+            // Enhanced mouse parallax (smooth like the reference)
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - window.innerWidth / 2);
+                mouseY = (e.clientY - window.innerHeight / 2);
+            }, {passive: true});
+
+            // Animation Loop
+            function animate(){
+                requestAnimationFrame(animate);
+
+                const time = clock.getElapsedTime();
+
+                // Wave-based breathing animation (inspired by reference's sine waves)
+                const positions = particleSystem.geometry.attributes.position.array;
+
+                for(let i = 0; i < particleCount; i++){
+                    const i3 = i * 3;
+                    const ix = velocities[i3];
+                    const iy = velocities[i3 + 1];
+                    const iz = velocities[i3 + 2];
+
+                    // Consciousness breathing effect
+                    positions[i3 + 1] = iy +
+                        Math.sin((ix + time) * 0.002) * 15 +
+                        Math.cos((iz + time) * 0.0015) * 15;
+
+                    // Subtle rotation drift
+                    const rotationAngle = time * 0.0001;
+                    const cos = Math.cos(rotationAngle);
+                    const sin = Math.sin(rotationAngle);
+                    const x = ix - 0;
+                    const z = iz - 0;
+                    positions[i3] = x * cos - z * sin;
+                    positions[i3 + 2] = x * sin + z * cos;
+                }
+                particleSystem.geometry.attributes.position.needsUpdate = true;
+
+                // Gentle system rotation
+                particleSystem.rotation.y = time * 0.03;
+
+                // Smooth camera parallax (weighted movement like reference)
+                targetCameraX = mouseX * 0.04;
+                targetCameraY = 80 - (mouseY * 0.03);
+
+                camera.position.x += (targetCameraX - camera.position.x) * 0.03;
+                camera.position.y += (targetCameraY - camera.position.y) * 0.03;
+                camera.lookAt(0, 0, 0);
+
+                // Render with bloom
+                composer.render();
+            }
+
+            // Start animation and fade in
+            animate();
+            setTimeout(() => {
+                container.classList.add('active');
+            }, 100);
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                composer.setSize(window.innerWidth, window.innerHeight);
+            }, {passive: true});
         }
     </script>
 </body>
