@@ -1310,6 +1310,163 @@
             100%{width:200px;opacity:0}
         }
 
+        /* Laboratory Section */
+        .laboratory-container{
+            display:grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap:2rem;
+            margin-top:3rem;
+        }
+
+        .shader-viewport{
+            position:relative;
+            background:var(--card-bg);
+            border:1px solid var(--card-border);
+            border-radius:20px;
+            overflow:hidden;
+            aspect-ratio:16/10;
+            transition:all .5s ease;
+        }
+
+        .shader-viewport:hover{
+            border-color:var(--consciousness-gold);
+            box-shadow:0 0 40px rgba(212,175,55,.2);
+        }
+
+        #consciousnessShader{
+            width:100%;
+            height:100%;
+            display:block;
+        }
+
+        .shader-overlay{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            pointer-events:none;
+            background:linear-gradient(180deg, rgba(0,0,0,.3) 0%, transparent 20%, transparent 80%, rgba(0,0,0,.3) 100%);
+        }
+
+        .shader-info{
+            position:absolute;
+            top:1rem;
+            left:1rem;
+        }
+
+        .shader-controls-panel{
+            background:var(--card-bg);
+            border:1px solid var(--card-border);
+            padding:2rem;
+            border-radius:20px;
+            backdrop-filter:blur(10px);
+            transition:all .3s ease;
+            position:relative;
+            overflow:hidden;
+        }
+
+        .shader-controls-panel::before{
+            content:'';
+            position:absolute;
+            top:0;
+            left:-100%;
+            width:100%;
+            height:100%;
+            background:linear-gradient(90deg, transparent, rgba(0,255,249,.05), transparent);
+            transition:left .6s ease;
+        }
+
+        .shader-controls-panel:hover::before{
+            left:100%;
+        }
+
+        .shader-control{
+            margin-bottom:1.5rem;
+            position:relative;
+            z-index:1;
+        }
+
+        .shader-control label{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:.5rem;
+            letter-spacing:.18em;
+        }
+
+        .shader-value{
+            color:var(--consciousness-gold);
+        }
+
+        .shader-slider{
+            width:100%;
+            height:2px;
+            background:rgba(255,255,255,.1);
+            outline:none;
+            -webkit-appearance:none;
+            appearance:none;
+            border-radius:2px;
+        }
+
+        .shader-slider::-webkit-slider-thumb{
+            -webkit-appearance:none;
+            appearance:none;
+            width:14px;
+            height:14px;
+            background:var(--consciousness-gold);
+            cursor:pointer;
+            border-radius:50%;
+            box-shadow:0 0 10px var(--emergence-glow);
+            transition:all .2s ease;
+        }
+
+        .shader-slider::-webkit-slider-thumb:hover{
+            transform:scale(1.2);
+            box-shadow:0 0 20px var(--consciousness-gold);
+        }
+
+        .shader-slider::-moz-range-thumb{
+            width:14px;
+            height:14px;
+            background:var(--consciousness-gold);
+            cursor:pointer;
+            border-radius:50%;
+            border:none;
+            box-shadow:0 0 10px var(--emergence-glow);
+            transition:all .2s ease;
+        }
+
+        .shader-slider::-moz-range-thumb:hover{
+            transform:scale(1.2);
+            box-shadow:0 0 20px var(--consciousness-gold);
+        }
+
+        .shader-select{
+            width:100%;
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.1);
+            color:var(--thought-white);
+            padding:.8rem 1rem;
+            border-radius:10px;
+            font-size:.85rem;
+            letter-spacing:.12em;
+            cursor:pointer;
+            outline:none;
+            transition:all .3s ease;
+            font-family:inherit;
+        }
+
+        .shader-select:hover{
+            border-color:var(--synaptic-silver);
+            background:rgba(255,255,255,.08);
+        }
+
+        .shader-select:focus{
+            border-color:var(--consciousness-gold);
+            box-shadow:0 0 20px rgba(212,175,55,.2);
+        }
+
         /* Accessibility: reduced motion */
         @media (prefers-reduced-motion: reduce){
             *,*::before,*::after{
@@ -1323,6 +1480,7 @@
         @media (max-width: 980px){
             .contact-wrap{grid-template-columns:1fr}
             .feature-grid{grid-template-columns:1fr}
+            .laboratory-container{grid-template-columns:1fr}
         }
 
         @media (max-width: 768px){
@@ -1431,6 +1589,7 @@
                 <li><a href="#foundation">FOUNDATION</a></li>
                 <li><a href="#intelligence">INTELLIGENCE</a></li>
                 <li><a href="#sovereignty">SOVEREIGNTY</a></li>
+                <li><a href="#laboratory">LABORATORY</a></li>
                 <li><a href="#nexus">NEXUS</a></li>
             </ul>
         </div>
@@ -1572,6 +1731,52 @@
                         <div class="feature-icon">🌐</div>
                         <h3 class="feature-title">YOUR MEMORY</h3>
                         <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds over time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONSCIOUSNESS LABORATORY -->
+        <section id="laboratory" class="anchor reveal">
+            <h2 class="section-title glitch-text" data-text="LABORATORY">LABORATORY</h2>
+            <p class="section-body">Interactive neural field visualization. Real-time consciousness rendering.</p>
+
+            <div class="laboratory-container">
+                <div class="shader-viewport">
+                    <canvas id="consciousnessShader"></canvas>
+                    <div class="shader-overlay">
+                        <div class="shader-info">
+                            <span class="pill">LIVE RENDER</span>
+                            <div class="tiny" style="margin-top: 0.5rem;">Move cursor to interact</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="shader-controls-panel">
+                    <div class="pill" style="margin-bottom: 1rem;">PARAMETERS</div>
+
+                    <div class="shader-control">
+                        <label class="tiny">MODE</label>
+                        <select id="shaderMode" class="shader-select">
+                            <option value="plasma">Neural Plasma</option>
+                            <option value="waves">Consciousness Waves</option>
+                            <option value="fractal">Fractal Nexus</option>
+                        </select>
+                    </div>
+
+                    <div class="shader-control">
+                        <label class="tiny">INTENSITY <span class="shader-value" id="intensityVal">1.0</span></label>
+                        <input type="range" id="intensitySlider" class="shader-slider" min="0.1" max="2" step="0.1" value="1.0">
+                    </div>
+
+                    <div class="shader-control">
+                        <label class="tiny">COMPLEXITY <span class="shader-value" id="complexityVal">1.0</span></label>
+                        <input type="range" id="complexitySlider" class="shader-slider" min="0.5" max="2" step="0.1" value="1.0">
+                    </div>
+
+                    <div class="shader-control">
+                        <label class="tiny">FLOW <span class="shader-value" id="flowVal">0.5</span></label>
+                        <input type="range" id="flowSlider" class="shader-slider" min="0" max="1" step="0.05" value="0.5">
                     </div>
                 </div>
             </div>
@@ -2217,6 +2422,268 @@
                 }
             }, 1500);
         });
+
+        // --- CONSCIOUSNESS SHADER LAB ---
+        (function initShaderLab() {
+            const canvas = document.getElementById('consciousnessShader');
+            if (!canvas) return;
+
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+            if (!gl) {
+                console.warn('WebGL not supported');
+                return;
+            }
+
+            // Vertex shader
+            const vertexShaderSource = `
+                attribute vec2 position;
+                void main() {
+                    gl_Position = vec4(position, 0.0, 1.0);
+                }
+            `;
+
+            // Fragment shaders using CytherAI colors
+            const shaderModes = {
+                plasma: `
+                    precision highp float;
+                    uniform vec2 resolution;
+                    uniform float time;
+                    uniform vec2 mouse;
+                    uniform float intensity;
+                    uniform float complexity;
+                    uniform float flow;
+
+                    vec3 gold = vec3(0.831, 0.686, 0.216);
+                    vec3 cyan = vec3(0.0, 1.0, 0.976);
+                    vec3 magenta = vec3(1.0, 0.0, 1.0);
+
+                    void main() {
+                        vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                        vec2 m = (mouse - 0.5) * 2.0;
+
+                        float t = time * 0.3 * intensity;
+                        float d = length(uv - m * 0.5);
+
+                        float w1 = sin(d * 8.0 * complexity - t * 2.0);
+                        float w2 = sin(uv.x * 6.0 * complexity + t);
+                        float w3 = cos(uv.y * 4.0 * complexity - t * 1.5);
+                        float w4 = sin((uv.x + uv.y) * 5.0 * complexity + t * 0.7);
+
+                        vec2 distort = vec2(
+                            sin(uv.y * 5.0 * complexity + t) * flow * 0.1,
+                            cos(uv.x * 5.0 * complexity - t) * flow * 0.1
+                        );
+                        uv += distort;
+
+                        float pattern = (w1 + w2 + w3 + w4) * 0.25 * 0.5 + 0.5;
+                        float glow = exp(-d * 2.0) * 0.5;
+                        pattern += glow;
+
+                        vec3 color = mix(gold, cyan, sin(pattern * 3.14159) * 0.5 + 0.5);
+                        color = mix(color, magenta, cos(pattern * 6.28) * 0.3 + 0.3);
+                        color += glow * gold;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `,
+
+                waves: `
+                    precision highp float;
+                    uniform vec2 resolution;
+                    uniform float time;
+                    uniform vec2 mouse;
+                    uniform float intensity;
+                    uniform float complexity;
+                    uniform float flow;
+
+                    vec3 gold = vec3(0.831, 0.686, 0.216);
+                    vec3 cyan = vec3(0.0, 1.0, 0.976);
+
+                    void main() {
+                        vec2 uv = gl_FragCoord.xy / resolution;
+                        vec2 m = mouse;
+                        float t = time * 0.5 * intensity;
+
+                        float dist = length(uv - m);
+                        float waves = 0.0;
+
+                        for(float i = 0.0; i < 5.0; i++) {
+                            float wave = sin((dist - t * 0.2 - i * 0.1) * 20.0 * complexity);
+                            waves += wave / (5.0 + i);
+                        }
+
+                        waves += sin(uv.y * 10.0 * complexity + t * 2.0) * 0.3;
+                        waves += sin(uv.x * 8.0 * complexity - t * 1.5 + flow) * 0.3;
+                        waves = waves * 0.5 + 0.5;
+
+                        vec3 color = mix(gold, cyan, flow);
+                        color *= waves;
+
+                        float glow = exp(-dist * 3.0) * intensity;
+                        color += glow * gold;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `,
+
+                fractal: `
+                    precision highp float;
+                    uniform vec2 resolution;
+                    uniform float time;
+                    uniform vec2 mouse;
+                    uniform float intensity;
+                    uniform float complexity;
+                    uniform float flow;
+
+                    vec3 gold = vec3(0.831, 0.686, 0.216);
+                    vec3 cyan = vec3(0.0, 1.0, 0.976);
+                    vec3 magenta = vec3(1.0, 0.0, 1.0);
+
+                    vec2 complexSquare(vec2 z) {
+                        return vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
+                    }
+
+                    void main() {
+                        vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                        uv *= 2.0;
+
+                        float t = time * 0.2 * intensity;
+                        vec2 c = vec2(
+                            cos(t) * 0.7 + (mouse.x - 0.5) * flow,
+                            sin(t * 0.7) * 0.5 + (mouse.y - 0.5) * flow
+                        );
+
+                        vec2 z = uv;
+                        float iterations = 0.0;
+                        float maxIter = 30.0 * complexity;
+
+                        for(float i = 0.0; i < 100.0; i++) {
+                            if(i >= maxIter) break;
+                            z = complexSquare(z) + c;
+                            if(length(z) > 2.0) break;
+                            iterations++;
+                        }
+
+                        float value = iterations / maxIter;
+                        value = pow(value, 0.5);
+
+                        vec3 color = mix(gold, cyan, sin(value * 3.14159 + t) * 0.5 + 0.5);
+                        color = mix(color, magenta, flow);
+                        color *= value;
+                        color += exp(-length(uv) * 2.0) * gold * 0.3;
+
+                        gl_FragColor = vec4(color, 1.0);
+                    }
+                `
+            };
+
+            function compileShader(source, type) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Shader error:', gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            function createProgram(vertSource, fragSource) {
+                const vertShader = compileShader(vertSource, gl.VERTEX_SHADER);
+                const fragShader = compileShader(fragSource, gl.FRAGMENT_SHADER);
+                const program = gl.createProgram();
+                gl.attachShader(program, vertShader);
+                gl.attachShader(program, fragShader);
+                gl.linkProgram(program);
+                if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                    console.error('Program error:', gl.getProgramInfoLog(program));
+                    return null;
+                }
+                return program;
+            }
+
+            const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+            let currentMode = 'plasma';
+            let program = createProgram(vertexShaderSource, shaderModes[currentMode]);
+            let uniforms = {};
+            let mouse = { x: 0.5, y: 0.5 };
+            let params = { intensity: 1.0, complexity: 1.0, flow: 0.5 };
+
+            function updateProgram() {
+                program = createProgram(vertexShaderSource, shaderModes[currentMode]);
+                uniforms = {
+                    position: gl.getAttribLocation(program, 'position'),
+                    resolution: gl.getUniformLocation(program, 'resolution'),
+                    time: gl.getUniformLocation(program, 'time'),
+                    mouse: gl.getUniformLocation(program, 'mouse'),
+                    intensity: gl.getUniformLocation(program, 'intensity'),
+                    complexity: gl.getUniformLocation(program, 'complexity'),
+                    flow: gl.getUniformLocation(program, 'flow')
+                };
+            }
+            updateProgram();
+
+            function resize() {
+                const rect = canvas.getBoundingClientRect();
+                canvas.width = rect.width * window.devicePixelRatio;
+                canvas.height = rect.height * window.devicePixelRatio;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            canvas.addEventListener('mousemove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = (e.clientX - rect.left) / rect.width;
+                mouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+            });
+
+            document.getElementById('shaderMode').addEventListener('change', (e) => {
+                currentMode = e.target.value;
+                updateProgram();
+            });
+
+            document.getElementById('intensitySlider').addEventListener('input', (e) => {
+                params.intensity = parseFloat(e.target.value);
+                document.getElementById('intensityVal').textContent = params.intensity.toFixed(1);
+            });
+
+            document.getElementById('complexitySlider').addEventListener('input', (e) => {
+                params.complexity = parseFloat(e.target.value);
+                document.getElementById('complexityVal').textContent = params.complexity.toFixed(1);
+            });
+
+            document.getElementById('flowSlider').addEventListener('input', (e) => {
+                params.flow = parseFloat(e.target.value);
+                document.getElementById('flowVal').textContent = params.flow.toFixed(2);
+            });
+
+            function render(timestamp) {
+                const time = timestamp * 0.001;
+
+                gl.useProgram(program);
+                gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+                gl.uniform1f(uniforms.time, time);
+                gl.uniform2f(uniforms.mouse, mouse.x, mouse.y);
+                gl.uniform1f(uniforms.intensity, params.intensity);
+                gl.uniform1f(uniforms.complexity, params.complexity);
+                gl.uniform1f(uniforms.flow, params.flow);
+
+                gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                gl.enableVertexAttribArray(uniforms.position);
+                gl.vertexAttribPointer(uniforms.position, 2, gl.FLOAT, false, 0, 0);
+
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                requestAnimationFrame(render);
+            }
+
+            requestAnimationFrame(render);
+        })();
 
         // --- CONTACT HELPERS ---
         function copyToClipboard(text){
