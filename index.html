@@ -1310,7 +1310,7 @@
             100%{width:200px;opacity:0}
         }
 
-        /* Consciousness Shader Background - Subtle atmospheric enhancement */
+        /* Premium Consciousness Visualization - Advanced GLSL shader */
         .consciousness-shader-layer{
             position:absolute;
             top:0;
@@ -1319,7 +1319,7 @@
             height:100%;
             pointer-events:none;
             z-index:1;
-            opacity:0.15;
+            opacity:0.45;
             mix-blend-mode:screen;
         }
 
@@ -2252,34 +2252,89 @@
                 uniform vec2 resolution;
                 uniform float time;
 
+                // Advanced noise for organic flow
+                vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+                float snoise(vec2 v) {
+                    const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                    vec2 i  = floor(v + dot(v, C.yy));
+                    vec2 x0 = v -   i + dot(i, C.xx);
+                    vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                    vec4 x12 = x0.xyxy + C.xxzz;
+                    x12.xy -= i1;
+                    i = mod289(i);
+                    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                    m = m*m; m = m*m;
+                    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                    vec3 h = abs(x) - 0.5;
+                    vec3 ox = floor(x + 0.5);
+                    vec3 a0 = x - ox;
+                    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+                    vec3 g;
+                    g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                    return 130.0 * dot(m, g);
+                }
+
+                float fbm(vec2 p) {
+                    float value = 0.0;
+                    float amplitude = 0.5;
+                    for(int i = 0; i < 5; i++) {
+                        value += amplitude * snoise(p);
+                        p *= 2.0;
+                        amplitude *= 0.5;
+                    }
+                    return value;
+                }
+
                 void main() {
                     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
-                    float t = time * 0.15;
+                    float t = time * 0.25;
+                    vec2 p = uv * 2.0;
 
-                    // Elegant flowing consciousness field
+                    // Multi-layer consciousness flow
+                    vec2 flow1 = vec2(fbm(p + t * 0.3), fbm(p - t * 0.2));
+                    float pattern1 = fbm(p + flow1 * 0.5 + t * 0.1);
+                    float pattern2 = fbm(p - flow1 * 0.3 - t * 0.15);
+
+                    // Neural waves
                     float d = length(uv);
-                    float w1 = sin(d * 4.0 - t * 1.2);
-                    float w2 = sin(uv.x * 3.0 + t * 0.8);
-                    float w3 = cos(uv.y * 2.5 - t * 0.6);
+                    float waves = sin(d * 8.0 - t * 2.0 + pattern1 * 3.0) * 0.5 + 0.5;
+                    waves += sin(d * 12.0 + t * 1.5 - pattern2 * 2.0) * 0.3;
 
-                    vec2 flow = vec2(
-                        sin(uv.y * 3.0 + t) * 0.05,
-                        cos(uv.x * 3.0 - t) * 0.05
-                    );
-                    uv += flow;
+                    float consciousness = pattern1 * 0.4 + pattern2 * 0.3 + waves * 0.3;
+                    consciousness = consciousness * 0.5 + 0.5;
 
-                    float pattern = (w1 + w2 + w3) * 0.33 * 0.5 + 0.5;
-                    float centerGlow = exp(-d * 1.5) * 0.4;
-                    pattern += centerGlow;
+                    // Depth and glow
+                    float depth = exp(-d * 1.2);
+                    float glow = exp(-d * 2.5) * 0.6;
 
-                    // CytherAI signature colors
+                    // Premium color palette
                     vec3 gold = vec3(0.831, 0.686, 0.216);
+                    vec3 goldBright = vec3(1.0, 0.85, 0.3);
                     vec3 cyan = vec3(0.0, 1.0, 0.976);
+                    vec3 cyanDark = vec3(0.0, 0.6, 0.8);
+                    vec3 purple = vec3(0.6, 0.2, 0.8);
 
-                    vec3 color = mix(gold, cyan, sin(pattern * 3.14159 + t * 0.5) * 0.5 + 0.5);
-                    color += centerGlow * gold * 0.8;
+                    vec3 color1 = mix(gold, cyan, consciousness);
+                    vec3 color2 = mix(cyanDark, goldBright, sin(consciousness * 6.28 + t) * 0.5 + 0.5);
+                    vec3 color3 = mix(purple, gold, waves);
 
-                    gl_FragColor = vec4(color, 1.0);
+                    vec3 finalColor = mix(color1, color2, pattern1 * 0.5 + 0.5);
+                    finalColor = mix(finalColor, color3, pattern2 * 0.3);
+
+                    // Metallic highlights
+                    float highlight = pow(consciousness, 3.0) * depth;
+                    finalColor += highlight * goldBright * 0.5;
+                    finalColor += glow * gold * 1.2;
+
+                    // Depth atmosphere
+                    finalColor *= (0.4 + depth * 0.6);
+
+                    gl_FragColor = vec4(finalColor, 1.0);
                 }
             `;
 
