@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liquid Consciousness | CytherAI Shader Lab</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+            color: #fff;
+        }
+
+        #canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+            cursor: crosshair;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            min-width: 250px;
+            z-index: 1000;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+        }
+
+        .controls h3 {
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #D4AF37;
+            text-align: center;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: #8a8a8a;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #D4AF37;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .control-group input[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #D4AF37;
+            cursor: pointer;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            border: none;
+        }
+
+        .control-group select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .control-group select:focus {
+            border-color: #D4AF37;
+        }
+
+        .value-display {
+            float: right;
+            color: #D4AF37;
+            font-size: 0.7rem;
+        }
+
+        .title {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            font-size: 1.5rem;
+            z-index: 1000;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+        }
+
+        .subtitle {
+            position: fixed;
+            top: 55px;
+            left: 20px;
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            color: #8a8a8a;
+            z-index: 1000;
+        }
+
+        .info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 0.7rem;
+            color: #8a8a8a;
+            letter-spacing: 0.1em;
+            z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="title">LIQUID CONSCIOUSNESS</div>
+    <div class="subtitle">NEURAL PLASMA • SHADER LAB</div>
+
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <h3>◈ SHADER CONTROLS</h3>
+
+        <div class="control-group">
+            <label>
+                MODE
+            </label>
+            <select id="modeSelect">
+                <option value="plasma">Neural Plasma</option>
+                <option value="waves">Consciousness Waves</option>
+                <option value="fractal">Fractal Nexus</option>
+                <option value="tunnel">Quantum Tunnel</option>
+                <option value="dna">DNA Helix</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>
+                SPEED
+                <span class="value-display" id="speedValue">1.0</span>
+            </label>
+            <input type="range" id="speedSlider" min="0" max="3" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <label>
+                COMPLEXITY
+                <span class="value-display" id="complexityValue">1.0</span>
+            </label>
+            <input type="range" id="complexitySlider" min="0.1" max="3" step="0.1" value="1.0">
+        </div>
+
+        <div class="control-group">
+            <label>
+                DISTORTION
+                <span class="value-display" id="distortionValue">0.5</span>
+            </label>
+            <input type="range" id="distortionSlider" min="0" max="2" step="0.1" value="0.5">
+        </div>
+
+        <div class="control-group">
+            <label>
+                COLOR SHIFT
+                <span class="value-display" id="colorValue">0.0</span>
+            </label>
+            <input type="range" id="colorSlider" min="0" max="1" step="0.01" value="0.0">
+        </div>
+    </div>
+
+    <div class="info">MOVE MOUSE TO INTERACT • CLICK TO PULSE</div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+
+        if (!gl) {
+            alert('WebGL not supported!');
+            throw new Error('WebGL not supported');
+        }
+
+        // Resize canvas to full screen
+        function resize() {
+            canvas.width = window.innerWidth * window.devicePixelRatio;
+            canvas.height = window.innerHeight * window.devicePixelRatio;
+            gl.viewport(0, 0, canvas.width, canvas.height);
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Vertex shader (simple passthrough)
+        const vertexShaderSource = `
+            attribute vec2 position;
+            void main() {
+                gl_Position = vec4(position, 0.0, 1.0);
+            }
+        `;
+
+        // Fragment shaders for different modes
+        const shaderModes = {
+            plasma: `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                uniform float speed;
+                uniform float complexity;
+                uniform float distortion;
+                uniform float colorShift;
+                uniform float pulse;
+
+                vec3 palette(float t) {
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 cyan = vec3(0.0, 1.0, 0.97);
+                    vec3 magenta = vec3(1.0, 0.0, 1.0);
+
+                    float shift = colorShift;
+                    vec3 a = mix(gold, cyan, shift);
+                    vec3 b = mix(cyan, magenta, shift);
+                    vec3 c = mix(magenta, gold, shift);
+
+                    return mix(mix(a, b, sin(t * 3.14159) * 0.5 + 0.5), c, cos(t * 6.28) * 0.5 + 0.5);
+                }
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                    vec2 m = (mouse - 0.5) * 2.0;
+
+                    float t = time * speed * 0.3;
+
+                    // Neural plasma field
+                    float d = length(uv - m * 0.5);
+                    float wave1 = sin(d * 8.0 * complexity - t * 2.0 + pulse * 5.0);
+                    float wave2 = sin(uv.x * 6.0 * complexity + t);
+                    float wave3 = cos(uv.y * 4.0 * complexity - t * 1.5);
+                    float wave4 = sin((uv.x + uv.y) * 5.0 * complexity + t * 0.7);
+
+                    // Distortion field
+                    vec2 distort = vec2(
+                        sin(uv.y * 5.0 * complexity + t) * distortion * 0.1,
+                        cos(uv.x * 5.0 * complexity - t) * distortion * 0.1
+                    );
+                    uv += distort;
+
+                    // Combine waves
+                    float pattern = (wave1 + wave2 + wave3 + wave4) * 0.25;
+                    pattern = pattern * 0.5 + 0.5;
+
+                    // Add consciousness glow
+                    float glow = exp(-d * (2.0 - pulse)) * 0.5;
+                    pattern += glow;
+
+                    // Color mapping
+                    vec3 color = palette(pattern + t * 0.1);
+                    color += glow * vec3(0.83, 0.69, 0.22);
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+
+            waves: `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                uniform float speed;
+                uniform float complexity;
+                uniform float distortion;
+                uniform float colorShift;
+                uniform float pulse;
+
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / resolution;
+                    vec2 m = mouse;
+                    float t = time * speed * 0.5;
+
+                    float dist = length(uv - m);
+                    float waves = 0.0;
+
+                    // Ripple waves emanating from mouse
+                    for(float i = 0.0; i < 5.0; i++) {
+                        float wave = sin((dist - t * 0.2 - i * 0.1) * 20.0 * complexity + pulse * 3.0);
+                        waves += wave / (5.0 + i);
+                    }
+
+                    // Add horizontal consciousness waves
+                    waves += sin(uv.y * 10.0 * complexity + t * 2.0) * 0.3;
+                    waves += sin(uv.x * 8.0 * complexity - t * 1.5 + distortion) * 0.3;
+
+                    waves = waves * 0.5 + 0.5;
+
+                    // Color
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 cyan = vec3(0.0, 1.0, 0.97);
+                    vec3 color = mix(gold, cyan, colorShift);
+                    color *= waves;
+
+                    // Add glow at mouse position
+                    float glow = exp(-dist * 3.0) * (1.0 + pulse);
+                    color += glow * gold;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+
+            fractal: `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                uniform float speed;
+                uniform float complexity;
+                uniform float distortion;
+                uniform float colorShift;
+                uniform float pulse;
+
+                vec2 complexSquare(vec2 z) {
+                    return vec2(z.x * z.x - z.y * z.y, 2.0 * z.x * z.y);
+                }
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                    uv *= 2.0;
+
+                    // Animated Julia set center
+                    float t = time * speed * 0.2;
+                    vec2 c = vec2(
+                        cos(t) * 0.7 + (mouse.x - 0.5) * distortion,
+                        sin(t * 0.7) * 0.5 + (mouse.y - 0.5) * distortion
+                    );
+
+                    vec2 z = uv;
+                    float iterations = 0.0;
+                    float maxIter = 30.0 * complexity;
+
+                    for(float i = 0.0; i < 100.0; i++) {
+                        if(i >= maxIter) break;
+                        z = complexSquare(z) + c;
+                        if(length(z) > 2.0) break;
+                        iterations++;
+                    }
+
+                    float value = iterations / maxIter;
+                    value = pow(value, 0.5);
+
+                    // Consciousness colors
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 cyan = vec3(0.0, 1.0, 0.97);
+                    vec3 magenta = vec3(1.0, 0.0, 1.0);
+
+                    vec3 color = mix(gold, cyan, sin(value * 3.14159 + t) * 0.5 + 0.5);
+                    color = mix(color, magenta, colorShift);
+                    color *= value;
+
+                    // Add pulse glow
+                    color += exp(-length(uv) * 2.0) * gold * pulse;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+
+            tunnel: `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                uniform float speed;
+                uniform float complexity;
+                uniform float distortion;
+                uniform float colorShift;
+                uniform float pulse;
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                    vec2 m = (mouse - 0.5) * 0.5;
+                    uv -= m;
+
+                    float t = time * speed;
+                    float a = atan(uv.y, uv.x);
+                    float r = length(uv);
+
+                    // Tunnel coordinates
+                    float z = 1.0 / r - t;
+                    float theta = a + sin(z * complexity) * distortion;
+
+                    // Neural pattern
+                    float pattern = sin(z * 10.0 * complexity + pulse * 5.0);
+                    pattern += sin(theta * 8.0 * complexity);
+                    pattern += sin(r * 15.0 * complexity + t * 2.0);
+                    pattern = pattern * 0.33 + 0.5;
+
+                    // Depth fog
+                    float fog = exp(-r * 2.0);
+                    pattern *= fog;
+
+                    // Color
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 cyan = vec3(0.0, 1.0, 0.97);
+                    vec3 color = mix(gold, cyan, sin(pattern * 6.28 + colorShift * 6.28) * 0.5 + 0.5);
+                    color *= pattern;
+
+                    // Center glow
+                    color += exp(-r * 5.0) * gold * (1.0 + pulse);
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `,
+
+            dna: `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                uniform float speed;
+                uniform float complexity;
+                uniform float distortion;
+                uniform float colorShift;
+                uniform float pulse;
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                    float t = time * speed;
+
+                    // Rotate view based on mouse
+                    float angle = (mouse.x - 0.5) * 3.14159;
+                    mat2 rot = mat2(cos(angle), -sin(angle), sin(angle), cos(angle));
+                    uv = rot * uv;
+
+                    // DNA helix parameters
+                    float z = uv.y * 3.0 + t;
+                    float helix1 = sin(z * complexity * 2.0) * 0.3 + distortion * (mouse.x - 0.5);
+                    float helix2 = sin(z * complexity * 2.0 + 3.14159) * 0.3 - distortion * (mouse.x - 0.5);
+
+                    // Distance to each strand
+                    float d1 = length(vec2(uv.x - helix1, uv.y)) - 0.05;
+                    float d2 = length(vec2(uv.x - helix2, uv.y)) - 0.05;
+
+                    // Base pairs (connecting lines)
+                    float basePair = 0.0;
+                    float pairFreq = 10.0 * complexity;
+                    if(mod(z * pairFreq, 1.0) < 0.1) {
+                        float dx = abs(uv.x - mix(helix1, helix2, 0.5));
+                        float dy = abs(fract(z * pairFreq) - 0.05);
+                        if(dy < 0.05 && dx < abs(helix1 - helix2) * 0.5) {
+                            basePair = 1.0 - dy / 0.05;
+                        }
+                    }
+
+                    // Combine elements
+                    float glow1 = exp(-d1 * 20.0);
+                    float glow2 = exp(-d2 * 20.0);
+                    float helixGlow = max(glow1, glow2) + basePair * 0.5;
+
+                    // Add background field
+                    float bgPattern = sin(uv.x * 20.0 + t) * sin(uv.y * 20.0 - t) * 0.1 + 0.1;
+
+                    // Color
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 cyan = vec3(0.0, 1.0, 0.97);
+                    vec3 magenta = vec3(1.0, 0.0, 1.0);
+
+                    vec3 color1 = mix(gold, cyan, colorShift);
+                    vec3 color2 = mix(cyan, magenta, colorShift);
+
+                    vec3 color = color1 * glow1 + color2 * glow2 + gold * basePair;
+                    color += bgPattern * gold * 0.3;
+                    color += pulse * gold * 0.5;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `
+        };
+
+        // Compile shader
+        function compileShader(source, type) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Shader compilation error:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+
+            return shader;
+        }
+
+        // Create program
+        function createProgram(vertSource, fragSource) {
+            const vertShader = compileShader(vertSource, gl.VERTEX_SHADER);
+            const fragShader = compileShader(fragSource, gl.FRAGMENT_SHADER);
+
+            const program = gl.createProgram();
+            gl.attachShader(program, vertShader);
+            gl.attachShader(program, fragShader);
+            gl.linkProgram(program);
+
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Program linking error:', gl.getProgramInfoLog(program));
+                return null;
+            }
+
+            return program;
+        }
+
+        // Set up geometry (full screen quad)
+        const vertices = new Float32Array([
+            -1, -1,
+             1, -1,
+            -1,  1,
+             1,  1
+        ]);
+
+        const buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        // State
+        let currentMode = 'plasma';
+        let program = createProgram(vertexShaderSource, shaderModes[currentMode]);
+        let uniforms = {};
+        let mouse = { x: 0.5, y: 0.5 };
+        let params = {
+            speed: 1.0,
+            complexity: 1.0,
+            distortion: 0.5,
+            colorShift: 0.0
+        };
+        let pulseTime = 0;
+        let pulseDecay = 0;
+
+        function updateProgram() {
+            program = createProgram(vertexShaderSource, shaderModes[currentMode]);
+            uniforms = {
+                position: gl.getAttribLocation(program, 'position'),
+                resolution: gl.getUniformLocation(program, 'resolution'),
+                time: gl.getUniformLocation(program, 'time'),
+                mouse: gl.getUniformLocation(program, 'mouse'),
+                speed: gl.getUniformLocation(program, 'speed'),
+                complexity: gl.getUniformLocation(program, 'complexity'),
+                distortion: gl.getUniformLocation(program, 'distortion'),
+                colorShift: gl.getUniformLocation(program, 'colorShift'),
+                pulse: gl.getUniformLocation(program, 'pulse')
+            };
+        }
+        updateProgram();
+
+        // Mouse tracking
+        canvas.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX / window.innerWidth;
+            mouse.y = 1.0 - (e.clientY / window.innerHeight);
+        });
+
+        // Click for pulse effect
+        canvas.addEventListener('click', () => {
+            pulseTime = performance.now();
+            pulseDecay = 1.0;
+        });
+
+        // Controls
+        document.getElementById('modeSelect').addEventListener('change', (e) => {
+            currentMode = e.target.value;
+            updateProgram();
+        });
+
+        document.getElementById('speedSlider').addEventListener('input', (e) => {
+            params.speed = parseFloat(e.target.value);
+            document.getElementById('speedValue').textContent = params.speed.toFixed(1);
+        });
+
+        document.getElementById('complexitySlider').addEventListener('input', (e) => {
+            params.complexity = parseFloat(e.target.value);
+            document.getElementById('complexityValue').textContent = params.complexity.toFixed(1);
+        });
+
+        document.getElementById('distortionSlider').addEventListener('input', (e) => {
+            params.distortion = parseFloat(e.target.value);
+            document.getElementById('distortionValue').textContent = params.distortion.toFixed(1);
+        });
+
+        document.getElementById('colorSlider').addEventListener('input', (e) => {
+            params.colorShift = parseFloat(e.target.value);
+            document.getElementById('colorValue').textContent = params.colorShift.toFixed(2);
+        });
+
+        // Render loop
+        function render(timestamp) {
+            const time = timestamp * 0.001;
+
+            // Update pulse decay
+            if (pulseDecay > 0) {
+                const elapsed = (timestamp - pulseTime) * 0.001;
+                pulseDecay = Math.max(0, 1.0 - elapsed * 2.0);
+            }
+
+            gl.useProgram(program);
+
+            // Set uniforms
+            gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+            gl.uniform1f(uniforms.time, time);
+            gl.uniform2f(uniforms.mouse, mouse.x, mouse.y);
+            gl.uniform1f(uniforms.speed, params.speed);
+            gl.uniform1f(uniforms.complexity, params.complexity);
+            gl.uniform1f(uniforms.distortion, params.distortion);
+            gl.uniform1f(uniforms.colorShift, params.colorShift);
+            gl.uniform1f(uniforms.pulse, pulseDecay);
+
+            // Set up attributes
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.enableVertexAttribArray(uniforms.position);
+            gl.vertexAttribPointer(uniforms.position, 2, gl.FLOAT, false, 0, 0);
+
+            // Draw
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    </script>
+</body>
+</html>
