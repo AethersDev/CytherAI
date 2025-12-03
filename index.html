@@ -1,329 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CytherAI | Where Thought Becomes Form</title>
+    
+    <meta name="description" content="CytherAI — Sovereign, verifiable neural-symbolic intelligence. Neural theorem prover. Where thought becomes form.">
+    <meta property="og:title" content="CytherAI | Where Thought Becomes Form">
+    <meta property="og:description" content="Neural theorem prover. Sovereign intelligence. Zero dependency.">
+    <meta name="theme-color" content="#000000">
 
-    <!-- SEO / Social -->
-    <meta name="description" content="CytherAI — Sovereign, verifiable neural-symbolic intelligence. Where thought becomes form." />
-    <meta property="og:title" content="CytherAI | Where Thought Becomes Form" />
-    <meta property="og:description" content="Sovereign, verifiable neural-symbolic intelligence." />
-    <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#000000" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400&family=Outfit:wght@100;200;300;400&display=swap" rel="stylesheet">
 
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
-
-        /* Performance: CSS Containment for better rendering */
-        .feature-card, .contact-card, .crowned-nexus { contain: layout style paint; }
-        .neural-field { contain: layout paint; will-change: auto; }
-
-        /* Performance: Optimize frequently animated elements */
-        .thought-cursor, .thought-trail { will-change: transform; }
-        .synapse-node { will-change: transform, opacity; }
-        .quantum-grid { will-change: transform; contain: layout style paint; }
-
-        /* DNA Helix Loading Animation */
-        .dna-helix{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100px;
-            height: 200px;
-            perspective: 1000px;
-        }
-
-        .dna-strand{
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            animation: dnaRotate 4s linear infinite;
-        }
-
-        .dna-base{
-            position: absolute;
-            width: 80%;
-            height: 2px;
-            background: linear-gradient(90deg, var(--gold-dim), var(--consciousness-gold), var(--gold-bright));
-            left: 10%;
-            transform-origin: center;
-        }
-
-        @keyframes dnaRotate{
-            0%{ transform: rotateY(0deg); }
-            100%{ transform: rotateY(360deg); }
-        }
-
-        /* Advanced Glitch Text Effect */
-        .glitch-text{
-            position: relative;
-            display: inline-block;
-        }
-
-        .glitch-text::before,
-        .glitch-text::after{
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-        }
-
-        .glitch-text:hover::before{
-            animation: glitchTop 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
-            color: var(--gold-bright);
-            z-index: -1;
-        }
-
-        .glitch-text:hover::after{
-            animation: glitchBottom 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
-            color: var(--amber-glow);
-            z-index: -2;
-        }
-
-        @keyframes glitchTop{
-            0%, 100%{ clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0.7; }
-            20%{ clip-path: inset(0 0 85% 0); transform: translate(-2px, -2px); }
-            40%{ clip-path: inset(0 0 65% 0); transform: translate(2px, 1px); }
-            60%{ clip-path: inset(0 0 45% 0); transform: translate(-1px, 2px); }
-            80%{ clip-path: inset(0 0 25% 0); transform: translate(1px, -1px); }
-        }
-
-        @keyframes glitchBottom{
-            0%, 100%{ clip-path: inset(0 0 0 0); transform: translate(0); opacity: 0.7; }
-            20%{ clip-path: inset(85% 0 0 0); transform: translate(2px, 2px); }
-            40%{ clip-path: inset(65% 0 0 0); transform: translate(-2px, -1px); }
-            60%{ clip-path: inset(45% 0 0 0); transform: translate(1px, -2px); }
-            80%{ clip-path: inset(25% 0 0 0); transform: translate(-1px, 1px); }
-        }
-
-        /* Keyboard Focus Enhancement */
-        *:focus-visible{
-            outline: 2px solid var(--consciousness-gold);
-            outline-offset: 4px;
-            box-shadow: 0 0 20px var(--emergence-glow);
-        }
-
-        .nav-links a:focus-visible,
-        .btn:focus-visible,
-        .neural-interface:focus-visible{
-            outline: 2px solid var(--consciousness-gold);
-            outline-offset: 6px;
-            box-shadow: 0 0 30px var(--emergence-glow), 0 0 60px rgba(212,175,55,.3);
-        }
-
-        /* Viewport reveal animations */
-        .reveal{
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease, transform 0.8s ease;
-        }
-
-        .reveal.active{
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Procedural neural web background */
-        .neural-web-canvas{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            opacity: 0.12;
-            mix-blend-mode: screen;
-        }
-
-        /* 3D Consciousness Field (Three.js) */
-        .consciousness-field-3d{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0;
-            transition: opacity 3s ease-out;
-        }
-
-        .consciousness-field-3d.active{
-            opacity: 0.3;
-        }
-
-        :root{
-            /* Core Black & Gold Palette */
-            --quantum-black: #000;
-            --void-black: #030303;
-            --abyss-black: #0a0a0a;
-            --neural-grey: #1a1a1a;
-            --synaptic-silver: #6a6a6a;
-            --thought-white: #f5f5f0;
-            --warm-white: #faf8f2;
+        :root {
+            --void: #000000;
+            --abyss: #030303;
+            --deep: #080808;
+            --surface: #0c0c0c;
+            --elevated: #141414;
+            --border: #1a1a1a;
+            --border-light: #252525;
             
-            /* Gold Spectrum */
-            --consciousness-gold: #D4AF37;
-            --gold-bright: #FFD700;
-            --gold-light: #F4E4BA;
-            --gold-dim: #8B7355;
-            --gold-deep: #B8860B;
-            --amber-glow: #FFBF00;
-            --champagne: #F7E7CE;
+            --gold-darkest: #1a1408;
+            --gold-shadow: #3d2e0a;
+            --gold-dim: #6b5a2f;
+            --gold-muted: #8b7355;
+            --gold: #b8942a;
+            --gold-core: #d4af37;
+            --gold-bright: #e8c547;
+            --gold-light: #f4d675;
+            --gold-pale: #fae8a0;
+            --gold-white: #fdf6e3;
             
-            /* Functional */
-            --emergence-glow: rgba(212,175,55,.35);
-            --neural-pulse: rgba(212,175,55,.08);
-            --breath-phase: 0;
-            --cognitive-depth: 1;
-            --resonance-frequency: 6s;
-            --thought-density: .5;
-            --card-bg: rgba(212,175,55,0.02);
-            --card-border: rgba(212,175,55,0.12);
-            --success: #D4AF37;
+            --glow: rgba(212, 175, 55, 0.4);
+            --glow-soft: rgba(212, 175, 55, 0.15);
+            --glow-intense: rgba(255, 215, 0, 0.5);
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        body{
-            font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--quantum-black);
-            color: var(--thought-white);
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; cursor: none; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--void);
+            color: var(--gold-white);
             overflow-x: hidden;
-            line-height: 1.6;
-            position: relative;
+            line-height: 1.7;
+            font-weight: 300;
         }
 
-        /* CRT Scanlines & Film Grain */
-        body::before{
-            content: '';
+        a { color: inherit; text-decoration: none; }
+
+        /* ========================================
+           CUSTOM CURSOR
+        ======================================== */
+        .cursor-core {
+            width: 8px;
+            height: 8px;
+            background: var(--gold-core);
+            border-radius: 50%;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background:
-                repeating-linear-gradient(0deg, rgba(0,0,0,.08) 0px, transparent 1px, transparent 2px, rgba(0,0,0,.08) 3px),
-                repeating-linear-gradient(90deg, rgba(212,175,55,.02) 0px, transparent 1px);
             pointer-events: none;
-            z-index: 9999;
-            animation: scanlines 8s linear infinite;
-            opacity: .35;
+            z-index: 10001;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
         }
 
-        @keyframes scanlines{
-            0%{ transform: translateY(0); }
-            100%{ transform: translateY(10px); }
-        }
-
-        /* Film grain noise */
-        body::after{
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/></filter><rect width="200" height="200" filter="url(%23n)" opacity="0.04"/></svg>');
-            pointer-events: none;
-            z-index: 9998;
-            animation: grain 8s steps(10) infinite;
-        }
-
-        @keyframes grain{
-            0%, 100% { transform: translate(0, 0); }
-            10% { transform: translate(-5%, -10%); }
-            20% { transform: translate(-15%, 5%); }
-            30% { transform: translate(7%, -25%); }
-            40% { transform: translate(-5%, 25%); }
-            50% { transform: translate(-15%, 10%); }
-            60% { transform: translate(15%, 0%); }
-            70% { transform: translate(0%, 15%); }
-            80% { transform: translate(3%, 35%); }
-            90% { transform: translate(-10%, 10%); }
-        }
-
-        a{ color: inherit }
-
-        /* Enhanced Custom Cursor with trails */
-        .thought-cursor{
-            width: 20px;
-            height: 20px;
-            border: 1px solid var(--consciousness-gold);
+        .cursor-aura {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--gold-muted);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            transition: transform .15s cubic-bezier(.25,.46,.45,.94);
-            mix-blend-mode: difference;
-            background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+            transition: all 0.2s var(--ease-out-expo);
+            background: radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%);
         }
 
-        .thought-trail{
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(212,175,55,0.4);
-            border-radius: 50%;
+        .cursor-aura.hover {
+            transform: scale(1.6);
+            border-color: var(--gold-core);
+            background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%);
+        }
+
+        .cursor-trail {
             position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-core);
+            border-radius: 50%;
             pointer-events: none;
             z-index: 9999;
-            opacity: .25;
-            transition: transform .3s cubic-bezier(.25,.46,.45,.94);
-            background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
         }
 
-        .cursor-ripple{
+        /* ========================================
+           OVERLAYS - SCANLINES & GRAIN
+        ======================================== */
+        .overlay-scanlines {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            border: 1px solid var(--consciousness-gold);
-            border-radius: 50%;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.03) 0px,
+                transparent 1px,
+                transparent 2px
+            );
             pointer-events: none;
             z-index: 9998;
-            animation: rippleExpand 1s ease-out forwards;
-            box-shadow: 0 0 20px var(--consciousness-gold);
+            opacity: 0.4;
         }
 
-        @keyframes rippleExpand{
-            to{
-                width: 80px;
-                height: 80px;
-                opacity: 0;
-                transform: translate(-30px,-30px);
-            }
+        .overlay-grain {
+            position: fixed;
+            inset: -100%;
+            width: 300%;
+            height: 300%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9997;
+            animation: grain 8s steps(10) infinite;
         }
 
-        /* Breathing with warm glow */
-        .neural-breathe{
-            animation: consciousnessBreathing var(--resonance-frequency) ease-in-out infinite;
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            30% { transform: translate(3%, -15%); }
+            50% { transform: translate(-10%, 5%); }
+            70% { transform: translate(8%, 10%); }
+            90% { transform: translate(-3%, 8%); }
         }
 
-        @keyframes consciousnessBreathing{
-            0%{ opacity: .6; transform: scale(1); filter: brightness(.85) }
-            25%{ opacity: .7; transform: scale(1.01); filter: brightness(.9) }
-            50%{ opacity: .85; transform: scale(1.02); filter: brightness(1) }
-            100%{ opacity: 1; transform: scale(1); filter: brightness(1.05) }
+        /* ========================================
+           CONSCIOUSNESS AWAKENING METER
+        ======================================== */
+        .awakening-meter {
+            position: fixed;
+            right: 2.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        /* Enhanced Nav with glassmorphism */
-        nav{
+        .awakening-track {
+            width: 2px;
+            height: 180px;
+            background: var(--gold-darkest);
+            position: relative;
+            border-radius: 1px;
+        }
+
+        .awakening-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, var(--gold-dim), var(--gold-core), var(--gold-bright));
+            border-radius: 1px;
+            transition: height 0.4s var(--ease-out-expo);
+            box-shadow: 0 0 15px var(--glow-soft);
+        }
+
+        .awakening-node {
+            width: 8px;
+            height: 8px;
+            border: 1px solid var(--gold-shadow);
+            border-radius: 50%;
+            background: var(--void);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .awakening-node:hover {
+            border-color: var(--gold-muted);
+        }
+
+        .awakening-node.active {
+            background: var(--gold-core);
+            border-color: var(--gold-bright);
+            box-shadow: 0 0 12px var(--glow);
+        }
+
+        .awakening-label {
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-shadow);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            margin-top: 1rem;
+        }
+
+        /* ========================================
+           NAVIGATION
+        ======================================== */
+        nav {
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 2rem 4rem;
+            padding: 1.5rem 4rem;
             z-index: 1000;
-            background: rgba(0,0,0,.7);
-            backdrop-filter: blur(20px) saturate(180%) brightness(.85);
-            transition: all .5s cubic-bezier(.4,0,.2,1);
-            border-bottom: 1px solid rgba(212,175,55,.08);
-            box-shadow: 0 10px 40px rgba(0,0,0,.4);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px) saturate(150%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.06);
+            transition: all 0.5s var(--ease-out-expo);
         }
 
-        .nav-container{
+        nav.scrolled {
+            padding: 1rem 4rem;
+            background: rgba(0, 0, 0, 0.85);
+            border-bottom-color: rgba(212, 175, 55, 0.12);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .nav-container {
             max-width: 1400px;
             margin: 0 auto;
             display: flex;
@@ -331,681 +238,673 @@
             align-items: center;
         }
 
-        .nav-brand{
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: .3em;
-            color: var(--thought-white);
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-brand:hover {
+            filter: drop-shadow(0 0 15px var(--glow-soft));
+        }
+
+        .nav-brand-icon {
+            width: 32px;
+            height: 38px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-brand:hover .nav-brand-icon {
+            transform: scale(1.05);
+        }
+
+        .nav-brand-text {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.3em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            color: var(--gold-muted);
+            transition: all 0.3s ease;
             position: relative;
-            cursor: pointer;
-            transition: all .3s ease;
-        }
-
-        .nav-brand:hover{
-            text-shadow:
-                0 0 10px var(--consciousness-gold),
-                0 0 20px var(--consciousness-gold),
-                0 0 30px var(--gold-bright);
-        }
-
-        .nav-brand::before{
-            content: '◈';
-            position: absolute;
-            left: -30px;
-            color: var(--consciousness-gold);
-            animation: symbolRotate 10s linear infinite;
-            filter: drop-shadow(0 0 10px var(--consciousness-gold));
-        }
-
-        @keyframes symbolRotate{ to{ transform: rotate(360deg) } }
-
-        .nav-links{ display: flex; gap: 3rem; list-style: none }
-
-        .nav-links a{
-            color: var(--synaptic-silver);
-            text-decoration: none;
-            font-size: .9rem;
-            letter-spacing: .15em;
-            transition: all .3s ease;
-            position: relative;
-            cursor: pointer;
             padding: 0.5rem 0;
         }
 
-        .nav-links a::after{
+        .nav-links a::before {
             content: '';
             position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 0;
+            left: 0;
             width: 0;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--consciousness-gold), transparent);
-            transition: width .3s ease;
-            box-shadow: 0 0 10px var(--consciousness-gold);
+            background: linear-gradient(90deg, var(--gold-core), transparent);
+            transition: width 0.4s var(--ease-out-expo);
         }
 
-        .nav-links a:hover{
-            color: var(--thought-white);
-            text-shadow: 0 0 10px rgba(212,175,55,.4);
-            transform: translateY(-2px);
+        .nav-links a:hover {
+            color: var(--gold-white);
+            text-shadow: 0 0 20px var(--glow-soft);
         }
 
-        .nav-links a:hover::after{ width: 120% }
+        .nav-links a:hover::before {
+            width: 100%;
+        }
 
-        /* Hero with enhanced parallax */
-        .hero{
+        /* ========================================
+           HERO SECTION
+        ======================================== */
+        .hero {
             min-height: 100vh;
             position: relative;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 4rem 2rem;
-            perspective: 2000px;
-        }
-
-        .neural-field{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            padding: 8rem 2rem 4rem;
             overflow: hidden;
         }
 
-        /* Enhanced synapse nodes with warm glow */
-        .synapse-node{
+        /* Ambient Glow Orbs */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.12;
+            pointer-events: none;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .ambient-orb-1 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--gold-core), transparent 70%);
+            top: 5%;
+            left: -15%;
+            animation-delay: 0s;
+        }
+
+        .ambient-orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--gold-bright), transparent 70%);
+            bottom: 10%;
+            right: -10%;
+            animation-delay: -7s;
+        }
+
+        .ambient-orb-3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--gold), transparent 70%);
+            top: 40%;
+            left: 25%;
+            animation-delay: -14s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(40px, -30px) scale(1.1); }
+            50% { transform: translate(-30px, 40px) scale(0.95); }
+            75% { transform: translate(30px, 30px) scale(1.08); }
+        }
+
+        /* Consciousness Shader Canvas */
+        .consciousness-shader {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.35;
+            mix-blend-mode: screen;
+        }
+
+        /* Three.js 3D Field */
+        .consciousness-3d {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+
+        .consciousness-3d.active {
+            opacity: 0.3;
+        }
+
+        /* Sacred Geometry */
+        .sacred-geometry {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 700px;
+            height: 700px;
+            pointer-events: none;
+            opacity: 0.08;
+        }
+
+        .geometry-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .geometry-layer svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .geometry-layer:nth-child(1) { animation: geoRotate 80s linear infinite; }
+        .geometry-layer:nth-child(2) { animation: geoRotate 60s linear infinite reverse; }
+        .geometry-layer:nth-child(3) { animation: geoRotate 100s linear infinite; }
+
+        @keyframes geoRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Neural Field */
+        .neural-field {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+        }
+
+        .synapse-node {
             position: absolute;
             width: 3px;
             height: 3px;
-            background: var(--consciousness-gold);
+            background: var(--gold-core);
             border-radius: 50%;
-            opacity: .25;
-            animation: synapticFire 8s ease-in-out infinite;
-            box-shadow: 0 0 8px var(--consciousness-gold);
-            transition: all .3s ease;
+            opacity: 0.25;
+            box-shadow: 0 0 8px var(--glow-soft);
+            animation: synapticPulse 6s ease-in-out infinite;
         }
 
-        @keyframes synapticFire{
-            0%,100%{
-                opacity: .1;
-                transform: scale(1);
-                box-shadow: 0 0 0 0 var(--neural-pulse);
-            }
-            50%{
-                opacity: .7;
-                transform: scale(1.5);
-                box-shadow: 0 0 15px 3px var(--emergence-glow);
-            }
+        @keyframes synapticPulse {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.4); box-shadow: 0 0 15px var(--glow); }
         }
 
-        /* Active neural connections to cursor */
-        .neural-connection{
+        .neural-connection {
             position: absolute;
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.3), transparent);
-            opacity: .08;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+            opacity: 0.08;
             transform-origin: left center;
-            animation: neuralPulse 4s ease-in-out infinite;
         }
 
-        .neural-connection.active{
-            background: linear-gradient(90deg, transparent, var(--consciousness-gold), transparent);
-            opacity: .5;
-            height: 1px;
-            box-shadow: 0 0 8px var(--consciousness-gold);
-            animation: electricPulse .5s ease-in-out;
-        }
-
-        @keyframes electricPulse{
-            0%, 100%{ opacity: .3; }
-            50%{ opacity: 1; }
-        }
-
-        @keyframes neuralPulse{
-            0%,100%{ opacity: .03 }
-            50%{ opacity: .2 }
-        }
-
-        /* Enhanced 3D quantum grid with more depth */
-        .quantum-grid{
+        /* Quantum Grid */
+        .quantum-grid {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 200%;
-            height: 200%;
-            transform: translate(-50%,-50%) rotateX(75deg);
+            width: 220%;
+            height: 220%;
+            transform: translate(-50%, -50%) rotateX(75deg);
             transform-style: preserve-3d;
-            opacity: .06;
+            opacity: 0.04;
             pointer-events: none;
         }
 
-        .grid-plane{
+        .grid-plane {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             background-image:
-                linear-gradient(rgba(212,175,55,0.4) .5px, transparent .5px),
-                linear-gradient(90deg, rgba(212,175,55,0.4) .5px, transparent .5px);
-            background-size: 60px 60px;
-            animation: gridFlow 20s linear infinite;
-            filter: drop-shadow(0 0 15px rgba(212,175,55,.2));
+                linear-gradient(var(--gold-shadow) 0.5px, transparent 0.5px),
+                linear-gradient(90deg, var(--gold-shadow) 0.5px, transparent 0.5px);
+            background-size: 70px 70px;
+            animation: gridFlow 25s linear infinite;
         }
 
-        @keyframes gridFlow{
-            to{ transform: translate(60px,60px) }
-        }
-
-        .grid-plane:nth-child(2){
-            transform: translateZ(-100px);
-            opacity: .5;
-            animation-duration: 25s;
-        }
-
-        .grid-plane:nth-child(3){
-            transform: translateZ(-200px);
-            opacity: .25;
-            animation-duration: 30s;
-        }
-
-        .grid-plane:nth-child(4){
-            transform: translateZ(-300px);
-            opacity: .12;
+        .grid-plane:nth-child(2) {
+            transform: translateZ(-120px);
+            opacity: 0.5;
             animation-duration: 35s;
-            background-size: 80px 80px;
         }
 
-        /* Enhanced Logo with warm glow */
-        .logo-container{
+        @keyframes gridFlow {
+            to { transform: translate(70px, 70px); }
+        }
+
+        /* ========================================
+           THE INTEGRATED CROWN LOGO SYSTEM
+        ======================================== */
+        .logo-system {
             position: relative;
-            margin-bottom: 4rem;
-            transform-style: preserve-3d;
-            animation: logoFloat 6s ease-in-out infinite;
-            z-index: 100;
-            filter: drop-shadow(0 20px 40px rgba(212,175,55,.35));
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2.5rem;
         }
 
-        @keyframes logoFloat{
-            0%,100%{ transform: translateY(0) rotateY(0) scale(1) }
-            25%{ transform: translateY(-5px) rotateY(90deg) scale(1.03) }
-            50%{ transform: translateY(-10px) rotateY(180deg) scale(1.06) }
-            75%{ transform: translateY(-5px) rotateY(270deg) scale(1.03) }
-        }
-
-        .crowned-nexus{
-            width: 200px;
-            height: 200px;
+        .logo-container {
             position: relative;
             cursor: pointer;
         }
 
-        .crowned-nexus:hover{
-            animation: warmGlitch .3s ease;
-        }
-
-        @keyframes warmGlitch{
-            0%, 100%{ filter: none; }
-            25%{ filter: brightness(1.2) drop-shadow(0 0 20px var(--consciousness-gold)); }
-            75%{ filter: brightness(1.1) drop-shadow(0 0 20px var(--gold-bright)); }
-        }
-
-        .crown-structure{
-            position: absolute;
-            top: 20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 80px;
-        }
-
-        .crown-peak{
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 25px solid transparent;
-            border-right: 25px solid transparent;
-            border-bottom: 45px solid var(--thought-white);
-            filter: drop-shadow(0 0 20px var(--emergence-glow)) drop-shadow(0 0 40px rgba(212,175,55,0.3));
-            animation: crownPulse 3s ease-in-out infinite;
-        }
-
-        @keyframes crownPulse{
-            0%,100%{
-                filter: drop-shadow(0 0 20px var(--emergence-glow));
-                transform: translateX(-50%) scale(1)
-            }
-            50%{
-                filter: drop-shadow(0 0 35px var(--consciousness-gold)) drop-shadow(0 0 50px rgba(255,215,0,0.3));
-                transform: translateX(-50%) scale(1.08)
-            }
-        }
-
-        .crown-peak::before,.crown-peak::after{
-            content: '';
-            position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 35px solid var(--thought-white);
-        }
-
-        .crown-peak::before{ left: -40px }
-        .crown-peak::after{ right: -40px }
-
-        .nexus-sphere{
-            position: absolute;
-            bottom: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 80px;
-            cursor: pointer;
-        }
-
-        .nexus-outer{
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--thought-white);
-            border-radius: 50%;
-            position: relative;
-            animation: nexusRotate 10s linear infinite;
-            background: radial-gradient(circle at 30% 30%, var(--emergence-glow) 0%, transparent 50%);
-            box-shadow:
-                inset 0 0 20px rgba(212,175,55,.15),
-                0 0 20px rgba(212,175,55,.25);
-        }
-
-        @keyframes nexusRotate{ to{ transform: rotate(360deg) } }
-
-        .nexus-inner{
+        .logo-glow {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%,-50%);
-            width: 60%;
-            height: 60%;
-            border: 1px solid var(--consciousness-gold);
-            border-radius: 50%;
-            animation: nexusRotate 7s linear infinite reverse;
-            box-shadow:
-                inset 0 0 10px rgba(212,175,55,.15),
-                0 0 10px rgba(212,175,55,.2);
-        }
-
-        .nexus-core{
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            width: 12px;
-            height: 12px;
-            background: var(--consciousness-gold);
-            border-radius: 50%;
-            box-shadow:
-                0 0 30px var(--consciousness-gold),
-                0 0 60px var(--emergence-glow),
-                0 0 90px rgba(255,215,0,0.3);
-            animation: corePulse 2s ease-in-out infinite;
-        }
-
-        @keyframes corePulse{
-            0%,100%{
-                transform: translate(-50%,-50%) scale(1);
-                box-shadow:
-                    0 0 30px var(--consciousness-gold),
-                    0 0 60px var(--emergence-glow)
-            }
-            50%{
-                transform: translate(-50%,-50%) scale(1.3);
-                box-shadow:
-                    0 0 40px var(--consciousness-gold),
-                    0 0 80px var(--emergence-glow),
-                    0 0 120px rgba(212,175,55,.2),
-                    0 0 150px rgba(255,215,0,.15)
-            }
-        }
-
-        .thought-particle{
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--consciousness-gold);
-            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 55%);
+            filter: blur(50px);
+            opacity: 0;
+            transition: opacity 0.6s ease;
             pointer-events: none;
-            animation: particleOrbit 20s linear infinite;
-            box-shadow: 0 0 8px var(--consciousness-gold);
         }
 
-        @keyframes particleOrbit{
-            from{ transform: rotate(0) translateX(100px) rotate(0) }
-            to{ transform: rotate(360deg) translateX(100px) rotate(-360deg) }
+        .logo-container:hover .logo-glow {
+            opacity: 1;
         }
 
-        /* Enhanced Typography */
-        .hero-content{
+        /* Floating Particles */
+        .logo-particles {
+            position: absolute;
+            inset: -60px;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold-core);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 5s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { top: 15%; left: 8%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 25%; right: 12%; animation-delay: 0.7s; }
+        .particle:nth-child(3) { top: 55%; left: 3%; animation-delay: 1.4s; }
+        .particle:nth-child(4) { top: 65%; right: 8%; animation-delay: 2.1s; }
+        .particle:nth-child(5) { top: 80%; left: 18%; animation-delay: 2.8s; }
+        .particle:nth-child(6) { top: 35%; left: -2%; animation-delay: 3.5s; }
+        .particle:nth-child(7) { top: 45%; right: 2%; animation-delay: 4.2s; }
+        .particle:nth-child(8) { top: 88%; right: 20%; animation-delay: 4.9s; }
+
+        @keyframes particleFloat {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+            15% { opacity: 0.7; transform: translateY(-8px) scale(1); }
+            85% { opacity: 0.7; transform: translateY(-35px) scale(1); }
+            100% { opacity: 0; transform: translateY(-45px) scale(0); }
+        }
+
+        /* The Main Logo SVG */
+        .integrated-crown {
+            width: 200px;
+            height: 240px;
+            filter: drop-shadow(0 0 50px rgba(212, 175, 55, 0.25));
+            transition: filter 0.5s ease;
+        }
+
+        .logo-container:hover .integrated-crown {
+            filter: drop-shadow(0 0 70px rgba(212, 175, 55, 0.4));
+        }
+
+        /* Proof Construction Animation */
+        .crown-peak-center,
+        .crown-peak-left,
+        .crown-peak-right,
+        .crown-arc,
+        .crown-terminal-left,
+        .crown-terminal-right,
+        .crown-jewel-center,
+        .crown-jewel-left,
+        .crown-jewel-right,
+        .lambda-symbol,
+        .verification-mark {
+            opacity: 0;
+            animation: proveIn 0.7s var(--ease-out-expo) forwards;
+        }
+
+        .crown-peak-center { animation-delay: 0.5s; }
+        .crown-peak-left { animation-delay: 0.7s; }
+        .crown-peak-right { animation-delay: 0.7s; }
+        .crown-arc { animation-delay: 0.9s; }
+        .crown-terminal-left { animation-delay: 1s; }
+        .crown-terminal-right { animation-delay: 1s; }
+        .crown-jewel-center { animation-delay: 1.15s; }
+        .crown-jewel-left { animation-delay: 1.25s; }
+        .crown-jewel-right { animation-delay: 1.25s; }
+        .lambda-symbol { animation-delay: 1.4s; }
+        .verification-mark { animation-delay: 1.9s; }
+
+        @keyframes proveIn {
+            0% { opacity: 0; transform: translateY(-12px) scale(0.9); filter: blur(4px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+
+        .crown-jewel-center {
+            animation: proveIn 0.7s var(--ease-out-expo) 1.15s forwards,
+                       jewelPulse 3.5s ease-in-out 2s infinite;
+        }
+
+        @keyframes jewelPulse {
+            0%, 100% { filter: drop-shadow(0 0 4px rgba(244, 214, 117, 0.5)); }
+            50% { filter: drop-shadow(0 0 15px rgba(244, 214, 117, 1)); }
+        }
+
+        /* Wordmark */
+        .wordmark {
+            margin-top: 2rem;
             text-align: center;
-            max-width: 1000px;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 1.6s forwards;
+        }
+
+        .wordmark-text {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 300;
+            letter-spacing: 0.45em;
+            color: var(--gold-white);
+            margin-left: 0.45em;
+            text-shadow: 0 0 40px var(--glow-soft);
+        }
+
+        .wordmark-tagline {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.35em;
+            color: var(--gold-dim);
+            margin-top: 0.6rem;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================
+           HERO CONTENT
+        ======================================== */
+        .hero-content {
+            text-align: center;
+            max-width: 850px;
             position: relative;
             z-index: 10;
         }
 
-        .hero-headline{
-            font-size: 4rem;
-            font-weight: 100;
-            letter-spacing: .2em;
-            margin-bottom: 1rem;
-            background: linear-gradient(180deg, var(--thought-white) 0%, var(--synaptic-silver) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: fadeInUp 1s ease-out;
-            position: relative;
-            cursor: default;
-        }
-
-        .hero-headline::before{
-            content: attr(data-text);
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, var(--consciousness-gold) 0%, transparent 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            opacity: 0;
-            animation: thoughtGlimmer 6s ease-in-out infinite;
-        }
-
-        @keyframes thoughtGlimmer{
-            0%,100%{ opacity: 0 }
-            50%{ opacity: .25 }
-        }
-
-        @keyframes fadeInUp{
-            from{ opacity: 0; transform: translateY(30px) }
-            to{ opacity: 1; transform: translateY(0) }
-        }
-
-        .hero-subline{
-            font-size: 1.1rem;
-            font-weight: 200;
-            letter-spacing: .4em;
-            color: var(--synaptic-silver);
-            margin-bottom: 2rem;
-            animation: fadeInUp 1s ease-out .2s both;
-            position: relative;
-            text-shadow: 0 0 20px rgba(212,175,55,.2);
-        }
-
-        .consciousness-indicator{
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            background: var(--consciousness-gold);
-            border-radius: 50%;
-            margin: 0 1rem;
-            animation: consciousPulse 2s ease-in-out infinite;
-            box-shadow: 0 0 10px var(--consciousness-gold);
-        }
-
-        @keyframes consciousPulse{
-            0%,100%{
-                transform: scale(1);
-                box-shadow: 0 0 0 0 var(--emergence-glow)
-            }
-            50%{
-                transform: scale(1.5);
-                box-shadow: 0 0 0 10px transparent, 0 0 20px var(--consciousness-gold)
-            }
-        }
-
-        .hero-description{
-            font-size: .95rem;
-            line-height: 2;
-            color: var(--synaptic-silver);
-            letter-spacing: .1em;
-            margin-bottom: 3rem;
-            animation: fadeInUp 1s ease-out .4s both;
-        }
-
-        .concept-tag{
-            display: inline-block;
-            padding: .2rem 1rem;
-            margin: 0 .5rem;
-            border: 1px solid rgba(212,175,55,.15);
-            background: rgba(212,175,55,.03);
-            border-radius: 20px;
-            transition: all .3s ease;
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .concept-tag::before{
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(
-                transparent,
-                var(--consciousness-gold),
-                transparent 30%
-            );
-            animation: rotate 4s linear infinite;
-            opacity: 0;
-            transition: opacity .3s ease;
-        }
-
-        @keyframes rotate{
-            100%{ transform: rotate(360deg); }
-        }
-
-        .concept-tag::after{
-            content: '';
-            position: absolute;
-            inset: 1px;
-            background: var(--quantum-black);
-            border-radius: 20px;
-        }
-
-        .concept-tag span{
-            position: relative;
-            z-index: 1;
-        }
-
-        .concept-tag:hover{
-            border-color: var(--consciousness-gold);
-            background: var(--emergence-glow);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(212,175,55,.2);
-        }
-
-        .concept-tag:hover::before{
-            opacity: 1;
-        }
-
-        /* Magnetic button with advanced effects */
-        .neural-interface{
-            display: inline-block;
-            padding: 1.2rem 4rem;
-            background: transparent;
-            color: var(--thought-white);
-            text-decoration: none;
-            letter-spacing: .2em;
-            font-size: .9rem;
+        .hero-headline {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.8rem);
             font-weight: 300;
+            letter-spacing: 0.08em;
+            line-height: 1.25;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 1.85s forwards;
+        }
+
+        .hero-headline em {
+            font-style: italic;
+            background: linear-gradient(135deg, var(--gold-core), var(--gold-bright));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .scramble-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.28em;
+            color: var(--gold-muted);
+            margin-bottom: 2.5rem;
+            min-height: 1.5em;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 2.05s forwards;
+        }
+
+        .scramble-text .char.scrambling {
+            color: var(--gold-core);
+            text-shadow: 0 0 8px var(--glow);
+        }
+
+        /* Concept Tags */
+        .concept-tags {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 2.25s forwards;
+        }
+
+        .concept-tag {
+            padding: 0.65rem 1.6rem;
+            border: 1px solid var(--gold-shadow);
+            background: rgba(212, 175, 55, 0.02);
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.18em;
+            color: var(--gold-muted);
+            transition: all 0.4s var(--ease-out-expo);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(212,175,55,.4);
-            animation: fadeInUp 1s ease-out .6s both;
-            transition: all .3s cubic-bezier(.4,0,.2,1);
-            cursor: pointer;
         }
 
-        .neural-interface::before{
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, var(--consciousness-gold), transparent);
-            transition: all .5s ease;
-            transform: translate(-50%,-50%);
-            border-radius: 50%;
-        }
-
-        .neural-interface::after{
+        .concept-tag::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,215,0,0.15), transparent);
-            opacity: 0;
-            transition: opacity .3s ease;
+            background: linear-gradient(90deg, transparent, rgba(212,175,55,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s var(--ease-out-expo);
         }
 
-        .neural-interface:hover{
-            color: var(--quantum-black);
-            border-color: var(--consciousness-gold);
-            box-shadow:
-                0 0 30px var(--emergence-glow),
-                0 0 60px rgba(212,175,55,.2),
-                0 10px 40px rgba(212,175,55,.35);
+        .concept-tag:hover {
+            border-color: var(--gold-core);
+            color: var(--gold-white);
+            background: rgba(212, 175, 55, 0.06);
             transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px var(--glow-soft);
         }
 
-        .neural-interface:hover::before{
-            width: 400px;
-            height: 400px;
+        .concept-tag:hover::before {
+            transform: translateX(100%);
         }
 
-        .neural-interface:hover::after{
-            opacity: .4;
-            animation: shimmer 1.5s ease infinite;
-        }
-
-        @keyframes shimmer{
-            0%{ transform: translateX(-100%); }
-            100%{ transform: translateX(100%); }
-        }
-
-        .neural-interface span{
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Enhanced Scroll Cue */
-        .consciousness-scroll{
-            position: absolute;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+        /* CTA Button */
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.1rem 2.8rem;
+            border: 1px solid var(--gold-dim);
+            background: transparent;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.22em;
+            color: var(--gold-white);
             cursor: pointer;
-        }
-
-        .scroll-neural{
-            width: 30px;
-            height: 50px;
-            border: 2px solid rgba(212,175,55,.4);
-            border-radius: 25px;
             position: relative;
-            animation: scrollPulse 2s ease-in-out infinite;
-            box-shadow: 0 0 15px rgba(212,175,55,.2);
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out-expo);
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 2.45s forwards;
         }
 
-        @keyframes scrollPulse{
-            0%,100%{ opacity: .5 }
-            50%{ opacity: 1 }
-        }
-
-        .scroll-synapse{
-            width: 4px;
-            height: 8px;
-            background: var(--consciousness-gold);
-            border-radius: 2px;
+        .cta-button::before {
+            content: '';
             position: absolute;
-            top: 8px;
+            inset: 0;
+            background: var(--gold-core);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s var(--ease-out-expo);
+            z-index: -1;
+        }
+
+        .cta-button:hover {
+            color: var(--void);
+            border-color: var(--gold-core);
+            box-shadow: 0 0 40px var(--glow), 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .cta-button:hover::before {
+            transform: scaleX(1);
+        }
+
+        .cta-icon {
+            width: 18px;
+            height: 18px;
+            border: 1px solid currentColor;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .cta-icon {
+            transform: rotate(45deg);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
             left: 50%;
             transform: translateX(-50%);
-            animation: synapseScroll 2s ease-in-out infinite;
-            box-shadow: 0 0 10px var(--consciousness-gold);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 2.8s forwards;
         }
 
-        @keyframes synapseScroll{
-            0%{ top: 8px; opacity: 0 }
-            50%{ opacity: 1 }
-            100%{ top: 32px; opacity: 0 }
+        .scroll-track {
+            width: 1px;
+            height: 55px;
+            background: var(--gold-shadow);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Enhanced Sections with 3D cards */
-        section.anchor{
-            min-height: 60vh;
-            padding: 8rem 2rem 4rem;
+        .scroll-pulse {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, var(--gold-core), transparent);
+            animation: scrollPulse 2.2s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0% { top: -20px; opacity: 0; }
+            50% { opacity: 1; }
+            100% { top: 55px; opacity: 0; }
+        }
+
+        .scroll-label {
+            font-family: var(--font-mono);
+            font-size: 0.52rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-dim);
+        }
+
+        /* ========================================
+           SECTIONS
+        ======================================== */
+        section {
+            padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
         }
 
-        .section-title{
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-number {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            letter-spacing: 0.35em;
+            color: var(--gold-shadow);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
             font-weight: 300;
-            letter-spacing: .4em;
-            color: var(--thought-white);
-            margin-bottom: 3rem;
-            font-size: 2.5rem;
-            text-align: center;
-            position: relative;
-            display: inline-block;
-            left: 50%;
-            transform: translateX(-50%);
+            letter-spacing: 0.18em;
+            margin-bottom: 1rem;
         }
 
-        .section-title::after{
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
+        .section-subtitle {
+            font-size: 0.92rem;
+            color: var(--gold-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.9;
+        }
+
+        .divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--consciousness-gold), transparent);
-            box-shadow: 0 0 10px var(--consciousness-gold);
+            background: linear-gradient(90deg, transparent, var(--gold-shadow), transparent);
+            margin: 0 2rem;
         }
 
-        .section-body{
-            color: var(--synaptic-silver);
-            text-align: center;
-            font-size: 1.1rem;
-            line-height: 2;
-            margin-bottom: 3rem;
-        }
-
-        /* 3D Holographic Cards */
-        .feature-grid{
+        /* ========================================
+           FEATURE CARDS - HOLOGRAPHIC
+        ======================================== */
+        .feature-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
         }
 
-        .feature-card{
-            background: rgba(212,175,55,.02);
-            border: 1px solid rgba(212,175,55,.1);
-            padding: 2rem;
-            border-radius: 20px;
+        .feature-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.02), rgba(0, 0, 0, 0.4));
+            border: 1px solid var(--border);
+            padding: 2.5rem;
             position: relative;
             overflow: hidden;
-            transition: all .5s cubic-bezier(.4,0,.2,1);
+            transition: all 0.5s var(--ease-out-expo);
             transform-style: preserve-3d;
-            cursor: pointer;
         }
 
-        .feature-card::before{
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                ellipse at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(212, 175, 55, 0.12),
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card::after {
             content: '';
             position: absolute;
             top: -50%;
@@ -1015,448 +914,405 @@
             background: conic-gradient(
                 from 0deg,
                 transparent,
-                var(--consciousness-gold),
-                var(--gold-bright),
-                transparent 50%
+                rgba(212, 175, 55, 0.08),
+                transparent 30%
             );
-            animation: cardRotate 6s linear infinite;
+            animation: cardRotate 8s linear infinite;
             opacity: 0;
-            transition: opacity .5s ease;
+            transition: opacity 0.4s ease;
         }
 
-        @keyframes cardRotate{
-            100%{ transform: rotate(360deg); }
+        @keyframes cardRotate {
+            to { transform: rotate(360deg); }
         }
 
-        .feature-card::after{
-            content: '';
-            position: absolute;
-            inset: 1px;
-            background: rgba(0,0,0,.92);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+        .feature-card:hover {
+            border-color: var(--gold-muted);
+            transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.4),
+                0 0 50px var(--glow-soft),
+                inset 0 0 50px rgba(212, 175, 55, 0.02);
         }
 
-        .feature-card:hover{
-            transform: translateY(-10px) rotateX(5deg);
-            border-color: var(--consciousness-gold);
-            box-shadow:
-                0 20px 60px rgba(212,175,55,.25),
-                0 0 60px rgba(212,175,55,.1),
-                inset 0 0 60px rgba(212,175,55,.03);
+        .feature-card:hover::before,
+        .feature-card:hover::after {
+            opacity: 1;
         }
 
-        .feature-card:hover::before{
-            opacity: .5;
-        }
-
-        .feature-content{
+        .feature-content {
             position: relative;
             z-index: 1;
         }
 
-        .feature-icon{
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1.5rem;
+        .feature-icon {
+            width: 55px;
+            height: 55px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--consciousness-gold), var(--gold-bright));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            filter: drop-shadow(0 0 15px var(--consciousness-gold));
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
-        .feature-title{
-            font-size: 1.3rem;
-            font-weight: 300;
-            letter-spacing: .2em;
-            margin-bottom: 1rem;
-            color: var(--thought-white);
+        .feature-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--gold-dim);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            opacity: 0.5;
+            animation: iconPulse 4s ease-in-out infinite;
         }
 
-        .feature-desc{
-            color: var(--synaptic-silver);
-            line-height: 1.8;
-            font-size: .95rem;
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
 
-        /* Contact / Nexus enhancements */
-        #nexus{ padding-top: 8rem }
+        .feature-icon-inner {
+            font-size: 1.6rem;
+            filter: drop-shadow(0 0 12px var(--glow));
+        }
 
-        .contact-wrap{
+        .feature-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.8rem;
+        }
+
+        .feature-desc {
+            font-size: 0.88rem;
+            color: var(--gold-muted);
+            line-height: 1.85;
+        }
+
+        /* ========================================
+           CONTACT SECTION
+        ======================================== */
+        .contact-grid {
             display: grid;
-            grid-template-columns: 1.4fr .6fr;
+            grid-template-columns: 1.5fr 1fr;
             gap: 2rem;
         }
 
-        .contact-card{
-            background: rgba(212,175,55,.02);
-            border: 1px solid rgba(212,175,55,.1);
-            padding: 2rem;
-            border-radius: 14px;
-            backdrop-filter: blur(10px);
-            transition: all .3s ease;
+        .contact-card {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.02), rgba(0, 0, 0, 0.3));
+            border: 1px solid var(--border);
+            padding: 2.2rem;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
         }
 
-        .contact-card::before{
+        .contact-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(212,175,55,.08), transparent);
-            transition: left .6s ease;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-core), transparent);
+            animation: cardShine 5s ease-in-out infinite;
         }
 
-        .contact-card:hover{
-            transform: translateY(-3px);
-            border-color: var(--consciousness-gold);
-            box-shadow: 0 10px 30px rgba(212,175,55,.1);
+        @keyframes cardShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
         }
 
-        .contact-card:hover::before{
-            left: 100%;
+        .contact-card:hover {
+            border-color: var(--gold-dim);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .contact-row{
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
-        }
-
-        .contact-email{
-            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-            letter-spacing: .02em;
-        }
-
-        .pill{
+        .contact-label {
+            font-family: var(--font-mono);
+            font-size: 0.58rem;
+            letter-spacing: 0.22em;
+            color: var(--gold-dim);
+            padding: 0.35rem 0.9rem;
+            border: 1px solid var(--gold-shadow);
             display: inline-block;
-            padding: .25rem .7rem;
-            border: 1px solid rgba(212,175,55,.2);
-            border-radius: 999px;
-            font-size: .75rem;
-            color: var(--consciousness-gold);
-            background: rgba(212,175,55,.05);
-            box-shadow: 0 0 10px rgba(212,175,55,.1);
+            margin-bottom: 1.2rem;
         }
 
-        .cta{
-            display: flex;
-            gap: .8rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
+        .contact-title {
+            font-family: var(--font-display);
+            font-size: 1.45rem;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            margin-bottom: 1.5rem;
         }
 
-        .btn{
-            border: 1px solid rgba(212,175,55,.4);
-            padding: .7rem 1rem;
-            border-radius: 10px;
+        .contact-email {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--gold-core);
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: 1px solid var(--gold-dim);
             background: transparent;
-            letter-spacing: .12em;
-            font-size: .85rem;
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            color: var(--gold-white);
             cursor: pointer;
-            transition: all .3s ease;
+            transition: all 0.35s var(--ease-out-expo);
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
             position: relative;
             overflow: hidden;
-            color: var(--thought-white);
-            text-decoration: none;
         }
 
-        .btn::before{
+        .btn::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: radial-gradient(circle, var(--consciousness-gold), transparent);
-            transform: translate(-50%, -50%);
-            transition: all .4s ease;
-            border-radius: 50%;
+            inset: 0;
+            background: var(--gold-core);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s var(--ease-out-expo);
+            z-index: -1;
         }
 
-        .btn:hover{
-            border-color: var(--consciousness-gold);
-            box-shadow: 0 0 20px var(--emergence-glow);
-            transform: translateY(-2px);
+        .btn:hover {
+            color: var(--void);
+            border-color: var(--gold-core);
+            box-shadow: 0 0 25px var(--glow-soft);
         }
 
-        .btn:hover::before{
-            width: 200px;
-            height: 200px;
+        .btn:hover::before {
+            transform: scaleX(1);
         }
 
-        .btn span{
-            position: relative;
-            z-index: 1;
-        }
-
-        .btn.success{
-            border-color: var(--gold-bright);
-            box-shadow: 0 0 20px rgba(255,215,0,.3);
-        }
-
-        .tiny{
-            font-size: .8rem;
-            color: var(--synaptic-silver);
-        }
-
-        .form{
+        .form-grid {
             display: grid;
-            gap: .8rem;
-            margin-top: 1rem;
-            position: relative;
-            z-index: 1;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .input, .textarea{
+        .form-input,
+        .form-textarea {
             width: 100%;
-            background: rgba(212,175,55,.03);
-            border: 1px solid rgba(212,175,55,.1);
-            color: var(--thought-white);
-            padding: .9rem 1rem;
-            border-radius: 10px;
+            padding: 0.95rem 1.1rem;
+            background: rgba(212, 175, 55, 0.02);
+            border: 1px solid var(--border);
+            color: var(--gold-white);
+            font-family: var(--font-body);
+            font-size: 0.88rem;
             outline: none;
-            transition: all .3s ease;
-            font-family: inherit;
+            transition: all 0.35s ease;
         }
 
-        .input:focus, .textarea:focus{
-            border-color: var(--consciousness-gold);
-            box-shadow:
-                0 0 0 3px rgba(212,175,55,.1),
-                0 0 20px rgba(212,175,55,.15);
-            background: rgba(212,175,55,.05);
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--gold-core);
+            box-shadow: 0 0 25px var(--glow-soft);
+            background: rgba(212, 175, 55, 0.04);
         }
 
-        .textarea{
-            min-height: 120px;
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--gold-dim);
+        }
+
+        .form-textarea {
+            min-height: 110px;
             resize: vertical;
         }
 
-        .link-row{
+        .status-list {
+            list-style: none;
+            margin: 1.5rem 0;
+        }
+
+        .status-item {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--gold-muted);
+            padding: 0.45rem 0;
             display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
+            align-items: center;
+            gap: 0.6rem;
         }
 
-        .ext-link{
-            font-size: .9rem;
-            color: var(--synaptic-silver);
-            text-decoration: none;
-            border-bottom: 1px dotted rgba(212,175,55,.3);
-            transition: all .3s ease;
-            position: relative;
+        .status-item::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--gold-core);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--glow);
+            animation: statusPulse 2s ease-in-out infinite;
         }
 
-        .ext-link:hover{
-            color: var(--thought-white);
-            border-bottom-color: var(--consciousness-gold);
-            text-shadow: 0 0 10px rgba(212,175,55,.4);
+        @keyframes statusPulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
         }
 
-        /* Footer */
-        footer{
-            margin: 4rem auto 2rem;
-            max-width: 1100px;
-            padding: 0 2rem;
-            color: var(--synaptic-silver);
+        .status-item strong {
+            color: var(--gold-bright);
+            font-weight: 400;
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        footer {
+            max-width: 1400px;
+            margin: 4rem auto 0;
+            padding: 2rem;
+            border-top: 1px solid var(--gold-shadow);
             display: flex;
             justify-content: space-between;
-            gap: 1rem;
+            align-items: center;
             flex-wrap: wrap;
-            border-top: 1px solid rgba(212,175,55,.1);
-            padding-top: 1.2rem;
+            gap: 1rem;
         }
 
-        .foot-left{ letter-spacing: .18em }
-        .foot-right{ display: flex; gap: 1rem; flex-wrap: wrap }
-
-        /* Entanglement */
-        .quantum-entangle{
-            position: fixed;
-            pointer-events: none;
-            z-index: 10001;
-            mix-blend-mode: screen;
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
         }
 
-        .entangle-line{
-            position: absolute;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--consciousness-gold), transparent);
-            transform-origin: left center;
-            animation: entanglePulse 1s ease-out forwards;
-            box-shadow: 0 0 10px var(--consciousness-gold);
+        .footer-brand svg {
+            width: 24px;
+            height: 28px;
+            opacity: 0.7;
         }
 
-        @keyframes entanglePulse{
-            0%{ width: 0; opacity: 1 }
-            100%{ width: 200px; opacity: 0 }
+        .footer-brand-text {
+            font-family: var(--font-mono);
+            font-size: 0.68rem;
+            letter-spacing: 0.18em;
+            color: var(--gold-dim);
         }
 
-        /* Premium Consciousness Visualization - Advanced GLSL shader */
-        .consciousness-shader-layer{
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.35;
-            mix-blend-mode: screen;
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            color: var(--gold-muted);
         }
 
-        /* Accessibility: reduced motion */
-        @media (prefers-reduced-motion: reduce){
-            *,*::before,*::after{
-                animation-duration: .01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: .01ms !important;
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 980px){
-            .contact-wrap{ grid-template-columns: 1fr }
-            .feature-grid{ grid-template-columns: 1fr }
-        }
-
-        @media (max-width: 768px){
-            .hero-headline{ font-size: 2.5rem; letter-spacing: .1em }
-            .crowned-nexus{ width: 150px; height: 150px }
-            .concept-tag{ display: block; margin: .5rem auto; max-width: 200px }
-            nav{ padding: 1.5rem 2rem }
-            .nav-links{ gap: 1.5rem }
-
-            /* Performance: Disable expensive effects on mobile */
-            body::before, body::after{ display: none }
-            .quantum-grid{ opacity: .04 !important }
-            .grid-plane:nth-child(3), .grid-plane:nth-child(4){ display: none }
-            .feature-card::before{ animation: none !important }
-            .thought-cursor, .thought-trail{ display: none }
-            *{ cursor: auto !important }
-
-            /* Simplify animations on mobile */
-            .synapse-node{ animation-duration: 12s !important }
-            .neural-connection{ display: none }
-            .logo-container{ animation: logoFloatSimple 8s ease-in-out infinite }
-        }
-
-        /* Simplified logo animation for mobile */
-        @keyframes logoFloatSimple{
-            0%,100%{ transform: translateY(0) }
-            50%{ transform: translateY(-10px) }
-        }
-
-        /* Loading */
-        .neural-init{
+        /* ========================================
+           LOADING SCREEN
+        ======================================== */
+        .loading-screen {
             position: fixed;
             inset: 0;
-            background: var(--quantum-black);
+            background: var(--void);
             z-index: 20000;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
-            gap: 2rem;
-            animation: initFade 2s ease-out 1.5s forwards;
+            justify-content: center;
+            gap: 2.5rem;
+            transition: opacity 1s ease, visibility 1s ease;
         }
 
-        @keyframes initFade{
-            to{ opacity: 0; visibility: hidden }
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        .init-text{
-            font-size: .9rem;
-            letter-spacing: .3em;
-            color: var(--consciousness-gold);
-            animation: initPulse 1s ease-in-out infinite;
-            text-shadow: 0 0 20px var(--consciousness-gold);
+        /* DNA Helix Loading */
+        .dna-helix {
+            width: 80px;
+            height: 160px;
+            position: relative;
+            perspective: 800px;
         }
 
-        @keyframes initPulse{
-            0%,100%{ opacity: .3 }
-            50%{ opacity: 1 }
-        }
-
-        /* Ambient glow orbs */
-        .ambient-orb {
+        .dna-strand {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            pointer-events: none;
-            animation: orbFloat 15s ease-in-out infinite;
+            inset: 0;
+            transform-style: preserve-3d;
+            animation: dnaRotate 3.5s linear infinite;
         }
 
-        .ambient-orb-1 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, var(--consciousness-gold), transparent 70%);
-            top: 10%;
-            left: -10%;
-            animation-delay: 0s;
+        .dna-base {
+            position: absolute;
+            width: 70%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--gold-dim), var(--gold-core), var(--gold-dim));
+            left: 15%;
+            border-radius: 1px;
         }
 
-        .ambient-orb-2 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, var(--gold-bright), transparent 70%);
-            bottom: 20%;
-            right: -5%;
-            animation-delay: -5s;
+        @keyframes dnaRotate {
+            to { transform: rotateY(360deg); }
         }
 
-        .ambient-orb-3 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, var(--gold-dim), transparent 70%);
-            top: 50%;
-            left: 30%;
-            animation-delay: -10s;
+        .loading-text {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.35em;
+            color: var(--gold-dim);
+            animation: loadingPulse 1.5s ease-in-out infinite;
         }
 
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(30px, -20px) scale(1.1); }
-            50% { transform: translate(-20px, 30px) scale(0.95); }
-            75% { transform: translate(20px, 20px) scale(1.05); }
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* ========================================
+           REVEAL ANIMATIONS
+        ======================================== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.9s var(--ease-out-expo);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 1100px) {
+            .awakening-meter { display: none; }
+            .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero { padding: 5rem 1.5rem 3rem; }
+            .integrated-crown { width: 150px; height: 180px; }
+            .sacred-geometry { width: 400px; height: 400px; }
+            section { padding: 4rem 1.5rem; }
+            .feature-grid { grid-template-columns: 1fr; }
+            .cursor-core, .cursor-aura { display: none; }
+            html { cursor: auto; }
+            .concept-tags { flex-direction: column; align-items: center; }
+            .ambient-orb { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 
-    <!-- Organization JSON-LD with contact -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "CytherAI",
-      "url": "https://cytherai.com",
-      "logo": "https://cytherai.com/logo.png",
-      "sameAs": [],
-      "contactPoint": [{
-        "@type": "ContactPoint",
-        "contactType": "Business",
-        "email": "Aethersdev@cytherAi.com",
-        "areaServed": "Worldwide",
-        "availableLanguage": ["en","ar"]
-      }]
-    }
-    </script>
-
-    <!-- Three.js Import Map for 3D Consciousness Field -->
+    <!-- Three.js -->
     <script type="importmap">
     {
         "imports": {
@@ -1467,21 +1323,49 @@
     </script>
 </head>
 <body>
-    <!-- Neural Initialization Screen with DNA Helix -->
-    <div class="neural-init">
+
+    <!-- Loading Screen with DNA Helix -->
+    <div class="loading-screen" id="loadingScreen">
         <div class="dna-helix">
             <div class="dna-strand" id="dnaStrand"></div>
         </div>
-        <div class="init-text">INITIALIZING NEURAL INTERFACE</div>
+        <div class="loading-text">CONSTRUCTING PROOF</div>
     </div>
 
-    <!-- Custom Cursor -->
-    <div class="thought-cursor" aria-hidden="true"></div>
-    <div class="thought-trail" aria-hidden="true"></div>
+    <!-- Overlays -->
+    <div class="overlay-scanlines"></div>
+    <div class="overlay-grain"></div>
 
-    <nav role="navigation" aria-label="Main navigation" class="neural-breathe">
+    <!-- Cursor -->
+    <div class="cursor-core" id="cursorCore"></div>
+    <div class="cursor-aura" id="cursorAura"></div>
+
+    <!-- Awakening Meter -->
+    <div class="awakening-meter" id="awakeningMeter">
+        <div class="awakening-node" data-section="hero"></div>
+        <div class="awakening-track">
+            <div class="awakening-fill" id="awakeningFill"></div>
+        </div>
+        <div class="awakening-node" data-section="foundation"></div>
+        <div class="awakening-node" data-section="intelligence"></div>
+        <div class="awakening-node" data-section="sovereignty"></div>
+        <div class="awakening-node" data-section="nexus"></div>
+        <div class="awakening-label">CONSCIOUSNESS</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav id="nav">
         <div class="nav-container">
-            <div class="nav-brand">CYTHERAI</div>
+            <a href="#" class="nav-brand">
+                <svg class="nav-brand-icon" viewBox="0 0 32 38" fill="none">
+                    <polygon points="16,2 22,12 10,12" fill="#D4AF37"/>
+                    <polygon points="6,7 11,15 1,15" fill="#B8942A"/>
+                    <polygon points="26,7 31,15 21,15" fill="#B8942A"/>
+                    <path d="M 0 17 Q 16 24 32 17" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                    <text x="16" y="31" fill="#D4AF37" font-family="serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                </svg>
+                <span class="nav-brand-text">CYTHERAI</span>
+            </a>
             <ul class="nav-links">
                 <li><a href="#foundation">FOUNDATION</a></li>
                 <li><a href="#intelligence">INTELLIGENCE</a></li>
@@ -1492,753 +1376,591 @@
     </nav>
 
     <main>
-        <section class="hero" role="main" aria-label="Consciousness Field">
-            <!-- Ambient glow orbs for warmth -->
+        <!-- HERO -->
+        <section class="hero" id="hero">
+            <!-- Ambient Orbs -->
             <div class="ambient-orb ambient-orb-1"></div>
             <div class="ambient-orb ambient-orb-2"></div>
             <div class="ambient-orb ambient-orb-3"></div>
 
-            <canvas class="consciousness-shader-layer" id="consciousnessShader"></canvas>
-            <div class="consciousness-field-3d" id="consciousnessField3D"></div>
-            <canvas class="neural-web-canvas" id="neuralWebCanvas"></canvas>
+            <!-- Consciousness Shader -->
+            <canvas class="consciousness-shader" id="consciousnessShader"></canvas>
+
+            <!-- Three.js 3D Field -->
+            <div class="consciousness-3d" id="consciousness3D"></div>
+
+            <!-- Sacred Geometry -->
+            <div class="sacred-geometry">
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.4" opacity="0.5">
+                        <circle cx="100" cy="100" r="90" stroke="var(--gold-dim)"/>
+                        <circle cx="100" cy="100" r="70" stroke="var(--gold-dim)"/>
+                        <circle cx="100" cy="100" r="50" stroke="var(--gold-dim)"/>
+                        <polygon points="100,10 190,100 100,190 10,100" stroke="var(--gold-dim)" fill="none"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.3" opacity="0.4">
+                        <polygon points="100,5 195,52 195,148 100,195 5,148 5,52" stroke="var(--gold-shadow)" fill="none"/>
+                        <line x1="100" y1="5" x2="100" y2="195" stroke="var(--gold-shadow)"/>
+                        <line x1="5" y1="52" x2="195" y2="148" stroke="var(--gold-shadow)"/>
+                        <line x1="195" y1="52" x2="5" y2="148" stroke="var(--gold-shadow)"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="0.25" opacity="0.3">
+                        <circle cx="100" cy="35" r="28" stroke="var(--gold-shadow)"/>
+                        <circle cx="145" cy="75" r="28" stroke="var(--gold-shadow)"/>
+                        <circle cx="145" cy="125" r="28" stroke="var(--gold-shadow)"/>
+                        <circle cx="100" cy="165" r="28" stroke="var(--gold-shadow)"/>
+                        <circle cx="55" cy="125" r="28" stroke="var(--gold-shadow)"/>
+                        <circle cx="55" cy="75" r="28" stroke="var(--gold-shadow)"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Neural Field -->
             <div class="neural-field" id="neuralField"></div>
 
-            <div class="quantum-grid" aria-hidden="true">
-                <div class="grid-plane"></div>
-                <div class="grid-plane"></div>
+            <!-- Quantum Grid -->
+            <div class="quantum-grid">
                 <div class="grid-plane"></div>
                 <div class="grid-plane"></div>
             </div>
 
-            <div class="logo-container">
-                <div class="crowned-nexus" role="img" aria-label="CytherAI Consciousness Nexus">
-                    <div class="crown-structure"><div class="crown-peak"></div></div>
-                    <div class="nexus-sphere">
-                        <div class="nexus-outer">
-                            <div class="nexus-inner"></div>
-                            <div class="nexus-core"></div>
-                        </div>
+            <!-- THE INTEGRATED CROWN LOGO -->
+            <div class="logo-system">
+                <div class="logo-container" id="logoContainer">
+                    <div class="logo-glow"></div>
+                    
+                    <div class="logo-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
                     </div>
-                    <div class="thought-particle" style="animation-delay:0s;"></div>
-                    <div class="thought-particle" style="animation-delay:5s;"></div>
-                    <div class="thought-particle" style="animation-delay:10s;"></div>
-                    <div class="thought-particle" style="animation-delay:15s;"></div>
+
+                    <svg class="integrated-crown" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Crown Peaks -->
+                        <polygon class="crown-peak-center" points="100,8 120,48 80,48" fill="#D4AF37"/>
+                        <polygon class="crown-peak-left" points="46,30 64,62 28,62" fill="#B8942A"/>
+                        <polygon class="crown-peak-right" points="154,30 172,62 136,62" fill="#B8942A"/>
+                        
+                        <!-- Crown Arc -->
+                        <path class="crown-arc" d="M 20 70 Q 100 98 180 70" stroke="#D4AF37" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        
+                        <!-- Crown Terminals -->
+                        <circle class="crown-terminal-left" cx="20" cy="70" r="4" fill="#B8942A"/>
+                        <circle class="crown-terminal-right" cx="180" cy="70" r="4" fill="#B8942A"/>
+                        
+                        <!-- Crown Jewels -->
+                        <circle class="crown-jewel-center" cx="100" cy="22" r="5" fill="#F4D675"/>
+                        <circle class="crown-jewel-left" cx="46" cy="42" r="3.5" fill="#E8C547"/>
+                        <circle class="crown-jewel-right" cx="154" cy="42" r="3.5" fill="#E8C547"/>
+                        
+                        <!-- Lambda Symbol -->
+                        <text class="lambda-symbol" x="100" y="158" fill="#D4AF37" font-family="'Cormorant Garamond', Georgia, serif" font-size="135" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                        
+                        <!-- Verification Mark -->
+                        <path class="verification-mark" d="M 75 210 L 90 225 L 128 180" stroke="#6B5A2F" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"/>
+                    </svg>
+                </div>
+
+                <!-- Wordmark -->
+                <div class="wordmark">
+                    <div class="wordmark-text">CYTHERAI</div>
+                    <div class="wordmark-tagline">NEURAL THEOREM PROVER</div>
                 </div>
             </div>
 
+            <!-- Hero Content -->
             <div class="hero-content">
-                <h1 class="hero-headline glitch-text" data-text="WHERE THOUGHT BECOMES FORM">WHERE THOUGHT BECOMES FORM</h1>
-                <p class="hero-subline">CYTHERAI <span class="consciousness-indicator" aria-hidden="true"></span> NEURAL-SYMBOLIC CONSCIOUSNESS</p>
-                <div class="hero-description">
-                    <span class="concept-tag"><span>VERIFIABLE REASONING</span></span>
-                    <span class="concept-tag"><span>SOVEREIGN INTELLIGENCE</span></span>
-                    <span class="concept-tag"><span>EMERGENT CONSCIOUSNESS</span></span>
+                <h1 class="hero-headline">Where <em>Thought</em> Becomes Form</h1>
+                <div class="scramble-text" id="scrambleText">SOVEREIGN VERIFIABLE INTELLIGENCE</div>
+                <div class="concept-tags">
+                    <span class="concept-tag">VERIFIABLE REASONING</span>
+                    <span class="concept-tag">ZERO DEPENDENCY</span>
+                    <span class="concept-tag">PROOF GENERATION</span>
                 </div>
-                <a href="#nexus" class="neural-interface"><span>INITIALIZE NEURAL INTERFACE</span></a>
+                <button class="cta-button" id="ctaButton">
+                    <span>INITIALIZE INTERFACE</span>
+                    <span class="cta-icon">→</span>
+                </button>
             </div>
 
-            <div class="consciousness-scroll" aria-hidden="true">
-                <div class="scroll-neural"><div class="scroll-synapse"></div></div>
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <div class="scroll-track">
+                    <div class="scroll-pulse"></div>
+                </div>
+                <span class="scroll-label">EXPLORE</span>
             </div>
         </section>
 
         <!-- FOUNDATION -->
-        <section id="foundation" class="anchor reveal">
-            <h2 class="section-title glitch-text" data-text="FOUNDATION">FOUNDATION</h2>
-            <p class="section-body">Local-first, proof-aware architecture. Deterministic cores; zero egress by default.</p>
-
+        <section id="foundation" class="reveal">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">FOUNDATION</h2>
+                <p class="section-subtitle">Local-first, proof-aware architecture. Deterministic cores with zero egress by default.</p>
+            </div>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">⚡</div>
-                        <h3 class="feature-title">LOCAL-FIRST</h3>
-                        <p class="feature-desc">All processing happens on your infrastructure. No cloud dependency, no vendor lock-in. True data sovereignty.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">⚡</span></div>
+                        <h3 class="feature-title">Local-First</h3>
+                        <p class="feature-desc">All processing happens on your infrastructure. No cloud dependency, no vendor lock-in. True data sovereignty from the ground up.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">🔐</div>
-                        <h3 class="feature-title">PROOF-AWARE</h3>
-                        <p class="feature-desc">Every inference carries cryptographic proof. Verify reasoning chains, detect contradictions, replay any decision.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">🔐</span></div>
+                        <h3 class="feature-title">Proof-Aware</h3>
+                        <p class="feature-desc">Every inference carries cryptographic proof. Verify reasoning chains, detect contradictions, replay any decision with full transparency.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">⚙️</div>
-                        <h3 class="feature-title">DETERMINISTIC</h3>
-                        <p class="feature-desc">Same input, same output. Every time. Reproducible intelligence for mission-critical applications.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">⚙️</span></div>
+                        <h3 class="feature-title">Deterministic</h3>
+                        <p class="feature-desc">Same input, same output. Every time. Reproducible intelligence for mission-critical applications requiring absolute precision.</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div class="divider"></div>
 
         <!-- INTELLIGENCE -->
-        <section id="intelligence" class="anchor reveal">
-            <h2 class="section-title glitch-text" data-text="INTELLIGENCE">INTELLIGENCE</h2>
-            <p class="section-body">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
-
+        <section id="intelligence" class="reveal">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">INTELLIGENCE</h2>
+                <p class="section-subtitle">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
+            </div>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">🧠</div>
-                        <h3 class="feature-title">NEURAL-SYMBOLIC</h3>
-                        <p class="feature-desc">Hybrid architecture combining deep learning intuition with symbolic logic precision.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">🧠</span></div>
+                        <h3 class="feature-title">Neural-Symbolic</h3>
+                        <p class="feature-desc">Hybrid architecture combining deep learning intuition with symbolic logic precision. The best of both paradigms unified.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">🔍</div>
-                        <h3 class="feature-title">CONTRADICTION DETECTION</h3>
-                        <p class="feature-desc">Built-in consistency checking prevents hallucinations and maintains logical coherence across reasoning chains.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">🔍</span></div>
+                        <h3 class="feature-title">Contradiction Detection</h3>
+                        <p class="feature-desc">Built-in consistency checking prevents hallucinations and maintains logical coherence across complex reasoning chains.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">📜</div>
-                        <h3 class="feature-title">REPLAYABLE RECEIPTS</h3>
-                        <p class="feature-desc">Every decision includes an audit trail. Step through reasoning, verify conclusions, trust the process.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">📜</span></div>
+                        <h3 class="feature-title">Replayable Receipts</h3>
+                        <p class="feature-desc">Every decision includes an immutable audit trail. Step through reasoning, verify conclusions, trust the process completely.</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div class="divider"></div>
 
         <!-- SOVEREIGNTY -->
-        <section id="sovereignty" class="anchor reveal">
-            <h2 class="section-title glitch-text" data-text="SOVEREIGNTY">SOVEREIGNTY</h2>
-            <p class="section-body">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
-
+        <section id="sovereignty" class="reveal">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">SOVEREIGNTY</h2>
+                <p class="section-subtitle">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
+            </div>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">🏠</div>
-                        <h3 class="feature-title">YOUR INFRASTRUCTURE</h3>
-                        <p class="feature-desc">Deploy on-premise or in your private cloud. Zero external API calls. Complete network isolation.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">🏠</span></div>
+                        <h3 class="feature-title">Your Infrastructure</h3>
+                        <p class="feature-desc">Deploy on-premise or in your private cloud. Zero external API calls. Complete network isolation for maximum security.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">💾</div>
-                        <h3 class="feature-title">YOUR WEIGHTS</h3>
-                        <p class="feature-desc">Model parameters stay with you. Fine-tune, adapt, evolve your intelligence without sharing proprietary data.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">💾</span></div>
+                        <h3 class="feature-title">Your Weights</h3>
+                        <p class="feature-desc">Model parameters stay with you. Fine-tune, adapt, evolve your intelligence without ever sharing proprietary data.</p>
                     </div>
                 </div>
-
                 <div class="feature-card">
                     <div class="feature-content">
-                        <div class="feature-icon">🌐</div>
-                        <h3 class="feature-title">YOUR MEMORY</h3>
-                        <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds over time.</p>
+                        <div class="feature-icon"><span class="feature-icon-inner">🌐</span></div>
+                        <h3 class="feature-title">Your Memory</h3>
+                        <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds exponentially over time.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- CONTACT / NEXUS -->
-        <section id="nexus" class="anchor reveal" aria-label="Contact and Nexus">
-            <h2 class="section-title glitch-text" data-text="NEXUS">NEXUS</h2>
+        <div class="divider"></div>
 
-            <div class="contact-wrap">
-                <!-- Left: Primary Contact Card -->
-                <div class="contact-card" id="card-primary">
-                    <div class="contact-row">
-                        <div>
-                            <div class="pill" aria-hidden="true">PRIMARY CHANNEL</div>
-                            <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em;position:relative;z-index:1">Reach the Team</h3>
-                        </div>
-                        <div class="tiny">Riyadh (UTC+3)</div>
-                    </div>
-
-                    <div style="margin-top:1rem">
-                        <div class="tiny">Email</div>
-                        <div class="contact-row" style="margin-top:.2rem">
-                            <code id="contactEmail" class="contact-email">Aethersdev@cytherAi.com</code>
-                            <div class="cta">
-                                <button class="btn" id="copyBtn" type="button" aria-label="Copy email"><span>COPY</span></button>
-                                <a class="btn" id="mailtoBtn" href="mailto:Aethersdev@cytherAi.com?subject=CytherAI%20Inquiry&body=Hello%20CytherAI%20team%2C%0A%0A" rel="nofollow"><span>EMAIL</span></a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <form class="form" onsubmit="return composeMail(event)">
-                        <div class="tiny" style="margin-top:1rem">Quick handoff (opens your email app)</div>
-                        <input class="input" id="qName" name="name" placeholder="Your name" autocomplete="name" />
-                        <input class="input" id="qCompany" name="company" placeholder="Company / Organization" autocomplete="organization" />
-                        <input class="input" id="qSubject" name="subject" placeholder="Subject (e.g., Pilot, Partnership, Press)" />
-                        <textarea class="textarea" id="qMessage" name="message" placeholder="A few lines about your request…"></textarea>
-                        <div class="cta">
-                            <button class="btn" type="submit"><span>COMPOSE EMAIL</span></button>
-                            <span id="copyNotice" class="tiny" role="status" aria-live="polite"></span>
-                        </div>
-                    </form>
-
-                    <div class="link-row" aria-label="External links">
-                        <a class="ext-link" href="#" aria-label="CytherAI on LinkedIn">LinkedIn</a>
-                        <a class="ext-link" href="#" aria-label="CytherAI on X">X</a>
-                        <a class="ext-link" href="#" aria-label="CytherAI on GitHub">GitHub</a>
-                    </div>
-                </div>
-
-                <!-- Right: Signals Card -->
+        <!-- NEXUS -->
+        <section id="nexus" class="reveal">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">NEXUS</h2>
+                <p class="section-subtitle">Initiate connection with the CytherAI collective.</p>
+            </div>
+            <div class="contact-grid">
                 <div class="contact-card">
-                    <div class="pill" aria-hidden="true">SIGNALS</div>
-                    <h3 style="margin-top:.6rem;font-weight:300;letter-spacing:.2em;position:relative;z-index:1">Status & Signals</h3>
-                    <ul class="tiny" style="margin-top:.8rem;list-style:none;display:grid;gap:.35rem;position:relative;z-index:1">
-                        <li>• Local-first mode: <strong>ENABLED</strong></li>
-                        <li>• Egress: <strong>0</strong></li>
-                        <li>• Proof-gate: <strong>ACTIVE</strong></li>
-                        <li>• Replay receipts: <strong>READY</strong></li>
-                    </ul>
-
-                    <div class="cta" style="margin-top:1rem">
-                        <a class="btn" href="#foundation"><span>FOUNDATION</span></a>
-                        <a class="btn" href="#intelligence"><span>INTELLIGENCE</span></a>
-                        <a class="btn" href="#sovereignty"><span>SOVEREIGNTY</span></a>
+                    <span class="contact-label">PRIMARY CHANNEL</span>
+                    <h3 class="contact-title">Reach the Team</h3>
+                    <code class="contact-email" id="contactEmail">Aethersdev@cytherAi.com</code>
+                    <div>
+                        <button class="btn" id="copyBtn">COPY EMAIL</button>
+                        <a class="btn" href="mailto:Aethersdev@cytherAi.com?subject=CytherAI%20Inquiry">COMPOSE</a>
                     </div>
-
-                    <p class="tiny" style="margin-top:1rem;position:relative;z-index:1">
-                        Prefer encrypted mail? Let us know in your subject (e.g., "PGP REQUEST"), and we'll reply with a key and fingerprint.
-                    </p>
+                    <form class="form-grid" id="contactForm">
+                        <input class="form-input" type="text" placeholder="Your name" name="name">
+                        <input class="form-input" type="text" placeholder="Organization" name="org">
+                        <input class="form-input" type="text" placeholder="Subject" name="subject">
+                        <textarea class="form-textarea" placeholder="Your message..." name="message"></textarea>
+                        <button class="btn" type="submit">SEND MESSAGE</button>
+                    </form>
+                </div>
+                <div class="contact-card">
+                    <span class="contact-label">SYSTEM STATUS</span>
+                    <h3 class="contact-title">Signals</h3>
+                    <ul class="status-list">
+                        <li class="status-item">Local-first mode: <strong>ENABLED</strong></li>
+                        <li class="status-item">Network egress: <strong>0 BYTES</strong></li>
+                        <li class="status-item">Proof-gate: <strong>ACTIVE</strong></li>
+                        <li class="status-item">Consciousness: <strong>AWAKENED</strong></li>
+                    </ul>
+                    <div>
+                        <a class="btn" href="#foundation">FOUNDATION</a>
+                        <a class="btn" href="#intelligence">INTELLIGENCE</a>
+                    </div>
+                    <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--gold-dim);">Prefer encrypted mail? Include "PGP REQUEST" in your subject.</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer role="contentinfo">
-        <div class="foot-left">© <span id="year"></span> CYTHERAI — ALL RIGHTS RESERVED</div>
-        <div class="foot-right tiny">
-            <span>Contact: <a href="mailto:Aethersdev@cytherAi.com">Aethersdev@cytherAi.com</a></span>
-            <span>Languages: EN / AR</span>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">
+            <svg viewBox="0 0 24 28" fill="none">
+                <polygon points="12,1 16,8 8,8" fill="#D4AF37"/>
+                <polygon points="5,5 8,10 2,10" fill="#B8942A"/>
+                <polygon points="19,5 22,10 16,10" fill="#B8942A"/>
+                <path d="M 1 12 Q 12 16 23 12" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                <text x="12" y="22" fill="#D4AF37" font-family="serif" font-size="12" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="footer-brand-text">© <span id="year"></span> CYTHERAI — ALL RIGHTS RESERVED</span>
+        </div>
+        <div class="footer-links">
+            <span>Riyadh (UTC+3)</span>
+            <span>EN / AR</span>
         </div>
     </footer>
 
-    <!-- Quantum Entanglement Container -->
-    <div class="quantum-entangle" id="quantumEntangle" aria-hidden="true"></div>
-
     <script>
-        /*
-         * PERFORMANCE OPTIMIZATIONS:
-         * - Mobile device detection to reduce expensive effects
-         * - Reduced neural nodes: 25 on mobile vs 60 on desktop
-         * - Disabled custom cursor and trails on touch devices
-         * - Throttled mousemove events (16ms/60fps) with passive listeners
-         * - Simplified backdrop-filter on mobile
-         * - Disabled neural connections on mobile
-         * - Reduced entanglement lines: 6 on mobile vs 12 on desktop
-         * - Slower animation intervals on mobile (3s vs 1.5s)
-         * - Disabled parallax effects on mobile and reduced-motion preference
-         * - CSS containment for better paint performance
-         * - will-change properties for frequently animated elements
-         * - Passive scroll listeners for better scroll performance
-         * - Cached DOM queries to reduce reflows
-         */
-
-        // Performance: Device detection
+        // ========================================
+        // INITIALIZATION
+        // ========================================
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth < 768;
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        // Year
+        
         document.getElementById('year').textContent = new Date().getFullYear();
 
         // DNA Helix Loading Animation
-        function generateDNAHelix(){
+        function generateDNAHelix() {
             const strand = document.getElementById('dnaStrand');
-            if(!strand) return;
-
-            for(let i = 0; i < 20; i++){
+            if (!strand) return;
+            for (let i = 0; i < 16; i++) {
                 const base = document.createElement('div');
                 base.className = 'dna-base';
                 base.style.top = (i * 10) + 'px';
-                base.style.transform = `rotateY(${i * 18}deg)`;
-                base.style.animationDelay = (i * 0.1) + 's';
+                base.style.transform = `rotateY(${i * 22.5}deg)`;
                 strand.appendChild(base);
             }
         }
+        generateDNAHelix();
 
-        // Intersection Observer for reveal animations
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting){
-                    entry.target.classList.add('active');
-                }
-            });
-        }, {
-            threshold: 0.15,
-            rootMargin: '0px 0px -100px 0px'
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+                document.getElementById('consciousness3D').classList.add('active');
+                initScramble();
+            }, 1800);
         });
 
-        // Observe all reveal elements
-        document.querySelectorAll('.reveal').forEach(el => {
-            revealObserver.observe(el);
-        });
+        // ========================================
+        // CUSTOM CURSOR
+        // ========================================
+        if (!isMobile) {
+            const cursorCore = document.getElementById('cursorCore');
+            const cursorAura = document.getElementById('cursorAura');
+            let mouseX = 0, mouseY = 0, coreX = 0, coreY = 0, auraX = 0, auraY = 0;
 
-        // Procedural Neural Web Canvas
-        function initNeuralWebCanvas(){
-            const canvas = document.getElementById('neuralWebCanvas');
-            if(!canvas || isMobile) return;
-
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            const particles = [];
-            const particleCount = 50;
-
-            for(let i = 0; i < particleCount; i++){
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    vx: (Math.random() - 0.5) * 0.5,
-                    vy: (Math.random() - 0.5) * 0.5,
-                    radius: Math.random() * 2 + 1
-                });
-            }
-
-            function drawNeuralWeb(){
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Update and draw particles
-                particles.forEach(p => {
-                    p.x += p.vx;
-                    p.y += p.vy;
-
-                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                    // Draw particle - warm gold
-                    ctx.fillStyle = 'rgba(212, 175, 55, 0.6)';
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                });
-
-                // Draw connections - gold
-                ctx.strokeStyle = 'rgba(212, 175, 55, 0.15)';
-                ctx.lineWidth = 0.5;
-
-                for(let i = 0; i < particles.length; i++){
-                    for(let j = i + 1; j < particles.length; j++){
-                        const dx = particles[i].x - particles[j].x;
-                        const dy = particles[i].y - particles[j].y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-
-                        if(dist < 150){
-                            ctx.beginPath();
-                            ctx.moveTo(particles[i].x, particles[i].y);
-                            ctx.lineTo(particles[j].x, particles[j].y);
-                            ctx.globalAlpha = 1 - (dist / 150);
-                            ctx.stroke();
-                            ctx.globalAlpha = 1;
-                        }
-                    }
-                }
-
-                requestAnimationFrame(drawNeuralWeb);
-            }
-
-            drawNeuralWeb();
-
-            window.addEventListener('resize', () => {
-                if(!isMobile){
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-            }, {passive: true});
-        }
-
-        // Neural Field Generation with cursor attraction
-        let nodes = [];
-        let mousePos = {x: 0, y: 0};
-        let animationFrameId = null;
-
-        function generateNeuralField(){
-            const field = document.getElementById('neuralField');
-            const nodeCount = isMobile ? 25 : (prefersReducedMotion ? 30 : 60);
-
-            for(let i=0;i<nodeCount;i++){
-                const node=document.createElement('div');
-                node.className='synapse-node';
-                const x = Math.random()*100;
-                const y = Math.random()*100;
-                node.style.left = x + '%';
-                node.style.top = y + '%';
-                node.style.animationDelay=Math.random()*8+'s';
-                field.appendChild(node);
-                nodes.push({
-                    element: node,
-                    x: x,
-                    y: y,
-                    baseX: x,
-                    baseY: y
-                });
-            }
-
-            // Create connections (skip on mobile for performance)
-            if(!isMobile){
-                for(let i=0;i<nodes.length;i++){
-                    for(let j=i+1;j<nodes.length;j++){
-                        const dx=nodes[j].x-nodes[i].x;
-                        const dy=nodes[j].y-nodes[i].y;
-                        const distance=Math.sqrt(dx*dx+dy*dy);
-
-                        if(distance<25&&Math.random()>.6){
-                            const connection=document.createElement('div');
-                            connection.className='neural-connection';
-                            connection.style.left=nodes[i].x+'%';
-                            connection.style.top=nodes[i].y+'%';
-                            connection.style.width=distance+'%';
-                            connection.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
-                            connection.style.animationDelay=Math.random()*4+'s';
-                            connection.dataset.from = i;
-                            connection.dataset.to = j;
-                            field.appendChild(connection);
-                        }
-                    }
-                }
-            }
-        }
-
-        // Enhanced cursor with magnetic effect
-        const cursor=document.querySelector('.thought-cursor');
-        const trail=document.querySelector('.thought-trail');
-        let mouseX=0, mouseY=0, cursorX=0, cursorY=0, trailX=0, trailY=0;
-
-        if(!isTouchDevice && !isMobile){
-            let mouseMoveThrottle = null;
-            document.addEventListener('mousemove', e => {
+            document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
+            }, { passive: true });
 
-                mousePos.x = (e.clientX / window.innerWidth) * 100;
-                mousePos.y = ((e.clientY + window.scrollY) / document.body.scrollHeight) * 100;
-
-                if(!mouseMoveThrottle){
-                    mouseMoveThrottle = setTimeout(() => {
-                        if(Math.random() > .97){
-                            createRipple(mouseX, mouseY);
-                        }
-                        attractNodes();
-                        magneticButtons(e);
-                        mouseMoveThrottle = null;
-                    }, 16);
-                }
-            }, {passive: true});
-        }
-
-        function attractNodes(){
-            const field = document.getElementById('neuralField');
-            if(!field) return;
-
-            const connections = field.querySelectorAll('.neural-connection');
-
-            nodes.forEach((node, index) => {
-                const dx = mousePos.x - node.x;
-                const dy = mousePos.y - node.y;
-                const distance = Math.sqrt(dx*dx + dy*dy);
-
-                if(distance < 20){
-                    const force = (20 - distance) / 20;
-                    node.x = node.baseX + dx * force * 0.3;
-                    node.y = node.baseY + dy * force * 0.3;
-                    node.element.style.left = node.x + '%';
-                    node.element.style.top = node.y + '%';
-                    node.element.style.transform = 'scale(1.5)';
-                    node.element.style.opacity = '1';
-
-                    connections.forEach(conn => {
-                        if(conn.dataset.from == index || conn.dataset.to == index){
-                            conn.classList.add('active');
-                            setTimeout(() => conn.classList.remove('active'), 500);
-                        }
-                    });
-                } else {
-                    node.x += (node.baseX - node.x) * 0.1;
-                    node.y += (node.baseY - node.y) * 0.1;
-                    node.element.style.left = node.x + '%';
-                    node.element.style.top = node.y + '%';
-                    node.element.style.transform = 'scale(1)';
-                }
-            });
-        }
-
-        function magneticButtons(e){
-            document.querySelectorAll('.btn, .neural-interface').forEach(btn => {
-                const rect = btn.getBoundingClientRect();
-                const btnCenterX = rect.left + rect.width / 2;
-                const btnCenterY = rect.top + rect.height / 2;
-                const distanceX = e.clientX - btnCenterX;
-                const distanceY = e.clientY - btnCenterY;
-                const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-
-                if(distance < 150){
-                    const force = (150 - distance) / 150;
-                    const moveX = distanceX * force * 0.3;
-                    const moveY = distanceY * force * 0.3;
-                    btn.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                } else {
-                    btn.style.transform = 'translate(0, 0)';
-                }
-            });
-        }
-
-        function animateCursor(){
-            if(!isTouchDevice && cursor && trail){
-                cursorX += (mouseX - cursorX) * 0.2;
-                cursorY += (mouseY - cursorY) * 0.2;
-                cursor.style.left = (cursorX - 10) + 'px';
-                cursor.style.top = (cursorY - 10) + 'px';
-
-                trailX += (mouseX - trailX) * 0.08;
-                trailY += (mouseY - trailY) * 0.08;
-                trail.style.left = (trailX - 20) + 'px';
-                trail.style.top = (trailY - 20) + 'px';
-
-                animationFrameId = requestAnimationFrame(animateCursor);
+            function animateCursor() {
+                coreX += (mouseX - coreX) * 0.25;
+                coreY += (mouseY - coreY) * 0.25;
+                auraX += (mouseX - auraX) * 0.1;
+                auraY += (mouseY - auraY) * 0.1;
+                
+                cursorCore.style.transform = `translate(${coreX - 4}px, ${coreY - 4}px)`;
+                cursorAura.style.transform = `translate(${auraX - 22}px, ${auraY - 22}px)`;
+                
+                requestAnimationFrame(animateCursor);
             }
-        }
-        if(!isTouchDevice && !isMobile){
             animateCursor();
+
+            document.querySelectorAll('a, button, .feature-card, .concept-tag, .logo-container, .awakening-node').forEach(el => {
+                el.addEventListener('mouseenter', () => cursorAura.classList.add('hover'));
+                el.addEventListener('mouseleave', () => cursorAura.classList.remove('hover'));
+            });
         }
 
-        function createRipple(x, y){
-            const ripple = document.createElement('div');
-            ripple.className = 'cursor-ripple';
-            ripple.style.left = (x - 10) + 'px';
-            ripple.style.top = (y - 10) + 'px';
-            document.body.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 1000);
-        }
+        // ========================================
+        // NEURAL FIELD
+        // ========================================
+        function generateNeuralField() {
+            const field = document.getElementById('neuralField');
+            if (!field) return;
+            
+            const nodeCount = isMobile ? 25 : 55;
+            const nodes = [];
 
-        // Enhanced Grid Parallax with depth
-        if(!isMobile && !isTouchDevice){
-            let gridThrottle = null;
-            document.addEventListener('mousemove', e => {
-                if(!gridThrottle){
-                    gridThrottle = setTimeout(() => {
-                        const grid = document.querySelector('.quantum-grid');
-                        const x = (e.clientX / window.innerWidth - 0.5) * 40;
-                        const y = (e.clientY / window.innerHeight - 0.5) * 40;
-                        if(grid){
-                            grid.style.transform = `translate(-50%, -50%) rotateX(${75 + y}deg) rotateZ(${x}deg)`;
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'synapse-node';
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                node.style.left = x + '%';
+                node.style.top = y + '%';
+                node.style.animationDelay = (Math.random() * 6) + 's';
+                field.appendChild(node);
+                nodes.push({ x, y });
+            }
+
+            if (!isMobile) {
+                for (let i = 0; i < nodes.length; i++) {
+                    for (let j = i + 1; j < nodes.length; j++) {
+                        const dx = nodes[j].x - nodes[i].x;
+                        const dy = nodes[j].y - nodes[i].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < 22 && Math.random() > 0.5) {
+                            const conn = document.createElement('div');
+                            conn.className = 'neural-connection';
+                            conn.style.left = nodes[i].x + '%';
+                            conn.style.top = nodes[i].y + '%';
+                            conn.style.width = distance + '%';
+                            conn.style.transform = `rotate(${Math.atan2(dy, dx) * 180 / Math.PI}deg)`;
+                            conn.style.animationDelay = (Math.random() * 4) + 's';
+                            field.appendChild(conn);
                         }
-                        gridThrottle = null;
-                    }, 32);
-                }
-            }, {passive: true});
-        }
-
-        // Enhanced CTA Entanglement
-        document.querySelector('.neural-interface').addEventListener('click', e => {
-            e.preventDefault();
-            const rect = e.target.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-
-            const lineCount = isMobile ? 6 : 12;
-            for(let i = 0; i < lineCount; i++){
-                setTimeout(() => createEntanglementLine(cx, cy, i * (360 / lineCount)), i * 40);
-            }
-
-            setTimeout(() => {
-                document.body.style.filter = 'brightness(1.3) saturate(1.5)';
-                setTimeout(() => {
-                    document.body.style.filter = 'brightness(1)';
-                }, 200);
-            }, 480);
-
-            document.querySelector('#nexus').scrollIntoView({behavior: 'smooth', block: 'start'});
-        });
-
-        function createEntanglementLine(x, y, angle){
-            const c = document.getElementById('quantumEntangle');
-            const line = document.createElement('div');
-            line.className = 'entangle-line';
-            line.style.left = x + 'px';
-            line.style.top = y + 'px';
-            line.style.transform = `rotate(${angle}deg)`;
-            c.appendChild(line);
-            setTimeout(() => line.remove(), 1000);
-        }
-
-        // Enhanced Logo interactions
-        const nexus = document.querySelector('.crowned-nexus');
-
-        nexus.addEventListener('mouseenter', () => {
-            document.querySelectorAll('.thought-particle').forEach(p => {
-                p.style.animationDuration = '5s';
-            });
-        });
-
-        nexus.addEventListener('mouseleave', () => {
-            document.querySelectorAll('.thought-particle').forEach(p => {
-                p.style.animationDuration = '20s';
-            });
-        });
-
-        nexus.addEventListener('click', () => {
-            const core = document.querySelector('.nexus-core');
-            core.style.animation = 'none';
-            setTimeout(() => {
-                core.style.animation = 'corePulse .5s ease-in-out infinite';
-            }, 10);
-
-            for(let i = 0; i < 5; i++){
-                setTimeout(() => {
-                    const wave = document.createElement('div');
-                    wave.style.cssText = `
-                        position:absolute;
-                        top:50%;
-                        left:50%;
-                        transform:translate(-50%,-50%);
-                        width:80px;
-                        height:80px;
-                        border:2px solid var(--consciousness-gold);
-                        border-radius:50%;
-                        animation:consciousnessWave 2s ease-out forwards;
-                        pointer-events:none;
-                        box-shadow: 0 0 20px var(--consciousness-gold);
-                    `;
-                    nexus.appendChild(wave);
-                    setTimeout(() => wave.remove(), 2000);
-                }, i * 150);
-            }
-        });
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes consciousnessWave{
-                to{
-                    width:400px;
-                    height:400px;
-                    opacity:0;
-                    border-width:.5px
-                }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Nav on scroll
-        let ticking = false;
-        const nav = document.querySelector('nav');
-
-        function updateNav(){
-            const y = window.pageYOffset;
-
-            if(y > 100){
-                nav.style.background = 'rgba(0,0,0,.92)';
-                nav.style.backdropFilter = isMobile ? 'blur(10px)' : 'blur(30px) saturate(180%) brightness(.7)';
-                nav.style.boxShadow = '0 10px 60px rgba(0,0,0,.5)';
-            } else {
-                nav.style.background = 'rgba(0,0,0,.7)';
-                nav.style.backdropFilter = isMobile ? 'blur(8px)' : 'blur(20px) saturate(180%) brightness(.85)';
-                nav.style.boxShadow = '0 10px 40px rgba(0,0,0,.4)';
-            }
-
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if(!ticking){
-                requestAnimationFrame(() => {
-                    updateNav();
-                });
-                ticking = true;
-            }
-        }, {passive: true});
-
-        // Smooth section scroll
-        document.querySelectorAll('a[href^="#"]').forEach(a => {
-            a.addEventListener('click', function(e){
-                if(this.getAttribute('href') === '#') return;
-                e.preventDefault();
-
-                const target = document.querySelector(this.getAttribute('href'));
-                if(target){
-                    document.querySelectorAll('.synapse-node').forEach((node, index) => {
-                        setTimeout(() => {
-                            node.style.animation = 'none';
-                            setTimeout(() => {
-                                node.style.animation = 'synapticFire .5s ease-in-out';
-                            }, 10);
-                        }, index * 20);
-                    });
-
-                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
-                }
-            });
-        });
-
-        // Breathing sync
-        let breathPhase = 0;
-        const breathInterval = isMobile ? 3000 : 1500;
-
-        setInterval(() => {
-            breathPhase = (breathPhase + 1) % 4;
-            document.documentElement.style.setProperty('--breath-phase', breathPhase);
-
-            if(breathPhase === 0 && !isMobile){
-                const connections = document.querySelectorAll('.neural-connection');
-                connections.forEach((c, i) => {
-                    setTimeout(() => {
-                        c.style.opacity = '.3';
-                        c.style.boxShadow = '0 0 8px var(--consciousness-gold)';
-                        setTimeout(() => {
-                            c.style.opacity = '.08';
-                            c.style.boxShadow = 'none';
-                        }, 1000);
-                    }, i * 8);
-                });
-            }
-        }, breathInterval);
-
-        // Parallax scrolling for sections
-        if(!isMobile && !prefersReducedMotion){
-            let parallaxTicking = false;
-            const parallaxElements = document.querySelectorAll('.feature-card');
-
-            function updateParallax(){
-                parallaxElements.forEach((el, index) => {
-                    const rect = el.getBoundingClientRect();
-                    const scrollPercent = (window.innerHeight - rect.top) / window.innerHeight;
-
-                    if(scrollPercent > 0 && scrollPercent < 1){
-                        const translateY = (scrollPercent - 0.5) * 50;
-                        el.style.transform = `translateY(${translateY}px)`;
                     }
-                });
-                parallaxTicking = false;
-            }
-
-            window.addEventListener('scroll', () => {
-                if(!parallaxTicking){
-                    requestAnimationFrame(updateParallax);
-                    parallaxTicking = true;
                 }
-            }, {passive: true});
+            }
+        }
+        generateNeuralField();
+
+        // ========================================
+        // TEXT SCRAMBLE
+        // ========================================
+        class TextScrambler {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#λ∀∃∴∵⊢⊨∧∨¬→↔∈∉⊂⊃';
+            }
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            update() {
+                let output = '';
+                let complete = 0;
+                for (let i = 0; i < this.queue.length; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.chars[Math.floor(Math.random() * this.chars.length)];
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="char scrambling">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(() => this.update());
+                    this.frame++;
+                }
+            }
         }
 
-        // Init
-        window.addEventListener('load', () => {
-            generateDNAHelix();
-            generateNeuralField();
-            initNeuralWebCanvas();
+        function initScramble() {
+            const el = document.getElementById('scrambleText');
+            if (!el) return;
+            const fx = new TextScrambler(el);
+            const phrases = [
+                'SOVEREIGN VERIFIABLE INTELLIGENCE',
+                'NEURAL THEOREM PROVER',
+                'WHERE THOUGHT BECOMES FORM',
+                'ZERO DEPENDENCY ARCHITECTURE',
+                '97.7% LOSS REDUCTION',
+                'PROOF GENERATION SYSTEM'
+            ];
+            let counter = 0;
+            const next = () => {
+                fx.setText(phrases[counter]).then(() => setTimeout(next, 3500));
+                counter = (counter + 1) % phrases.length;
+            };
+            next();
+        }
 
-            setTimeout(() => {
-                const init = document.querySelector('.neural-init');
-                if(init){
-                    init.style.animation = 'initFade 1s ease-out forwards';
-                    setTimeout(() => init.remove(), 1000);
+        // ========================================
+        // AWAKENING METER
+        // ========================================
+        const awakeningFill = document.getElementById('awakeningFill');
+        const awakeningNodes = document.querySelectorAll('.awakening-node');
+        const sections = ['hero', 'foundation', 'intelligence', 'sovereignty', 'nexus'];
+
+        function updateAwakening() {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = Math.min((scrollTop / docHeight) * 100, 100);
+            
+            if (awakeningFill) {
+                awakeningFill.style.height = progress + '%';
+            }
+
+            sections.forEach((section, index) => {
+                const el = document.getElementById(section);
+                if (el && awakeningNodes[index]) {
+                    const rect = el.getBoundingClientRect();
+                    const isActive = rect.top < window.innerHeight / 2 && rect.bottom > 0;
+                    awakeningNodes[index].classList.toggle('active', isActive);
                 }
-            }, 1500);
+            });
+        }
+
+        window.addEventListener('scroll', updateAwakening, { passive: true });
+        updateAwakening();
+
+        // ========================================
+        // NAVIGATION
+        // ========================================
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 80);
+        }, { passive: true });
+
+        // ========================================
+        // REVEAL ON SCROLL
+        // ========================================
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1, rootMargin: '-50px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ========================================
+        // FEATURE CARD MOUSE EFFECT
+        // ========================================
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                card.style.setProperty('--mouse-x', x + '%');
+                card.style.setProperty('--mouse-y', y + '%');
+            });
         });
 
-        // --- Consciousness Shader (Pure Black & Gold) ---
+        // ========================================
+        // LOGO GLOW PROXIMITY
+        // ========================================
+        const logoContainer = document.getElementById('logoContainer');
+        if (!isMobile && logoContainer) {
+            document.addEventListener('mousemove', (e) => {
+                const rect = logoContainer.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distance = Math.sqrt(Math.pow(e.clientX - centerX, 2) + Math.pow(e.clientY - centerY, 2));
+                const maxDistance = 450;
+                const intensity = Math.max(0, 1 - (distance / maxDistance));
+                const glow = logoContainer.querySelector('.logo-glow');
+                if (glow) glow.style.opacity = intensity * 0.9;
+            }, { passive: true });
+        }
+
+        // ========================================
+        // INTERACTIONS
+        // ========================================
+        document.getElementById('ctaButton').addEventListener('click', () => {
+            document.getElementById('nexus').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.getElementById('copyBtn').addEventListener('click', async () => {
+            const email = document.getElementById('contactEmail').textContent;
+            try {
+                await navigator.clipboard.writeText(email);
+                document.getElementById('copyBtn').textContent = 'COPIED!';
+                setTimeout(() => document.getElementById('copyBtn').textContent = 'COPY EMAIL', 2000);
+            } catch (err) {}
+        });
+
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = new FormData(e.target);
+            const subject = encodeURIComponent(data.get('subject') || 'CytherAI Inquiry');
+            const body = encodeURIComponent(`Name: ${data.get('name')}\nOrganization: ${data.get('org')}\n\n${data.get('message')}`);
+            window.location.href = `mailto:Aethersdev@cytherAi.com?subject=${subject}&body=${body}`;
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+
+    <!-- CONSCIOUSNESS SHADER -->
+    <script>
         (function() {
             const canvas = document.getElementById('consciousnessShader');
             if (!canvas || isMobile) return;
@@ -2246,27 +1968,22 @@
             const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
             if (!gl) return;
 
-            const vertexShader = `
-                attribute vec2 position;
-                void main() {
-                    gl_Position = vec4(position, 0.0, 1.0);
-                }
-            `;
+            const vertexShader = `attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
 
             const fragmentShader = `
                 precision highp float;
                 uniform vec2 resolution;
                 uniform float time;
+                uniform vec2 mouse;
 
-                // Advanced noise for organic flow
                 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                 vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                 vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
 
                 float snoise(vec2 v) {
                     const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
-                    vec2 i  = floor(v + dot(v, C.yy));
-                    vec2 x0 = v -   i + dot(i, C.xx);
+                    vec2 i = floor(v + dot(v, C.yy));
+                    vec2 x0 = v - i + dot(i, C.xx);
                     vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
                     vec4 x12 = x0.xyxy + C.xxzz;
                     x12.xy -= i1;
@@ -2280,7 +1997,7 @@
                     vec3 a0 = x - ox;
                     m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
                     vec3 g;
-                    g.x  = a0.x  * x0.x  + h.x  * x0.y;
+                    g.x = a0.x * x0.x + h.x * x0.y;
                     g.yz = a0.yz * x12.xz + h.yz * x12.yw;
                     return 130.0 * dot(m, g);
                 }
@@ -2288,7 +2005,7 @@
                 float fbm(vec2 p) {
                     float value = 0.0;
                     float amplitude = 0.5;
-                    for(int i = 0; i < 5; i++) {
+                    for(int i = 0; i < 6; i++) {
                         value += amplitude * snoise(p);
                         p *= 2.0;
                         amplitude *= 0.5;
@@ -2298,49 +2015,51 @@
 
                 void main() {
                     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
-                    float t = time * 0.2;
-                    vec2 p = uv * 2.0;
-
-                    // Multi-layer consciousness flow
-                    vec2 flow1 = vec2(fbm(p + t * 0.3), fbm(p - t * 0.2));
-                    float pattern1 = fbm(p + flow1 * 0.5 + t * 0.1);
-                    float pattern2 = fbm(p - flow1 * 0.3 - t * 0.15);
-
-                    // Neural waves
+                    float t = time * 0.12;
+                    vec2 mouseInfluence = (mouse - 0.5) * 0.2;
+                    uv += mouseInfluence * 0.08;
+                    vec2 p = uv * 2.2;
+                    
+                    vec2 flow1 = vec2(fbm(p + t * 0.35), fbm(p - t * 0.25));
+                    vec2 flow2 = vec2(fbm(p - t * 0.18 + 10.0), fbm(p + t * 0.22 + 10.0));
+                    
+                    float pattern1 = fbm(p + flow1 * 0.55 + t * 0.08);
+                    float pattern2 = fbm(p - flow2 * 0.35 - t * 0.06);
+                    float pattern3 = fbm(p * 1.4 + flow1 * 0.25);
+                    
                     float d = length(uv);
-                    float waves = sin(d * 8.0 - t * 2.0 + pattern1 * 3.0) * 0.5 + 0.5;
-                    waves += sin(d * 12.0 + t * 1.5 - pattern2 * 2.0) * 0.3;
-
-                    float consciousness = pattern1 * 0.4 + pattern2 * 0.3 + waves * 0.3;
+                    float waves = sin(d * 9.0 - t * 2.2 + pattern1 * 3.5) * 0.5 + 0.5;
+                    waves += sin(d * 14.0 + t * 1.8 - pattern2 * 2.5) * 0.25;
+                    waves += sin(d * 5.5 - t * 1.3 + pattern3 * 1.8) * 0.15;
+                    
+                    float consciousness = pattern1 * 0.35 + pattern2 * 0.28 + pattern3 * 0.17 + waves * 0.2;
                     consciousness = consciousness * 0.5 + 0.5;
-
-                    // Depth and glow
-                    float depth = exp(-d * 1.5);
-                    float glow = exp(-d * 2.8) * 0.5;
-
-                    // Pure Gold Palette - no cyan
-                    vec3 goldDark = vec3(0.545, 0.455, 0.216);      // #8B7455 dim gold
-                    vec3 gold = vec3(0.831, 0.686, 0.216);          // #D4AF37 consciousness gold
-                    vec3 goldBright = vec3(1.0, 0.843, 0.0);        // #FFD700 bright gold
-                    vec3 amber = vec3(1.0, 0.75, 0.0);              // #FFBF00 amber
-                    vec3 champagne = vec3(0.969, 0.906, 0.808);     // #F7E7CE champagne
-
-                    // Warm gradient mixing
-                    vec3 color1 = mix(goldDark, gold, consciousness);
-                    vec3 color2 = mix(gold, goldBright, sin(consciousness * 6.28 + t) * 0.5 + 0.5);
-                    vec3 color3 = mix(amber, champagne, waves * 0.5);
-
-                    vec3 finalColor = mix(color1, color2, pattern1 * 0.5 + 0.5);
-                    finalColor = mix(finalColor, color3, pattern2 * 0.2);
-
-                    // Metallic highlights
-                    float highlight = pow(consciousness, 3.0) * depth;
-                    finalColor += highlight * goldBright * 0.4;
-                    finalColor += glow * gold * 1.0;
-
-                    // Depth atmosphere
-                    finalColor *= (0.35 + depth * 0.65);
-
+                    
+                    float depth = exp(-d * 1.6);
+                    float glow = exp(-d * 2.8) * 0.55;
+                    float vignette = 1.0 - d * 0.35;
+                    
+                    vec3 goldShadow = vec3(0.24, 0.18, 0.04);
+                    vec3 goldDim = vec3(0.42, 0.35, 0.18);
+                    vec3 gold = vec3(0.72, 0.58, 0.16);
+                    vec3 goldCore = vec3(0.83, 0.69, 0.22);
+                    vec3 goldBright = vec3(0.91, 0.77, 0.28);
+                    vec3 goldLight = vec3(0.96, 0.84, 0.46);
+                    
+                    vec3 color1 = mix(goldShadow, goldDim, consciousness);
+                    vec3 color2 = mix(goldDim, gold, consciousness * 1.15);
+                    vec3 color3 = mix(gold, goldCore, waves);
+                    vec3 color4 = mix(goldCore, goldBright, pattern3 * 0.5 + 0.5);
+                    
+                    vec3 finalColor = mix(color1, color2, pattern1 * 0.55 + 0.45);
+                    finalColor = mix(finalColor, color3, pattern2 * 0.35);
+                    finalColor = mix(finalColor, color4, glow * 0.45);
+                    
+                    float highlight = pow(consciousness, 3.5) * depth;
+                    finalColor += highlight * goldLight * 0.28;
+                    finalColor += glow * goldBright * 0.45;
+                    finalColor *= (0.38 + depth * 0.62) * vignette;
+                    
                     gl_FragColor = vec4(finalColor, 1.0);
                 }
             `;
@@ -2354,6 +2073,8 @@
 
             const vs = compile(vertexShader, gl.VERTEX_SHADER);
             const fs = compile(fragmentShader, gl.FRAGMENT_SHADER);
+            if (!vs || !fs) return;
+
             const program = gl.createProgram();
             gl.attachShader(program, vs);
             gl.attachShader(program, fs);
@@ -2367,6 +2088,13 @@
             const posLoc = gl.getAttribLocation(program, 'position');
             const resLoc = gl.getUniformLocation(program, 'resolution');
             const timeLoc = gl.getUniformLocation(program, 'time');
+            const mouseLoc = gl.getUniformLocation(program, 'mouse');
+
+            let mouseX = 0.5, mouseY = 0.5;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX / window.innerWidth;
+                mouseY = 1.0 - (e.clientY / window.innerHeight);
+            }, { passive: true });
 
             function resize() {
                 canvas.width = window.innerWidth;
@@ -2374,276 +2102,145 @@
                 gl.viewport(0, 0, canvas.width, canvas.height);
             }
             resize();
-            window.addEventListener('resize', resize);
+            window.addEventListener('resize', resize, { passive: true });
 
             function render(time) {
                 gl.useProgram(program);
                 gl.uniform2f(resLoc, canvas.width, canvas.height);
                 gl.uniform1f(timeLoc, time * 0.001);
-
+                gl.uniform2f(mouseLoc, mouseX, mouseY);
                 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
                 gl.enableVertexAttribArray(posLoc);
                 gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
                 gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-
                 requestAnimationFrame(render);
             }
             requestAnimationFrame(render);
         })();
-
-        // --- CONTACT HELPERS ---
-        function copyToClipboard(text){
-            try{
-                navigator.clipboard.writeText(text).then(() => {
-                    flashCopy('Copied');
-                    setBtnSuccess();
-                }).catch(() => {
-                    const ta = document.createElement('textarea');
-                    ta.value = text;
-                    document.body.appendChild(ta);
-                    ta.select();
-                    try{
-                        document.execCommand('copy');
-                        flashCopy('Copied');
-                        setBtnSuccess();
-                    } catch(e){
-                        flashCopy('Select & copy failed');
-                    } finally{
-                        ta.remove();
-                    }
-                });
-            } catch{
-                flashCopy('Copy not available');
-            }
-        }
-
-        function setBtnSuccess(){
-            const btn = document.getElementById('copyBtn');
-            btn.classList.add('success');
-            btn.querySelector('span').textContent = 'COPIED';
-            setTimeout(() => {
-                btn.classList.remove('success');
-                btn.querySelector('span').textContent = 'COPY';
-            }, 1500);
-        }
-
-        function flashCopy(msg){
-            const n = document.getElementById('copyNotice');
-            n.textContent = msg;
-            setTimeout(() => {n.textContent = '';}, 1600);
-        }
-
-        document.getElementById('copyBtn').addEventListener('click', () => {
-            copyToClipboard(document.getElementById('contactEmail').textContent.trim());
-        });
-
-        function composeMail(e){
-            e.preventDefault();
-            const name = encodeURIComponent(document.getElementById('qName').value.trim());
-            const org = encodeURIComponent(document.getElementById('qCompany').value.trim());
-            const subjRaw = document.getElementById('qSubject').value.trim() || 'CytherAI Inquiry';
-            const subject = encodeURIComponent(subjRaw);
-            const message = document.getElementById('qMessage').value.trim();
-
-            const body = encodeURIComponent(
-`Hello CytherAI team,
-
-Name: ${decodeURIComponent(name) || '-'}
-Organization: ${decodeURIComponent(org) || '-'}
-
-${message || '(your message here)'}
-
-— Sent from cytherai.com`
-            );
-
-            const mailto = `mailto:Aethersdev@cytherAi.com?subject=${subject}&body=${body}`;
-            window.location.href = mailto;
-            return false;
-        }
     </script>
 
-    <!-- 3D Consciousness Field (Three.js Module) - Pure Gold -->
+    <!-- THREE.JS 3D CONSCIOUSNESS FIELD -->
     <script type="module">
         import * as THREE from 'three';
         import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
         import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
         import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
-        const shouldRun3D = !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) &&
-                           window.innerWidth >= 768 &&
-                           !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const shouldRun = !(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) && window.innerWidth >= 768;
+        if (!shouldRun) return;
 
-        if(!shouldRun3D){
-            console.log('3D Consciousness Field: Skipped for performance');
-        } else {
-            init3DConsciousnessField();
+        const container = document.getElementById('consciousness3D');
+        if (!container) return;
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x000000, 0.0007);
+
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+        camera.position.set(0, 80, 550);
+        camera.lookAt(0, 0, 0);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'high-performance' });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 0.85;
+        container.appendChild(renderer.domElement);
+
+        const particleCount = 3000;
+        const geometry = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const colors = new Float32Array(particleCount * 3);
+        const velocities = new Float32Array(particleCount * 3);
+
+        const colorGold = new THREE.Color(0xD4AF37);
+        const colorGoldDim = new THREE.Color(0x8B7355);
+        const colorGoldBright = new THREE.Color(0xFFD700);
+        const colorAmber = new THREE.Color(0xFFBF00);
+
+        for (let i = 0; i < particleCount; i++) {
+            const i3 = i * 3;
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 280 + Math.random() * 380;
+            positions[i3] = Math.cos(angle) * radius;
+            positions[i3 + 1] = (Math.random() - 0.5) * 220;
+            positions[i3 + 2] = Math.sin(angle) * radius;
+            velocities[i3] = positions[i3];
+            velocities[i3 + 1] = positions[i3 + 1];
+            velocities[i3 + 2] = positions[i3 + 2];
+
+            const brightness = Math.random();
+            let mixColor = brightness < 0.25 ? colorGoldDim : brightness < 0.7 ? colorGold : brightness < 0.9 ? colorGoldBright : colorAmber;
+            colors[i3] = mixColor.r;
+            colors[i3 + 1] = mixColor.g;
+            colors[i3 + 2] = mixColor.b;
         }
 
-        function init3DConsciousnessField(){
-            const container = document.getElementById('consciousnessField3D');
-            if(!container) return;
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            const scene = new THREE.Scene();
-            scene.fog = new THREE.FogExp2(0x000000, 0.0008);
+        const material = new THREE.PointsMaterial({
+            size: 1.2,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false,
+            sizeAttenuation: true
+        });
 
-            const camera = new THREE.PerspectiveCamera(
-                50,
-                window.innerWidth / window.innerHeight,
-                0.1,
-                2000
-            );
-            camera.position.set(0, 100, 600);
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        const composer = new EffectComposer(renderer);
+        composer.addPass(new RenderPass(scene, camera));
+        composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.65, 0.45, 0.3));
+
+        const clock = new THREE.Clock();
+        let mouseX = 0, mouseY = 0;
+        let targetCameraX = 0, targetCameraY = 80;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX - window.innerWidth / 2;
+            mouseY = e.clientY - window.innerHeight / 2;
+        }, { passive: true });
+
+        let frameCount = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            frameCount++;
+            if (frameCount % 2 !== 0) return;
+
+            const time = clock.getElapsedTime();
+            const positions = particleSystem.geometry.attributes.position.array;
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3 + 1] = velocities[i3 + 1] + Math.sin((velocities[i3] + time) * 0.001) * 7 + Math.cos((velocities[i3 + 2] + time) * 0.0007) * 7;
+                const rotAngle = time * 0.00004;
+                const cos = Math.cos(rotAngle), sin = Math.sin(rotAngle);
+                const x = velocities[i3], z = velocities[i3 + 2];
+                positions[i3] = x * cos - z * sin;
+                positions[i3 + 2] = x * sin + z * cos;
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            particleSystem.rotation.y = time * 0.008;
+
+            targetCameraX = mouseX * 0.018;
+            targetCameraY = 80 - mouseY * 0.012;
+            camera.position.x += (targetCameraX - camera.position.x) * 0.018;
+            camera.position.y += (targetCameraY - camera.position.y) * 0.018;
             camera.lookAt(0, 0, 0);
 
-            const renderer = new THREE.WebGLRenderer({
-                antialias: false,
-                alpha: true,
-                powerPreference: 'high-performance'
-            });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-            renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 0.9;
-            container.appendChild(renderer.domElement);
-
-            // Particle System - Pure Gold Palette
-            const particleCount = 3500;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const colors = new Float32Array(particleCount * 3);
-            const velocities = new Float32Array(particleCount * 3);
-
-            // Pure gold spectrum - no cyan
-            const colorGold = new THREE.Color(0xD4AF37);       // consciousness-gold
-            const colorGoldDim = new THREE.Color(0x8B7355);    // dimmer gold
-            const colorGoldBright = new THREE.Color(0xFFD700); // bright gold
-            const colorAmber = new THREE.Color(0xFFBF00);      // amber
-
-            for(let i = 0; i < particleCount; i++){
-                const i3 = i * 3;
-
-                const angle = Math.random() * Math.PI * 2;
-                const radius = 300 + (Math.random() * 400);
-
-                positions[i3] = Math.cos(angle) * radius;
-                positions[i3 + 1] = (Math.random() - 0.5) * 250;
-                positions[i3 + 2] = Math.sin(angle) * radius;
-
-                velocities[i3] = positions[i3];
-                velocities[i3 + 1] = positions[i3 + 1];
-                velocities[i3 + 2] = positions[i3 + 2];
-
-                // Monochromatic gold gradient
-                const brightness = Math.random();
-                let mixColor;
-                if(brightness < 0.25) {
-                    mixColor = colorGoldDim;
-                } else if(brightness < 0.7) {
-                    mixColor = colorGold;
-                } else if(brightness < 0.9) {
-                    mixColor = colorGoldBright;
-                } else {
-                    mixColor = colorAmber;
-                }
-
-                colors[i3] = mixColor.r;
-                colors[i3 + 1] = mixColor.g;
-                colors[i3 + 2] = mixColor.b;
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const material = new THREE.PointsMaterial({
-                size: 1.3,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.55,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false,
-                sizeAttenuation: true
-            });
-
-            const particleSystem = new THREE.Points(geometry, material);
-            scene.add(particleSystem);
-
-            // Post-Processing: Warm Bloom
-            const composer = new EffectComposer(renderer);
-            const renderPass = new RenderPass(scene, camera);
-            composer.addPass(renderPass);
-
-            const bloomPass = new UnrealBloomPass(
-                new THREE.Vector2(window.innerWidth, window.innerHeight),
-                0.7,
-                0.5,
-                0.35
-            );
-            composer.addPass(bloomPass);
-
-            const clock = new THREE.Clock();
-            let mouseX = 0, mouseY = 0;
-            let targetCameraX = 0, targetCameraY = 80;
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX - window.innerWidth / 2);
-                mouseY = (e.clientY - window.innerHeight / 2);
-            }, {passive: true});
-
-            let frameCount = 0;
-            function animate(){
-                requestAnimationFrame(animate);
-                frameCount++;
-
-                if(frameCount % 2 !== 0) return;
-
-                const time = clock.getElapsedTime();
-
-                const positions = particleSystem.geometry.attributes.position.array;
-
-                for(let i = 0; i < particleCount; i++){
-                    const i3 = i * 3;
-                    const ix = velocities[i3];
-                    const iy = velocities[i3 + 1];
-                    const iz = velocities[i3 + 2];
-
-                    positions[i3 + 1] = iy +
-                        Math.sin((ix + time) * 0.001) * 8 +
-                        Math.cos((iz + time) * 0.0008) * 8;
-
-                    const rotationAngle = time * 0.00005;
-                    const cos = Math.cos(rotationAngle);
-                    const sin = Math.sin(rotationAngle);
-                    const x = ix - 0;
-                    const z = iz - 0;
-                    positions[i3] = x * cos - z * sin;
-                    positions[i3 + 2] = x * sin + z * cos;
-                }
-                particleSystem.geometry.attributes.position.needsUpdate = true;
-
-                particleSystem.rotation.y = time * 0.01;
-
-                targetCameraX = mouseX * 0.02;
-                targetCameraY = 100 - (mouseY * 0.015);
-
-                camera.position.x += (targetCameraX - camera.position.x) * 0.02;
-                camera.position.y += (targetCameraY - camera.position.y) * 0.02;
-                camera.lookAt(0, 0, 0);
-
-                composer.render();
-            }
-
-            animate();
-            setTimeout(() => {
-                container.classList.add('active');
-            }, 100);
-
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                composer.setSize(window.innerWidth, window.innerHeight);
-            }, {passive: true});
+            composer.render();
         }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            composer.setSize(window.innerWidth, window.innerHeight);
+        }, { passive: true });
     </script>
 </body>
 </html>
