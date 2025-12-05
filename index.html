@@ -632,6 +632,245 @@
         }
 
         /* ========================================
+           THOUGHT BECOMES FORM TRANSFORMATION
+        ======================================== */
+        .transformation-container {
+            position: relative;
+            width: 600px;
+            height: 400px;
+            margin: 3rem auto;
+            z-index: 10;
+        }
+
+        .thought-symbols {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .thought-symbol {
+            position: absolute;
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--gold-dim);
+            opacity: 0;
+            font-style: italic;
+            pointer-events: none;
+            filter: blur(2px);
+            animation: symbolAppear 0.6s ease-out forwards;
+        }
+
+        @keyframes symbolAppear {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) rotate(0deg);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 0.7;
+                transform: scale(1) rotate(var(--rotation, 0deg));
+                filter: blur(2px);
+            }
+        }
+
+        .thought-symbol.drifting {
+            animation: symbolDrift 2s ease-in-out forwards;
+        }
+
+        @keyframes symbolDrift {
+            0% {
+                opacity: 0.7;
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 0.4;
+                filter: blur(4px);
+                transform: translate(
+                    calc(var(--drift-x, 0) * 1px),
+                    calc(var(--drift-y, 0) * 1px)
+                ) rotate(var(--rotation, 0deg));
+            }
+        }
+
+        .thought-symbol.converging {
+            animation: symbolConverge 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes symbolConverge {
+            0% {
+                opacity: 0.4;
+                filter: blur(4px);
+            }
+            70% {
+                opacity: 0.8;
+                filter: blur(0px);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--target-x), var(--target-y)) scale(0.3);
+                filter: blur(0px);
+            }
+        }
+
+        .proof-tree {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.8s ease-out;
+        }
+
+        .proof-tree.crystallized {
+            opacity: 1 !important;
+        }
+
+        .proof-line {
+            stroke: var(--gold-dim);
+            stroke-width: 1.5;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            fill: none;
+        }
+
+        .proof-tree.crystallized .proof-line {
+            animation: drawLine 0.6s ease-out forwards;
+        }
+
+        @keyframes drawLine {
+            to {
+                stroke-dashoffset: 0;
+                stroke: var(--gold-core);
+            }
+        }
+
+        .proof-node {
+            fill: var(--gold-shadow);
+            stroke: var(--gold-dim);
+            stroke-width: 1.5;
+            opacity: 0;
+        }
+
+        .proof-tree.crystallized .proof-node {
+            animation: nodeGlow 0.8s ease-out forwards;
+        }
+
+        @keyframes nodeGlow {
+            0% {
+                opacity: 0;
+                transform-origin: center;
+                r: 0;
+            }
+            100% {
+                opacity: 1;
+                fill: var(--gold-core);
+                stroke: var(--gold-bright);
+                filter: drop-shadow(0 0 8px var(--glow));
+            }
+        }
+
+        .proof-node.conclusion {
+            r: 8;
+        }
+
+        .proof-tree.crystallized .proof-node.conclusion {
+            animation: conclusionPulse 1s ease-out 0.8s forwards;
+        }
+
+        @keyframes conclusionPulse {
+            0% {
+                opacity: 0;
+                r: 0;
+            }
+            50% {
+                r: 12;
+            }
+            100% {
+                opacity: 1;
+                r: 8;
+                fill: var(--gold-bright);
+                stroke: var(--gold-white);
+                filter: drop-shadow(0 0 15px var(--glow-intense));
+            }
+        }
+
+        .proof-text {
+            font-family: var(--font-mono);
+            font-size: 16px;
+            fill: var(--gold-muted);
+            opacity: 0;
+        }
+
+        .proof-text.small {
+            font-size: 13px;
+        }
+
+        .proof-text.conclusion {
+            font-size: 18px;
+            font-weight: 400;
+        }
+
+        .proof-tree.crystallized .proof-text {
+            animation: textAppear 0.5s ease-out forwards;
+        }
+
+        @keyframes textAppear {
+            to {
+                opacity: 1;
+                fill: var(--gold-white);
+            }
+        }
+
+        .turnstile-symbol {
+            font-family: var(--font-display);
+            fill: var(--gold-core);
+            opacity: 0;
+            font-weight: 300;
+        }
+
+        .proof-tree.crystallized .turnstile-symbol {
+            animation: turnstileGlow 1s ease-out forwards;
+        }
+
+        @keyframes turnstileGlow {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+                fill: var(--gold-bright);
+                filter: drop-shadow(0 0 20px var(--glow));
+            }
+        }
+
+        .qed-symbol {
+            font-family: var(--font-display);
+            font-size: 32px;
+            fill: var(--gold-core);
+            opacity: 0;
+            font-weight: 400;
+        }
+
+        .proof-tree.crystallized .qed-symbol {
+            animation: qedStamp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s forwards;
+        }
+
+        @keyframes qedStamp {
+            0% {
+                opacity: 0;
+                transform: scale(2) rotate(-10deg);
+                filter: blur(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(0deg);
+                fill: var(--gold-bright);
+                filter: blur(0px) drop-shadow(0 0 12px var(--glow));
+            }
+        }
+
+        /* ========================================
            HERO CONTENT
         ======================================== */
         .hero-content {
@@ -1299,6 +1538,12 @@
             html { cursor: auto; }
             .concept-tags { flex-direction: column; align-items: center; }
             .ambient-orb { display: none; }
+            .transformation-container {
+                width: 90%;
+                max-width: 400px;
+                height: 300px;
+                margin: 2rem auto;
+            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -1465,6 +1710,46 @@
                     <div class="wordmark-text">CYTHERAI</div>
                     <div class="wordmark-tagline">NEURAL THEOREM PROVER</div>
                 </div>
+            </div>
+
+            <!-- Thought Becomes Form Transformation -->
+            <div class="transformation-container" id="transformationContainer">
+                <div class="thought-symbols" id="thoughtSymbols">
+                    <!-- Scattered abstract symbols - will be generated by JS -->
+                </div>
+                <svg class="proof-tree" id="proofTree" viewBox="0 0 600 400" style="opacity: 0;">
+                    <!-- Central Turnstile -->
+                    <text x="300" y="80" class="turnstile-symbol" text-anchor="middle" font-size="48">⊢</text>
+
+                    <!-- Top Level Premise -->
+                    <line x1="300" y1="100" x2="300" y2="140" class="proof-line" />
+                    <text x="300" y="160" class="proof-text" text-anchor="middle">Neural ∧ Symbolic</text>
+
+                    <!-- Branch Lines -->
+                    <line x1="300" y1="170" x2="200" y2="210" class="proof-line" />
+                    <line x1="300" y1="170" x2="400" y2="210" class="proof-line" />
+
+                    <!-- Left Branch -->
+                    <circle cx="200" cy="220" r="6" class="proof-node" />
+                    <text x="200" y="245" class="proof-text small" text-anchor="middle">∀x(Thought(x))</text>
+                    <line x1="200" y1="250" x2="200" y2="280" class="proof-line" />
+
+                    <!-- Right Branch -->
+                    <circle cx="400" cy="220" r="6" class="proof-node" />
+                    <text x="400" y="245" class="proof-text small" text-anchor="middle">∃y(Proof(y))</text>
+                    <line x1="400" y1="250" x2="400" y2="280" class="proof-line" />
+
+                    <!-- Convergence -->
+                    <line x1="200" y1="280" x2="300" y2="320" class="proof-line" />
+                    <line x1="400" y1="280" x2="300" y2="320" class="proof-line" />
+
+                    <!-- Conclusion -->
+                    <circle cx="300" cy="330" r="8" class="proof-node conclusion" />
+                    <text x="300" y="365" class="proof-text conclusion" text-anchor="middle">λ-calculus → Verified</text>
+
+                    <!-- QED -->
+                    <text x="300" y="395" class="qed-symbol" text-anchor="middle">∎</text>
+                </svg>
             </div>
 
             <!-- Hero Content -->
@@ -1683,6 +1968,7 @@
                 document.getElementById('loadingScreen').classList.add('hidden');
                 document.getElementById('consciousness3D').classList.add('active');
                 initScramble();
+                initTransformation();
             }, 1800);
         });
 
@@ -1834,6 +2120,82 @@
                 counter = (counter + 1) % phrases.length;
             };
             next();
+        }
+
+        // ========================================
+        // THOUGHT BECOMES FORM TRANSFORMATION
+        // ========================================
+        function initTransformation() {
+            if (prefersReducedMotion || isMobile) return;
+
+            const container = document.getElementById('thoughtSymbols');
+            const proofTree = document.getElementById('proofTree');
+            if (!container || !proofTree) return;
+
+            // Mathematical symbols representing "thought"
+            const symbols = ['∀', '∃', '∧', '∨', '¬', '→', '↔', '⊢', '⊨', '≡', '∈', '∉', '⊂', '⊃', 'λ', '∴', '∵'];
+            const symbolElements = [];
+
+            // Phase 1: Scattered symbols appear (0-1.5s)
+            symbols.forEach((symbol, i) => {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.className = 'thought-symbol';
+                    el.textContent = symbol;
+
+                    // Random scattered position
+                    const x = 50 + (Math.random() - 0.5) * 500;
+                    const y = 50 + (Math.random() - 0.5) * 300;
+                    const rotation = (Math.random() - 0.5) * 60;
+
+                    el.style.left = x + 'px';
+                    el.style.top = y + 'px';
+                    el.style.setProperty('--rotation', rotation + 'deg');
+                    el.style.animationDelay = (i * 0.08) + 's';
+
+                    container.appendChild(el);
+                    symbolElements.push({ el, x, y, rotation });
+                }, i * 80);
+            });
+
+            // Phase 2: Symbols drift organically (1.5-3.5s)
+            setTimeout(() => {
+                symbolElements.forEach(({ el, x, y }, i) => {
+                    const driftX = (Math.random() - 0.5) * 100;
+                    const driftY = (Math.random() - 0.5) * 80;
+
+                    el.style.setProperty('--drift-x', driftX);
+                    el.style.setProperty('--drift-y', driftY);
+                    el.classList.add('drifting');
+                });
+            }, 1500);
+
+            // Phase 3: Symbols converge to center (3.5-4.7s)
+            setTimeout(() => {
+                symbolElements.forEach(({ el }, i) => {
+                    const rect = el.getBoundingClientRect();
+                    const containerRect = container.getBoundingClientRect();
+
+                    // Calculate path to center of container
+                    const currentX = rect.left - containerRect.left + rect.width / 2;
+                    const currentY = rect.top - containerRect.top + rect.height / 2;
+                    const targetX = 300 - currentX;
+                    const targetY = 200 - currentY;
+
+                    el.style.setProperty('--target-x', targetX + 'px');
+                    el.style.setProperty('--target-y', targetY + 'px');
+                    el.classList.remove('drifting');
+                    el.classList.add('converging');
+
+                    // Remove symbol after convergence
+                    setTimeout(() => el.remove(), 1200);
+                });
+            }, 3500);
+
+            // Phase 4: Proof tree crystallizes (4.7s)
+            setTimeout(() => {
+                proofTree.classList.add('crystallized');
+            }, 4700);
         }
 
         // ========================================
