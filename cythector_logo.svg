@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  CYTHECTOR LOGO SYSTEM
+  =====================
+  
+  Brand: Cythector - Cinematic AI Director
+  Parent: CytherAI (cytherai.com)
+  
+  Concept: Director's Viewfinder + Crown
+  - Film frame corners represent cinematography/directing
+  - Central lens/eye represents AI vision and analysis
+  - Crown points above frame represent mastery and excellence
+  - Lambda integration honors CytherAI heritage
+  
+  Usage:
+  - Primary: Full color gradient on dark backgrounds
+  - Monochrome: Single color for light backgrounds
+  - Minimum size: 32px height
+  - Clear space: 25% of logo height on all sides
+-->
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <!-- Primary Gold Gradient -->
+    <linearGradient id="cythectorGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B7019"/>
+      <stop offset="40%" style="stop-color:#D4AF37"/>
+      <stop offset="100%" style="stop-color:#E8D48B"/>
+    </linearGradient>
+    
+    <!-- Radial Glow for Lens -->
+    <radialGradient id="lensGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#E8D48B"/>
+      <stop offset="60%" style="stop-color:#D4AF37"/>
+      <stop offset="100%" style="stop-color:#8B7019"/>
+    </radialGradient>
+    
+    <!-- Drop Shadow Filter -->
+    <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.83  0 0 0 0 0.69  0 0 0 0 0.22  0 0 0 0.6 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <g filter="url(#goldGlow)">
+    <!-- OUTER FRAME (Viewfinder) -->
+    <rect 
+      x="30" y="50" 
+      width="140" height="110" 
+      rx="12" ry="12"
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="6"
+    />
+    
+    <!-- INNER FRAME -->
+    <rect 
+      x="45" y="65" 
+      width="110" height="80" 
+      rx="6" ry="6"
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="2"
+      opacity="0.5"
+    />
+    
+    <!-- CROWN POINTS (Director's Excellence) -->
+    <g stroke="url(#cythectorGold)" stroke-width="6" stroke-linecap="round" fill="none">
+      <!-- Left Crown Point -->
+      <path d="M55 25 L70 50"/>
+      <!-- Center Crown Point (Highest) -->
+      <path d="M100 15 L100 50"/>
+      <!-- Right Crown Point -->
+      <path d="M145 25 L130 50"/>
+    </g>
+    
+    <!-- Crown Tips (Gems) -->
+    <circle cx="55" cy="22" r="5" fill="url(#cythectorGold)"/>
+    <circle cx="100" cy="12" r="6" fill="url(#cythectorGold)"/>
+    <circle cx="145" cy="22" r="5" fill="url(#cythectorGold)"/>
+    
+    <!-- CENTRAL LENS (AI Eye) -->
+    <circle 
+      cx="100" cy="105" r="28" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="5"
+    />
+    
+    <!-- Lens Inner Ring -->
+    <circle 
+      cx="100" cy="105" r="18" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="2"
+      opacity="0.6"
+    />
+    
+    <!-- Lens Core (Pupil) -->
+    <circle cx="100" cy="105" r="10" fill="url(#lensGlow)"/>
+    
+    <!-- Lens Highlight -->
+    <circle cx="95" cy="100" r="3" fill="#FFF" opacity="0.4"/>
+    
+    <!-- CORNER REGISTRATION MARKS (Film Frame) -->
+    <!-- Top Left -->
+    <path 
+      d="M30 75 L30 50 L55 50" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="6" 
+      stroke-linecap="round"
+    />
+    
+    <!-- Top Right -->
+    <path 
+      d="M170 75 L170 50 L145 50" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="6" 
+      stroke-linecap="round"
+    />
+    
+    <!-- Bottom Left -->
+    <path 
+      d="M30 135 L30 160 L55 160" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="6" 
+      stroke-linecap="round"
+    />
+    
+    <!-- Bottom Right -->
+    <path 
+      d="M170 135 L170 160 L145 160" 
+      fill="none" 
+      stroke="url(#cythectorGold)" 
+      stroke-width="6" 
+      stroke-linecap="round"
+    />
+  </g>
+  
+  <!-- WORDMARK (Optional - remove for icon only) -->
+  <text 
+    x="100" y="188" 
+    text-anchor="middle" 
+    font-family="'Syne', 'Helvetica Neue', Arial, sans-serif" 
+    font-size="18" 
+    font-weight="700" 
+    letter-spacing="8"
+    fill="url(#cythectorGold)"
+  >CYTHECTOR</text>
+</svg>
