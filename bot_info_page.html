@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CytherAI Director Bot | Bot Information</title>
+    <meta name="description" content="Information about the CytherAI-DirectorBot web crawler used for collecting film-related text for training cinematic AI models.">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --card-bg: #12121a;
+            --gold: #c9a227;
+            --text: #e8e8e8;
+            --text-muted: #888;
+            --border: #2a2a35;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--gold) 0%, #e8d48b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        section {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        h2 {
+            color: var(--gold);
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        code {
+            background: var(--bg);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.9rem;
+        }
+        
+        pre {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .contact-box {
+            background: var(--bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--gold);
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(201, 162, 39, 0.2);
+            color: var(--gold);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">🎬</div>
+            <h1>CytherAI-DirectorBot</h1>
+            <p class="subtitle">Research Web Crawler for Cinematic AI</p>
+        </header>
+        
+        <section>
+            <h2>What is this bot?</h2>
+            <p>
+                <code>CytherAI-DirectorBot</code> is a research web crawler operated by CytherAI. 
+                It collects publicly available film-related text (screenplays, film analyses, 
+                cinematography guides) for training a cinematic director AI model that generates 
+                professional shot lists from scene descriptions.
+            </p>
+            <p>
+                <span class="badge">Non-commercial</span>
+                <span class="badge">Research Use</span>
+                <span class="badge">Low Volume</span>
+            </p>
+        </section>
+        
+        <section>
+            <h2>User-Agent String</h2>
+            <pre><code>CytherAI-DirectorBot/1.0 (+https://cytherai.com/bots/director; contact: Aethdev@cytherai.com)</code></pre>
+        </section>
+        
+        <section>
+            <h2>Crawling Behavior</h2>
+            <ul>
+                <li><strong>Respects robots.txt</strong> — We honor all directives in your robots.txt file</li>
+                <li><strong>Rate limited</strong> — Maximum 1 request per 2 seconds per domain</li>
+                <li><strong>Low volume</strong> — Typically &lt;500 pages per domain total</li>
+                <li><strong>Caches responses</strong> — We don't re-request pages unnecessarily</li>
+                <li><strong>Identifies itself</strong> — Always sends the User-Agent string above</li>
+            </ul>
+        </section>
+        
+        <section>
+            <h2>What We Collect</h2>
+            <ul>
+                <li>Public domain screenplays</li>
+                <li>Film analysis and educational content</li>
+                <li>Cinematography technique descriptions</li>
+                <li>Shot breakdowns and film studies</li>
+            </ul>
+            <p>
+                We do <strong>not</strong> collect: personal data, login-protected content, 
+                copyrighted material without clear licensing, or any sensitive information.
+            </p>
+        </section>
+        
+        <section>
+            <h2>How to Block This Bot</h2>
+            <p>Add the following to your <code>robots.txt</code> file:</p>
+            <pre><code>User-agent: CytherAI-DirectorBot
+Disallow: /</code></pre>
+            <p>
+                Or to block specific directories:
+            </p>
+            <pre><code>User-agent: CytherAI-DirectorBot
+Disallow: /private/
+Disallow: /members/</code></pre>
+        </section>
+        
+        <section>
+            <h2>Contact</h2>
+            <div class="contact-box">
+                <p><strong>Email:</strong> <a href="mailto:Aethdev@cytherai.com">Aethdev@cytherai.com</a></p>
+                <p><strong>Website:</strong> <a href="https://cytherai.com">cytherai.com</a></p>
+                <p><strong>Response time:</strong> We respond to all inquiries within 24-48 hours</p>
+            </div>
+            <p style="margin-top: 1rem;">
+                If you have concerns about our crawler's behavior or would like us to remove 
+                cached content from your site, please contact us and we will address it promptly.
+            </p>
+        </section>
+        
+        <section>
+            <h2>Technical Details</h2>
+            <ul>
+                <li><strong>IP Range:</strong> Currently operates from dynamic IPs (residential/cloud)</li>
+                <li><strong>Request headers:</strong> Standard HTTP/1.1 with gzip support</li>
+                <li><strong>JavaScript:</strong> Does not execute JavaScript (static HTML only)</li>
+                <li><strong>Cookies:</strong> Does not store or send cookies</li>
+            </ul>
+        </section>
+        
+        <footer>
+            <p>© 2024 CytherAI. All rights reserved.</p>
+            <p><a href="https://cytherai.com">cytherai.com</a></p>
+        </footer>
+    </div>
+</body>
+</html>
