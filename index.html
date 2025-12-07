@@ -47,7 +47,15 @@
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-        html { scroll-behavior: smooth; cursor: none; }
+        html {
+            cursor: none;
+            overflow-x: hidden;
+        }
+
+        /* Buttery smooth scroll - disabled for custom implementation */
+        html.lenis {
+            height: auto;
+        }
 
         body {
             font-family: var(--font-body);
@@ -58,10 +66,54 @@
             font-weight: 300;
         }
 
+        /* Accessibility: Respect prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+
+            .consciousness-shader,
+            .consciousness-3d,
+            .overlay-grain,
+            .neural-field,
+            .quantum-grid,
+            .ambient-orb {
+                display: none !important;
+            }
+        }
+
         a { color: inherit; text-decoration: none; }
 
         /* ========================================
-           CUSTOM CURSOR
+           ENHANCED FOCUS STATES (Accessibility)
+        ======================================== */
+        a:focus-visible,
+        button:focus-visible,
+        .nav-links a:focus-visible,
+        .cta-button:focus-visible,
+        .concept-tag:focus-visible {
+            outline: 2px solid var(--gold-core);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
+        .awakening-node:focus-visible {
+            outline: 2px solid var(--gold-core);
+            outline-offset: 2px;
+        }
+
+        /* Remove default focus outline for mouse users */
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* ========================================
+           ENHANCED MAGNETIC CURSOR SYSTEM
         ======================================== */
         .cursor-core {
             width: 8px;
@@ -72,7 +124,13 @@
             pointer-events: none;
             z-index: 10001;
             mix-blend-mode: difference;
-            transition: transform 0.1s ease;
+            transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+            will-change: transform;
+        }
+
+        .cursor-core.magnetic {
+            width: 12px;
+            height: 12px;
         }
 
         .cursor-aura {
@@ -83,14 +141,22 @@
             position: fixed;
             pointer-events: none;
             z-index: 10000;
-            transition: all 0.2s var(--ease-out-expo);
+            transition: all 0.3s var(--ease-out-expo);
             background: radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%);
+            will-change: transform, border-color;
         }
 
         .cursor-aura.hover {
             transform: scale(1.6);
             border-color: var(--gold-core);
             background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, transparent 70%);
+        }
+
+        .cursor-aura.magnetic {
+            transform: scale(1.8);
+            border-color: var(--gold-bright);
+            background: radial-gradient(circle, rgba(212,175,55,0.15) 0%, transparent 70%);
+            box-shadow: 0 0 30px rgba(212,175,55,0.2);
         }
 
         .cursor-trail {
@@ -1064,13 +1130,31 @@
         }
 
         /* ========================================
-           SECTIONS
+           SECTIONS - Enhanced with Parallax
         ======================================== */
         section {
             padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
+            will-change: transform;
+        }
+
+        /* Reveal animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--ease-out-expo);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Parallax layers */
+        [data-parallax] {
+            will-change: transform;
         }
 
         .section-header {
@@ -1126,6 +1210,9 @@
             overflow: hidden;
             transition: all 0.5s var(--ease-out-expo);
             transform-style: preserve-3d;
+            perspective: 1000px;
+            cursor: pointer;
+            will-change: transform, box-shadow;
         }
 
         .feature-card::before {
@@ -1552,6 +1639,118 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
+        }
+
+        /* ========================================
+           CYTHECTOR SECTION - Enhanced Refinements
+        ======================================== */
+        #cythector .section-header {
+            animation: fadeSlideUp 1s var(--ease-out-expo) forwards;
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #cythector img[src*="cythector_logo"] {
+            transition: all 0.6s var(--ease-out-expo);
+            animation: logoFloat 6s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            25% {
+                transform: translateY(-8px) rotate(2deg) scale(1.02);
+            }
+            50% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+            75% {
+                transform: translateY(-5px) rotate(-2deg) scale(1.01);
+            }
+        }
+
+        #cythector img[src*="cythector_logo"]:hover {
+            transform: scale(1.15) translateY(-10px) !important;
+            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.6)) !important;
+            animation-play-state: paused;
+        }
+
+        #cythector .feature-card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cascadeIn 0.7s var(--ease-out-expo) forwards;
+        }
+
+        #cythector .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        #cythector .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        #cythector .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes cascadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Enhanced bot link button */
+        #cythector a[href*="/bots/cythector/"] {
+            position: relative;
+            overflow: hidden;
+            color: var(--gold-core);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            border: 1px solid var(--gold-dim);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            display: inline-block;
+            transition: all 0.4s var(--ease-out-expo);
+            background: rgba(212, 175, 55, 0.03);
+        }
+
+        #cythector a[href*="/bots/cythector/"]::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.2), transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: all 0.5s var(--ease-out-expo);
+            border-radius: 50%;
+        }
+
+        #cythector a[href*="/bots/cythector/"]:hover {
+            color: var(--gold-white);
+            border-color: var(--gold-core);
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+        }
+
+        #cythector a[href*="/bots/cythector/"]:hover::before {
+            width: 300px;
+            height: 300px;
         }
     </style>
 
@@ -2019,12 +2218,14 @@
         });
 
         // ========================================
-        // CUSTOM CURSOR
+        // ENHANCED MAGNETIC CURSOR SYSTEM
         // ========================================
         if (!isMobile) {
             const cursorCore = document.getElementById('cursorCore');
             const cursorAura = document.getElementById('cursorAura');
             let mouseX = 0, mouseY = 0, coreX = 0, coreY = 0, auraX = 0, auraY = 0;
+            let currentTarget = null;
+            const magneticElements = document.querySelectorAll('a, button, .feature-card, .concept-tag, .logo-container, .awakening-node, .cta-button');
 
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
@@ -2032,21 +2233,49 @@
             }, { passive: true });
 
             function animateCursor() {
-                coreX += (mouseX - coreX) * 0.25;
-                coreY += (mouseY - coreY) * 0.25;
-                auraX += (mouseX - auraX) * 0.1;
-                auraY += (mouseY - auraY) * 0.1;
-                
+                let targetX = mouseX;
+                let targetY = mouseY;
+
+                // Magnetic attraction to interactive elements
+                if (currentTarget) {
+                    const rect = currentTarget.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const distance = Math.sqrt(Math.pow(mouseX - centerX, 2) + Math.pow(mouseY - centerY, 2));
+
+                    // Apply magnetic pull within 100px radius
+                    if (distance < 100) {
+                        const strength = (100 - distance) / 100 * 0.3;
+                        targetX += (centerX - mouseX) * strength;
+                        targetY += (centerY - mouseY) * strength;
+                    }
+                }
+
+                coreX += (targetX - coreX) * 0.25;
+                coreY += (targetY - coreY) * 0.25;
+                auraX += (targetX - auraX) * 0.1;
+                auraY += (targetY - auraY) * 0.1;
+
                 cursorCore.style.transform = `translate(${coreX - 4}px, ${coreY - 4}px)`;
                 cursorAura.style.transform = `translate(${auraX - 22}px, ${auraY - 22}px)`;
-                
+
                 requestAnimationFrame(animateCursor);
             }
             animateCursor();
 
-            document.querySelectorAll('a, button, .feature-card, .concept-tag, .logo-container, .awakening-node').forEach(el => {
-                el.addEventListener('mouseenter', () => cursorAura.classList.add('hover'));
-                el.addEventListener('mouseleave', () => cursorAura.classList.remove('hover'));
+            magneticElements.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorAura.classList.add('hover');
+                    cursorCore.classList.add('magnetic');
+                    cursorAura.classList.add('magnetic');
+                    currentTarget = el;
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorAura.classList.remove('hover');
+                    cursorCore.classList.remove('magnetic');
+                    cursorAura.classList.remove('magnetic');
+                    currentTarget = null;
+                });
             });
         }
 
@@ -2293,7 +2522,7 @@
         document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
 
         // ========================================
-        // FEATURE CARD MOUSE EFFECT
+        // ENHANCED FEATURE CARD 3D TILT & MOUSE EFFECT
         // ========================================
         document.querySelectorAll('.feature-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
@@ -2302,6 +2531,23 @@
                 const y = ((e.clientY - rect.top) / rect.height) * 100;
                 card.style.setProperty('--mouse-x', x + '%');
                 card.style.setProperty('--mouse-y', y + '%');
+
+                // 3D tilt effect
+                if (!isMobile) {
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const deltaX = (e.clientX - centerX) / (rect.width / 2);
+                    const deltaY = (e.clientY - centerY) / (rect.height / 2);
+
+                    const rotateX = deltaY * -8; // Max 8deg tilt
+                    const rotateY = deltaX * 8;
+
+                    card.style.transform = `translateY(-8px) perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
             });
         });
 
@@ -2355,6 +2601,66 @@
                 if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
+
+        // ========================================
+        // SMOOTH SCROLL & PARALLAX SYSTEM
+        // ========================================
+        if (!isMobile && !prefersReducedMotion) {
+            let ticking = false;
+
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+
+                // Parallax on hero elements
+                const hero = document.getElementById('hero');
+                if (hero) {
+                    const heroHeight = hero.offsetHeight;
+                    const progress = Math.min(scrolled / heroHeight, 1);
+
+                    // Fade and transform hero content on scroll
+                    const heroContent = hero.querySelector('.hero-content');
+                    if (heroContent) {
+                        heroContent.style.opacity = 1 - progress * 0.8;
+                        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                    }
+
+                    // Parallax on ambient orbs
+                    const orbs = hero.querySelectorAll('.ambient-orb');
+                    orbs.forEach((orb, i) => {
+                        const speed = 0.15 + (i * 0.05);
+                        orb.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+
+                    // Parallax on sacred geometry
+                    const geometry = hero.querySelector('.sacred-geometry');
+                    if (geometry) {
+                        geometry.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.2}px) rotate(${scrolled * 0.05}deg)`;
+                    }
+                }
+
+                // Parallax on section headers
+                document.querySelectorAll('.section-header').forEach(header => {
+                    const rect = header.getBoundingClientRect();
+                    const scrollProgress = (window.innerHeight - rect.top) / window.innerHeight;
+                    if (scrollProgress > 0 && scrollProgress < 1.5) {
+                        header.style.transform = `translateY(${(1 - scrollProgress) * 30}px)`;
+                        header.style.opacity = Math.min(scrollProgress * 1.2, 1);
+                    }
+                });
+
+                ticking = false;
+            }
+
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }
+
+            window.addEventListener('scroll', requestTick, { passive: true });
+            updateParallax(); // Initial call
+        }
     </script>
 
     <!-- CONSCIOUSNESS SHADER -->
