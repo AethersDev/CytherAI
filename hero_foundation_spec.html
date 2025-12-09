@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CytherAI | Hero + Foundation Spec</title>
+    <meta name="description" content="φ-based design system implementation - Hero + Foundation golden reference">
+
+    <style>
+        /* ========================================
+           DESIGN TOKENS - φ-Based System Contract
+        ======================================== */
+        :root {
+            /* Colors */
+            --bg: #050508;
+            --bg-soft: #090b10;
+            --text: #f5f5f0;
+            --text-muted: #9c9b96;
+            --gold: #d4af37;
+            --gold-dark: #a07f24;
+            --danger: #b3204a;
+
+            /* Fonts */
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Radius */
+            --radius-card: 12px;
+            --radius-chip: 999px;
+
+            /* Spacing (base unit = 8px) */
+            --u: 8px;
+
+            /* Layout */
+            --content-width: 1160px;  /* φ-appropriate */
+            --gutter: 32px;
+
+            /* Timing */
+            --timing-slow: 1.8s;
+            --timing-norm: 0.6s;
+            --timing-fast: 0.18s;
+
+            /* Easing */
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ========================================
+           RESET & BASE
+        ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           DNA HELIX LOADING SCREEN
+        ======================================== */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity var(--timing-slow) var(--ease), visibility var(--timing-slow);
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .dna-helix {
+            width: 120px;
+            height: 200px;
+            position: relative;
+            perspective: 800px;
+        }
+
+        .dna-strand {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: dnaRotate 4s linear infinite;
+        }
+
+        .dna-base {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            transform-origin: center;
+            opacity: 0.6;
+        }
+
+        @keyframes dnaRotate {
+            to { transform: rotateY(360deg); }
+        }
+
+        .loading-text {
+            margin-top: calc(var(--u) * 4);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--text-muted);
+            animation: loadingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* ========================================
+           HERO VIEWPORT - Full-screen container
+        ======================================== */
+        .hero-viewport {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ========================================
+           HERO BACKGROUND LAYER
+        ======================================== */
+        .hero-background-layer {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .consciousness-shader {
+            position: absolute;
+            inset: 0;
+            opacity: 0.35;
+            mix-blend-mode: screen;
+        }
+
+        /* Sacred Geometry Overlay */
+        .sacred-geometry {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        .geometry-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .geometry-layer svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* SPEC: Very slow rotation, not continuous spinning */
+        .geometry-layer:nth-child(1) { animation: geoRotate 80s linear infinite; }
+        .geometry-layer:nth-child(2) { animation: geoRotate 60s linear infinite reverse; }
+        .geometry-layer:nth-child(3) { animation: geoRotate 100s linear infinite; }
+
+        @keyframes geoRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Neural Field Particles */
+        .neural-field {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        /* Will be populated via JS with WebGL */
+        .neural-field canvas {
+            position: absolute;
+            inset: 0;
+            opacity: 0.25;
+        }
+
+        /* CRT Overlay - scanlines + grain */
+        .crt-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 100;
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.03) 0px,
+                    transparent 1px,
+                    transparent 2px
+                ),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+            opacity: 0.4;
+        }
+
+        /* Ambient Orbs */
+        .ambient-orbs {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.08;
+            animation: orbDrift 25s ease-in-out infinite;
+        }
+
+        .ambient-orb-1 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--gold), transparent 60%);
+            top: 10%;
+            left: -10%;
+        }
+
+        .ambient-orb-2 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--gold-dark), transparent 60%);
+            bottom: 20%;
+            right: -5%;
+            animation-delay: -10s;
+        }
+
+        @keyframes orbDrift {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(30px, -20px); }
+            66% { transform: translate(-20px, 25px); }
+        }
+
+        /* ========================================
+           HEADER HUD - Top bar
+        ======================================== */
+        .header-hud {
+            position: relative;
+            z-index: 10;
+            padding: calc(var(--u) * 3) calc(var(--u) * 4);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-left {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .hud-left span {
+            margin: 0 calc(var(--u) * 2);
+        }
+
+        .hud-lambda {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .hud-right {
+            display: flex;
+            gap: calc(var(--u) * 4);
+        }
+
+        .hud-nav-item {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color var(--timing-fast);
+        }
+
+        .hud-nav-item:hover {
+            color: var(--gold);
+        }
+
+        /* ========================================
+           HERO FOREGROUND LAYER - 2-column grid
+        ======================================== */
+        .hero-foreground-layer {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: calc(var(--u) * 6) calc(var(--u) * 4);
+        }
+
+        .hero-layout-grid {
+            max-width: var(--content-width);
+            width: 100%;
+            display: grid;
+            grid-template-columns: 45% 55%;
+            gap: calc(var(--u) * 8);
+            align-items: center;
+        }
+
+        /* ========================================
+           HERO LOGO COLUMN (45%)
+        ======================================== */
+        .hero-logo-column {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .integrated-crown-container {
+            position: relative;
+        }
+
+        .integrated-crown {
+            width: 220px;
+            height: 260px;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
+        }
+
+        /* SPEC: Crown Proof Construction (3.5-4.5s stepwise) */
+        .crown-peak-center,
+        .crown-peak-left,
+        .crown-peak-right,
+        .crown-arc,
+        .crown-terminal-left,
+        .crown-terminal-right,
+        .crown-jewel-center,
+        .crown-jewel-left,
+        .crown-jewel-right,
+        .lambda-symbol,
+        .verification-mark {
+            opacity: 0;
+            animation: proveIn var(--timing-norm) var(--ease) forwards;
+        }
+
+        /* Stepwise delays (4s total) */
+        .crown-peak-center { animation-delay: 0.5s; }
+        .crown-peak-left { animation-delay: 1.0s; }
+        .crown-peak-right { animation-delay: 1.0s; }
+        .crown-arc {
+            animation: proveIn var(--timing-norm) var(--ease) 1.6s forwards,
+                       arcDraw var(--timing-norm) var(--ease) 1.6s forwards;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+        }
+        .crown-terminal-left { animation-delay: 2.1s; }
+        .crown-terminal-right { animation-delay: 2.1s; }
+        .crown-jewel-center { animation-delay: 2.6s; }
+        .crown-jewel-left { animation-delay: 2.9s; }
+        .crown-jewel-right { animation-delay: 2.9s; }
+        .lambda-symbol { animation-delay: 3.3s; }
+        .verification-mark { animation-delay: 3.8s; }
+
+        @keyframes proveIn {
+            from { opacity: 0; transform: translateY(-6px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes arcDraw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* SPEC: Idle breathing - rare proof flash */
+        .crown-jewel-center {
+            animation: proveIn var(--timing-norm) var(--ease) 2.6s forwards,
+                       jewelPulse 7s ease-in-out 5s infinite;
+        }
+
+        @keyframes jewelPulse {
+            0%, 90%, 100% { filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5)); }
+            95% { filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.9)); }
+        }
+
+        /* Awakening Meter - vertical beside crown */
+        .awakening-meter {
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--u) * 0.75);
+        }
+
+        .awakening-node {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1px solid var(--gold-dark);
+            background: var(--bg);
+            transition: all var(--timing-norm) var(--ease);
+        }
+
+        .awakening-node.active {
+            background: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+        }
+
+        .awakening-track {
+            width: 2px;
+            height: 140px;
+            background: rgba(212, 175, 55, 0.15);
+            position: relative;
+        }
+
+        .awakening-fill {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, var(--gold-dark), var(--gold));
+            transition: height var(--timing-slow) var(--ease);
+        }
+
+        /* ========================================
+           HERO TEXT COLUMN (55%)
+        ======================================== */
+        .hero-text-column {
+            padding-left: calc(var(--u) * 4);
+        }
+
+        .hero-wordmark {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            margin-left: 0.4em;
+            margin-bottom: calc(var(--u) * 2);
+            color: var(--text);
+        }
+
+        .hero-tagline {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
+            color: var(--text-muted);
+            margin-bottom: calc(var(--u) * 3);
+        }
+
+        .hero-spec-bar {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: calc(var(--u) * 4);
+            line-height: 1.8;
+        }
+
+        .spec-separator {
+            margin: 0 calc(var(--u) * 1.5);
+            color: var(--gold-dark);
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: calc(var(--u) * 1.5);
+            padding: calc(var(--u) * 1.75) calc(var(--u) * 4);
+            border: 1px solid var(--gold-dark);
+            border-radius: var(--radius-card);
+            background: transparent;
+            color: var(--gold);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            cursor: pointer;
+            transition: all var(--timing-norm) var(--ease);
+            text-decoration: none;
+        }
+
+        .hero-cta:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.08);
+            transform: translateY(-2px);
+        }
+
+        /* ========================================
+           FOUNDATION SECTION
+        ======================================== */
+        .foundation-section {
+            position: relative;
+            background: var(--bg-soft);
+            padding: calc(var(--u) * 12) calc(var(--u) * 4);
+        }
+
+        .foundation-background {
+            position: absolute;
+            inset: 0;
+            opacity: 0.06;
+            pointer-events: none;
+        }
+
+        .section-content {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header-row {
+            text-align: center;
+            margin-bottom: calc(var(--u) * 8);
+        }
+
+        .section-index {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--gold-dark);
+            margin-bottom: calc(var(--u) * 1.5);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--text);
+            margin-bottom: calc(var(--u) * 2);
+        }
+
+        .section-subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Foundation Grid: Diagram + Cards */
+        .section-grid {
+            display: grid;
+            grid-template-columns: 40% 60%;
+            gap: calc(var(--u) * 6);
+            align-items: start;
+        }
+
+        /* Foundation Crown Diagram */
+        .foundation-crown-diagram {
+            background: var(--bg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: var(--radius-card);
+            padding: calc(var(--u) * 4);
+            text-align: center;
+        }
+
+        .diagram-title {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: calc(var(--u) * 3);
+        }
+
+        /* Foundation Cards Grid */
+        .foundation-card-grid {
+            display: grid;
+            gap: calc(var(--u) * 2.5);
+        }
+
+        .foundation-card {
+            background: var(--bg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-top: 3px solid var(--gold-dark);
+            border-radius: var(--radius-card);
+            padding: calc(var(--u) * 3);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--timing-norm) var(--ease);
+        }
+
+        .foundation-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: conic-gradient(
+                from 0deg at 50% 50%,
+                transparent,
+                rgba(212, 175, 55, 0.1),
+                transparent 40%
+            );
+            opacity: 0;
+            transition: opacity var(--timing-slow) var(--ease);
+        }
+
+        .foundation-card:hover {
+            border-color: var(--gold-dark);
+            transform: translateY(-3px);
+        }
+
+        .foundation-card:hover::before {
+            opacity: 1;
+            animation: conicSheen 3s linear infinite;
+        }
+
+        @keyframes conicSheen {
+            to { transform: rotate(360deg); }
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: calc(var(--u) * 1.5);
+            color: var(--gold);
+        }
+
+        .card-title {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--text);
+            margin-bottom: calc(var(--u) * 1);
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 900px) {
+            .hero-layout-grid {
+                grid-template-columns: 1fr;
+                gap: calc(var(--u) * 6);
+            }
+
+            .hero-text-column {
+                padding-left: 0;
+                text-align: center;
+            }
+
+            .awakening-meter {
+                display: none;
+            }
+
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================
+         DNA HELIX LOADING SCREEN
+    ======================================== -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="dna-helix">
+            <div class="dna-strand" id="dnaStrand"></div>
+        </div>
+        <div class="loading-text">CONSTRUCTING PROOF</div>
+    </div>
+
+    <!-- ========================================
+         HERO VIEWPORT
+    ======================================== -->
+    <div class="hero-viewport">
+
+        <!-- Background Layer -->
+        <div class="hero-background-layer">
+            <canvas class="consciousness-shader" id="shader"></canvas>
+
+            <!-- Sacred Geometry Overlay -->
+            <div class="sacred-geometry">
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.4" opacity="0.6">
+                        <circle cx="100" cy="100" r="90"/>
+                        <circle cx="100" cy="100" r="70"/>
+                        <circle cx="100" cy="100" r="50"/>
+                        <polygon points="100,10 190,100 100,190 10,100" fill="none"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.3" opacity="0.4">
+                        <polygon points="100,5 195,52 195,148 100,195 5,148 5,52" fill="none"/>
+                        <line x1="100" y1="5" x2="100" y2="195"/>
+                        <line x1="5" y1="52" x2="195" y2="148"/>
+                        <line x1="195" y1="52" x2="5" y2="148"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.5" opacity="0.5">
+                        <circle cx="100" cy="100" r="85"/>
+                        <circle cx="100" cy="100" r="60"/>
+                        <circle cx="100" cy="100" r="35"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Neural Field Particles -->
+            <div class="neural-field" id="neuralField"></div>
+
+            <div class="ambient-orbs">
+                <div class="ambient-orb ambient-orb-1"></div>
+                <div class="ambient-orb ambient-orb-2"></div>
+            </div>
+        </div>
+
+        <!-- CRT Overlay -->
+        <div class="crt-overlay"></div>
+
+        <!-- Header HUD -->
+        <div class="header-hud">
+            <div class="hud-left">
+                <span class="hud-lambda">λ CYTHERAI</span>
+                <span>|</span>
+                <span>NODE: 127.0.0.1</span>
+                <span>|</span>
+                <span>CONSTRUCTING PROOF</span>
+            </div>
+            <nav class="hud-right">
+                <a href="#foundation" class="hud-nav-item">FOUNDATION</a>
+                <a href="#" class="hud-nav-item">INTELLIGENCE</a>
+                <a href="#" class="hud-nav-item">SOVEREIGNTY</a>
+            </nav>
+        </div>
+
+        <!-- Hero Foreground Layer -->
+        <div class="hero-foreground-layer">
+            <div class="hero-layout-grid">
+
+                <!-- Logo Column (45%) -->
+                <div class="hero-logo-column">
+                    <div class="integrated-crown-container">
+                        <!-- Placeholder for Integrated Crown SVG -->
+                        <svg class="integrated-crown" viewBox="0 0 200 240" fill="none">
+                            <g id="crown-structure">
+                                <!-- Crown peaks with φ spacing -->
+                                <polygon class="crown-peak-center" points="100,20 110,50 90,50" fill="var(--gold)" opacity="1"/>
+                                <polygon class="crown-peak-left" points="50,35 60,60 40,60" fill="var(--gold)" opacity="1"/>
+                                <polygon class="crown-peak-right" points="150,35 160,60 140,60" fill="var(--gold)" opacity="1"/>
+
+                                <!-- Crown arc (φ-based curve) -->
+                                <path class="crown-arc" d="M40 60 Q100 90 160 60" stroke="var(--gold)" stroke-width="2" fill="none" opacity="1"/>
+
+                                <!-- Terminal points -->
+                                <circle class="crown-terminal-left" cx="40" cy="60" r="4" fill="var(--gold)" opacity="1"/>
+                                <circle class="crown-terminal-right" cx="160" cy="60" r="4" fill="var(--gold)" opacity="1"/>
+
+                                <!-- Jewels -->
+                                <circle class="crown-jewel-center" cx="100" cy="50" r="5" fill="var(--gold)" opacity="1"/>
+                                <circle class="crown-jewel-left" cx="50" cy="60" r="4" fill="var(--gold-dark)" opacity="1"/>
+                                <circle class="crown-jewel-right" cx="150" cy="60" r="4" fill="var(--gold-dark)" opacity="1"/>
+
+                                <!-- Lambda symbol -->
+                                <text class="lambda-symbol" x="100" y="140" text-anchor="middle" font-family="var(--font-display)" font-size="48" fill="var(--gold)" opacity="1">λ</text>
+
+                                <!-- Verification mark -->
+                                <path class="verification-mark" d="M85 170 L95 180 L115 160" stroke="var(--gold)" stroke-width="3" fill="none" stroke-linecap="round" opacity="1"/>
+                            </g>
+                        </svg>
+
+                        <!-- Awakening Meter -->
+                        <div class="awakening-meter">
+                            <div class="awakening-node active"></div>
+                            <div class="awakening-track">
+                                <div class="awakening-fill" id="awakeningFill"></div>
+                            </div>
+                            <div class="awakening-node"></div>
+                            <div class="awakening-node"></div>
+                            <div class="awakening-node"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Text Column (55%) -->
+                <div class="hero-text-column">
+                    <h1 class="hero-wordmark">CYTHERAI</h1>
+                    <p class="hero-tagline">NEURAL THEOREM PROVER</p>
+                    <div class="hero-spec-bar">
+                        VERIFIABLE REASONING
+                        <span class="spec-separator">•</span>
+                        ZERO-DEPENDENCY CORE
+                        <span class="spec-separator">•</span>
+                        CONSUMER-HARDWARE TRAINING
+                    </div>
+                    <a href="#foundation" class="hero-cta">
+                        INITIALIZE INTERFACE →
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================
+         FOUNDATION SECTION
+    ======================================== -->
+    <section class="foundation-section" id="foundation">
+        <div class="foundation-background">
+            <!-- Faint proof texture would go here -->
+        </div>
+
+        <div class="section-content">
+
+            <div class="section-header-row">
+                <div class="section-index">01</div>
+                <h2 class="section-title">FOUNDATION</h2>
+                <p class="section-subtitle">
+                    CytherAI isn't just another AI company – it's a neural theorem prover.
+                </p>
+            </div>
+
+            <div class="section-grid">
+
+                <!-- Foundation Crown Diagram (40%) -->
+                <div class="foundation-crown-diagram">
+                    <div class="diagram-title">GEOMETRY OF UNITY</div>
+                    <!-- φ-guide diagram would go here -->
+                    <svg viewBox="0 0 200 200" style="max-width: 280px; margin: 0 auto;">
+                        <!-- Central crown (simplified) -->
+                        <polygon points="100,40 110,70 90,70" fill="var(--gold)" opacity="0.8"/>
+                        <circle cx="100" cy="70" r="4" fill="var(--gold)"/>
+
+                        <!-- φ guides -->
+                        <line x1="100" y1="20" x2="100" y2="180" stroke="var(--gold-dark)" stroke-width="0.5" opacity="0.4"/>
+                        <line x1="20" y1="100" x2="180" y2="100" stroke="var(--gold-dark)" stroke-width="0.5" opacity="0.4"/>
+                        <circle cx="100" cy="100" r="60" stroke="var(--gold-dark)" stroke-width="0.5" fill="none" opacity="0.3"/>
+
+                        <text x="105" y="25" font-family="var(--font-mono)" font-size="8" fill="var(--gold-dark)">AXIS</text>
+                        <text x="105" y="120" font-family="var(--font-mono)" font-size="8" fill="var(--gold-dark)">φ SPACING</text>
+                    </svg>
+                </div>
+
+                <!-- Foundation Cards (60%) -->
+                <div class="foundation-card-grid">
+
+                    <div class="foundation-card">
+                        <div class="card-icon">🔒</div>
+                        <h3 class="card-title">LOCAL-FIRST</h3>
+                        <p class="card-desc">
+                            Your infrastructure, your weights. Zero external API calls. Complete network isolation.
+                        </p>
+                    </div>
+
+                    <div class="foundation-card">
+                        <div class="card-icon">⊢</div>
+                        <h3 class="card-title">PROOF-AWARE</h3>
+                        <p class="card-desc">
+                            Neural-symbolic fusion with contradiction detection. Every decision includes an audit trail.
+                        </p>
+                    </div>
+
+                    <div class="foundation-card">
+                        <div class="card-icon">🖥️</div>
+                        <h3 class="card-title">ACCESSIBLE</h3>
+                        <p class="card-desc">
+                            Train on consumer hardware. No enterprise clusters required. Intelligence that compounds.
+                        </p>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         INITIALIZATION & DNA HELIX
+    ======================================== -->
+    <script>
+        // DNA Helix Generation
+        (function() {
+            const strand = document.getElementById('dnaStrand');
+            if (!strand) return;
+
+            for (let i = 0; i < 20; i++) {
+                const base = document.createElement('div');
+                base.className = 'dna-base';
+                base.style.top = (i * 10) + 'px';
+                base.style.transform = `rotateY(${i * 18}deg)`;
+                strand.appendChild(base);
+            }
+        })();
+
+        // Loading Screen - Hide after delay
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2200);
+        });
+    </script>
+
+    <!-- ========================================
+         CONSCIOUSNESS SHADER (WebGL - Advanced)
+    ======================================== -->
+    <script>
+        (function() {
+            const canvas = document.getElementById('shader');
+            if (!canvas) return;
+
+            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (!gl) return;
+
+            const vs = `
+                attribute vec2 p;
+                void main() { gl_Position = vec4(p, 0.0, 1.0); }
+            `;
+
+            const fs = `
+                precision highp float;
+                uniform vec2 r;
+                uniform float t;
+
+                // Simplex noise (minimal implementation)
+                vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
+
+                float snoise(vec2 v) {
+                    const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+                    vec2 i = floor(v + dot(v, C.yy));
+                    vec2 x0 = v - i + dot(i, C.xx);
+                    vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+                    vec4 x12 = x0.xyxy + C.xxzz;
+                    x12.xy -= i1;
+                    i = mod289(i);
+                    vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+                    vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+                    m = m*m; m = m*m;
+                    vec3 x = 2.0 * fract(p * C.www) - 1.0;
+                    vec3 h = abs(x) - 0.5;
+                    vec3 ox = floor(x + 0.5);
+                    vec3 a0 = x - ox;
+                    m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+                    vec3 g;
+                    g.x = a0.x * x0.x + h.x * x0.y;
+                    g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+                    return 130.0 * dot(m, g);
+                }
+
+                float fbm(vec2 p) {
+                    float v = 0.0, a = 0.5;
+                    for(int i = 0; i < 4; i++) {
+                        v += a * snoise(p);
+                        p *= 2.0;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                void main() {
+                    vec2 uv = (gl_FragCoord.xy - 0.5 * r) / min(r.x, r.y);
+
+                    // SPEC: "lava lamp at 5% speed"
+                    float time = t * 0.006;
+                    vec2 p = uv * 2.0;
+
+                    // Ultra-slow flow
+                    vec2 flow = vec2(fbm(p + time * 0.02), fbm(p - time * 0.015));
+                    float pattern = fbm(p + flow * 0.4 + time * 0.005);
+
+                    float d = length(uv);
+                    float consciousness = pattern * 0.5 + 0.5;
+
+                    // Gold gradient
+                    vec3 goldDark = vec3(0.4, 0.3, 0.1);
+                    vec3 gold = vec3(0.83, 0.69, 0.22);
+                    vec3 color = mix(goldDark, gold, consciousness);
+
+                    // Vignette
+                    float vignette = 1.0 - d * 0.5;
+                    color *= vignette;
+
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+
+            function compile(src, type) {
+                const s = gl.createShader(type);
+                gl.shaderSource(s, src);
+                gl.compileShader(s);
+                return s;
+            }
+
+            const prog = gl.createProgram();
+            gl.attachShader(prog, compile(vs, gl.VERTEX_SHADER));
+            gl.attachShader(prog, compile(fs, gl.FRAGMENT_SHADER));
+            gl.linkProgram(prog);
+
+            const verts = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, verts, gl.STATIC_DRAW);
+
+            const pLoc = gl.getAttribLocation(prog, 'p');
+            const rLoc = gl.getUniformLocation(prog, 'r');
+            const tLoc = gl.getUniformLocation(prog, 't');
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            function render(time) {
+                gl.useProgram(prog);
+                gl.uniform2f(rLoc, canvas.width, canvas.height);
+                gl.uniform1f(tLoc, time * 0.001);
+                gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+                gl.enableVertexAttribArray(pLoc);
+                gl.vertexAttribPointer(pLoc, 2, gl.FLOAT, false, 0, 0);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                requestAnimationFrame(render);
+            }
+            requestAnimationFrame(render);
+        })();
+
+        // Awakening meter progression
+        let progress = 0;
+        const fill = document.getElementById('awakeningFill');
+
+        function updateAwakening() {
+            progress = Math.min(progress + 0.5, 100);
+            if (fill) fill.style.height = progress + '%';
+
+            const nodes = document.querySelectorAll('.awakening-node');
+            if (progress > 30) nodes[1]?.classList.add('active');
+            if (progress > 60) nodes[2]?.classList.add('active');
+            if (progress > 90) nodes[3]?.classList.add('active');
+        }
+
+        // Simulate progression (in real implementation, tie to scroll/crown sequence)
+        setInterval(updateAwakening, 100);
+    </script>
+
+</body>
+</html>
