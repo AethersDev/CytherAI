@@ -68,6 +68,69 @@
         }
 
         /* ========================================
+           DNA HELIX LOADING SCREEN
+        ======================================== */
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity var(--timing-slow) var(--ease), visibility var(--timing-slow);
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .dna-helix {
+            width: 120px;
+            height: 200px;
+            position: relative;
+            perspective: 800px;
+        }
+
+        .dna-strand {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            animation: dnaRotate 4s linear infinite;
+        }
+
+        .dna-base {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+            transform-origin: center;
+            opacity: 0.6;
+        }
+
+        @keyframes dnaRotate {
+            to { transform: rotateY(360deg); }
+        }
+
+        .loading-text {
+            margin-top: calc(var(--u) * 4);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            color: var(--text-muted);
+            animation: loadingPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* ========================================
            HERO VIEWPORT - Full-screen container
         ======================================== */
         .hero-viewport {
@@ -91,6 +154,55 @@
             position: absolute;
             inset: 0;
             opacity: 0.35;
+            mix-blend-mode: screen;
+        }
+
+        /* Sacred Geometry Overlay */
+        .sacred-geometry {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        .geometry-layer {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .geometry-layer svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* SPEC: Very slow rotation, not continuous spinning */
+        .geometry-layer:nth-child(1) { animation: geoRotate 80s linear infinite; }
+        .geometry-layer:nth-child(2) { animation: geoRotate 60s linear infinite reverse; }
+        .geometry-layer:nth-child(3) { animation: geoRotate 100s linear infinite; }
+
+        @keyframes geoRotate {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Neural Field Particles */
+        .neural-field {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        /* Will be populated via JS with WebGL */
+        .neural-field canvas {
+            position: absolute;
+            inset: 0;
+            opacity: 0.25;
         }
 
         /* CRT Overlay - scanlines + grain */
@@ -237,6 +349,60 @@
             width: 220px;
             height: 260px;
             filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
+        }
+
+        /* SPEC: Crown Proof Construction (3.5-4.5s stepwise) */
+        .crown-peak-center,
+        .crown-peak-left,
+        .crown-peak-right,
+        .crown-arc,
+        .crown-terminal-left,
+        .crown-terminal-right,
+        .crown-jewel-center,
+        .crown-jewel-left,
+        .crown-jewel-right,
+        .lambda-symbol,
+        .verification-mark {
+            opacity: 0;
+            animation: proveIn var(--timing-norm) var(--ease) forwards;
+        }
+
+        /* Stepwise delays (4s total) */
+        .crown-peak-center { animation-delay: 0.5s; }
+        .crown-peak-left { animation-delay: 1.0s; }
+        .crown-peak-right { animation-delay: 1.0s; }
+        .crown-arc {
+            animation: proveIn var(--timing-norm) var(--ease) 1.6s forwards,
+                       arcDraw var(--timing-norm) var(--ease) 1.6s forwards;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+        }
+        .crown-terminal-left { animation-delay: 2.1s; }
+        .crown-terminal-right { animation-delay: 2.1s; }
+        .crown-jewel-center { animation-delay: 2.6s; }
+        .crown-jewel-left { animation-delay: 2.9s; }
+        .crown-jewel-right { animation-delay: 2.9s; }
+        .lambda-symbol { animation-delay: 3.3s; }
+        .verification-mark { animation-delay: 3.8s; }
+
+        @keyframes proveIn {
+            from { opacity: 0; transform: translateY(-6px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes arcDraw {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* SPEC: Idle breathing - rare proof flash */
+        .crown-jewel-center {
+            animation: proveIn var(--timing-norm) var(--ease) 2.6s forwards,
+                       jewelPulse 7s ease-in-out 5s infinite;
+        }
+
+        @keyframes jewelPulse {
+            0%, 90%, 100% { filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.5)); }
+            95% { filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.9)); }
         }
 
         /* Awakening Meter - vertical beside crown */
