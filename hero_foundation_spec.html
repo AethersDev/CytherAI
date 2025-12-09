@@ -680,6 +680,16 @@
 <body>
 
     <!-- ========================================
+         DNA HELIX LOADING SCREEN
+    ======================================== -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="dna-helix">
+            <div class="dna-strand" id="dnaStrand"></div>
+        </div>
+        <div class="loading-text">CONSTRUCTING PROOF</div>
+    </div>
+
+    <!-- ========================================
          HERO VIEWPORT
     ======================================== -->
     <div class="hero-viewport">
@@ -687,6 +697,37 @@
         <!-- Background Layer -->
         <div class="hero-background-layer">
             <canvas class="consciousness-shader" id="shader"></canvas>
+
+            <!-- Sacred Geometry Overlay -->
+            <div class="sacred-geometry">
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.4" opacity="0.6">
+                        <circle cx="100" cy="100" r="90"/>
+                        <circle cx="100" cy="100" r="70"/>
+                        <circle cx="100" cy="100" r="50"/>
+                        <polygon points="100,10 190,100 100,190 10,100" fill="none"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.3" opacity="0.4">
+                        <polygon points="100,5 195,52 195,148 100,195 5,148 5,52" fill="none"/>
+                        <line x1="100" y1="5" x2="100" y2="195"/>
+                        <line x1="5" y1="52" x2="195" y2="148"/>
+                        <line x1="195" y1="52" x2="5" y2="148"/>
+                    </svg>
+                </div>
+                <div class="geometry-layer">
+                    <svg viewBox="0 0 200 200" fill="none" stroke="var(--gold-dark)" stroke-width="0.5" opacity="0.5">
+                        <circle cx="100" cy="100" r="85"/>
+                        <circle cx="100" cy="100" r="60"/>
+                        <circle cx="100" cy="100" r="35"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Neural Field Particles -->
+            <div class="neural-field" id="neuralField"></div>
+
             <div class="ambient-orbs">
                 <div class="ambient-orb ambient-orb-1"></div>
                 <div class="ambient-orb ambient-orb-2"></div>
@@ -854,7 +895,33 @@
     </section>
 
     <!-- ========================================
-         CONSCIOUSNESS SHADER (WebGL)
+         INITIALIZATION & DNA HELIX
+    ======================================== -->
+    <script>
+        // DNA Helix Generation
+        (function() {
+            const strand = document.getElementById('dnaStrand');
+            if (!strand) return;
+
+            for (let i = 0; i < 20; i++) {
+                const base = document.createElement('div');
+                base.className = 'dna-base';
+                base.style.top = (i * 10) + 'px';
+                base.style.transform = `rotateY(${i * 18}deg)`;
+                strand.appendChild(base);
+            }
+        })();
+
+        // Loading Screen - Hide after delay
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2200);
+        });
+    </script>
+
+    <!-- ========================================
+         CONSCIOUSNESS SHADER (WebGL - Advanced)
     ======================================== -->
     <script>
         (function() {
