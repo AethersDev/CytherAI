@@ -25,6 +25,11 @@
             --success: #20c997;
             --hologram-cyan: #00fff9;
             --hologram-magenta: #ff00ff;
+            --neon-pink: #ff006e;
+            --neon-blue: #00d9ff;
+            --neon-purple: #b388ff;
+            --depth-fog: rgba(0,255,249,.02);
+            --clay-shadow: rgba(0,0,0,.3);
         }
 
         body{
@@ -34,6 +39,108 @@
             overflow-x:hidden;
             line-height:1.6;
             position:relative;
+        }
+
+        /* Morphing Blob Background - 2025 Trend */
+        .blob-container{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:1;
+            pointer-events:none;
+            opacity:.15;
+            filter:blur(80px);
+        }
+
+        .morphing-blob{
+            position:absolute;
+            border-radius:50%;
+            filter:blur(40px);
+            mix-blend-mode:screen;
+            animation:blobMorph 20s ease-in-out infinite;
+        }
+
+        .blob-1{
+            width:500px;
+            height:500px;
+            top:10%;
+            left:10%;
+            background:radial-gradient(circle, var(--hologram-cyan), transparent);
+            animation-delay:0s;
+        }
+
+        .blob-2{
+            width:600px;
+            height:600px;
+            top:60%;
+            right:10%;
+            background:radial-gradient(circle, var(--hologram-magenta), transparent);
+            animation-delay:5s;
+        }
+
+        .blob-3{
+            width:450px;
+            height:450px;
+            top:40%;
+            left:50%;
+            background:radial-gradient(circle, var(--consciousness-gold), transparent);
+            animation-delay:10s;
+        }
+
+        @keyframes blobMorph{
+            0%, 100%{
+                transform:translate(0, 0) scale(1) rotate(0deg);
+                border-radius:50% 60% 55% 45%;
+            }
+            25%{
+                transform:translate(50px, -30px) scale(1.1) rotate(90deg);
+                border-radius:45% 70% 50% 60%;
+            }
+            50%{
+                transform:translate(-40px, 50px) scale(.9) rotate(180deg);
+                border-radius:60% 45% 65% 40%;
+            }
+            75%{
+                transform:translate(30px, 40px) scale(1.05) rotate(270deg);
+                border-radius:55% 50% 45% 70%;
+            }
+        }
+
+        /* Liquid Glass Distortion Effect - VFX-JS Inspired */
+        .liquid-glass-layer{
+            position:fixed;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            pointer-events:none;
+            z-index:9997;
+            opacity:0;
+            transition:opacity .3s ease;
+            background:radial-gradient(circle 200px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(0,255,249,.08),
+                transparent 80%);
+            backdrop-filter:blur(2px);
+            mix-blend-mode:screen;
+        }
+
+        body:hover .liquid-glass-layer{
+            opacity:1;
+        }
+
+        /* Depth Fog Layer */
+        .depth-fog{
+            position:fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            height:50%;
+            background:linear-gradient(to top, var(--depth-fog), transparent);
+            pointer-events:none;
+            z-index:2;
+            opacity:.6;
         }
 
         /* CRT Scanlines & Film Grain */
@@ -87,7 +194,7 @@
 
         a{color:inherit}
 
-        /* Enhanced Custom Cursor with trails */
+        /* Enhanced Custom Cursor with trails - 2025 Advanced */
         .thought-cursor{
             width:20px;
             height:20px;
@@ -101,6 +208,34 @@
             background: radial-gradient(circle, var(--hologram-cyan) 0%, transparent 70%);
         }
 
+        .thought-cursor::before{
+            content:'';
+            position:absolute;
+            inset:-10px;
+            border-radius:50%;
+            background:conic-gradient(
+                from 0deg,
+                transparent,
+                var(--neon-pink),
+                transparent 90deg,
+                var(--neon-blue),
+                transparent 180deg,
+                var(--neon-purple),
+                transparent 270deg
+            );
+            animation:cursorSpin 3s linear infinite;
+            opacity:0;
+            transition:opacity .3s ease;
+        }
+
+        .thought-cursor.active::before{
+            opacity:.6;
+        }
+
+        @keyframes cursorSpin{
+            to{ transform:rotate(360deg); }
+        }
+
         .thought-trail{
             width:40px;
             height:40px;
@@ -112,6 +247,7 @@
             opacity:.3;
             transition:transform .3s cubic-bezier(.25,.46,.45,.94);
             background: radial-gradient(circle, var(--hologram-magenta) 0%, transparent 70%);
+            box-shadow:0 0 30px var(--hologram-magenta);
         }
 
         .cursor-ripple{
@@ -540,6 +676,7 @@
             z-index:10;
         }
 
+        /* Kinetic Typography - 2025 Advanced Trend */
         .hero-headline{
             font-size:4rem;
             font-weight:100;
@@ -552,6 +689,14 @@
             animation:fadeInUp 1s ease-out;
             position:relative;
             cursor:default;
+            transition:transform .3s cubic-bezier(.34,1.56,.64,1), filter .3s ease;
+            will-change:transform;
+        }
+
+        .hero-headline:hover{
+            transform:scale(1.02);
+            filter:drop-shadow(0 0 30px var(--hologram-cyan))
+                   drop-shadow(0 0 60px var(--hologram-magenta));
         }
 
         .hero-headline::before{
@@ -676,7 +821,72 @@
             opacity:1;
         }
 
-        /* Magnetic button with advanced effects */
+        /* Neon Pulse Accent System - 2025 Gaming UI Inspired */
+        .neon-accent{
+            position:relative;
+        }
+
+        .neon-accent::before{
+            content:'';
+            position:absolute;
+            inset:-2px;
+            border-radius:inherit;
+            padding:2px;
+            background:linear-gradient(45deg,
+                var(--neon-pink),
+                var(--neon-blue),
+                var(--neon-purple),
+                var(--hologram-cyan)
+            );
+            -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite:xor;
+            mask-composite:exclude;
+            opacity:0;
+            animation:neonPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes neonPulse{
+            0%, 100%{ opacity:0; transform:scale(1); }
+            50%{ opacity:.8; transform:scale(1.02); }
+        }
+
+        /* Scroll-triggered Reveal Animations */
+        .reveal{
+            opacity:0;
+            transform:translateY(50px);
+            transition:opacity .8s cubic-bezier(.34,1.56,.64,1),
+                       transform .8s cubic-bezier(.34,1.56,.64,1);
+        }
+
+        .reveal.active{
+            opacity:1;
+            transform:translateY(0);
+        }
+
+        /* Enhanced Chromatic Aberration on Interaction */
+        .chromatic-split{
+            transition:filter .3s ease;
+        }
+
+        .chromatic-split:hover{
+            animation:chromaticAberration .6s ease;
+        }
+
+        @keyframes chromaticAberration{
+            0%, 100%{
+                filter:none;
+            }
+            25%{
+                filter:drop-shadow(3px 0 var(--neon-pink))
+                       drop-shadow(-3px 0 var(--neon-blue));
+            }
+            75%{
+                filter:drop-shadow(-3px 0 var(--neon-blue))
+                       drop-shadow(3px 0 var(--neon-pink));
+            }
+        }
+
+        /* Magnetic button with advanced effects - 2025 Enhanced */
         .neural-interface{
             display:inline-block;
             padding:1.2rem 4rem;
@@ -692,6 +902,14 @@
             animation:fadeInUp 1s ease-out .6s both;
             transition:all .3s cubic-bezier(.4,0,.2,1);
             cursor:pointer;
+            will-change:transform;
+        }
+
+        .neural-interface:active{
+            transform:translateY(-1px) scale(0.98);
+            box-shadow:
+                0 0 20px var(--emergence-glow),
+                0 0 40px rgba(0,255,249,.2);
         }
 
         .neural-interface::before{
@@ -848,6 +1066,7 @@
             transition:all .5s cubic-bezier(.4,0,.2,1);
             transform-style:preserve-3d;
             cursor:pointer;
+            will-change:transform;
         }
 
         .feature-card::before{
@@ -873,6 +1092,7 @@
             100%{ transform:rotate(360deg); }
         }
 
+        /* Claymorphism Layer - 2025 Hybrid Trend */
         .feature-card::after{
             content:'';
             position:absolute;
@@ -880,6 +1100,9 @@
             background:rgba(0,0,0,.9);
             border-radius:20px;
             backdrop-filter:blur(10px);
+            box-shadow:
+                inset 20px 20px 40px var(--clay-shadow),
+                inset -20px -20px 40px rgba(255,255,255,.02);
         }
 
         .feature-card:hover{
@@ -1228,6 +1451,20 @@
     <!-- Neural Initialization Screen -->
     <div class="neural-init"><div class="init-text">INITIALIZING NEURAL INTERFACE</div></div>
 
+    <!-- 2025 Enhancement Layers -->
+    <!-- Morphing Blob Background -->
+    <div class="blob-container" aria-hidden="true">
+        <div class="morphing-blob blob-1"></div>
+        <div class="morphing-blob blob-2"></div>
+        <div class="morphing-blob blob-3"></div>
+    </div>
+
+    <!-- Liquid Glass Distortion Layer -->
+    <div class="liquid-glass-layer" aria-hidden="true"></div>
+
+    <!-- Depth Fog Atmosphere -->
+    <div class="depth-fog" aria-hidden="true"></div>
+
     <!-- Custom Cursor -->
     <div class="thought-cursor" aria-hidden="true"></div>
     <div class="thought-trail" aria-hidden="true"></div>
@@ -1289,29 +1526,29 @@
 
         <!-- FOUNDATION -->
         <section id="foundation" class="anchor">
-            <h2 class="section-title">FOUNDATION</h2>
-            <p class="section-body">Local-first, proof-aware architecture. Deterministic cores; zero egress by default.</p>
+            <h2 class="section-title chromatic-split reveal">FOUNDATION</h2>
+            <p class="section-body reveal">Local-first, proof-aware architecture. Deterministic cores; zero egress by default.</p>
 
             <div class="feature-grid">
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">⚡</div>
+                        <div class="feature-icon chromatic-split">⚡</div>
                         <h3 class="feature-title">LOCAL-FIRST</h3>
                         <p class="feature-desc">All processing happens on your infrastructure. No cloud dependency, no vendor lock-in. True data sovereignty.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">🔐</div>
+                        <div class="feature-icon chromatic-split">🔐</div>
                         <h3 class="feature-title">PROOF-AWARE</h3>
                         <p class="feature-desc">Every inference carries cryptographic proof. Verify reasoning chains, detect contradictions, replay any decision.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">⚙️</div>
+                        <div class="feature-icon chromatic-split">⚙️</div>
                         <h3 class="feature-title">DETERMINISTIC</h3>
                         <p class="feature-desc">Same input, same output. Every time. Reproducible intelligence for mission-critical applications.</p>
                     </div>
@@ -1321,29 +1558,29 @@
 
         <!-- INTELLIGENCE -->
         <section id="intelligence" class="anchor">
-            <h2 class="section-title">INTELLIGENCE</h2>
-            <p class="section-body">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
+            <h2 class="section-title chromatic-split reveal">INTELLIGENCE</h2>
+            <p class="section-body reveal">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
 
             <div class="feature-grid">
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">🧠</div>
+                        <div class="feature-icon chromatic-split">🧠</div>
                         <h3 class="feature-title">NEURAL-SYMBOLIC</h3>
                         <p class="feature-desc">Hybrid architecture combining deep learning intuition with symbolic logic precision.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">🔍</div>
+                        <div class="feature-icon chromatic-split">🔍</div>
                         <h3 class="feature-title">CONTRADICTION DETECTION</h3>
                         <p class="feature-desc">Built-in consistency checking prevents hallucinations and maintains logical coherence across reasoning chains.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">📜</div>
+                        <div class="feature-icon chromatic-split">📜</div>
                         <h3 class="feature-title">REPLAYABLE RECEIPTS</h3>
                         <p class="feature-desc">Every decision includes an audit trail. Step through reasoning, verify conclusions, trust the process.</p>
                     </div>
@@ -1353,29 +1590,29 @@
 
         <!-- SOVEREIGNTY -->
         <section id="sovereignty" class="anchor">
-            <h2 class="section-title">SOVEREIGNTY</h2>
-            <p class="section-body">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
+            <h2 class="section-title chromatic-split reveal">SOVEREIGNTY</h2>
+            <p class="section-body reveal">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
 
             <div class="feature-grid">
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">🏠</div>
+                        <div class="feature-icon chromatic-split">🏠</div>
                         <h3 class="feature-title">YOUR INFRASTRUCTURE</h3>
                         <p class="feature-desc">Deploy on-premise or in your private cloud. Zero external API calls. Complete network isolation.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">💾</div>
+                        <div class="feature-icon chromatic-split">💾</div>
                         <h3 class="feature-title">YOUR WEIGHTS</h3>
                         <p class="feature-desc">Model parameters stay with you. Fine-tune, adapt, evolve your intelligence without sharing proprietary data.</p>
                     </div>
                 </div>
 
-                <div class="feature-card">
+                <div class="feature-card neon-accent reveal">
                     <div class="feature-content">
-                        <div class="feature-icon">🌐</div>
+                        <div class="feature-icon chromatic-split">🌐</div>
                         <h3 class="feature-title">YOUR MEMORY</h3>
                         <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds over time.</p>
                     </div>
@@ -1530,6 +1767,12 @@
             mousePos.x = (e.clientX / window.innerWidth) * 100;
             mousePos.y = ((e.clientY + window.scrollY) / document.body.scrollHeight) * 100;
 
+            // 2025 Enhancement: Liquid Glass Effect
+            updateLiquidGlass(e);
+
+            // 2025 Enhancement: 3D Card Tilt
+            update3DCardTilt(e);
+
             if(Math.random() > .97){
                 createRipple(mouseX, mouseY);
             }
@@ -1539,6 +1782,97 @@
 
             // Magnetic button effect
             magneticButtons(e);
+
+            // Activate cursor on interaction
+            activateCursor();
+        });
+
+        // 2025 Feature: Liquid Glass Distortion Effect
+        function updateLiquidGlass(e){
+            const liquidLayer = document.querySelector('.liquid-glass-layer');
+            const x = (e.clientX / window.innerWidth) * 100;
+            const y = (e.clientY / window.innerHeight) * 100;
+            liquidLayer.style.setProperty('--mouse-x', x + '%');
+            liquidLayer.style.setProperty('--mouse-y', y + '%');
+        }
+
+        // 2025 Feature: Advanced 3D Card Tilt
+        function update3DCardTilt(e){
+            document.querySelectorAll('.feature-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                if(x > 0 && x < rect.width && y > 0 && y < rect.height){
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+
+                    card.style.transform = `translateY(-10px)
+                                            perspective(1000px)
+                                            rotateX(${rotateX}deg)
+                                            rotateY(${rotateY}deg)
+                                            scale3d(1.02, 1.02, 1.02)`;
+                } else {
+                    card.style.transform = '';
+                }
+            });
+        }
+
+        // 2025 Feature: Cursor Activation (Optimized)
+        let cursorActiveTimeout;
+        function activateCursor(){
+            if(!cursor.classList.contains('active')){
+                cursor.classList.add('active');
+            }
+            clearTimeout(cursorActiveTimeout);
+            cursorActiveTimeout = setTimeout(() => cursor.classList.remove('active'), 300);
+        }
+
+        // 2025 Feature: Scroll-Triggered Reveal Animations
+        function revealOnScroll(){
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(element => {
+                const windowHeight = window.innerHeight;
+                const elementTop = element.getBoundingClientRect().top;
+                const revealPoint = 100;
+
+                if(elementTop < windowHeight - revealPoint){
+                    element.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // 2025 Feature: Enhanced Hero Parallax
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            const logoContainer = document.querySelector('.logo-container');
+            const heroContent = document.querySelector('.hero-content');
+
+            if(hero && scrolled < window.innerHeight){
+                // Multi-layer parallax with different speeds
+                if(logoContainer){
+                    logoContainer.style.transform = `translateY(${scrolled * 0.5}px) scale(${1 - scrolled * 0.0003})`;
+                    logoContainer.style.opacity = 1 - (scrolled / window.innerHeight) * 1.2;
+                }
+                if(heroContent){
+                    heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                    heroContent.style.opacity = 1 - (scrolled / window.innerHeight) * 0.8;
+                }
+
+                // Parallax quantum grid
+                const grid = document.querySelector('.quantum-grid');
+                if(grid){
+                    const baseRotation = 75;
+                    grid.style.transform = `translate(-50%, -50%)
+                                           rotateX(${baseRotation + scrolled * 0.02}deg)`;
+                }
+            }
         });
 
         function attractNodes(){
