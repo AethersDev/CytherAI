@@ -6,154 +6,566 @@
     <title>Cythector | CytherAI Director Bot Information</title>
     <meta name="description" content="Information about Cythector (CytherAI-DirectorBot) web crawler used for collecting film-related text for training cinematic AI models.">
     <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#050508">
     <style>
+        /* ========================================
+           DESIGN TOKENS - Consistent with Main Site
+        ======================================== */
         :root {
-            --bg: #0a0a0f;
-            --card-bg: #12121a;
-            --gold: #c9a227;
-            --text: #e8e8e8;
-            --text-muted: #888;
-            --border: #2a2a35;
+            --bg: #050508;
+            --bg-soft: #090b10;
+            --card-bg: #0a0a10;
+            --gold: #d4af37;
+            --gold-bright: #f4d675;
+            --gold-dim: #8b7355;
+            --gold-shadow: #3d3520;
+            --text: #f5f5f0;
+            --text-muted: #9c9b96;
+            --border: #1a1a1a;
+            --glow: rgba(212, 175, 55, 0.4);
+            --glow-soft: rgba(212, 175, 55, 0.15);
+
+            --font-display: 'Cormorant Garamond', Georgia, serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, monospace;
+            --font-body: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .film-grain, .consciousness-glow, .film-reel-bg, .floating-particles { display: none !important; }
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            font-family: var(--font-body);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.8;
             padding: 2rem;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
-        
+
+        /* Film Grain Overlay */
+        .film-grain {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            animation: grain 8s steps(10) infinite;
+        }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-3%, -5%); }
+            30% { transform: translate(2%, -8%); }
+            50% { transform: translate(-5%, 3%); }
+            70% { transform: translate(4%, 5%); }
+            90% { transform: translate(-2%, 4%); }
+        }
+
+        /* Consciousness Glow Background */
+        .consciousness-glow {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowPulse 8s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
+        }
+
+        /* Film Reel Background Pattern */
+        .film-reel-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.02;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 20px,
+                    rgba(212, 175, 55, 0.3) 20px,
+                    rgba(212, 175, 55, 0.3) 22px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 100px,
+                    rgba(212, 175, 55, 0.2) 100px,
+                    rgba(212, 175, 55, 0.2) 104px
+                );
+            animation: filmScroll 30s linear infinite;
+        }
+
+        @keyframes filmScroll {
+            to { background-position: 0 1000px, 0 0; }
+        }
+
+        /* Floating Particles */
+        .floating-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: particleFloat 20s ease-in-out infinite;
+            box-shadow: 0 0 6px var(--glow);
+        }
+
+        @keyframes particleFloat {
+            0% { opacity: 0; transform: translateY(100vh) scale(0); }
+            10% { opacity: 0.6; transform: translateY(80vh) scale(1); }
+            90% { opacity: 0.6; transform: translateY(5vh) scale(1); }
+            100% { opacity: 0; transform: translateY(-5vh) scale(0); }
+        }
+
         .container {
             max-width: 800px;
             margin: 0 auto;
+            position: relative;
+            z-index: 10;
         }
-        
+
+        /* Header with Enhanced Styling */
         .header {
             text-align: center;
             margin-bottom: 3rem;
             padding-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            position: relative;
         }
-        
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
         .logo {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
         }
-        
+
+        .logo img {
+            width: 120px;
+            height: 120px;
+            filter: drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
+            animation: logoFloat 6s ease-in-out infinite;
+            transition: all 0.5s var(--ease-out-expo);
+        }
+
+        .logo img:hover {
+            filter: drop-shadow(0 0 50px rgba(212, 175, 55, 0.5));
+            transform: scale(1.05);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Logo Glow Ring */
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px;
+            height: 160px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 50%;
+            animation: ringPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes ringPulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.2; }
+        }
+
         h1 {
-            font-size: 2rem;
-            background: linear-gradient(135deg, var(--gold) 0%, #e8d48b 100%);
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-bright) 50%, var(--gold) 100%);
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            background-clip: text;
+            margin-bottom: 0.75rem;
+            animation: shimmer 3s linear infinite;
         }
-        
+
+        @keyframes shimmer {
+            to { background-position: 200% center; }
+        }
+
         .subtitle {
+            font-family: var(--font-mono);
             color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
         }
-        
-        section {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            color: var(--gold-dim);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            border-radius: 4px;
+            transition: all 0.3s var(--ease-out-expo);
         }
-        
-        h2 {
+
+        .back-link:hover {
             color: var(--gold);
-            font-size: 1.25rem;
-            margin-bottom: 1rem;
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateX(-4px);
+            text-decoration: none;
         }
-        
+
+        /* Section Cards - Liquid Glass Effect */
+        section {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.02) 0%, rgba(10, 10, 16, 0.8) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s var(--ease-out-expo);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s var(--ease-out-expo) forwards;
+        }
+
+        section:nth-child(1) { animation-delay: 0.1s; }
+        section:nth-child(2) { animation-delay: 0.2s; }
+        section:nth-child(3) { animation-delay: 0.3s; }
+        section:nth-child(4) { animation-delay: 0.4s; }
+        section:nth-child(5) { animation-delay: 0.5s; }
+        section:nth-child(6) { animation-delay: 0.6s; }
+        section:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Hover Effects */
+        section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            animation: cardShine 6s ease-in-out infinite;
+        }
+
+        @keyframes cardShine {
+            0%, 100% { left: -100%; }
+            50% { left: 100%; }
+        }
+
+        section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(212, 175, 55, 0.08) 0%,
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            pointer-events: none;
+        }
+
+        section:hover {
+            border-color: rgba(212, 175, 55, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(212, 175, 55, 0.05);
+        }
+
+        section:hover::after {
+            opacity: 1;
+        }
+
+        h2 {
+            font-family: var(--font-display);
+            color: var(--gold);
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            margin-bottom: 1.25rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 40px;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold), transparent);
+        }
+
         p {
             margin-bottom: 1rem;
+            color: var(--text-muted);
         }
-        
+
+        p:last-child {
+            margin-bottom: 0;
+        }
+
         ul {
-            padding-left: 1.5rem;
+            padding-left: 0;
             margin-bottom: 1rem;
+            list-style: none;
         }
-        
+
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-muted);
         }
-        
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6em;
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--glow);
+        }
+
+        li strong {
+            color: var(--text);
+        }
+
         code {
-            background: var(--bg);
-            padding: 0.2rem 0.5rem;
+            background: rgba(212, 175, 55, 0.08);
+            padding: 0.2rem 0.6rem;
             border-radius: 4px;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--gold-bright);
+            border: 1px solid rgba(212, 175, 55, 0.1);
         }
-        
+
         pre {
-            background: var(--bg);
-            padding: 1rem;
-            border-radius: 8px;
+            background: rgba(5, 5, 8, 0.8);
+            padding: 1.25rem;
+            border-radius: 12px;
             overflow-x: auto;
-            margin: 1rem 0;
+            margin: 1.25rem 0;
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            position: relative;
         }
-        
+
+        pre::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--gold), transparent);
+            border-radius: 3px 0 0 3px;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            border: none;
+            color: var(--text-muted);
+        }
+
         a {
             color: var(--gold);
             text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
         }
-        
+
+        a:not(.back-link)::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--gold);
+            transition: width 0.3s var(--ease-out-expo);
+        }
+
         a:hover {
-            text-decoration: underline;
+            color: var(--gold-bright);
+            text-shadow: 0 0 20px var(--glow-soft);
         }
-        
+
+        a:not(.back-link):hover::after {
+            width: 100%;
+        }
+
         .contact-box {
-            background: var(--bg);
-            padding: 1rem;
-            border-radius: 8px;
+            background: rgba(5, 5, 8, 0.6);
+            padding: 1.5rem;
+            border-radius: 12px;
             border-left: 3px solid var(--gold);
+            margin-bottom: 1rem;
         }
-        
+
+        .contact-box p {
+            margin-bottom: 0.75rem;
+        }
+
+        .contact-box p:last-child {
+            margin-bottom: 0;
+        }
+
         .badge {
             display: inline-block;
-            background: rgba(201, 162, 39, 0.2);
+            background: rgba(212, 175, 55, 0.1);
             color: var(--gold);
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            padding: 0.35rem 1rem;
+            border-radius: 999px;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
             margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: all 0.3s ease;
         }
-        
+
+        .badge:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.1);
+        }
+
         footer {
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
             color: var(--text-muted);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+        }
+
+        footer p {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            section { padding: 1.5rem; }
+            h1 { font-size: 2rem; }
+            .consciousness-glow { width: 300px; height: 300px; }
         }
     </style>
 </head>
 <body>
+    <!-- Visual Effects -->
+    <div class="film-grain"></div>
+    <div class="consciousness-glow"></div>
+    <div class="film-reel-bg"></div>
+    <div class="floating-particles" id="floatingParticles"></div>
+
     <div class="container">
+        <a href="/" class="back-link">← CYTHERAI HOME</a>
+
         <header class="header">
             <div class="logo">
-                <img src="/cythector_logo.svg" alt="Cythector Logo" style="width: 120px; height: 120px;">
+                <img src="/cythector_logo.svg" alt="Cythector Logo">
             </div>
             <h1>Cythector</h1>
             <p class="subtitle">CytherAI-DirectorBot/1.0 — Research Web Crawler for Cinematic AI</p>
         </header>
-        
+
         <section>
             <h2>What is this bot?</h2>
             <p>
-                <code>CytherAI-DirectorBot</code> is a research web crawler operated by CytherAI. 
-                It collects publicly available film-related text (screenplays, film analyses, 
-                cinematography guides) for training a cinematic director AI model that generates 
+                <code>CytherAI-DirectorBot</code> is a research web crawler operated by CytherAI.
+                It collects publicly available film-related text (screenplays, film analyses,
+                cinematography guides) for training a cinematic director AI model that generates
                 professional shot lists from scene descriptions.
             </p>
             <p>
@@ -162,12 +574,12 @@
                 <span class="badge">Low Volume</span>
             </p>
         </section>
-        
+
         <section>
             <h2>User-Agent String</h2>
             <pre><code>CytherAI-DirectorBot/1.0 (+https://cytherai.com/bots/cythector; contact: Aethdev@cytherai.com)</code></pre>
         </section>
-        
+
         <section>
             <h2>Crawling Behavior</h2>
             <ul>
@@ -178,7 +590,7 @@
                 <li><strong>Identifies itself</strong> — Always sends the User-Agent string above</li>
             </ul>
         </section>
-        
+
         <section>
             <h2>What We Collect</h2>
             <ul>
@@ -188,11 +600,11 @@
                 <li>Shot breakdowns and film studies</li>
             </ul>
             <p>
-                We do <strong>not</strong> collect: personal data, login-protected content, 
+                We do <strong>not</strong> collect: personal data, login-protected content,
                 copyrighted material without clear licensing, or any sensitive information.
             </p>
         </section>
-        
+
         <section>
             <h2>How to Block This Bot</h2>
             <p>Add the following to your <code>robots.txt</code> file:</p>
@@ -205,7 +617,7 @@ Disallow: /</code></pre>
 Disallow: /private/
 Disallow: /members/</code></pre>
         </section>
-        
+
         <section>
             <h2>Contact</h2>
             <div class="contact-box">
@@ -214,11 +626,11 @@ Disallow: /members/</code></pre>
                 <p><strong>Response time:</strong> We respond to all inquiries within 24-48 hours</p>
             </div>
             <p style="margin-top: 1rem;">
-                If you have concerns about our crawler's behavior or would like us to remove 
+                If you have concerns about our crawler's behavior or would like us to remove
                 cached content from your site, please contact us and we will address it promptly.
             </p>
         </section>
-        
+
         <section>
             <h2>Technical Details</h2>
             <ul>
@@ -228,11 +640,43 @@ Disallow: /members/</code></pre>
                 <li><strong>Cookies:</strong> Does not store or send cookies</li>
             </ul>
         </section>
-        
+
         <footer>
-            <p>© 2024 CytherAI. All rights reserved.</p>
+            <p>© <span id="year"></span> CYTHERAI — ALL RIGHTS RESERVED</p>
             <p><a href="https://cytherai.com">cytherai.com</a></p>
         </footer>
     </div>
+
+    <script>
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Generate floating particles
+        const particleContainer = document.getElementById('floatingParticles');
+        const isMobile = window.innerWidth < 768;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!isMobile && !prefersReducedMotion && particleContainer) {
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = (5 + Math.random() * 90) + '%';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particle.style.animationDelay = (Math.random() * 15) + 's';
+                particleContainer.appendChild(particle);
+            }
+        }
+
+        // Card mouse tracking for glow effect
+        document.querySelectorAll('section').forEach(section => {
+            section.addEventListener('mousemove', (e) => {
+                const rect = section.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                section.style.setProperty('--mouse-x', x + '%');
+                section.style.setProperty('--mouse-y', y + '%');
+            });
+        });
+    </script>
 </body>
 </html>
