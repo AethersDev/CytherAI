@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CytherAI | Where Thought Becomes Form</title>
+    
+    <meta name="description" content="CytherAI — Sovereign, verifiable neural-symbolic intelligence. Neural theorem prover. Where thought becomes form.">
+    <meta property="og:title" content="CytherAI | Where Thought Becomes Form">
+    <meta property="og:description" content="Neural theorem prover. Sovereign intelligence. Zero dependency.">
+    <meta name="theme-color" content="#050508">
+
+    <!-- 
+    ╔══════════════════════════════════════════════════════════════════════════════╗
+    ║  CYTHERAI — EVOLVED                                                          ║
+    ║  Design Methodology: Crystalline Material Reality + Precision Instruments    ║
+    ║  Cross-pollination: Swiss chronographs, architectural glass, theorem proofs  ║
+    ║  Anti-convergence: No glassmorphism blur, no generic dark-tech aesthetic     ║
+    ╚══════════════════════════════════════════════════════════════════════════════╝
+    -->
+
+    <style>
+        /* ═══════════════════════════════════════════════════════════════════════════
+           DESIGN TOKENS — Crystalline Material System
+           Derived from: Brushed titanium, optical glass, theorem notation
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        @font-face {
+            font-family: 'Instrument Serif';
+            src: local('Instrument Serif'), local('Times New Roman');
+            font-display: swap;
+        }
+        
+        :root {
+            /* MATERIAL PALETTE — Derived from physical materials */
+            --void: #03030a;
+            --obsidian: #08080f;
+            --titanium: #1a1a24;
+            --steel: #2a2a38;
+            
+            /* GOLD SPECTRUM — Temperature progression (cool→warm) */
+            --gold-frost: #c9b896;
+            --gold-core: #d4af37;
+            --gold-forge: #e8c547;
+            --gold-ember: #f4d03f;
+            
+            /* ACCENT — Cryptographic precision */
+            --proof-blue: #4a6fa5;
+            --theorem-green: #4a8f6a;
+            --axiom-red: #8f4a5c;
+            
+            /* TEXT HIERARCHY */
+            --text-primary: #f0ede4;
+            --text-secondary: #a09d94;
+            --text-tertiary: #5a584f;
+            
+            /* MATERIAL SURFACES */
+            --surface-etched: linear-gradient(
+                135deg,
+                rgba(212, 175, 55, 0.03) 0%,
+                rgba(212, 175, 55, 0.01) 50%,
+                rgba(212, 175, 55, 0.04) 100%
+            );
+            --surface-crystal: linear-gradient(
+                180deg,
+                rgba(255, 255, 255, 0.02) 0%,
+                transparent 40%,
+                rgba(0, 0, 0, 0.3) 100%
+            );
+            --surface-forge: linear-gradient(
+                145deg,
+                rgba(212, 175, 55, 0.08) 0%,
+                rgba(212, 175, 55, 0.02) 30%,
+                rgba(0, 0, 0, 0.4) 100%
+            );
+            
+            /* TYPOGRAPHY — Tension through contrast */
+            --font-theorem: 'Cormorant Garamond', 'Instrument Serif', Georgia, serif;
+            --font-proof: 'JetBrains Mono', 'SF Mono', 'Cascadia Code', monospace;
+            --font-axiom: system-ui, -apple-system, sans-serif;
+            
+            /* SPACING — Mathematical progression (φ ratio) */
+            --space-xs: 0.382rem;
+            --space-sm: 0.618rem;
+            --space-md: 1rem;
+            --space-lg: 1.618rem;
+            --space-xl: 2.618rem;
+            --space-2xl: 4.236rem;
+            --space-3xl: 6.854rem;
+            
+            /* TIMING — Precision instrument choreography */
+            --motion-instant: 0.1s;
+            --motion-swift: 0.2s;
+            --motion-smooth: 0.4s;
+            --motion-deliberate: 0.8s;
+            --motion-ceremonial: 1.4s;
+            
+            /* EASING — Material physics */
+            --ease-crystal: cubic-bezier(0.22, 1, 0.36, 1);
+            --ease-forge: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --ease-settle: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           RESET & BASE — Zero dependencies
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-core) var(--obsidian);
+        }
+        
+        html::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        html::-webkit-scrollbar-track {
+            background: var(--obsidian);
+        }
+        
+        html::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--gold-frost) 0%, var(--gold-core) 100%);
+            border-radius: 3px;
+        }
+        
+        body {
+            font-family: var(--font-axiom);
+            background: var(--void);
+            color: var(--text-primary);
+            line-height: 1.7;
+            font-weight: 300;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+        
+        ::selection {
+            background: rgba(212, 175, 55, 0.3);
+            color: var(--text-primary);
+        }
+        
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           ACCESSIBILITY — Enhanced focus states
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            
+            .crystalline-field,
+            .forge-particles,
+            .proof-grid {
+                display: none !important;
+            }
+        }
+        
+        :focus-visible {
+            outline: 2px solid var(--gold-core);
+            outline-offset: 4px;
+            border-radius: 2px;
+        }
+        
+        :focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           ATMOSPHERIC LAYERS — Crystalline depth system
+           (Not glassmorphism blur — actual material simulation)
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        /* Layer 1: Deep void with subtle warmth */
+        .atmosphere {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .atmosphere::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(74, 111, 165, 0.04) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 40%),
+                radial-gradient(ellipse 100% 80% at 50% 120%, rgba(212, 175, 55, 0.06) 0%, transparent 50%);
+        }
+        
+        /* Layer 2: Precision grid — theorem proof aesthetic */
+        .proof-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.015;
+            background-image:
+                linear-gradient(var(--gold-frost) 1px, transparent 1px),
+                linear-gradient(90deg, var(--gold-frost) 1px, transparent 1px);
+            background-size: 100px 100px;
+            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 0%, transparent 70%);
+        }
+        
+        /* Layer 3: Forged metal texture */
+        .forge-texture {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            opacity: 0.4;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='forge'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23forge)' opacity='0.025'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           CRYSTALLINE FIELD — WebGL Particle System
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .crystalline-field {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+        
+        .crystalline-field canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           NAVIGATION — Precision instrument bezel
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: var(--space-lg) var(--space-2xl);
+            transition: all var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .nav::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--surface-etched);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.06);
+            opacity: 0;
+            transition: opacity var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .nav.scrolled::before {
+            opacity: 1;
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+        }
+        
+        .nav-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .nav-logo {
+            width: 36px;
+            height: 42px;
+            transition: filter var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .nav-brand:hover .nav-logo {
+            filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.5));
+        }
+        
+        .nav-wordmark {
+            font-family: var(--font-theorem);
+            font-size: 1.15rem;
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            color: var(--text-primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: var(--space-xl);
+            list-style: none;
+        }
+        
+        .nav-link {
+            font-family: var(--font-proof);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            padding: var(--space-sm) 0;
+            position: relative;
+            transition: color var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-core), var(--gold-forge));
+            transition: width var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           HERO — Crystalline monument
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: var(--space-3xl) var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Precision rings — chronograph bezel aesthetic */
+        .precision-rings {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px;
+            height: 800px;
+            pointer-events: none;
+        }
+        
+        .precision-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.04);
+            border-radius: 50%;
+            animation: ringRotate 120s linear infinite;
+        }
+        
+        .precision-ring:nth-child(1) {
+            inset: 5%;
+            border-style: dashed;
+            border-color: rgba(212, 175, 55, 0.06);
+        }
+        
+        .precision-ring:nth-child(2) {
+            inset: 15%;
+            animation-direction: reverse;
+            animation-duration: 90s;
+        }
+        
+        .precision-ring:nth-child(3) {
+            inset: 25%;
+            animation-duration: 150s;
+            border-color: rgba(212, 175, 55, 0.03);
+        }
+        
+        .precision-ring:nth-child(4) {
+            inset: 35%;
+            animation-direction: reverse;
+            animation-duration: 200s;
+        }
+        
+        @keyframes ringRotate {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Tick marks — chronograph dial */
+        .dial-ticks {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        
+        .dial-tick {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1px;
+            height: 12px;
+            background: var(--gold-frost);
+            opacity: 0.15;
+            transform-origin: 50% 300px;
+        }
+        
+        .dial-tick.major {
+            height: 20px;
+            width: 2px;
+            opacity: 0.25;
+            background: linear-gradient(180deg, var(--gold-core), transparent);
+        }
+        
+        /* Hero content */
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+        }
+        
+        /* The Crown — Sovereign symbol */
+        .crown-system {
+            margin-bottom: var(--space-xl);
+            position: relative;
+        }
+        
+        .crown-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 60%);
+            filter: blur(60px);
+            opacity: 0;
+            transition: opacity var(--motion-deliberate) var(--ease-crystal);
+        }
+        
+        .crown-system:hover .crown-glow {
+            opacity: 1;
+        }
+        
+        .crown-svg {
+            width: 120px;
+            height: 140px;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.2));
+            transition: filter var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .crown-system:hover .crown-svg {
+            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.4));
+        }
+        
+        /* Sovereign badge */
+        .sovereign-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            margin-bottom: var(--space-lg);
+            font-family: var(--font-proof);
+            font-size: 0.6rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-frost);
+            background: var(--surface-etched);
+            animation: badgeReveal var(--motion-ceremonial) var(--ease-crystal) 0.3s backwards;
+        }
+        
+        .sovereign-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--gold-core);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes badgeReveal {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+        }
+        
+        /* Hero title — Theorem notation aesthetic */
+        .hero-title {
+            font-family: var(--font-theorem);
+            font-size: clamp(2.8rem, 8vw, 5.5rem);
+            font-weight: 300;
+            letter-spacing: 0.08em;
+            line-height: 1.1;
+            margin-bottom: var(--space-lg);
+            animation: titleReveal var(--motion-ceremonial) var(--ease-crystal) 0.5s backwards;
+        }
+        
+        .hero-title em {
+            font-style: italic;
+            color: var(--gold-core);
+            text-shadow: 0 0 60px rgba(212, 175, 55, 0.3);
+        }
+        
+        @keyframes titleReveal {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+                filter: blur(4px);
+            }
+        }
+        
+        /* Axiom line */
+        .axiom {
+            font-family: var(--font-proof);
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-xl);
+            animation: axiomReveal var(--motion-ceremonial) var(--ease-crystal) 0.7s backwards;
+        }
+        
+        @keyframes axiomReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        
+        /* Proof tags — NOT rounded pills, sharp precision cuts */
+        .proof-tags {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-xl);
+            animation: tagsReveal var(--motion-ceremonial) var(--ease-crystal) 0.9s backwards;
+        }
+        
+        @keyframes tagsReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        
+        .proof-tag {
+            padding: var(--space-sm) var(--space-lg);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+            background: var(--surface-etched);
+            font-family: var(--font-proof);
+            font-size: 0.58rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--motion-swift) var(--ease-crystal);
+            /* Sharp cuts, not rounded */
+            clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+        }
+        
+        .proof-tag::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 40%, rgba(212, 175, 55, 0.1) 50%, transparent 60%);
+            transform: translateX(-100%);
+            transition: transform var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .proof-tag:hover {
+            border-color: var(--gold-core);
+            color: var(--text-primary);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .proof-tag:hover::before {
+            transform: translateX(100%);
+        }
+        
+        /* CTA — Forged button */
+        .cta-forged {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-md) var(--space-xl);
+            border: 1px solid var(--gold-frost);
+            background: transparent;
+            font-family: var(--font-proof);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--text-primary);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--motion-smooth) var(--ease-crystal);
+            animation: ctaReveal var(--motion-ceremonial) var(--ease-crystal) 1.1s backwards;
+        }
+        
+        @keyframes ctaReveal {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
+        
+        .cta-forged::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--gold-core), var(--gold-forge));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--motion-smooth) var(--ease-crystal);
+            z-index: -1;
+        }
+        
+        .cta-forged:hover {
+            color: var(--void);
+            border-color: var(--gold-core);
+            box-shadow: 
+                0 0 30px rgba(212, 175, 55, 0.2),
+                0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-forged:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .cta-icon {
+            width: 20px;
+            height: 20px;
+            border: 1px solid currentColor;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform var(--motion-swift) var(--ease-forge);
+        }
+        
+        .cta-forged:hover .cta-icon {
+            transform: rotate(45deg);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           SCROLL INDICATOR — Precision instrument needle
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .scroll-needle {
+            position: absolute;
+            bottom: var(--space-xl);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            animation: needleReveal var(--motion-ceremonial) var(--ease-crystal) 1.3s backwards;
+        }
+        
+        @keyframes needleReveal {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+        }
+        
+        .needle-track {
+            width: 1px;
+            height: 60px;
+            background: rgba(212, 175, 55, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .needle-indicator {
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(180deg, transparent, var(--gold-core), transparent);
+            animation: needleFlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes needleFlow {
+            0% { top: -10px; opacity: 0; }
+            30% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { top: 60px; opacity: 0; }
+        }
+        
+        .needle-label {
+            font-family: var(--font-proof);
+            font-size: 0.5rem;
+            letter-spacing: 0.3em;
+            color: var(--text-tertiary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           SECTIONS — Architectural depth
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .section {
+            padding: var(--space-3xl) var(--space-xl);
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--space-2xl);
+        }
+        
+        .section-index {
+            font-family: var(--font-proof);
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-md);
+        }
+        
+        .section-title {
+            font-family: var(--font-theorem);
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: var(--space-md);
+        }
+        
+        .section-theorem {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.9;
+        }
+        
+        /* Divider — Etched line */
+        .divider-etched {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+            margin: 0 var(--space-xl);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           FEATURE CARDS — Crystalline panels (NOT rounded shadow cards)
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .crystal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: var(--space-lg);
+        }
+        
+        .crystal-panel {
+            background: var(--surface-crystal);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            padding: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--motion-smooth) var(--ease-crystal);
+            
+            /* Crystalline cut corners */
+            clip-path: polygon(
+                0 20px, 20px 0,
+                100% 0, 100% calc(100% - 20px),
+                calc(100% - 20px) 100%, 0 100%
+            );
+        }
+        
+        /* Corner accents */
+        .crystal-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-left: 1px solid rgba(212, 175, 55, 0.15);
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            clip-path: polygon(0 0, 100% 0, 0 100%);
+            opacity: 0.5;
+            transition: opacity var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .crystal-panel::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            border-right: 1px solid rgba(212, 175, 55, 0.15);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            clip-path: polygon(100% 100%, 0 100%, 100% 0);
+            opacity: 0.5;
+            transition: opacity var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .crystal-panel:hover {
+            border-color: rgba(212, 175, 55, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(212, 175, 55, 0.05);
+        }
+        
+        .crystal-panel:hover::before,
+        .crystal-panel:hover::after {
+            opacity: 1;
+            border-color: var(--gold-core);
+        }
+        
+        .panel-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+            position: relative;
+        }
+        
+        .panel-icon::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            animation: iconBreathe 4s ease-in-out infinite;
+        }
+        
+        @keyframes iconBreathe {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        
+        .panel-icon-inner {
+            font-size: 1.4rem;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3));
+        }
+        
+        .panel-title {
+            font-family: var(--font-theorem);
+            font-size: 1.15rem;
+            letter-spacing: 0.08em;
+            margin-bottom: var(--space-sm);
+        }
+        
+        .panel-proof {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           PROOF SECTION — Mathematical demonstration
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .proof-demonstration {
+            background: var(--surface-forge);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            padding: var(--space-2xl);
+            position: relative;
+            margin: var(--space-2xl) 0;
+        }
+        
+        .proof-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            margin-bottom: var(--space-lg);
+            padding-bottom: var(--space-lg);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+        }
+        
+        .proof-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-xs) var(--space-md);
+            background: rgba(74, 143, 106, 0.1);
+            border: 1px solid rgba(74, 143, 106, 0.3);
+            font-family: var(--font-proof);
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            color: var(--theorem-green);
+        }
+        
+        .proof-status::before {
+            content: '✓';
+            font-size: 0.8rem;
+        }
+        
+        .proof-id {
+            font-family: var(--font-proof);
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            color: var(--text-tertiary);
+        }
+        
+        .proof-body {
+            font-family: var(--font-proof);
+            font-size: 0.8rem;
+            line-height: 2;
+            color: var(--text-secondary);
+        }
+        
+        .proof-line {
+            display: flex;
+            gap: var(--space-md);
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.03);
+        }
+        
+        .proof-line:last-child {
+            border-bottom: none;
+        }
+        
+        .proof-num {
+            color: var(--text-tertiary);
+            min-width: 24px;
+        }
+        
+        .proof-statement {
+            color: var(--text-secondary);
+        }
+        
+        .proof-statement .keyword {
+            color: var(--proof-blue);
+        }
+        
+        .proof-statement .type {
+            color: var(--gold-frost);
+        }
+        
+        .proof-statement .symbol {
+            color: var(--gold-core);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           CONTACT — Transmission interface
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .transmission-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: var(--space-lg);
+        }
+        
+        .transmission-panel {
+            background: var(--surface-crystal);
+            border: 1px solid rgba(212, 175, 55, 0.06);
+            padding: var(--space-xl);
+            position: relative;
+            transition: all var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .transmission-panel:hover {
+            border-color: rgba(212, 175, 55, 0.12);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .transmission-label {
+            font-family: var(--font-proof);
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            color: var(--text-tertiary);
+            padding: var(--space-xs) var(--space-md);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            display: inline-block;
+            margin-bottom: var(--space-lg);
+        }
+        
+        .transmission-title {
+            font-family: var(--font-theorem);
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
+            margin-bottom: var(--space-md);
+        }
+        
+        .transmission-channel {
+            font-family: var(--font-proof);
+            font-size: 0.85rem;
+            color: var(--gold-core);
+            transition: color var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .transmission-channel:hover {
+            color: var(--gold-forge);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        
+        .transmission-coordinates {
+            font-family: var(--font-proof);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            line-height: 2;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           FOOTER — Sovereignty seal
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .sovereignty-footer {
+            padding: var(--space-2xl) var(--space-xl);
+            border-top: 1px solid rgba(212, 175, 55, 0.06);
+            text-align: center;
+        }
+        
+        .footer-seal {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .seal-icon {
+            width: 40px;
+            height: 46px;
+            opacity: 0.4;
+            transition: opacity var(--motion-swift) var(--ease-crystal);
+        }
+        
+        .footer-seal:hover .seal-icon {
+            opacity: 0.8;
+        }
+        
+        .seal-text {
+            font-family: var(--font-proof);
+            font-size: 0.55rem;
+            letter-spacing: 0.3em;
+            color: var(--text-tertiary);
+        }
+        
+        .seal-year {
+            font-family: var(--font-theorem);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            color: var(--text-secondary);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           AWAKENING METER — Consciousness progress
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .awakening-meter {
+            position: fixed;
+            right: var(--space-xl);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+        
+        .awakening-track {
+            width: 2px;
+            height: 160px;
+            background: rgba(212, 175, 55, 0.08);
+            position: relative;
+        }
+        
+        .awakening-fill {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to top, var(--gold-frost), var(--gold-core), var(--gold-forge));
+            transition: height var(--motion-smooth) var(--ease-crystal);
+        }
+        
+        .awakening-node {
+            width: 8px;
+            height: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            background: var(--void);
+            transition: all var(--motion-swift) var(--ease-crystal);
+            cursor: pointer;
+        }
+        
+        .awakening-node:hover {
+            border-color: var(--gold-frost);
+        }
+        
+        .awakening-node.active {
+            background: var(--gold-core);
+            border-color: var(--gold-forge);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
+        
+        .awakening-label {
+            font-family: var(--font-proof);
+            font-size: 0.5rem;
+            letter-spacing: 0.25em;
+            color: var(--text-tertiary);
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            margin-top: var(--space-md);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           REVEAL ANIMATIONS — Scroll-driven
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all var(--motion-deliberate) var(--ease-crystal);
+        }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all var(--motion-deliberate) var(--ease-crystal);
+        }
+        
+        .reveal-stagger.visible > *:nth-child(1) { transition-delay: 0.1s; }
+        .reveal-stagger.visible > *:nth-child(2) { transition-delay: 0.2s; }
+        .reveal-stagger.visible > *:nth-child(3) { transition-delay: 0.3s; }
+        .reveal-stagger.visible > *:nth-child(4) { transition-delay: 0.4s; }
+        
+        .reveal-stagger.visible > * {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           RESPONSIVE — Precision at all scales
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        @media (max-width: 1024px) {
+            .nav {
+                padding: var(--space-md) var(--space-lg);
+            }
+            
+            .nav-links {
+                gap: var(--space-lg);
+            }
+            
+            .transmission-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .awakening-meter {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+            
+            .precision-rings,
+            .dial-ticks {
+                display: none;
+            }
+            
+            .crystal-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .proof-tags {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .section {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           LOADING STATE — Proof construction
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        .loading-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--void);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-lg);
+            transition: opacity var(--motion-deliberate) var(--ease-crystal);
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-ring {
+            width: 60px;
+            height: 60px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-top-color: var(--gold-core);
+            border-radius: 50%;
+            animation: loadingRotate 1s linear infinite;
+        }
+        
+        @keyframes loadingRotate {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-family: var(--font-proof);
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            color: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-ring"></div>
+        <div class="loading-text">CONSTRUCTING PROOF</div>
+    </div>
+
+    <!-- Atmospheric layers -->
+    <div class="atmosphere"></div>
+    <div class="proof-grid"></div>
+    <div class="forge-texture"></div>
+    
+    <!-- Crystalline particle field -->
+    <div class="crystalline-field">
+        <canvas id="crystallineCanvas"></canvas>
+    </div>
+
+    <!-- Awakening meter -->
+    <nav class="awakening-meter" aria-label="Section progress">
+        <button class="awakening-node active" data-section="hero" aria-label="Hero section"></button>
+        <div class="awakening-track">
+            <div class="awakening-fill" id="awakeningFill"></div>
+        </div>
+        <button class="awakening-node" data-section="foundation" aria-label="Foundation section"></button>
+        <button class="awakening-node" data-section="sovereignty" aria-label="Sovereignty section"></button>
+        <button class="awakening-node" data-section="nexus" aria-label="Nexus section"></button>
+        <span class="awakening-label">CONSCIOUSNESS</span>
+    </nav>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand" aria-label="CytherAI Home">
+                <svg class="nav-logo" viewBox="0 0 32 38" fill="none">
+                    <polygon points="16,2 22,12 10,12" fill="#D4AF37"/>
+                    <polygon points="6,7 11,15 1,15" fill="#B8942A"/>
+                    <polygon points="26,7 31,15 21,15" fill="#B8942A"/>
+                    <path d="M 0 17 Q 16 24 32 17" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                    <text x="16" y="31" fill="#D4AF37" font-family="Georgia, serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                </svg>
+                <span class="nav-wordmark">CYTHERAI</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#foundation" class="nav-link">FOUNDATION</a></li>
+                <li><a href="#sovereignty" class="nav-link">SOVEREIGNTY</a></li>
+                <li><a href="#nexus" class="nav-link">NEXUS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero" id="hero">
+            <!-- Precision instrument rings -->
+            <div class="precision-rings" aria-hidden="true">
+                <div class="precision-ring"></div>
+                <div class="precision-ring"></div>
+                <div class="precision-ring"></div>
+                <div class="precision-ring"></div>
+            </div>
+            
+            <!-- Chronograph tick marks -->
+            <div class="dial-ticks" id="dialTicks" aria-hidden="true"></div>
+            
+            <div class="hero-content">
+                <!-- Crown system -->
+                <div class="crown-system">
+                    <div class="crown-glow"></div>
+                    <svg class="crown-svg" viewBox="0 0 120 140" fill="none">
+                        <!-- Crown structure -->
+                        <polygon points="60,8 80,40 40,40" fill="#D4AF37"/>
+                        <polygon points="20,25 38,50 5,50" fill="#A08030"/>
+                        <polygon points="100,25 115,50 82,50" fill="#A08030"/>
+                        
+                        <!-- Crown base arc -->
+                        <path d="M 5 55 Q 60 80 115 55" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                        
+                        <!-- Lambda theorem symbol -->
+                        <text x="60" y="110" fill="#D4AF37" font-family="Georgia, serif" font-size="52" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                        
+                        <!-- Precision tick marks -->
+                        <line x1="60" y1="60" x2="60" y2="68" stroke="#D4AF37" stroke-width="1" opacity="0.5"/>
+                        <line x1="40" y1="65" x2="42" y2="72" stroke="#D4AF37" stroke-width="0.5" opacity="0.3"/>
+                        <line x1="80" y1="65" x2="78" y2="72" stroke="#D4AF37" stroke-width="0.5" opacity="0.3"/>
+                    </svg>
+                </div>
+                
+                <!-- Sovereign badge -->
+                <div class="sovereign-badge">
+                    SOVEREIGN NEURAL ARCHITECTURE
+                </div>
+                
+                <!-- Title -->
+                <h1 class="hero-title">
+                    Where <em>Thought</em><br>
+                    Becomes Form
+                </h1>
+                
+                <!-- Axiom -->
+                <p class="axiom">Neural theorem prover · Verifiable intelligence · Zero dependency</p>
+                
+                <!-- Proof tags -->
+                <div class="proof-tags">
+                    <span class="proof-tag">FORMAL VERIFICATION</span>
+                    <span class="proof-tag">NEURAL-SYMBOLIC</span>
+                    <span class="proof-tag">SOVEREIGN</span>
+                </div>
+                
+                <!-- CTA -->
+                <button class="cta-forged">
+                    ENTER THE PROOF
+                    <span class="cta-icon">→</span>
+                </button>
+            </div>
+            
+            <!-- Scroll indicator -->
+            <div class="scroll-needle" aria-hidden="true">
+                <div class="needle-track">
+                    <div class="needle-indicator"></div>
+                </div>
+                <span class="needle-label">DESCEND</span>
+            </div>
+        </section>
+
+        <div class="divider-etched"></div>
+
+        <!-- FOUNDATION -->
+        <section class="section" id="foundation">
+            <header class="section-header reveal">
+                <span class="section-index">001 — FOUNDATION</span>
+                <h2 class="section-title">The Architecture of Certainty</h2>
+                <p class="section-theorem">
+                    Every theorem begins with axioms. Our neural architecture constructs 
+                    proofs from first principles—verifiable, reproducible, sovereign.
+                </p>
+            </header>
+            
+            <div class="crystal-grid reveal-stagger">
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">⊢</span>
+                    </div>
+                    <h3 class="panel-title">Formal Verification</h3>
+                    <p class="panel-proof">
+                        Mathematical certainty through automated theorem proving. 
+                        Every inference step is verifiable, every conclusion is sound.
+                    </p>
+                </article>
+                
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">∀</span>
+                    </div>
+                    <h3 class="panel-title">Neural-Symbolic Fusion</h3>
+                    <p class="panel-proof">
+                        The intuition of neural networks meets the rigor of symbolic logic. 
+                        Pattern recognition guided by formal constraints.
+                    </p>
+                </article>
+                
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">λ</span>
+                    </div>
+                    <h3 class="panel-title">Type-Theoretic Core</h3>
+                    <p class="panel-proof">
+                        Built on dependent type theory. Programs are proofs, 
+                        types are propositions, computation is reasoning.
+                    </p>
+                </article>
+            </div>
+            
+            <!-- Proof demonstration -->
+            <div class="proof-demonstration reveal">
+                <div class="proof-header">
+                    <div class="proof-status">VERIFIED</div>
+                    <span class="proof-id">THEOREM 2.3.1 — SOUNDNESS</span>
+                </div>
+                <div class="proof-body">
+                    <div class="proof-line">
+                        <span class="proof-num">1.</span>
+                        <span class="proof-statement">
+                            <span class="keyword">let</span> Γ : <span class="type">Context</span> <span class="symbol">:=</span> ∅
+                        </span>
+                    </div>
+                    <div class="proof-line">
+                        <span class="proof-num">2.</span>
+                        <span class="proof-statement">
+                            <span class="keyword">assume</span> h : Γ <span class="symbol">⊢</span> φ
+                        </span>
+                    </div>
+                    <div class="proof-line">
+                        <span class="proof-num">3.</span>
+                        <span class="proof-statement">
+                            <span class="keyword">have</span> <span class="type">Valid</span>(φ) <span class="symbol">:=</span> soundness_theorem(h)
+                        </span>
+                    </div>
+                    <div class="proof-line">
+                        <span class="proof-num">4.</span>
+                        <span class="proof-statement">
+                            <span class="symbol">∎</span> <span class="keyword">QED</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider-etched"></div>
+
+        <!-- SOVEREIGNTY -->
+        <section class="section" id="sovereignty">
+            <header class="section-header reveal">
+                <span class="section-index">002 — SOVEREIGNTY</span>
+                <h2 class="section-title">Zero External Dependencies</h2>
+                <p class="section-theorem">
+                    True sovereignty requires complete autonomy. Our system operates 
+                    independently—no external APIs, no cloud dependencies, no trust assumptions.
+                </p>
+            </header>
+            
+            <div class="crystal-grid reveal-stagger">
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">◇</span>
+                    </div>
+                    <h3 class="panel-title">Air-Gap Capable</h3>
+                    <p class="panel-proof">
+                        Deploy in fully isolated environments. Critical infrastructure 
+                        that operates without network connectivity.
+                    </p>
+                </article>
+                
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">⊗</span>
+                    </div>
+                    <h3 class="panel-title">Cryptographic Integrity</h3>
+                    <p class="panel-proof">
+                        Every proof is cryptographically signed. Verifiable provenance 
+                        from axiom to conclusion.
+                    </p>
+                </article>
+                
+                <article class="crystal-panel">
+                    <div class="panel-icon">
+                        <span class="panel-icon-inner">∞</span>
+                    </div>
+                    <h3 class="panel-title">Perpetual Operation</h3>
+                    <p class="panel-proof">
+                        No subscription model, no license servers, no phone-home requirements. 
+                        Own your intelligence infrastructure.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <div class="divider-etched"></div>
+
+        <!-- NEXUS -->
+        <section class="section" id="nexus">
+            <header class="section-header reveal">
+                <span class="section-index">003 — NEXUS</span>
+                <h2 class="section-title">Establish Connection</h2>
+                <p class="section-theorem">
+                    Begin the dialogue. Sovereign intelligence awaits.
+                </p>
+            </header>
+            
+            <div class="transmission-grid reveal-stagger">
+                <div class="transmission-panel">
+                    <span class="transmission-label">PRIMARY CHANNEL</span>
+                    <h3 class="transmission-title">Direct Transmission</h3>
+                    <a href="mailto:theorem@cytherai.io" class="transmission-channel">
+                        theorem@cytherai.io
+                    </a>
+                </div>
+                
+                <div class="transmission-panel">
+                    <span class="transmission-label">COORDINATES</span>
+                    <div class="transmission-coordinates">
+                        <div>PROOF_SPACE :: ℝ³</div>
+                        <div>EPOCH :: 2025</div>
+                        <div>STATE :: SOVEREIGN</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="sovereignty-footer">
+        <div class="footer-seal">
+            <svg class="seal-icon" viewBox="0 0 32 38" fill="none">
+                <polygon points="16,2 22,12 10,12" fill="#D4AF37"/>
+                <polygon points="6,7 11,15 1,15" fill="#B8942A"/>
+                <polygon points="26,7 31,15 21,15" fill="#B8942A"/>
+                <path d="M 0 17 Q 16 24 32 17" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                <text x="16" y="31" fill="#D4AF37" font-family="Georgia, serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="seal-text">SOVEREIGN INTELLIGENCE</span>
+            <span class="seal-year">MMXXV</span>
+        </div>
+    </footer>
+
+    <script>
+        /* ═══════════════════════════════════════════════════════════════════════════
+           CRYSTALLINE PARTICLE FIELD — WebGL implementation
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const canvas = document.getElementById('crystallineCanvas');
+            const gl = canvas.getContext('webgl', { alpha: true, antialias: true });
+            
+            if (!gl) {
+                console.log('WebGL not supported');
+                return;
+            }
+            
+            // Vertex shader
+            const vsSource = `
+                attribute vec2 position;
+                void main() {
+                    gl_Position = vec4(position, 0.0, 1.0);
+                }
+            `;
+            
+            // Fragment shader — crystalline particles
+            const fsSource = `
+                precision highp float;
+                uniform vec2 resolution;
+                uniform float time;
+                uniform vec2 mouse;
+                
+                // Hash functions
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+                }
+                
+                vec3 hash3(float n) {
+                    return fract(sin(vec3(n, n + 1.0, n + 2.0)) * vec3(43758.5453, 22578.1459, 19642.3490));
+                }
+                
+                void main() {
+                    vec2 uv = gl_FragCoord.xy / resolution;
+                    vec2 p = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
+                    
+                    // Mouse influence
+                    vec2 mouseInfluence = (mouse - 0.5) * 0.3;
+                    
+                    float t = time * 0.5;
+                    vec3 color = vec3(0.0);
+                    float particleCount = 80.0;
+                    
+                    for (float i = 0.0; i < 80.0; i++) {
+                        vec3 seed = hash3(i);
+                        
+                        // Orbital motion
+                        float angle = seed.x * 6.28318 + t * (0.05 + seed.y * 0.1);
+                        float radius = 0.3 + seed.z * 0.5;
+                        float height = (seed.y - 0.5) * 1.2 + sin(t * 0.3 + i) * 0.1;
+                        
+                        vec2 particlePos = vec2(
+                            cos(angle) * radius + mouseInfluence.x * 0.2,
+                            height + mouseInfluence.y * 0.2
+                        );
+                        
+                        // Distance to particle
+                        float dist = length(p - particlePos);
+                        
+                        // Glow
+                        float glow = 0.003 / (dist + 0.001);
+                        glow = pow(glow, 1.8) * 0.3;
+                        
+                        // Depth fade
+                        float depth = 0.5 + seed.z * 0.5;
+                        
+                        // Gold color with variation
+                        vec3 goldColor = mix(
+                            vec3(0.83, 0.69, 0.22),
+                            vec3(0.92, 0.78, 0.28),
+                            seed.x
+                        );
+                        
+                        color += goldColor * glow * depth;
+                    }
+                    
+                    // Subtle vignette
+                    float vignette = 1.0 - length(p) * 0.3;
+                    color *= vignette;
+                    
+                    // Tone mapping
+                    color = color / (color + vec3(1.0));
+                    color = pow(color, vec3(1.0 / 2.2));
+                    
+                    gl_FragColor = vec4(color, 1.0);
+                }
+            `;
+            
+            function compileShader(source, type) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error('Shader error:', gl.getShaderInfoLog(shader));
+                    return null;
+                }
+                return shader;
+            }
+            
+            const vs = compileShader(vsSource, gl.VERTEX_SHADER);
+            const fs = compileShader(fsSource, gl.FRAGMENT_SHADER);
+            if (!vs || !fs) return;
+            
+            const program = gl.createProgram();
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+            
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error('Program error:', gl.getProgramInfoLog(program));
+                return;
+            }
+            
+            // Geometry
+            const vertices = new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]);
+            const buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+            
+            // Locations
+            const posLoc = gl.getAttribLocation(program, 'position');
+            const resLoc = gl.getUniformLocation(program, 'resolution');
+            const timeLoc = gl.getUniformLocation(program, 'time');
+            const mouseLoc = gl.getUniformLocation(program, 'mouse');
+            
+            // Mouse tracking
+            let mouseX = 0.5, mouseY = 0.5;
+            let targetMouseX = 0.5, targetMouseY = 0.5;
+            
+            document.addEventListener('mousemove', (e) => {
+                targetMouseX = e.clientX / window.innerWidth;
+                targetMouseY = 1.0 - e.clientY / window.innerHeight;
+            }, { passive: true });
+            
+            // Resize
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                gl.viewport(0, 0, canvas.width, canvas.height);
+            }
+            resize();
+            window.addEventListener('resize', resize, { passive: true });
+            
+            // Render
+            const startTime = Date.now();
+            let frame = 0;
+            
+            function render() {
+                frame++;
+                if (frame % 2 === 0) {
+                    const time = (Date.now() - startTime) * 0.001;
+                    
+                    mouseX += (targetMouseX - mouseX) * 0.05;
+                    mouseY += (targetMouseY - mouseY) * 0.05;
+                    
+                    gl.useProgram(program);
+                    gl.uniform2f(resLoc, canvas.width, canvas.height);
+                    gl.uniform1f(timeLoc, time);
+                    gl.uniform2f(mouseLoc, mouseX, mouseY);
+                    
+                    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+                    gl.enableVertexAttribArray(posLoc);
+                    gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
+                    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+                }
+                
+                requestAnimationFrame(render);
+            }
+            render();
+        })();
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           DIAL TICK MARKS — Chronograph aesthetic
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const container = document.getElementById('dialTicks');
+            if (!container) return;
+            
+            for (let i = 0; i < 60; i++) {
+                const tick = document.createElement('div');
+                tick.className = 'dial-tick' + (i % 5 === 0 ? ' major' : '');
+                tick.style.transform = `rotate(${i * 6}deg)`;
+                container.appendChild(tick);
+            }
+        })();
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           NAVIGATION SCROLL STATE
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const nav = document.getElementById('nav');
+            let scrolled = false;
+            
+            window.addEventListener('scroll', () => {
+                const isScrolled = window.scrollY > 50;
+                if (isScrolled !== scrolled) {
+                    scrolled = isScrolled;
+                    nav.classList.toggle('scrolled', scrolled);
+                }
+            }, { passive: true });
+        })();
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           REVEAL ON SCROLL — Intersection Observer
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
+                observer.observe(el);
+            });
+        })();
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           AWAKENING METER — Scroll progress
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const fill = document.getElementById('awakeningFill');
+            const nodes = document.querySelectorAll('.awakening-node');
+            const sections = ['hero', 'foundation', 'sovereignty', 'nexus'];
+            
+            function updateProgress() {
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollProgress = Math.min(100, (window.scrollY / scrollHeight) * 100);
+                fill.style.height = scrollProgress + '%';
+                
+                // Update active nodes
+                sections.forEach((id, index) => {
+                    const section = document.getElementById(id);
+                    if (!section) return;
+                    
+                    const rect = section.getBoundingClientRect();
+                    const isActive = rect.top < window.innerHeight / 2 && rect.bottom > 0;
+                    
+                    if (nodes[index]) {
+                        nodes[index].classList.toggle('active', isActive);
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', updateProgress, { passive: true });
+            updateProgress();
+            
+            // Node click navigation
+            nodes.forEach((node, index) => {
+                node.addEventListener('click', () => {
+                    const section = document.getElementById(sections[index]);
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        })();
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           LOADING SCREEN — Dismiss after load
+        ═══════════════════════════════════════════════════════════════════════════ */
+        
+        (function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 800);
+            });
+        })();
+    </script>
+</body>
+</html>
