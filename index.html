@@ -1070,6 +1070,337 @@
         }
 
         /* ═══════════════════════════════════════════════════════════════════════════
+           CINEMATIC FILM FRAME — 35mm aesthetic for Cythector
+           Cross-pollination: Film title sequences, celluloid material
+        ═══════════════════════════════════════════════════════════════════════════ */
+
+        .cinema-frame {
+            position: relative;
+            margin: var(--space-2xl) 0;
+            padding: var(--space-xl);
+        }
+
+        /* Film sprocket holes */
+        .cinema-frame::before,
+        .cinema-frame::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 24px;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent 0,
+                transparent 8px,
+                rgba(212, 175, 55, 0.15) 8px,
+                rgba(212, 175, 55, 0.15) 20px,
+                transparent 20px,
+                transparent 28px
+            );
+            animation: filmAdvance 2s linear infinite;
+        }
+
+        .cinema-frame::before {
+            left: 0;
+            border-right: 2px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .cinema-frame::after {
+            right: 0;
+            border-left: 2px solid rgba(212, 175, 55, 0.1);
+        }
+
+        @keyframes filmAdvance {
+            from { background-position: 0 0; }
+            to { background-position: 0 28px; }
+        }
+
+        /* Aspect ratio frame (2.39:1 Cinemascope) */
+        .aspect-frame {
+            position: relative;
+            aspect-ratio: 2.39 / 1;
+            background: var(--obsidian);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+            margin: 0 32px;
+        }
+
+        /* Film frame number */
+        .frame-counter {
+            position: absolute;
+            top: var(--space-sm);
+            right: var(--space-md);
+            font-family: var(--font-proof);
+            font-size: 0.6rem;
+            color: rgba(212, 175, 55, 0.4);
+            letter-spacing: 0.1em;
+        }
+
+        .frame-counter::before {
+            content: '△ ';
+            opacity: 0.5;
+        }
+
+        /* Golden section grid overlay */
+        .golden-grid {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity var(--motion-smooth) var(--ease-crystal);
+        }
+
+        .aspect-frame:hover .golden-grid {
+            opacity: 0.3;
+        }
+
+        .golden-grid svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Shot preview area */
+        .shot-preview {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .shot-preview-content {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+
+        .shot-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));
+        }
+
+        .shot-label {
+            font-family: var(--font-proof);
+            font-size: 0.65rem;
+            letter-spacing: 0.25em;
+            color: var(--text-tertiary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .shot-title {
+            font-family: var(--font-theorem);
+            font-size: 1.4rem;
+            color: var(--gold-frost);
+            letter-spacing: 0.1em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           CLAPPERBOARD — Director's slate aesthetic
+        ═══════════════════════════════════════════════════════════════════════════ */
+
+        .clapperboard {
+            background: linear-gradient(135deg, var(--titanium) 0%, var(--obsidian) 100%);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: var(--space-lg);
+            margin: var(--space-xl) 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Slate stripes at top */
+        .clapperboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--gold-core) 0,
+                var(--gold-core) 20px,
+                var(--void) 20px,
+                var(--void) 40px
+            );
+            animation: slateSlide 0.5s ease-out;
+        }
+
+        @keyframes slateSlide {
+            from { transform: translateX(-40px); }
+            to { transform: translateX(0); }
+        }
+
+        .slate-content {
+            padding-top: var(--space-md);
+        }
+
+        .slate-row {
+            display: flex;
+            gap: var(--space-xl);
+            margin-bottom: var(--space-sm);
+            font-family: var(--font-proof);
+            font-size: 0.7rem;
+        }
+
+        .slate-label {
+            color: var(--text-tertiary);
+            min-width: 80px;
+            letter-spacing: 0.1em;
+        }
+
+        .slate-value {
+            color: var(--gold-frost);
+            letter-spacing: 0.05em;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           NEURAL NETWORK VISUALIZATION — For Intelligence section
+           Cross-pollination: Scientific instruments, oscilloscope aesthetics
+        ═══════════════════════════════════════════════════════════════════════════ */
+
+        .neural-viz {
+            position: relative;
+            padding: var(--space-2xl);
+            background: var(--surface-forge);
+            border: 1px solid rgba(212, 175, 55, 0.08);
+            margin: var(--space-xl) 0;
+            overflow: hidden;
+        }
+
+        .neural-svg {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .neural-svg path {
+            stroke: var(--gold-frost);
+            stroke-width: 1;
+            fill: none;
+            stroke-dasharray: 200;
+            stroke-dashoffset: 200;
+            animation: neuralFlow 3s ease-in-out infinite;
+        }
+
+        .neural-svg path:nth-child(2) { animation-delay: 0.5s; }
+        .neural-svg path:nth-child(3) { animation-delay: 1s; }
+        .neural-svg path:nth-child(4) { animation-delay: 1.5s; }
+        .neural-svg path:nth-child(5) { animation-delay: 2s; }
+
+        @keyframes neuralFlow {
+            0% { stroke-dashoffset: 200; opacity: 0; }
+            20% { opacity: 0.6; }
+            50% { stroke-dashoffset: 0; opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { stroke-dashoffset: -200; opacity: 0; }
+        }
+
+        .neural-node {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--gold-core);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--gold-core);
+            animation: nodePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes nodePulse {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.5); opacity: 1; }
+        }
+
+        /* Oscilloscope trace */
+        .trace-container {
+            position: relative;
+            height: 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            margin: var(--space-lg) 0;
+            overflow: hidden;
+        }
+
+        .trace-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 200%;
+            height: 2px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--theorem-green) 25%,
+                var(--gold-core) 50%,
+                var(--theorem-green) 75%,
+                transparent 100%
+            );
+            filter: blur(0.5px);
+            animation: traceScan 4s linear infinite;
+        }
+
+        .trace-wave {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 60'%3E%3Cpath d='M0,30 Q25,10 50,30 T100,30 T150,30 T200,30' stroke='%234a8f6a' stroke-width='1.5' fill='none' opacity='0.6'/%3E%3C/svg%3E") repeat-x;
+            animation: waveFlow 3s linear infinite;
+        }
+
+        @keyframes traceScan {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes waveFlow {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100px); }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
+           PROOF TYPEWRITER — Animated theorem typing
+        ═══════════════════════════════════════════════════════════════════════════ */
+
+        .typewriter-proof {
+            overflow: hidden;
+        }
+
+        .typewriter-line {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typeReveal 0.8s steps(40, end) forwards;
+            animation-play-state: paused;
+        }
+
+        .typewriter-line.visible {
+            animation-play-state: running;
+        }
+
+        .typewriter-line:nth-child(1) { animation-delay: 0s; }
+        .typewriter-line:nth-child(2) { animation-delay: 0.8s; }
+        .typewriter-line:nth-child(3) { animation-delay: 1.6s; }
+        .typewriter-line:nth-child(4) { animation-delay: 2.4s; }
+
+        @keyframes typeReveal {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--gold-core);
+            margin-left: 2px;
+            animation: cursorBlink 1s step-end infinite;
+        }
+
+        @keyframes cursorBlink {
+            50% { opacity: 0; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════════════
            BOT LINK — Research crawler reference
         ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -1670,10 +2001,38 @@
                 </p>
             </header>
 
+            <!-- Neural Network Visualization -->
+            <div class="neural-viz reveal">
+                <!-- SVG Neural Paths -->
+                <svg class="neural-svg" viewBox="0 0 800 200" preserveAspectRatio="none">
+                    <path d="M50,100 Q200,30 400,100 T750,100"/>
+                    <path d="M50,50 Q200,120 400,50 T750,50"/>
+                    <path d="M50,150 Q200,80 400,150 T750,150"/>
+                    <path d="M100,100 C200,20 300,180 400,100 S600,20 700,100"/>
+                    <path d="M100,75 C250,150 350,50 500,75 S650,100 700,75"/>
+                </svg>
+
+                <!-- Neural Nodes -->
+                <div class="neural-node" style="top: 20%; left: 10%;"></div>
+                <div class="neural-node" style="top: 50%; left: 25%; animation-delay: 0.3s;"></div>
+                <div class="neural-node" style="top: 80%; left: 15%; animation-delay: 0.6s;"></div>
+                <div class="neural-node" style="top: 30%; left: 50%; animation-delay: 0.9s;"></div>
+                <div class="neural-node" style="top: 70%; left: 55%; animation-delay: 1.2s;"></div>
+                <div class="neural-node" style="top: 50%; left: 75%; animation-delay: 1.5s;"></div>
+                <div class="neural-node" style="top: 25%; left: 90%; animation-delay: 1.8s;"></div>
+                <div class="neural-node" style="top: 75%; left: 85%; animation-delay: 2.1s;"></div>
+
+                <!-- Oscilloscope Trace -->
+                <div class="trace-container">
+                    <div class="trace-wave"></div>
+                    <div class="trace-line"></div>
+                </div>
+            </div>
+
             <div class="crystal-grid reveal-stagger">
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">⊕</span>
+                        <span class="panel-icon-inner">🧠</span>
                     </div>
                     <h3 class="panel-title">Hybrid Architecture</h3>
                     <p class="panel-proof">
@@ -1684,7 +2043,7 @@
 
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">⊥</span>
+                        <span class="panel-icon-inner">⚠️</span>
                     </div>
                     <h3 class="panel-title">Contradiction Detection</h3>
                     <p class="panel-proof">
@@ -1695,7 +2054,7 @@
 
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">⊨</span>
+                        <span class="panel-icon-inner">📜</span>
                     </div>
                     <h3 class="panel-title">Replayable Receipts</h3>
                     <p class="panel-proof">
@@ -1705,35 +2064,36 @@
                 </article>
             </div>
 
-            <!-- Intelligence demonstration -->
+            <!-- Intelligence demonstration with typewriter effect -->
             <div class="proof-demonstration reveal">
                 <div class="proof-header">
                     <div class="proof-status">COHERENT</div>
                     <span class="proof-id">TRACE 4.1.2 — REASONING CHAIN</span>
                 </div>
-                <div class="proof-body">
-                    <div class="proof-line">
+                <div class="proof-body typewriter-proof">
+                    <div class="proof-line typewriter-line">
                         <span class="proof-num">1.</span>
                         <span class="proof-statement">
                             <span class="keyword">input</span> P : <span class="type">Proposition</span> <span class="symbol">⊢</span> ¬(A ∧ ¬A)
                         </span>
                     </div>
-                    <div class="proof-line">
+                    <div class="proof-line typewriter-line">
                         <span class="proof-num">2.</span>
                         <span class="proof-statement">
                             <span class="keyword">neural</span> inference <span class="symbol">→</span> pattern_match(P)
                         </span>
                     </div>
-                    <div class="proof-line">
+                    <div class="proof-line typewriter-line">
                         <span class="proof-num">3.</span>
                         <span class="proof-statement">
                             <span class="keyword">symbolic</span> verify <span class="symbol">⊨</span> <span class="type">Consistent</span>(inference)
                         </span>
                     </div>
-                    <div class="proof-line">
+                    <div class="proof-line typewriter-line">
                         <span class="proof-num">4.</span>
                         <span class="proof-statement">
                             <span class="symbol">□</span> <span class="keyword">RECEIPT SEALED</span>
+                            <span class="cursor-blink"></span>
                         </span>
                     </div>
                 </div>
@@ -1753,16 +2113,64 @@
                 </p>
             </header>
 
-            <!-- Cythector Logo -->
+            <!-- Cythector Logo with enhanced glow -->
             <div class="cythector-emblem reveal">
                 <div class="emblem-glow"></div>
                 <img src="/cythector_logo.svg" alt="Cythector Logo" class="emblem-icon">
             </div>
 
+            <!-- Cinematic Film Frame Showcase -->
+            <div class="cinema-frame reveal">
+                <div class="aspect-frame">
+                    <span class="frame-counter">FRAME 24A</span>
+
+                    <!-- Golden Section Grid (appears on hover) -->
+                    <div class="golden-grid">
+                        <svg viewBox="0 0 239 100" preserveAspectRatio="none">
+                            <line x1="38.2%" y1="0" x2="38.2%" y2="100%" stroke="#d4af37" stroke-width="0.5"/>
+                            <line x1="61.8%" y1="0" x2="61.8%" y2="100%" stroke="#d4af37" stroke-width="0.5"/>
+                            <line x1="0" y1="38.2%" x2="100%" y2="38.2%" stroke="#d4af37" stroke-width="0.5"/>
+                            <line x1="0" y1="61.8%" x2="100%" y2="61.8%" stroke="#d4af37" stroke-width="0.5"/>
+                        </svg>
+                    </div>
+
+                    <!-- Shot Preview Content -->
+                    <div class="shot-preview">
+                        <div class="shot-preview-content">
+                            <div class="shot-icon">🎬</div>
+                            <span class="shot-label">NARRATIVE → VISUAL</span>
+                            <div class="shot-title">Scene Becomes Structure</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Director's Clapperboard -->
+            <div class="clapperboard reveal">
+                <div class="slate-content">
+                    <div class="slate-row">
+                        <span class="slate-label">PROD</span>
+                        <span class="slate-value">CYTHECTOR v1.0</span>
+                    </div>
+                    <div class="slate-row">
+                        <span class="slate-label">SCENE</span>
+                        <span class="slate-value">Any narrative description</span>
+                    </div>
+                    <div class="slate-row">
+                        <span class="slate-label">OUTPUT</span>
+                        <span class="slate-value">SCENE / MOOD / DURATION / SHOT LIST / NOTES</span>
+                    </div>
+                    <div class="slate-row">
+                        <span class="slate-label">MODEL</span>
+                        <span class="slate-value">100% Local · Zero Cloud Dependency</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="crystal-grid reveal-stagger">
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">▷</span>
+                        <span class="panel-icon-inner">🎥</span>
                     </div>
                     <h3 class="panel-title">Narrative → Structure</h3>
                     <p class="panel-proof">
@@ -1773,7 +2181,7 @@
 
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">⟁</span>
+                        <span class="panel-icon-inner">🎞️</span>
                     </div>
                     <h3 class="panel-title">Custom Training Pipeline</h3>
                     <p class="panel-proof">
@@ -1784,7 +2192,7 @@
 
                 <article class="crystal-panel">
                     <div class="panel-icon">
-                        <span class="panel-icon-inner">⊚</span>
+                        <span class="panel-icon-inner">🔐</span>
                     </div>
                     <h3 class="panel-title">100% Local Inference</h3>
                     <p class="panel-proof">
@@ -2142,13 +2550,17 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
+
+                        // Trigger typewriter animation for proof lines
+                        const typewriterLines = entry.target.querySelectorAll('.typewriter-line');
+                        typewriterLines.forEach(line => line.classList.add('visible'));
                     }
                 });
             }, {
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
             });
-            
+
             document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => {
                 observer.observe(el);
             });
@@ -2161,7 +2573,7 @@
         (function() {
             const fill = document.getElementById('awakeningFill');
             const nodes = document.querySelectorAll('.awakening-node');
-            const sections = ['hero', 'foundation', 'sovereignty', 'nexus'];
+            const sections = ['hero', 'foundation', 'intelligence', 'cythector', 'sovereignty', 'nexus'];
             
             function updateProgress() {
                 const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
