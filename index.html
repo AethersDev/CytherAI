@@ -18,27 +18,52 @@
            φ-based design system for CytherAI
         ======================================== */
         :root {
-            /* Colors */
+            /* ════════════════════════════════════════
+               REFINED COLOR SYSTEM
+               Derived from gold (#d4af37) using
+               luminance scaling for coherent hierarchy
+            ════════════════════════════════════════ */
+
+            /* Base colors */
             --bg: #050508;
-            --bg-soft: #090b10;
+            --bg-soft: #0a0a0f;
+            --void: #050508;
             --text: #f5f5f0;
             --text-muted: #9c9b96;
-            --gold: #d4af37;
-            --gold-dark: #a07f24;
             --danger: #b3204a;
-
-            /* Legacy compatibility - map to new tokens */
-            --void: #050508;
-            --gold-core: #d4af37;
-            --gold-muted: #9c9b96;
-            --gold-white: #f5f5f0;
             --border: #1a1a1a;
 
-            /* Fonts */
+            /* Gold Palette - Luminance hierarchy from darkest to brightest */
+            --gold-darkest: #2a2210;      /* 10% luminance - deepest shadows */
+            --gold-shadow: #4a3d1a;       /* 20% luminance - subtle shadows */
+            --gold-dim: #7a6428;          /* 35% luminance - muted accents */
+            --gold-dark: #a07f24;         /* 50% luminance - secondary */
+            --gold: #d4af37;              /* 65% luminance - primary */
+            --gold-core: #d4af37;         /* Primary gold (alias) */
+            --gold-muted: #9c9b96;        /* Desaturated for text */
+            --gold-bright: #e8c84a;       /* 80% luminance - highlights */
+            --gold-white: #f5f5f0;        /* Near-white with warm cast */
+
+            /* Glow System - RGBA for compositing */
+            --glow-soft: rgba(212, 175, 55, 0.25);
+            --glow: rgba(212, 175, 55, 0.5);
+            --glow-intense: rgba(232, 200, 74, 0.7);
+
+            /* ════════════════════════════════════════
+               TYPOGRAPHY SYSTEM
+               Tension through contrast: Light (300) vs Bold (600)
+               Scale ratio: 1.414 (augmented fourth)
+            ════════════════════════════════════════ */
             --font-display: 'Cormorant Garamond', Georgia, 'Palatino Linotype', serif;
             --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
             --font-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
             --font-body: var(--font-sans);
+
+            /* Font weights for tension */
+            --weight-light: 300;
+            --weight-normal: 400;
+            --weight-medium: 500;
+            --weight-bold: 600;
 
             /* Radius */
             --radius-card: 12px;
@@ -396,48 +421,39 @@
             overflow: hidden;
         }
 
-        /* Ambient Glow Orbs */
+        /* Ambient Glow Orbs - Refined: Slower, subtler, fewer */
         .ambient-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.12;
+            filter: blur(120px);
+            opacity: 0.08;  /* Reduced from 0.12 - more subtle */
             pointer-events: none;
-            animation: orbFloat 20s ease-in-out infinite;
+            animation: orbFloat 40s ease-in-out infinite;  /* Slower - less distracting */
         }
 
         .ambient-orb-1 {
-            width: 500px;
-            height: 500px;
+            width: 600px;
+            height: 600px;
             background: radial-gradient(circle, var(--gold-core), transparent 70%);
-            top: 5%;
-            left: -15%;
+            top: 0%;
+            left: -20%;
             animation-delay: 0s;
         }
 
         .ambient-orb-2 {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, var(--gold-bright), transparent 70%);
-            bottom: 10%;
-            right: -10%;
-            animation-delay: -7s;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--gold-dim), transparent 70%);
+            bottom: 5%;
+            right: -15%;
+            animation-delay: -20s;
         }
 
-        .ambient-orb-3 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, var(--gold), transparent 70%);
-            top: 40%;
-            left: 25%;
-            animation-delay: -14s;
-        }
+        /* Removed third orb - restraint as distinction */
 
         @keyframes orbFloat {
             0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(40px, -30px) scale(1.1); }
-            50% { transform: translate(-30px, 40px) scale(0.95); }
-            75% { transform: translate(30px, 30px) scale(1.08); }
+            50% { transform: translate(20px, -15px) scale(1.03); }  /* Subtler movement */
         }
 
         /* Consciousness Shader Canvas */
@@ -462,16 +478,16 @@
             opacity: 0.3;
         }
 
-        /* Sacred Geometry */
+        /* Sacred Geometry - Refined: Single layer, much slower */
         .sacred-geometry {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 700px;
-            height: 700px;
+            width: 650px;
+            height: 650px;
             pointer-events: none;
-            opacity: 0.08;
+            opacity: 0.05;  /* Reduced - let content breathe */
         }
 
         .geometry-layer {
@@ -487,15 +503,16 @@
             height: 100%;
         }
 
-        .geometry-layer:nth-child(1) { animation: geoRotate 80s linear infinite; }
-        .geometry-layer:nth-child(2) { animation: geoRotate 60s linear infinite reverse; }
-        .geometry-layer:nth-child(3) { animation: geoRotate 100s linear infinite; }
+        /* Single rotation - restraint over complexity */
+        .geometry-layer:nth-child(1) { animation: geoRotate 180s linear infinite; }
+        .geometry-layer:nth-child(2) { animation: geoRotate 240s linear infinite reverse; opacity: 0.6; }
+        .geometry-layer:nth-child(3) { animation: geoRotate 300s linear infinite; opacity: 0.4; }
 
         @keyframes geoRotate {
             to { transform: rotate(360deg); }
         }
 
-        /* Neural Field */
+        /* Neural Field - Refined: Subtler, slower pulse */
         .neural-field {
             position: absolute;
             inset: 0;
@@ -504,38 +521,38 @@
 
         .synapse-node {
             position: absolute;
-            width: 3px;
-            height: 3px;
+            width: 2px;
+            height: 2px;
             background: var(--gold-core);
             border-radius: 50%;
-            opacity: 0.25;
-            box-shadow: 0 0 8px var(--glow-soft);
-            animation: synapticPulse 6s ease-in-out infinite;
+            opacity: 0.15;  /* Reduced from 0.25 */
+            box-shadow: 0 0 6px var(--glow-soft);
+            animation: synapticPulse 12s ease-in-out infinite;  /* Slower - more meditative */
         }
 
         @keyframes synapticPulse {
-            0%, 100% { opacity: 0.15; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.4); box-shadow: 0 0 15px var(--glow); }
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.2); }  /* Subtler peak */
         }
 
         .neural-connection {
             position: absolute;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+            background: linear-gradient(90deg, transparent, var(--gold-shadow), transparent);  /* Dimmer */
             opacity: 0.08;
             transform-origin: left center;
         }
 
-        /* Quantum Grid */
+        /* Quantum Grid - Refined: Subtler, slower flow */
         .quantum-grid {
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 220%;
-            height: 220%;
-            transform: translate(-50%, -50%) rotateX(75deg);
+            width: 200%;
+            height: 200%;
+            transform: translate(-50%, -50%) rotateX(72deg);
             transform-style: preserve-3d;
-            opacity: 0.04;
+            opacity: 0.025;  /* Reduced from 0.04 - less competing */
             pointer-events: none;
         }
 
@@ -543,16 +560,16 @@
             position: absolute;
             inset: 0;
             background-image:
-                linear-gradient(var(--gold-shadow) 0.5px, transparent 0.5px),
-                linear-gradient(90deg, var(--gold-shadow) 0.5px, transparent 0.5px);
-            background-size: 70px 70px;
-            animation: gridFlow 25s linear infinite;
+                linear-gradient(var(--gold-darkest) 0.5px, transparent 0.5px),
+                linear-gradient(90deg, var(--gold-darkest) 0.5px, transparent 0.5px);
+            background-size: 80px 80px;  /* Slightly larger grid */
+            animation: gridFlow 60s linear infinite;  /* Much slower */
         }
 
         .grid-plane:nth-child(2) {
-            transform: translateZ(-120px);
-            opacity: 0.5;
-            animation-duration: 35s;
+            transform: translateZ(-150px);
+            opacity: 0.4;
+            animation-duration: 80s;
         }
 
         @keyframes gridFlow {
@@ -971,21 +988,25 @@
 
         .hero-headline {
             font-family: var(--font-display);
-            font-size: clamp(2rem, 5vw, 3.8rem);
-            font-weight: 300;
-            letter-spacing: 0.08em;
-            line-height: 1.25;
-            margin-bottom: 1.5rem;
+            font-size: clamp(2.2rem, 5.5vw, 4.2rem);
+            font-weight: 200;  /* Ultra-light for ethereal quality */
+            letter-spacing: 0.06em;
+            line-height: 1.2;
+            margin-bottom: 1.8rem;
             opacity: 0;
             animation: fadeUp 0.9s var(--ease-out-expo) 1.85s forwards;
+            color: var(--gold-white);
         }
 
+        /* Typography Tension: Ultra-light (200) vs Bold (600) */
         .hero-headline em {
-            font-style: italic;
+            font-style: normal;  /* Remove italic - weight provides emphasis */
+            font-weight: 600;    /* Bold for dramatic contrast */
             background: linear-gradient(135deg, var(--gold-core), var(--gold-bright));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            letter-spacing: 0.02em;  /* Tighter for bold weight */
         }
 
         .scramble-text {
@@ -1156,8 +1177,8 @@
            SECTIONS - Enhanced with Parallax
         ======================================== */
         section {
-            padding: 8rem 2rem;
-            max-width: 1400px;
+            padding: 10rem 2.5rem;  /* More generous vertical rhythm */
+            max-width: 1320px;  /* Slightly narrower for better readability */
             margin: 0 auto;
             position: relative;
             will-change: transform;
@@ -1180,34 +1201,39 @@
             will-change: transform;
         }
 
+        /* Section Header - Refined spacing rhythm */
         .section-header {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;  /* More breathing room */
         }
 
         .section-number {
             font-family: var(--font-mono);
-            font-size: 0.58rem;
-            letter-spacing: 0.35em;
-            color: var(--gold-shadow);
-            margin-bottom: 1rem;
+            font-size: 0.55rem;
+            letter-spacing: 0.4em;
+            color: var(--gold-dim);  /* Slightly brighter for hierarchy */
+            margin-bottom: 1.5rem;
             display: block;
+            opacity: 0.7;
         }
 
         .section-title {
             font-family: var(--font-display);
-            font-size: clamp(1.8rem, 4vw, 2.6rem);
-            font-weight: 300;
-            letter-spacing: 0.18em;
-            margin-bottom: 1rem;
+            font-size: clamp(2.2rem, 5vw, 3.2rem);  /* Slightly larger */
+            font-weight: 200;  /* Ultra-light for elegance */
+            letter-spacing: 0.25em;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            color: var(--gold-white);
         }
 
         .section-subtitle {
-            font-size: 0.92rem;
+            font-size: 0.95rem;
             color: var(--gold-muted);
-            max-width: 600px;
+            max-width: 580px;
             margin: 0 auto;
-            line-height: 1.9;
+            line-height: 1.95;
+            letter-spacing: 0.02em;
         }
 
         .divider {
@@ -2439,7 +2465,7 @@
             <!-- Ambient Orbs -->
             <div class="ambient-orb ambient-orb-1"></div>
             <div class="ambient-orb ambient-orb-2"></div>
-            <div class="ambient-orb ambient-orb-3"></div>
+            <!-- Third orb removed - restraint as distinction -->
 
             <!-- Consciousness Shader -->
             <canvas class="consciousness-shader" id="consciousnessShader"></canvas>
