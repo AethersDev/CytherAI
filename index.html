@@ -81,9 +81,24 @@
             --timing-norm: 0.6s;
             --timing-fast: 0.18s;
 
-            /* Easing */
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+            /* ════════════════════════════════════════
+               MOTION VOCABULARY
+               Meaningful animation with purpose
+               Each easing/duration signals intent
+            ════════════════════════════════════════ */
+
+            /* Easing - Each curve has semantic meaning */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);     /* Entry: confident arrival */
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);    /* Hover: responsive feedback */
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);        /* Ambient: natural breathing */
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* Emphasis: slight overshoot */
+
+            /* Duration vocabulary - Timing signals importance */
+            --duration-instant: 0.1s;   /* Micro feedback */
+            --duration-fast: 0.2s;      /* Button/link response */
+            --duration-normal: 0.4s;    /* Content transitions */
+            --duration-slow: 0.8s;      /* Significant changes */
+            --duration-reveal: 1.2s;    /* Hero/section reveals */
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -322,9 +337,10 @@
             width: 100%;
             padding: 1.5rem 4rem;
             z-index: 1000;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(20px) saturate(150%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.06);
+            /* Architectural approach: solid darkness, sharp edge */
+            background: linear-gradient(180deg, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.85) 100%);
+            backdrop-filter: blur(8px);  /* Minimal blur - just enough */
+            border-bottom: 1px solid var(--gold-shadow);
             transition: all 0.5s var(--ease-out-expo);
         }
 
@@ -421,39 +437,69 @@
             overflow: hidden;
         }
 
-        /* Ambient Glow Orbs - Refined: Slower, subtler, fewer */
-        .ambient-orb {
+        /* ════════════════════════════════════════
+           PARADIGM SHIFT: Architectural Light
+           Sharp geometric forms instead of diffuse blobs
+           Restraint as distinction
+        ════════════════════════════════════════ */
+
+        /* Removed blur orbs - replaced with architectural light beams */
+        .ambient-orb { display: none; }
+
+        /* Architectural Light Pillars - Sharp, defined, intentional */
+        .light-architecture {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.08;  /* Reduced from 0.12 - more subtle */
+            inset: 0;
             pointer-events: none;
-            animation: orbFloat 40s ease-in-out infinite;  /* Slower - less distracting */
+            overflow: hidden;
         }
 
-        .ambient-orb-1 {
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, var(--gold-core), transparent 70%);
-            top: 0%;
-            left: -20%;
-            animation-delay: 0s;
+        .light-pillar {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                var(--gold-shadow) 20%,
+                var(--gold-dim) 50%,
+                var(--gold-shadow) 80%,
+                transparent 100%
+            );
+            opacity: 0.15;
         }
 
-        .ambient-orb-2 {
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, var(--gold-dim), transparent 70%);
-            bottom: 5%;
-            right: -15%;
-            animation-delay: -20s;
+        .light-pillar:nth-child(1) { left: 15%; }
+        .light-pillar:nth-child(2) { left: 85%; }
+        .light-pillar:nth-child(3) {
+            left: 50%;
+            width: 2px;
+            opacity: 0.08;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                var(--gold-core) 40%,
+                var(--gold-core) 60%,
+                transparent 100%
+            );
         }
 
-        /* Removed third orb - restraint as distinction */
-
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(20px, -15px) scale(1.03); }  /* Subtler movement */
+        /* Horizon Line - Grounding element */
+        .horizon-line {
+            position: absolute;
+            bottom: 25%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                var(--gold-shadow) 20%,
+                var(--gold-dim) 50%,
+                var(--gold-shadow) 80%,
+                transparent 100%
+            );
+            opacity: 0.2;
         }
 
         /* Consciousness Shader Canvas */
@@ -593,22 +639,27 @@
             cursor: pointer;
         }
 
+        /* Logo enhancement - Sharp geometric halo, not diffuse blur */
         .logo-glow {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 55%);
-            filter: blur(50px);
+            width: 280px;
+            height: 280px;
+            /* Sharp ring instead of diffuse glow */
+            border: 1px solid transparent;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle, transparent 45%, rgba(212,175,55,0.1) 48%, rgba(212,175,55,0.15) 50%, rgba(212,175,55,0.1) 52%, transparent 55%);
             opacity: 0;
-            transition: opacity 0.6s ease;
+            transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
             pointer-events: none;
         }
 
         .logo-container:hover .logo-glow {
             opacity: 1;
+            transform: translate(-50%, -50%) scale(1.05);
         }
 
         /* Floating Particles */
@@ -644,16 +695,18 @@
             100% { opacity: 0; transform: translateY(-45px) scale(0); }
         }
 
-        /* The Main Logo SVG */
+        /* The Main Logo SVG - Sharp definition, minimal diffusion */
         .integrated-crown {
             width: 200px;
             height: 240px;
-            filter: drop-shadow(0 0 50px rgba(212, 175, 55, 0.25));
-            transition: filter 0.5s ease;
+            /* Tight, defined glow instead of diffuse blur */
+            filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.35));
+            transition: filter 0.4s var(--ease-out-expo);
         }
 
         .logo-container:hover .integrated-crown {
-            filter: drop-shadow(0 0 70px rgba(212, 175, 55, 0.4));
+            filter: drop-shadow(0 0 16px rgba(212, 175, 55, 0.5))
+                    drop-shadow(0 0 4px rgba(212, 175, 55, 0.8));  /* Double glow - sharp core, soft outer */
         }
 
         /* SPEC: Proof Construction Animation (3.5-4.5s total, stepwise)
@@ -986,27 +1039,38 @@
             z-index: 10;
         }
 
+        /* ════════════════════════════════════════
+           TYPOGRAPHY: Extreme Tension
+           Ultra-light (100) vs Black (800)
+           Scale ratio 4x+ between levels
+        ════════════════════════════════════════ */
         .hero-headline {
             font-family: var(--font-display);
-            font-size: clamp(2.2rem, 5.5vw, 4.2rem);
-            font-weight: 200;  /* Ultra-light for ethereal quality */
-            letter-spacing: 0.06em;
-            line-height: 1.2;
-            margin-bottom: 1.8rem;
+            font-size: clamp(2.4rem, 6vw, 4.8rem);  /* Larger for presence */
+            font-weight: 100;  /* EXTREME light - ethereal, almost fragile */
+            letter-spacing: 0.08em;
+            line-height: 1.15;
+            margin-bottom: 2rem;
             opacity: 0;
             animation: fadeUp 0.9s var(--ease-out-expo) 1.85s forwards;
             color: var(--gold-white);
         }
 
-        /* Typography Tension: Ultra-light (200) vs Bold (600) */
+        /* Typography Tension: Ultra-light (100) vs Black (800) - DRAMATIC */
         .hero-headline em {
-            font-style: normal;  /* Remove italic - weight provides emphasis */
-            font-weight: 600;    /* Bold for dramatic contrast */
-            background: linear-gradient(135deg, var(--gold-core), var(--gold-bright));
+            font-style: normal;
+            font-weight: 800;    /* BLACK weight - maximum contrast */
+            background: linear-gradient(
+                135deg,
+                var(--gold-dim) 0%,
+                var(--gold-core) 40%,
+                var(--gold-bright) 100%
+            );
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: 0.02em;  /* Tighter for bold weight */
+            letter-spacing: -0.01em;  /* Negative tracking for heavy weight */
+            /* Subtle inner glow effect via text-shadow on fallback */
         }
 
         .scramble-text {
@@ -1853,58 +1917,39 @@
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        /* LIQUID GLASS 2.0 - Apple 2025 WWDC inspired */
+        /* ════════════════════════════════════════
+           REFINED GLASS - Architectural Clarity
+           Minimal blur, maximum definition
+        ════════════════════════════════════════ */
         .liquid-glass {
             background: linear-gradient(
                 135deg,
-                rgba(212, 175, 55, 0.03) 0%,
-                rgba(255, 255, 255, 0.02) 50%,
-                rgba(212, 175, 55, 0.04) 100%
+                rgba(10, 10, 15, 0.92) 0%,
+                rgba(15, 15, 20, 0.88) 100%
             );
-            backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-            -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-            border: 1px solid rgba(212, 175, 55, 0.08);
+            backdrop-filter: blur(6px);  /* Subtle - material honesty */
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid var(--gold-shadow);
             box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05),
-                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+                0 4px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(212, 175, 55, 0.05);
             position: relative;
             overflow: hidden;
         }
 
-        .liquid-glass::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 200%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(255, 255, 255, 0.03) 25%,
-                rgba(212, 175, 55, 0.05) 50%,
-                rgba(255, 255, 255, 0.03) 75%,
-                transparent 100%
-            );
-            animation: liquidShimmer 8s ease-in-out infinite;
-        }
+        /* Removed shimmer animation - restraint as distinction */
+        .liquid-glass::before { display: none; }
 
-        @keyframes liquidShimmer {
-            0% { transform: translateX(-50%) skewX(-15deg); }
-            100% { transform: translateX(50%) skewX(-15deg); }
-        }
-
-        /* Apply liquid glass to nav */
+        /* Nav maintains architectural consistency */
         nav.liquid-glass-nav {
             background: linear-gradient(
                 180deg,
-                rgba(5, 5, 8, 0.7) 0%,
-                rgba(5, 5, 8, 0.5) 100%
+                rgba(5, 5, 8, 0.96) 0%,
+                rgba(5, 5, 8, 0.92) 100%
             ) !important;
-            backdrop-filter: blur(30px) saturate(200%) brightness(0.95) !important;
-            -webkit-backdrop-filter: blur(30px) saturate(200%) brightness(0.95) !important;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.1) !important;
+            backdrop-filter: blur(8px) !important;
+            -webkit-backdrop-filter: blur(8px) !important;
+            border-bottom: 1px solid var(--gold-shadow) !important;
         }
 
         /* QUANTUM ENTANGLEMENT THREADS */
@@ -2462,10 +2507,13 @@
     <main>
         <!-- HERO -->
         <section class="hero" id="hero">
-            <!-- Ambient Orbs -->
-            <div class="ambient-orb ambient-orb-1"></div>
-            <div class="ambient-orb ambient-orb-2"></div>
-            <!-- Third orb removed - restraint as distinction -->
+            <!-- Architectural Light System - Sharp geometry, not diffuse glow -->
+            <div class="light-architecture">
+                <div class="light-pillar"></div>
+                <div class="light-pillar"></div>
+                <div class="light-pillar"></div>
+            </div>
+            <div class="horizon-line"></div>
 
             <!-- Consciousness Shader -->
             <canvas class="consciousness-shader" id="consciousnessShader"></canvas>
