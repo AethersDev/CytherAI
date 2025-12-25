@@ -3,102 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CytherAI | Where Thought Becomes Form</title>
-    
-    <meta name="description" content="CytherAI — Sovereign, verifiable neural-symbolic intelligence. Neural theorem prover. Where thought becomes form.">
-    <meta property="og:title" content="CytherAI | Where Thought Becomes Form">
-    <meta property="og:description" content="Neural theorem prover. Sovereign intelligence. Zero dependency.">
-    <meta name="theme-color" content="#000000">
+    <title>CytherAI | Prove Code Correctness in Minutes</title>
+
+    <meta name="description" content="CytherAI — Neural theorem proving for enterprise systems. Reduce verification time from months to minutes. Sovereign, verifiable, deterministic.">
+    <meta property="og:title" content="CytherAI | Neural Theorem Proving for Enterprise">
+    <meta property="og:description" content="Prove code correctness in minutes, not months. Enterprise-grade neural theorem prover.">
+    <meta name="theme-color" content="#0F1217">
+
+    <!-- Structured Data for AI Credibility Verification -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "CytherAI",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Cross-platform",
+        "description": "Neural theorem prover for enterprise code verification",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "CytherAI",
+            "sameAs": [
+                "https://github.com/CytherAI"
+            ]
+        }
+    }
+    </script>
 
     <!-- Zero external dependencies - Sovereign font stack -->
 
     <style>
-        /* ========================================
-           DESIGN TOKENS - System Contract
-           φ-based design system for CytherAI
-        ======================================== */
+        /* ════════════════════════════════════════════════════════════════
+           DESIGN TOKENS - Executive-Grade System Contract
+           Infrastructure-grade aesthetics for CTO/CEO credibility
+           Optimized for the 3-5 second decision window
+        ════════════════════════════════════════════════════════════════ */
         :root {
             /* ════════════════════════════════════════
-               REFINED COLOR SYSTEM
-               Derived from gold (#d4af37) using
-               luminance scaling for coherent hierarchy
+               INFRASTRUCTURE COLOR SYSTEM
+               Warm grays that signal serious systems
+               Based on defense-tech visual language
             ════════════════════════════════════════ */
 
-            /* Base colors */
-            --bg: #050508;
-            --bg-soft: #0a0a0f;
-            --void: #050508;
-            --text: #f5f5f0;
-            --text-muted: #9c9b96;
-            --danger: #b3204a;
-            --border: #1a1a1a;
+            /* Base - Warm infrastructure grays (not pure black) */
+            --bg-primary: #0F1217;        /* Near-black with subtle blue */
+            --bg-elevated: #1B1F24;       /* Cards, surfaces */
+            --bg-surface: #252A31;        /* Elevated UI elements */
+            --bg: #0F1217;                /* Alias for compatibility */
+            --bg-soft: #1B1F24;           /* Alias */
+            --void: #0F1217;              /* Alias */
 
-            /* Gold Palette - Luminance hierarchy from darkest to brightest */
-            --gold-darkest: #2a2210;      /* 10% luminance - deepest shadows */
-            --gold-shadow: #4a3d1a;       /* 20% luminance - subtle shadows */
-            --gold-dim: #7a6428;          /* 35% luminance - muted accents */
-            --gold-dark: #a07f24;         /* 50% luminance - secondary */
-            --gold: #d4af37;              /* 65% luminance - primary */
-            --gold-core: #d4af37;         /* Primary gold (alias) */
-            --gold-muted: #9c9b96;        /* Desaturated for text */
-            --gold-bright: #e8c84a;       /* 80% luminance - highlights */
-            --gold-white: #f5f5f0;        /* Near-white with warm cast */
+            /* Text hierarchy - Off-white for reduced eye strain */
+            --text-primary: #F0F0F0;      /* Primary text */
+            --text-secondary: #A0A4AB;    /* Supporting text */
+            --text-muted: #6B7280;        /* Tertiary/disabled */
+            --text: #F0F0F0;              /* Alias */
 
-            /* Glow System - RGBA for compositing */
-            --glow-soft: rgba(212, 175, 55, 0.25);
-            --glow: rgba(212, 175, 55, 0.5);
-            --glow-intense: rgba(232, 200, 74, 0.7);
+            /* Accent system - Desaturated for professionalism */
+            --accent-primary: #3B82F6;    /* Trust blue (desaturated) */
+            --accent-success: #22C55E;    /* Verification/proven states */
+            --accent-warning: #EAB308;    /* Caution states */
+            --danger: #EF4444;            /* Error states */
+
+            /* Gold Palette - Refined for instrumentation aesthetic */
+            --gold-darkest: #1F1A0F;      /* Deepest shadows */
+            --gold-shadow: #3D3520;       /* Subtle shadows */
+            --gold-dim: #5C5030;          /* Muted accents */
+            --gold-dark: #8B7355;         /* Secondary */
+            --gold: #C9A227;              /* Primary - slightly desaturated */
+            --gold-core: #C9A227;         /* Primary (alias) */
+            --gold-muted: #A0A4AB;        /* Desaturated for text */
+            --gold-bright: #DDB84D;       /* Highlights */
+            --gold-white: #F0F0F0;        /* Near-white */
+
+            /* Border system */
+            --border: #2D3239;
+            --border-subtle: #1F2328;
+
+            /* Glow System - Subdued for professionalism */
+            --glow-soft: rgba(201, 162, 39, 0.15);
+            --glow: rgba(201, 162, 39, 0.3);
+            --glow-intense: rgba(201, 162, 39, 0.5);
 
             /* ════════════════════════════════════════
-               TYPOGRAPHY SYSTEM
-               Tension through contrast: Light (300) vs Bold (600)
-               Scale ratio: 1.414 (augmented fourth)
+               TYPOGRAPHY SYSTEM - Executive Grade
+               Clean geometric sans for headlines
+               Humanist sans for body readability
+               Monospace for data/code displays
             ════════════════════════════════════════ */
-            --font-display: 'Cormorant Garamond', Georgia, 'Palatino Linotype', serif;
-            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
-            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-body: var(--font-sans);
 
-            /* Font weights for tension */
+            /* Display: Clean geometric sans (Söhne → Inter → system) */
+            --font-display: 'Inter', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+
+            /* Body: Humanist sans for readability */
+            --font-body: 'Inter', 'SF Pro Text', system-ui, -apple-system, sans-serif;
+
+            /* Mono: For data, code, instrumentation */
+            --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+
+            /* Legacy alias */
+            --font-sans: var(--font-body);
+
+            /* Font weights - Clear hierarchy */
             --weight-light: 300;
             --weight-normal: 400;
             --weight-medium: 500;
-            --weight-bold: 600;
-
-            /* Radius */
-            --radius-card: 12px;
-            --radius-chip: 999px;
-
-            /* Spacing - base unit */
-            --u: 8px;
-
-            /* Layout */
-            --content-width: 1160px;
-            --gutter: 32px;
-
-            /* Timing (seconds) */
-            --timing-slow: 1.8s;
-            --timing-norm: 0.6s;
-            --timing-fast: 0.18s;
+            --weight-semibold: 600;
+            --weight-bold: 700;
 
             /* ════════════════════════════════════════
-               MOTION VOCABULARY
-               Meaningful animation with purpose
-               Each easing/duration signals intent
+               SPACING & LAYOUT
+               4px grid for instrumentation precision
+            ════════════════════════════════════════ */
+            --u: 4px;                     /* Base unit (4px grid) */
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            --spacing-3xl: 64px;
+
+            /* Radius - Sharp, not rounded */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-card: 8px;
+            --radius-chip: 999px;
+
+            /* Layout */
+            --content-width: 1200px;
+            --content-narrow: 800px;
+            --gutter: 24px;
+
+            /* ════════════════════════════════════════
+               MOTION VOCABULARY - Instrumentation Grade
+               Every animation demonstrates causality
+               Duration tokens: 100ms / 250ms / 400ms
             ════════════════════════════════════════ */
 
-            /* Easing - Each curve has semantic meaning */
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);     /* Entry: confident arrival */
-            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);    /* Hover: responsive feedback */
-            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);        /* Ambient: natural breathing */
-            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);   /* Emphasis: slight overshoot */
+            /* Easing - Semantic curves */
+            --ease-out: cubic-bezier(0.33, 1, 0.68, 1);        /* Arrivals (decelerating) */
+            --ease-in: cubic-bezier(0.32, 0, 0.67, 0);         /* Departures (accelerating) */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);    /* Confident arrival */
+            --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);   /* Responsive feedback */
+            --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);       /* Natural transitions */
+            --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);  /* Emphasis */
 
-            /* Duration vocabulary - Timing signals importance */
-            --duration-instant: 0.1s;   /* Micro feedback */
-            --duration-fast: 0.2s;      /* Button/link response */
-            --duration-normal: 0.4s;    /* Content transitions */
-            --duration-slow: 0.8s;      /* Significant changes */
-            --duration-reveal: 1.2s;    /* Hero/section reveals */
+            /* Duration tokens - Explicit timing */
+            --duration-micro: 100ms;      /* Micro-interactions */
+            --duration-fast: 150ms;       /* Button/link response */
+            --duration-normal: 250ms;     /* Transitions */
+            --duration-slow: 400ms;       /* Page reveals */
+            --duration-reveal: 600ms;     /* Section reveals */
+
+            /* Legacy aliases */
+            --duration-instant: 0.1s;
+            --timing-fast: 0.15s;
+            --timing-norm: 0.25s;
+            --timing-slow: 0.4s;
         }
 
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -106,20 +173,19 @@
         html {
             cursor: none;
             overflow-x: hidden;
-        }
-
-        /* Buttery smooth scroll - disabled for custom implementation */
-        html.lenis {
-            height: auto;
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: var(--font-body);
-            background: var(--void);
-            color: var(--gold-white);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             overflow-x: hidden;
-            line-height: 1.7;
-            font-weight: 300;
+            line-height: 1.6;
+            font-weight: var(--weight-normal);
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         /* Accessibility: Respect prefers-reduced-motion */
@@ -138,16 +204,18 @@
             .overlay-grain,
             .neural-field,
             .quantum-grid,
-            .ambient-orb {
+            .ambient-orb,
+            .instrumentation-grid {
                 display: none !important;
             }
         }
 
         a { color: inherit; text-decoration: none; }
 
-        /* ========================================
+        /* ════════════════════════════════════════
            ENHANCED FOCUS STATES (Accessibility)
-        ======================================== */
+           WCAG 2.1 4.5:1 contrast compliance
+        ════════════════════════════════════════ */ */
         a:focus-visible,
         button:focus-visible,
         .nav-links a:focus-visible,
@@ -2406,6 +2474,527 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
+           EXECUTIVE-GRADE TRUST INFRASTRUCTURE
+           Pre-hero trust signals for 3-5 second credibility window
+        ════════════════════════════════════════════════════════════════ */
+
+        /* ═══════════════════════════════════════
+           TRUST STRIP - Above the fold signals
+        ═══════════════════════════════════════ */
+        .trust-strip {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1001;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(15, 18, 23, 0.95) 100%);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 8px 0;
+            opacity: 0;
+            animation: fadeIn 0.4s var(--ease-out) 0.5s forwards;
+        }
+
+        .trust-strip-inner {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 0 var(--gutter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .trust-item .trust-icon {
+            width: 14px;
+            height: 14px;
+            opacity: 0.7;
+        }
+
+        .trust-item.verified {
+            color: var(--accent-success);
+        }
+
+        .trust-item.verified .trust-icon {
+            opacity: 1;
+        }
+
+        .trust-badge {
+            padding: 4px 10px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════════════════════════
+           INSTRUMENTATION GRID OVERLAY
+           Defense-tech visual language
+        ═══════════════════════════════════════ */
+        .instrumentation-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+            overflow: hidden;
+        }
+
+        .grid-lines {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
+            background-size: 64px 64px;
+            mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
+        }
+
+        /* Corner brackets - instrumentation aesthetic */
+        .corner-bracket {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            z-index: 2;
+            opacity: 0.3;
+        }
+
+        .corner-bracket::before,
+        .corner-bracket::after {
+            content: '';
+            position: absolute;
+            background: var(--gold-dim);
+        }
+
+        .corner-bracket.top-left {
+            top: 80px;
+            left: 24px;
+        }
+        .corner-bracket.top-left::before {
+            top: 0; left: 0; width: 20px; height: 1px;
+        }
+        .corner-bracket.top-left::after {
+            top: 0; left: 0; width: 1px; height: 20px;
+        }
+
+        .corner-bracket.top-right {
+            top: 80px;
+            right: 24px;
+        }
+        .corner-bracket.top-right::before {
+            top: 0; right: 0; width: 20px; height: 1px;
+        }
+        .corner-bracket.top-right::after {
+            top: 0; right: 0; width: 1px; height: 20px;
+        }
+
+        .corner-bracket.bottom-left {
+            bottom: 24px;
+            left: 24px;
+        }
+        .corner-bracket.bottom-left::before {
+            bottom: 0; left: 0; width: 20px; height: 1px;
+        }
+        .corner-bracket.bottom-left::after {
+            bottom: 0; left: 0; width: 1px; height: 20px;
+        }
+
+        .corner-bracket.bottom-right {
+            bottom: 24px;
+            right: 24px;
+        }
+        .corner-bracket.bottom-right::before {
+            bottom: 0; right: 0; width: 20px; height: 1px;
+        }
+        .corner-bracket.bottom-right::after {
+            bottom: 0; right: 0; width: 1px; height: 20px;
+        }
+
+        /* Technical annotations */
+        .tech-annotation {
+            position: fixed;
+            font-family: var(--font-mono);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            opacity: 0.4;
+            text-transform: uppercase;
+            z-index: 2;
+        }
+
+        .tech-annotation.bottom-left {
+            bottom: 32px;
+            left: 70px;
+        }
+
+        .tech-annotation.bottom-right {
+            bottom: 32px;
+            right: 70px;
+        }
+
+        /* ═══════════════════════════════════════
+           EXECUTIVE HERO - Outcome-focused
+        ═══════════════════════════════════════ */
+        .hero-outcome-headline {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: var(--weight-semibold);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            text-align: center;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease-out-expo) 0.8s forwards;
+        }
+
+        .hero-outcome-headline .highlight {
+            color: var(--gold);
+            position: relative;
+        }
+
+        .hero-technical-subheadline {
+            font-family: var(--font-body);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            font-weight: var(--weight-normal);
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            text-align: center;
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease-out-expo) 1s forwards;
+        }
+
+        /* Dual CTA pattern */
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease-out-expo) 1.2s forwards;
+        }
+
+        .cta-primary {
+            padding: 14px 28px;
+            background: var(--gold);
+            color: var(--bg-primary);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: var(--weight-semibold);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-primary:hover {
+            background: var(--gold-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(201, 162, 39, 0.3);
+        }
+
+        .cta-secondary {
+            padding: 14px 28px;
+            background: transparent;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: var(--weight-medium);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--gold-dim);
+            background: var(--bg-elevated);
+        }
+
+        /* ═══════════════════════════════════════
+           TEAM CREDENTIALS SECTION
+           Trust signals for pre-revenue companies
+        ═══════════════════════════════════════ */
+        .team-credentials {
+            padding: 80px 0;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .credentials-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .credentials-label {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .credentials-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 0 var(--gutter);
+        }
+
+        .team-member {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            transition: all var(--duration-normal) var(--ease-out);
+        }
+
+        .team-member:hover {
+            border-color: var(--gold-dim);
+            transform: translateY(-4px);
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .member-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-surface);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: var(--weight-semibold);
+            color: var(--gold);
+        }
+
+        .member-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: var(--weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .member-info .role {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .member-credentials {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .member-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .member-link {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 6px 12px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .member-link:hover {
+            color: var(--gold);
+            background: var(--bg-surface);
+        }
+
+        /* ═══════════════════════════════════════
+           METRICS STRIP - Social proof for early-stage
+        ═══════════════════════════════════════ */
+        .metrics-strip {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 32px 0;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp 0.8s var(--ease-out-expo) 1.4s forwards;
+        }
+
+        .metric-item {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: var(--weight-bold);
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* ═══════════════════════════════════════
+           NAVIGATION - Enterprise path
+        ═══════════════════════════════════════ */
+        .nav-persona-switch {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-md);
+            margin-right: 24px;
+        }
+
+        .persona-btn {
+            padding: 8px 16px;
+            font-family: var(--font-mono);
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .persona-btn.active {
+            background: var(--bg-surface);
+            color: var(--text-primary);
+        }
+
+        .persona-btn:hover:not(.active) {
+            color: var(--text-primary);
+        }
+
+        /* ═══════════════════════════════════════
+           PASSIVE DEMO INDICATOR
+        ═══════════════════════════════════════ */
+        .passive-demo-indicator {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 0.6s var(--ease-out) 3s forwards;
+        }
+
+        .demo-pulse {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        /* Mobile adjustments for executive elements */
+        @media (max-width: 768px) {
+            .trust-strip-inner {
+                gap: 16px;
+                font-size: 10px;
+            }
+
+            .trust-item {
+                font-size: 10px;
+            }
+
+            .corner-bracket {
+                display: none;
+            }
+
+            .hero-cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .cta-primary, .cta-secondary {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
+
+            .metrics-strip {
+                gap: 24px;
+            }
+
+            .nav-persona-switch {
+                display: none;
+            }
+        }
+
+        /* ════════════════════════════════════════════════════════════════
            PARADIGM SHIFT: THE PROOF BECOMES THE INTERFACE
            Every visual effect is now a projection of proof state
         ════════════════════════════════════════════════════════════════ */
@@ -3056,6 +3645,54 @@
 </head>
 <body data-proof-phase="idle">
 
+    <!-- ════════════════════════════════════════════════════════════════
+         EXECUTIVE-GRADE TRUST INFRASTRUCTURE
+         Pre-hero signals for 3-5 second credibility window
+    ════════════════════════════════════════════════════════════════ -->
+
+    <!-- Trust Strip - Above the fold -->
+    <div class="trust-strip" id="trustStrip">
+        <div class="trust-strip-inner">
+            <div class="trust-item verified">
+                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                </svg>
+                <span>Deterministic Proofs</span>
+            </div>
+            <div class="trust-item">
+                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                <span>Zero Egress</span>
+            </div>
+            <div class="trust-item">
+                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+                <span>Minutes, Not Months</span>
+            </div>
+            <span class="trust-badge">Open Source</span>
+        </div>
+    </div>
+
+    <!-- Instrumentation Grid - Defense-tech aesthetic -->
+    <div class="instrumentation-grid">
+        <div class="grid-lines"></div>
+    </div>
+
+    <!-- Corner Brackets - Precision calibration marks -->
+    <div class="corner-bracket top-left"></div>
+    <div class="corner-bracket top-right"></div>
+    <div class="corner-bracket bottom-left"></div>
+    <div class="corner-bracket bottom-right"></div>
+
+    <!-- Technical Annotations -->
+    <div class="tech-annotation bottom-left">SYS.NEURAL.THEOREM.v1</div>
+    <div class="tech-annotation bottom-right">SOVEREIGN.VERIFICATION</div>
+
     <!-- Verification Flash Overlay -->
     <div class="verification-flash" id="verificationFlash"></div>
 
@@ -3070,7 +3707,7 @@
         <div class="dna-helix">
             <div class="dna-strand" id="dnaStrand"></div>
         </div>
-        <div class="loading-text">CONSTRUCTING PROOF</div>
+        <div class="loading-text">INITIALIZING PROOF KERNEL</div>
     </div>
 
     <!-- Overlays -->
@@ -3383,16 +4020,72 @@
                 </div>
             </div>
 
-            <!-- Hero Content -->
+            <!-- Hero Content - Executive Outcome-Focused -->
             <div class="hero-content">
-                <h1 class="hero-headline">Where <em>Thought</em> Becomes Form</h1>
-                <div class="scramble-text" id="scrambleText">SOVEREIGN VERIFIABLE INTELLIGENCE</div>
-                <div class="concept-tags">
+                <!-- Outcome-focused headline: 6-10 words, business impact -->
+                <h1 class="hero-outcome-headline">
+                    Prove Code Correctness in <span class="highlight">Minutes</span>
+                </h1>
+
+                <!-- Technical depth subheadline -->
+                <p class="hero-technical-subheadline">
+                    Neural-guided theorem proving for enterprise systems.
+                    Deterministic verification with cryptographic receipts.
+                </p>
+
+                <!-- Dual CTA pattern -->
+                <div class="hero-cta-group">
+                    <button class="cta-primary" id="ctaWatchProof">
+                        <span>Watch It Prove</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </button>
+                    <a href="#documentation" class="cta-secondary">
+                        <span>Technical Docs</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14 2 14 8 20 8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Metrics strip for social proof -->
+                <div class="metrics-strip">
+                    <div class="metric-item">
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Deterministic</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">External Deps</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">SHA-256</div>
+                        <div class="metric-label">Verified Receipts</div>
+                    </div>
+                </div>
+
+                <!-- Passive demo indicator -->
+                <div class="passive-demo-indicator">
+                    <span class="demo-pulse"></span>
+                    <span>Live proof demonstration below</span>
+                </div>
+
+                <!-- Legacy: hidden but preserved for compatibility -->
+                <div style="display:none;">
+                    <h1 class="hero-headline">Where <em>Thought</em> Becomes Form</h1>
+                    <div class="scramble-text" id="scrambleText">SOVEREIGN VERIFIABLE INTELLIGENCE</div>
+                </div>
+
+                <div class="concept-tags" style="display:none;">
                     <span class="concept-tag">VERIFIABLE REASONING</span>
                     <span class="concept-tag">ZERO DEPENDENCY</span>
                     <span class="concept-tag">PROOF GENERATION</span>
                 </div>
-                <button class="cta-button" id="ctaButton">
+                <button class="cta-button" id="ctaButton" style="display:none;">
                     <span>INITIALIZE INTERFACE</span>
                     <span class="cta-icon">→</span>
                 </button>
@@ -3550,6 +4243,77 @@
                         <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds exponentially over time.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- ════════════════════════════════════════════════════════════════
+             TEAM CREDENTIALS - Trust signals for pre-revenue companies
+             Team reputations become the trust signal
+        ════════════════════════════════════════════════════════════════ -->
+        <section class="team-credentials reveal" id="team">
+            <div class="credentials-header">
+                <p class="credentials-label">The Team Behind the Proofs</p>
+                <h2 class="credentials-title">Built by Researchers, For Engineers</h2>
+            </div>
+            <div class="team-grid">
+                <article class="team-member">
+                    <div class="member-header">
+                        <div class="member-avatar">AE</div>
+                        <div class="member-info">
+                            <h4>Aethers</h4>
+                            <span class="role">Founder & Lead Architect</span>
+                        </div>
+                    </div>
+                    <p class="member-credentials">
+                        Neural-symbolic systems researcher. Previously built
+                        verification infrastructure at scale. Focus on making
+                        formal methods accessible to working engineers.
+                    </p>
+                    <div class="member-links">
+                        <a href="https://github.com/AethersDev" class="member-link" target="_blank" rel="noopener">GitHub</a>
+                        <a href="#" class="member-link">Publications</a>
+                    </div>
+                </article>
+
+                <article class="team-member">
+                    <div class="member-header">
+                        <div class="member-avatar">λ</div>
+                        <div class="member-info">
+                            <h4>Core Contributors</h4>
+                            <span class="role">Open Source Community</span>
+                        </div>
+                    </div>
+                    <p class="member-credentials">
+                        CytherAI is built in the open. Contributors from
+                        theorem proving, type theory, and systems programming
+                        backgrounds. All code is sovereign and auditable.
+                    </p>
+                    <div class="member-links">
+                        <a href="https://github.com/CytherAI" class="member-link" target="_blank" rel="noopener">Repository</a>
+                        <a href="#" class="member-link">Contribute</a>
+                    </div>
+                </article>
+
+                <article class="team-member">
+                    <div class="member-header">
+                        <div class="member-avatar">∀</div>
+                        <div class="member-info">
+                            <h4>Research Foundation</h4>
+                            <span class="role">Academic Roots</span>
+                        </div>
+                    </div>
+                    <p class="member-credentials">
+                        Built on decades of formal verification research.
+                        Combines neural networks with classical theorem
+                        proving for unprecedented accuracy and speed.
+                    </p>
+                    <div class="member-links">
+                        <a href="#" class="member-link">Research Papers</a>
+                        <a href="#" class="member-link">Methodology</a>
+                    </div>
+                </article>
             </div>
         </section>
 
@@ -5554,6 +6318,62 @@
         };
 
         // ════════════════════════════════════════
+        // PASSIVE DEMONSTRATION SYSTEM
+        // Auto-play proof on page load
+        // ════════════════════════════════════════
+        const PassiveDemo = {
+            autoPlayDelay: 4000,  // Wait 4 seconds after page load
+            demoClaims: [
+                '((P → Q) ∧ P) → Q',       // Modus Ponens
+                '(P ∧ Q) → P',              // AND Elimination
+                'P → (P ∨ Q)'               // OR Introduction
+            ],
+
+            init() {
+                // Bind "Watch It Prove" button
+                const watchBtn = document.getElementById('ctaWatchProof');
+                if (watchBtn) {
+                    watchBtn.addEventListener('click', () => this.triggerDemo());
+                }
+
+                // Auto-play after delay (passive demonstration)
+                setTimeout(() => {
+                    if (ProofState.phase === 'idle' && !ProofState.currentReceipt) {
+                        this.triggerDemo();
+                    }
+                }, this.autoPlayDelay);
+            },
+
+            async triggerDemo() {
+                // Scroll to proof interface smoothly
+                const proofInterface = document.getElementById('proofInterface');
+                if (proofInterface) {
+                    proofInterface.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+
+                // Small delay to let scroll complete
+                await new Promise(r => setTimeout(r, 500));
+
+                // Select random demo claim
+                const claim = this.demoClaims[Math.floor(Math.random() * this.demoClaims.length)];
+
+                // Set the input value
+                const input = document.getElementById('claimInput');
+                if (input) {
+                    input.value = claim;
+                    input.focus();
+                }
+
+                // Trigger the proof
+                await new Promise(r => setTimeout(r, 300));
+                const proveBtn = document.getElementById('proveBtn');
+                if (proveBtn && !proveBtn.disabled) {
+                    proveBtn.click();
+                }
+            }
+        };
+
+        // ════════════════════════════════════════
         // INITIALIZATION
         // ════════════════════════════════════════
         function initProofSystem() {
@@ -5571,11 +6391,12 @@
                 SemanticLens.init();
                 ShaderBinding.init();
                 ProofUI.init();
+                PassiveDemo.init();
 
                 console.log('%c⊢ CytherAI Proof System Initialized',
-                    'color: #d4af37; font-family: monospace; font-size: 14px;');
-                console.log('%c  Where Thought Becomes Form',
-                    'color: #9c9b96; font-family: monospace; font-size: 11px;');
+                    'color: #c9a227; font-family: monospace; font-size: 14px;');
+                console.log('%c  Prove Code Correctness in Minutes',
+                    'color: #a0a4ab; font-family: monospace; font-size: 11px;');
             }
         }
 
