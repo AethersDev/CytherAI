@@ -44,72 +44,60 @@
         ════════════════════════════════════════════════════════════════ */
         :root {
             /* ════════════════════════════════════════
-               INFRASTRUCTURE COLOR SYSTEM
-               Warm grays that signal serious systems
-               Based on defense-tech visual language
+               CINEMATIC COLOR SYSTEM
+               Near-black depth for one-pass impact
+               Gold as sovereign authority accent
             ════════════════════════════════════════ */
 
-            /* Base - Warm infrastructure grays (not pure black) */
-            --bg-primary: #0F1217;        /* Near-black with subtle blue */
-            --bg-elevated: #1B1F24;       /* Cards, surfaces */
-            --bg-surface: #252A31;        /* Elevated UI elements */
-            --bg: #0F1217;                /* Alias for compatibility */
-            --bg-soft: #1B1F24;           /* Alias */
-            --void: #0F1217;              /* Alias */
+            /* Base - Cinematic near-black depth */
+            --bg-primary: #050508;        /* Deep black with warmth */
+            --bg-elevated: #0a0a0f;       /* Subtle lift */
+            --bg-surface: #12121a;        /* Elevated elements */
+            --bg: #050508;
+            --bg-soft: #0a0a0f;
+            --void: #050508;
 
-            /* Text hierarchy - Off-white for reduced eye strain */
-            --text-primary: #F0F0F0;      /* Primary text */
-            --text-secondary: #A0A4AB;    /* Supporting text */
-            --text-muted: #6B7280;        /* Tertiary/disabled */
-            --text: #F0F0F0;              /* Alias */
+            /* Text hierarchy */
+            --text-primary: #f5f5f0;      /* Warm white */
+            --text-secondary: #9c9b96;    /* Muted */
+            --text-muted: #6b6b65;        /* Tertiary */
+            --text: #f5f5f0;
 
-            /* Accent system - Desaturated for professionalism */
-            --accent-primary: #3B82F6;    /* Trust blue (desaturated) */
-            --accent-success: #22C55E;    /* Verification/proven states */
-            --accent-warning: #EAB308;    /* Caution states */
-            --danger: #EF4444;            /* Error states */
-
-            /* Gold Palette - Refined for instrumentation aesthetic */
-            --gold-darkest: #1F1A0F;      /* Deepest shadows */
-            --gold-shadow: #3D3520;       /* Subtle shadows */
-            --gold-dim: #5C5030;          /* Muted accents */
-            --gold-dark: #8B7355;         /* Secondary */
-            --gold: #C9A227;              /* Primary - slightly desaturated */
-            --gold-core: #C9A227;         /* Primary (alias) */
-            --gold-muted: #A0A4AB;        /* Desaturated for text */
-            --gold-bright: #DDB84D;       /* Highlights */
-            --gold-white: #F0F0F0;        /* Near-white */
+            /* Gold Palette - Sovereign authority */
+            --gold-darkest: #2a2210;
+            --gold-shadow: #4a3d1a;
+            --gold-dim: #7a6428;
+            --gold-dark: #a07f24;
+            --gold: #d4af37;
+            --gold-core: #d4af37;
+            --gold-muted: #9c9b96;
+            --gold-bright: #e8c84a;
+            --gold-white: #f5f5f0;
 
             /* Border system */
-            --border: #2D3239;
-            --border-subtle: #1F2328;
+            --border: #1a1a1a;
+            --border-subtle: #0f0f0f;
 
-            /* Glow System - Subdued for professionalism */
-            --glow-soft: rgba(201, 162, 39, 0.15);
-            --glow: rgba(201, 162, 39, 0.3);
-            --glow-intense: rgba(201, 162, 39, 0.5);
+            /* Glow System - Cinematic */
+            --glow-soft: rgba(212, 175, 55, 0.2);
+            --glow: rgba(212, 175, 55, 0.4);
+            --glow-intense: rgba(212, 175, 55, 0.6);
+
+            /* Ritual phase colors */
+            --phase-random: #ff6b6b;
+            --phase-converge: #ffd93d;
+            --phase-emerge: #6bcb77;
+            --phase-lock: #d4af37;
 
             /* ════════════════════════════════════════
-               TYPOGRAPHY SYSTEM - Executive Grade
-               Clean geometric sans for headlines
-               Humanist sans for body readability
-               Monospace for data/code displays
+               TYPOGRAPHY SYSTEM
             ════════════════════════════════════════ */
 
-            /* Display: Clean geometric sans (Inter → system stack) */
-            /* Note: SF Pro removed due to licensing restrictions */
             --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
-            /* Body: Humanist sans for readability */
             --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-
-            /* Mono: For data, code, instrumentation */
             --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-
-            /* Legacy alias */
             --font-sans: var(--font-body);
 
-            /* Font weights - Clear hierarchy */
             --weight-light: 300;
             --weight-normal: 400;
             --weight-medium: 500;
@@ -117,20 +105,7 @@
             --weight-bold: 700;
 
             /* ════════════════════════════════════════
-               SEMANTIC COLOR PALETTE
-               Functional states within gold discipline
-            ════════════════════════════════════════ */
-            --semantic-verified: #22C55E;       /* Proof complete, validation success */
-            --semantic-verified-glow: rgba(34, 197, 94, 0.3);
-            --semantic-searching: #EAB308;      /* Active computation */
-            --semantic-searching-glow: rgba(234, 179, 8, 0.3);
-            --semantic-contradiction: #EF4444;  /* Proof failure, error */
-            --semantic-contradiction-glow: rgba(239, 68, 68, 0.3);
-            --semantic-idle: var(--gold-dim);   /* Awaiting input */
-
-            /* ════════════════════════════════════════
                SPACING & LAYOUT
-               4px grid for instrumentation precision
             ════════════════════════════════════════ */
             --u: 4px;                     /* Base unit (4px grid) */
             --spacing-xs: 4px;
@@ -2487,24 +2462,274 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           EXECUTIVE-GRADE TRUST INFRASTRUCTURE
-           Pre-hero trust signals for 3-5 second credibility window
+           REALITY TEASER ENGINE
+           Cinematic one-pass experience. Not a SaaS surface.
+           Memorable + credible in one pass.
         ════════════════════════════════════════════════════════════════ */
 
+        /* Hide all SaaS surface elements */
+        .trust-strip,
+        .trust-inspector,
+        .metrics-strip,
+        .proof-interface,
+        .proof-receipt,
+        .team-credentials,
+        .instrumentation-grid,
+        .corner-bracket,
+        .tech-annotation,
+        .hero-cta-group,
+        .hero-technical-subheadline,
+        .passive-demo-indicator,
+        .nav-persona-switch {
+            display: none !important;
+        }
+
         /* ═══════════════════════════════════════
-           TRUST STRIP - Above the fold signals
+           RITUAL STAGE - Containment Chamber
         ═══════════════════════════════════════ */
-        .trust-strip {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1001;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(15, 18, 23, 0.95) 100%);
-            border-bottom: 1px solid var(--border-subtle);
-            padding: 8px 0;
+        .ritual-stage {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 3rem auto;
+            border: 1px solid var(--gold-shadow);
+            border-radius: 8px;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 50% 50%,
+                rgba(212, 175, 55, 0.03) 0%,
+                transparent 70%);
+        }
+
+        .ritual-stage::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            background: linear-gradient(135deg,
+                rgba(212, 175, 55, 0.1) 0%,
+                transparent 50%,
+                rgba(212, 175, 55, 0.05) 100%);
+            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        /* Phase indicator - transient, not permanent chrome */
+        .ritual-phase-indicator {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            font-family: var(--font-mono);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
             opacity: 0;
-            animation: fadeIn 0.4s var(--ease-out) 0.5s forwards;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .ritual-phase-indicator.visible {
+            opacity: 1;
+        }
+
+        .ritual-phase-indicator[data-phase="random"] {
+            color: var(--phase-random);
+        }
+
+        .ritual-phase-indicator[data-phase="converge"] {
+            color: var(--phase-converge);
+        }
+
+        .ritual-phase-indicator[data-phase="emerge"] {
+            color: var(--phase-emerge);
+        }
+
+        .ritual-phase-indicator[data-phase="lock"] {
+            color: var(--phase-lock);
+        }
+
+        /* Ritual message - flashes and fades */
+        .ritual-message {
+            position: absolute;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            white-space: nowrap;
+        }
+
+        .ritual-message.visible {
+            opacity: 1;
+        }
+
+        /* Symbolic glyphs - ambient emergence */
+        .ritual-glyphs {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ritual-glyph {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 18px;
+            color: var(--gold-dim);
+            opacity: 0;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .ritual-glyph.visible {
+            opacity: 0.6;
+        }
+
+        /* Calibration lines - only during convergence */
+        .calibration-lines {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .calibration-lines.active {
+            opacity: 1;
+        }
+
+        .calibration-line {
+            position: absolute;
+            background: var(--gold-dim);
+            opacity: 0.3;
+        }
+
+        .calibration-line.horizontal {
+            height: 1px;
+            width: 100%;
+            left: 0;
+        }
+
+        .calibration-line.vertical {
+            width: 1px;
+            height: 100%;
+            top: 0;
+        }
+
+        /* ═══════════════════════════════════════
+           SOVEREIGN HEADLINE
+        ═══════════════════════════════════════ */
+        .sovereign-headline {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: var(--weight-light);
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-out-expo) 0.5s forwards;
+        }
+
+        .sovereign-headline em {
+            font-style: normal;
+            color: var(--gold);
+        }
+
+        .sovereign-subline {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            text-align: center;
+            text-transform: uppercase;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0;
+            animation: fadeUp 1s var(--ease-out-expo) 0.8s forwards;
+        }
+
+        /* ═══════════════════════════════════════
+           RITUAL CTA - Appears only at end
+        ═══════════════════════════════════════ */
+        .ritual-cta-container {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s var(--ease-out-expo);
+            pointer-events: none;
+        }
+
+        .ritual-cta-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .ritual-cta {
+            padding: 14px 32px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border: 1px solid var(--gold-dim);
+            background: transparent;
+            color: var(--gold-white);
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .ritual-cta:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            box-shadow: 0 0 30px var(--glow-soft);
+        }
+
+        .ritual-cta.primary {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--void);
+        }
+
+        .ritual-cta.primary:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 0 40px var(--glow);
+        }
+
+        /* ═══════════════════════════════════════
+           REDUCED MOTION - Still scene
+        ═══════════════════════════════════════ */
+        @media (prefers-reduced-motion: reduce) {
+            .ritual-stage {
+                opacity: 1;
+            }
+
+            .ritual-phase-indicator,
+            .ritual-message,
+            .ritual-glyph,
+            .calibration-lines {
+                display: none;
+            }
+
+            .ritual-cta-container {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
+            }
+        }
+
+        /* Hide legacy trust strip reference */
+        .trust-strip {
+            display: none !important;
         }
 
         .trust-strip-inner {
@@ -4236,75 +4461,50 @@
                 </div>
             </div>
 
-            <!-- Hero Content - Executive Outcome-Focused -->
+            <!-- ════════════════════════════════════════════════════════════════
+                 REALITY TEASER - Cinematic one-pass experience
+                 No forms. No receipts. Just the machine revealing itself.
+            ════════════════════════════════════════════════════════════════ -->
             <div class="hero-content">
-                <!-- Outcome-focused headline: 6-10 words, business impact -->
-                <h1 class="hero-outcome-headline">
-                    Prove Code Correctness in <span class="highlight">Minutes</span>
+                <!-- Sovereign headline -->
+                <h1 class="sovereign-headline">
+                    Sovereign <em>Neural</em> Theorem Prover
                 </h1>
-
-                <!-- Technical depth subheadline -->
-                <p class="hero-technical-subheadline">
-                    Neural-guided theorem proving for enterprise systems.
-                    Deterministic verification with cryptographic receipts.
+                <p class="sovereign-subline">
+                    Trained from random initialization. Fully reproducible. Zero dependencies.
                 </p>
 
-                <!-- Dual CTA pattern -->
-                <div class="hero-cta-group">
-                    <button class="cta-primary" id="ctaWatchProof">
-                        <span>Watch It Prove</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                    </button>
-                    <a href="#documentation" class="cta-secondary">
-                        <span>Technical Docs</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/>
-                        </svg>
-                    </a>
-                </div>
+                <!-- Ritual Stage - Containment Chamber -->
+                <div class="ritual-stage" id="ritualStage">
+                    <!-- Phase indicator - transient -->
+                    <div class="ritual-phase-indicator" id="ritualPhase">INIT: RANDOM</div>
 
-                <!-- Metrics strip for social proof -->
-                <div class="metrics-strip">
-                    <div class="metric-item">
-                        <div class="metric-value">100%</div>
-                        <div class="metric-label">Deterministic</div>
+                    <!-- Calibration lines - appear during convergence -->
+                    <div class="calibration-lines" id="calibrationLines">
+                        <div class="calibration-line horizontal" style="top: 25%;"></div>
+                        <div class="calibration-line horizontal" style="top: 50%;"></div>
+                        <div class="calibration-line horizontal" style="top: 75%;"></div>
+                        <div class="calibration-line vertical" style="left: 25%;"></div>
+                        <div class="calibration-line vertical" style="left: 50%;"></div>
+                        <div class="calibration-line vertical" style="left: 75%;"></div>
                     </div>
-                    <div class="metric-item">
-                        <div class="metric-value">0</div>
-                        <div class="metric-label">External Deps</div>
+
+                    <!-- Symbolic glyphs - ambient emergence -->
+                    <div class="ritual-glyphs" id="ritualGlyphs">
+                        <!-- Generated by RitualController -->
                     </div>
-                    <div class="metric-item">
-                        <div class="metric-value">SHA-256</div>
-                        <div class="metric-label">Verified Receipts</div>
-                    </div>
+
+                    <!-- The crown and crystal render here via existing systems -->
+
+                    <!-- Ritual message - flashes at key moments -->
+                    <div class="ritual-message" id="ritualMessage"></div>
                 </div>
 
-                <!-- Passive demo indicator -->
-                <div class="passive-demo-indicator">
-                    <span class="demo-pulse"></span>
-                    <span>Live proof demonstration below</span>
+                <!-- CTA appears only at ritual end -->
+                <div class="ritual-cta-container" id="ritualCTA">
+                    <button class="ritual-cta" id="replayRitual">Replay</button>
+                    <a href="mailto:demo@cytherai.com?subject=NDA%20Demo%20Request" class="ritual-cta primary">Request NDA Demo</a>
                 </div>
-
-                <!-- Legacy: hidden but preserved for compatibility -->
-                <div style="display:none;">
-                    <h1 class="hero-headline">Where <em>Thought</em> Becomes Form</h1>
-                    <div class="scramble-text" id="scrambleText">SOVEREIGN VERIFIABLE INTELLIGENCE</div>
-                </div>
-
-                <div class="concept-tags" style="display:none;">
-                    <span class="concept-tag">VERIFIABLE REASONING</span>
-                    <span class="concept-tag">ZERO DEPENDENCY</span>
-                    <span class="concept-tag">PROOF GENERATION</span>
-                </div>
-                <button class="cta-button" id="ctaButton" style="display:none;">
-                    <span>INITIALIZE INTERFACE</span>
-                    <span class="cta-icon">→</span>
-                </button>
             </div>
 
             <!-- Scroll Indicator -->
@@ -6534,263 +6734,271 @@
         };
 
         // ════════════════════════════════════════
-        // TRUST INSPECTOR
-        // Prove zero egress claims on-page
+        // RITUAL CONTROLLER
+        // 4-act cinematic experience: Random → Convergence → Emergence → Lock
+        // No user input. No receipts. Just the machine revealing itself.
         // ════════════════════════════════════════
-        const TrustInspector = {
-            sessionSeed: null,
+        const RitualController = {
+            phases: ['random', 'converge', 'emerge', 'lock'],
+            currentPhase: -1,
+            isRunning: false,
+
+            // Timing (milliseconds)
+            timing: {
+                random: 3000,      // Act 1: High entropy
+                converge: 4000,   // Act 2: Chaos collapses
+                emerge: 4000,     // Act 3: Symbolic traces
+                lock: 3000        // Act 4: Stable attractor
+            },
+
+            // Ritual messages
+            messages: {
+                random: 'INIT: RANDOM SEED',
+                converge: 'TRAINING CONVERGENCE',
+                emerge: 'THEOREM PROVER EMERGENCE',
+                lock: 'REPRODUCIBLE END-TO-END'
+            },
+
+            glyphs: ['λ', '⊢', '→', '∀', '∃', '∧', '∨', '¬', '⊨', '∎'],
+
             elements: {},
 
             init() {
-                // Generate deterministic session seed
-                this.sessionSeed = this.generateSessionSeed();
-
                 this.elements = {
-                    toggle: document.getElementById('trustInspectorToggle'),
-                    panel: document.getElementById('trustInspectorPanel'),
-                    networkCount: document.getElementById('networkCount'),
-                    externalOrigins: document.getElementById('externalOrigins'),
-                    demoSeed: document.getElementById('demoSeedDisplay'),
-                    sessionId: document.getElementById('sessionId'),
-                    receiptHash: document.getElementById('inspectorReceiptHash'),
-                    status: document.getElementById('inspectorStatus')
+                    stage: document.getElementById('ritualStage'),
+                    phase: document.getElementById('ritualPhase'),
+                    message: document.getElementById('ritualMessage'),
+                    glyphs: document.getElementById('ritualGlyphs'),
+                    calibration: document.getElementById('calibrationLines'),
+                    cta: document.getElementById('ritualCTA'),
+                    replayBtn: document.getElementById('replayRitual')
                 };
 
-                // Display session info
-                if (this.elements.sessionId) {
-                    this.elements.sessionId.textContent = this.sessionSeed.toString(16).slice(0, 8).toUpperCase();
-                }
-                if (this.elements.demoSeed) {
-                    this.elements.demoSeed.textContent = 'Seed: ' + this.sessionSeed.toString(16).slice(0, 8);
+                // Bind replay button
+                if (this.elements.replayBtn) {
+                    this.elements.replayBtn.addEventListener('click', () => this.start());
                 }
 
-                // Bind toggle
-                if (this.elements.toggle) {
-                    this.elements.toggle.addEventListener('click', () => this.togglePanel());
-                }
-
-                // Analyze network requests
-                this.analyzeRequests();
-
-                // Listen for proof completion to update receipt hash
-                ProofBus.on('proof:complete', (receipt) => {
-                    if (this.elements.receiptHash) {
-                        this.elements.receiptHash.textContent = receipt.hash;
-                    }
-                    if (this.elements.toggle) {
-                        this.elements.toggle.classList.add('verified');
-                    }
-                });
-            },
-
-            generateSessionSeed() {
-                // Deterministic seed based on date (rotates daily)
-                const today = new Date();
-                const dateString = today.toISOString().split('T')[0];
-                let hash = 0;
-                for (let i = 0; i < dateString.length; i++) {
-                    hash = ((hash << 5) - hash) + dateString.charCodeAt(i);
-                    hash = hash & hash;
-                }
-                return Math.abs(hash);
-            },
-
-            togglePanel() {
-                if (this.elements.panel) {
-                    this.elements.panel.classList.toggle('open');
-                }
-            },
-
-            analyzeRequests() {
-                // Use Performance API to verify zero external requests
-                const resources = performance.getEntriesByType('resource');
-                const currentOrigin = window.location.origin;
-
-                let externalCount = 0;
-                const externalHosts = new Set();
-
-                resources.forEach(r => {
-                    try {
-                        const url = new URL(r.name);
-                        if (url.origin !== currentOrigin) {
-                            externalCount++;
-                            externalHosts.add(url.hostname);
-                        }
-                    } catch (e) {
-                        // Invalid URL, skip
-                    }
-                });
-
-                // Update display
-                if (this.elements.networkCount) {
-                    this.elements.networkCount.textContent = resources.length.toString();
-                }
-                if (this.elements.externalOrigins) {
-                    if (externalCount === 0) {
-                        this.elements.externalOrigins.textContent = 'None';
-                        this.elements.externalOrigins.classList.add('success');
-                    } else {
-                        this.elements.externalOrigins.textContent = Array.from(externalHosts).join(', ');
-                        this.elements.externalOrigins.classList.remove('success');
-                    }
-                }
-            },
-
-            getDemoIndex(presetCount) {
-                // Deterministic rotation based on session seed
-                return this.sessionSeed % presetCount;
-            }
-        };
-
-        // ════════════════════════════════════════
-        // VERIFIED MOMENT - Signature Ritual
-        // Unmistakable "this is real" event
-        // ════════════════════════════════════════
-        const VerifiedMoment = {
-            init() {
-                ProofBus.on('proof:complete', (receipt) => {
-                    this.triggerRitual(receipt);
-                });
-            },
-
-            triggerRitual(receipt) {
-                // 1. Trust strip flips to VERIFIED
-                const trustStrip = document.getElementById('trustStrip');
-                if (trustStrip) {
-                    trustStrip.classList.add('verified');
-                }
-
-                // 2. Crown performs seal motion
-                const crownLogo = document.querySelector('.crown-logo');
-                if (crownLogo) {
-                    crownLogo.classList.add('sealing');
-                    setTimeout(() => crownLogo.classList.remove('sealing'), 1000);
-                }
-
-                // 3. Crystal becomes inspectable
-                const crystal = document.getElementById('witnessCrystal');
-                if (crystal) {
-                    crystal.classList.add('inspectable');
-                }
-
-                // 4. Update Trust Inspector toggle to verified state
-                const inspectorToggle = document.getElementById('trustInspectorToggle');
-                if (inspectorToggle) {
-                    inspectorToggle.classList.add('verified');
-                }
-            },
-
-            reset() {
-                const trustStrip = document.getElementById('trustStrip');
-                if (trustStrip) trustStrip.classList.remove('verified');
-
-                const crystal = document.getElementById('witnessCrystal');
-                if (crystal) crystal.classList.remove('inspectable');
-
-                const inspectorToggle = document.getElementById('trustInspectorToggle');
-                if (inspectorToggle) inspectorToggle.classList.remove('verified');
-            }
-        };
-
-        // ════════════════════════════════════════
-        // PASSIVE DEMONSTRATION SYSTEM
-        // Deterministic rotation with accessibility gates
-        // ════════════════════════════════════════
-        const PassiveDemo = {
-            autoPlayDelay: 4000,
-            demoClaims: [
-                '((P → Q) ∧ P) → Q',       // Modus Ponens
-                '(P ∧ Q) → P',              // AND Elimination
-                'P → (P ∨ Q)'               // OR Introduction
-            ],
-            hasTriggered: false,
-
-            init() {
-                // Bind "Watch It Prove" button
-                const watchBtn = document.getElementById('ctaWatchProof');
-                if (watchBtn) {
-                    watchBtn.addEventListener('click', () => this.triggerDemo());
-                }
-
-                // Check accessibility gates before auto-play
+                // Check accessibility before auto-start
                 if (this.shouldAutoPlay()) {
-                    this.scheduleAutoPlay();
+                    this.scheduleStart();
+                } else {
+                    // Show locked state immediately for reduced motion
+                    this.showLockedState();
                 }
             },
 
             shouldAutoPlay() {
-                // Gate 1: Respect prefers-reduced-motion
                 if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                     return false;
                 }
-
-                // Gate 2: Respect save-data mode
                 if (navigator.connection?.saveData) {
                     return false;
                 }
-
                 return true;
             },
 
-            scheduleAutoPlay() {
-                // Use requestIdleCallback for optimal timing (fallback to setTimeout)
+            scheduleStart() {
                 const scheduleWhenIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-
                 scheduleWhenIdle(() => {
-                    // Wait for first paint + additional delay
-                    setTimeout(() => {
-                        if (ProofState.phase === 'idle' && !ProofState.currentReceipt && !this.hasTriggered) {
-                            this.triggerDemo();
-                        }
-                    }, this.autoPlayDelay);
-                }, { timeout: 2000 });
+                    setTimeout(() => this.start(), 2000);
+                }, { timeout: 1500 });
             },
 
-            async triggerDemo() {
-                if (this.hasTriggered && ProofState.currentReceipt) {
-                    // If already proven, just scroll to it
-                    const proofInterface = document.getElementById('proofInterface');
-                    if (proofInterface) {
-                        proofInterface.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            async start() {
+                if (this.isRunning) return;
+                this.isRunning = true;
+                this.currentPhase = -1;
+
+                // Hide CTA
+                if (this.elements.cta) {
+                    this.elements.cta.classList.remove('visible');
+                }
+
+                // Clear glyphs
+                if (this.elements.glyphs) {
+                    this.elements.glyphs.innerHTML = '';
+                }
+
+                // Run each phase
+                await this.runPhase('random');
+                await this.runPhase('converge');
+                await this.runPhase('emerge');
+                await this.runPhase('lock');
+
+                // Show final message and CTA
+                await this.showFinalState();
+
+                this.isRunning = false;
+            },
+
+            async runPhase(phase) {
+                this.currentPhase = this.phases.indexOf(phase);
+
+                // Update phase indicator
+                if (this.elements.phase) {
+                    this.elements.phase.textContent = this.messages[phase];
+                    this.elements.phase.setAttribute('data-phase', phase);
+                    this.elements.phase.classList.add('visible');
+                }
+
+                // Phase-specific effects
+                switch(phase) {
+                    case 'random':
+                        this.triggerRandomPhase();
+                        break;
+                    case 'converge':
+                        this.triggerConvergePhase();
+                        break;
+                    case 'emerge':
+                        this.triggerEmergePhase();
+                        break;
+                    case 'lock':
+                        this.triggerLockPhase();
+                        break;
+                }
+
+                // Emit to existing visual systems
+                ProofBus.emit('ritual:phase', { phase, index: this.currentPhase });
+
+                // Wait for phase duration
+                await new Promise(r => setTimeout(r, this.timing[phase]));
+            },
+
+            triggerRandomPhase() {
+                // High entropy state - update shader
+                ProofState.update({ entropy: 0.9, coherence: 0.1 });
+
+                // Scatter random particles
+                if (typeof CausalTraces !== 'undefined') {
+                    CausalTraces.burst(20);
+                }
+            },
+
+            triggerConvergePhase() {
+                // Show calibration lines
+                if (this.elements.calibration) {
+                    this.elements.calibration.classList.add('active');
+                }
+
+                // Reduce entropy, increase coherence
+                ProofState.update({ entropy: 0.4, coherence: 0.5 });
+
+                // Start converging particles
+                if (typeof CausalTraces !== 'undefined') {
+                    CausalTraces.converge(15);
+                }
+
+                // Activate sacred geometry rotation
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry) {
+                    geometry.style.opacity = '0.15';
+                }
+            },
+
+            triggerEmergePhase() {
+                // Spawn symbolic glyphs
+                this.spawnGlyphs();
+
+                // Continue stabilizing
+                ProofState.update({ entropy: 0.2, coherence: 0.75 });
+
+                // Begin crown assembly
+                if (typeof CrownSync !== 'undefined') {
+                    CrownSync.animateStep(3, 7);
+                }
+
+                // Hide calibration lines (they were for calibration only)
+                setTimeout(() => {
+                    if (this.elements.calibration) {
+                        this.elements.calibration.classList.remove('active');
                     }
-                    return;
+                }, 2000);
+            },
+
+            triggerLockPhase() {
+                // Final lock state
+                ProofState.update({ entropy: 0, coherence: 1 });
+
+                // Complete crown
+                if (typeof CrownSync !== 'undefined') {
+                    CrownSync.complete();
                 }
 
-                this.hasTriggered = true;
-
-                // Reset verified moment state
-                VerifiedMoment.reset();
-
-                // Scroll to proof interface smoothly
-                const proofInterface = document.getElementById('proofInterface');
-                if (proofInterface) {
-                    proofInterface.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                // Crystallize
+                const crystal = document.getElementById('witnessCrystal');
+                if (crystal) {
+                    crystal.classList.add('locked');
                 }
 
+                // Lock sacred geometry
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry) {
+                    geometry.style.animation = 'none';
+                    geometry.style.opacity = '0.2';
+                }
+            },
+
+            spawnGlyphs() {
+                if (!this.elements.glyphs) return;
+
+                // Spawn glyphs at random positions
+                this.glyphs.forEach((glyph, i) => {
+                    setTimeout(() => {
+                        const el = document.createElement('span');
+                        el.className = 'ritual-glyph';
+                        el.textContent = glyph;
+                        el.style.left = (20 + Math.random() * 60) + '%';
+                        el.style.top = (20 + Math.random() * 60) + '%';
+                        this.elements.glyphs.appendChild(el);
+
+                        // Fade in
+                        setTimeout(() => el.classList.add('visible'), 100);
+
+                        // Fade out after a moment
+                        setTimeout(() => el.classList.remove('visible'), 2500);
+                    }, i * 300);
+                });
+            },
+
+            async showFinalState() {
+                // Flash final message
+                if (this.elements.message) {
+                    this.elements.message.textContent = 'ZERO DEPENDENCIES';
+                    this.elements.message.classList.add('visible');
+
+                    await new Promise(r => setTimeout(r, 2000));
+
+                    this.elements.message.textContent = 'SOVEREIGN VERIFICATION';
+                    await new Promise(r => setTimeout(r, 2000));
+
+                    this.elements.message.classList.remove('visible');
+                }
+
+                // Hide phase indicator
+                if (this.elements.phase) {
+                    this.elements.phase.classList.remove('visible');
+                }
+
+                // Show CTA
                 await new Promise(r => setTimeout(r, 500));
-
-                // DETERMINISTIC claim selection based on session seed
-                const demoIndex = TrustInspector.getDemoIndex(this.demoClaims.length);
-                const claim = this.demoClaims[demoIndex];
-
-                // Update demo seed display
-                const seedDisplay = document.getElementById('demoSeedDisplay');
-                if (seedDisplay) {
-                    seedDisplay.textContent = `Claim #${demoIndex + 1}`;
+                if (this.elements.cta) {
+                    this.elements.cta.classList.add('visible');
                 }
 
-                // Set the input value
-                const input = document.getElementById('claimInput');
-                if (input) {
-                    input.value = claim;
-                    input.focus();
+                ProofBus.emit('ritual:complete', {});
+            },
+
+            showLockedState() {
+                // For reduced motion - show final state immediately
+                ProofState.update({ entropy: 0, coherence: 1 });
+
+                if (typeof CrownSync !== 'undefined') {
+                    CrownSync.complete();
                 }
 
-                await new Promise(r => setTimeout(r, 300));
-
-                const proveBtn = document.getElementById('proveBtn');
-                if (proveBtn && !proveBtn.disabled) {
-                    proveBtn.click();
+                if (this.elements.cta) {
+                    this.elements.cta.classList.add('visible');
                 }
             }
         };
@@ -6807,25 +7015,19 @@
             }
 
             function init() {
-                // Core proof systems
+                // Core visual systems
                 WitnessCrystal.init();
                 CrownSync.init();
                 CausalTraces.init();
-                SemanticLens.init();
                 ShaderBinding.init();
-                ProofUI.init();
 
-                // Executive trust systems
-                TrustInspector.init();
-                VerifiedMoment.init();
-                PassiveDemo.init();
+                // Reality Teaser Engine - the sovereign ritual
+                RitualController.init();
 
-                console.log('%c⊢ CytherAI Proof System Initialized',
-                    'color: #c9a227; font-family: monospace; font-size: 14px;');
-                console.log('%c  Prove Code Correctness in Minutes',
+                console.log('%c⊢ CytherAI',
+                    'color: #d4af37; font-family: monospace; font-size: 14px;');
+                console.log('%c  Sovereign Neural Theorem Prover',
                     'color: #a0a4ab; font-family: monospace; font-size: 11px;');
-                console.log('%c  Session: ' + TrustInspector.sessionSeed.toString(16).slice(0, 8).toUpperCase(),
-                    'color: #6b7280; font-family: monospace; font-size: 10px;');
             }
         }
 
