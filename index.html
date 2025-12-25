@@ -7077,43 +7077,190 @@
             }
         };
 
-        // ════════════════════════════════════════
-        // RITUAL CONTROLLER
-        // Cinematic 4-act sovereign lab ritual (12-18 seconds)
-        // ACT 0: Idle → ACT 1: Initiation → ACT 2: Convergence → ACT 3: Lock → ACT 4: Hold
-        // No user input. No receipts. Just the machine revealing itself.
-        // ════════════════════════════════════════
+        // ════════════════════════════════════════════════════════════════════════════
+        // RITUAL CONTROLLER - NORTH STAR ARCHITECTURE
+        // ════════════════════════════════════════════════════════════════════════════
+        // The Irreversible Capture: Chaos → Convergence → Capture → Seal
+        //
+        // CORE PRINCIPLE: Single master progress scalar (0→1) drives EVERYTHING.
+        // No independent dials. No arbitrary animations. Pure determinism.
+        //
+        // HIERARCHY:
+        //   progress (0→1) → entropy, coherence → materiality → camera
+        //
+        // THE CAPTURE WINDOW: progress 0.78-0.82 (4% of runtime = the snap)
+        // 95% restraint, 5% drama. Everything else serves the capture.
+        // ════════════════════════════════════════════════════════════════════════════
         const RitualController = {
-            phases: ['idle', 'initiation', 'convergence', 'lock'],
-            currentPhase: -1,
+            // ─────────────────────────────────────────
+            // MASTER STATE
+            // ─────────────────────────────────────────
+            progress: 0,              // 0→1: THE master scalar
             isRunning: false,
             isPaused: false,
             hasCompleted: false,
+            isLocked: false,          // Once true, NEVER goes back
 
-            // Timing per spec (milliseconds)
-            timing: {
-                idle: 800,          // ACT 0: Silence/poise (0.0s–0.8s)
-                initiation: 2200,   // ACT 1: Instant meaning (0.8s–3.0s)
-                convergence: 9000,  // ACT 2: Cinematic build (3.0s–12.0s)
-                lock: 4000          // ACT 3: Reality moment (12.0s–16.0s)
-            },
+            // Total ritual duration (ms) - 16 seconds
+            DURATION: 16000,
 
-            // NDA-safe micro-artifacts (fleeting, 300-700ms each)
+            // The Capture Window - where the snap happens
+            // 95% restraint / 5% capture
+            CAPTURE_START: 0.78,      // 12.48s
+            CAPTURE_PEAK: 0.80,       // 12.80s - the shutter snap
+            CAPTURE_END: 0.82,        // 13.12s
+
+            // Lock point - no return after this
+            LOCK_POINT: 0.85,
+
+            // Stamp flash timing within capture
+            stampShown: false,
+            stampHidden: false,
+
+            // NDA-safe micro-artifacts (fleeting, peripheral)
             microArtifacts: [
                 'INIT: RANDOM SEED',
                 'PIPELINE: TOKENIZER → WEIGHTS',
                 'MODE: SOVEREIGN EXECUTION',
                 'RIGOR: FROM FIRST PRINCIPLES'
             ],
+            artifactIndex: 0,
+            lastArtifactTime: 0,
 
-            // The seal stamp (shown once at lock)
+            // The seal stamp (shown once at capture)
             stampLine: 'DETERMINISM SEALED.',
-
-            // Deterministic seed for reproducibility feel
-            seed: 0xCYTHER,
 
             elements: {},
 
+            // ─────────────────────────────────────────
+            // EASING FUNCTIONS
+            // ─────────────────────────────────────────
+            easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            },
+
+            easeInOutQuart(t) {
+                return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+            },
+
+            easeOutExpo(t) {
+                return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+            },
+
+            // ─────────────────────────────────────────
+            // HIERARCHICAL DIAL DERIVATION
+            // progress → entropy/coherence → materiality → camera
+            // ─────────────────────────────────────────
+            deriveState(progress) {
+                // Clamp progress
+                const p = Math.max(0, Math.min(1, progress));
+
+                // Core dials - everything flows from progress
+                const coherence = this.easeOutCubic(p);
+                const entropy = 1 - coherence;
+                const materiality = coherence * coherence;  // coherence² - lags behind
+
+                // Seal progress - starts at 20%, completes at capture
+                let sealProgress = 0;
+                if (p > 0.15) {
+                    const sealT = (p - 0.15) / (this.CAPTURE_PEAK - 0.15);
+                    sealProgress = this.easeInOutQuart(Math.min(sealT, 1));
+                }
+
+                // Camera derives from coherence and capture window
+                const inCaptureWindow = p >= this.CAPTURE_START && p <= this.CAPTURE_END;
+                const captureIntensity = inCaptureWindow
+                    ? Math.sin((p - this.CAPTURE_START) / (this.CAPTURE_END - this.CAPTURE_START) * Math.PI)
+                    : 0;
+
+                // Iris: opens as coherence rises
+                const iris = this.easeOutExpo(Math.min(p * 1.5, 1));
+
+                // Focus: racks from 0 → 1 following coherence
+                const focus = coherence;
+
+                // Exposure: low → medium, spike at capture
+                const baseExposure = 0.15 + coherence * 0.4;
+                const exposure = baseExposure + captureIntensity * 0.25;
+
+                // Vignette: strong → subtle as coherence rises
+                const vignette = 1.0 - coherence * 0.5;
+
+                // Grain: loose → tight (restraint increases)
+                const grain = 0.15 - coherence * 0.11;
+
+                // Chromatic: only during capture window
+                const chromatic = captureIntensity * 0.6;
+
+                // Shutter snap: peak of capture window only
+                const atPeak = Math.abs(p - this.CAPTURE_PEAK) < 0.01;
+                const shutterSnap = atPeak ? 1.0 : 0;
+
+                // Lens breathing: subtle, decreases as we lock
+                const lensBreathing = (1 - coherence) * 0.4;
+
+                return {
+                    // Core state
+                    entropy,
+                    coherence,
+                    materiality,
+
+                    // Camera
+                    iris,
+                    focus,
+                    exposure,
+                    vignette,
+                    grain,
+                    chromatic,
+                    shutterSnap,
+                    lensBreathing,
+                    sealProgress,
+
+                    // Flags
+                    inCaptureWindow,
+                    captureIntensity
+                };
+            },
+
+            // ─────────────────────────────────────────
+            // APPLY STATE TO ALL SYSTEMS
+            // ─────────────────────────────────────────
+            applyState(state) {
+                const cam = window.RitualCamera;
+
+                // Update ProofState (for any listeners)
+                ProofState.update({
+                    entropy: state.entropy,
+                    coherence: state.coherence,
+                    materiality: state.materiality
+                });
+
+                // Update camera - direct assignment, no animations
+                cam.iris = state.iris;
+                cam.focus = state.focus;
+                cam.exposure = state.exposure;
+                cam.vignette = state.vignette;
+                cam.grain = state.grain;
+                cam.chromatic = state.chromatic;
+                cam.lensBreathing = state.lensBreathing;
+                cam.materiality = state.materiality;
+                cam.sealProgress = state.sealProgress;
+
+                // Shutter snap triggers on peak
+                if (state.shutterSnap > 0 && cam.shutterSnap === 0) {
+                    cam.shutterSnap = 1.0;  // Will decay via shader render loop
+                }
+
+                // Geometry opacity follows materiality
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry) {
+                    geometry.style.opacity = String(0.05 + state.materiality * 0.15);
+                }
+            },
+
+            // ─────────────────────────────────────────
+            // INITIALIZATION
+            // ─────────────────────────────────────────
             init() {
                 this.elements = {
                     stage: document.getElementById('ritualStage'),
@@ -7142,7 +7289,6 @@
                 if (this.shouldAutoPlay()) {
                     this.scheduleStart();
                 } else {
-                    // Show locked state immediately for reduced motion
                     this.showLockedState();
                 }
             },
@@ -7158,355 +7304,217 @@
             },
 
             scheduleStart() {
-                // Start after content paint using requestIdleCallback
                 const scheduleWhenIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
                 scheduleWhenIdle(() => {
-                    // Short delay to ensure content is visible first
                     setTimeout(() => this.start(), 100);
                 }, { timeout: 500 });
             },
 
-            async start() {
+            // ─────────────────────────────────────────
+            // THE RITUAL - SINGLE ANIMATION LOOP
+            // ─────────────────────────────────────────
+            start() {
                 if (this.isRunning) return;
-                this.isRunning = true;
-                this.currentPhase = -1;
-                this.hasCompleted = false;
 
                 // Reset state
+                this.isRunning = true;
+                this.progress = 0;
+                this.isLocked = false;
+                this.hasCompleted = false;
+                this.stampShown = false;
+                this.stampHidden = false;
+                this.artifactIndex = 0;
+                this.lastArtifactTime = 0;
+
+                // Reset UI elements
                 if (this.elements.cta) {
                     this.elements.cta.classList.remove('visible');
-                }
-                if (this.elements.glyphs) {
-                    this.elements.glyphs.innerHTML = '';
                 }
                 if (this.elements.stamp) {
                     this.elements.stamp.classList.remove('visible');
                 }
-
-                // ACT 0: Idle - silence/poise
-                await this.runPhase('idle');
-
-                // ACT 1: Initiation - instant meaning
-                await this.runPhase('initiation');
-
-                // ACT 2: Convergence - cinematic build
-                await this.runPhase('convergence');
-
-                // ACT 3: Lock - reality moment
-                await this.runPhase('lock');
-
-                // ACT 4: Hold - stable end frame
-                await this.showHoldState();
-
-                this.isRunning = false;
-                this.hasCompleted = true;
-            },
-
-            async runPhase(phase) {
-                this.currentPhase = this.phases.indexOf(phase);
-
-                // Emit ritual state change
-                ProofBus.emit('ritual:state', { phase, index: this.currentPhase });
-
-                // Phase-specific effects
-                switch(phase) {
-                    case 'idle':
-                        await this.triggerIdlePhase();
-                        break;
-                    case 'initiation':
-                        await this.triggerInitiationPhase();
-                        break;
-                    case 'convergence':
-                        await this.triggerConvergencePhase();
-                        break;
-                    case 'lock':
-                        await this.triggerLockPhase();
-                        break;
-                }
-
-                // Wait for phase duration (with pause support)
-                await this.waitWithPause(this.timing[phase]);
-            },
-
-            async waitWithPause(ms) {
-                const startTime = Date.now();
-                let elapsed = 0;
-
-                while (elapsed < ms) {
-                    if (this.isPaused) {
-                        await new Promise(r => setTimeout(r, 100));
-                    } else {
-                        await new Promise(r => setTimeout(r, Math.min(50, ms - elapsed)));
-                        elapsed = Date.now() - startTime;
-                    }
-                }
-            },
-
-            async triggerIdlePhase() {
-                // ACT 0: Near-black, minimal ambient hint
-                // CAMERA: Iris closed, low exposure, paper material
-                ProofState.update({ entropy: 0.05, coherence: 0, materiality: 0 });
-
-                const cam = window.RitualCamera;
-                cam.iris = 0.0;
-                cam.focus = 0.0;
-                cam.exposure = 0.15;
-                cam.vignette = 1.0;
-                cam.grain = 0.15;
-                cam.chromatic = 0.0;
-                cam.materiality = 0.0;
-                cam.sealProgress = 0.0;
-                cam.lensBreathing = 0.0;
-
-                // Hide phase indicator during idle
                 if (this.elements.phase) {
                     this.elements.phase.classList.remove('visible');
                 }
+                if (this.elements.calibration) {
+                    this.elements.calibration.classList.remove('active');
+                }
+
+                // Emit start
+                ProofBus.emit('ritual:state', { phase: 'start', progress: 0 });
+
+                // Start the single animation loop
+                this.startTime = Date.now();
+                this.pausedTime = 0;
+                this.tick();
             },
 
-            async triggerInitiationPhase() {
-                // ACT 1: Instant meaning in 3-5 seconds
-                // CAMERA: Iris opens + exposure rises slightly
-                ProofState.update({ entropy: 0.7, coherence: 0.15, materiality: 0.2 });
+            tick() {
+                if (!this.isRunning) return;
 
-                const cam = window.RitualCamera;
+                // Handle pause
+                if (this.isPaused) {
+                    this.pauseStart = this.pauseStart || Date.now();
+                    requestAnimationFrame(() => this.tick());
+                    return;
+                } else if (this.pauseStart) {
+                    this.pausedTime += Date.now() - this.pauseStart;
+                    this.pauseStart = null;
+                }
 
-                // Animate iris opening over 1.5s
-                this.animateCamera('iris', 0.0, 1.0, 1500);
-                this.animateCamera('exposure', 0.15, 0.4, 1500);
-                this.animateCamera('focus', 0.0, 0.3, 2000);
-                this.animateCamera('materiality', 0.0, 0.15, 2000);
-                cam.lensBreathing = 0.3;
+                // Calculate progress
+                const elapsed = Date.now() - this.startTime - this.pausedTime;
+                this.progress = Math.min(elapsed / this.DURATION, 1);
 
-                // Gentle particle emergence
-                if (typeof CausalTraces !== 'undefined') {
+                // Derive and apply state
+                const state = this.deriveState(this.progress);
+                this.applyState(state);
+
+                // ─────────────────────────────────────────
+                // PHASE-SPECIFIC EVENTS (minimal, triggered once)
+                // ─────────────────────────────────────────
+
+                // Micro-artifacts during convergence (progress 0.2-0.7)
+                if (this.progress > 0.2 && this.progress < 0.7) {
+                    const now = Date.now();
+                    if (now - this.lastArtifactTime > 2000 && this.artifactIndex < this.microArtifacts.length) {
+                        this.showMicroArtifact(this.microArtifacts[this.artifactIndex]);
+                        this.artifactIndex++;
+                        this.lastArtifactTime = now;
+                    }
+                }
+
+                // Calibration lines during convergence
+                if (this.progress > 0.25 && this.progress < 0.75) {
+                    if (this.elements.calibration && !this.elements.calibration.classList.contains('active')) {
+                        this.elements.calibration.classList.add('active');
+                    }
+                } else if (this.elements.calibration) {
+                    this.elements.calibration.classList.remove('active');
+                }
+
+                // Crown assembly at midpoint
+                if (this.progress > 0.5 && this.progress < 0.52 && typeof CrownSync !== 'undefined') {
+                    CrownSync.animateStep(4, 11);
+                }
+
+                // Particles during build
+                if (this.progress > 0.15 && this.progress < 0.2 && typeof CausalTraces !== 'undefined') {
                     CausalTraces.burst(8);
                 }
-
-                // Show sacred geometry faintly
-                const geometry = document.querySelector('.sacred-geometry');
-                if (geometry) {
-                    geometry.style.opacity = '0.08';
-                }
-            },
-
-            async triggerConvergencePhase() {
-                // ACT 2: Chaos collapses, geometry aligns
-                // CAMERA: Focus rack slowly, lens breathing, glass phase, seal begins
-                ProofState.update({ entropy: 0.5, coherence: 0.4, materiality: 0.4 });
-
-                const cam = window.RitualCamera;
-
-                // Focus rack from background to foreground over convergence
-                this.animateCamera('focus', 0.3, 0.9, 8000);
-                this.animateCamera('exposure', 0.4, 0.55, 6000);
-                this.animateCamera('materiality', 0.15, 0.5, 4000);
-                this.animateCamera('vignette', 1.0, 0.7, 5000);
-                cam.lensBreathing = 0.5;
-
-                // Begin seal geometry drawing (etching animation)
-                this.animateCamera('sealProgress', 0.0, 0.6, 8000);
-
-                // Show calibration lines
-                if (this.elements.calibration) {
-                    this.elements.calibration.classList.add('active');
-                }
-
-                // Sacred geometry intensifies
-                const geometry = document.querySelector('.sacred-geometry');
-                if (geometry) {
-                    geometry.style.opacity = '0.15';
-                    geometry.style.transition = 'opacity 2s ease';
-                }
-
-                // Spawn micro-artifacts
-                this.spawnMicroArtifacts();
-
-                // Converging particles
-                if (typeof CausalTraces !== 'undefined') {
+                if (this.progress > 0.4 && this.progress < 0.42 && typeof CausalTraces !== 'undefined') {
                     CausalTraces.converge(12);
                 }
+                if (this.progress > 0.65 && this.progress < 0.67 && typeof CausalTraces !== 'undefined') {
+                    CausalTraces.converge(8);
+                }
 
-                // Crown assembly + material phase shift midway
-                setTimeout(() => {
+                // ─────────────────────────────────────────
+                // THE CAPTURE - show stamp at peak
+                // ─────────────────────────────────────────
+                if (this.progress >= this.CAPTURE_PEAK && !this.stampShown) {
+                    this.stampShown = true;
+
+                    // Complete crown seal
                     if (typeof CrownSync !== 'undefined') {
-                        CrownSync.animateStep(4, 11);
+                        CrownSync.complete();
                     }
-                    ProofState.update({ entropy: 0.3, coherence: 0.6, materiality: 0.6 });
-                    this.animateCamera('materiality', 0.5, 0.75, 3000);
-                }, 4000);
 
-                // Further convergence + grain tightens
-                setTimeout(() => {
-                    ProofState.update({ entropy: 0.15, coherence: 0.8, materiality: 0.8 });
-                    this.animateCamera('grain', 0.12, 0.08, 2000);
-                    if (typeof CausalTraces !== 'undefined') {
-                        CausalTraces.converge(8);
+                    // Crystallize
+                    const crystal = document.getElementById('witnessCrystal');
+                    if (crystal) {
+                        crystal.classList.add('locked');
                     }
-                    if (this.elements.calibration) {
-                        this.elements.calibration.classList.remove('active');
-                    }
-                }, 7000);
-            },
 
-            async triggerLockPhase() {
-                // ACT 3: The reality moment - irreversible seal
-                // CAMERA: Shutter snap + exposure clamp + chromatic split + metal phase
-                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
-
-                const cam = window.RitualCamera;
-
-                // Complete seal geometry
-                this.animateCamera('sealProgress', 0.6, 1.0, 800);
-                this.animateCamera('materiality', 0.75, 1.0, 1000);
-                this.animateCamera('focus', 0.9, 1.0, 500);
-                this.animateCamera('exposure', 0.55, 0.65, 1000);
-                this.animateCamera('vignette', 0.7, 0.5, 1500);
-                this.animateCamera('grain', 0.08, 0.05, 1000);
-                cam.lensBreathing = 0.1;
-
-                // SHUTTER SNAP - the irreversible moment (800ms in)
-                setTimeout(() => {
-                    cam.shutterSnap = 1.0;  // Flash + chromatic aberration
-                    cam.chromatic = 0.8;
-
-                    // Decay chromatic after snap
-                    setTimeout(() => {
-                        this.animateCamera('chromatic', 0.8, 0.0, 1500);
-                    }, 100);
-                }, 800);
-
-                // Complete crown seal
-                if (typeof CrownSync !== 'undefined') {
-                    CrownSync.complete();
-                }
-
-                // Crystallize
-                const crystal = document.getElementById('witnessCrystal');
-                if (crystal) {
-                    crystal.classList.add('locked');
-                }
-
-                // Lock sacred geometry (no rotation)
-                const geometry = document.querySelector('.sacred-geometry');
-                if (geometry) {
-                    geometry.style.animation = 'none';
-                    geometry.style.opacity = '0.2';
-                }
-
-                // Show stamp line after shutter snap
-                setTimeout(() => {
+                    // Show stamp
                     if (this.elements.stamp) {
                         this.elements.stamp.textContent = this.stampLine;
                         this.elements.stamp.classList.add('visible');
-                    } else if (this.elements.message) {
-                        this.elements.message.textContent = this.stampLine;
-                        this.elements.message.classList.add('visible');
                     }
-                }, 1000);
+                }
 
-                // Fade stamp after display
-                setTimeout(() => {
+                // Fade stamp shortly after capture
+                if (this.progress >= this.CAPTURE_END + 0.08 && !this.stampHidden) {
+                    this.stampHidden = true;
                     if (this.elements.stamp) {
                         this.elements.stamp.classList.remove('visible');
-                    } else if (this.elements.message) {
-                        this.elements.message.classList.remove('visible');
                     }
-                }, 2800);
+                }
+
+                // ─────────────────────────────────────────
+                // THE LOCK - irreversible commit
+                // ─────────────────────────────────────────
+                if (this.progress >= this.LOCK_POINT && !this.isLocked) {
+                    this.isLocked = true;
+
+                    // Lock sacred geometry (stop rotation)
+                    const geometry = document.querySelector('.sacred-geometry');
+                    if (geometry) {
+                        geometry.style.animation = 'none';
+                    }
+
+                    // Hide phase indicator
+                    if (this.elements.phase) {
+                        this.elements.phase.classList.remove('visible');
+                    }
+
+                    ProofBus.emit('ritual:state', { phase: 'locked', progress: this.progress });
+                }
+
+                // ─────────────────────────────────────────
+                // COMPLETION - stable hold state
+                // ─────────────────────────────────────────
+                if (this.progress >= 1) {
+                    this.isRunning = false;
+                    this.hasCompleted = true;
+
+                    // Final state - seal becomes subtle watermark
+                    const cam = window.RitualCamera;
+                    cam.sealProgress = 0.4;
+                    cam.lensBreathing = 0.1;
+
+                    // Show CTA
+                    setTimeout(() => {
+                        if (this.elements.cta) {
+                            this.elements.cta.classList.add('visible');
+                        }
+                    }, 500);
+
+                    ProofBus.emit('ritual:complete', { completed: true });
+                    return;
+                }
+
+                // Continue the loop
+                requestAnimationFrame(() => this.tick());
             },
 
-            // Smooth camera dial animation helper
-            animateCamera(prop, from, to, duration) {
-                const cam = window.RitualCamera;
-                const startTime = Date.now();
-
-                const animate = () => {
-                    const elapsed = Date.now() - startTime;
-                    const t = Math.min(elapsed / duration, 1);
-                    // Ease out cubic
-                    const eased = 1 - Math.pow(1 - t, 3);
-                    cam[prop] = from + (to - from) * eased;
-
-                    if (t < 1) {
-                        requestAnimationFrame(animate);
-                    }
-                };
-                animate();
-            },
-
-            spawnMicroArtifacts() {
-                // NDA-safe micro-artifacts: fleeting, 300-700ms each, peripheral, faint
+            showMicroArtifact(text) {
                 if (!this.elements.phase) return;
 
-                this.microArtifacts.forEach((artifact, i) => {
-                    setTimeout(() => {
-                        if (this.elements.phase && this.currentPhase === 2) {
-                            this.elements.phase.textContent = artifact;
-                            this.elements.phase.setAttribute('data-phase', 'converge');
-                            this.elements.phase.classList.add('visible');
+                this.elements.phase.textContent = text;
+                this.elements.phase.setAttribute('data-phase', 'converge');
+                this.elements.phase.classList.add('visible');
 
-                            // Fade out after 400-600ms
-                            setTimeout(() => {
-                                if (this.elements.phase) {
-                                    this.elements.phase.classList.remove('visible');
-                                }
-                            }, 400 + Math.random() * 200);
-                        }
-                    }, i * 2000 + Math.random() * 500);
-                });
-            },
-
-            async showHoldState() {
-                // ACT 4: Stable end frame with one CTA
-                // CAMERA: Settled state - seal becomes watermark
-
-                const cam = window.RitualCamera;
-
-                // Hide phase indicator
-                if (this.elements.phase) {
-                    this.elements.phase.classList.remove('visible');
-                }
-
-                // Ensure stable visual state
-                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
-
-                // Final camera state - subtle ambient
-                cam.iris = 1.0;
-                cam.focus = 1.0;
-                cam.exposure = 0.55;
-                cam.vignette = 0.5;
-                cam.grain = 0.04;
-                cam.chromatic = 0.0;
-                cam.materiality = 1.0;
-                cam.sealProgress = 0.4;  // Seal becomes subtle watermark
-                cam.lensBreathing = 0.15;  // Very subtle breathing
-
-                // Wait a moment before showing CTA
-                await new Promise(r => setTimeout(r, 500));
-
-                // Show CTA
-                if (this.elements.cta) {
-                    this.elements.cta.classList.add('visible');
-                }
-
-                ProofBus.emit('ritual:complete', { completed: true });
+                // Fade out after 400-600ms
+                setTimeout(() => {
+                    if (this.elements.phase) {
+                        this.elements.phase.classList.remove('visible');
+                    }
+                }, 400 + Math.random() * 200);
             },
 
             showLockedState() {
                 // For reduced motion - jump to stable end state immediately
-                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
+                this.progress = 1;
+                this.isLocked = true;
+                this.hasCompleted = true;
 
-                // Set camera to final locked state
-                const cam = window.RitualCamera;
-                cam.iris = 1.0;
-                cam.focus = 1.0;
-                cam.exposure = 0.55;
-                cam.vignette = 0.5;
-                cam.grain = 0.04;
-                cam.chromatic = 0.0;
-                cam.materiality = 1.0;
-                cam.sealProgress = 0.4;
-                cam.lensBreathing = 0.0;
+                const state = this.deriveState(1);
+                this.applyState(state);
+
+                // Seal as watermark
+                window.RitualCamera.sealProgress = 0.4;
+                window.RitualCamera.lensBreathing = 0;
 
                 if (typeof CrownSync !== 'undefined') {
                     CrownSync.complete();
@@ -7523,8 +7531,6 @@
                 if (this.elements.cta) {
                     this.elements.cta.classList.add('visible');
                 }
-
-                this.hasCompleted = true;
             }
         };
 
