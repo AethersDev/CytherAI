@@ -5482,8 +5482,23 @@
         }
     </script>
 
-    <!-- CONSCIOUSNESS SHADER -->
+    <!-- REALITY DEVICE SHADER - Cinema-grade visuals -->
+    <!-- Paradigm Shift: From "WebGL art" to "filmed machine" -->
     <script>
+        // Global camera and material state for shader communication
+        window.RitualCamera = {
+            iris: 0.0,           // 0=closed, 1=open (aperture)
+            focus: 0.0,          // 0=far, 1=near (focus plane)
+            exposure: 0.3,       // 0=dark, 1=bright
+            vignette: 0.8,       // vignette intensity
+            grain: 0.12,         // film grain amount
+            chromatic: 0.0,      // chromatic aberration
+            shutterSnap: 0.0,    // shutter flash (0-1, decays)
+            materiality: 0.0,    // 0=paper, 0.5=glass, 1=metal
+            sealProgress: 0.0,   // 0=hidden, 1=fully drawn
+            lensBreathing: 0.0   // subtle FOV micro-changes
+        };
+
         (function() {
             const canvas = document.getElementById('consciousnessShader');
             if (!canvas || isMobile) return;
@@ -5493,12 +5508,36 @@
 
             const vertexShader = `attribute vec2 position; void main() { gl_Position = vec4(position, 0.0, 1.0); }`;
 
+            // ═══════════════════════════════════════════════════════════════
+            // REALITY DEVICE SHADER
+            // Cinema-grade visuals: Camera language + Material phases + Seal geometry
+            // ═══════════════════════════════════════════════════════════════
             const fragmentShader = `
                 precision highp float;
                 uniform vec2 resolution;
                 uniform float time;
                 uniform vec2 mouse;
 
+                // Camera language uniforms
+                uniform float u_iris;
+                uniform float u_focus;
+                uniform float u_exposure;
+                uniform float u_vignette;
+                uniform float u_grain;
+                uniform float u_chromatic;
+                uniform float u_shutter;
+                uniform float u_breathing;
+
+                // Material phase uniforms
+                uniform float u_materiality;
+
+                // Seal geometry uniforms
+                uniform float u_seal;
+                uniform float u_seed;
+
+                // ═══════════════════════════════════════
+                // NOISE FUNCTIONS
+                // ═══════════════════════════════════════
                 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                 vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                 vec3 permute(vec3 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -5525,10 +5564,13 @@
                     return 130.0 * dot(m, g);
                 }
 
+                float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
+                float hash1(float n) { return fract(sin(n) * 43758.5453123); }
+
                 float fbm(vec2 p) {
                     float value = 0.0;
                     float amplitude = 0.5;
-                    for(int i = 0; i < 6; i++) {
+                    for(int i = 0; i < 5; i++) {
                         value += amplitude * snoise(p);
                         p *= 2.0;
                         amplitude *= 0.5;
@@ -5536,57 +5578,215 @@
                     return value;
                 }
 
+                // ═══════════════════════════════════════
+                // SDF PRIMITIVES FOR SEAL GEOMETRY
+                // ═══════════════════════════════════════
+                float sdCircle(vec2 p, float r) { return length(p) - r; }
+                float sdLine(vec2 p, vec2 a, vec2 b) {
+                    vec2 pa = p - a, ba = b - a;
+                    float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
+                    return length(pa - ba * h);
+                }
+
+                // ═══════════════════════════════════════
+                // DETERMINISTIC SEAL GEOMETRY
+                // Unique sigil from seed - razor sharp SDF
+                // ═══════════════════════════════════════
+                float sealGeometry(vec2 uv, float seed, float progress) {
+                    if (progress <= 0.0) return 0.0;
+
+                    float d = 1.0;
+                    vec2 p = uv * 2.5;
+
+                    // Generate deterministic radial strokes from seed
+                    float numStrokes = 6.0 + floor(hash1(seed) * 4.0);
+                    float baseAngle = hash1(seed + 1.0) * 6.28318;
+
+                    for (float i = 0.0; i < 10.0; i++) {
+                        if (i >= numStrokes) break;
+
+                        float strokeProgress = clamp((progress - i / numStrokes) * numStrokes, 0.0, 1.0);
+                        if (strokeProgress <= 0.0) continue;
+
+                        float angle = baseAngle + i * 6.28318 / numStrokes + hash1(seed + i * 0.1) * 0.3;
+                        float innerR = 0.15 + hash1(seed + i * 0.2) * 0.1;
+                        float outerR = 0.35 + hash1(seed + i * 0.3) * 0.2;
+
+                        float drawR = innerR + (outerR - innerR) * strokeProgress;
+
+                        vec2 dir = vec2(cos(angle), sin(angle));
+                        vec2 a = dir * innerR;
+                        vec2 b = dir * drawR;
+
+                        d = min(d, sdLine(p, a, b));
+                    }
+
+                    // Central ring
+                    float ringProgress = clamp(progress * 1.5, 0.0, 1.0);
+                    d = min(d, abs(sdCircle(p, 0.12 * ringProgress)) - 0.008);
+
+                    // Outer ring (draws last)
+                    float outerProgress = clamp((progress - 0.7) * 3.33, 0.0, 1.0);
+                    if (outerProgress > 0.0) {
+                        d = min(d, abs(sdCircle(p, 0.45 * outerProgress)) - 0.004);
+                    }
+
+                    // Lambda glyph at center
+                    float lambdaProgress = clamp((progress - 0.8) * 5.0, 0.0, 1.0);
+                    if (lambdaProgress > 0.0) {
+                        vec2 lp = p * 8.0;
+                        float lambda = sdLine(lp, vec2(-0.3, -0.4) * lambdaProgress, vec2(0.0, 0.4) * lambdaProgress);
+                        lambda = min(lambda, sdLine(lp, vec2(0.0, 0.4) * lambdaProgress, vec2(0.3, -0.4) * lambdaProgress));
+                        d = min(d, lambda / 8.0);
+                    }
+
+                    // Sharp anti-aliased edge
+                    float lineWidth = 0.008 + 0.004 * (1.0 - u_materiality);
+                    return smoothstep(lineWidth, lineWidth * 0.3, d);
+                }
+
+                // ═══════════════════════════════════════
+                // MATERIAL PHASES
+                // Paper (0) → Glass (0.5) → Metal (1)
+                // ═══════════════════════════════════════
+                vec3 paperMaterial(vec2 uv, float t) {
+                    float fiber = fbm(uv * 40.0 + t * 0.01) * 0.15;
+                    float lines = smoothstep(0.48, 0.5, fract(uv.x * 30.0 + snoise(uv * 5.0) * 0.1));
+                    lines += smoothstep(0.48, 0.5, fract(uv.y * 30.0 + snoise(uv.yx * 5.0) * 0.1));
+                    lines *= 0.08;
+                    vec3 paperBase = vec3(0.06, 0.055, 0.045);
+                    vec3 inkColor = vec3(0.15, 0.12, 0.08);
+                    return paperBase + fiber * vec3(0.02) + lines * inkColor;
+                }
+
+                vec3 glassMaterial(vec2 uv, float t, vec3 baseColor) {
+                    vec2 refractUV = uv + snoise(uv * 3.0 + t * 0.05) * 0.02;
+                    float caustic = pow(snoise(refractUV * 8.0 + t * 0.1) * 0.5 + 0.5, 3.0);
+                    float internalGlow = exp(-length(uv) * 2.0) * 0.3;
+                    float edge = pow(length(uv), 2.0);
+                    vec3 glassColor = baseColor * (1.0 + caustic * 0.4);
+                    glassColor += vec3(0.8, 0.7, 0.5) * internalGlow;
+                    glassColor = mix(glassColor, vec3(0.9, 0.85, 0.7), edge * 0.2);
+                    return glassColor;
+                }
+
+                vec3 metalMaterial(vec2 uv, float t, vec3 baseColor) {
+                    float d = length(uv);
+                    vec2 lightDir = normalize(vec2(0.3, 0.5));
+                    float specular = pow(max(0.0, dot(normalize(uv), lightDir)), 64.0);
+                    float edgeSpec = pow(1.0 - abs(d - 0.3), 8.0) * 0.5;
+                    float brushed = snoise(uv * vec2(2.0, 40.0) + t * 0.02) * 0.05;
+                    vec3 metalColor = baseColor * (1.0 + brushed);
+                    metalColor += vec3(1.0, 0.95, 0.8) * specular * 0.6;
+                    metalColor += vec3(0.9, 0.8, 0.6) * edgeSpec;
+                    return metalColor;
+                }
+
+                // ═══════════════════════════════════════
+                // CAMERA EFFECTS
+                // ═══════════════════════════════════════
+                vec3 chromaticAberration(vec2 uv, vec3 color, float amount) {
+                    if (amount <= 0.001) return color;
+                    vec2 dir = uv * amount * 0.02;
+                    float r = color.r * (1.0 + length(dir) * 2.0);
+                    float b = color.b * (1.0 - length(dir) * 1.5);
+                    return vec3(r, color.g, b);
+                }
+
+                float filmGrain(vec2 uv, float t, float amount) {
+                    return (hash(uv * 1000.0 + t * 100.0) - 0.5) * amount;
+                }
+
+                // ═══════════════════════════════════════
+                // MAIN RENDER
+                // ═══════════════════════════════════════
                 void main() {
                     vec2 uv = (gl_FragCoord.xy - 0.5 * resolution) / min(resolution.x, resolution.y);
-                    // SPEC: "lava lamp at 5% speed" - low-frequency temporal evolution
-                    float t = time * 0.006;  // Reduced from 0.12 → extremely slow evolution
-                    vec2 mouseInfluence = (mouse - 0.5) * 0.1;  // Reduced mouse influence
-                    uv += mouseInfluence * 0.03;
+                    vec2 screenUV = gl_FragCoord.xy / resolution;
+
+                    // Lens breathing
+                    float breath = sin(time * 0.3) * u_breathing * 0.02;
+                    uv *= 1.0 + breath;
+
+                    float t = time * 0.008;
+
+                    // ═══════════════════════════════════════
+                    // BASE CONSCIOUSNESS FIELD
+                    // ═══════════════════════════════════════
                     vec2 p = uv * 2.2;
+                    vec2 flow1 = vec2(fbm(p + t * 0.5), fbm(p - t * 0.4));
+                    vec2 flow2 = vec2(fbm(p - t * 0.3 + 10.0), fbm(p + t * 0.35 + 10.0));
 
-                    // Ultra-slow flow patterns
-                    vec2 flow1 = vec2(fbm(p + t * 0.02), fbm(p - t * 0.015));
-                    vec2 flow2 = vec2(fbm(p - t * 0.01 + 10.0), fbm(p + t * 0.012 + 10.0));
+                    float pattern1 = fbm(p + flow1 * 0.55);
+                    float pattern2 = fbm(p - flow2 * 0.35);
+                    float consciousness = pattern1 * 0.5 + pattern2 * 0.3 + 0.2;
 
-                    float pattern1 = fbm(p + flow1 * 0.55 + t * 0.005);
-                    float pattern2 = fbm(p - flow2 * 0.35 - t * 0.003);
-                    float pattern3 = fbm(p * 1.4 + flow1 * 0.25);
-
-                    float d = length(uv);
-                    // SPEC: No fast pulsation - extremely slow wave motion
-                    float waves = sin(d * 9.0 - t * 0.15 + pattern1 * 3.5) * 0.5 + 0.5;
-                    waves += sin(d * 14.0 + t * 0.12 - pattern2 * 2.5) * 0.25;
-                    waves += sin(d * 5.5 - t * 0.08 + pattern3 * 1.8) * 0.15;
-                    
-                    float consciousness = pattern1 * 0.35 + pattern2 * 0.28 + pattern3 * 0.17 + waves * 0.2;
-                    consciousness = consciousness * 0.5 + 0.5;
-                    
-                    float depth = exp(-d * 1.6);
-                    float glow = exp(-d * 2.8) * 0.55;
-                    float vignette = 1.0 - d * 0.35;
-                    
+                    // ═══════════════════════════════════════
+                    // MATERIAL PHASE BLENDING
+                    // ═══════════════════════════════════════
                     vec3 goldShadow = vec3(0.24, 0.18, 0.04);
-                    vec3 goldDim = vec3(0.42, 0.35, 0.18);
-                    vec3 gold = vec3(0.72, 0.58, 0.16);
                     vec3 goldCore = vec3(0.83, 0.69, 0.22);
-                    vec3 goldBright = vec3(0.91, 0.77, 0.28);
-                    vec3 goldLight = vec3(0.96, 0.84, 0.46);
-                    
-                    vec3 color1 = mix(goldShadow, goldDim, consciousness);
-                    vec3 color2 = mix(goldDim, gold, consciousness * 1.15);
-                    vec3 color3 = mix(gold, goldCore, waves);
-                    vec3 color4 = mix(goldCore, goldBright, pattern3 * 0.5 + 0.5);
-                    
-                    vec3 finalColor = mix(color1, color2, pattern1 * 0.55 + 0.45);
-                    finalColor = mix(finalColor, color3, pattern2 * 0.35);
-                    finalColor = mix(finalColor, color4, glow * 0.45);
-                    
-                    float highlight = pow(consciousness, 3.5) * depth;
-                    finalColor += highlight * goldLight * 0.28;
-                    finalColor += glow * goldBright * 0.45;
-                    finalColor *= (0.38 + depth * 0.62) * vignette;
-                    
-                    gl_FragColor = vec4(finalColor, 1.0);
+                    vec3 gold = vec3(0.72, 0.58, 0.16);
+
+                    vec3 baseColor = mix(goldShadow, goldCore, consciousness);
+
+                    vec3 paperPhase = paperMaterial(uv, t);
+                    vec3 glassPhase = glassMaterial(uv, t, baseColor);
+                    vec3 metalPhase = metalMaterial(uv, t, baseColor);
+
+                    vec3 materialColor;
+                    if (u_materiality < 0.5) {
+                        materialColor = mix(paperPhase, glassPhase, u_materiality * 2.0);
+                    } else {
+                        materialColor = mix(glassPhase, metalPhase, (u_materiality - 0.5) * 2.0);
+                    }
+
+                    vec3 color = mix(baseColor * consciousness, materialColor, u_materiality * 0.7);
+
+                    // ═══════════════════════════════════════
+                    // SEAL GEOMETRY OVERLAY
+                    // ═══════════════════════════════════════
+                    float seal = sealGeometry(uv, u_seed, u_seal);
+                    vec3 sealColor = mix(gold, vec3(1.0, 0.95, 0.85), u_materiality);
+                    float emboss = u_shutter * seal * 0.3;
+                    sealColor += emboss * vec3(1.0, 0.9, 0.7);
+                    color = mix(color, sealColor, seal * u_seal);
+
+                    // ═══════════════════════════════════════
+                    // CAMERA LANGUAGE
+                    // ═══════════════════════════════════════
+
+                    // Iris / Aperture opening
+                    float irisRadius = mix(0.0, 1.5, u_iris);
+                    float irisMask = smoothstep(irisRadius, irisRadius + 0.1, length(uv) * 1.2);
+                    color = mix(color, vec3(0.0), irisMask * (1.0 - u_iris));
+
+                    // Focus rack simulation
+                    float dofBlur = abs(length(uv) - u_focus * 0.5);
+                    vec3 blurredColor = mix(color, vec3(dot(color, vec3(0.3, 0.5, 0.2))), dofBlur * 0.3);
+                    color = mix(color, blurredColor, (1.0 - u_focus) * 0.4);
+
+                    // Exposure
+                    color *= u_exposure * 2.5 + 0.3;
+
+                    // Shutter snap (micro strobe + chromatic split)
+                    color += u_shutter * vec3(1.0, 0.98, 0.95) * 0.5;
+
+                    // Vignette
+                    float vignette = 1.0 - pow(length(uv) * u_vignette, 2.5);
+                    color *= vignette;
+
+                    // Chromatic aberration
+                    color = chromaticAberration(uv, color, u_chromatic);
+
+                    // Film grain
+                    color += filmGrain(screenUV, time, u_grain);
+
+                    // Tone mapping
+                    color = color / (color + vec3(1.0));
+                    color = pow(color, vec3(1.0 / 2.2));
+
+                    gl_FragColor = vec4(color, 1.0);
                 }
             `;
 
@@ -5594,7 +5794,11 @@
                 const shader = gl.createShader(type);
                 gl.shaderSource(shader, src);
                 gl.compileShader(shader);
-                return gl.getShaderParameter(shader, gl.COMPILE_STATUS) ? shader : null;
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.warn('Shader:', gl.getShaderInfoLog(shader));
+                    return null;
+                }
+                return shader;
             }
 
             const vs = compile(vertexShader, gl.VERTEX_SHADER);
@@ -5611,10 +5815,26 @@
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
             gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
+            // Standard uniforms
             const posLoc = gl.getAttribLocation(program, 'position');
             const resLoc = gl.getUniformLocation(program, 'resolution');
             const timeLoc = gl.getUniformLocation(program, 'time');
             const mouseLoc = gl.getUniformLocation(program, 'mouse');
+
+            // Camera uniforms
+            const irisLoc = gl.getUniformLocation(program, 'u_iris');
+            const focusLoc = gl.getUniformLocation(program, 'u_focus');
+            const exposureLoc = gl.getUniformLocation(program, 'u_exposure');
+            const vignetteLoc = gl.getUniformLocation(program, 'u_vignette');
+            const grainLoc = gl.getUniformLocation(program, 'u_grain');
+            const chromaticLoc = gl.getUniformLocation(program, 'u_chromatic');
+            const shutterLoc = gl.getUniformLocation(program, 'u_shutter');
+            const breathingLoc = gl.getUniformLocation(program, 'u_breathing');
+
+            // Material & seal uniforms
+            const materialityLoc = gl.getUniformLocation(program, 'u_materiality');
+            const sealLoc = gl.getUniformLocation(program, 'u_seal');
+            const seedLoc = gl.getUniformLocation(program, 'u_seed');
 
             let mouseX = 0.5, mouseY = 0.5;
             document.addEventListener('mousemove', (e) => {
@@ -5631,10 +5851,32 @@
             window.addEventListener('resize', resize, { passive: true });
 
             function render(time) {
+                const cam = window.RitualCamera;
+
                 gl.useProgram(program);
                 gl.uniform2f(resLoc, canvas.width, canvas.height);
                 gl.uniform1f(timeLoc, time * 0.001);
                 gl.uniform2f(mouseLoc, mouseX, mouseY);
+
+                // Camera language
+                gl.uniform1f(irisLoc, cam.iris);
+                gl.uniform1f(focusLoc, cam.focus);
+                gl.uniform1f(exposureLoc, cam.exposure);
+                gl.uniform1f(vignetteLoc, cam.vignette);
+                gl.uniform1f(grainLoc, cam.grain);
+                gl.uniform1f(chromaticLoc, cam.chromatic);
+                gl.uniform1f(shutterLoc, cam.shutterSnap);
+                gl.uniform1f(breathingLoc, cam.lensBreathing);
+
+                // Material & seal
+                gl.uniform1f(materialityLoc, cam.materiality);
+                gl.uniform1f(sealLoc, cam.sealProgress);
+                gl.uniform1f(seedLoc, 0.42);
+
+                // Decay shutter snap
+                cam.shutterSnap *= 0.85;
+                if (cam.shutterSnap < 0.01) cam.shutterSnap = 0;
+
                 gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
                 gl.enableVertexAttribArray(posLoc);
                 gl.vertexAttribPointer(posLoc, 2, gl.FLOAT, false, 0, 0);
@@ -7002,26 +7244,39 @@
 
             async triggerIdlePhase() {
                 // ACT 0: Near-black, minimal ambient hint
+                // CAMERA: Iris closed, low exposure, paper material
                 ProofState.update({ entropy: 0.05, coherence: 0, materiality: 0 });
+
+                const cam = window.RitualCamera;
+                cam.iris = 0.0;
+                cam.focus = 0.0;
+                cam.exposure = 0.15;
+                cam.vignette = 1.0;
+                cam.grain = 0.15;
+                cam.chromatic = 0.0;
+                cam.materiality = 0.0;
+                cam.sealProgress = 0.0;
+                cam.lensBreathing = 0.0;
 
                 // Hide phase indicator during idle
                 if (this.elements.phase) {
                     this.elements.phase.classList.remove('visible');
                 }
-
-                // Ensure visuals are dim
-                const shader = document.getElementById('consciousnessShader');
-                if (shader) {
-                    shader.style.opacity = '0.1';
-                }
             },
 
             async triggerInitiationPhase() {
                 // ACT 1: Instant meaning in 3-5 seconds
-                // Show headline/subline (already visible via CSS animation)
-
-                // Subtle field activation
+                // CAMERA: Iris opens + exposure rises slightly
                 ProofState.update({ entropy: 0.7, coherence: 0.15, materiality: 0.2 });
+
+                const cam = window.RitualCamera;
+
+                // Animate iris opening over 1.5s
+                this.animateCamera('iris', 0.0, 1.0, 1500);
+                this.animateCamera('exposure', 0.15, 0.4, 1500);
+                this.animateCamera('focus', 0.0, 0.3, 2000);
+                this.animateCamera('materiality', 0.0, 0.15, 2000);
+                cam.lensBreathing = 0.3;
 
                 // Gentle particle emergence
                 if (typeof CausalTraces !== 'undefined') {
@@ -7037,13 +7292,25 @@
 
             async triggerConvergencePhase() {
                 // ACT 2: Chaos collapses, geometry aligns
-                // Show calibration lines as calibration marks
+                // CAMERA: Focus rack slowly, lens breathing, glass phase, seal begins
+                ProofState.update({ entropy: 0.5, coherence: 0.4, materiality: 0.4 });
+
+                const cam = window.RitualCamera;
+
+                // Focus rack from background to foreground over convergence
+                this.animateCamera('focus', 0.3, 0.9, 8000);
+                this.animateCamera('exposure', 0.4, 0.55, 6000);
+                this.animateCamera('materiality', 0.15, 0.5, 4000);
+                this.animateCamera('vignette', 1.0, 0.7, 5000);
+                cam.lensBreathing = 0.5;
+
+                // Begin seal geometry drawing (etching animation)
+                this.animateCamera('sealProgress', 0.0, 0.6, 8000);
+
+                // Show calibration lines
                 if (this.elements.calibration) {
                     this.elements.calibration.classList.add('active');
                 }
-
-                // Update dials progressively
-                ProofState.update({ entropy: 0.5, coherence: 0.4, materiality: 0.4 });
 
                 // Sacred geometry intensifies
                 const geometry = document.querySelector('.sacred-geometry');
@@ -7052,7 +7319,7 @@
                     geometry.style.transition = 'opacity 2s ease';
                 }
 
-                // Spawn micro-artifacts (fleeting, peripheral, faint)
+                // Spawn micro-artifacts
                 this.spawnMicroArtifacts();
 
                 // Converging particles
@@ -7060,17 +7327,19 @@
                     CausalTraces.converge(12);
                 }
 
-                // Crown begins assembly midway
+                // Crown assembly + material phase shift midway
                 setTimeout(() => {
                     if (typeof CrownSync !== 'undefined') {
                         CrownSync.animateStep(4, 11);
                     }
                     ProofState.update({ entropy: 0.3, coherence: 0.6, materiality: 0.6 });
+                    this.animateCamera('materiality', 0.5, 0.75, 3000);
                 }, 4000);
 
-                // Further convergence
+                // Further convergence + grain tightens
                 setTimeout(() => {
                     ProofState.update({ entropy: 0.15, coherence: 0.8, materiality: 0.8 });
+                    this.animateCamera('grain', 0.12, 0.08, 2000);
                     if (typeof CausalTraces !== 'undefined') {
                         CausalTraces.converge(8);
                     }
@@ -7082,10 +7351,32 @@
 
             async triggerLockPhase() {
                 // ACT 3: The reality moment - irreversible seal
-                // Damping to near-zero, contrast tightens, glow narrows
+                // CAMERA: Shutter snap + exposure clamp + chromatic split + metal phase
                 ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
 
-                // Complete crown with single seal moment
+                const cam = window.RitualCamera;
+
+                // Complete seal geometry
+                this.animateCamera('sealProgress', 0.6, 1.0, 800);
+                this.animateCamera('materiality', 0.75, 1.0, 1000);
+                this.animateCamera('focus', 0.9, 1.0, 500);
+                this.animateCamera('exposure', 0.55, 0.65, 1000);
+                this.animateCamera('vignette', 0.7, 0.5, 1500);
+                this.animateCamera('grain', 0.08, 0.05, 1000);
+                cam.lensBreathing = 0.1;
+
+                // SHUTTER SNAP - the irreversible moment (800ms in)
+                setTimeout(() => {
+                    cam.shutterSnap = 1.0;  // Flash + chromatic aberration
+                    cam.chromatic = 0.8;
+
+                    // Decay chromatic after snap
+                    setTimeout(() => {
+                        this.animateCamera('chromatic', 0.8, 0.0, 1500);
+                    }, 100);
+                }, 800);
+
+                // Complete crown seal
                 if (typeof CrownSync !== 'undefined') {
                     CrownSync.complete();
                 }
@@ -7096,14 +7387,14 @@
                     crystal.classList.add('locked');
                 }
 
-                // Lock sacred geometry orientation (no constant rotation)
+                // Lock sacred geometry (no rotation)
                 const geometry = document.querySelector('.sacred-geometry');
                 if (geometry) {
                     geometry.style.animation = 'none';
                     geometry.style.opacity = '0.2';
                 }
 
-                // Show stamp line after brief pause
+                // Show stamp line after shutter snap
                 setTimeout(() => {
                     if (this.elements.stamp) {
                         this.elements.stamp.textContent = this.stampLine;
@@ -7112,7 +7403,7 @@
                         this.elements.message.textContent = this.stampLine;
                         this.elements.message.classList.add('visible');
                     }
-                }, 800);
+                }, 1000);
 
                 // Fade stamp after display
                 setTimeout(() => {
@@ -7121,7 +7412,26 @@
                     } else if (this.elements.message) {
                         this.elements.message.classList.remove('visible');
                     }
-                }, 2500);
+                }, 2800);
+            },
+
+            // Smooth camera dial animation helper
+            animateCamera(prop, from, to, duration) {
+                const cam = window.RitualCamera;
+                const startTime = Date.now();
+
+                const animate = () => {
+                    const elapsed = Date.now() - startTime;
+                    const t = Math.min(elapsed / duration, 1);
+                    // Ease out cubic
+                    const eased = 1 - Math.pow(1 - t, 3);
+                    cam[prop] = from + (to - from) * eased;
+
+                    if (t < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+                animate();
             },
 
             spawnMicroArtifacts() {
@@ -7148,6 +7458,9 @@
 
             async showHoldState() {
                 // ACT 4: Stable end frame with one CTA
+                // CAMERA: Settled state - seal becomes watermark
+
+                const cam = window.RitualCamera;
 
                 // Hide phase indicator
                 if (this.elements.phase) {
@@ -7156,6 +7469,17 @@
 
                 // Ensure stable visual state
                 ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
+
+                // Final camera state - subtle ambient
+                cam.iris = 1.0;
+                cam.focus = 1.0;
+                cam.exposure = 0.55;
+                cam.vignette = 0.5;
+                cam.grain = 0.04;
+                cam.chromatic = 0.0;
+                cam.materiality = 1.0;
+                cam.sealProgress = 0.4;  // Seal becomes subtle watermark
+                cam.lensBreathing = 0.15;  // Very subtle breathing
 
                 // Wait a moment before showing CTA
                 await new Promise(r => setTimeout(r, 500));
@@ -7171,6 +7495,18 @@
             showLockedState() {
                 // For reduced motion - jump to stable end state immediately
                 ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
+
+                // Set camera to final locked state
+                const cam = window.RitualCamera;
+                cam.iris = 1.0;
+                cam.focus = 1.0;
+                cam.exposure = 0.55;
+                cam.vignette = 0.5;
+                cam.grain = 0.04;
+                cam.chromatic = 0.0;
+                cam.materiality = 1.0;
+                cam.sealProgress = 0.4;
+                cam.lensBreathing = 0.0;
 
                 if (typeof CrownSync !== 'undefined') {
                     CrownSync.complete();
