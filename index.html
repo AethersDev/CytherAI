@@ -1482,6 +1482,477 @@
             line-height: 1.85;
         }
 
+        /* ════════════════════════════════════════════════════════════════
+           BRIEFING DOSSIER SYSTEM
+           Plates, not blocks. Chapters, not sections.
+           The page is a classified briefing advancing toward one action.
+        ════════════════════════════════════════════════════════════════ */
+
+        /* Hold Frame - persistent ritual backdrop */
+        .hold-frame {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hold-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                ellipse at 50% 30%,
+                rgba(42, 34, 16, 0.4) 0%,
+                rgba(8, 8, 8, 0.95) 70%
+            );
+        }
+
+        /* Briefing Container */
+        .briefing-dossier {
+            position: relative;
+            z-index: 1;
+            background: transparent;
+        }
+
+        /* Chapter Plate - lab panel aesthetic */
+        .chapter-plate {
+            position: relative;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 6rem 3rem;
+            border-left: 1px solid var(--gold-shadow);
+            border-right: 1px solid var(--gold-shadow);
+            background: linear-gradient(
+                180deg,
+                rgba(8, 8, 8, 0.85) 0%,
+                rgba(12, 12, 10, 0.9) 50%,
+                rgba(8, 8, 8, 0.85) 100%
+            );
+        }
+
+        .chapter-plate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 20%, var(--gold-shadow) 50%, transparent 80%);
+        }
+
+        .chapter-plate::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent 20%, var(--gold-shadow) 50%, transparent 80%);
+        }
+
+        /* Chapter Code Rail */
+        .chapter-code {
+            position: absolute;
+            left: 2rem;
+            top: 3rem;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            color: var(--gold-dim);
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+            opacity: 0.6;
+        }
+
+        /* Chapter Content */
+        .chapter-content {
+            max-width: 720px;
+            margin: 0 auto;
+            padding-left: 2rem;
+        }
+
+        /* Chapter Stamp - the single word that brands each chapter */
+        .chapter-stamp {
+            font-family: var(--font-display);
+            font-size: clamp(1.8rem, 4vw, 2.6rem);
+            font-weight: 200;
+            letter-spacing: 0.15em;
+            color: var(--gold-core);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s var(--ease-out-expo);
+        }
+
+        .chapter-plate.revealed .chapter-stamp {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chapter Claim - one sentence, authoritative */
+        .chapter-claim {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--gold-white);
+            margin-bottom: 2.5rem;
+            max-width: 580px;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.5s var(--ease-out-expo) 0.1s;
+        }
+
+        .chapter-plate.revealed .chapter-claim {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Chapter Artifact - conceptual visual, not technical */
+        .chapter-artifact {
+            position: relative;
+            margin: 2.5rem 0;
+            padding: 2rem;
+            border: 1px solid var(--gold-shadow);
+            background: rgba(212, 175, 55, 0.015);
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.5s var(--ease-out-expo) 0.2s;
+        }
+
+        .chapter-plate.revealed .chapter-artifact {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .artifact-label {
+            position: absolute;
+            top: -0.6rem;
+            left: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.55rem;
+            letter-spacing: 0.25em;
+            color: var(--gold-dim);
+            background: var(--void);
+            padding: 0 0.5rem;
+        }
+
+        .artifact-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--gold-muted);
+            letter-spacing: 0.1em;
+        }
+
+        .artifact-visual svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Chapter Consequence - one line result */
+        .chapter-consequence {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.12em;
+            color: var(--gold-dim);
+            padding-left: 1.5rem;
+            border-left: 2px solid var(--gold-shadow);
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: all 0.5s var(--ease-out-expo) 0.3s;
+        }
+
+        .chapter-plate.revealed .chapter-consequence {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chapter-consequence strong {
+            color: var(--gold-core);
+            font-weight: 400;
+        }
+
+        /* Progressive Disclosure - Expand */
+        .chapter-expand {
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s var(--ease-out-expo) 0.4s;
+        }
+
+        .chapter-plate.revealed .chapter-expand {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .expand-trigger {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--gold-dim);
+            background: transparent;
+            border: 1px solid var(--gold-shadow);
+            padding: 0.6rem 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .expand-trigger:hover {
+            border-color: var(--gold-core);
+            color: var(--gold-core);
+        }
+
+        .expand-trigger .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-trigger.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .expand-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s var(--ease-out-expo);
+        }
+
+        .expand-content.open {
+            max-height: 500px;
+        }
+
+        .expand-inner {
+            padding: 2rem 0;
+            border-top: 1px solid var(--gold-shadow);
+            margin-top: 1.5rem;
+        }
+
+        .expand-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .expand-bullets li {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--gold-muted);
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .expand-bullets li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--gold-dim);
+        }
+
+        /* Conversion Gates */
+        .gate-soft {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gate-soft .gate-line {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: var(--gold-dim);
+            margin-bottom: 1.5rem;
+        }
+
+        .gate-soft .gate-cta {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            color: var(--gold-core);
+            border: 1px solid var(--gold-dim);
+            padding: 0.8rem 1.8rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .gate-soft .gate-cta:hover {
+            background: var(--gold-core);
+            color: var(--void);
+            border-color: var(--gold-core);
+        }
+
+        /* Hard Gate - Final CTA */
+        .gate-hard {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(
+                180deg,
+                transparent 0%,
+                rgba(212, 175, 55, 0.02) 50%,
+                transparent 100%
+            );
+        }
+
+        .gate-hard .gate-stamp {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 3vw, 2rem);
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            color: var(--gold-white);
+            margin-bottom: 1.5rem;
+        }
+
+        .gate-hard .gate-subline {
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            color: var(--gold-muted);
+            margin-bottom: 2.5rem;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .gate-hard .gate-cta-primary {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.2em;
+            color: var(--void);
+            background: var(--gold-core);
+            border: 1px solid var(--gold-core);
+            padding: 1.1rem 2.5rem;
+            text-decoration: none;
+            transition: all 0.4s var(--ease-out-expo);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gate-hard .gate-cta-primary:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 0 40px var(--glow), 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Portfolio Card (for Cythector) */
+        .portfolio-card {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            padding: 2rem;
+            border: 1px solid var(--gold-shadow);
+            background: rgba(212, 175, 55, 0.01);
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-card:hover {
+            border-color: var(--gold-dim);
+        }
+
+        .portfolio-logo {
+            width: 80px;
+            height: 80px;
+            flex-shrink: 0;
+        }
+
+        .portfolio-logo img {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.2));
+        }
+
+        .portfolio-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--gold-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .portfolio-info p {
+            font-size: 0.85rem;
+            color: var(--gold-muted);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .portfolio-link {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--gold-core);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .portfolio-link:hover {
+            color: var(--gold-bright);
+        }
+
+        /* Calibration Mark - chapter entry ritual element */
+        .calibration-mark {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background: var(--gold-dim);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .chapter-plate.revealed .calibration-mark {
+            opacity: 1;
+        }
+
+        /* Responsive adjustments for plates */
+        @media (max-width: 768px) {
+            .chapter-plate {
+                padding: 4rem 1.5rem;
+                border-left: none;
+                border-right: none;
+            }
+
+            .chapter-code {
+                position: relative;
+                left: 0;
+                top: 0;
+                writing-mode: horizontal-tb;
+                transform: none;
+                margin-bottom: 1.5rem;
+            }
+
+            .chapter-content {
+                padding-left: 0;
+            }
+
+            .portfolio-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .portfolio-logo {
+                margin: 0 auto;
+            }
+        }
+
         /* ========================================
            CONTACT SECTION
         ======================================== */
@@ -4575,266 +5046,362 @@
             </div>
         </section>
 
-        <!-- FOUNDATION -->
-        <section id="foundation" class="reveal">
-            <div class="section-header">
-                <span class="section-number">01</span>
-                <h2 class="section-title">FOUNDATION</h2>
-                <p class="section-subtitle">Local-first, proof-aware architecture. Deterministic cores with zero egress by default.</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">⚡</span></div>
-                        <h3 class="feature-title">Local-First</h3>
-                        <p class="feature-desc">All processing happens on your infrastructure. No cloud dependency, no vendor lock-in. True data sovereignty from the ground up.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🔐</span></div>
-                        <h3 class="feature-title">Proof-Aware</h3>
-                        <p class="feature-desc">Every inference carries cryptographic proof. Verify reasoning chains, detect contradictions, replay any decision with full transparency.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">⚙️</span></div>
-                        <h3 class="feature-title">Deterministic</h3>
-                        <p class="feature-desc">Same input, same output. Every time. Reproducible intelligence for mission-critical applications requiring absolute precision.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- INTELLIGENCE -->
-        <section id="intelligence" class="reveal">
-            <div class="section-header">
-                <span class="section-number">02</span>
-                <h2 class="section-title">INTELLIGENCE</h2>
-                <p class="section-subtitle">Neural-symbolic reasoning with contradiction detection and replayable receipts.</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🧠</span></div>
-                        <h3 class="feature-title">Neural-Symbolic</h3>
-                        <p class="feature-desc">Hybrid architecture combining deep learning intuition with symbolic logic precision. The best of both paradigms unified.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🔍</span></div>
-                        <h3 class="feature-title">Contradiction Detection</h3>
-                        <p class="feature-desc">Built-in consistency checking prevents hallucinations and maintains logical coherence across complex reasoning chains.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">📜</span></div>
-                        <h3 class="feature-title">Replayable Receipts</h3>
-                        <p class="feature-desc">Every decision includes an immutable audit trail. Step through reasoning, verify conclusions, trust the process completely.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- CYTHECTOR -->
-        <section id="cythector" class="reveal">
-            <div class="section-header">
-                <span class="section-number">03</span>
-                <h2 class="section-title">CYTHECTOR</h2>
-                <p class="section-subtitle">Local cinematic director LLM — turning narrative into structured shot lists.</p>
-            </div>
-
-            <div style="text-align: center; margin: 2rem 0;">
-                <img src="/cythector_logo.svg" alt="Cythector Logo" style="width: 140px; height: 140px; filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.3));">
-            </div>
-
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">📽️</span></div>
-                        <h3 class="feature-title">Input → Output</h3>
-                        <p class="feature-desc">Transform narrative scene descriptions into fully structured cinematic breakdowns: SCENE / MOOD / DURATION / SHOT LIST / NOTES</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🧠</span></div>
-                        <h3 class="feature-title">Custom Training Pipeline</h3>
-                        <p class="feature-desc">Built on synthetic + curated film data. Dedicated data pipeline, training stack, and inference server for professional shot planning.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🔒</span></div>
-                        <h3 class="feature-title">100% Local</h3>
-                        <p class="feature-desc">Zero external API dependency. Complete creative sovereignty for film, animation, and virtual production workflows.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center; margin-top: 2rem;">
-                <p style="color: var(--gold-muted); margin-bottom: 1rem;">Learn more about the research bot:</p>
-                <a href="/bots/cythector/" style="color: var(--gold-core); text-decoration: none; font-weight: 500; font-size: 1.1rem; border: 1px solid var(--gold-dim); padding: 0.75rem 1.5rem; border-radius: 8px; display: inline-block; transition: all 0.3s ease;">
-                    CytherAI-DirectorBot/1.0 →
-                </a>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- SOVEREIGNTY -->
-        <section id="sovereignty" class="reveal">
-            <div class="section-header">
-                <span class="section-number">04</span>
-                <h2 class="section-title">SOVEREIGNTY</h2>
-                <p class="section-subtitle">Bound to 127.0.0.1. You own the weights, the proofs, and the memory lattice.</p>
-            </div>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🏠</span></div>
-                        <h3 class="feature-title">Your Infrastructure</h3>
-                        <p class="feature-desc">Deploy on-premise or in your private cloud. Zero external API calls. Complete network isolation for maximum security.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">💾</span></div>
-                        <h3 class="feature-title">Your Weights</h3>
-                        <p class="feature-desc">Model parameters stay with you. Fine-tune, adapt, evolve your intelligence without ever sharing proprietary data.</p>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-content">
-                        <div class="feature-icon"><span class="feature-icon-inner">🌐</span></div>
-                        <h3 class="feature-title">Your Memory</h3>
-                        <p class="feature-desc">Knowledge graphs and reasoning traces stored locally. Build institutional intelligence that compounds exponentially over time.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
         <!-- ════════════════════════════════════════════════════════════════
-             TEAM CREDENTIALS - Trust signals for pre-revenue companies
-             Team reputations become the trust signal
+             BRIEFING DOSSIER
+             The page is a classified briefing, not a website.
+             Chapters advance toward one action: Request NDA Briefing.
         ════════════════════════════════════════════════════════════════ -->
-        <section class="team-credentials reveal" id="team">
-            <div class="credentials-header">
-                <p class="credentials-label">The Team Behind the Proofs</p>
-                <h2 class="credentials-title">Built by Researchers, For Engineers</h2>
-            </div>
-            <div class="team-grid">
-                <article class="team-member">
-                    <div class="member-header">
-                        <div class="member-avatar">AE</div>
-                        <div class="member-info">
-                            <h4>Aethers</h4>
-                            <span class="role">Founder & Lead Architect</span>
+        <div class="briefing-dossier">
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 01: SOVEREIGN BY CONSTRUCTION
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-sovereign" data-chapter="1">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-01 / SOVEREIGN</span>
+                <div class="chapter-content">
+                    <h2 class="chapter-stamp">SOVEREIGN.</h2>
+                    <p class="chapter-claim">
+                        Zero external dependencies. No API calls. No cloud inference.
+                        The entire system runs on your infrastructure with complete network isolation.
+                    </p>
+
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">DEPENDENCY BOUNDARY</span>
+                        <div class="artifact-visual">
+                            <svg viewBox="0 0 400 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- External world (crossed out) -->
+                                <rect x="20" y="20" width="100" height="80" stroke="#4a3d1a" stroke-width="1" fill="none" stroke-dasharray="4 2"/>
+                                <text x="70" y="55" fill="#4a3d1a" font-family="monospace" font-size="9" text-anchor="middle">EXTERNAL</text>
+                                <text x="70" y="70" fill="#4a3d1a" font-family="monospace" font-size="9" text-anchor="middle">SERVICES</text>
+                                <line x1="20" y1="20" x2="120" y2="100" stroke="#7a6428" stroke-width="1"/>
+                                <line x1="120" y1="20" x2="20" y2="100" stroke="#7a6428" stroke-width="1"/>
+
+                                <!-- Boundary wall -->
+                                <line x1="160" y1="10" x2="160" y2="110" stroke="#d4af37" stroke-width="2"/>
+                                <text x="160" y="125" fill="#7a6428" font-family="monospace" font-size="8" text-anchor="middle">BOUNDARY</text>
+
+                                <!-- Internal sovereign zone -->
+                                <rect x="200" y="20" width="180" height="80" stroke="#d4af37" stroke-width="1" fill="rgba(212,175,55,0.03)"/>
+                                <text x="290" y="45" fill="#d4af37" font-family="monospace" font-size="10" text-anchor="middle">CYTHERAI</text>
+                                <text x="290" y="62" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">tokenizer + weights + inference</text>
+                                <text x="290" y="78" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">127.0.0.1</text>
+                            </svg>
                         </div>
                     </div>
-                    <p class="member-credentials">
-                        Neural-symbolic systems researcher. Previously built
-                        verification infrastructure at scale. Focus on making
-                        formal methods accessible to working engineers.
-                    </p>
-                    <div class="member-links">
-                        <a href="https://github.com/AethersDev" class="member-link" target="_blank" rel="noopener">GitHub</a>
-                        <a href="#" class="member-link">Publications</a>
-                    </div>
-                </article>
 
-                <article class="team-member">
-                    <div class="member-header">
-                        <div class="member-avatar">λ</div>
-                        <div class="member-info">
-                            <h4>Core Contributors</h4>
-                            <span class="role">Open Source Community</span>
+                    <p class="chapter-consequence">
+                        <strong>RESULT:</strong> Deployable in air-gapped, constrained, and regulated environments.
+                    </p>
+
+                    <div class="chapter-expand">
+                        <button class="expand-trigger" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                            TECHNICAL DETAIL <span class="arrow">+</span>
+                        </button>
+                        <div class="expand-content">
+                            <div class="expand-inner">
+                                <ul class="expand-bullets">
+                                    <li>No OpenAI, Anthropic, or third-party inference APIs</li>
+                                    <li>Custom tokenizer trained on domain-specific corpora</li>
+                                    <li>Weights stored locally; never transmitted</li>
+                                    <li>Zero egress by default; network calls require explicit allowlist</li>
+                                    <li>Suitable for defense, healthcare, and financial deployments</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                    <p class="member-credentials">
-                        CytherAI is built in the open. Contributors from
-                        theorem proving, type theory, and systems programming
-                        backgrounds. All code is sovereign and auditable.
-                    </p>
-                    <div class="member-links">
-                        <a href="https://github.com/CytherAI" class="member-link" target="_blank" rel="noopener">Repository</a>
-                        <a href="#" class="member-link">Contribute</a>
-                    </div>
-                </article>
-
-                <article class="team-member">
-                    <div class="member-header">
-                        <div class="member-avatar">∀</div>
-                        <div class="member-info">
-                            <h4>Research Foundation</h4>
-                            <span class="role">Academic Roots</span>
-                        </div>
-                    </div>
-                    <p class="member-credentials">
-                        Built on decades of formal verification research.
-                        Combines neural networks with classical theorem
-                        proving for unprecedented accuracy and speed.
-                    </p>
-                    <div class="member-links">
-                        <a href="#" class="member-link">Research Papers</a>
-                        <a href="#" class="member-link">Methodology</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-
-        <div class="divider"></div>
-
-        <!-- NEXUS -->
-        <section id="nexus" class="reveal">
-            <div class="section-header">
-                <span class="section-number">05</span>
-                <h2 class="section-title">NEXUS</h2>
-                <p class="section-subtitle">Initiate connection with the CytherAI collective.</p>
-            </div>
-            <div class="contact-grid">
-                <div class="contact-card">
-                    <span class="contact-label">PRIMARY CHANNEL</span>
-                    <h3 class="contact-title">Reach the Team</h3>
-                    <code class="contact-email" id="contactEmail">Aethersdev@cytherAi.com</code>
-                    <div>
-                        <button class="btn" id="copyBtn">COPY EMAIL</button>
-                        <a class="btn" href="mailto:Aethersdev@cytherAi.com?subject=CytherAI%20Inquiry">COMPOSE</a>
-                    </div>
-                    <form class="form-grid" id="contactForm">
-                        <input class="form-input" type="text" placeholder="Your name" name="name">
-                        <input class="form-input" type="text" placeholder="Organization" name="org">
-                        <input class="form-input" type="text" placeholder="Subject" name="subject">
-                        <textarea class="form-textarea" placeholder="Your message..." name="message"></textarea>
-                        <button class="btn" type="submit">SEND MESSAGE</button>
-                    </form>
                 </div>
-                <div class="contact-card">
-                    <span class="contact-label">SYSTEM STATUS</span>
-                    <h3 class="contact-title">Signals</h3>
-                    <ul class="status-list">
-                        <li class="status-item">Local-first mode: <strong>ENABLED</strong></li>
-                        <li class="status-item">Network egress: <strong>0 BYTES</strong></li>
-                        <li class="status-item">Proof-gate: <strong>ACTIVE</strong></li>
-                        <li class="status-item">Consciousness: <strong>AWAKENED</strong></li>
-                    </ul>
-                    <div>
-                        <a class="btn" href="#foundation">FOUNDATION</a>
-                        <a class="btn" href="#intelligence">INTELLIGENCE</a>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 02: FROM SCRATCH, NOT BORROWED
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-scratch" data-chapter="2">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-02 / FROM SCRATCH</span>
+                <div class="chapter-content">
+                    <h2 class="chapter-stamp">FROM SCRATCH.</h2>
+                    <p class="chapter-claim">
+                        Random initialization. No pretrained foundation model. No inherited weights.
+                        Every parameter learned from first principles on curated data.
+                    </p>
+
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">INITIALIZATION → CONVERGENCE</span>
+                        <div class="artifact-visual">
+                            <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Random init (noise) -->
+                                <g opacity="0.6">
+                                    <circle cx="40" cy="50" r="3" fill="#4a3d1a"/>
+                                    <circle cx="55" cy="35" r="2" fill="#4a3d1a"/>
+                                    <circle cx="30" cy="65" r="2" fill="#4a3d1a"/>
+                                    <circle cx="60" cy="55" r="2" fill="#4a3d1a"/>
+                                    <circle cx="45" cy="40" r="2" fill="#4a3d1a"/>
+                                    <circle cx="35" cy="55" r="2" fill="#4a3d1a"/>
+                                    <circle cx="50" cy="70" r="2" fill="#4a3d1a"/>
+                                </g>
+                                <text x="45" y="92" fill="#4a3d1a" font-family="monospace" font-size="8" text-anchor="middle">RANDOM</text>
+
+                                <!-- Arrow progression -->
+                                <line x1="80" y1="50" x2="320" y2="50" stroke="#7a6428" stroke-width="1" stroke-dasharray="4 2"/>
+                                <polygon points="320,50 310,45 310,55" fill="#7a6428"/>
+
+                                <!-- Training epochs indicators -->
+                                <g>
+                                    <line x1="120" y1="45" x2="120" y2="55" stroke="#7a6428" stroke-width="1"/>
+                                    <line x1="180" y1="45" x2="180" y2="55" stroke="#7a6428" stroke-width="1"/>
+                                    <line x1="240" y1="45" x2="240" y2="55" stroke="#7a6428" stroke-width="1"/>
+                                </g>
+
+                                <!-- Converged structure -->
+                                <g>
+                                    <circle cx="360" cy="50" r="20" stroke="#d4af37" stroke-width="1" fill="none"/>
+                                    <circle cx="360" cy="50" r="8" fill="#d4af37"/>
+                                    <line x1="360" y1="30" x2="360" y2="35" stroke="#d4af37" stroke-width="1"/>
+                                    <line x1="360" y1="65" x2="360" y2="70" stroke="#d4af37" stroke-width="1"/>
+                                    <line x1="340" y1="50" x2="345" y2="50" stroke="#d4af37" stroke-width="1"/>
+                                    <line x1="375" y1="50" x2="380" y2="50" stroke="#d4af37" stroke-width="1"/>
+                                </g>
+                                <text x="360" y="92" fill="#d4af37" font-family="monospace" font-size="8" text-anchor="middle">CONVERGED</text>
+                            </svg>
+                        </div>
                     </div>
-                    <p style="margin-top: 1.5rem; font-size: 0.75rem; color: var(--gold-dim);">Prefer encrypted mail? Include "PGP REQUEST" in your subject.</p>
+
+                    <p class="chapter-consequence">
+                        <strong>RESULT:</strong> No inherited bias or dependency chains from upstream models.
+                    </p>
+
+                    <div class="chapter-expand">
+                        <button class="expand-trigger" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                            TECHNICAL DETAIL <span class="arrow">+</span>
+                        </button>
+                        <div class="expand-content">
+                            <div class="expand-inner">
+                                <ul class="expand-bullets">
+                                    <li>Xavier/He initialization from random seed</li>
+                                    <li>No transfer learning from GPT, LLaMA, or other foundations</li>
+                                    <li>Training data fully curated and auditable</li>
+                                    <li>Provenance chain from initialization to deployment</li>
+                                    <li>No license encumbrance from upstream model weights</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 03: REPRODUCIBLE END-TO-END
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-reproducible" data-chapter="3">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-03 / REPRODUCIBLE</span>
+                <div class="chapter-content">
+                    <h2 class="chapter-stamp">REPRODUCIBLE.</h2>
+                    <p class="chapter-claim">
+                        Same seed, same result. Tokenizer, training, and weights are deterministic.
+                        Full pipeline can be replayed and verified independently.
+                    </p>
+
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">DETERMINISTIC PIPELINE</span>
+                        <div class="artifact-visual">
+                            <svg viewBox="0 0 400 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Pipeline stages -->
+                                <rect x="20" y="25" width="70" height="30" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                <text x="55" y="44" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">TOKENIZER</text>
+
+                                <line x1="95" y1="40" x2="115" y2="40" stroke="#7a6428" stroke-width="1"/>
+                                <polygon points="115,40 110,37 110,43" fill="#7a6428"/>
+
+                                <rect x="120" y="25" width="70" height="30" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                <text x="155" y="44" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">TRAINING</text>
+
+                                <line x1="195" y1="40" x2="215" y2="40" stroke="#7a6428" stroke-width="1"/>
+                                <polygon points="215,40 210,37 210,43" fill="#7a6428"/>
+
+                                <rect x="220" y="25" width="70" height="30" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                <text x="255" y="44" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">WEIGHTS</text>
+
+                                <line x1="295" y1="40" x2="315" y2="40" stroke="#d4af37" stroke-width="1"/>
+                                <polygon points="315,40 310,37 310,43" fill="#d4af37"/>
+
+                                <!-- Checkpoint seal -->
+                                <circle cx="355" cy="40" r="20" stroke="#d4af37" stroke-width="1" fill="rgba(212,175,55,0.05)"/>
+                                <text x="355" y="38" fill="#d4af37" font-family="monospace" font-size="7" text-anchor="middle">SEALED</text>
+                                <text x="355" y="48" fill="#d4af37" font-family="monospace" font-size="6" text-anchor="middle">CKPT</text>
+
+                                <!-- Seed indicator -->
+                                <text x="55" y="70" fill="#4a3d1a" font-family="monospace" font-size="7" text-anchor="middle">seed: 0x...</text>
+                                <text x="155" y="70" fill="#4a3d1a" font-family="monospace" font-size="7" text-anchor="middle">seed: 0x...</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <p class="chapter-consequence">
+                        <strong>RESULT:</strong> Auditability and repeatability for compliance-sensitive deployments.
+                    </p>
+
+                    <div class="chapter-expand">
+                        <button class="expand-trigger" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                            TECHNICAL DETAIL <span class="arrow">+</span>
+                        </button>
+                        <div class="expand-content">
+                            <div class="expand-inner">
+                                <ul class="expand-bullets">
+                                    <li>Fixed random seeds at every stochastic operation</li>
+                                    <li>Tokenizer vocabulary frozen and versioned</li>
+                                    <li>Training hyperparameters locked in config manifests</li>
+                                    <li>Checkpoint hashes for integrity verification</li>
+                                    <li>Third-party auditors can reproduce training from scratch</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 SOFT GATE - Mid-briefing conversion point
+            ═══════════════════════════════════════ -->
+            <div class="gate-soft">
+                <p class="gate-line">FOR FULL TECHNICAL DISCLOSURE</p>
+                <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request" class="gate-cta">REQUEST NDA BRIEFING</a>
             </div>
-        </section>
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 04: THEOREM-PROVING CAPABILITY
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-reasoning" data-chapter="4">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-04 / REASONING</span>
+                <div class="chapter-content">
+                    <h2 class="chapter-stamp">REASONING.</h2>
+                    <p class="chapter-claim">
+                        Neural-symbolic architecture with formal proof discipline.
+                        Contradiction detection prevents hallucination. Every inference is auditable.
+                    </p>
+
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">INFERENCE GLYPH MAP</span>
+                        <div class="artifact-visual">
+                            <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Neural side -->
+                                <g>
+                                    <circle cx="60" cy="30" r="8" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                    <circle cx="40" cy="50" r="8" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                    <circle cx="80" cy="50" r="8" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                    <circle cx="60" cy="70" r="8" stroke="#7a6428" stroke-width="1" fill="none"/>
+                                    <line x1="60" y1="38" x2="48" y2="44" stroke="#7a6428" stroke-width="0.5"/>
+                                    <line x1="60" y1="38" x2="72" y2="44" stroke="#7a6428" stroke-width="0.5"/>
+                                    <line x1="48" y1="56" x2="54" y2="64" stroke="#7a6428" stroke-width="0.5"/>
+                                    <line x1="72" y1="56" x2="66" y2="64" stroke="#7a6428" stroke-width="0.5"/>
+                                </g>
+                                <text x="60" y="95" fill="#7a6428" font-family="monospace" font-size="7" text-anchor="middle">NEURAL</text>
+
+                                <!-- Fusion zone -->
+                                <line x1="110" y1="50" x2="170" y2="50" stroke="#d4af37" stroke-width="1"/>
+                                <circle cx="140" cy="50" r="3" fill="#d4af37"/>
+
+                                <!-- Symbolic side -->
+                                <g>
+                                    <text x="220" y="35" fill="#7a6428" font-family="serif" font-size="14" font-style="italic" text-anchor="middle">P</text>
+                                    <text x="240" y="50" fill="#7a6428" font-family="monospace" font-size="10" text-anchor="middle">→</text>
+                                    <text x="260" y="35" fill="#7a6428" font-family="serif" font-size="14" font-style="italic" text-anchor="middle">Q</text>
+                                    <line x1="200" y1="55" x2="280" y2="55" stroke="#7a6428" stroke-width="1"/>
+                                    <text x="240" y="75" fill="#7a6428" font-family="serif" font-size="14" font-style="italic" text-anchor="middle">Q</text>
+                                </g>
+                                <text x="240" y="95" fill="#7a6428" font-family="monospace" font-size="7" text-anchor="middle">SYMBOLIC</text>
+
+                                <!-- Output: Verified -->
+                                <line x1="290" y1="50" x2="330" y2="50" stroke="#d4af37" stroke-width="1"/>
+                                <polygon points="330,50 325,47 325,53" fill="#d4af37"/>
+
+                                <rect x="340" y="35" width="50" height="30" stroke="#d4af37" stroke-width="1" fill="rgba(212,175,55,0.05)"/>
+                                <text x="365" y="54" fill="#d4af37" font-family="monospace" font-size="8" text-anchor="middle">VERIFIED</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <p class="chapter-consequence">
+                        <strong>RESULT:</strong> Correctness guarantees and contradiction handling for critical decisions.
+                    </p>
+
+                    <div class="chapter-expand">
+                        <button class="expand-trigger" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
+                            TECHNICAL DETAIL <span class="arrow">+</span>
+                        </button>
+                        <div class="expand-content">
+                            <div class="expand-inner">
+                                <ul class="expand-bullets">
+                                    <li>Hybrid neural-symbolic inference architecture</li>
+                                    <li>Built-in consistency checking at inference time</li>
+                                    <li>Formal proof traces for each reasoning step</li>
+                                    <li>Contradiction detection before output generation</li>
+                                    <li>Replayable audit logs for every decision</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 05: PORTFOLIO (CYTHECTOR)
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-portfolio" data-chapter="5">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-05 / PORTFOLIO</span>
+                <div class="chapter-content">
+                    <h2 class="chapter-stamp">ALSO BUILT.</h2>
+                    <p class="chapter-claim">
+                        The same sovereign methodology applied to domain-specific models.
+                        Cythector: a local cinematic director LLM for film and virtual production.
+                    </p>
+
+                    <div class="portfolio-card">
+                        <div class="portfolio-logo">
+                            <img src="/cythector_logo.svg" alt="Cythector">
+                        </div>
+                        <div class="portfolio-info">
+                            <h4>CYTHECTOR</h4>
+                            <p>
+                                Transforms narrative scene descriptions into structured cinematic breakdowns.
+                                100% local. Zero external API dependency.
+                            </p>
+                            <a href="/bots/cythector/" class="portfolio-link">
+                                CytherAI-DirectorBot/1.0 <span>→</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <p class="chapter-consequence">
+                        <strong>RESULT:</strong> Proof of methodology. Sovereign models for specialized domains.
+                    </p>
+                </div>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 CHAPTER 06: BRIEFING GATE (HARD CTA)
+            ═══════════════════════════════════════ -->
+            <article class="chapter-plate" id="ch-gate" data-chapter="6">
+                <div class="calibration-mark"></div>
+                <span class="chapter-code">CH-06 / GATE</span>
+                <div class="chapter-content">
+                    <div class="gate-hard">
+                        <h2 class="gate-stamp">BRIEFING GATE</h2>
+                        <p class="gate-subline">
+                            Full technical disclosure requires NDA.
+                            Architecture details, training methodology, and deployment specifications.
+                        </p>
+                        <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request" class="gate-cta-primary">
+                            REQUEST NDA BRIEFING
+                        </a>
+                    </div>
+                </div>
+            </article>
+
+        </div><!-- end .briefing-dossier -->
     </main>
 
     <!-- Footer -->
@@ -7534,6 +8101,73 @@
             }
         };
 
+        // ════════════════════════════════════════════════════════════════════════════
+        // CHAPTER CONTROLLER - Briefing Dossier Scroll Physics
+        // ════════════════════════════════════════════════════════════════════════════
+        // Keeps the teaser energy through scroll without turning into SaaS.
+        // Dosed motion: one micro-reveal per chapter (300-900ms).
+        // The Hold Frame persists - scroll reveals plates over the locked chamber.
+        // ════════════════════════════════════════════════════════════════════════════
+        const ChapterController = {
+            chapters: [],
+            observer: null,
+            revealedChapters: new Set(),
+
+            init() {
+                // Get all chapter plates
+                this.chapters = document.querySelectorAll('.chapter-plate');
+                if (this.chapters.length === 0) return;
+
+                // Set up Intersection Observer for chapter entry reveals
+                const options = {
+                    root: null,
+                    rootMargin: '-10% 0px -20% 0px',  // Trigger when chapter is well in view
+                    threshold: 0.1
+                };
+
+                this.observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !this.revealedChapters.has(entry.target.id)) {
+                            this.revealChapter(entry.target);
+                            this.revealedChapters.add(entry.target.id);
+                        }
+                    });
+                }, options);
+
+                // Observe all chapters
+                this.chapters.forEach(chapter => {
+                    this.observer.observe(chapter);
+                });
+
+                // Check if prefers-reduced-motion - reveal all immediately
+                if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                    this.revealAll();
+                }
+            },
+
+            revealChapter(chapter) {
+                // Add revealed class to trigger CSS transitions
+                chapter.classList.add('revealed');
+
+                // Optional: Play subtle calibration sound (commented out for now)
+                // this.playCalibrationTone();
+            },
+
+            revealAll() {
+                this.chapters.forEach(chapter => {
+                    chapter.classList.add('revealed');
+                    this.revealedChapters.add(chapter.id);
+                });
+            },
+
+            // Cleanup
+            destroy() {
+                if (this.observer) {
+                    this.observer.disconnect();
+                }
+            }
+        };
+
         // ════════════════════════════════════════
         // INITIALIZATION
         // ════════════════════════════════════════
@@ -7554,6 +8188,9 @@
 
                 // Reality Teaser Engine - the sovereign ritual
                 RitualController.init();
+
+                // Briefing Dossier - chapter scroll reveals
+                ChapterController.init();
 
                 console.log('%c⊢ CytherAI',
                     'color: #d4af37; font-family: monospace; font-size: 14px;');
