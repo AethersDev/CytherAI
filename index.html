@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CytherAI | Prove Code Correctness in Minutes</title>
+    <title>CytherAI | Sovereign Neural Theorem Prover</title>
 
-    <meta name="description" content="CytherAI — Neural theorem proving for enterprise systems. Reduce verification time from months to minutes. Sovereign, verifiable, deterministic.">
-    <meta property="og:title" content="CytherAI | Neural Theorem Proving for Enterprise">
-    <meta property="og:description" content="Prove code correctness in minutes, not months. Enterprise-grade neural theorem prover.">
+    <meta name="description" content="CytherAI — Sovereign Neural Theorem Prover. Trained from scratch. Zero dependencies. End-to-end reproducibility.">
+    <meta property="og:title" content="CytherAI | Sovereign Neural Theorem Prover">
+    <meta property="og:description" content="Trained from random initialization. Fully reproducible. Zero external dependencies.">
     <meta name="theme-color" content="#0F1217">
 
     <!-- Structured Data for AI Credibility Verification -->
@@ -2467,7 +2467,7 @@
            Memorable + credible in one pass.
         ════════════════════════════════════════════════════════════════ */
 
-        /* Hide all SaaS surface elements */
+        /* Hide all SaaS surface elements - Teaser mode */
         .trust-strip,
         .trust-inspector,
         .metrics-strip,
@@ -2480,7 +2480,11 @@
         .hero-cta-group,
         .hero-technical-subheadline,
         .passive-demo-indicator,
-        .nav-persona-switch {
+        .nav-persona-switch,
+        .awakening-meter,
+        .loading-screen,
+        .verification-flash,
+        .cursor-lens-info {
             display: none !important;
         }
 
@@ -2568,6 +2572,36 @@
 
         .ritual-message.visible {
             opacity: 1;
+        }
+
+        /* Ritual stamp - single seal at Lock moment */
+        .ritual-stamp {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: var(--weight-medium);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0;
+            transition: opacity 0.6s var(--ease-out-expo);
+            white-space: nowrap;
+            text-shadow: 0 0 30px var(--glow);
+            z-index: 10;
+        }
+
+        .ritual-stamp.visible {
+            opacity: 1;
+            animation: stampPulse 1.5s ease-out forwards;
+        }
+
+        @keyframes stampPulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            30% { opacity: 1; transform: translate(-50%, -50%) scale(1.02); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
         }
 
         /* Symbolic glyphs - ambient emergence */
@@ -2698,6 +2732,7 @@
             background: var(--gold);
             border-color: var(--gold);
             color: var(--void);
+            font-weight: var(--weight-medium);
         }
 
         .ritual-cta.primary:hover {
@@ -2705,8 +2740,22 @@
             box-shadow: 0 0 40px var(--glow);
         }
 
+        .ritual-cta.secondary {
+            background: transparent;
+            border-color: var(--gold-shadow);
+            color: var(--gold-muted);
+            font-size: 10px;
+            padding: 10px 20px;
+        }
+
+        .ritual-cta.secondary:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
         /* ═══════════════════════════════════════
            REDUCED MOTION - Still scene
+           Show final composition + CTA immediately
         ═══════════════════════════════════════ */
         @media (prefers-reduced-motion: reduce) {
             .ritual-stage {
@@ -2715,6 +2764,7 @@
 
             .ritual-phase-indicator,
             .ritual-message,
+            .ritual-stamp,
             .ritual-glyph,
             .calibration-lines {
                 display: none;
@@ -2724,6 +2774,12 @@
                 opacity: 1;
                 transform: translateY(0);
                 pointer-events: auto;
+            }
+
+            .sovereign-headline,
+            .sovereign-subline {
+                opacity: 1;
+                animation: none;
             }
         }
 
@@ -4476,10 +4532,10 @@
 
                 <!-- Ritual Stage - Containment Chamber -->
                 <div class="ritual-stage" id="ritualStage">
-                    <!-- Phase indicator - transient -->
-                    <div class="ritual-phase-indicator" id="ritualPhase">INIT: RANDOM</div>
+                    <!-- Phase indicator - transient micro-artifacts -->
+                    <div class="ritual-phase-indicator" id="ritualPhase"></div>
 
-                    <!-- Calibration lines - appear during convergence -->
+                    <!-- Calibration lines - appear during convergence as calibration marks -->
                     <div class="calibration-lines" id="calibrationLines">
                         <div class="calibration-line horizontal" style="top: 25%;"></div>
                         <div class="calibration-line horizontal" style="top: 50%;"></div>
@@ -4489,21 +4545,24 @@
                         <div class="calibration-line vertical" style="left: 75%;"></div>
                     </div>
 
-                    <!-- Symbolic glyphs - ambient emergence -->
+                    <!-- Symbolic glyphs - ambient emergence (optional during convergence) -->
                     <div class="ritual-glyphs" id="ritualGlyphs">
                         <!-- Generated by RitualController -->
                     </div>
 
                     <!-- The crown and crystal render here via existing systems -->
 
+                    <!-- Stamp line - single seal at Lock moment -->
+                    <div class="ritual-stamp" id="ritualStamp"></div>
+
                     <!-- Ritual message - flashes at key moments -->
                     <div class="ritual-message" id="ritualMessage"></div>
                 </div>
 
-                <!-- CTA appears only at ritual end -->
+                <!-- CTA appears only at ritual end (ACT 4: Hold) -->
                 <div class="ritual-cta-container" id="ritualCTA">
-                    <button class="ritual-cta" id="replayRitual">Replay</button>
-                    <a href="mailto:demo@cytherai.com?subject=NDA%20Demo%20Request" class="ritual-cta primary">Request NDA Demo</a>
+                    <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request" class="ritual-cta primary">Request NDA Briefing</a>
+                    <button class="ritual-cta secondary" id="replayRitual">Replay</button>
                 </div>
             </div>
 
@@ -5884,9 +5943,11 @@
         // All visuals read from this state
         // ════════════════════════════════════════
         const ProofState = {
-            phase: 'idle',           // idle | search | converge | verify | crystallize
-            entropy: 0.0,            // 0.0 → 1.0 (search breadth / contradiction pressure)
+            phase: 'idle',           // idle | initiation | convergence | lock | hold
+            entropy: 0.0,            // 0.0 → 1.0 (high=chaotic, low=ordered)
             coherence: 0.0,          // 0.0 → 1.0 (how close to closure)
+            materiality: 0.0,        // 0.0 → 1.0 (ethereal → crisp/physical)
+            seed: 0xCYTHER,          // fixed deterministic seed
             witnessHash: null,       // receipt hash → deterministic seed
             ruleVector: [],          // distribution of axioms/rules used
             stepIndex: 0,            // current step in proof
@@ -5903,6 +5964,12 @@
             update(updates) {
                 Object.assign(this, updates);
                 ProofBus.emit('state:update', this);
+                ProofBus.emit('ritual:dial', {
+                    entropy: this.entropy,
+                    coherence: this.coherence,
+                    materiality: this.materiality,
+                    seed: this.seed
+                });
             }
         };
 
@@ -6711,55 +6778,97 @@
 
         // ════════════════════════════════════════
         // SHADER STATE BINDING
-        // Update shader uniforms from proof state
+        // Drive visuals from global dials (entropy, coherence, materiality, seed)
         // ════════════════════════════════════════
         const ShaderBinding = {
             init() {
                 ProofBus.on('state:update', (state) => {
-                    // Update consciousness shader intensity based on phase
+                    const entropy = state.entropy || 0;
+                    const coherence = state.coherence || 0;
+                    const materiality = state.materiality || 0;
+
+                    // Shader field: driven by entropy + materiality
+                    // Turbulence decreases as entropy falls, edges sharpen as materiality rises
                     const shader = document.getElementById('consciousnessShader');
                     if (shader) {
-                        const intensity = 0.25 + (state.coherence * 0.35);
+                        const intensity = 0.15 + (coherence * 0.25) + (materiality * 0.15);
                         shader.style.opacity = intensity;
+                        shader.style.filter = `contrast(${1 + materiality * 0.3})`;
                     }
 
-                    // Update sacred geometry based on phase
-                    const geometry = document.querySelector('.sacred-geometry');
-                    if (geometry && state.witnessHash) {
-                        const rotation = parseInt(state.witnessHash.substring(0, 8), 16) % 360;
-                        geometry.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                    // Neural field: higher entropy = more visible activity
+                    const neuralField = document.getElementById('neuralField');
+                    if (neuralField) {
+                        neuralField.style.opacity = 0.05 + (entropy * 0.15);
                     }
+
+                    // Quantum grid: fades with coherence
+                    const quantumGrid = document.querySelector('.quantum-grid');
+                    if (quantumGrid) {
+                        quantumGrid.style.opacity = 0.01 + (entropy * 0.03);
+                    }
+
+                    // Crown/logo glow: intensifies with materiality
+                    const logoGlow = document.querySelector('.logo-glow');
+                    if (logoGlow) {
+                        logoGlow.style.opacity = materiality * 0.8;
+                    }
+
+                    // Update sacred geometry based on coherence
+                    const geometry = document.querySelector('.sacred-geometry');
+                    if (geometry) {
+                        // Rotation speed slows as coherence increases
+                        const speedFactor = 1 - (coherence * 0.8);
+                        if (speedFactor < 0.2) {
+                            geometry.style.animationPlayState = 'paused';
+                        }
+                    }
+                });
+
+                // Listen for ritual dial changes
+                ProofBus.on('ritual:dial', (dials) => {
+                    // Set CSS custom properties for shader-driven effects
+                    document.documentElement.style.setProperty('--dial-entropy', dials.entropy);
+                    document.documentElement.style.setProperty('--dial-coherence', dials.coherence);
+                    document.documentElement.style.setProperty('--dial-materiality', dials.materiality);
                 });
             }
         };
 
         // ════════════════════════════════════════
         // RITUAL CONTROLLER
-        // 4-act cinematic experience: Random → Convergence → Emergence → Lock
+        // Cinematic 4-act sovereign lab ritual (12-18 seconds)
+        // ACT 0: Idle → ACT 1: Initiation → ACT 2: Convergence → ACT 3: Lock → ACT 4: Hold
         // No user input. No receipts. Just the machine revealing itself.
         // ════════════════════════════════════════
         const RitualController = {
-            phases: ['random', 'converge', 'emerge', 'lock'],
+            phases: ['idle', 'initiation', 'convergence', 'lock'],
             currentPhase: -1,
             isRunning: false,
+            isPaused: false,
+            hasCompleted: false,
 
-            // Timing (milliseconds)
+            // Timing per spec (milliseconds)
             timing: {
-                random: 3000,      // Act 1: High entropy
-                converge: 4000,   // Act 2: Chaos collapses
-                emerge: 4000,     // Act 3: Symbolic traces
-                lock: 3000        // Act 4: Stable attractor
+                idle: 800,          // ACT 0: Silence/poise (0.0s–0.8s)
+                initiation: 2200,   // ACT 1: Instant meaning (0.8s–3.0s)
+                convergence: 9000,  // ACT 2: Cinematic build (3.0s–12.0s)
+                lock: 4000          // ACT 3: Reality moment (12.0s–16.0s)
             },
 
-            // Ritual messages
-            messages: {
-                random: 'INIT: RANDOM SEED',
-                converge: 'TRAINING CONVERGENCE',
-                emerge: 'THEOREM PROVER EMERGENCE',
-                lock: 'REPRODUCIBLE END-TO-END'
-            },
+            // NDA-safe micro-artifacts (fleeting, 300-700ms each)
+            microArtifacts: [
+                'INIT: RANDOM SEED',
+                'PIPELINE: TOKENIZER → WEIGHTS',
+                'MODE: SOVEREIGN EXECUTION',
+                'RIGOR: FROM FIRST PRINCIPLES'
+            ],
 
-            glyphs: ['λ', '⊢', '→', '∀', '∃', '∧', '∨', '¬', '⊨', '∎'],
+            // The seal stamp (shown once at lock)
+            stampLine: 'DETERMINISM SEALED.',
+
+            // Deterministic seed for reproducibility feel
+            seed: 0xCYTHER,
 
             elements: {},
 
@@ -6768,16 +6877,24 @@
                     stage: document.getElementById('ritualStage'),
                     phase: document.getElementById('ritualPhase'),
                     message: document.getElementById('ritualMessage'),
+                    stamp: document.getElementById('ritualStamp'),
                     glyphs: document.getElementById('ritualGlyphs'),
                     calibration: document.getElementById('calibrationLines'),
                     cta: document.getElementById('ritualCTA'),
-                    replayBtn: document.getElementById('replayRitual')
+                    replayBtn: document.getElementById('replayRitual'),
+                    heroContent: document.querySelector('.hero-content'),
+                    logoSystem: document.querySelector('.logo-system')
                 };
 
                 // Bind replay button
                 if (this.elements.replayBtn) {
                     this.elements.replayBtn.addEventListener('click', () => this.start());
                 }
+
+                // Pause when tab hidden
+                document.addEventListener('visibilitychange', () => {
+                    this.isPaused = document.hidden;
+                });
 
                 // Check accessibility before auto-start
                 if (this.shouldAutoPlay()) {
@@ -6799,128 +6916,176 @@
             },
 
             scheduleStart() {
+                // Start after content paint using requestIdleCallback
                 const scheduleWhenIdle = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
                 scheduleWhenIdle(() => {
-                    setTimeout(() => this.start(), 2000);
-                }, { timeout: 1500 });
+                    // Short delay to ensure content is visible first
+                    setTimeout(() => this.start(), 100);
+                }, { timeout: 500 });
             },
 
             async start() {
                 if (this.isRunning) return;
                 this.isRunning = true;
                 this.currentPhase = -1;
+                this.hasCompleted = false;
 
-                // Hide CTA
+                // Reset state
                 if (this.elements.cta) {
                     this.elements.cta.classList.remove('visible');
                 }
-
-                // Clear glyphs
                 if (this.elements.glyphs) {
                     this.elements.glyphs.innerHTML = '';
                 }
+                if (this.elements.stamp) {
+                    this.elements.stamp.classList.remove('visible');
+                }
 
-                // Run each phase
-                await this.runPhase('random');
-                await this.runPhase('converge');
-                await this.runPhase('emerge');
+                // ACT 0: Idle - silence/poise
+                await this.runPhase('idle');
+
+                // ACT 1: Initiation - instant meaning
+                await this.runPhase('initiation');
+
+                // ACT 2: Convergence - cinematic build
+                await this.runPhase('convergence');
+
+                // ACT 3: Lock - reality moment
                 await this.runPhase('lock');
 
-                // Show final message and CTA
-                await this.showFinalState();
+                // ACT 4: Hold - stable end frame
+                await this.showHoldState();
 
                 this.isRunning = false;
+                this.hasCompleted = true;
             },
 
             async runPhase(phase) {
                 this.currentPhase = this.phases.indexOf(phase);
 
-                // Update phase indicator
-                if (this.elements.phase) {
-                    this.elements.phase.textContent = this.messages[phase];
-                    this.elements.phase.setAttribute('data-phase', phase);
-                    this.elements.phase.classList.add('visible');
-                }
+                // Emit ritual state change
+                ProofBus.emit('ritual:state', { phase, index: this.currentPhase });
 
                 // Phase-specific effects
                 switch(phase) {
-                    case 'random':
-                        this.triggerRandomPhase();
+                    case 'idle':
+                        await this.triggerIdlePhase();
                         break;
-                    case 'converge':
-                        this.triggerConvergePhase();
+                    case 'initiation':
+                        await this.triggerInitiationPhase();
                         break;
-                    case 'emerge':
-                        this.triggerEmergePhase();
+                    case 'convergence':
+                        await this.triggerConvergencePhase();
                         break;
                     case 'lock':
-                        this.triggerLockPhase();
+                        await this.triggerLockPhase();
                         break;
                 }
 
-                // Emit to existing visual systems
-                ProofBus.emit('ritual:phase', { phase, index: this.currentPhase });
-
-                // Wait for phase duration
-                await new Promise(r => setTimeout(r, this.timing[phase]));
+                // Wait for phase duration (with pause support)
+                await this.waitWithPause(this.timing[phase]);
             },
 
-            triggerRandomPhase() {
-                // High entropy state - update shader
-                ProofState.update({ entropy: 0.9, coherence: 0.1 });
+            async waitWithPause(ms) {
+                const startTime = Date.now();
+                let elapsed = 0;
 
-                // Scatter random particles
-                if (typeof CausalTraces !== 'undefined') {
-                    CausalTraces.burst(20);
+                while (elapsed < ms) {
+                    if (this.isPaused) {
+                        await new Promise(r => setTimeout(r, 100));
+                    } else {
+                        await new Promise(r => setTimeout(r, Math.min(50, ms - elapsed)));
+                        elapsed = Date.now() - startTime;
+                    }
                 }
             },
 
-            triggerConvergePhase() {
-                // Show calibration lines
+            async triggerIdlePhase() {
+                // ACT 0: Near-black, minimal ambient hint
+                ProofState.update({ entropy: 0.05, coherence: 0, materiality: 0 });
+
+                // Hide phase indicator during idle
+                if (this.elements.phase) {
+                    this.elements.phase.classList.remove('visible');
+                }
+
+                // Ensure visuals are dim
+                const shader = document.getElementById('consciousnessShader');
+                if (shader) {
+                    shader.style.opacity = '0.1';
+                }
+            },
+
+            async triggerInitiationPhase() {
+                // ACT 1: Instant meaning in 3-5 seconds
+                // Show headline/subline (already visible via CSS animation)
+
+                // Subtle field activation
+                ProofState.update({ entropy: 0.7, coherence: 0.15, materiality: 0.2 });
+
+                // Gentle particle emergence
+                if (typeof CausalTraces !== 'undefined') {
+                    CausalTraces.burst(8);
+                }
+
+                // Show sacred geometry faintly
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry) {
+                    geometry.style.opacity = '0.08';
+                }
+            },
+
+            async triggerConvergencePhase() {
+                // ACT 2: Chaos collapses, geometry aligns
+                // Show calibration lines as calibration marks
                 if (this.elements.calibration) {
                     this.elements.calibration.classList.add('active');
                 }
 
-                // Reduce entropy, increase coherence
-                ProofState.update({ entropy: 0.4, coherence: 0.5 });
+                // Update dials progressively
+                ProofState.update({ entropy: 0.5, coherence: 0.4, materiality: 0.4 });
 
-                // Start converging particles
-                if (typeof CausalTraces !== 'undefined') {
-                    CausalTraces.converge(15);
-                }
-
-                // Activate sacred geometry rotation
+                // Sacred geometry intensifies
                 const geometry = document.querySelector('.sacred-geometry');
                 if (geometry) {
                     geometry.style.opacity = '0.15';
-                }
-            },
-
-            triggerEmergePhase() {
-                // Spawn symbolic glyphs
-                this.spawnGlyphs();
-
-                // Continue stabilizing
-                ProofState.update({ entropy: 0.2, coherence: 0.75 });
-
-                // Begin crown assembly
-                if (typeof CrownSync !== 'undefined') {
-                    CrownSync.animateStep(3, 7);
+                    geometry.style.transition = 'opacity 2s ease';
                 }
 
-                // Hide calibration lines (they were for calibration only)
+                // Spawn micro-artifacts (fleeting, peripheral, faint)
+                this.spawnMicroArtifacts();
+
+                // Converging particles
+                if (typeof CausalTraces !== 'undefined') {
+                    CausalTraces.converge(12);
+                }
+
+                // Crown begins assembly midway
                 setTimeout(() => {
+                    if (typeof CrownSync !== 'undefined') {
+                        CrownSync.animateStep(4, 11);
+                    }
+                    ProofState.update({ entropy: 0.3, coherence: 0.6, materiality: 0.6 });
+                }, 4000);
+
+                // Further convergence
+                setTimeout(() => {
+                    ProofState.update({ entropy: 0.15, coherence: 0.8, materiality: 0.8 });
+                    if (typeof CausalTraces !== 'undefined') {
+                        CausalTraces.converge(8);
+                    }
                     if (this.elements.calibration) {
                         this.elements.calibration.classList.remove('active');
                     }
-                }, 2000);
+                }, 7000);
             },
 
-            triggerLockPhase() {
-                // Final lock state
-                ProofState.update({ entropy: 0, coherence: 1 });
+            async triggerLockPhase() {
+                // ACT 3: The reality moment - irreversible seal
+                // Damping to near-zero, contrast tightens, glow narrows
+                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
 
-                // Complete crown
+                // Complete crown with single seal moment
                 if (typeof CrownSync !== 'undefined') {
                     CrownSync.complete();
                 }
@@ -6931,75 +7096,99 @@
                     crystal.classList.add('locked');
                 }
 
-                // Lock sacred geometry
+                // Lock sacred geometry orientation (no constant rotation)
                 const geometry = document.querySelector('.sacred-geometry');
                 if (geometry) {
                     geometry.style.animation = 'none';
                     geometry.style.opacity = '0.2';
                 }
+
+                // Show stamp line after brief pause
+                setTimeout(() => {
+                    if (this.elements.stamp) {
+                        this.elements.stamp.textContent = this.stampLine;
+                        this.elements.stamp.classList.add('visible');
+                    } else if (this.elements.message) {
+                        this.elements.message.textContent = this.stampLine;
+                        this.elements.message.classList.add('visible');
+                    }
+                }, 800);
+
+                // Fade stamp after display
+                setTimeout(() => {
+                    if (this.elements.stamp) {
+                        this.elements.stamp.classList.remove('visible');
+                    } else if (this.elements.message) {
+                        this.elements.message.classList.remove('visible');
+                    }
+                }, 2500);
             },
 
-            spawnGlyphs() {
-                if (!this.elements.glyphs) return;
+            spawnMicroArtifacts() {
+                // NDA-safe micro-artifacts: fleeting, 300-700ms each, peripheral, faint
+                if (!this.elements.phase) return;
 
-                // Spawn glyphs at random positions
-                this.glyphs.forEach((glyph, i) => {
+                this.microArtifacts.forEach((artifact, i) => {
                     setTimeout(() => {
-                        const el = document.createElement('span');
-                        el.className = 'ritual-glyph';
-                        el.textContent = glyph;
-                        el.style.left = (20 + Math.random() * 60) + '%';
-                        el.style.top = (20 + Math.random() * 60) + '%';
-                        this.elements.glyphs.appendChild(el);
+                        if (this.elements.phase && this.currentPhase === 2) {
+                            this.elements.phase.textContent = artifact;
+                            this.elements.phase.setAttribute('data-phase', 'converge');
+                            this.elements.phase.classList.add('visible');
 
-                        // Fade in
-                        setTimeout(() => el.classList.add('visible'), 100);
-
-                        // Fade out after a moment
-                        setTimeout(() => el.classList.remove('visible'), 2500);
-                    }, i * 300);
+                            // Fade out after 400-600ms
+                            setTimeout(() => {
+                                if (this.elements.phase) {
+                                    this.elements.phase.classList.remove('visible');
+                                }
+                            }, 400 + Math.random() * 200);
+                        }
+                    }, i * 2000 + Math.random() * 500);
                 });
             },
 
-            async showFinalState() {
-                // Flash final message
-                if (this.elements.message) {
-                    this.elements.message.textContent = 'ZERO DEPENDENCIES';
-                    this.elements.message.classList.add('visible');
-
-                    await new Promise(r => setTimeout(r, 2000));
-
-                    this.elements.message.textContent = 'SOVEREIGN VERIFICATION';
-                    await new Promise(r => setTimeout(r, 2000));
-
-                    this.elements.message.classList.remove('visible');
-                }
+            async showHoldState() {
+                // ACT 4: Stable end frame with one CTA
 
                 // Hide phase indicator
                 if (this.elements.phase) {
                     this.elements.phase.classList.remove('visible');
                 }
 
-                // Show CTA
+                // Ensure stable visual state
+                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
+
+                // Wait a moment before showing CTA
                 await new Promise(r => setTimeout(r, 500));
+
+                // Show CTA
                 if (this.elements.cta) {
                     this.elements.cta.classList.add('visible');
                 }
 
-                ProofBus.emit('ritual:complete', {});
+                ProofBus.emit('ritual:complete', { completed: true });
             },
 
             showLockedState() {
-                // For reduced motion - show final state immediately
-                ProofState.update({ entropy: 0, coherence: 1 });
+                // For reduced motion - jump to stable end state immediately
+                ProofState.update({ entropy: 0, coherence: 1, materiality: 1 });
 
                 if (typeof CrownSync !== 'undefined') {
                     CrownSync.complete();
                 }
 
+                // Lock geometry
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry) {
+                    geometry.style.animation = 'none';
+                    geometry.style.opacity = '0.2';
+                }
+
+                // Show CTA immediately
                 if (this.elements.cta) {
                     this.elements.cta.classList.add('visible');
                 }
+
+                this.hasCompleted = true;
             }
         };
 
