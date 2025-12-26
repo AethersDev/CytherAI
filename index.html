@@ -2553,8 +2553,281 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           2025 CUTTING-EDGE ENHANCEMENTS
-           Advanced visual systems for modern web experiences
+           2025 PARADIGM SHIFT VISUALS
+           IMPOSSIBLE TO MISS - Bold, dramatic, jaw-dropping effects
+        ════════════════════════════════════════════════════════════════ */
+
+        /* ═══════════════════════════════════════
+           HOLOGRAPHIC RAINBOW OVERLAY
+           Full-screen animated hologram effect
+        ═══════════════════════════════════════ */
+        .holographic-overlay {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 5;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 0, 255, 0.15) 0%,
+                rgba(0, 255, 255, 0.15) 25%,
+                rgba(255, 255, 0, 0.15) 50%,
+                rgba(0, 255, 255, 0.15) 75%,
+                rgba(255, 0, 255, 0.15) 100%
+            );
+            background-size: 400% 400%;
+            animation: holoShift 8s ease infinite;
+            opacity: 0.6;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes holoShift {
+            0%, 100% { background-position: 0% 50%; filter: hue-rotate(0deg); }
+            25% { background-position: 50% 100%; filter: hue-rotate(90deg); }
+            50% { background-position: 100% 50%; filter: hue-rotate(180deg); }
+            75% { background-position: 50% 0%; filter: hue-rotate(270deg); }
+        }
+
+        /* Scanline hologram effect */
+        .holographic-overlay::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255, 255, 255, 0.05) 0px,
+                transparent 2px,
+                transparent 4px
+            );
+            animation: scanlineMove 4s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100px); }
+        }
+
+        /* ═══════════════════════════════════════
+           MASSIVE 3D FLOATING CARDS
+           Cards that actually float and rotate
+        ═══════════════════════════════════════ */
+        .feature-card,
+        .dossier-plate,
+        .contact-card {
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .feature-card:hover,
+        .dossier-plate:hover {
+            transform: translateY(-30px) rotateX(10deg) rotateY(-10deg) scale(1.05) !important;
+            box-shadow:
+                0 50px 100px rgba(212, 175, 55, 0.4),
+                0 80px 150px rgba(0, 0, 0, 0.8),
+                inset 0 0 80px rgba(212, 175, 55, 0.2) !important;
+            z-index: 100 !important;
+        }
+
+        /* 3D depth layers */
+        .feature-card::before,
+        .dossier-plate::before {
+            transform: translateZ(-20px) !important;
+        }
+
+        /* ═══════════════════════════════════════
+           EXPLOSIVE TEXT DISINTEGRATION
+           Text literally breaks apart
+        ═══════════════════════════════════════ */
+        @keyframes textExplode {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(var(--explode-x, 0) * 200px),
+                    calc(var(--explode-y, 0) * 200px)
+                ) rotate(calc(var(--explode-r, 0) * 720deg)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .text-explode .char {
+            animation: textExplode 1.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
+        }
+
+        /* ═══════════════════════════════════════
+           SCREEN-WIDE GLITCH EFFECT
+           VHS-style glitch waves
+        ═══════════════════════════════════════ */
+        .glitch-wave {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 9995;
+            opacity: 0;
+            animation: glitchPulse 10s ease-in-out infinite;
+        }
+
+        @keyframes glitchPulse {
+            0%, 90%, 100% { opacity: 0; }
+            91%, 93%, 95% { opacity: 1; }
+            92%, 94% { opacity: 0; }
+        }
+
+        .glitch-wave::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                0deg,
+                transparent 0%,
+                rgba(255, 0, 0, 0.3) 48%,
+                rgba(0, 255, 255, 0.3) 52%,
+                transparent 100%
+            );
+            background-size: 100% 10px;
+            animation: glitchScan 0.3s linear infinite;
+        }
+
+        @keyframes glitchScan {
+            0% { transform: translateY(0) scaleY(1); }
+            100% { transform: translateY(100vh) scaleY(2); }
+        }
+
+        /* ═══════════════════════════════════════
+           RAINBOW GRADIENT WAVES
+           Massive color shifts across page
+        ═══════════════════════════════════════ */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: -100%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(
+                ellipse at 50% 50%,
+                rgba(212, 175, 55, 0.3) 0%,
+                rgba(255, 0, 255, 0.2) 25%,
+                rgba(0, 255, 255, 0.2) 50%,
+                rgba(255, 255, 0, 0.2) 75%,
+                transparent 100%
+            );
+            animation: colorWave 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes colorWave {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotate(0deg) scale(1);
+                opacity: 0.4;
+            }
+            50% {
+                transform: translate(-30%, -30%) rotate(180deg) scale(1.5);
+                opacity: 0.7;
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           GIANT PARTICLE BURST
+           Impossible-to-miss particle explosions
+        ═══════════════════════════════════════ */
+        .mega-particle {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9990;
+            box-shadow:
+                0 0 30px var(--gold-core),
+                0 0 60px var(--gold-bright),
+                0 0 90px rgba(212, 175, 55, 0.5);
+            animation: megaBurst 3s ease-out forwards;
+        }
+
+        @keyframes megaBurst {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(var(--burst-x, 0) * 800px),
+                    calc(var(--burst-y, 0) * 800px)
+                ) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           FLOATING HOLOGRAPHIC UI
+           Cards that levitate dramatically
+        ═══════════════════════════════════════ */
+        @keyframes float3D {
+            0%, 100% {
+                transform: translateY(0) rotateX(0deg) rotateY(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotateX(5deg) rotateY(-5deg);
+            }
+            50% {
+                transform: translateY(-40px) rotateX(-3deg) rotateY(5deg);
+            }
+            75% {
+                transform: translateY(-20px) rotateX(3deg) rotateY(-3deg);
+            }
+        }
+
+        .floating-holo {
+            animation: float3D 8s ease-in-out infinite !important;
+            box-shadow:
+                0 40px 80px rgba(0, 0, 0, 0.6),
+                0 0 100px rgba(212, 175, 55, 0.5),
+                inset 0 0 100px rgba(212, 175, 55, 0.1) !important;
+        }
+
+        /* ═══════════════════════════════════════
+           CHROMATIC ABERRATION
+           RGB split effect on everything
+        ═══════════════════════════════════════ */
+        .chromatic-split {
+            position: relative;
+        }
+
+        .chromatic-split::before,
+        .chromatic-split::after {
+            content: attr(data-text);
+            position: absolute;
+            inset: 0;
+            opacity: 0.7;
+            mix-blend-mode: screen;
+        }
+
+        .chromatic-split::before {
+            color: #ff0000;
+            animation: chromaShiftR 2s ease-in-out infinite;
+        }
+
+        .chromatic-split::after {
+            color: #00ffff;
+            animation: chromaShiftC 2s ease-in-out infinite;
+        }
+
+        @keyframes chromaShiftR {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(3px, -2px); }
+        }
+
+        @keyframes chromaShiftC {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-3px, 2px); }
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           ORIGINAL 2025 ENHANCEMENTS (kept for compatibility)
         ════════════════════════════════════════════════════════════════ */
 
         /* ═══════════════════════════════════════
@@ -5795,6 +6068,16 @@
     <div class="depth-fog" id="depthFog">...</div>
     <div class="data-stream-container" id="dataStreamContainer"></div>
     -->
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         PARADIGM SHIFT VISUAL LAYERS - Impossible to miss
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Holographic Rainbow Overlay - Full screen animated hologram -->
+    <div class="holographic-overlay"></div>
+
+    <!-- Glitch Wave Effect - VHS-style screen glitches -->
+    <div class="glitch-wave"></div>
 
     <!-- Consciousness Particles - kept for causal trace system -->
     <div class="consciousness-particles" id="consciousnessParticles"></div>
@@ -9490,6 +9773,110 @@
 
         const EnhancementEngine = {
             // ═══════════════════════════════════════
+            // MEGA PARTICLE BURST SYSTEM
+            // Giant glowing particles that explode
+            // ═══════════════════════════════════════
+            createMegaBurst(x, y, count = 50) {
+                for (let i = 0; i < count; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'mega-particle';
+
+                    // Random burst direction
+                    const angle = (Math.PI * 2 * i) / count;
+                    const burstX = Math.cos(angle);
+                    const burstY = Math.sin(angle);
+
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+                    particle.style.setProperty('--burst-x', burstX);
+                    particle.style.setProperty('--burst-y', burstY);
+
+                    document.body.appendChild(particle);
+                    setTimeout(() => particle.remove(), 3000);
+                }
+            },
+
+            // Auto-burst on scroll milestones
+            initAutoBurst() {
+                let lastBurst = 0;
+                window.addEventListener('scroll', () => {
+                    const scrollPos = window.pageYOffset;
+                    const milestone = Math.floor(scrollPos / 500);
+
+                    if (milestone > lastBurst) {
+                        lastBurst = milestone;
+                        this.createMegaBurst(
+                            window.innerWidth / 2,
+                            window.innerHeight / 2,
+                            30
+                        );
+                    }
+                }, { passive: true });
+
+                // Initial burst on load
+                setTimeout(() => {
+                    this.createMegaBurst(window.innerWidth / 2, window.innerHeight / 3, 80);
+                }, 500);
+            },
+
+            // ═══════════════════════════════════════
+            // FLOATING HOLOGRAPHIC CARDS
+            // Apply levitation to ALL cards
+            // ═══════════════════════════════════════
+            initFloatingCards() {
+                const cards = document.querySelectorAll('.feature-card, .dossier-plate, .contact-card, .bento-item');
+
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('floating-holo');
+                    }, index * 100);
+                });
+            },
+
+            // ═══════════════════════════════════════
+            // CHROMATIC ABERRATION TEXT
+            // RGB split on all headlines
+            // ═══════════════════════════════════════
+            initChromaticText() {
+                const headlines = document.querySelectorAll('.hero-headline, .sovereign-headline, .section-title, .wordmark-text');
+
+                headlines.forEach(headline => {
+                    const text = headline.textContent;
+                    headline.setAttribute('data-text', text);
+                    headline.classList.add('chromatic-split');
+                });
+            },
+
+            // ═══════════════════════════════════════
+            // TEXT EXPLOSION EFFECT
+            // On click, text explodes into particles
+            // ═══════════════════════════════════════
+            initTextExplosion() {
+                const targets = document.querySelectorAll('.section-title, .chapter-stamp');
+
+                targets.forEach(target => {
+                    target.addEventListener('click', () => {
+                        // Wrap each character
+                        const text = target.textContent;
+                        target.innerHTML = text.split('').map((char, i) => {
+                            const x = (Math.random() - 0.5);
+                            const y = (Math.random() - 0.5);
+                            const r = (Math.random() - 0.5);
+                            return `<span class="char" style="--explode-x: ${x}; --explode-y: ${y}; --explode-r: ${r}">${char}</span>`;
+                        }).join('');
+
+                        target.classList.add('text-explode');
+
+                        // Restore after animation
+                        setTimeout(() => {
+                            target.classList.remove('text-explode');
+                            target.textContent = text;
+                        }, 1500);
+                    });
+                });
+            },
+
+            // ═══════════════════════════════════════
             // RIPPLE EFFECT SYSTEM
             // ═══════════════════════════════════════
             initRipples() {
@@ -9734,7 +10121,14 @@
             // MASTER INITIALIZATION
             // ═══════════════════════════════════════
             init() {
-                console.log('%c⚡ 2025 Enhancements Activated', 'color: #00f0ff; font-weight: bold; font-size: 12px;');
+                console.log('%c🎆 PARADIGM SHIFT VISUALS ACTIVATED', 'color: #ff00ff; font-weight: bold; font-size: 16px; text-shadow: 0 0 10px #ff00ff;');
+                console.log('%c💥 Impossible-to-miss visual effects loading...', 'color: #00ffff; font-size: 12px;');
+
+                // BOLD PARADIGM-SHIFTING EFFECTS (activated first for maximum impact)
+                this.initAutoBurst();
+                this.initFloatingCards();
+                this.initChromaticText();
+                this.initTextExplosion();
 
                 // Initialize all enhancement systems
                 this.initRipples();
@@ -9746,6 +10140,13 @@
                 this.initGlassmorphism();
                 this.initParallax();
 
+                console.log('%c✨ Holographic Rainbow Overlay', 'color: #ff00ff; font-size: 11px; font-weight: bold;');
+                console.log('%c💥 Mega Particle Bursts', 'color: #ffff00; font-size: 11px; font-weight: bold;');
+                console.log('%c🎪 Floating 3D Cards', 'color: #00ffff; font-size: 11px; font-weight: bold;');
+                console.log('%c📺 VHS Glitch Waves', 'color: #ff0000; font-size: 11px; font-weight: bold;');
+                console.log('%c🌈 Rainbow Color Waves', 'color: #00ff00; font-size: 11px; font-weight: bold;');
+                console.log('%c💎 Chromatic Aberration', 'color: #ff00ff; font-size: 11px; font-weight: bold;');
+                console.log('%c💣 Text Explosions (click titles!)', 'color: #ffff00; font-size: 11px; font-weight: bold;');
                 console.log('%c✓ Glassmorphism', 'color: #d4af37; font-size: 10px;');
                 console.log('%c✓ Kinetic Typography', 'color: #d4af37; font-size: 10px;');
                 console.log('%c✓ Advanced Particles', 'color: #d4af37; font-size: 10px;');
@@ -9753,6 +10154,8 @@
                 console.log('%c✓ Liquid Morphing', 'color: #d4af37; font-size: 10px;');
                 console.log('%c✓ Neon Accents', 'color: #d4af37; font-size: 10px;');
                 console.log('%c✓ Micro-interactions', 'color: #d4af37; font-size: 10px;');
+
+                console.log('%c\n🚀 ALL SYSTEMS OPERATIONAL - VISUAL PARADIGM SHIFTED', 'color: #00ff00; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px #00ff00;');
             }
         };
 
