@@ -90,6 +90,20 @@
             --phase-lock: #d4af37;
 
             /* ════════════════════════════════════════
+               2025 NEON ACCENT SYSTEM
+               Dynamic phase-based color shifts
+            ════════════════════════════════════════ */
+            --neon-cyan: #00f0ff;
+            --neon-magenta: #ff006e;
+            --neon-blue: #4d9fff;
+            --neon-electric: #39ff14;
+
+            /* Neon glow intensity levels */
+            --neon-glow-soft: 0 0 10px currentColor;
+            --neon-glow-medium: 0 0 20px currentColor, 0 0 40px currentColor;
+            --neon-glow-intense: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 80px currentColor;
+
+            /* ════════════════════════════════════════
                TYPOGRAPHY SYSTEM
             ════════════════════════════════════════ */
 
@@ -393,10 +407,14 @@
             width: 100%;
             padding: 1.5rem 4rem;
             z-index: 1000;
-            /* Architectural approach: solid darkness, sharp edge */
-            background: linear-gradient(180deg, rgba(5,5,8,0.95) 0%, rgba(5,5,8,0.85) 100%);
-            backdrop-filter: blur(8px);  /* Minimal blur - just enough */
-            border-bottom: 1px solid var(--gold-shadow);
+            /* Enhanced glassmorphic navigation */
+            background: rgba(5, 5, 8, 0.75);
+            backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(105%);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
             transition: all 0.5s var(--ease-out-expo);
         }
 
@@ -1362,8 +1380,36 @@
             margin: 0 2rem;
         }
 
+        /* ════════════════════════════════════════
+           2025 GLASSMORPHISM SYSTEM
+           Frosted glass with depth hierarchy
+        ════════════════════════════════════════ */
+        .glass-morphic {
+            background: rgba(212, 175, 55, 0.05);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.37),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-heavy {
+            background: rgba(212, 175, 55, 0.08);
+            backdrop-filter: blur(24px) saturate(200%) brightness(110%);
+            -webkit-backdrop-filter: blur(24px) saturate(200%) brightness(110%);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .glass-light {
+            background: rgba(212, 175, 55, 0.03);
+            backdrop-filter: blur(12px) saturate(160%);
+            -webkit-backdrop-filter: blur(12px) saturate(160%);
+            border: 1px solid rgba(212, 175, 55, 0.12);
+        }
+
         /* ========================================
-           FEATURE CARDS - HOLOGRAPHIC
+           FEATURE CARDS - HOLOGRAPHIC + GLASS
         ======================================== */
         .feature-grid {
             display: grid;
@@ -1382,6 +1428,14 @@
             perspective: 1000px;
             cursor: pointer;
             will-change: transform, box-shadow;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .feature-card:hover {
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(0, 0, 0, 0.3));
         }
 
         .feature-card::before {
@@ -2496,6 +2550,404 @@
         .status-item strong {
             color: var(--gold-bright);
             font-weight: 400;
+        }
+
+        /* ════════════════════════════════════════════════════════════════
+           2025 CUTTING-EDGE ENHANCEMENTS
+           Advanced visual systems for modern web experiences
+        ════════════════════════════════════════════════════════════════ */
+
+        /* ═══════════════════════════════════════
+           KINETIC TYPOGRAPHY SYSTEM
+           Text that breathes with proof states
+        ═══════════════════════════════════════ */
+        .kinetic-text {
+            display: inline-block;
+            transition: all 0.6s var(--ease-out-expo);
+        }
+
+        .kinetic-text.phase-search {
+            animation: textSearch 2s ease-in-out infinite;
+        }
+
+        .kinetic-text.phase-converge {
+            animation: textConverge 1.5s ease-in-out infinite;
+        }
+
+        .kinetic-text.phase-crystallize {
+            animation: textCrystallize 3s ease-in-out infinite;
+            color: var(--neon-cyan);
+            text-shadow: var(--neon-glow-medium);
+        }
+
+        @keyframes textSearch {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+            50% { transform: translateY(-3px) scale(1.02); opacity: 0.9; filter: blur(0.5px); }
+        }
+
+        @keyframes textConverge {
+            0%, 100% { letter-spacing: 0.3em; }
+            50% { letter-spacing: 0.35em; }
+        }
+
+        @keyframes textCrystallize {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px var(--neon-cyan),
+                    0 0 20px var(--neon-cyan),
+                    0 0 30px var(--neon-cyan);
+            }
+            50% {
+                text-shadow:
+                    0 0 20px var(--neon-cyan),
+                    0 0 40px var(--neon-cyan),
+                    0 0 60px var(--neon-cyan),
+                    0 0 80px rgba(0, 240, 255, 0.5);
+            }
+        }
+
+        /* Character-level animation */
+        .char {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .char.pulse {
+            animation: charPulse 0.6s ease-out;
+        }
+
+        @keyframes charPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); color: var(--gold-bright); }
+        }
+
+        /* ═══════════════════════════════════════
+           ENHANCED MICROINTERACTIONS
+           Ripples, haptic feedback, polish
+        ═══════════════════════════════════════ */
+        .ripple-effect {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.6) 0%, rgba(212, 175, 55, 0) 70%);
+            transform: scale(0);
+            animation: rippleExpand 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(4); opacity: 0; }
+        }
+
+        /* Button micro-animations */
+        .btn-micro,
+        .cta-button,
+        .prove-btn,
+        .replay-btn,
+        .preset-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-micro::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn-micro:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Haptic pulse on interaction */
+        @keyframes hapticPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.97); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-micro:active {
+            animation: hapticPulse 0.2s ease;
+        }
+
+        /* ═══════════════════════════════════════
+           BENTO GRID SYSTEM
+           Modular asymmetric layouts
+        ═══════════════════════════════════════ */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .bento-item {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03), rgba(0, 0, 0, 0.5));
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s var(--ease-out-expo);
+        }
+
+        .bento-item:hover {
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-4px);
+            box-shadow:
+                0 12px 40px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .bento-large {
+            grid-column: span 8;
+            grid-row: span 2;
+        }
+
+        .bento-medium {
+            grid-column: span 6;
+        }
+
+        .bento-small {
+            grid-column: span 4;
+        }
+
+        .bento-tall {
+            grid-row: span 2;
+        }
+
+        /* ═══════════════════════════════════════
+           ADVANCED PARTICLE BEHAVIORS
+           Flocking, attraction, organic movement
+        ═══════════════════════════════════════ */
+        .particle-flock {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold-core);
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 8px var(--gold-core);
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        .particle-flock.active {
+            animation: flockFloat 8s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes flockFloat {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(var(--flock-x1, 50px), var(--flock-y1, -30px)) scale(1.2);
+            }
+            50% {
+                transform: translate(var(--flock-x2, -30px), var(--flock-y2, 40px)) scale(0.9);
+            }
+            75% {
+                transform: translate(var(--flock-x3, 60px), var(--flock-y3, 20px)) scale(1.1);
+            }
+        }
+
+        /* Particle trail effect */
+        .particle-trail {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold-dim);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.3); }
+        }
+
+        /* ═══════════════════════════════════════
+           SCROLL-LINKED CINEMATIC SYSTEM
+           Camera-like reveals and transitions
+        ═══════════════════════════════════════ */
+        .cinematic-reveal {
+            opacity: 0;
+            transform: translateY(60px) scale(0.95);
+            transition: all 1.2s var(--ease-out-expo);
+            filter: blur(4px);
+        }
+
+        .cinematic-reveal.in-view {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .cinematic-reveal.from-left {
+            transform: translateX(-80px) translateY(20px) rotateY(-5deg);
+        }
+
+        .cinematic-reveal.from-left.in-view {
+            transform: translateX(0) translateY(0) rotateY(0);
+        }
+
+        .cinematic-reveal.from-right {
+            transform: translateX(80px) translateY(20px) rotateY(5deg);
+        }
+
+        .cinematic-reveal.from-right.in-view {
+            transform: translateX(0) translateY(0) rotateY(0);
+        }
+
+        /* Parallax depth layers */
+        .parallax-layer {
+            will-change: transform;
+            transition: transform 0.1s linear;
+        }
+
+        .parallax-near { transform: translateZ(50px); }
+        .parallax-mid { transform: translateZ(0px); }
+        .parallax-far { transform: translateZ(-50px); }
+
+        /* ═══════════════════════════════════════
+           LIQUID DISTORTION EFFECTS
+           Morphing, flowing transitions
+        ═══════════════════════════════════════ */
+        .liquid-morph {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .liquid-morph::before {
+            content: '';
+            position: absolute;
+            inset: -100%;
+            background: radial-gradient(
+                circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(212, 175, 55, 0.2) 0%,
+                rgba(212, 175, 55, 0.1) 25%,
+                transparent 50%
+            );
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+
+        .liquid-morph:hover::before {
+            opacity: 1;
+        }
+
+        /* Flowing gradient animation */
+        .liquid-gradient {
+            background: linear-gradient(
+                45deg,
+                var(--gold-shadow) 0%,
+                var(--gold-dim) 25%,
+                var(--gold-core) 50%,
+                var(--gold-dim) 75%,
+                var(--gold-shadow) 100%
+            );
+            background-size: 200% 200%;
+            animation: liquidFlow 8s ease-in-out infinite;
+        }
+
+        @keyframes liquidFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ═══════════════════════════════════════
+           NEON ACCENT PHASE INDICATORS
+           Dynamic color shifts based on state
+        ═══════════════════════════════════════ */
+        [data-proof-phase="search"] .neon-accent {
+            color: var(--neon-magenta);
+            text-shadow: var(--neon-glow-medium);
+        }
+
+        [data-proof-phase="converge"] .neon-accent {
+            color: var(--neon-electric);
+            text-shadow: var(--neon-glow-medium);
+        }
+
+        [data-proof-phase="crystallize"] .neon-accent {
+            color: var(--neon-cyan);
+            text-shadow: var(--neon-glow-intense);
+        }
+
+        /* Pulsing neon glow */
+        .neon-pulse {
+            animation: neonPulseGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes neonPulseGlow {
+            0%, 100% {
+                text-shadow:
+                    0 0 10px currentColor,
+                    0 0 20px currentColor,
+                    0 0 30px currentColor;
+            }
+            50% {
+                text-shadow:
+                    0 0 20px currentColor,
+                    0 0 40px currentColor,
+                    0 0 60px currentColor,
+                    0 0 80px currentColor;
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE ADJUSTMENTS
+        ═══════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bento-large,
+            .bento-medium,
+            .bento-small {
+                grid-column: span 1;
+            }
+
+            .glass-morphic,
+            .glass-heavy,
+            .glass-light {
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .kinetic-text,
+            .particle-flock,
+            .liquid-gradient,
+            .neon-pulse {
+                animation: none !important;
+            }
+
+            .cinematic-reveal {
+                transition-duration: 0.01ms;
+            }
         }
 
         /* ========================================
@@ -9030,6 +9482,286 @@
         }
 
         initProofSystem();
+
+        // ════════════════════════════════════════════════════════════════
+        // 2025 CUTTING-EDGE ENHANCEMENTS ACTIVATION
+        // Glassmorphism, kinetic typography, advanced particles, etc.
+        // ════════════════════════════════════════════════════════════════
+
+        const EnhancementEngine = {
+            // ═══════════════════════════════════════
+            // RIPPLE EFFECT SYSTEM
+            // ═══════════════════════════════════════
+            initRipples() {
+                const buttons = document.querySelectorAll('.btn-micro, .cta-button, .prove-btn, .replay-btn, .preset-btn, .gate-cta, .ritual-cta');
+
+                buttons.forEach(btn => {
+                    btn.classList.add('ripple-effect');
+                    btn.addEventListener('click', (e) => {
+                        const ripple = document.createElement('div');
+                        ripple.className = 'ripple';
+
+                        const rect = btn.getBoundingClientRect();
+                        const size = Math.max(rect.width, rect.height);
+                        const x = e.clientX - rect.left - size / 2;
+                        const y = e.clientY - rect.top - size / 2;
+
+                        ripple.style.width = ripple.style.height = `${size}px`;
+                        ripple.style.left = `${x}px`;
+                        ripple.style.top = `${y}px`;
+
+                        btn.appendChild(ripple);
+
+                        setTimeout(() => ripple.remove(), 800);
+                    });
+                });
+            },
+
+            // ═══════════════════════════════════════
+            // KINETIC TYPOGRAPHY
+            // ═══════════════════════════════════════
+            initKineticTypography() {
+                const headlines = document.querySelectorAll('.sovereign-headline');
+
+                headlines.forEach(headline => {
+                    // Wrap words in spans
+                    const words = headline.textContent.split(' ');
+                    headline.innerHTML = words.map(word =>
+                        `<span class="kinetic-text">${word}</span>`
+                    ).join(' ');
+                });
+
+                // Update typography based on proof phase
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:step', () => {
+                        const phase = document.body.getAttribute('data-proof-phase');
+                        document.querySelectorAll('.kinetic-text').forEach(text => {
+                            text.className = `kinetic-text phase-${phase}`;
+                        });
+                    });
+                }
+            },
+
+            // ═══════════════════════════════════════
+            // ADVANCED FLOCKING PARTICLES
+            // ═══════════════════════════════════════
+            initFlockingParticles() {
+                if (isMobile || prefersReducedMotion) return;
+
+                const container = document.querySelector('.hero');
+                if (!container) return;
+
+                const particles = [];
+                const particleCount = 30;
+
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle-flock';
+
+                    // Random starting position
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    particle.style.left = `${x}px`;
+                    particle.style.top = `${y}px`;
+
+                    // Random flocking vectors
+                    particle.style.setProperty('--flock-x1', `${(Math.random() - 0.5) * 100}px`);
+                    particle.style.setProperty('--flock-y1', `${(Math.random() - 0.5) * 80}px`);
+                    particle.style.setProperty('--flock-x2', `${(Math.random() - 0.5) * 120}px`);
+                    particle.style.setProperty('--flock-y2', `${(Math.random() - 0.5) * 100}px`);
+                    particle.style.setProperty('--flock-x3', `${(Math.random() - 0.5) * 90}px`);
+                    particle.style.setProperty('--flock-y3', `${(Math.random() - 0.5) * 110}px`);
+
+                    particle.style.animationDelay = `${Math.random() * 8}s`;
+                    particle.style.animationDuration = `${8 + Math.random() * 4}s`;
+
+                    container.appendChild(particle);
+                    particles.push(particle);
+
+                    // Activate after a delay
+                    setTimeout(() => particle.classList.add('active'), 100 + i * 50);
+                }
+
+                // Create particle trails on proof events
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:step', (data) => {
+                        if (Math.random() > 0.7) {
+                            this.createParticleTrail(container);
+                        }
+                    });
+                }
+            },
+
+            createParticleTrail(container) {
+                const trail = document.createElement('div');
+                trail.className = 'particle-trail';
+                trail.style.left = `${Math.random() * 100}%`;
+                trail.style.top = `${Math.random() * 100}%`;
+                container.appendChild(trail);
+                setTimeout(() => trail.remove(), 800);
+            },
+
+            // ═══════════════════════════════════════
+            // CINEMATIC SCROLL REVEALS
+            // ═══════════════════════════════════════
+            initCinematicReveals() {
+                const reveals = document.querySelectorAll('.dossier-plate, .feature-card, .contact-card');
+
+                reveals.forEach((element, index) => {
+                    element.classList.add('cinematic-reveal');
+
+                    // Alternate left/right reveals
+                    if (index % 3 === 0) {
+                        element.classList.add('from-left');
+                    } else if (index % 3 === 1) {
+                        element.classList.add('from-right');
+                    }
+                });
+
+                // Intersection Observer for scroll-linked reveals
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('in-view');
+                        }
+                    });
+                }, {
+                    threshold: 0.15,
+                    rootMargin: '-50px'
+                });
+
+                reveals.forEach(el => observer.observe(el));
+            },
+
+            // ═══════════════════════════════════════
+            // LIQUID MORPHING EFFECTS
+            // ═══════════════════════════════════════
+            initLiquidMorphing() {
+                const morphElements = document.querySelectorAll('.feature-card, .bento-item, .contact-card');
+
+                morphElements.forEach(el => {
+                    el.classList.add('liquid-morph');
+
+                    el.addEventListener('mousemove', (e) => {
+                        const rect = el.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) * 100;
+                        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                        el.style.setProperty('--mouse-x', `${x}%`);
+                        el.style.setProperty('--mouse-y', `${y}%`);
+                    });
+                });
+            },
+
+            // ═══════════════════════════════════════
+            // NEON ACCENT PHASE SYNC
+            // ═══════════════════════════════════════
+            initNeonAccents() {
+                const accentElements = document.querySelectorAll('.ritual-stamp, .ritual-message, .verification-mark');
+
+                accentElements.forEach(el => {
+                    el.classList.add('neon-accent', 'neon-pulse');
+                });
+
+                // Update neon colors based on proof phase
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:step', (data) => {
+                        const phase = document.body.getAttribute('data-proof-phase');
+                        document.body.setAttribute('data-neon-phase', phase);
+                    });
+                }
+            },
+
+            // ═══════════════════════════════════════
+            // GLASSMORPHISM ACTIVATION
+            // ═══════════════════════════════════════
+            initGlassmorphism() {
+                // Apply glassmorphism to key UI elements
+                const nav = document.querySelector('nav');
+                if (nav) nav.classList.add('glass-heavy');
+
+                const proofReceipt = document.querySelector('.proof-receipt');
+                if (proofReceipt) proofReceipt.classList.add('glass-morphic');
+
+                const trustInspector = document.querySelector('.trust-inspector-panel');
+                if (trustInspector) trustInspector.classList.add('glass-morphic');
+
+                const dossierPlates = document.querySelectorAll('.dossier-plate .plate-surface');
+                dossierPlates.forEach(plate => plate.classList.add('glass-light'));
+            },
+
+            // ═══════════════════════════════════════
+            // PARALLAX SCROLL SYSTEM
+            // ═══════════════════════════════════════
+            initParallax() {
+                if (isMobile || prefersReducedMotion) return;
+
+                const hero = document.querySelector('.hero');
+                const heroContent = document.querySelector('.hero-content');
+                const geometry = document.querySelector('.sacred-geometry');
+                const neuralField = document.querySelector('.neural-field');
+
+                let ticking = false;
+
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            const scrolled = window.pageYOffset;
+                            const heroHeight = hero ? hero.offsetHeight : 0;
+
+                            if (heroContent && scrolled < heroHeight) {
+                                const progress = scrolled / heroHeight;
+                                heroContent.style.opacity = 1 - progress * 0.7;
+                                heroContent.style.transform = `translateY(${scrolled * 0.4}px)`;
+                            }
+
+                            if (geometry && scrolled < heroHeight) {
+                                geometry.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.2}px) rotate(${scrolled * 0.05}deg)`;
+                            }
+
+                            if (neuralField && scrolled < heroHeight) {
+                                neuralField.style.transform = `translateY(${scrolled * -0.15}px)`;
+                            }
+
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                }, { passive: true });
+            },
+
+            // ═══════════════════════════════════════
+            // MASTER INITIALIZATION
+            // ═══════════════════════════════════════
+            init() {
+                console.log('%c⚡ 2025 Enhancements Activated', 'color: #00f0ff; font-weight: bold; font-size: 12px;');
+
+                // Initialize all enhancement systems
+                this.initRipples();
+                this.initKineticTypography();
+                this.initFlockingParticles();
+                this.initCinematicReveals();
+                this.initLiquidMorphing();
+                this.initNeonAccents();
+                this.initGlassmorphism();
+                this.initParallax();
+
+                console.log('%c✓ Glassmorphism', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Kinetic Typography', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Advanced Particles', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Cinematic Reveals', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Liquid Morphing', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Neon Accents', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✓ Micro-interactions', 'color: #d4af37; font-size: 10px;');
+            }
+        };
+
+        // Activate enhancements after DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => EnhancementEngine.init());
+        } else {
+            EnhancementEngine.init();
+        }
 
     })();
     </script>
