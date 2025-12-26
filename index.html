@@ -2553,57 +2553,51 @@
         }
 
         /* ════════════════════════════════════════════════════════════════
-           2025 PARADIGM SHIFT VISUALS
-           IMPOSSIBLE TO MISS - Bold, dramatic, jaw-dropping effects
+           PARADIGM SHIFT VISUALS - SOVEREIGN GOLD AESTHETIC
+           Precision-grade enhancements within executive design system
+           Maintains gold sovereignty, cinematic black, mathematical precision
         ════════════════════════════════════════════════════════════════ */
 
         /* ═══════════════════════════════════════
-           HOLOGRAPHIC RAINBOW OVERLAY
-           Full-screen animated hologram effect
+           TACTICAL SCAN OVERLAY
+           Precision instrumentation aesthetic
         ═══════════════════════════════════════ */
-        .holographic-overlay {
+        .tactical-scan-overlay {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 5;
-            background: linear-gradient(
-                45deg,
-                rgba(255, 0, 255, 0.15) 0%,
-                rgba(0, 255, 255, 0.15) 25%,
-                rgba(255, 255, 0, 0.15) 50%,
-                rgba(0, 255, 255, 0.15) 75%,
-                rgba(255, 0, 255, 0.15) 100%
-            );
-            background-size: 400% 400%;
-            animation: holoShift 8s ease infinite;
-            opacity: 0.6;
-            mix-blend-mode: screen;
+            opacity: 0.15;
         }
 
-        @keyframes holoShift {
-            0%, 100% { background-position: 0% 50%; filter: hue-rotate(0deg); }
-            25% { background-position: 50% 100%; filter: hue-rotate(90deg); }
-            50% { background-position: 100% 50%; filter: hue-rotate(180deg); }
-            75% { background-position: 50% 0%; filter: hue-rotate(270deg); }
-        }
-
-        /* Scanline hologram effect */
-        .holographic-overlay::before {
+        .tactical-scan-overlay::before {
             content: '';
             position: absolute;
             inset: 0;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(255, 255, 255, 0.05) 0px,
+                transparent 0px,
+                rgba(212, 175, 55, 0.02) 1px,
                 transparent 2px,
                 transparent 4px
             );
-            animation: scanlineMove 4s linear infinite;
+            animation: tacticalScan 8s linear infinite;
         }
 
-        @keyframes scanlineMove {
+        @keyframes tacticalScan {
             0% { transform: translateY(0); }
             100% { transform: translateY(100px); }
+        }
+
+        /* Precision targeting grid */
+        .tactical-scan-overlay::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(0deg, transparent 98%, rgba(212, 175, 55, 0.05) 100%),
+                linear-gradient(90deg, transparent 98%, rgba(212, 175, 55, 0.05) 100%);
+            background-size: 50px 50px;
         }
 
         /* ═══════════════════════════════════════
@@ -2634,131 +2628,130 @@
         }
 
         /* ═══════════════════════════════════════
-           EXPLOSIVE TEXT DISINTEGRATION
-           Text literally breaks apart
+           LIQUID GOLD SHIMMER
+           Molten metal flow effect
         ═══════════════════════════════════════ */
-        @keyframes textExplode {
+        @keyframes goldShimmer {
             0% {
-                transform: translate(0, 0) rotate(0deg) scale(1);
-                opacity: 1;
+                background-position: 0% 50%;
+                filter: brightness(1);
+            }
+            50% {
+                background-position: 100% 50%;
+                filter: brightness(1.2);
             }
             100% {
-                transform: translate(
-                    calc(var(--explode-x, 0) * 200px),
-                    calc(var(--explode-y, 0) * 200px)
-                ) rotate(calc(var(--explode-r, 0) * 720deg)) scale(0);
-                opacity: 0;
+                background-position: 0% 50%;
+                filter: brightness(1);
             }
         }
 
-        .text-explode .char {
-            animation: textExplode 1.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards !important;
-        }
-
-        /* ═══════════════════════════════════════
-           SCREEN-WIDE GLITCH EFFECT
-           VHS-style glitch waves
-        ═══════════════════════════════════════ */
-        .glitch-wave {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 9995;
-            opacity: 0;
-            animation: glitchPulse 10s ease-in-out infinite;
-        }
-
-        @keyframes glitchPulse {
-            0%, 90%, 100% { opacity: 0; }
-            91%, 93%, 95% { opacity: 1; }
-            92%, 94% { opacity: 0; }
-        }
-
-        .glitch-wave::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+        .gold-shimmer {
             background: linear-gradient(
-                0deg,
-                transparent 0%,
-                rgba(255, 0, 0, 0.3) 48%,
-                rgba(0, 255, 255, 0.3) 52%,
-                transparent 100%
+                120deg,
+                var(--gold-shadow) 0%,
+                var(--gold-dim) 25%,
+                var(--gold-core) 50%,
+                var(--gold-bright) 60%,
+                var(--gold-core) 75%,
+                var(--gold-dim) 100%
             );
-            background-size: 100% 10px;
-            animation: glitchScan 0.3s linear infinite;
-        }
-
-        @keyframes glitchScan {
-            0% { transform: translateY(0) scaleY(1); }
-            100% { transform: translateY(100vh) scaleY(2); }
+            background-size: 200% 200%;
+            animation: goldShimmer 4s ease-in-out infinite;
         }
 
         /* ═══════════════════════════════════════
-           RAINBOW GRADIENT WAVES
-           Massive color shifts across page
+           GOLDEN HOUR ATMOSPHERIC GLOW
+           Cinematic depth through warm gradients
         ═══════════════════════════════════════ */
         body::before {
             content: '';
             position: fixed;
-            inset: -100%;
-            width: 300%;
-            height: 300%;
+            inset: -50%;
+            width: 200%;
+            height: 200%;
             background: radial-gradient(
-                ellipse at 50% 50%,
-                rgba(212, 175, 55, 0.3) 0%,
-                rgba(255, 0, 255, 0.2) 25%,
-                rgba(0, 255, 255, 0.2) 50%,
-                rgba(255, 255, 0, 0.2) 75%,
-                transparent 100%
+                ellipse at 50% 30%,
+                rgba(212, 175, 55, 0.08) 0%,
+                rgba(212, 175, 55, 0.04) 30%,
+                transparent 60%
             );
-            animation: colorWave 15s ease-in-out infinite;
+            animation: goldenHourPulse 20s ease-in-out infinite;
             pointer-events: none;
             z-index: 1;
             mix-blend-mode: screen;
         }
 
-        @keyframes colorWave {
+        @keyframes goldenHourPulse {
             0%, 100% {
-                transform: translate(-50%, -50%) rotate(0deg) scale(1);
-                opacity: 0.4;
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
             }
             50% {
-                transform: translate(-30%, -30%) rotate(180deg) scale(1.5);
-                opacity: 0.7;
+                transform: translate(-50%, -45%) scale(1.1);
+                opacity: 0.8;
             }
         }
 
         /* ═══════════════════════════════════════
-           GIANT PARTICLE BURST
-           Impossible-to-miss particle explosions
+           PRECISION GOLD PARTICLE FIELD
+           Sovereign particle system - GOLD ONLY
         ═══════════════════════════════════════ */
-        .mega-particle {
+        .precision-particle {
             position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, var(--gold-bright) 0%, transparent 70%);
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle, var(--gold-bright) 0%, var(--gold-core) 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 9990;
             box-shadow:
-                0 0 30px var(--gold-core),
-                0 0 60px var(--gold-bright),
-                0 0 90px rgba(212, 175, 55, 0.5);
-            animation: megaBurst 3s ease-out forwards;
+                0 0 20px var(--gold-core),
+                0 0 40px rgba(212, 175, 55, 0.6),
+                0 0 60px rgba(212, 175, 55, 0.3);
+            animation: precisionBurst 2.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
 
-        @keyframes megaBurst {
+        @keyframes precisionBurst {
             0% {
                 transform: translate(0, 0) scale(0);
                 opacity: 1;
             }
+            60% {
+                opacity: 1;
+            }
             100% {
                 transform: translate(
-                    calc(var(--burst-x, 0) * 800px),
-                    calc(var(--burst-y, 0) * 800px)
-                ) scale(2);
+                    calc(var(--burst-x, 0) * 600px),
+                    calc(var(--burst-y, 0) * 600px)
+                ) scale(0.3);
                 opacity: 0;
+            }
+        }
+
+        /* Precision ring pulse */
+        .precision-ring {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border: 2px solid var(--gold-core);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9989;
+            opacity: 0;
+            animation: ringExpand 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes ringExpand {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+                box-shadow: 0 0 20px var(--gold-core), inset 0 0 20px var(--gold-core);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2.5);
+                opacity: 0;
+                box-shadow: 0 0 60px var(--gold-dim), inset 0 0 60px var(--gold-dim);
             }
         }
 
@@ -2790,40 +2783,40 @@
         }
 
         /* ═══════════════════════════════════════
-           CHROMATIC ABERRATION
-           RGB split effect on everything
+           PRECISION TYPOGRAPHY ENHANCEMENT
+           Subtle gold glow for executive presence
         ═══════════════════════════════════════ */
-        .chromatic-split {
+        .precision-text {
             position: relative;
+            text-shadow:
+                0 0 20px rgba(212, 175, 55, 0.3),
+                0 0 40px rgba(212, 175, 55, 0.2),
+                0 2px 4px rgba(0, 0, 0, 0.8);
         }
 
-        .chromatic-split::before,
-        .chromatic-split::after {
-            content: attr(data-text);
-            position: absolute;
-            inset: 0;
-            opacity: 0.7;
-            mix-blend-mode: screen;
+        .precision-text-intense {
+            text-shadow:
+                0 0 30px rgba(212, 175, 55, 0.6),
+                0 0 60px rgba(212, 175, 55, 0.4),
+                0 0 90px rgba(212, 175, 55, 0.2),
+                0 2px 8px rgba(0, 0, 0, 0.9);
+            animation: goldPulseGlow 4s ease-in-out infinite;
         }
 
-        .chromatic-split::before {
-            color: #ff0000;
-            animation: chromaShiftR 2s ease-in-out infinite;
-        }
-
-        .chromatic-split::after {
-            color: #00ffff;
-            animation: chromaShiftC 2s ease-in-out infinite;
-        }
-
-        @keyframes chromaShiftR {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(3px, -2px); }
-        }
-
-        @keyframes chromaShiftC {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(-3px, 2px); }
+        @keyframes goldPulseGlow {
+            0%, 100% {
+                text-shadow:
+                    0 0 30px rgba(212, 175, 55, 0.6),
+                    0 0 60px rgba(212, 175, 55, 0.4),
+                    0 2px 8px rgba(0, 0, 0, 0.9);
+            }
+            50% {
+                text-shadow:
+                    0 0 40px rgba(212, 175, 55, 0.8),
+                    0 0 80px rgba(212, 175, 55, 0.6),
+                    0 0 120px rgba(212, 175, 55, 0.3),
+                    0 2px 12px rgba(0, 0, 0, 0.95);
+            }
         }
 
         /* ════════════════════════════════════════════════════════════════
@@ -6070,14 +6063,12 @@
     -->
 
     <!-- ═══════════════════════════════════════════════════════════════
-         PARADIGM SHIFT VISUAL LAYERS - Impossible to miss
+         PRECISION VISUAL ENHANCEMENT LAYERS
+         Tactical instrumentation aesthetic - GOLD SOVEREIGN ONLY
     ═══════════════════════════════════════════════════════════════ -->
 
-    <!-- Holographic Rainbow Overlay - Full screen animated hologram -->
-    <div class="holographic-overlay"></div>
-
-    <!-- Glitch Wave Effect - VHS-style screen glitches -->
-    <div class="glitch-wave"></div>
+    <!-- Tactical Scan Overlay - Precision grid and scanlines -->
+    <div class="tactical-scan-overlay"></div>
 
     <!-- Consciousness Particles - kept for causal trace system -->
     <div class="consciousness-particles" id="consciousnessParticles"></div>
@@ -9773,15 +9764,24 @@
 
         const EnhancementEngine = {
             // ═══════════════════════════════════════
-            // MEGA PARTICLE BURST SYSTEM
-            // Giant glowing particles that explode
+            // PRECISION GOLD PARTICLE SYSTEM
+            // Controlled, sovereign particle bursts
             // ═══════════════════════════════════════
-            createMegaBurst(x, y, count = 50) {
+            createPrecisionBurst(x, y, count = 24) {
+                // Create precision ring
+                const ring = document.createElement('div');
+                ring.className = 'precision-ring';
+                ring.style.left = `${x}px`;
+                ring.style.top = `${y}px`;
+                document.body.appendChild(ring);
+                setTimeout(() => ring.remove(), 3000);
+
+                // Create gold particles
                 for (let i = 0; i < count; i++) {
                     const particle = document.createElement('div');
-                    particle.className = 'mega-particle';
+                    particle.className = 'precision-particle';
 
-                    // Random burst direction
+                    // Precise radial distribution
                     const angle = (Math.PI * 2 * i) / count;
                     const burstX = Math.cos(angle);
                     const burstY = Math.sin(angle);
@@ -9792,31 +9792,31 @@
                     particle.style.setProperty('--burst-y', burstY);
 
                     document.body.appendChild(particle);
-                    setTimeout(() => particle.remove(), 3000);
+                    setTimeout(() => particle.remove(), 2500);
                 }
             },
 
-            // Auto-burst on scroll milestones
-            initAutoBurst() {
+            // Controlled burst on scroll milestones
+            initPrecisionBurstSystem() {
                 let lastBurst = 0;
                 window.addEventListener('scroll', () => {
                     const scrollPos = window.pageYOffset;
-                    const milestone = Math.floor(scrollPos / 500);
+                    const milestone = Math.floor(scrollPos / 800);
 
                     if (milestone > lastBurst) {
                         lastBurst = milestone;
-                        this.createMegaBurst(
+                        this.createPrecisionBurst(
                             window.innerWidth / 2,
                             window.innerHeight / 2,
-                            30
+                            16
                         );
                     }
                 }, { passive: true });
 
-                // Initial burst on load
+                // Initial controlled burst on load
                 setTimeout(() => {
-                    this.createMegaBurst(window.innerWidth / 2, window.innerHeight / 3, 80);
-                }, 500);
+                    this.createPrecisionBurst(window.innerWidth / 2, window.innerHeight / 3, 32);
+                }, 800);
             },
 
             // ═══════════════════════════════════════
@@ -9834,44 +9834,39 @@
             },
 
             // ═══════════════════════════════════════
-            // CHROMATIC ABERRATION TEXT
-            // RGB split on all headlines
+            // PRECISION TYPOGRAPHY GLOW
+            // Gold shimmer on key text elements
             // ═══════════════════════════════════════
-            initChromaticText() {
-                const headlines = document.querySelectorAll('.hero-headline, .sovereign-headline, .section-title, .wordmark-text');
+            initPrecisionTypography() {
+                const primaryText = document.querySelectorAll('.sovereign-headline, .wordmark-text');
+                const secondaryText = document.querySelectorAll('.section-title, .chapter-stamp');
 
-                headlines.forEach(headline => {
-                    const text = headline.textContent;
-                    headline.setAttribute('data-text', text);
-                    headline.classList.add('chromatic-split');
+                primaryText.forEach(text => {
+                    text.classList.add('precision-text-intense');
+                });
+
+                secondaryText.forEach(text => {
+                    text.classList.add('precision-text');
                 });
             },
 
             // ═══════════════════════════════════════
-            // TEXT EXPLOSION EFFECT
-            // On click, text explodes into particles
+            // GOLD SHIMMER ELEMENTS
+            // Liquid gold flow on interactive elements
             // ═══════════════════════════════════════
-            initTextExplosion() {
-                const targets = document.querySelectorAll('.section-title, .chapter-stamp');
+            initGoldShimmer() {
+                const shimmerElements = document.querySelectorAll('.cta-button, .prove-btn, .gate-cta, .ritual-cta');
 
-                targets.forEach(target => {
-                    target.addEventListener('click', () => {
-                        // Wrap each character
-                        const text = target.textContent;
-                        target.innerHTML = text.split('').map((char, i) => {
-                            const x = (Math.random() - 0.5);
-                            const y = (Math.random() - 0.5);
-                            const r = (Math.random() - 0.5);
-                            return `<span class="char" style="--explode-x: ${x}; --explode-y: ${y}; --explode-r: ${r}">${char}</span>`;
-                        }).join('');
+                shimmerElements.forEach(el => {
+                    // Store original background
+                    const originalBg = window.getComputedStyle(el).background;
 
-                        target.classList.add('text-explode');
+                    el.addEventListener('mouseenter', () => {
+                        el.classList.add('gold-shimmer');
+                    });
 
-                        // Restore after animation
-                        setTimeout(() => {
-                            target.classList.remove('text-explode');
-                            target.textContent = text;
-                        }, 1500);
+                    el.addEventListener('mouseleave', () => {
+                        el.classList.remove('gold-shimmer');
                     });
                 });
             },
@@ -10121,16 +10116,16 @@
             // MASTER INITIALIZATION
             // ═══════════════════════════════════════
             init() {
-                console.log('%c🎆 PARADIGM SHIFT VISUALS ACTIVATED', 'color: #ff00ff; font-weight: bold; font-size: 16px; text-shadow: 0 0 10px #ff00ff;');
-                console.log('%c💥 Impossible-to-miss visual effects loading...', 'color: #00ffff; font-size: 12px;');
+                console.log('%c⚡ PRECISION ENHANCEMENTS ACTIVATED', 'color: #d4af37; font-weight: bold; font-size: 14px; text-shadow: 0 0 20px rgba(212, 175, 55, 0.8);');
+                console.log('%c  Sovereign Gold Aesthetic | Executive-Grade Visuals', 'color: #a0a4ab; font-size: 11px;');
 
-                // BOLD PARADIGM-SHIFTING EFFECTS (activated first for maximum impact)
-                this.initAutoBurst();
+                // PRECISION SOVEREIGN EFFECTS (gold aesthetic maintained)
+                this.initPrecisionBurstSystem();
                 this.initFloatingCards();
-                this.initChromaticText();
-                this.initTextExplosion();
+                this.initPrecisionTypography();
+                this.initGoldShimmer();
 
-                // Initialize all enhancement systems
+                // Supporting enhancement systems
                 this.initRipples();
                 this.initKineticTypography();
                 this.initFlockingParticles();
@@ -10140,22 +10135,17 @@
                 this.initGlassmorphism();
                 this.initParallax();
 
-                console.log('%c✨ Holographic Rainbow Overlay', 'color: #ff00ff; font-size: 11px; font-weight: bold;');
-                console.log('%c💥 Mega Particle Bursts', 'color: #ffff00; font-size: 11px; font-weight: bold;');
-                console.log('%c🎪 Floating 3D Cards', 'color: #00ffff; font-size: 11px; font-weight: bold;');
-                console.log('%c📺 VHS Glitch Waves', 'color: #ff0000; font-size: 11px; font-weight: bold;');
-                console.log('%c🌈 Rainbow Color Waves', 'color: #00ff00; font-size: 11px; font-weight: bold;');
-                console.log('%c💎 Chromatic Aberration', 'color: #ff00ff; font-size: 11px; font-weight: bold;');
-                console.log('%c💣 Text Explosions (click titles!)', 'color: #ffff00; font-size: 11px; font-weight: bold;');
-                console.log('%c✓ Glassmorphism', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Kinetic Typography', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Advanced Particles', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Cinematic Reveals', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Liquid Morphing', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Neon Accents', 'color: #d4af37; font-size: 10px;');
-                console.log('%c✓ Micro-interactions', 'color: #d4af37; font-size: 10px;');
+                console.log('%c✦ Tactical Scan Overlay', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✦ Precision Gold Particles', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✦ Golden Hour Atmospheric Glow', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✦ Floating 3D Cards (Controlled)', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✦ Liquid Gold Shimmer', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✦ Precision Typography Glow', 'color: #d4af37; font-size: 11px;');
+                console.log('%c✓ Glassmorphism', 'color: #7a6428; font-size: 10px;');
+                console.log('%c✓ Cinematic Reveals', 'color: #7a6428; font-size: 10px;');
+                console.log('%c✓ Micro-interactions', 'color: #7a6428; font-size: 10px;');
 
-                console.log('%c\n🚀 ALL SYSTEMS OPERATIONAL - VISUAL PARADIGM SHIFTED', 'color: #00ff00; font-weight: bold; font-size: 14px; text-shadow: 0 0 10px #00ff00;');
+                console.log('%c\n⊢ SOVEREIGN VISUAL SYSTEMS OPERATIONAL', 'color: #d4af37; font-weight: bold; font-size: 12px; text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);');
             }
         };
 
