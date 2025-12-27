@@ -10355,7 +10355,205 @@
             });
         };
 
-        // 7. TEMPORAL CSS HOOKS - Additive styles for moods
+        // 7. STRANGE ATTRACTOR PROOF SIGNATURE
+        // Chaos-theoretic visualization - Lorenz attractor seeded by proof hash
+        // Each proof generates unique deterministic 3D butterfly pattern
+        EnhancementEngine.StrangeAttractor = {
+            canvas: null,
+            ctx: null,
+            points: [],
+            params: { sigma: 10, rho: 28, beta: 8/3, hue: 45 },
+            isActive: false,
+            animationId: null,
+            rotation: 0,
+            lastTime: 0,
+            trailLength: 800,
+            currentIndex: 0,
+            precomputed: false,
+
+            init() {
+                this.injectStyles();
+                this.createCanvas();
+
+                ProofBus.on('phase:change', (phase) => this.onPhaseChange(phase));
+                ProofBus.on('proof:complete', (receipt) => this.generateSignature(receipt));
+            },
+
+            injectStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .attractor-canvas {
+                        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                        pointer-events: none; z-index: 5; opacity: 0;
+                        transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+                        mix-blend-mode: screen;
+                    }
+                    .attractor-canvas.active { opacity: 1; }
+                    .attractor-glow {
+                        position: fixed; top: 50%; left: 50%; width: 400px; height: 400px;
+                        transform: translate(-50%, -50%);
+                        background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+                        pointer-events: none; z-index: 4; opacity: 0;
+                        transition: opacity 1.2s ease;
+                    }
+                    .attractor-glow.active { opacity: 1; }
+                `;
+                document.head.appendChild(style);
+            },
+
+            createCanvas() {
+                this.canvas = document.createElement('canvas');
+                this.canvas.className = 'attractor-canvas';
+                this.ctx = this.canvas.getContext('2d');
+                document.body.appendChild(this.canvas);
+
+                this.glow = document.createElement('div');
+                this.glow.className = 'attractor-glow';
+                document.body.appendChild(this.glow);
+
+                this.resize();
+                window.addEventListener('resize', () => this.resize(), { passive: true });
+            },
+
+            resize() {
+                const dpr = window.devicePixelRatio || 1;
+                this.canvas.width = window.innerWidth * dpr;
+                this.canvas.height = window.innerHeight * dpr;
+                this.canvas.style.width = window.innerWidth + 'px';
+                this.canvas.style.height = window.innerHeight + 'px';
+                this.ctx.scale(dpr, dpr);
+            },
+
+            // Deterministic chaos parameters from proof hash
+            hashToParams(hash) {
+                if (!hash || typeof hash !== 'string') hash = 'CYTHERAI_DEFAULT_' + Date.now();
+                const nums = [...hash].map(c => c.charCodeAt(0));
+                const rand = (i) => {
+                    const x = Math.sin(nums[i % nums.length] * 9999 + i) * 10000;
+                    return x - Math.floor(x);
+                };
+                return {
+                    sigma: 8 + rand(0) * 6,      // 8-14
+                    rho: 22 + rand(1) * 12,      // 22-34
+                    beta: 2 + rand(2) * 2,       // 2-4
+                    x0: (rand(3) - 0.5) * 2,
+                    y0: (rand(4) - 0.5) * 2,
+                    z0: (rand(5) - 0.5) * 2 + 25,
+                    hue: (nums.reduce((a, b) => a + b, 0) % 60) + 30
+                };
+            },
+
+            // Lorenz attractor differential equations
+            computeTrajectory(params, steps = 2000) {
+                const { sigma, rho, beta, x0, y0, z0 } = params;
+                const dt = 0.005, points = [];
+                let x = x0, y = y0, z = z0;
+
+                for (let i = 0; i < steps; i++) {
+                    const dx = sigma * (y - x);
+                    const dy = x * (rho - z) - y;
+                    const dz = x * y - beta * z;
+                    x += dx * dt; y += dy * dt; z += dz * dt;
+                    points.push({ x, y, z, t: i / steps });
+                }
+                return points;
+            },
+
+            // 3D to 2D projection with rotation
+            project(point, rotation) {
+                const { x, y, z } = point;
+                const scale = 8, cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+                const cos = Math.cos(rotation), sin = Math.sin(rotation);
+                const x2 = x * cos - z * sin, z2 = x * sin + z * cos;
+                const persp = 100 / (100 + z2 * 0.5);
+                return { x: cx + x2 * scale * persp, y: cy + y * scale * persp * 0.6, depth: z2, persp };
+            },
+
+            generateSignature(receipt) {
+                if (!receipt) return;
+                const hash = receipt.witnessHash || receipt.hash || String(receipt);
+                const params = this.hashToParams(hash);
+                this.params = params;
+                this.points = this.computeTrajectory(params, this.trailLength);
+                this.currentIndex = 0;
+                this.precomputed = true;
+                this.rotation = 0;
+                console.log(`%c◆ Attractor: σ=${params.sigma.toFixed(2)} ρ=${params.rho.toFixed(2)} β=${params.beta.toFixed(2)}`, 'color: #d4af37; font-style: italic;');
+            },
+
+            onPhaseChange(phase) {
+                if (phase === 'convergence' || phase === 'lock') this.activate();
+                else if (phase === 'idle' || phase === 'hold') this.deactivate();
+            },
+
+            activate() {
+                if (this.isActive) return;
+                this.isActive = true;
+                this.canvas.classList.add('active');
+                this.glow.classList.add('active');
+                if (!this.precomputed) this.generateSignature({ witnessHash: 'CYTHER_' + Date.now() });
+                this.lastTime = performance.now();
+                this.render();
+            },
+
+            deactivate() {
+                this.isActive = false;
+                this.canvas.classList.remove('active');
+                this.glow.classList.remove('active');
+                if (this.animationId) { cancelAnimationFrame(this.animationId); this.animationId = null; }
+            },
+
+            render() {
+                if (!this.isActive) return;
+                const now = performance.now();
+                const delta = (now - this.lastTime) / 1000;
+                this.lastTime = now;
+                this.rotation += delta * 0.15;
+
+                // Fade trail
+                this.ctx.fillStyle = 'rgba(12, 12, 12, 0.08)';
+                this.ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+                if (!this.points.length) { this.animationId = requestAnimationFrame(() => this.render()); return; }
+
+                const visible = Math.min(this.currentIndex + 5, this.points.length);
+                if (this.currentIndex < this.points.length - 5) this.currentIndex += 3;
+
+                // Draw attractor lines
+                this.ctx.lineWidth = 1.5;
+                for (let i = Math.max(0, visible - 400); i < visible - 1; i++) {
+                    const p1 = this.project(this.points[i], this.rotation);
+                    const p2 = this.project(this.points[i + 1], this.rotation);
+                    const t = i / this.points.length;
+                    const alpha = (1 - Math.abs(p1.depth) / 50) * (0.3 + t * 0.7);
+                    const hue = this.params.hue + p1.depth * 0.5;
+                    this.ctx.strokeStyle = `hsla(${hue}, 70%, 60%, ${Math.max(0.1, alpha * 0.8)})`;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(p1.x, p1.y);
+                    this.ctx.lineTo(p2.x, p2.y);
+                    this.ctx.stroke();
+                }
+
+                // Leading glow point
+                if (visible > 0) {
+                    const lead = this.project(this.points[visible - 1], this.rotation);
+                    const grad = this.ctx.createRadialGradient(lead.x, lead.y, 0, lead.x, lead.y, 20);
+                    grad.addColorStop(0, `hsla(${this.params.hue}, 90%, 80%, 0.9)`);
+                    grad.addColorStop(0.3, `hsla(${this.params.hue}, 80%, 60%, 0.5)`);
+                    grad.addColorStop(1, 'transparent');
+                    this.ctx.fillStyle = grad;
+                    this.ctx.beginPath();
+                    this.ctx.arc(lead.x, lead.y, 20, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                this.animationId = requestAnimationFrame(() => this.render());
+            },
+
+            visualize(hash) { this.generateSignature({ witnessHash: hash }); this.activate(); }
+        };
+
+        // 8. TEMPORAL CSS HOOKS - Additive styles for moods
         EnhancementEngine.initTemporalCSS = function() {
             const style = document.createElement('style');
             style.textContent = `
@@ -10395,12 +10593,14 @@
             this.initViewTransitions();
             this.initHaptics();
             this.initInkSimulation();
+            this.StrangeAttractor.init();
 
             console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
-            console.log('%c  NOVEL ENHANCEMENTS v2.0 INTEGRATED', 'color: #d4af37; font-weight: bold;');
+            console.log('%c  NOVEL ENHANCEMENTS v2.1 INTEGRATED', 'color: #d4af37; font-weight: bold;');
             console.log('%c  ✓ Temporal Design  ✓ Generative Sigil', 'color: #22c55e; font-size: 10px;');
             console.log('%c  ✓ Variable Font    ✓ View Transitions', 'color: #22c55e; font-size: 10px;');
             console.log('%c  ✓ Haptic Feedback  ✓ Ink Simulation', 'color: #22c55e; font-size: 10px;');
+            console.log('%c  ✓ Strange Attractor Proof Signature', 'color: #22c55e; font-size: 10px;');
             console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
         };
 
