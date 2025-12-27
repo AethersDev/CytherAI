@@ -10644,8 +10644,9 @@
                 // Create CSS for variable font animation
                 this.injectStyles();
 
-                // Start breathing animation
-                this.startBreathing();
+                // Breathing disabled - uses existing RitualController tick loop instead
+                // Coherence-driven updates via ProofBus events (no competing rAF)
+                this.breathingEnabled = false;
 
                 // Listen for phase changes
                 if (typeof ProofBus !== 'undefined') {
@@ -11173,28 +11174,33 @@
             },
 
             startUpdateLoop() {
+                // Only run loop when audio is actually connected (no idle spinning)
                 const update = () => {
-                    if (this.isConnected && this.analyser && this.dataArray) {
-                        this.analyser.getByteFrequencyData(this.dataArray);
+                    if (!this.isConnected || !this.analyser || !this.dataArray) {
+                        // Not connected - check again in 500ms instead of every frame
+                        setTimeout(() => requestAnimationFrame(update), 500);
+                        return;
+                    }
 
-                        // Calculate audio metrics
-                        const bass = this.getFrequencyRange(0, 10);
-                        const mid = this.getFrequencyRange(10, 50);
-                        const high = this.getFrequencyRange(50, 128);
-                        const overall = (bass + mid + high) / 3;
+                    this.analyser.getByteFrequencyData(this.dataArray);
 
-                        // Update CSS custom properties for shader access
-                        const root = document.documentElement;
-                        root.style.setProperty('--audio-bass', bass / 255);
-                        root.style.setProperty('--audio-mid', mid / 255);
-                        root.style.setProperty('--audio-high', high / 255);
-                        root.style.setProperty('--audio-energy', overall / 255);
+                    // Calculate audio metrics
+                    const bass = this.getFrequencyRange(0, 10);
+                    const mid = this.getFrequencyRange(10, 50);
+                    const high = this.getFrequencyRange(50, 128);
+                    const overall = (bass + mid + high) / 3;
 
-                        // Update WebGL camera if available
-                        if (window.RitualCamera) {
-                            window.RitualCamera.audioEnergy = overall / 255;
-                            window.RitualCamera.audioBass = bass / 255;
-                        }
+                    // Update CSS custom properties for shader access
+                    const root = document.documentElement;
+                    root.style.setProperty('--audio-bass', bass / 255);
+                    root.style.setProperty('--audio-mid', mid / 255);
+                    root.style.setProperty('--audio-high', high / 255);
+                    root.style.setProperty('--audio-energy', overall / 255);
+
+                    // Update WebGL camera if available
+                    if (window.RitualCamera) {
+                        window.RitualCamera.audioEnergy = overall / 255;
+                        window.RitualCamera.audioBass = bass / 255;
                     }
 
                     requestAnimationFrame(update);
