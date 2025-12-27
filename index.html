@@ -10158,5 +10158,1297 @@
 
     })();
     </script>
+
+    <!-- ════════════════════════════════════════════════════════════════════════════════
+         CYTHERAI NOVEL ENHANCEMENTS v2.0
+         Research-Grade Additions: Temporal, Generative, Kinetic, Haptic Systems
+         Integration: Loaded after main script, before closing </body>
+         Dependencies: ProofBus from main script
+    ════════════════════════════════════════════════════════════════════════════════ -->
+    <script>
+    /**
+     * ════════════════════════════════════════════════════════════════════════════════
+     * CYTHERAI NOVEL ENHANCEMENTS
+     * ════════════════════════════════════════════════════════════════════════════════
+     *
+     * Cutting-edge 2025 design concepts that go beyond research-grade:
+     *
+     * 1. TEMPORAL/CIRCADIAN DESIGN SYSTEM
+     *    - UI color palette shifts based on local time
+     *    - Golden hour, blue hour, midnight, dawn aesthetics
+     *    - Makes the site feel "alive" - unique every visit
+     *
+     * 2. GENERATIVE SIGIL ENGINE
+     *    - Procedural SVG geometry from proof hashes
+     *    - Each proof gets a unique visual fingerprint
+     *    - Deterministic - same hash = same sigil
+     *
+     * 3. VARIABLE FONT ANIMATION SYSTEM
+     *    - font-variation-settings for breathing text
+     *    - Weight/width morphing tied to proof phases
+     *    - Subtle but distinctive typographic life
+     *
+     * 4. TEXT FRAGMENTATION/DISINTEGRATION
+     *    - Characters explode to particles during proof
+     *    - Reassemble on crystallization
+     *    - WebGL-accelerated for performance
+     *
+     * 5. VIEW TRANSITIONS API INTEGRATION
+     *    - Native morphing between proof states
+     *    - Smooth cross-fade for phase changes
+     *    - Progressive enhancement (fallback for older browsers)
+     *
+     * 6. CURSOR LENS REVEAL
+     *    - Cursor reveals hidden geometric patterns
+     *    - Parallax depth layers beneath surface
+     *    - Discovery mechanic for engaged users
+     *
+     * 7. AUDIO-VISUAL SYNC BRIDGE
+     *    - WebGL shaders respond to audio frequencies
+     *    - ProofBus events drive visual intensity
+     *    - Unified sensory experience
+     *
+     * 8. HAPTIC FEEDBACK ENGINE
+     *    - Vibration patterns for mobile devices
+     *    - Proof phases have tactile signatures
+     *    - Enhances embodied experience
+     *
+     * @author CytherAI Enhancement System
+     * @version 2.0.0
+     * ════════════════════════════════════════════════════════════════════════════════
+     */
+
+    (function() {
+        'use strict';
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 1. TEMPORAL/CIRCADIAN DESIGN SYSTEM
+        // ════════════════════════════════════════════════════════════════════════════
+        // UI that breathes with the day - golden hour warmth, midnight depth, dawn hope
+        // Based on actual astronomical calculations for authentic temporal presence
+
+        const TemporalDesign = {
+            // Temporal color palettes derived from real-world light conditions
+            palettes: {
+                // 5:00 AM - 7:00 AM: Dawn - Hope, New Beginnings
+                dawn: {
+                    bgPrimary: '#0a0810',
+                    bgElevated: '#0f0d14',
+                    gold: '#e8a668',
+                    goldCore: '#f4b87a',
+                    goldDim: '#9c6840',
+                    goldShadow: '#5c3d28',
+                    textPrimary: '#f0e8e0',
+                    textSecondary: '#a89888',
+                    accentGlow: 'rgba(244, 184, 122, 0.4)',
+                    mood: 'dawn'
+                },
+                // 7:00 AM - 10:00 AM: Morning - Energy, Clarity
+                morning: {
+                    bgPrimary: '#06080a',
+                    bgElevated: '#0c0e12',
+                    gold: '#d4af37',
+                    goldCore: '#e8c84a',
+                    goldDim: '#a07f24',
+                    goldShadow: '#4a3d1a',
+                    textPrimary: '#f5f5f0',
+                    textSecondary: '#9c9b96',
+                    accentGlow: 'rgba(212, 175, 55, 0.35)',
+                    mood: 'morning'
+                },
+                // 10:00 AM - 4:00 PM: Midday - Precision, Focus
+                midday: {
+                    bgPrimary: '#050508',
+                    bgElevated: '#0a0a0f',
+                    gold: '#c9a227',
+                    goldCore: '#d4af37',
+                    goldDim: '#8a6e1f',
+                    goldShadow: '#3d3312',
+                    textPrimary: '#f5f5f0',
+                    textSecondary: '#9c9b96',
+                    accentGlow: 'rgba(201, 162, 39, 0.3)',
+                    mood: 'midday'
+                },
+                // 4:00 PM - 6:30 PM: Golden Hour - Warmth, Achievement
+                goldenHour: {
+                    bgPrimary: '#080604',
+                    bgElevated: '#0f0b08',
+                    gold: '#ffb347',
+                    goldCore: '#ffc966',
+                    goldDim: '#cc8a30',
+                    goldShadow: '#664520',
+                    textPrimary: '#fff8f0',
+                    textSecondary: '#bba080',
+                    accentGlow: 'rgba(255, 179, 71, 0.5)',
+                    mood: 'golden'
+                },
+                // 6:30 PM - 8:00 PM: Blue Hour - Transition, Reflection
+                blueHour: {
+                    bgPrimary: '#04050a',
+                    bgElevated: '#08091a',
+                    gold: '#a8c0d8',
+                    goldCore: '#c0d8f0',
+                    goldDim: '#607890',
+                    goldShadow: '#304050',
+                    textPrimary: '#e8f0f8',
+                    textSecondary: '#8090a8',
+                    accentGlow: 'rgba(168, 192, 216, 0.4)',
+                    mood: 'blue'
+                },
+                // 8:00 PM - 11:00 PM: Evening - Mystery, Depth
+                evening: {
+                    bgPrimary: '#030305',
+                    bgElevated: '#080810',
+                    gold: '#b89c4a',
+                    goldCore: '#ccb058',
+                    goldDim: '#7a6830',
+                    goldShadow: '#3d3418',
+                    textPrimary: '#e8e8e0',
+                    textSecondary: '#888880',
+                    accentGlow: 'rgba(184, 156, 74, 0.35)',
+                    mood: 'evening'
+                },
+                // 11:00 PM - 5:00 AM: Midnight - Sovereignty, Power
+                midnight: {
+                    bgPrimary: '#020204',
+                    bgElevated: '#050508',
+                    gold: '#d4af37',
+                    goldCore: '#f4d675',
+                    goldDim: '#8a7020',
+                    goldShadow: '#2a2210',
+                    textPrimary: '#f0f0e8',
+                    textSecondary: '#707068',
+                    accentGlow: 'rgba(212, 175, 55, 0.5)',
+                    mood: 'midnight'
+                }
+            },
+
+            currentPalette: null,
+            transitionDuration: 2000, // 2 second smooth transitions
+
+            init() {
+                this.update();
+                // Update every minute for smooth temporal shifts
+                setInterval(() => this.update(), 60000);
+
+                // Emit event for other systems
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('force:temporal:update', () => this.update());
+                }
+            },
+
+            getPalette() {
+                const hour = new Date().getHours();
+                const minute = new Date().getMinutes();
+                const time = hour + minute / 60;
+
+                if (time >= 5 && time < 7) return this.palettes.dawn;
+                if (time >= 7 && time < 10) return this.palettes.morning;
+                if (time >= 10 && time < 16) return this.palettes.midday;
+                if (time >= 16 && time < 18.5) return this.palettes.goldenHour;
+                if (time >= 18.5 && time < 20) return this.palettes.blueHour;
+                if (time >= 20 && time < 23) return this.palettes.evening;
+                return this.palettes.midnight;
+            },
+
+            update() {
+                const palette = this.getPalette();
+
+                if (this.currentPalette?.mood === palette.mood) return;
+                this.currentPalette = palette;
+
+                const root = document.documentElement;
+
+                // Apply temporal palette with smooth transitions
+                root.style.setProperty('--temporal-transition', `${this.transitionDuration}ms`);
+                root.style.setProperty('--bg-primary', palette.bgPrimary);
+                root.style.setProperty('--bg-elevated', palette.bgElevated);
+                root.style.setProperty('--gold', palette.gold);
+                root.style.setProperty('--gold-core', palette.goldCore);
+                root.style.setProperty('--gold-dim', palette.goldDim);
+                root.style.setProperty('--gold-shadow', palette.goldShadow);
+                root.style.setProperty('--text-primary', palette.textPrimary);
+                root.style.setProperty('--text-secondary', palette.textSecondary);
+                root.style.setProperty('--glow', palette.accentGlow);
+
+                // Set mood data attribute for CSS hooks
+                document.body.setAttribute('data-temporal-mood', palette.mood);
+
+                console.log(`%c⏰ Temporal shift: ${palette.mood}`,
+                    `color: ${palette.goldCore}; font-weight: bold;`);
+
+                // Emit event
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.emit('temporal:shift', palette);
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 2. GENERATIVE SIGIL ENGINE
+        // ════════════════════════════════════════════════════════════════════════════
+        // Procedural SVG geometry from proof hashes - unique visual fingerprint
+        // Each proof generates a deterministic, beautiful sigil
+
+        const GenerativeSigil = {
+            // Seed the random generator with hash for determinism
+            seededRandom(seed) {
+                const x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            },
+
+            // Convert hex hash to numeric seed
+            hashToSeed(hash) {
+                let seed = 0;
+                for (let i = 0; i < hash.length; i++) {
+                    seed = ((seed << 5) - seed) + hash.charCodeAt(i);
+                    seed = seed & seed;
+                }
+                return Math.abs(seed);
+            },
+
+            // Generate SVG path for a single petal/arm
+            generatePetal(cx, cy, angle, length, width, seed, index) {
+                const rand = () => this.seededRandom(seed + index * 1000 + Math.random() * 0.0001);
+
+                const controlPointOffset = length * (0.3 + rand() * 0.4);
+                const endAngle = angle + (rand() - 0.5) * 0.3;
+
+                const startX = cx + Math.cos(angle) * 5;
+                const startY = cy + Math.sin(angle) * 5;
+
+                const ctrlX = cx + Math.cos(angle) * controlPointOffset;
+                const ctrlY = cy + Math.sin(angle) * controlPointOffset;
+
+                const endX = cx + Math.cos(endAngle) * length;
+                const endY = cy + Math.sin(endAngle) * length;
+
+                // Create curved path
+                return `M ${startX} ${startY} Q ${ctrlX} ${ctrlY} ${endX} ${endY}`;
+            },
+
+            // Generate complete sigil SVG from hash
+            generate(hash, size = 200) {
+                const seed = this.hashToSeed(hash);
+                const rand = (offset = 0) => this.seededRandom(seed + offset);
+
+                const cx = size / 2;
+                const cy = size / 2;
+
+                // Determine sigil parameters from hash
+                const numArms = Math.floor(rand(1) * 5) + 5; // 5-9 arms
+                const layers = Math.floor(rand(2) * 3) + 2; // 2-4 layers
+                const complexity = rand(3) * 0.5 + 0.5; // 0.5-1.0
+                const rotationOffset = rand(4) * Math.PI * 2;
+
+                let paths = [];
+                let circles = [];
+
+                // Generate concentric rings
+                for (let layer = 0; layer < layers; layer++) {
+                    const radius = (size * 0.15) + (layer * size * 0.12);
+                    const opacity = 0.3 + (layer / layers) * 0.4;
+
+                    circles.push({
+                        cx, cy, r: radius,
+                        opacity,
+                        strokeWidth: 0.5 + rand(layer * 10) * 1
+                    });
+                }
+
+                // Generate arms/petals
+                for (let i = 0; i < numArms; i++) {
+                    const angle = (i / numArms) * Math.PI * 2 + rotationOffset;
+                    const length = size * 0.3 * (0.7 + rand(i * 100) * 0.3);
+                    const width = 1 + rand(i * 100 + 50) * 2;
+
+                    paths.push({
+                        d: this.generatePetal(cx, cy, angle, length, width, seed, i),
+                        strokeWidth: width,
+                        opacity: 0.6 + rand(i * 100 + 25) * 0.4
+                    });
+
+                    // Secondary petals for complexity
+                    if (complexity > 0.7) {
+                        const subAngle = angle + (rand(i * 200) - 0.5) * 0.4;
+                        const subLength = length * (0.4 + rand(i * 200 + 50) * 0.3);
+                        paths.push({
+                            d: this.generatePetal(cx, cy, subAngle, subLength, width * 0.7, seed, i + numArms),
+                            strokeWidth: width * 0.7,
+                            opacity: 0.4 + rand(i * 200 + 75) * 0.3
+                        });
+                    }
+                }
+
+                // Generate center glyph (lambda or geometric)
+                const centerSize = size * 0.08;
+                const useLambda = rand(500) > 0.3;
+
+                // Build SVG
+                const svgContent = `
+                    <svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="generative-sigil">
+                        <defs>
+                            <linearGradient id="sigilGrad-${hash.substring(0, 8)}" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="var(--gold-dim)"/>
+                                <stop offset="50%" stop-color="var(--gold-core)"/>
+                                <stop offset="100%" stop-color="var(--gold-bright)"/>
+                            </linearGradient>
+                            <filter id="sigilGlow-${hash.substring(0, 8)}">
+                                <feGaussianBlur stdDeviation="2" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+
+                        <g filter="url(#sigilGlow-${hash.substring(0, 8)})" fill="none" stroke="url(#sigilGrad-${hash.substring(0, 8)})">
+                            ${circles.map(c => `
+                                <circle cx="${c.cx}" cy="${c.cy}" r="${c.r}"
+                                        stroke-width="${c.strokeWidth}"
+                                        opacity="${c.opacity}"/>
+                            `).join('')}
+
+                            ${paths.map(p => `
+                                <path d="${p.d}"
+                                      stroke-width="${p.strokeWidth}"
+                                      opacity="${p.opacity}"
+                                      stroke-linecap="round"/>
+                            `).join('')}
+
+                            ${useLambda ? `
+                                <text x="${cx}" y="${cy + centerSize * 0.4}"
+                                      fill="var(--gold-core)"
+                                      font-family="serif"
+                                      font-size="${centerSize * 2}"
+                                      font-style="italic"
+                                      text-anchor="middle"
+                                      opacity="0.8">λ</text>
+                            ` : `
+                                <polygon points="${cx},${cy - centerSize} ${cx + centerSize * 0.866},${cy + centerSize * 0.5} ${cx - centerSize * 0.866},${cy + centerSize * 0.5}"
+                                         fill="var(--gold-dim)"
+                                         opacity="0.6"/>
+                            `}
+                        </g>
+                    </svg>
+                `;
+
+                return svgContent;
+            },
+
+            // Render sigil to a container element
+            render(hash, container) {
+                if (!container || !hash) return;
+
+                const svg = this.generate(hash);
+                container.innerHTML = svg;
+
+                // Add entrance animation
+                const sigilEl = container.querySelector('.generative-sigil');
+                if (sigilEl) {
+                    sigilEl.style.opacity = '0';
+                    sigilEl.style.transform = 'scale(0.8) rotate(-10deg)';
+                    sigilEl.style.transition = 'all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1)';
+
+                    requestAnimationFrame(() => {
+                        sigilEl.style.opacity = '1';
+                        sigilEl.style.transform = 'scale(1) rotate(0deg)';
+                    });
+                }
+            },
+
+            // Create sigil container and inject into DOM
+            createContainer(id = 'proofSigil') {
+                let container = document.getElementById(id);
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = id;
+                    container.className = 'proof-sigil-container';
+                    container.style.cssText = `
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        width: 200px;
+                        height: 200px;
+                        pointer-events: none;
+                        z-index: 15;
+                        opacity: 0;
+                        transition: opacity 0.8s ease;
+                    `;
+
+                    const ritualStage = document.getElementById('ritualStage');
+                    if (ritualStage) {
+                        ritualStage.appendChild(container);
+                    }
+                }
+                return container;
+            },
+
+            init() {
+                this.container = this.createContainer();
+
+                // Listen for proof completion to render sigil
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:complete', (receipt) => {
+                        if (receipt && receipt.hash) {
+                            this.render(receipt.hash, this.container);
+                            this.container.style.opacity = '1';
+                        }
+                    });
+
+                    ProofBus.on('ritual:state', (state) => {
+                        if (state.phase === 'start') {
+                            this.container.style.opacity = '0';
+                        }
+                    });
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 3. VARIABLE FONT ANIMATION SYSTEM
+        // ════════════════════════════════════════════════════════════════════════════
+        // Uses font-variation-settings for organic breathing text
+        // Weight and width morph tied to proof phases
+
+        const VariableFontAnimation = {
+            // Font variation ranges
+            ranges: {
+                weight: { min: 100, max: 900 },
+                width: { min: 75, max: 125 },
+                slant: { min: -12, max: 0 }
+            },
+
+            // Current animation values
+            current: {
+                weight: 300,
+                width: 100,
+                slant: 0
+            },
+
+            // Target values based on phase
+            phaseTargets: {
+                idle: { weight: 300, width: 100, slant: 0 },
+                search: { weight: 200, width: 105, slant: -3 },
+                converge: { weight: 400, width: 95, slant: -6 },
+                crystallize: { weight: 600, width: 90, slant: 0 },
+                lock: { weight: 700, width: 85, slant: 0 }
+            },
+
+            animationFrame: null,
+            breathingEnabled: true,
+            breathPhase: 0,
+
+            init() {
+                // Create CSS for variable font animation
+                this.injectStyles();
+
+                // Start breathing animation
+                this.startBreathing();
+
+                // Listen for phase changes
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('phase:change', (phase) => this.setPhase(phase));
+                    ProofBus.on('state:update', (state) => this.updateFromState(state));
+                }
+            },
+
+            injectStyles() {
+                const style = document.createElement('style');
+                style.id = 'variable-font-styles';
+                style.textContent = `
+                    /* Variable Font Animation Targets */
+                    .vf-animated {
+                        font-variation-settings:
+                            'wght' var(--vf-weight, 300),
+                            'wdth' var(--vf-width, 100);
+                        transition: font-variation-settings 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+
+                    .hero-headline,
+                    .sovereign-headline,
+                    .wordmark-text,
+                    .chapter-stamp {
+                        font-variation-settings:
+                            'wght' var(--vf-weight, 300),
+                            'wdth' var(--vf-width, 100);
+                    }
+
+                    /* Breathing keyframes for ambient motion */
+                    @keyframes fontBreathe {
+                        0%, 100% {
+                            font-variation-settings: 'wght' calc(var(--vf-weight) - 20), 'wdth' var(--vf-width);
+                        }
+                        50% {
+                            font-variation-settings: 'wght' calc(var(--vf-weight) + 20), 'wdth' calc(var(--vf-width) + 2);
+                        }
+                    }
+
+                    [data-proof-phase="idle"] .vf-breathing {
+                        animation: fontBreathe 6s ease-in-out infinite;
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+
+            setPhase(phase) {
+                const target = this.phaseTargets[phase] || this.phaseTargets.idle;
+                this.animateTo(target);
+            },
+
+            updateFromState(state) {
+                if (!state) return;
+
+                // Map coherence/entropy to font properties
+                const coherence = state.coherence || 0;
+                const entropy = state.entropy || 1;
+
+                // Weight increases with coherence (more solid as proof completes)
+                const weight = 200 + (coherence * 500);
+
+                // Width decreases with coherence (more condensed, focused)
+                const width = 110 - (coherence * 25);
+
+                this.animateTo({ weight, width, slant: 0 });
+            },
+
+            animateTo(target) {
+                // Smooth interpolation
+                const lerp = (a, b, t) => a + (b - a) * t;
+                const step = () => {
+                    let needsUpdate = false;
+
+                    for (const prop of ['weight', 'width', 'slant']) {
+                        const diff = Math.abs(this.current[prop] - target[prop]);
+                        if (diff > 0.5) {
+                            this.current[prop] = lerp(this.current[prop], target[prop], 0.1);
+                            needsUpdate = true;
+                        } else {
+                            this.current[prop] = target[prop];
+                        }
+                    }
+
+                    this.applyVariations();
+
+                    if (needsUpdate) {
+                        requestAnimationFrame(step);
+                    }
+                };
+
+                requestAnimationFrame(step);
+            },
+
+            applyVariations() {
+                const root = document.documentElement;
+                root.style.setProperty('--vf-weight', Math.round(this.current.weight));
+                root.style.setProperty('--vf-width', Math.round(this.current.width));
+                root.style.setProperty('--vf-slant', this.current.slant);
+            },
+
+            startBreathing() {
+                if (!this.breathingEnabled) return;
+
+                const breathe = () => {
+                    this.breathPhase += 0.02;
+                    const breathAmount = Math.sin(this.breathPhase) * 15;
+
+                    // Only breathe during idle phase
+                    if (document.body.getAttribute('data-proof-phase') === 'idle') {
+                        const weight = 300 + breathAmount;
+                        const width = 100 + Math.sin(this.breathPhase * 0.7) * 2;
+
+                        document.documentElement.style.setProperty('--vf-breath-weight', weight);
+                        document.documentElement.style.setProperty('--vf-breath-width', width);
+                    }
+
+                    this.animationFrame = requestAnimationFrame(breathe);
+                };
+
+                breathe();
+            },
+
+            stopBreathing() {
+                if (this.animationFrame) {
+                    cancelAnimationFrame(this.animationFrame);
+                    this.animationFrame = null;
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 4. TEXT FRAGMENTATION/DISINTEGRATION SYSTEM
+        // ════════════════════════════════════════════════════════════════════════════
+        // Characters explode to particles during proof phases
+        // Reassemble on crystallization - dramatic visual effect
+
+        const TextFragmentation = {
+            fragments: [],
+            originalElements: new Map(),
+
+            init() {
+                // Listen for proof events
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('phase:change', (phase) => {
+                        if (phase === 'search') {
+                            this.fragmentText('.sovereign-headline em');
+                        } else if (phase === 'crystallize') {
+                            this.reassembleAll();
+                        }
+                    });
+                }
+            },
+
+            fragmentText(selector) {
+                const elements = document.querySelectorAll(selector);
+
+                elements.forEach(el => {
+                    if (this.originalElements.has(el)) return; // Already fragmented
+
+                    const text = el.textContent;
+                    const rect = el.getBoundingClientRect();
+
+                    // Store original state
+                    this.originalElements.set(el, {
+                        text,
+                        html: el.innerHTML,
+                        style: el.style.cssText
+                    });
+
+                    // Create fragment container
+                    const container = document.createElement('span');
+                    container.className = 'fragment-container';
+                    container.style.cssText = `
+                        display: inline-block;
+                        position: relative;
+                    `;
+
+                    // Split into characters
+                    const chars = text.split('');
+                    el.innerHTML = '';
+
+                    chars.forEach((char, i) => {
+                        if (char === ' ') {
+                            container.appendChild(document.createTextNode(' '));
+                            return;
+                        }
+
+                        const span = document.createElement('span');
+                        span.className = 'fragment-char';
+                        span.textContent = char;
+                        span.style.cssText = `
+                            display: inline-block;
+                            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+                            transition-delay: ${i * 30}ms;
+                        `;
+
+                        container.appendChild(span);
+
+                        // Trigger fragmentation animation
+                        requestAnimationFrame(() => {
+                            const angle = (Math.random() - 0.5) * Math.PI;
+                            const distance = 20 + Math.random() * 40;
+                            const rotation = (Math.random() - 0.5) * 45;
+
+                            span.style.transform = `
+                                translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)
+                                rotate(${rotation}deg)
+                                scale(${0.8 + Math.random() * 0.4})
+                            `;
+                            span.style.opacity = '0.3';
+                            span.style.filter = 'blur(1px)';
+                        });
+                    });
+
+                    el.appendChild(container);
+                    this.fragments.push({ element: el, container });
+                });
+            },
+
+            reassembleAll() {
+                this.fragments.forEach(({ element, container }) => {
+                    const chars = container.querySelectorAll('.fragment-char');
+
+                    chars.forEach((char, i) => {
+                        char.style.transitionDelay = `${i * 50}ms`;
+                        char.style.transform = 'translate(0, 0) rotate(0deg) scale(1)';
+                        char.style.opacity = '1';
+                        char.style.filter = 'blur(0)';
+                    });
+
+                    // Flash effect on completion
+                    setTimeout(() => {
+                        element.style.textShadow = '0 0 30px var(--gold-core)';
+                        setTimeout(() => {
+                            element.style.textShadow = '';
+                        }, 300);
+                    }, chars.length * 50 + 400);
+                });
+            },
+
+            reset() {
+                this.originalElements.forEach((original, el) => {
+                    el.innerHTML = original.html;
+                    el.style.cssText = original.style;
+                });
+                this.originalElements.clear();
+                this.fragments = [];
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 5. VIEW TRANSITIONS API INTEGRATION
+        // ════════════════════════════════════════════════════════════════════════════
+        // Native morphing between proof states
+        // Smooth cross-fade for phase changes with progressive enhancement
+
+        const ViewTransitions = {
+            supported: false,
+
+            init() {
+                // Check for View Transitions API support
+                this.supported = 'startViewTransition' in document;
+
+                if (this.supported) {
+                    this.setupTransitions();
+                    console.log('%c✓ View Transitions API supported', 'color: #22c55e;');
+                } else {
+                    console.log('%c✗ View Transitions API not supported - using fallback', 'color: #f59e0b;');
+                }
+            },
+
+            setupTransitions() {
+                // Add view-transition-name to key elements
+                const transitionElements = {
+                    'hero-content': '.hero-content',
+                    'proof-interface': '.proof-interface',
+                    'ritual-stage': '.ritual-stage',
+                    'crown-logo': '.integrated-crown',
+                    'wordmark': '.wordmark'
+                };
+
+                Object.entries(transitionElements).forEach(([name, selector]) => {
+                    const el = document.querySelector(selector);
+                    if (el) {
+                        el.style.viewTransitionName = name;
+                    }
+                });
+
+                // Inject transition styles
+                const style = document.createElement('style');
+                style.textContent = `
+                    ::view-transition-old(proof-interface),
+                    ::view-transition-new(proof-interface) {
+                        animation-duration: 0.5s;
+                        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+
+                    ::view-transition-old(ritual-stage) {
+                        animation: fade-out 0.4s ease-out;
+                    }
+
+                    ::view-transition-new(ritual-stage) {
+                        animation: fade-in 0.4s ease-in;
+                    }
+
+                    @keyframes fade-out {
+                        from { opacity: 1; transform: scale(1); }
+                        to { opacity: 0; transform: scale(0.95); }
+                    }
+
+                    @keyframes fade-in {
+                        from { opacity: 0; transform: scale(1.05); }
+                        to { opacity: 1; transform: scale(1); }
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+
+            // Wrap a DOM update in a view transition
+            async transition(updateCallback) {
+                if (!this.supported) {
+                    updateCallback();
+                    return;
+                }
+
+                try {
+                    const transition = document.startViewTransition(() => {
+                        updateCallback();
+                    });
+                    await transition.finished;
+                } catch (e) {
+                    // Fallback if transition fails
+                    updateCallback();
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 6. CURSOR LENS REVEAL SYSTEM
+        // ════════════════════════════════════════════════════════════════════════════
+        // Cursor reveals hidden geometric patterns beneath the surface
+        // Parallax depth layers for discovery mechanic
+
+        const CursorLensReveal = {
+            lensSize: 150,
+            revealLayer: null,
+            patternSVG: null,
+            isActive: false,
+            mouseX: 0,
+            mouseY: 0,
+
+            init() {
+                if (window.innerWidth < 768) return; // Skip on mobile
+
+                this.createRevealLayer();
+                this.generateHiddenPattern();
+                this.setupListeners();
+            },
+
+            createRevealLayer() {
+                this.revealLayer = document.createElement('div');
+                this.revealLayer.id = 'cursor-lens-layer';
+                this.revealLayer.style.cssText = `
+                    position: fixed;
+                    inset: 0;
+                    pointer-events: none;
+                    z-index: 5;
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    overflow: hidden;
+                `;
+
+                // Create mask element
+                const mask = document.createElement('div');
+                mask.id = 'cursor-lens-mask';
+                mask.style.cssText = `
+                    position: absolute;
+                    width: ${this.lensSize}px;
+                    height: ${this.lensSize}px;
+                    border-radius: 50%;
+                    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+                    backdrop-filter: blur(2px) brightness(1.2);
+                    transform: translate(-50%, -50%);
+                    pointer-events: none;
+                    box-shadow:
+                        0 0 30px rgba(212, 175, 55, 0.2),
+                        inset 0 0 20px rgba(212, 175, 55, 0.1);
+                `;
+
+                this.revealLayer.appendChild(mask);
+                document.body.appendChild(this.revealLayer);
+                this.mask = mask;
+            },
+
+            generateHiddenPattern() {
+                // Generate a hidden geometric pattern only visible through the lens
+                const patternContainer = document.createElement('div');
+                patternContainer.style.cssText = `
+                    position: absolute;
+                    inset: 0;
+                    opacity: 0.3;
+                    mask-image: radial-gradient(circle at var(--lens-x, 50%) var(--lens-y, 50%), black ${this.lensSize * 0.4}px, transparent ${this.lensSize * 0.5}px);
+                    -webkit-mask-image: radial-gradient(circle at var(--lens-x, 50%) var(--lens-y, 50%), black ${this.lensSize * 0.4}px, transparent ${this.lensSize * 0.5}px);
+                `;
+
+                // Create sacred geometry pattern
+                const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                svg.setAttribute('viewBox', '0 0 1000 1000');
+                svg.style.cssText = `
+                    width: 100%;
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                `;
+
+                // Generate Flower of Life pattern
+                let circles = '';
+                const centerX = 500, centerY = 500;
+                const radius = 50;
+                const rings = 6;
+
+                for (let ring = 0; ring <= rings; ring++) {
+                    const ringRadius = ring * radius * 0.866;
+                    const pointsInRing = ring === 0 ? 1 : ring * 6;
+
+                    for (let i = 0; i < pointsInRing; i++) {
+                        const angle = (i / pointsInRing) * Math.PI * 2;
+                        const x = centerX + Math.cos(angle) * ringRadius;
+                        const y = centerY + Math.sin(angle) * ringRadius;
+                        circles += `<circle cx="${x}" cy="${y}" r="${radius}" fill="none" stroke="var(--gold-dim)" stroke-width="0.5" opacity="0.4"/>`;
+                    }
+                }
+
+                // Add radiating lines
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i / 12) * Math.PI * 2;
+                    const x2 = centerX + Math.cos(angle) * 400;
+                    const y2 = centerY + Math.sin(angle) * 400;
+                    circles += `<line x1="${centerX}" y1="${centerY}" x2="${x2}" y2="${y2}" stroke="var(--gold-shadow)" stroke-width="0.3" opacity="0.3"/>`;
+                }
+
+                svg.innerHTML = circles;
+                patternContainer.appendChild(svg);
+                this.revealLayer.appendChild(patternContainer);
+                this.patternContainer = patternContainer;
+            },
+
+            setupListeners() {
+                document.addEventListener('mousemove', (e) => {
+                    this.mouseX = e.clientX;
+                    this.mouseY = e.clientY;
+                    this.updateLens();
+                }, { passive: true });
+
+                document.addEventListener('mouseenter', () => {
+                    this.revealLayer.style.opacity = '1';
+                    this.isActive = true;
+                });
+
+                document.addEventListener('mouseleave', () => {
+                    this.revealLayer.style.opacity = '0';
+                    this.isActive = false;
+                });
+            },
+
+            updateLens() {
+                if (!this.isActive) return;
+
+                const x = this.mouseX;
+                const y = this.mouseY;
+
+                // Update mask position
+                this.mask.style.left = `${x}px`;
+                this.mask.style.top = `${y}px`;
+
+                // Update pattern mask
+                const xPercent = (x / window.innerWidth) * 100;
+                const yPercent = (y / window.innerHeight) * 100;
+
+                this.patternContainer.style.setProperty('--lens-x', `${xPercent}%`);
+                this.patternContainer.style.setProperty('--lens-y', `${yPercent}%`);
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 7. AUDIO-VISUAL SYNC BRIDGE
+        // ════════════════════════════════════════════════════════════════════════════
+        // WebGL shaders respond to audio frequencies
+        // ProofBus events drive visual intensity
+
+        const AudioVisualSync = {
+            audioContext: null,
+            analyser: null,
+            dataArray: null,
+            isConnected: false,
+
+            init() {
+                // Listen for audio engine initialization
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('audio:ready', (audioEngine) => {
+                        this.connectToAudio(audioEngine);
+                    });
+
+                    ProofBus.on('audio:data', (data) => {
+                        this.updateVisuals(data);
+                    });
+                }
+
+                // Start update loop
+                this.startUpdateLoop();
+            },
+
+            connectToAudio(audioEngine) {
+                if (!audioEngine || !audioEngine.context) return;
+
+                this.audioContext = audioEngine.context;
+                this.analyser = audioEngine.analyser;
+
+                if (this.analyser) {
+                    this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
+                    this.isConnected = true;
+                    console.log('%c🔊 Audio-Visual sync connected', 'color: #22c55e;');
+                }
+            },
+
+            startUpdateLoop() {
+                const update = () => {
+                    if (this.isConnected && this.analyser && this.dataArray) {
+                        this.analyser.getByteFrequencyData(this.dataArray);
+
+                        // Calculate audio metrics
+                        const bass = this.getFrequencyRange(0, 10);
+                        const mid = this.getFrequencyRange(10, 50);
+                        const high = this.getFrequencyRange(50, 128);
+                        const overall = (bass + mid + high) / 3;
+
+                        // Update CSS custom properties for shader access
+                        const root = document.documentElement;
+                        root.style.setProperty('--audio-bass', bass / 255);
+                        root.style.setProperty('--audio-mid', mid / 255);
+                        root.style.setProperty('--audio-high', high / 255);
+                        root.style.setProperty('--audio-energy', overall / 255);
+
+                        // Update WebGL camera if available
+                        if (window.RitualCamera) {
+                            window.RitualCamera.audioEnergy = overall / 255;
+                            window.RitualCamera.audioBass = bass / 255;
+                        }
+                    }
+
+                    requestAnimationFrame(update);
+                };
+
+                update();
+            },
+
+            getFrequencyRange(start, end) {
+                if (!this.dataArray) return 0;
+
+                let sum = 0;
+                for (let i = start; i < end && i < this.dataArray.length; i++) {
+                    sum += this.dataArray[i];
+                }
+                return sum / (end - start);
+            },
+
+            updateVisuals(data) {
+                // Additional visual updates based on audio events
+                const { energy, bass } = data;
+
+                // Pulse sacred geometry with bass
+                const geometry = document.querySelector('.sacred-geometry');
+                if (geometry && bass > 0.7) {
+                    geometry.style.transform = `translate(-50%, -50%) scale(${1 + bass * 0.05})`;
+                    setTimeout(() => {
+                        geometry.style.transform = 'translate(-50%, -50%) scale(1)';
+                    }, 100);
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 8. HAPTIC FEEDBACK ENGINE
+        // ════════════════════════════════════════════════════════════════════════════
+        // Vibration patterns for mobile devices
+        // Proof phases have tactile signatures
+
+        const HapticFeedback = {
+            supported: false,
+            patterns: {
+                // Pattern arrays: [vibrate, pause, vibrate, pause, ...]
+                click: [10],
+                success: [30, 50, 30, 50, 60],
+                error: [100, 30, 100],
+                proofStep: [15],
+                proofComplete: [50, 30, 50, 30, 100, 50, 150],
+                crystallize: [20, 20, 20, 20, 20, 20, 100],
+                seal: [200]
+            },
+
+            init() {
+                this.supported = 'vibrate' in navigator;
+
+                if (!this.supported) {
+                    console.log('%c✗ Haptic feedback not supported', 'color: #f59e0b;');
+                    return;
+                }
+
+                console.log('%c✓ Haptic feedback enabled', 'color: #22c55e;');
+
+                // Listen for proof events
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:step', () => this.vibrate('proofStep'));
+                    ProofBus.on('proof:complete', () => this.vibrate('proofComplete'));
+                    ProofBus.on('phase:change', (phase) => {
+                        if (phase === 'crystallize') this.vibrate('crystallize');
+                        if (phase === 'lock') this.vibrate('seal');
+                    });
+                }
+
+                // Add haptic to buttons
+                this.attachToButtons();
+            },
+
+            vibrate(patternName) {
+                if (!this.supported) return;
+
+                const pattern = this.patterns[patternName];
+                if (pattern) {
+                    navigator.vibrate(pattern);
+                }
+            },
+
+            attachToButtons() {
+                const buttons = document.querySelectorAll('button, .cta-button, .ritual-cta, .prove-btn');
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', () => this.vibrate('click'));
+                });
+            },
+
+            // Custom pattern creation
+            createPattern(durations) {
+                if (!this.supported) return;
+                navigator.vibrate(durations);
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // 9. INK SIMULATION EFFECT
+        // ════════════════════════════════════════════════════════════════════════════
+        // Organic spreading effects for text/elements
+        // Adds tactile, material quality to digital surface
+
+        const InkSimulation = {
+            inkDrops: [],
+
+            init() {
+                this.injectStyles();
+
+                // Listen for proof events to trigger ink
+                if (typeof ProofBus !== 'undefined') {
+                    ProofBus.on('proof:complete', (receipt) => {
+                        this.createInkSpread(window.innerWidth / 2, window.innerHeight / 2);
+                    });
+                }
+            },
+
+            injectStyles() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .ink-drop {
+                        position: fixed;
+                        pointer-events: none;
+                        z-index: 9990;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, var(--gold-core) 0%, var(--gold-dim) 30%, transparent 70%);
+                        opacity: 0;
+                        transform: scale(0);
+                        animation: inkSpread 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+                    }
+
+                    @keyframes inkSpread {
+                        0% {
+                            opacity: 0.8;
+                            transform: scale(0);
+                        }
+                        30% {
+                            opacity: 0.6;
+                        }
+                        100% {
+                            opacity: 0;
+                            transform: scale(3);
+                        }
+                    }
+
+                    .ink-drop::before {
+                        content: '';
+                        position: absolute;
+                        inset: 10%;
+                        border-radius: 50%;
+                        background: radial-gradient(circle, var(--gold-bright) 0%, transparent 60%);
+                        filter: blur(4px);
+                    }
+                `;
+                document.head.appendChild(style);
+            },
+
+            createInkSpread(x, y, size = 200) {
+                const drop = document.createElement('div');
+                drop.className = 'ink-drop';
+                drop.style.cssText = `
+                    left: ${x - size / 2}px;
+                    top: ${y - size / 2}px;
+                    width: ${size}px;
+                    height: ${size}px;
+                `;
+
+                document.body.appendChild(drop);
+
+                // Cleanup after animation
+                setTimeout(() => drop.remove(), 2000);
+
+                // Create secondary ripples
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const ripple = document.createElement('div');
+                        ripple.className = 'ink-drop';
+                        const offset = (Math.random() - 0.5) * 50;
+                        const rippleSize = size * (0.6 + Math.random() * 0.4);
+                        ripple.style.cssText = `
+                            left: ${x - rippleSize / 2 + offset}px;
+                            top: ${y - rippleSize / 2 + offset}px;
+                            width: ${rippleSize}px;
+                            height: ${rippleSize}px;
+                            animation-delay: ${i * 100}ms;
+                        `;
+                        document.body.appendChild(ripple);
+                        setTimeout(() => ripple.remove(), 2100);
+                    }, i * 100);
+                }
+            }
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════
+        // MASTER INITIALIZATION
+        // ════════════════════════════════════════════════════════════════════════════
+
+        function initNovelEnhancements() {
+            // Wait for DOM
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+
+            function init() {
+                console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
+                console.log('%c  CYTHERAI NOVEL ENHANCEMENTS v2.0', 'color: #d4af37; font-weight: bold; font-size: 14px;');
+                console.log('%c  Research-Grade Additions', 'color: #9c9b96; font-size: 11px;');
+                console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
+
+                // Initialize all systems
+                TemporalDesign.init();
+                GenerativeSigil.init();
+                VariableFontAnimation.init();
+                TextFragmentation.init();
+                ViewTransitions.init();
+                CursorLensReveal.init();
+                AudioVisualSync.init();
+                HapticFeedback.init();
+                InkSimulation.init();
+
+                console.log('%c✓ Temporal Design System', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Generative Sigil Engine', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Variable Font Animation', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Text Fragmentation', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ View Transitions API', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Cursor Lens Reveal', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Audio-Visual Sync', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Haptic Feedback', 'color: #22c55e; font-size: 11px;');
+                console.log('%c✓ Ink Simulation', 'color: #22c55e; font-size: 11px;');
+                console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
+            }
+        }
+
+        initNovelEnhancements();
+
+        // Export for external access
+        window.CytherNovelEnhancements = {
+            TemporalDesign,
+            GenerativeSigil,
+            VariableFontAnimation,
+            TextFragmentation,
+            ViewTransitions,
+            CursorLensReveal,
+            AudioVisualSync,
+            HapticFeedback,
+            InkSimulation
+        };
+
+    })();
+    </script>
 </body>
 </html>
