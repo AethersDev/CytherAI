@@ -10149,6 +10149,261 @@
             }
         };
 
+        // ════════════════════════════════════════════════════════════════════════════
+        // NOVEL ENHANCEMENTS v2.0 - Properly Integrated
+        // ════════════════════════════════════════════════════════════════════════════
+        // These extensions hook into existing systems without creating competing loops
+        // ════════════════════════════════════════════════════════════════════════════
+
+        // 1. TEMPORAL DESIGN - Circadian CSS hooks (no variable overrides)
+        EnhancementEngine.initTemporalDesign = function() {
+            const getMood = () => {
+                const hour = new Date().getHours();
+                const minute = new Date().getMinutes();
+                const time = hour + minute / 60;
+                if (time >= 5 && time < 7) return 'dawn';
+                if (time >= 7 && time < 10) return 'morning';
+                if (time >= 10 && time < 16) return 'midday';
+                if (time >= 16 && time < 18.5) return 'golden';
+                if (time >= 18.5 && time < 20) return 'blue';
+                if (time >= 20 && time < 23) return 'evening';
+                return 'midnight';
+            };
+
+            const updateMood = () => {
+                const mood = getMood();
+                document.body.setAttribute('data-temporal-mood', mood);
+            };
+
+            updateMood();
+            setInterval(updateMood, 60000);
+        };
+
+        // 2. GENERATIVE SIGIL - Procedural SVG from proof hash
+        EnhancementEngine.GenerativeSigil = {
+            seededRandom(seed) {
+                const x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            },
+
+            hashToSeed(hash) {
+                let seed = 0;
+                for (let i = 0; i < hash.length; i++) {
+                    seed = ((seed << 5) - seed) + hash.charCodeAt(i);
+                    seed = seed & seed;
+                }
+                return Math.abs(seed);
+            },
+
+            generate(hash, size = 180) {
+                const seed = this.hashToSeed(hash);
+                const rand = (offset = 0) => this.seededRandom(seed + offset);
+                const cx = size / 2, cy = size / 2;
+                const numArms = Math.floor(rand(1) * 5) + 5;
+                const layers = Math.floor(rand(2) * 3) + 2;
+                const rotationOffset = rand(4) * Math.PI * 2;
+
+                let circles = '', paths = '';
+                for (let layer = 0; layer < layers; layer++) {
+                    const r = (size * 0.15) + (layer * size * 0.12);
+                    const op = 0.3 + (layer / layers) * 0.4;
+                    const sw = 0.5 + rand(layer * 10) * 1;
+                    circles += `<circle cx="${cx}" cy="${cy}" r="${r}" stroke-width="${sw}" opacity="${op}"/>`;
+                }
+                for (let i = 0; i < numArms; i++) {
+                    const angle = (i / numArms) * Math.PI * 2 + rotationOffset;
+                    const len = size * 0.3 * (0.7 + rand(i * 100) * 0.3);
+                    const sw = 1 + rand(i * 100 + 50) * 2;
+                    const op = 0.6 + rand(i * 100 + 25) * 0.4;
+                    const ex = cx + Math.cos(angle) * len;
+                    const ey = cy + Math.sin(angle) * len;
+                    paths += `<line x1="${cx}" y1="${cy}" x2="${ex}" y2="${ey}" stroke-width="${sw}" opacity="${op}" stroke-linecap="round"/>`;
+                }
+
+                return `<svg viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" class="generative-sigil">
+                    <g fill="none" stroke="var(--gold-core)" filter="url(#sigilGlow)">
+                        <defs><filter id="sigilGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+                        ${circles}${paths}
+                        <text x="${cx}" y="${cy + 6}" fill="var(--gold-core)" font-family="serif" font-size="18" font-style="italic" text-anchor="middle" opacity="0.8">λ</text>
+                    </g>
+                </svg>`;
+            },
+
+            init() {
+                const style = document.createElement('style');
+                style.textContent = `
+                    .proof-sigil-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; height: 180px; pointer-events: none; z-index: 15; opacity: 0; transition: opacity 0.8s ease; }
+                    .generative-sigil { width: 100%; height: 100%; opacity: 0; transform: scale(0.8) rotate(-10deg); transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+                    .proof-sigil-container.visible .generative-sigil { opacity: 1; transform: scale(1) rotate(0deg); }
+                `;
+                document.head.appendChild(style);
+
+                const container = document.createElement('div');
+                container.id = 'proofSigil';
+                container.className = 'proof-sigil-container';
+                const stage = document.getElementById('ritualStage');
+                if (stage) stage.appendChild(container);
+
+                ProofBus.on('proof:complete', (receipt) => {
+                    if (receipt?.hash) {
+                        container.innerHTML = this.generate(receipt.hash);
+                        container.classList.add('visible');
+                    }
+                });
+                ProofBus.on('ritual:state', (state) => {
+                    if (state.phase === 'start') container.classList.remove('visible');
+                });
+            }
+        };
+
+        // 3. VARIABLE FONT - Coherence-driven weight (no animation loop)
+        EnhancementEngine.initVariableFont = function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .hero-headline, .sovereign-headline, .wordmark-text, .chapter-stamp {
+                    font-variation-settings: 'wght' var(--vf-weight, 300), 'wdth' var(--vf-width, 100);
+                    transition: font-variation-settings 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+                }
+            `;
+            document.head.appendChild(style);
+
+            ProofBus.on('state:update', (state) => {
+                const coherence = state.coherence || 0;
+                const weight = Math.round(200 + coherence * 500);
+                const width = Math.round(110 - coherence * 25);
+                document.documentElement.style.setProperty('--vf-weight', weight);
+                document.documentElement.style.setProperty('--vf-width', width);
+            });
+        };
+
+        // 4. VIEW TRANSITIONS - Progressive enhancement
+        EnhancementEngine.initViewTransitions = function() {
+            if (!('startViewTransition' in document)) return;
+
+            const transitionMap = {
+                'hero-content': '.hero-content',
+                'proof-interface': '.proof-interface',
+                'ritual-stage': '.ritual-stage',
+                'crown-logo': '.integrated-crown'
+            };
+            Object.entries(transitionMap).forEach(([name, sel]) => {
+                const el = document.querySelector(sel);
+                if (el) el.style.viewTransitionName = name;
+            });
+
+            const style = document.createElement('style');
+            style.textContent = `
+                ::view-transition-old(ritual-stage) { animation: vtFadeOut 0.4s ease-out; }
+                ::view-transition-new(ritual-stage) { animation: vtFadeIn 0.4s ease-in; }
+                @keyframes vtFadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
+                @keyframes vtFadeIn { from { opacity: 0; transform: scale(1.05); } to { opacity: 1; transform: scale(1); } }
+            `;
+            document.head.appendChild(style);
+        };
+
+        // 5. HAPTIC FEEDBACK - Mobile vibration patterns
+        EnhancementEngine.initHaptics = function() {
+            if (!('vibrate' in navigator)) return;
+
+            const patterns = {
+                click: [10],
+                proofStep: [15],
+                proofComplete: [50, 30, 50, 30, 100, 50, 150],
+                crystallize: [20, 20, 20, 20, 20, 20, 100],
+                seal: [200]
+            };
+
+            const vibrate = (name) => navigator.vibrate(patterns[name] || [10]);
+
+            ProofBus.on('proof:step', () => vibrate('proofStep'));
+            ProofBus.on('proof:complete', () => vibrate('proofComplete'));
+            ProofBus.on('phase:change', (phase) => {
+                if (phase === 'crystallize') vibrate('crystallize');
+                if (phase === 'lock') vibrate('seal');
+            });
+
+            document.querySelectorAll('button, .cta-button, .ritual-cta, .prove-btn').forEach(btn => {
+                btn.addEventListener('click', () => vibrate('click'));
+            });
+        };
+
+        // 6. INK SIMULATION - Organic spread on proof completion
+        EnhancementEngine.initInkSimulation = function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                .ink-drop { position: fixed; pointer-events: none; z-index: 9990; border-radius: 50%; background: radial-gradient(circle, var(--gold-core) 0%, var(--gold-dim) 30%, transparent 70%); opacity: 0; transform: scale(0); animation: inkSpread 2s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+                @keyframes inkSpread { 0% { opacity: 0.8; transform: scale(0); } 30% { opacity: 0.6; } 100% { opacity: 0; transform: scale(3); } }
+            `;
+            document.head.appendChild(style);
+
+            const createInk = (x, y, size = 200) => {
+                const drop = document.createElement('div');
+                drop.className = 'ink-drop';
+                drop.style.cssText = `left:${x - size/2}px;top:${y - size/2}px;width:${size}px;height:${size}px;`;
+                document.body.appendChild(drop);
+                setTimeout(() => drop.remove(), 2000);
+            };
+
+            ProofBus.on('proof:complete', () => {
+                createInk(window.innerWidth / 2, window.innerHeight / 2);
+                for (let i = 1; i <= 3; i++) {
+                    setTimeout(() => {
+                        const offset = (Math.random() - 0.5) * 50;
+                        createInk(window.innerWidth / 2 + offset, window.innerHeight / 2 + offset, 120 + Math.random() * 80);
+                    }, i * 100);
+                }
+            });
+        };
+
+        // 7. TEMPORAL CSS HOOKS - Additive styles for moods
+        EnhancementEngine.initTemporalCSS = function() {
+            const style = document.createElement('style');
+            style.textContent = `
+                /* Temporal mood overlays - additive, non-destructive */
+                [data-temporal-mood="dawn"] { --temporal-tint: rgba(244, 184, 122, 0.03); }
+                [data-temporal-mood="morning"] { --temporal-tint: rgba(232, 200, 74, 0.02); }
+                [data-temporal-mood="midday"] { --temporal-tint: rgba(201, 162, 39, 0.01); }
+                [data-temporal-mood="golden"] { --temporal-tint: rgba(255, 179, 71, 0.04); }
+                [data-temporal-mood="blue"] { --temporal-tint: rgba(168, 192, 216, 0.03); }
+                [data-temporal-mood="evening"] { --temporal-tint: rgba(184, 156, 74, 0.02); }
+                [data-temporal-mood="midnight"] { --temporal-tint: rgba(244, 214, 117, 0.03); }
+
+                [data-temporal-mood]::after {
+                    content: '';
+                    position: fixed;
+                    inset: 0;
+                    background: var(--temporal-tint, transparent);
+                    pointer-events: none;
+                    z-index: 0;
+                    mix-blend-mode: overlay;
+                    transition: background 2s ease;
+                }
+            `;
+            document.head.appendChild(style);
+        };
+
+        // Extend init to include novel enhancements
+        const originalInit = EnhancementEngine.init.bind(EnhancementEngine);
+        EnhancementEngine.init = function() {
+            originalInit();
+
+            // Initialize novel systems
+            this.initTemporalDesign();
+            this.initTemporalCSS();
+            this.GenerativeSigil.init();
+            this.initVariableFont();
+            this.initViewTransitions();
+            this.initHaptics();
+            this.initInkSimulation();
+
+            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
+            console.log('%c  NOVEL ENHANCEMENTS v2.0 INTEGRATED', 'color: #d4af37; font-weight: bold;');
+            console.log('%c  ✓ Temporal Design  ✓ Generative Sigil', 'color: #22c55e; font-size: 10px;');
+            console.log('%c  ✓ Variable Font    ✓ View Transitions', 'color: #22c55e; font-size: 10px;');
+            console.log('%c  ✓ Haptic Feedback  ✓ Ink Simulation', 'color: #22c55e; font-size: 10px;');
+            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
+        };
+
         // Activate enhancements after DOM is ready
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => EnhancementEngine.init());
