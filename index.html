@@ -2660,38 +2660,7 @@
             animation: goldShimmer 4s ease-in-out infinite;
         }
 
-        /* ═══════════════════════════════════════
-           GOLDEN HOUR ATMOSPHERIC GLOW
-           Cinematic depth through warm gradients
-        ═══════════════════════════════════════ */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(
-                ellipse at 50% 30%,
-                rgba(212, 175, 55, 0.08) 0%,
-                rgba(212, 175, 55, 0.04) 30%,
-                transparent 60%
-            );
-            animation: goldenHourPulse 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 1;
-            mix-blend-mode: screen;
-        }
-
-        @keyframes goldenHourPulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.6;
-            }
-            50% {
-                transform: translate(-50%, -45%) scale(1.1);
-                opacity: 0.8;
-            }
-        }
+        /* Golden Hour Atmospheric Glow - Consolidated into site-wide pulse below */
 
         /* ═══════════════════════════════════════
            PRECISION GOLD PARTICLE FIELD
