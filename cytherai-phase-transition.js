@@ -1,12 +1,18 @@
 /**
  * ════════════════════════════════════════════════════════════════════════════════
- * CYTHERAI PHASE TRANSITION ENGINE - JavaScript
+ * CYTHERAI PHASE TRANSITION ENGINE - Authority Edition
  * ════════════════════════════════════════════════════════════════════════════════
  *
- * Material Metaphor: Thermodynamic Medium
- * Content crystallizes from chaos through the thermodynamics of attention.
+ * "Fast reveals nothing. Slow reveals truth."
  *
- * The user doesn't read—they precipitate meaning from supersaturation.
+ * Deterministic. Hysteresis-based. φ-governed. No gimmicks.
+ *
+ * Core principles:
+ * - Attention is the only input
+ * - Scroll velocity = temperature
+ * - Pause duration = pressure
+ * - State changes are hysteresis-based (not random)
+ * - Feels physical and inevitable
  *
  * ════════════════════════════════════════════════════════════════════════════════
  */
@@ -15,88 +21,78 @@
     'use strict';
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // CONFIGURATION
+    // φ-BASED CONFIGURATION
     // ═══════════════════════════════════════════════════════════════════════════════
+
+    const PHI = 1.618033988749895;
+    const PHI_INV = 0.618033988749895;
 
     const CONFIG = {
         // Thermal velocity thresholds (px/s)
+        // Reduced to 3 visible behaviors: hot, warm, cold
         thermal: {
-            plasma: 2000,    // > 2000 = plasma
-            gas: 800,        // 800-2000 = gas
-            liquid: 200,     // 200-800 = liquid
-            solid: 50,       // 50-200 = solid
-            frozen: 50       // < 50 + time = frozen
+            hotThreshold: 600,      // > 600 px/s = hot (blurry, suggestive)
+            coldThreshold: 80,      // < 80 px/s = entering cold
+            frozenTime: 500         // ms stationary to reach crystallized
         },
 
-        // Latent heat delays (ms)
-        latent: {
-            plasmaToGas: 50,
-            gasToLiquid: 100,
-            liquidToSolid: 200,
-            solidToFrozen: 600
+        // Hysteresis bands - prevents flickering
+        // Once in a state, need to cross FURTHER to exit
+        hysteresis: {
+            hotExit: 400,           // Must drop below 400 to exit hot
+            coldExit: 150           // Must rise above 150 to exit cold
         },
 
-        // Crystal formation
-        crystal: {
-            facetDelay: 400,         // ms between facet reveals
-            maxFacets: 6,            // crystallographic symmetry
-            nucleationAdvance: 200   // ms earlier for nucleation sites
+        // φ-based scroll landmarks
+        landmarks: {
+            emergence: PHI_INV - (1 / (PHI * PHI * PHI)),  // 0.382
+            balance: PHI_INV,                               // 0.618
+            completion: PHI_INV + (1 / (PHI * PHI))         // 0.854
         },
 
-        // Seed crystal positions (scroll %)
-        seedCrystal: {
-            positions: [25, 60, 92],
-            states: ['nucleus', 'growing', 'complete'],
-            labels: ['INIT', 'FORMING', 'PROVEN']
+        // Crystal facet timing (capped at 3)
+        facets: {
+            depth1Time: 0,          // Immediate
+            depth2Time: 800,        // First reveal after 800ms
+            depth3Time: 1600,       // Maximum depth at 1600ms
+            maxDepth: 3
         },
 
-        // Triple point
+        // Triple point detection
         triplePoint: {
-            scrollPosition: 60,      // % scroll
-            velocityRange: [300, 600], // medium velocity
-            duration: 2000           // ms to remain active
+            scrollTolerance: 0.03,  // ±3% around 0.618
+            velocityMin: 150,       // Between warm and cold
+            velocityMax: 400,       // Between warm and hot
+            duration: 800           // How long effect persists
         },
 
-        // Supercooling
-        supercooling: {
-            probability: 0.15,       // 15% chance per solid→frozen attempt
-            maxEvents: 3,
-            cooldown: 10000          // ms between possible events
-        },
-
-        // Brownian particles
-        particles: {
-            count: 30,
-            minSize: 2,
-            maxSize: 5
-        },
-
-        // Phase diagram
-        phaseDiagram: {
-            updateInterval: 100,     // ms
-            maxPathPoints: 200
+        // Performance
+        performance: {
+            velocitySampleRate: 50, // ms between velocity samples
+            stateUpdateRate: 100    // ms between state evaluations
         }
     };
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // STATE
+    // STATE (Minimal, deterministic)
     // ═══════════════════════════════════════════════════════════════════════════════
 
     const STATE = {
-        currentPhase: 'liquid',
-        previousPhase: null,
-        scrollVelocity: 0,
-        scrollPosition: 0,
+        thermal: 'warm',            // hot | warm | cold
+        lockedThermal: null,        // Hysteresis lock
+        velocity: 0,
+        scrollPercent: 0,
         lastScrollY: 0,
         lastScrollTime: 0,
-        stationaryTime: 0,
+        stationaryStart: 0,
         crystalDepth: 1,
-        supercoolingCount: 0,
-        lastSupercool: 0,
-        isTriplePoint: false,
-        pathPoints: [],
+        triplePointActive: false,
         initialized: false
     };
+
+    // Velocity sample buffer for smoothing
+    const velocityBuffer = [];
+    const VELOCITY_BUFFER_SIZE = 5;
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // PHASE TRANSITION ENGINE
@@ -104,626 +100,352 @@
 
     const PhaseEngine = {
 
-        // ─────────────────────────────────────────────────────────────────
-        // INITIALIZATION
-        // ─────────────────────────────────────────────────────────────────
-
         init() {
             if (STATE.initialized) return;
             STATE.initialized = true;
 
+            // Create minimal DOM elements
             this.createDOM();
-            this.bindEvents();
-            this.startVelocityLoop();
-            this.startCrystalLoop();
-            this.initParticles();
 
             // Set initial state
-            document.body.setAttribute('data-thermal', 'liquid');
+            document.body.setAttribute('data-thermal', 'warm');
             document.body.setAttribute('data-crystal-depth', '1');
-            document.body.setAttribute('data-supercooled', 'false');
             document.body.setAttribute('data-triple-point', 'false');
 
-            this.log('Phase Transition Engine initialized');
+            // Bind scroll listener (passive for performance)
+            window.addEventListener('scroll', this.onScroll.bind(this), { passive: true });
+
+            // Start state evaluation loop
+            this.startStateLoop();
+
+            // Mark nucleation sites
+            this.markNucleationSites();
+
+            this.log('Authority Edition initialized');
         },
+
+        // ─────────────────────────────────────────────────────────────────
+        // MINIMAL DOM CREATION
+        // ─────────────────────────────────────────────────────────────────
 
         createDOM() {
-            // Thermal overlay
-            if (!document.querySelector('.thermal-overlay')) {
-                const overlay = document.createElement('div');
-                overlay.className = 'thermal-overlay';
-                document.body.appendChild(overlay);
+            const fragment = document.createDocumentFragment();
+
+            // Thermal vignette (cold state)
+            if (!document.querySelector('.thermal-vignette')) {
+                const vignette = document.createElement('div');
+                vignette.className = 'thermal-vignette';
+                fragment.appendChild(vignette);
             }
 
-            // Brownian particle container
-            if (!document.querySelector('.brownian-container')) {
-                const container = document.createElement('div');
-                container.className = 'brownian-container';
-                document.body.appendChild(container);
+            // Thermal reticle (cold state edge tightening)
+            if (!document.querySelector('.thermal-reticle')) {
+                const reticle = document.createElement('div');
+                reticle.className = 'thermal-reticle';
+                fragment.appendChild(reticle);
             }
 
-            // Phase diagram
-            this.createPhaseDiagram();
-
-            // Seed crystals
-            this.createSeedCrystals();
-
-            // Triple point badge
-            if (!document.querySelector('.triple-point-badge')) {
-                const badge = document.createElement('div');
-                badge.className = 'triple-point-badge';
-                badge.textContent = 'TRIPLE POINT';
-                document.body.appendChild(badge);
+            // Brownian field (CSS-based, no particles)
+            if (!document.querySelector('.brownian-field')) {
+                const field = document.createElement('div');
+                field.className = 'brownian-field';
+                fragment.appendChild(field);
             }
 
-            // Supercooling warning
-            if (!document.querySelector('.supercool-warning')) {
-                const warning = document.createElement('div');
-                warning.className = 'supercool-warning';
-                warning.textContent = 'SUPERCOOLING';
-                document.body.appendChild(warning);
-            }
+            // Calibration marks (cold state corners)
+            const positions = ['top-left', 'top-right', 'bottom-left', 'bottom-right'];
+            positions.forEach(pos => {
+                if (!document.querySelector(`.calibration-mark.${pos}`)) {
+                    const mark = document.createElement('div');
+                    mark.className = `calibration-mark ${pos}`;
+                    fragment.appendChild(mark);
 
-            // Euler mark
-            if (!document.querySelector('.euler-mark')) {
-                const euler = document.createElement('div');
-                euler.className = 'euler-mark';
-                euler.innerHTML = 'χ = <span class="euler-value">0</span>';
-                document.body.appendChild(euler);
-            }
+                    const markV = document.createElement('div');
+                    markV.className = `calibration-mark ${pos} vertical`;
+                    fragment.appendChild(markV);
+                }
+            });
+
+            // Seed crystals at φ landmarks
+            this.createSeedCrystals(fragment);
+
+            document.body.appendChild(fragment);
         },
 
-        createPhaseDiagram() {
-            if (document.querySelector('.phase-diagram')) return;
-
-            const diagram = document.createElement('div');
-            diagram.className = 'phase-diagram';
-            diagram.innerHTML = `
-                <div class="phase-diagram-bg"></div>
-                <div class="phase-region plasma"></div>
-                <div class="phase-region gas"></div>
-                <div class="phase-region liquid"></div>
-                <div class="phase-region solid"></div>
-                <div class="phase-region crystal"></div>
-                <svg class="phase-path" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <polyline class="phase-path-line" points=""/>
+        createSeedCrystals(fragment) {
+            const positions = ['emergence', 'balance', 'completion'];
+            const crystalSVG = `
+                <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="20,4 35,12 35,28 20,36 5,28 5,12"
+                        stroke="currentColor" stroke-width="0.75" fill="none" opacity="0.6"/>
+                    <polygon points="20,10 28,15 28,25 20,30 12,25 12,15"
+                        stroke="currentColor" stroke-width="0.5" fill="rgba(212,175,55,0.08)"/>
+                    <line x1="20" y1="4" x2="20" y2="36" stroke="currentColor" stroke-width="0.3" opacity="0.3"/>
                 </svg>
-                <div class="phase-current"></div>
-                <span class="phase-axis-label x">PRESSURE</span>
-                <span class="phase-axis-label y">TEMP</span>
             `;
-            document.body.appendChild(diagram);
 
-            // Show after brief delay
-            setTimeout(() => diagram.classList.add('visible'), 2000);
-        },
-
-        createSeedCrystals() {
-            CONFIG.seedCrystal.positions.forEach((pos, i) => {
-                if (document.querySelector(`.seed-crystal[data-appearance="${i+1}"]`)) return;
-
-                const crystal = document.createElement('div');
-                crystal.className = 'seed-crystal';
-                crystal.setAttribute('data-appearance', i + 1);
-                crystal.setAttribute('data-state', 'hidden');
-                crystal.innerHTML = `
-                    <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Hexagonal crystal structure -->
-                        <polygon
-                            points="30,5 52,17.5 52,42.5 30,55 8,42.5 8,17.5"
-                            stroke="currentColor"
-                            stroke-width="1"
-                            fill="none"
-                            opacity="0.6"
-                        />
-                        <polygon
-                            points="30,12 45,21 45,39 30,48 15,39 15,21"
-                            stroke="currentColor"
-                            stroke-width="0.75"
-                            fill="rgba(212,175,55,0.1)"
-                            opacity="0.8"
-                        />
-                        <polygon
-                            points="30,18 38,24 38,36 30,42 22,36 22,24"
-                            stroke="currentColor"
-                            stroke-width="0.5"
-                            fill="rgba(212,175,55,0.2)"
-                        />
-                        <!-- Inner facets -->
-                        <line x1="30" y1="5" x2="30" y2="55" stroke="currentColor" stroke-width="0.3" opacity="0.4"/>
-                        <line x1="8" y1="17.5" x2="52" y2="42.5" stroke="currentColor" stroke-width="0.3" opacity="0.4"/>
-                        <line x1="52" y1="17.5" x2="8" y2="42.5" stroke="currentColor" stroke-width="0.3" opacity="0.4"/>
-                        <!-- Core -->
-                        <circle cx="30" cy="30" r="4" fill="currentColor" opacity="0.6"/>
-                    </svg>
-                    <span class="seed-crystal-label">${CONFIG.seedCrystal.labels[i]}</span>
-                `;
-                crystal.style.color = 'var(--gold-core, #d4af37)';
-                document.body.appendChild(crystal);
+            positions.forEach(pos => {
+                if (!document.querySelector(`.seed-crystal[data-position="${pos}"]`)) {
+                    const crystal = document.createElement('div');
+                    crystal.className = 'seed-crystal';
+                    crystal.setAttribute('data-position', pos);
+                    crystal.setAttribute('data-visible', 'false');
+                    crystal.innerHTML = crystalSVG;
+                    fragment.appendChild(crystal);
+                }
             });
         },
 
         // ─────────────────────────────────────────────────────────────────
-        // EVENT BINDING
+        // SCROLL HANDLING (Velocity calculation)
         // ─────────────────────────────────────────────────────────────────
 
-        bindEvents() {
-            // Scroll velocity tracking
-            window.addEventListener('scroll', this.handleScroll.bind(this), { passive: true });
-
-            // Resize handling
-            window.addEventListener('resize', this.debounce(this.handleResize.bind(this), 200));
-        },
-
-        handleScroll() {
+        onScroll() {
             const now = performance.now();
             const currentY = window.scrollY;
             const deltaY = Math.abs(currentY - STATE.lastScrollY);
             const deltaTime = now - STATE.lastScrollTime;
 
-            if (deltaTime > 0) {
-                STATE.scrollVelocity = (deltaY / deltaTime) * 1000; // px/s
+            // Calculate instantaneous velocity
+            if (deltaTime > 0 && deltaTime < 500) {
+                const instantVelocity = (deltaY / deltaTime) * 1000;
+
+                // Add to buffer for smoothing
+                velocityBuffer.push(instantVelocity);
+                if (velocityBuffer.length > VELOCITY_BUFFER_SIZE) {
+                    velocityBuffer.shift();
+                }
+
+                // Smoothed velocity (average of buffer)
+                STATE.velocity = velocityBuffer.reduce((a, b) => a + b, 0) / velocityBuffer.length;
             }
 
-            STATE.scrollPosition = (currentY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            // Calculate scroll percentage
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            STATE.scrollPercent = docHeight > 0 ? currentY / docHeight : 0;
+
+            // Update tracking
             STATE.lastScrollY = currentY;
             STATE.lastScrollTime = now;
-            STATE.stationaryTime = 0;
 
-            // Update seed crystals
+            // Reset stationary timer on movement
+            if (deltaY > 2) {
+                STATE.stationaryStart = 0;
+                STATE.crystalDepth = 1;
+                document.body.setAttribute('data-crystal-depth', '1');
+            }
+
+            // Update seed crystal visibility
             this.updateSeedCrystals();
-
-            // Check for triple point
-            this.checkTriplePoint();
-        },
-
-        handleResize() {
-            // Recalculate particle positions
-            this.initParticles();
         },
 
         // ─────────────────────────────────────────────────────────────────
-        // VELOCITY DETECTION LOOP
+        // STATE EVALUATION LOOP (Hysteresis-based)
         // ─────────────────────────────────────────────────────────────────
 
-        startVelocityLoop() {
-            const loop = () => {
-                const now = performance.now();
+        startStateLoop() {
+            let lastUpdate = 0;
 
-                // Decay velocity when not scrolling
-                if (now - STATE.lastScrollTime > 100) {
-                    STATE.scrollVelocity *= 0.9;
-                    STATE.stationaryTime += 16;
+            const loop = (timestamp) => {
+                // Throttle updates
+                if (timestamp - lastUpdate >= CONFIG.performance.stateUpdateRate) {
+                    lastUpdate = timestamp;
+                    this.evaluateState(timestamp);
                 }
-
-                // Determine phase from velocity
-                const newPhase = this.calculatePhase();
-
-                if (newPhase !== STATE.currentPhase) {
-                    this.transitionPhase(newPhase);
-                }
-
-                // Update phase diagram
-                this.updatePhaseDiagram();
-
-                // Update Euler characteristic
-                this.updateEuler();
-
                 requestAnimationFrame(loop);
             };
 
             requestAnimationFrame(loop);
         },
 
-        calculatePhase() {
-            const v = STATE.scrollVelocity;
+        evaluateState(now) {
+            const v = STATE.velocity;
+            const timeSinceScroll = now - STATE.lastScrollTime;
 
-            if (v > CONFIG.thermal.plasma) return 'plasma';
-            if (v > CONFIG.thermal.gas) return 'gas';
-            if (v > CONFIG.thermal.liquid) return 'liquid';
-            if (v > CONFIG.thermal.solid) return 'solid';
+            // Determine target thermal state with hysteresis
+            let targetThermal = STATE.thermal;
 
-            // Frozen requires time stationary
-            if (STATE.stationaryTime > CONFIG.latent.solidToFrozen) {
-                return 'frozen';
-            }
-
-            return 'solid';
-        },
-
-        transitionPhase(newPhase) {
-            STATE.previousPhase = STATE.currentPhase;
-
-            // Check for supercooling before solid→frozen
-            if (STATE.currentPhase === 'solid' && newPhase === 'frozen') {
-                if (this.checkSupercooling()) {
-                    return; // Supercooling event triggered
+            if (STATE.thermal === 'hot') {
+                // Exit hot only if velocity drops below hysteresis band
+                if (v < CONFIG.hysteresis.hotExit) {
+                    targetThermal = v < CONFIG.thermal.coldThreshold ? 'cold' : 'warm';
+                }
+            } else if (STATE.thermal === 'cold') {
+                // Exit cold only if velocity rises above hysteresis band
+                if (v > CONFIG.hysteresis.coldExit) {
+                    targetThermal = v > CONFIG.thermal.hotThreshold ? 'hot' : 'warm';
+                }
+            } else {
+                // In warm state, evaluate normally
+                if (v > CONFIG.thermal.hotThreshold) {
+                    targetThermal = 'hot';
+                } else if (v < CONFIG.thermal.coldThreshold) {
+                    targetThermal = 'cold';
                 }
             }
 
-            // Get latent heat delay
-            const delay = this.getLatentDelay(STATE.currentPhase, newPhase);
+            // Handle stationary → crystallization
+            if (timeSinceScroll > 100) {
+                // Velocity decays when stationary
+                STATE.velocity *= 0.85;
 
-            setTimeout(() => {
-                STATE.currentPhase = newPhase;
-                document.body.setAttribute('data-thermal', newPhase);
-
-                // Reset crystal depth on phase change upward
-                if (this.getPhaseOrder(newPhase) < this.getPhaseOrder(STATE.previousPhase)) {
-                    STATE.crystalDepth = 1;
-                    document.body.setAttribute('data-crystal-depth', '1');
+                if (STATE.stationaryStart === 0) {
+                    STATE.stationaryStart = now;
                 }
 
-                this.log(`Phase transition: ${STATE.previousPhase} → ${newPhase}`);
-            }, delay);
-        },
+                const stationaryDuration = now - STATE.stationaryStart;
 
-        getPhaseOrder(phase) {
-            const order = { plasma: 0, gas: 1, liquid: 2, solid: 3, frozen: 4 };
-            return order[phase] || 2;
-        },
+                // Deep crystallization only after frozen time
+                if (stationaryDuration > CONFIG.thermal.frozenTime) {
+                    targetThermal = 'cold';
 
-        getLatentDelay(from, to) {
-            if (from === 'plasma' && to === 'gas') return CONFIG.latent.plasmaToGas;
-            if (from === 'gas' && to === 'liquid') return CONFIG.latent.gasToLiquid;
-            if (from === 'liquid' && to === 'solid') return CONFIG.latent.liquidToSolid;
-            if (from === 'solid' && to === 'frozen') return CONFIG.latent.solidToFrozen;
-            return 50; // Default quick transition for reverse
-        },
-
-        // ─────────────────────────────────────────────────────────────────
-        // CRYSTALLIZATION LOOP
-        // ─────────────────────────────────────────────────────────────────
-
-        startCrystalLoop() {
-            setInterval(() => {
-                // Only grow crystals when frozen
-                if (STATE.currentPhase === 'frozen') {
-                    if (STATE.crystalDepth < CONFIG.crystal.maxFacets) {
-                        STATE.crystalDepth++;
-                        document.body.setAttribute('data-crystal-depth', STATE.crystalDepth.toString());
-                        this.log(`Crystal facet revealed: ${STATE.crystalDepth}/${CONFIG.crystal.maxFacets}`);
+                    // Progressive facet reveal
+                    if (stationaryDuration > CONFIG.facets.depth2Time && STATE.crystalDepth < 2) {
+                        STATE.crystalDepth = 2;
+                        document.body.setAttribute('data-crystal-depth', '2');
+                    }
+                    if (stationaryDuration > CONFIG.facets.depth3Time && STATE.crystalDepth < 3) {
+                        STATE.crystalDepth = 3;
+                        document.body.setAttribute('data-crystal-depth', '3');
                     }
                 }
-            }, CONFIG.crystal.facetDelay);
-        },
-
-        // ─────────────────────────────────────────────────────────────────
-        // SUPERCOOLING
-        // ─────────────────────────────────────────────────────────────────
-
-        checkSupercooling() {
-            const now = performance.now();
-
-            // Check limits
-            if (STATE.supercoolingCount >= CONFIG.supercooling.maxEvents) return false;
-            if (now - STATE.lastSupercool < CONFIG.supercooling.cooldown) return false;
-
-            // Random chance
-            if (Math.random() < CONFIG.supercooling.probability) {
-                this.triggerSupercooling();
-                return true;
             }
 
-            return false;
-        },
+            // Apply state change
+            if (targetThermal !== STATE.thermal) {
+                STATE.thermal = targetThermal;
+                document.body.setAttribute('data-thermal', targetThermal);
+            }
 
-        triggerSupercooling() {
-            STATE.supercoolingCount++;
-            STATE.lastSupercool = performance.now();
-
-            document.body.setAttribute('data-supercooled', 'true');
-            this.log('SUPERCOOLING EVENT');
-
-            // Flash back to liquid briefly
-            setTimeout(() => {
-                STATE.currentPhase = 'liquid';
-                document.body.setAttribute('data-thermal', 'liquid');
-            }, 300);
-
-            // Reset supercooled state
-            setTimeout(() => {
-                document.body.setAttribute('data-supercooled', 'false');
-            }, 1000);
+            // Check for triple point at φ balance
+            this.checkTriplePoint();
         },
 
         // ─────────────────────────────────────────────────────────────────
-        // TRIPLE POINT
+        // TRIPLE POINT (Deterministic at 0.618)
         // ─────────────────────────────────────────────────────────────────
 
         checkTriplePoint() {
-            const inRange =
-                Math.abs(STATE.scrollPosition - CONFIG.triplePoint.scrollPosition) < 5 &&
-                STATE.scrollVelocity >= CONFIG.triplePoint.velocityRange[0] &&
-                STATE.scrollVelocity <= CONFIG.triplePoint.velocityRange[1];
+            const scrollNearBalance = Math.abs(STATE.scrollPercent - CONFIG.landmarks.balance) < CONFIG.triplePoint.scrollTolerance;
+            const velocityInRange = STATE.velocity >= CONFIG.triplePoint.velocityMin &&
+                                    STATE.velocity <= CONFIG.triplePoint.velocityMax;
 
-            if (inRange && !STATE.isTriplePoint) {
-                STATE.isTriplePoint = true;
+            if (scrollNearBalance && velocityInRange && !STATE.triplePointActive) {
+                STATE.triplePointActive = true;
                 document.body.setAttribute('data-triple-point', 'true');
-                this.log('TRIPLE POINT ACHIEVED');
 
-                // Auto-expire
+                // Auto-expire after duration
                 setTimeout(() => {
-                    STATE.isTriplePoint = false;
+                    STATE.triplePointActive = false;
                     document.body.setAttribute('data-triple-point', 'false');
                 }, CONFIG.triplePoint.duration);
             }
         },
 
         // ─────────────────────────────────────────────────────────────────
-        // SEED CRYSTALS
+        // SEED CRYSTALS (φ landmark visibility)
         // ─────────────────────────────────────────────────────────────────
 
         updateSeedCrystals() {
-            CONFIG.seedCrystal.positions.forEach((pos, i) => {
-                const crystal = document.querySelector(`.seed-crystal[data-appearance="${i+1}"]`);
-                if (!crystal) return;
+            const scroll = STATE.scrollPercent;
 
-                const currentState = crystal.getAttribute('data-state');
-                let newState = 'hidden';
-
-                // Determine state based on scroll position and phase
-                const scrollDist = Math.abs(STATE.scrollPosition - pos);
-
-                if (scrollDist < 15) {
-                    if (STATE.currentPhase === 'frozen') {
-                        newState = CONFIG.seedCrystal.states[i];
-                    } else if (STATE.currentPhase === 'solid') {
-                        newState = i === 0 ? 'nucleus' : 'hidden';
-                    } else if (STATE.currentPhase === 'liquid' && scrollDist < 8) {
-                        newState = 'nucleus';
-                    }
-                }
-
-                if (newState !== currentState) {
-                    crystal.setAttribute('data-state', newState);
-                }
-            });
-        },
-
-        // ─────────────────────────────────────────────────────────────────
-        // PHASE DIAGRAM
-        // ─────────────────────────────────────────────────────────────────
-
-        updatePhaseDiagram() {
-            // Calculate position on diagram
-            // X = scroll position (0-100%)
-            // Y = thermal velocity inverted (high temp at top)
-            const x = STATE.scrollPosition;
-            const y = 100 - Math.min(100, (STATE.scrollVelocity / CONFIG.thermal.plasma) * 100);
-
-            // Update current indicator
-            const indicator = document.querySelector('.phase-current');
-            if (indicator) {
-                indicator.style.left = `${x}%`;
-                indicator.style.top = `${y}%`;
+            // Emergence crystal: visible near 0.382
+            const emergence = document.querySelector('.seed-crystal[data-position="emergence"]');
+            if (emergence) {
+                const nearEmergence = Math.abs(scroll - CONFIG.landmarks.emergence) < 0.08;
+                emergence.setAttribute('data-visible', nearEmergence ? 'true' : 'false');
             }
 
-            // Add to path
-            STATE.pathPoints.push({ x, y });
-            if (STATE.pathPoints.length > CONFIG.phaseDiagram.maxPathPoints) {
-                STATE.pathPoints.shift();
+            // Balance crystal: visible near 0.618
+            const balance = document.querySelector('.seed-crystal[data-position="balance"]');
+            if (balance) {
+                const nearBalance = Math.abs(scroll - CONFIG.landmarks.balance) < 0.08;
+                balance.setAttribute('data-visible', nearBalance ? 'true' : 'false');
             }
 
-            // Update path line
-            const pathLine = document.querySelector('.phase-path-line');
-            if (pathLine && STATE.pathPoints.length > 1) {
-                const points = STATE.pathPoints
-                    .map(p => `${p.x},${p.y}`)
-                    .join(' ');
-                pathLine.setAttribute('points', points);
+            // Completion crystal: visible near 0.854
+            const completion = document.querySelector('.seed-crystal[data-position="completion"]');
+            if (completion) {
+                const nearCompletion = Math.abs(scroll - CONFIG.landmarks.completion) < 0.08;
+                completion.setAttribute('data-visible', nearCompletion ? 'true' : 'false');
             }
         },
 
         // ─────────────────────────────────────────────────────────────────
-        // EULER CHARACTERISTIC
+        // NUCLEATION SITES (Hierarchy without UI)
         // ─────────────────────────────────────────────────────────────────
-
-        eulerBacktracks: 0,
-        eulerPauses: 0,
-        lastScrollDirection: 0,
-
-        updateEuler() {
-            // Detect backtracking
-            const currentDirection = STATE.scrollVelocity > 10 ?
-                (window.scrollY > STATE.lastScrollY ? 1 : -1) : 0;
-
-            if (currentDirection !== 0 && currentDirection !== this.lastScrollDirection && this.lastScrollDirection !== 0) {
-                this.eulerBacktracks++;
-            }
-            this.lastScrollDirection = currentDirection;
-
-            // Count pauses (frozen state entries)
-            if (STATE.currentPhase === 'frozen' && STATE.previousPhase === 'solid') {
-                this.eulerPauses++;
-            }
-
-            // Calculate Euler characteristic (topology of reading)
-            const chi = this.eulerPauses - this.eulerBacktracks;
-
-            const eulerValue = document.querySelector('.euler-value');
-            if (eulerValue) {
-                eulerValue.textContent = chi >= 0 ? `+${chi}` : chi;
-            }
-        },
-
-        // ─────────────────────────────────────────────────────────────────
-        // BROWNIAN PARTICLES
-        // ─────────────────────────────────────────────────────────────────
-
-        initParticles() {
-            const container = document.querySelector('.brownian-container');
-            if (!container) return;
-
-            container.innerHTML = '';
-
-            for (let i = 0; i < CONFIG.particles.count; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'brownian-particle';
-
-                const size = CONFIG.particles.minSize +
-                    Math.random() * (CONFIG.particles.maxSize - CONFIG.particles.minSize);
-
-                particle.style.cssText = `
-                    width: ${size}px;
-                    height: ${size}px;
-                    left: ${Math.random() * 100}%;
-                    top: ${Math.random() * 100}%;
-                    --random-x: ${Math.random()};
-                    --random-y: ${Math.random()};
-                    animation-delay: ${Math.random() * 2}s;
-                `;
-
-                container.appendChild(particle);
-            }
-        },
-
-        // ─────────────────────────────────────────────────────────────────
-        // UTILITIES
-        // ─────────────────────────────────────────────────────────────────
-
-        debounce(fn, delay) {
-            let timeout;
-            return (...args) => {
-                clearTimeout(timeout);
-                timeout = setTimeout(() => fn.apply(this, args), delay);
-            };
-        },
-
-        log(msg) {
-            console.log(`%c[Phase] ${msg}`, 'color: #d4af37; font-weight: bold;');
-        }
-    };
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // NUCLEATION SITE PROCESSOR
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-    const NucleationProcessor = {
-        init() {
-            // Find all elements that should be nucleation sites
-            this.markNucleationSites();
-        },
 
         markNucleationSites() {
-            // Headlines are primary nucleation sites
+            // Primary: headlines crystallize first
             document.querySelectorAll('.chapter-stamp, .sovereign-headline, .gate-stamp').forEach(el => {
                 if (!el.hasAttribute('data-nucleation')) {
                     el.setAttribute('data-nucleation', 'primary');
                 }
             });
 
-            // Claims are secondary
+            // Secondary: claims follow
             document.querySelectorAll('.chapter-claim, .sovereign-subline').forEach(el => {
                 if (!el.hasAttribute('data-nucleation')) {
                     el.setAttribute('data-nucleation', 'secondary');
                 }
             });
 
-            // Key terms in artifacts
-            document.querySelectorAll('.artifact-label').forEach(el => {
+            // Tertiary: artifacts last
+            document.querySelectorAll('.artifact-label, .chapter-artifact').forEach(el => {
                 if (!el.hasAttribute('data-nucleation')) {
                     el.setAttribute('data-nucleation', 'tertiary');
                 }
             });
-        }
-    };
-
-    // ═══════════════════════════════════════════════════════════════════════════════
-    // FACET SYSTEM
-    // ═══════════════════════════════════════════════════════════════════════════════
-
-    const FacetSystem = {
-        init() {
-            // Convert data-disclosure elements to faceted content
-            this.processFacetedContent();
         },
 
-        processFacetedContent() {
-            document.querySelectorAll('[data-disclosure]').forEach(el => {
-                if (el.classList.contains('faceted-processed')) return;
+        // ─────────────────────────────────────────────────────────────────
+        // UTILITIES
+        // ─────────────────────────────────────────────────────────────────
 
-                const mainContent = el.innerHTML;
-                const disclosure = el.getAttribute('data-disclosure');
-
-                el.classList.add('faceted-processed');
-                el.setAttribute('data-facets', '2');
-
-                // Create facet structure
-                el.innerHTML = `
-                    <span data-facet="1">${mainContent}</span>
-                    <span data-facet="2" class="facet-disclosure">${disclosure}</span>
-                `;
-
-                // Add facet indicator
-                const indicator = document.createElement('div');
-                indicator.className = 'facet-indicator';
-                indicator.innerHTML = `
-                    <div class="facet-dot revealed"></div>
-                    <div class="facet-dot"></div>
-                `;
-                el.appendChild(indicator);
-            });
+        log(msg) {
+            console.log(`%c[Phase] ${msg}`, 'color: #d4af37;');
         }
     };
 
     // ═══════════════════════════════════════════════════════════════════════════════
-    // CONSOLE BRANDING
+    // CONSOLE SIGNATURE (Minimal)
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    const ConsoleBrand = {
-        print() {
-            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
-            console.log('%c  CYTHERAI PHASE TRANSITION ENGINE v1.0', 'color: #d4af37; font-weight: bold; font-size: 14px;');
-            console.log('%c  Material: Thermodynamic Medium', 'color: #8a6e1f; font-style: italic;');
-            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
-            console.log('%c  ✓ Thermal Velocity Detection', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Phase State Management (5 states)', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Nucleation Site System', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Seed Crystal (3 appearances)', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Phase Diagram UI', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Crystalline Facets', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Latent Heat Delays', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Supercooling Events', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Triple Point Detection', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Brownian Particle Field', 'color: #22c55e; font-size: 10px;');
-            console.log('%c  ✓ Euler Characteristic Tracking', 'color: #22c55e; font-size: 10px;');
-            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
-            console.log('%c  "You don\'t read—you nucleate meaning."', 'color: #f5f5f0; font-style: italic;');
-            console.log('%c═══════════════════════════════════════════════════', 'color: #d4af37;');
-        }
+    const printSignature = () => {
+        console.log('%c════════════════════════════════════════════', 'color: #d4af37;');
+        console.log('%c  PHASE TRANSITION ENGINE', 'color: #d4af37; font-weight: bold;');
+        console.log('%c  Authority Edition', 'color: #8a6e1f; font-style: italic;');
+        console.log('%c════════════════════════════════════════════', 'color: #d4af37;');
+        console.log('%c  "Fast reveals nothing. Slow reveals truth."', 'color: #9c9b96;');
+        console.log('%c════════════════════════════════════════════', 'color: #d4af37;');
     };
 
     // ═══════════════════════════════════════════════════════════════════════════════
     // INITIALIZATION
     // ═══════════════════════════════════════════════════════════════════════════════
 
-    function init() {
-        // Check for reduced motion preference
+    const init = () => {
+        // Check for reduced motion
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            console.log('%c[Phase] Reduced motion detected - minimal effects', 'color: #8a6e1f;');
-            document.body.setAttribute('data-thermal', 'solid');
+            document.body.setAttribute('data-thermal', 'warm');
+            console.log('%c[Phase] Reduced motion - minimal effects', 'color: #8a6e1f;');
             return;
         }
 
-        ConsoleBrand.print();
+        printSignature();
         PhaseEngine.init();
-        NucleationProcessor.init();
-        FacetSystem.init();
-    }
+    };
 
-    // Start when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
-    // Expose for debugging
+    // Minimal API exposure
     window.CytherPhase = {
-        engine: PhaseEngine,
-        state: STATE,
-        config: CONFIG
+        getState: () => ({ ...STATE }),
+        getConfig: () => ({ ...CONFIG })
     };
 
 })();

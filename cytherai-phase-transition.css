@@ -1,912 +1,525 @@
 /**
  * ════════════════════════════════════════════════════════════════════════════════
- * CYTHERAI PHASE TRANSITION ENGINE - CSS
+ * CYTHERAI PHASE TRANSITION ENGINE - Authority Edition
  * ════════════════════════════════════════════════════════════════════════════════
  *
- * Material Metaphor: Thermodynamic Medium
- * Content crystallizes from chaos through the thermodynamics of attention.
+ * "Fast reveals nothing. Slow reveals truth."
+ *
+ * Deterministic. Hysteresis-based. φ-governed. No gimmicks.
  *
  * ════════════════════════════════════════════════════════════════════════════════
  */
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   ROOT: PHASE TRANSITION VARIABLES
+   φ-BASED DESIGN TOKEN LADDER
+   All values derive from golden ratio (1.618) to create natural harmony.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 :root {
-    /* Thermal color temperature */
-    --thermal-plasma: #f0f4ff;      /* Blue-white hot */
-    --thermal-gas: #fff8e8;         /* White-gold */
-    --thermal-liquid: #ffe4a8;      /* Warm gold */
-    --thermal-solid: #d4af37;       /* Deep gold */
-    --thermal-crystal: #f4e4bc;     /* Cold gold */
+    /* ─────────────────────────────────────────────────────────────────
+       SPACING LADDER (φ-derived, base 8px)
+       8 × φⁿ progression
+       ───────────────────────────────────────────────────────────────── */
+    --space-0: 0;
+    --space-1: 5px;      /* 8 / φ */
+    --space-2: 8px;      /* base */
+    --space-3: 13px;     /* 8 × φ⁰·⁵ */
+    --space-4: 21px;     /* 8 × φ¹·⁵ */
+    --space-5: 34px;     /* 8 × φ² */
+    --space-6: 55px;     /* 8 × φ²·⁵ */
+    --space-7: 89px;     /* 8 × φ³ */
+    --space-8: 144px;    /* 8 × φ³·⁵ */
 
-    /* Phase transition timing (latent heat) */
-    --latent-plasma-gas: 50ms;
-    --latent-gas-liquid: 100ms;
-    --latent-liquid-solid: 200ms;
-    --latent-solid-crystal: 600ms;
+    /* ─────────────────────────────────────────────────────────────────
+       TYPOGRAPHY LADDER (φ-derived, base 16px)
+       ───────────────────────────────────────────────────────────────── */
+    --type-xs: 10px;     /* 16 / φ¹·⁵ */
+    --type-sm: 13px;     /* 16 / φ */
+    --type-base: 16px;   /* base */
+    --type-lg: 21px;     /* 16 × φ⁰·⁵ */
+    --type-xl: 26px;     /* 16 × φ */
+    --type-2xl: 33px;    /* 16 × φ¹·⁵ */
+    --type-3xl: 42px;    /* 16 × φ² */
+    --type-4xl: 55px;    /* 16 × φ²·⁵ */
+    --type-5xl: 68px;    /* 16 × φ³ */
 
-    /* Crystallographic values */
-    --facet-angle: 60deg;
-    --lattice-spacing: 40px;
-    --nucleation-radius: 150px;
+    /* Line height = φ */
+    --leading-tight: 1.2;
+    --leading-normal: 1.618;
+    --leading-relaxed: 1.85;
 
-    /* Current state (set by JS) */
+    /* ─────────────────────────────────────────────────────────────────
+       TIMING LADDER (φ-derived, base 100ms)
+       ───────────────────────────────────────────────────────────────── */
+    --time-instant: 50ms;
+    --time-fast: 100ms;
+    --time-normal: 160ms;    /* 100 × φ⁰·⁵ */
+    --time-slow: 260ms;      /* 100 × φ */
+    --time-slower: 420ms;    /* 100 × φ¹·⁵ */
+    --time-slowest: 680ms;   /* 100 × φ² */
+
+    /* ─────────────────────────────────────────────────────────────────
+       SCROLL LANDMARKS (φ emergence points)
+       ───────────────────────────────────────────────────────────────── */
+    --scroll-emergence: 0.382;   /* 1 - φ⁻¹ */
+    --scroll-balance: 0.618;     /* φ⁻¹ (THE critical point) */
+    --scroll-completion: 0.854;  /* φ⁻¹ + φ⁻² */
+
+    /* ─────────────────────────────────────────────────────────────────
+       OPTICAL CENTERLINE
+       Single axis of truth for all primary elements.
+       ───────────────────────────────────────────────────────────────── */
+    --optical-offset: 0px;       /* Compensates for asymmetric weight */
+    --content-max-width: 890px;
+
+    /* ─────────────────────────────────────────────────────────────────
+       THERMAL STATES (internal, 3 visible behaviors)
+       Hot → Warm → Cold
+       ───────────────────────────────────────────────────────────────── */
+    --thermal-hot: rgba(255, 248, 232, 0.7);
+    --thermal-warm: rgba(212, 175, 55, 1);
+    --thermal-cold: rgba(244, 228, 188, 1);
+
+    /* Current phase properties (set by JS) */
     --phase-blur: 0px;
     --phase-opacity: 1;
-    --phase-letter-spacing: 0.15em;
-    --phase-jitter: 0;
-    --lattice-opacity: 0;
-    --prismatic-intensity: 0;
+    --phase-sharpness: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE STATE: PLASMA
-   Maximum entropy. Content as energy, not form.
+   PHASE STATE: HOT (Fast Scroll)
+   Content becomes less legible, more suggestive. Reveals nothing.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-body[data-thermal="plasma"] {
-    --phase-blur: 4px;
-    --phase-opacity: 0.7;
-    --phase-letter-spacing: 0.5em;
-    --phase-jitter: 3px;
-    --thermal-tint: var(--thermal-plasma);
+body[data-thermal="hot"] {
+    --phase-blur: 2px;
+    --phase-opacity: 0.75;
 }
 
-body[data-thermal="plasma"] .chapter-stamp,
-body[data-thermal="plasma"] .sovereign-headline,
-body[data-thermal="plasma"] .chapter-claim {
+body[data-thermal="hot"] .chapter-stamp,
+body[data-thermal="hot"] .sovereign-headline,
+body[data-thermal="hot"] .chapter-claim,
+body[data-thermal="hot"] .gate-stamp {
     filter: blur(var(--phase-blur));
-    letter-spacing: var(--phase-letter-spacing);
-    animation: plasma-jitter 0.1s infinite;
-    color: var(--thermal-plasma);
-    text-shadow:
-        0 0 20px var(--thermal-plasma),
-        0 0 40px rgba(240, 244, 255, 0.5);
-}
-
-@keyframes plasma-jitter {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(calc(var(--phase-jitter) * -1), var(--phase-jitter)); }
-    50% { transform: translate(var(--phase-jitter), calc(var(--phase-jitter) * -1)); }
-    75% { transform: translate(var(--phase-jitter), var(--phase-jitter)); }
-}
-
-body[data-thermal="plasma"] .dossier-plate,
-body[data-thermal="plasma"] .plate-surface {
-    border-color: rgba(240, 244, 255, 0.3);
-    box-shadow:
-        0 0 60px rgba(240, 244, 255, 0.2),
-        inset 0 0 40px rgba(240, 244, 255, 0.05);
-}
-
-/* Plasma streaking effect on scroll */
-body[data-thermal="plasma"]::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: linear-gradient(
-        180deg,
-        transparent 0%,
-        rgba(240, 244, 255, 0.03) 50%,
-        transparent 100%
-    );
-    pointer-events: none;
-    z-index: 9995;
-    animation: plasma-streak 0.15s infinite;
-}
-
-@keyframes plasma-streak {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE STATE: GAS
-   Volatile, suggestive, ephemeral. Ideas suggest themselves.
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-body[data-thermal="gas"] {
-    --phase-blur: 1.5px;
-    --phase-opacity: 0.85;
-    --phase-letter-spacing: 0.35em;
-    --thermal-tint: var(--thermal-gas);
-}
-
-body[data-thermal="gas"] .chapter-stamp,
-body[data-thermal="gas"] .sovereign-headline,
-body[data-thermal="gas"] .chapter-claim {
-    filter: blur(var(--phase-blur));
-    letter-spacing: var(--phase-letter-spacing);
     opacity: var(--phase-opacity);
-    animation: gas-drift 3s ease-in-out infinite;
-    color: var(--thermal-gas);
+    transition:
+        filter var(--time-fast) ease-out,
+        opacity var(--time-fast) ease-out;
 }
 
-@keyframes gas-drift {
-    0%, 100% { transform: translateX(0) translateY(0); }
-    33% { transform: translateX(2px) translateY(-1px); }
-    66% { transform: translateX(-1px) translateY(1px); }
-}
-
-/* Gas expansion effect - words seem to breathe */
-body[data-thermal="gas"] .chapter-claim {
-    animation: gas-breathe 2s ease-in-out infinite;
-}
-
-@keyframes gas-breathe {
-    0%, 100% { transform: scale(1); opacity: 0.85; }
-    50% { transform: scale(1.01); opacity: 0.9; }
+/* Hot state: suggestive motion residue */
+body[data-thermal="hot"] .plate-surface {
+    border-color: rgba(212, 175, 55, 0.1);
+    transition: border-color var(--time-fast) ease-out;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE STATE: LIQUID
-   Flowing, coherent, impermanent. Readable but not retained.
+   PHASE STATE: WARM (Normal Scroll)
+   Content is readable, stable. Default state.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-body[data-thermal="liquid"] {
-    --phase-blur: 0px;
-    --phase-opacity: 0.95;
-    --phase-letter-spacing: 0.2em;
-    --thermal-tint: var(--thermal-liquid);
-}
-
-body[data-thermal="liquid"] .chapter-stamp,
-body[data-thermal="liquid"] .sovereign-headline {
-    letter-spacing: var(--phase-letter-spacing);
-    opacity: var(--phase-opacity);
-    animation: liquid-shimmer 4s ease-in-out infinite;
-    color: var(--thermal-liquid);
-    transition: all var(--latent-gas-liquid) ease;
-}
-
-@keyframes liquid-shimmer {
-    0%, 100% {
-        text-shadow: 0 0 10px rgba(255, 228, 168, 0.3);
-    }
-    50% {
-        text-shadow: 0 0 20px rgba(255, 228, 168, 0.5);
-    }
-}
-
-/* Liquid flow effect - subtle baseline undulation */
-body[data-thermal="liquid"] .chapter-claim {
-    animation: liquid-flow 5s ease-in-out infinite;
-}
-
-@keyframes liquid-flow {
-    0%, 100% { transform: translateY(0); }
-    25% { transform: translateY(-1px); }
-    75% { transform: translateY(1px); }
-}
-
-/* Surface tension at edges */
-body[data-thermal="liquid"] .plate-surface {
-    border-color: rgba(255, 228, 168, 0.4);
-    box-shadow:
-        0 0 30px rgba(255, 228, 168, 0.15),
-        inset 0 1px 0 rgba(255, 228, 168, 0.2);
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE STATE: SOLID
-   Structured, stable, trustworthy. Clear understanding.
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-body[data-thermal="solid"] {
+body[data-thermal="warm"] {
     --phase-blur: 0px;
     --phase-opacity: 1;
-    --phase-letter-spacing: 0.15em;
-    --lattice-opacity: 0.15;
-    --thermal-tint: var(--thermal-solid);
 }
 
-body[data-thermal="solid"] .chapter-stamp,
-body[data-thermal="solid"] .sovereign-headline {
-    letter-spacing: var(--phase-letter-spacing);
+body[data-thermal="warm"] .chapter-stamp,
+body[data-thermal="warm"] .sovereign-headline,
+body[data-thermal="warm"] .chapter-claim,
+body[data-thermal="warm"] .gate-stamp {
+    filter: blur(0);
     opacity: 1;
-    animation: none;
-    color: var(--gold-core, #d4af37);
-    text-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.5),
-        0 0 20px rgba(212, 175, 55, 0.3);
-    transition: all var(--latent-liquid-solid) ease;
+    transition:
+        filter var(--time-normal) ease-out,
+        opacity var(--time-normal) ease-out;
 }
 
-body[data-thermal="solid"] .chapter-claim {
-    opacity: 1;
-    animation: none;
-    color: var(--text-primary, #f5f5f0);
-}
-
-/* Solid emboss effect */
-body[data-thermal="solid"] .chapter-stamp em {
-    text-shadow:
-        1px 1px 0 rgba(0, 0, 0, 0.3),
-        -1px -1px 0 rgba(255, 255, 255, 0.1),
-        0 0 30px rgba(212, 175, 55, 0.4);
-}
-
-/* Lattice begins to emerge */
-body[data-thermal="solid"] .plate-surface::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(60deg, transparent 48%, rgba(212, 175, 55, 0.08) 50%, transparent 52%),
-        linear-gradient(-60deg, transparent 48%, rgba(212, 175, 55, 0.08) 50%, transparent 52%),
-        linear-gradient(0deg, transparent 48%, rgba(212, 175, 55, 0.05) 50%, transparent 52%);
-    background-size: var(--lattice-spacing) var(--lattice-spacing);
-    opacity: var(--lattice-opacity);
-    pointer-events: none;
-    transition: opacity 0.5s ease;
+body[data-thermal="warm"] .plate-surface {
+    border-color: rgba(212, 175, 55, 0.2);
+    transition: border-color var(--time-normal) ease-out;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE STATE: CRYSTAL (FROZEN)
-   Perfect order. Maximum information density. Faceted, prismatic, eternal.
+   PHASE STATE: COLD (Slow + Pause)
+   Content crystallizes—sharp, precise, sealed. Reveals truth.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-body[data-thermal="frozen"] {
+body[data-thermal="cold"] {
     --phase-blur: 0px;
     --phase-opacity: 1;
-    --phase-letter-spacing: 0.12em;
-    --lattice-opacity: 0.4;
-    --prismatic-intensity: 1;
-    --thermal-tint: var(--thermal-crystal);
+    --phase-sharpness: 1;
 }
 
-body[data-thermal="frozen"] .chapter-stamp,
-body[data-thermal="frozen"] .sovereign-headline {
-    letter-spacing: var(--phase-letter-spacing);
+body[data-thermal="cold"] .chapter-stamp,
+body[data-thermal="cold"] .sovereign-headline,
+body[data-thermal="cold"] .gate-stamp {
+    filter: blur(0);
+    opacity: 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: var(--gold-bright, #e8c84a);
     text-shadow:
-        /* Multi-facet crystal shadow */
-        2px 2px 0 rgba(212, 175, 55, 0.3),
-        -2px 2px 0 rgba(212, 175, 55, 0.2),
-        2px -2px 0 rgba(212, 175, 55, 0.2),
-        -2px -2px 0 rgba(212, 175, 55, 0.1),
-        0 0 30px rgba(212, 175, 55, 0.6),
-        0 0 60px rgba(212, 175, 55, 0.3);
-    transition: all var(--latent-solid-crystal) ease;
+        0 0 var(--space-3) rgba(212, 175, 55, 0.3),
+        0 0 var(--space-5) rgba(212, 175, 55, 0.15);
+    transition:
+        filter var(--time-slow) ease-out,
+        text-shadow var(--time-slower) ease-out;
 }
 
-/* Prismatic dispersion on crystal state */
-body[data-thermal="frozen"] .chapter-stamp em,
-body[data-thermal="frozen"] [data-nucleation="primary"] {
-    background: linear-gradient(
-        90deg,
-        #ff6b6b 0%,
-        #ffa500 15%,
-        #ffd700 30%,
-        #d4af37 50%,
-        #98fb98 70%,
-        #87ceeb 85%,
-        #dda0dd 100%
-    );
-    background-size: 200% 100%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: prismatic-shift 3s ease-in-out infinite;
-}
-
-@keyframes prismatic-shift {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
-
-/* Full lattice in crystal state */
-body[data-thermal="frozen"] .plate-surface::before {
-    opacity: var(--lattice-opacity);
-    background-image:
-        linear-gradient(60deg, transparent 47%, rgba(212, 175, 55, 0.15) 50%, transparent 53%),
-        linear-gradient(-60deg, transparent 47%, rgba(212, 175, 55, 0.15) 50%, transparent 53%),
-        linear-gradient(0deg, transparent 47%, rgba(212, 175, 55, 0.1) 50%, transparent 53%);
-}
-
-/* Crystal facet borders */
-body[data-thermal="frozen"] .dossier-plate {
-    border-color: rgba(212, 175, 55, 0.5);
-    box-shadow:
-        0 0 0 1px rgba(212, 175, 55, 0.3),
-        0 0 40px rgba(212, 175, 55, 0.2),
-        0 0 80px rgba(212, 175, 55, 0.1),
-        inset 0 0 60px rgba(212, 175, 55, 0.05);
-}
-
-/* QED mark only appears in crystal state */
-body:not([data-thermal="frozen"]) .qed-crystal {
-    opacity: 0;
-    transform: scale(0);
-}
-
-body[data-thermal="frozen"] .qed-crystal {
+body[data-thermal="cold"] .chapter-claim {
     opacity: 1;
-    transform: scale(1);
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: var(--gold-white, #f5f5f0);
+    transition: all var(--time-slow) ease-out;
+}
+
+/* Cold state: crystalline border precision */
+body[data-thermal="cold"] .plate-surface {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow:
+        0 0 0 1px rgba(212, 175, 55, 0.15),
+        0 0 var(--space-5) rgba(212, 175, 55, 0.08);
+    transition:
+        border-color var(--time-slower) ease-out,
+        box-shadow var(--time-slower) ease-out;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    NUCLEATION SITES
-   Elements that crystallize first and seed structure around them.
+   Key elements crystallize FIRST. Creates hierarchy without UI.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-[data-nucleation] {
-    position: relative;
-    z-index: 10;
-}
-
-/* Primary nucleation - crystallizes 200ms earlier */
 [data-nucleation="primary"] {
     transition-delay: 0ms !important;
 }
 
-/* Secondary nucleation - slight delay */
 [data-nucleation="secondary"] {
-    transition-delay: 100ms !important;
+    transition-delay: var(--time-fast) !important;
 }
 
-/* Nucleation glow in solid/crystal states */
-body[data-thermal="solid"] [data-nucleation="primary"],
-body[data-thermal="frozen"] [data-nucleation="primary"] {
+[data-nucleation="tertiary"] {
+    transition-delay: var(--time-normal) !important;
+}
+
+/* Cold state nucleation glow - subtle, not UI */
+body[data-thermal="cold"] [data-nucleation="primary"] {
     position: relative;
 }
 
-body[data-thermal="solid"] [data-nucleation="primary"]::after,
-body[data-thermal="frozen"] [data-nucleation="primary"]::after {
+body[data-thermal="cold"] [data-nucleation="primary"]::after {
     content: '';
     position: absolute;
-    inset: -20px;
+    inset: calc(var(--space-3) * -1);
     background: radial-gradient(
         ellipse at center,
-        rgba(212, 175, 55, 0.15) 0%,
-        rgba(212, 175, 55, 0.05) 40%,
+        rgba(212, 175, 55, 0.06) 0%,
         transparent 70%
     );
     pointer-events: none;
-    animation: nucleation-pulse 3s ease-in-out infinite;
     z-index: -1;
+    opacity: 0;
+    animation: nucleation-emerge var(--time-slowest) ease-out forwards;
 }
 
-@keyframes nucleation-pulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.1); opacity: 1; }
+@keyframes nucleation-emerge {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   CRYSTALLINE FACETS - Progressive revelation system
+   CRYSTALLINE FACETS (Capped at 2-3)
+   Progressive micro-reveals on sustained pause.
    ═══════════════════════════════════════════════════════════════════════════════ */
-
-[data-facets] {
-    position: relative;
-}
 
 [data-facet] {
     opacity: 0;
-    transform: rotateY(90deg);
-    transform-origin: left center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    transition:
+        opacity var(--time-slow) ease-out,
+        max-height var(--time-slower) ease-out;
 }
 
 [data-facet="1"] {
-    position: relative;
     opacity: 1;
-    transform: rotateY(0deg);
+    max-height: none;
 }
 
-/* Facets revealed based on crystal depth */
+/* Facet 2: First crystalline reveal */
 body[data-crystal-depth="2"] [data-facet="2"],
-body[data-crystal-depth="3"] [data-facet="2"],
-body[data-crystal-depth="3"] [data-facet="3"],
-body[data-crystal-depth="4"] [data-facet="2"],
-body[data-crystal-depth="4"] [data-facet="3"],
-body[data-crystal-depth="4"] [data-facet="4"],
-body[data-crystal-depth="5"] [data-facet="2"],
-body[data-crystal-depth="5"] [data-facet="3"],
-body[data-crystal-depth="5"] [data-facet="4"],
-body[data-crystal-depth="5"] [data-facet="5"],
-body[data-crystal-depth="6"] [data-facet] {
-    opacity: 1;
-    transform: rotateY(0deg);
+body[data-crystal-depth="3"] [data-facet="2"] {
+    opacity: 0.9;
+    max-height: 200px;
 }
 
-/* Facet indicator */
-.facet-indicator {
-    position: absolute;
-    right: -30px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+/* Facet 3: Maximum depth (rare) */
+body[data-crystal-depth="3"] [data-facet="3"] {
+    opacity: 0.85;
+    max-height: 200px;
 }
 
-.facet-dot {
-    width: 4px;
-    height: 4px;
-    background: var(--gold-shadow, #3d3312);
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-.facet-dot.revealed {
-    background: var(--gold-core, #d4af37);
-    box-shadow: 0 0 8px var(--gold-core, #d4af37);
+/* Crystalline facet styling */
+[data-facet="2"],
+[data-facet="3"] {
+    font-size: var(--type-sm);
+    color: var(--gold-muted, #9c9b96);
+    padding-top: var(--space-3);
+    margin-top: var(--space-3);
+    border-top: 1px solid rgba(212, 175, 55, 0.1);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   SEED CRYSTAL - Signature object (3 appearances)
+   SEED CRYSTAL (3 Appearances - Diegetic Only)
+   No dashboard. Appears as environmental marker.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 .seed-crystal {
     position: fixed;
-    width: 60px;
-    height: 60px;
+    width: var(--space-6);
+    height: var(--space-6);
     pointer-events: none;
-    z-index: 9998;
+    z-index: 50;
     opacity: 0;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity var(--time-slower) ease-out;
 }
 
-.seed-crystal[data-state="nucleus"] {
-    opacity: 0.6;
-    transform: scale(0.5);
-    filter: blur(1px);
-}
-
-.seed-crystal[data-state="growing"] {
-    opacity: 0.85;
-    transform: scale(0.8);
-    filter: blur(0);
-    animation: crystal-grow 2s ease-out infinite;
-}
-
-.seed-crystal[data-state="complete"] {
+.seed-crystal[data-visible="true"] {
     opacity: 1;
-    transform: scale(1);
-    filter: none;
-}
-
-@keyframes crystal-grow {
-    0%, 100% { transform: scale(0.8); }
-    50% { transform: scale(0.85); }
 }
 
 .seed-crystal svg {
     width: 100%;
     height: 100%;
-}
-
-/* Seed crystal positions */
-.seed-crystal[data-appearance="1"] {
-    top: 20%;
-    left: 5%;
-}
-
-.seed-crystal[data-appearance="2"] {
-    top: 55%;
-    right: 5%;
-    left: auto;
-}
-
-.seed-crystal[data-appearance="3"] {
-    bottom: 8%;
-    left: 50%;
-    top: auto;
-    transform: translateX(-50%);
-}
-
-.seed-crystal[data-state="complete"][data-appearance="3"] {
-    transform: translateX(-50%) scale(1);
-}
-
-/* Seed crystal label */
-.seed-crystal-label {
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.2em;
     color: var(--gold-dim, #8a6e1f);
-    white-space: nowrap;
+}
+
+/* Positions at φ landmarks */
+.seed-crystal[data-position="emergence"] {
+    top: 38.2%;
+    right: var(--space-4);
+}
+
+.seed-crystal[data-position="balance"] {
+    top: 61.8%;
+    right: var(--space-4);
+}
+
+.seed-crystal[data-position="completion"] {
+    top: 85.4%;
+    right: var(--space-4);
+}
+
+/* Cold state: crystal becomes prominent */
+body[data-thermal="cold"] .seed-crystal[data-visible="true"] svg {
+    color: var(--gold-core, #d4af37);
+    filter: drop-shadow(0 0 var(--space-2) rgba(212, 175, 55, 0.4));
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   PHASE DIAGRAM - Persistent UI showing reading path
+   TRIPLE POINT AT 0.618
+   All three behaviors briefly coexist, then resolve.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-.phase-diagram {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 100px;
-    height: 100px;
-    z-index: 100;
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
+body[data-triple-point="true"] .dossier-plate {
+    /* Hot residue in background */
+    background: linear-gradient(
+        135deg,
+        rgba(255, 248, 232, 0.02) 0%,
+        transparent 30%,
+        transparent 70%,
+        rgba(244, 228, 188, 0.02) 100%
+    );
 }
 
-.phase-diagram.visible {
-    opacity: 1;
-    pointer-events: auto;
+body[data-triple-point="true"] .chapter-stamp {
+    /* Momentary shimmer across all temperatures */
+    animation: triple-shimmer var(--time-slowest) ease-out;
 }
 
-.phase-diagram:hover {
-    opacity: 1;
-    transform: scale(1.5);
-    transform-origin: bottom left;
-}
-
-.phase-diagram-bg {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px solid var(--gold-shadow, #3d3312);
-    backdrop-filter: blur(8px);
-}
-
-/* Phase regions */
-.phase-region {
-    position: absolute;
-    opacity: 0.3;
-}
-
-.phase-region.plasma {
-    top: 0; left: 0; right: 0; height: 20%;
-    background: linear-gradient(180deg, var(--thermal-plasma) 0%, transparent 100%);
-}
-
-.phase-region.gas {
-    top: 20%; left: 0; right: 0; height: 20%;
-    background: linear-gradient(180deg, var(--thermal-gas) 0%, transparent 100%);
-}
-
-.phase-region.liquid {
-    top: 40%; left: 0; right: 0; height: 20%;
-    background: linear-gradient(180deg, var(--thermal-liquid) 0%, transparent 100%);
-}
-
-.phase-region.solid {
-    top: 60%; left: 0; right: 0; height: 20%;
-    background: linear-gradient(180deg, var(--thermal-solid) 0%, transparent 100%);
-}
-
-.phase-region.crystal {
-    top: 80%; left: 0; right: 0; height: 20%;
-    background: linear-gradient(180deg, var(--thermal-crystal) 0%, transparent 100%);
-}
-
-/* Reading path trace */
-.phase-path {
-    position: absolute;
-    inset: 0;
-}
-
-.phase-path svg {
-    width: 100%;
-    height: 100%;
-}
-
-.phase-path-line {
-    fill: none;
-    stroke: var(--gold-core, #d4af37);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    opacity: 0.8;
-}
-
-/* Current position indicator */
-.phase-current {
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: var(--gold-bright, #e8c84a);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--gold-core, #d4af37);
-    transition: all 0.15s ease;
-}
-
-/* Axis labels */
-.phase-axis-label {
-    position: absolute;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 6px;
-    letter-spacing: 0.1em;
-    color: var(--gold-shadow, #3d3312);
-}
-
-.phase-axis-label.x { bottom: -15px; left: 50%; transform: translateX(-50%); }
-.phase-axis-label.y { left: -20px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   SUPERCOOLING EVENT
-   Content appears to crystallize, then suddenly liquefies.
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-body[data-supercooled="true"] .chapter-stamp,
-body[data-supercooled="true"] .sovereign-headline {
-    animation: supercool-flicker 0.3s ease-in-out 3;
-}
-
-@keyframes supercool-flicker {
-    0%, 100% {
-        filter: blur(0);
-        color: var(--gold-core, #d4af37);
+@keyframes triple-shimmer {
+    0% {
+        text-shadow:
+            0 0 var(--space-4) rgba(255, 248, 232, 0.4),
+            0 0 var(--space-2) rgba(212, 175, 55, 0.3);
     }
     50% {
-        filter: blur(2px);
-        color: var(--thermal-liquid);
+        text-shadow:
+            0 0 var(--space-3) rgba(212, 175, 55, 0.5),
+            0 0 var(--space-5) rgba(244, 228, 188, 0.2);
+    }
+    100% {
+        text-shadow:
+            0 0 var(--space-3) rgba(212, 175, 55, 0.3),
+            0 0 var(--space-5) rgba(212, 175, 55, 0.15);
     }
 }
 
-/* Supercooling indicator */
-.supercool-warning {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    color: var(--thermal-liquid);
-    opacity: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transition: opacity 0.2s ease;
-}
-
-body[data-supercooled="true"] .supercool-warning {
-    opacity: 1;
-    animation: supercool-flash 0.5s ease-out;
-}
-
-@keyframes supercool-flash {
-    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-    100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
-}
-
 /* ═══════════════════════════════════════════════════════════════════════════════
-   TRIPLE POINT - All states coexist at 60% with medium velocity
+   DIEGETIC THERMAL INDICATORS (No Dashboard)
+   Environmental cues only—reticle, vignette, calibration marks.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-body[data-triple-point="true"] {
-    /* Overlay showing all states simultaneously */
-}
-
-body[data-triple-point="true"]::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-        radial-gradient(circle at 20% 30%, rgba(240, 244, 255, 0.1) 0%, transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(255, 248, 232, 0.1) 0%, transparent 25%),
-        radial-gradient(circle at 50% 50%, rgba(255, 228, 168, 0.1) 0%, transparent 35%),
-        radial-gradient(circle at 30% 70%, rgba(212, 175, 55, 0.15) 0%, transparent 30%),
-        radial-gradient(circle at 70% 80%, rgba(244, 228, 188, 0.1) 0%, transparent 25%);
-    pointer-events: none;
-    z-index: 9994;
-    animation: triple-point-shimmer 2s ease-in-out infinite;
-}
-
-@keyframes triple-point-shimmer {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 1; }
-}
-
-/* Triple point badge */
-.triple-point-badge {
-    position: fixed;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    padding: 8px 16px;
-    border: 1px solid var(--gold-core, #d4af37);
-    background: rgba(0, 0, 0, 0.8);
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.2em;
-    color: var(--gold-core, #d4af37);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 100;
-}
-
-body[data-triple-point="true"] .triple-point-badge {
-    opacity: 1;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════════
-   BROWNIAN PARTICLES - Background atmosphere
-   ═══════════════════════════════════════════════════════════════════════════════ */
-
-.brownian-container {
+/* Vignette sharpening in cold state */
+.thermal-vignette {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    overflow: hidden;
+    z-index: 9990;
+    opacity: 0;
+    background: radial-gradient(
+        ellipse at 50% 50%,
+        transparent 50%,
+        rgba(0, 0, 0, 0.15) 100%
+    );
+    transition: opacity var(--time-slower) ease-out;
+}
+
+body[data-thermal="cold"] .thermal-vignette {
+    opacity: 1;
+}
+
+/* Edge reticle - tightens in cold state */
+.thermal-reticle {
+    position: fixed;
+    inset: var(--space-4);
+    border: 1px solid transparent;
+    pointer-events: none;
+    z-index: 9989;
+    transition:
+        border-color var(--time-slower) ease-out,
+        inset var(--time-slower) ease-out;
+}
+
+body[data-thermal="cold"] .thermal-reticle {
+    border-color: rgba(212, 175, 55, 0.08);
+    inset: var(--space-3);
+}
+
+/* Calibration marks in corners (cold state only) */
+.calibration-mark {
+    position: fixed;
+    width: var(--space-4);
+    height: 1px;
+    background: rgba(212, 175, 55, 0.15);
+    opacity: 0;
+    transition: opacity var(--time-slow) ease-out;
+    pointer-events: none;
+    z-index: 9988;
+}
+
+body[data-thermal="cold"] .calibration-mark {
+    opacity: 1;
+}
+
+.calibration-mark.top-left { top: var(--space-4); left: var(--space-4); }
+.calibration-mark.top-right { top: var(--space-4); right: var(--space-4); }
+.calibration-mark.bottom-left { bottom: var(--space-4); left: var(--space-4); }
+.calibration-mark.bottom-right { bottom: var(--space-4); right: var(--space-4); }
+
+.calibration-mark.vertical {
+    width: 1px;
+    height: var(--space-4);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   BROWNIAN RESIDUE (Simplified)
+   Hot: visible motion. Cold: stillness. No particle system overhead.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+
+.brownian-field {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
     z-index: 1;
+    opacity: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='30' r='0.5' fill='%23d4af37' opacity='0.3'/%3E%3Ccircle cx='70' cy='60' r='0.3' fill='%23d4af37' opacity='0.2'/%3E%3Ccircle cx='40' cy='80' r='0.4' fill='%23d4af37' opacity='0.25'/%3E%3Ccircle cx='85' cy='20' r='0.35' fill='%23d4af37' opacity='0.2'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    transition: opacity var(--time-normal) ease-out;
 }
 
-.brownian-particle {
-    position: absolute;
-    width: 3px;
-    height: 3px;
-    background: var(--gold-core, #d4af37);
-    border-radius: 50%;
-    opacity: 0.3;
-}
-
-/* Plasma: violent, fast, streaking */
-body[data-thermal="plasma"] .brownian-particle {
-    animation: brownian-plasma 0.5s linear infinite;
+body[data-thermal="hot"] .brownian-field {
     opacity: 0.6;
-    box-shadow: 0 0 10px var(--thermal-plasma);
+    animation: brownian-drift 3s linear infinite;
 }
 
-@keyframes brownian-plasma {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(
-        calc((var(--random-x, 0.5) - 0.5) * 100px),
-        calc((var(--random-y, 0.5) - 0.5) * 100px)
-    ); }
+body[data-thermal="warm"] .brownian-field {
+    opacity: 0.2;
+    animation: brownian-drift 8s linear infinite;
 }
 
-/* Gas: rapid, random */
-body[data-thermal="gas"] .brownian-particle {
-    animation: brownian-gas 2s ease-in-out infinite;
-    opacity: 0.4;
-}
-
-@keyframes brownian-gas {
-    0%, 100% { transform: translate(0, 0); }
-    25% { transform: translate(15px, -10px); }
-    50% { transform: translate(-10px, 15px); }
-    75% { transform: translate(10px, 10px); }
-}
-
-/* Liquid: slow, flowing */
-body[data-thermal="liquid"] .brownian-particle {
-    animation: brownian-liquid 5s ease-in-out infinite;
-    opacity: 0.35;
-}
-
-@keyframes brownian-liquid {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(5px, 8px); }
-}
-
-/* Solid: minimal drift, clustering */
-body[data-thermal="solid"] .brownian-particle {
-    animation: brownian-solid 8s ease-in-out infinite;
-    opacity: 0.25;
-}
-
-@keyframes brownian-solid {
-    0%, 100% { transform: translate(0, 0); }
-    50% { transform: translate(2px, 2px); }
-}
-
-/* Crystal: locked in lattice positions */
-body[data-thermal="frozen"] .brownian-particle {
+body[data-thermal="cold"] .brownian-field {
+    opacity: 0;
     animation: none;
-    opacity: 0.4;
-    box-shadow: 0 0 6px var(--gold-core, #d4af37);
+}
+
+@keyframes brownian-drift {
+    0% { background-position: 0 0; }
+    100% { background-position: 200px 200px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   THERMAL GRADIENT OVERLAY
-   Color temperature shifts with phase state.
+   OPTICAL CENTERLINE GOVERNANCE
+   All primary narrative objects share ONE axis.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-.thermal-overlay {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 9993;
-    opacity: 0.03;
-    transition: background 0.5s ease;
+/* Primary elements: centered on optical axis */
+.hero-content,
+.briefing-dossier,
+.dossier-plate .plate-surface,
+.gate-hard {
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateX(var(--optical-offset));
 }
 
-body[data-thermal="plasma"] .thermal-overlay {
-    background: radial-gradient(ellipse at 50% 30%, var(--thermal-plasma), transparent 70%);
-}
-
-body[data-thermal="gas"] .thermal-overlay {
-    background: radial-gradient(ellipse at 50% 40%, var(--thermal-gas), transparent 70%);
-}
-
-body[data-thermal="liquid"] .thermal-overlay {
-    background: radial-gradient(ellipse at 50% 50%, var(--thermal-liquid), transparent 70%);
-}
-
-body[data-thermal="solid"] .thermal-overlay {
-    background: radial-gradient(ellipse at 50% 50%, var(--thermal-solid), transparent 60%);
-}
-
-body[data-thermal="frozen"] .thermal-overlay {
-    background: radial-gradient(ellipse at 50% 50%, var(--thermal-crystal), transparent 50%);
-    opacity: 0.05;
+/* Peripheral elements: low mass, no axis pull */
+.thermal-vignette,
+.thermal-reticle,
+.calibration-mark,
+.seed-crystal,
+.brownian-field {
+    /* These exist outside optical axis */
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   RESPONSIVE BEHAVIOR
+   RESPONSIVE + REDUCED MOTION
    ═══════════════════════════════════════════════════════════════════════════════ */
 
 @media (max-width: 768px) {
-    .phase-diagram {
-        display: none;
-    }
-
     .seed-crystal {
-        width: 40px;
-        height: 40px;
+        display: none;
     }
 
-    .facet-indicator {
+    .thermal-reticle {
+        display: none;
+    }
+
+    .calibration-mark {
         display: none;
     }
 }
 
-@media (max-width: 1024px) {
-    .brownian-container {
-        opacity: 0.5;
-    }
-}
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-    .brownian-particle,
-    .seed-crystal,
-    [data-nucleation]::after {
-        animation: none !important;
-    }
-
     body[data-thermal] .chapter-stamp,
     body[data-thermal] .sovereign-headline,
     body[data-thermal] .chapter-claim {
-        animation: none !important;
         filter: none !important;
+        animation: none !important;
+        transition: opacity var(--time-fast) ease-out !important;
+    }
+
+    .brownian-field {
+        animation: none !important;
+        opacity: 0.1 !important;
+    }
+
+    [data-nucleation]::after {
+        animation: none !important;
     }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
-   UTILITY CLASSES
+   HYSTERESIS INDICATOR (Console only, not visual)
+   Visual indication that state is "locked" until threshold crossed.
    ═══════════════════════════════════════════════════════════════════════════════ */
 
-/* Force crystal state on element */
-.crystallized {
-    filter: none !important;
-    opacity: 1 !important;
-    letter-spacing: 0.12em !important;
-    animation: none !important;
-}
-
-/* Prevent crystallization */
-.volatile {
-    transition: none !important;
-}
-
-/* Euler characteristic marker */
-.euler-mark {
-    position: fixed;
-    bottom: 20px;
-    right: 140px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.15em;
-    color: var(--gold-shadow, #3d3312);
-    opacity: 0.5;
-}
+/* No visual hysteresis UI - handled in JS, manifests as transition smoothness */
