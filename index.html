@@ -5935,6 +5935,42 @@
                 height: 280px;
             }
         }
+
+        /* ════════════════════════════════════════════════════════════════
+           NORTH-STAR CONFLICT RESOLUTION
+           Disables conflicting elements when North-Star system is active
+        ════════════════════════════════════════════════════════════════ */
+
+        /* Hide awakening-meter when briefing-spine is present (same purpose) */
+        body:has(#briefing-spine) .awakening-meter {
+            display: none !important;
+        }
+
+        /* Hide corner-brackets when calibration-marks are present (same purpose) */
+        body:has(.calibration-mark) .corner-bracket {
+            display: none !important;
+        }
+
+        /* Disable overlay-grain when North-Star body::after is active */
+        body:has([data-optical-state]) .overlay-grain {
+            display: none !important;
+        }
+
+        /* Ensure North-Star optical layer doesn't conflict with existing overlays */
+        body:has([data-optical-state]) .overlay-scanlines {
+            z-index: 9990; /* Below North-Star's body::after at z-index 10000 */
+        }
+
+        /* Fix z-index stack for proper layering */
+        #briefing-spine {
+            z-index: 1001; /* Above nav at 1000 */
+        }
+
+        /* Align instrumentation-grid properly with North-Star chapter markers */
+        body:has([data-chapter]) .instrumentation-grid {
+            opacity: 0.3; /* Reduce visual noise */
+        }
+
     </style>
 
     <!-- Zero external dependencies - Pure WebGL sovereignty -->
