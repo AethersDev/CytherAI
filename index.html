@@ -953,78 +953,95 @@
         }
 
         /* ════════════════════════════════════════
-           PROOF METRICS - Quantified credibility
-           Numbers that speak louder than words
+           PROOF SEAL - Silent verification mark
+           Geometry speaks where words cannot
         ════════════════════════════════════════ */
-        .proof-metrics {
+        .proof-seal {
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 2rem;
+            align-items: center;
             margin-top: 3rem;
-            padding: 1.5rem 2.5rem;
-            background: linear-gradient(135deg,
-                rgba(212, 175, 55, 0.03) 0%,
-                rgba(0, 0, 0, 0.4) 50%,
-                rgba(212, 175, 55, 0.03) 100%
-            );
-            border: 1px solid rgba(212, 175, 55, 0.1);
-            border-radius: 2px;
             opacity: 0;
             animation: fadeUp 0.9s var(--ease-out-expo) 2.2s forwards;
         }
 
-        .metric {
+        .seal-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 0.35rem;
         }
 
-        .metric-value {
+        .seal-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid var(--gold-shadow);
+        }
+
+        .seal-ring-outer {
+            width: 80px;
+            height: 80px;
+            animation: sealPulse 4s ease-in-out infinite;
+        }
+
+        .seal-ring-inner {
+            width: 50px;
+            height: 50px;
+            animation: sealPulse 4s ease-in-out infinite 0.5s;
+        }
+
+        .seal-core {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .seal-glyph {
             font-family: var(--font-display);
-            font-size: 1.8rem;
-            font-weight: 300;
-            color: var(--gold-core);
-            line-height: 1;
-            letter-spacing: -0.02em;
-        }
-
-        .metric-unit {
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--gold-dim);
-            margin-left: 0.1em;
+            animation: sealGlow 3s ease-in-out infinite;
         }
 
-        .metric-label {
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            letter-spacing: 0.15em;
-            color: var(--text-secondary);
-            text-transform: uppercase;
+        @keyframes sealPulse {
+            0%, 100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.02);
+            }
         }
 
-        .metric-divider {
-            width: 1px;
-            height: 40px;
-            background: linear-gradient(180deg,
-                transparent 0%,
-                var(--gold-shadow) 30%,
-                var(--gold-shadow) 70%,
-                transparent 100%
-            );
+        @keyframes sealGlow {
+            0%, 100% {
+                opacity: 0.5;
+                text-shadow: 0 0 10px transparent;
+            }
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--gold-shadow);
+            }
         }
 
         @media (max-width: 768px) {
-            .proof-metrics {
-                gap: 1.2rem;
-                padding: 1rem 1.5rem;
+            .seal-container {
+                width: 60px;
+                height: 60px;
             }
-            .metric-value {
-                font-size: 1.4rem;
+            .seal-ring-outer {
+                width: 60px;
+                height: 60px;
             }
-            .metric-divider {
-                height: 30px;
+            .seal-ring-inner {
+                width: 38px;
+                height: 38px;
             }
         }
 
@@ -1435,18 +1452,28 @@
             transform: rotate(45deg);
         }
 
-        /* Scroll Indicator - Refined */
+        /* Scroll Indicator - Viewport-centered with scroll-fade */
         .scroll-indicator {
-            position: absolute;
+            position: fixed;
             bottom: 2.5rem;
-            left: 50%;
+            left: 50vw;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
             opacity: 0;
-            animation: fadeUp 0.9s var(--ease-out-expo) 2.8s forwards;
+            animation:
+                fadeUp 0.9s var(--ease-out-expo) 2.8s forwards,
+                scrollFadeOut linear forwards;
+            animation-timeline: auto, scroll();
+            animation-range: normal, 0vh 30vh;
+            z-index: 100;
+        }
+
+        @keyframes scrollFadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; pointer-events: none; }
         }
 
         .scroll-glyph {
@@ -6382,23 +6409,16 @@
             </div>
 
             <!-- ════════════════════════════════════════════════════════════════
-                 PROOF METRICS - Quantified credibility
-                 Concrete numbers that demonstrate capability
+                 PROOF SEAL - Silent verification mark
+                 Geometry speaks where words cannot
             ════════════════════════════════════════════════════════════════ -->
-            <div class="proof-metrics">
-                <div class="metric">
-                    <span class="metric-value">97.3<span class="metric-unit">%</span></span>
-                    <span class="metric-label">verification</span>
-                </div>
-                <div class="metric-divider"></div>
-                <div class="metric">
-                    <span class="metric-value">0</span>
-                    <span class="metric-label">dependencies</span>
-                </div>
-                <div class="metric-divider"></div>
-                <div class="metric">
-                    <span class="metric-value">&lt;6<span class="metric-unit">h</span></span>
-                    <span class="metric-label">training</span>
+            <div class="proof-seal">
+                <div class="seal-container">
+                    <div class="seal-ring seal-ring-outer"></div>
+                    <div class="seal-ring seal-ring-inner"></div>
+                    <div class="seal-core">
+                        <span class="seal-glyph">∴</span>
+                    </div>
                 </div>
             </div>
 
