@@ -3618,9 +3618,8 @@
             animation: consciousnessBreath 6s ease-in-out infinite;
         }
 
-        /* Site-wide subtle pulse */
-        body::before {
-            content: '';
+        /* Site-wide subtle pulse - using dedicated element to avoid conflict with North-Star optical layer */
+        .site-breath-layer {
             position: fixed;
             inset: 0;
             background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
@@ -3963,7 +3962,7 @@
                 display: none;
             }
 
-            body::before {
+            .site-breath-layer {
                 display: none;
             }
         }
@@ -3981,7 +3980,7 @@
                 display: none !important;
             }
 
-            body::before,
+            .site-breath-layer,
             .feature-card::after,
             .feature-card .holo-overlay,
             .liquid-glass::before {
@@ -5949,6 +5948,9 @@
 
 </head>
 <body data-proof-phase="idle">
+
+    <!-- Site Breathing Layer - Decorative ambient glow (moved from body::before to avoid North-Star conflict) -->
+    <div class="site-breath-layer" aria-hidden="true"></div>
 
     <!-- ════════════════════════════════════════════════════════════════
          EXECUTIVE-GRADE TRUST INFRASTRUCTURE
