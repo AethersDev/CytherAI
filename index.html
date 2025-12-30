@@ -862,6 +862,96 @@
             margin-top: 0.6rem;
         }
 
+        /* ════════════════════════════════════════
+           PROOF SIGNATURE - Elegant minimal identity
+           Three pillars centered below brand
+        ════════════════════════════════════════ */
+        .proof-signature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+            opacity: 0;
+            animation: fadeUp 0.9s var(--ease-out-expo) 1.8s forwards;
+        }
+
+        .signature-divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg,
+                transparent 0%,
+                var(--gold-shadow) 20%,
+                var(--gold-dim) 50%,
+                var(--gold-shadow) 80%,
+                transparent 100%
+            );
+        }
+
+        .divider-glyph {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--gold-core);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .signature-pillars {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .pillar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .pillar-value {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: var(--gold-white);
+        }
+
+        .pillar-label {
+            font-family: var(--font-display);
+            font-size: 0.65rem;
+            font-style: italic;
+            letter-spacing: 0.05em;
+            color: var(--gold-shadow);
+            text-transform: lowercase;
+        }
+
+        .pillar-separator {
+            font-size: 0.5rem;
+            color: var(--gold-shadow);
+            opacity: 0.6;
+        }
+
+        @media (max-width: 768px) {
+            .signature-pillars {
+                gap: 1rem;
+            }
+            .pillar-value {
+                font-size: 0.6rem;
+            }
+            .pillar-label {
+                font-size: 0.55rem;
+            }
+        }
+
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(25px); }
             to { opacity: 1; transform: translateY(0); }
@@ -6148,16 +6238,31 @@
             </div>
 
             <!-- ════════════════════════════════════════════════════════════════
-                 HERO HEADLINE - Comes directly after brand identity
+                 PROOF SIGNATURE - Minimal elegance below brand
+                 Three pillars of identity: Pure inference, sovereignty, verification
             ════════════════════════════════════════════════════════════════ -->
-            <div class="hero-content">
-                <!-- Sovereign headline -->
-                <h1 class="sovereign-headline cut-aware" data-disclosure="Formal reasoning, compressed into a single neural architecture.">
-                    Sovereign <em>Neural</em> Theorem Prover
-                </h1>
-                <p class="sovereign-subline seal-adjacent">
-                    Trained from random initialization. Fully reproducible. Zero dependencies.
-                </p>
+            <div class="proof-signature">
+                <div class="signature-divider">
+                    <span class="divider-line"></span>
+                    <span class="divider-glyph">⊢</span>
+                    <span class="divider-line"></span>
+                </div>
+                <div class="signature-pillars">
+                    <div class="pillar">
+                        <span class="pillar-value">PURE</span>
+                        <span class="pillar-label">inference</span>
+                    </div>
+                    <span class="pillar-separator">•</span>
+                    <div class="pillar">
+                        <span class="pillar-value">SOVEREIGN</span>
+                        <span class="pillar-label">architecture</span>
+                    </div>
+                    <span class="pillar-separator">•</span>
+                    <div class="pillar">
+                        <span class="pillar-value">PROVEN</span>
+                        <span class="pillar-label">verified</span>
+                    </div>
+                </div>
             </div>
 
             <!-- ════════════════════════════════════════
