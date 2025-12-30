@@ -624,6 +624,9 @@
         }
 
         /* Single rotation - restraint over complexity */
+        .geometry-layer {
+            will-change: transform;
+        }
         .geometry-layer:nth-child(1) { animation: geoRotate 180s linear infinite; }
         .geometry-layer:nth-child(2) { animation: geoRotate 240s linear infinite reverse; opacity: 0.6; }
         .geometry-layer:nth-child(3) { animation: geoRotate 300s linear infinite; opacity: 0.4; }
@@ -2919,54 +2922,6 @@
         }
 
         /* ═══════════════════════════════════════
-           BENTO GRID SYSTEM
-           Modular asymmetric layouts
-        ═══════════════════════════════════════ */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 1.5rem;
-            margin: 3rem 0;
-        }
-
-        .bento-item {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.03), rgba(0, 0, 0, 0.5));
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            border-radius: var(--radius-md);
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            transition: all 0.4s var(--ease-out-expo);
-        }
-
-        .bento-item:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-            transform: translateY(-4px);
-            box-shadow:
-                0 12px 40px rgba(0, 0, 0, 0.4),
-                0 0 30px rgba(212, 175, 55, 0.1);
-        }
-
-        .bento-large {
-            grid-column: span 8;
-            grid-row: span 2;
-        }
-
-        .bento-medium {
-            grid-column: span 6;
-        }
-
-        .bento-small {
-            grid-column: span 4;
-        }
-
-        .bento-tall {
-            grid-row: span 2;
-        }
-
-        /* ═══════════════════════════════════════
            ADVANCED PARTICLE BEHAVIORS
            Flocking, attraction, organic movement
         ═══════════════════════════════════════ */
@@ -3154,16 +3109,6 @@
            RESPONSIVE ADJUSTMENTS
         ═══════════════════════════════════════ */
         @media (max-width: 768px) {
-            .bento-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .bento-large,
-            .bento-medium,
-            .bento-small {
-                grid-column: span 1;
-            }
-
             .glass-morphic,
             .glass-heavy,
             .glass-light {
@@ -3531,10 +3476,10 @@
                 180deg,
                 rgba(5, 5, 8, 0.96) 0%,
                 rgba(5, 5, 8, 0.92) 100%
-            ) !important;
-            backdrop-filter: blur(8px) !important;
-            -webkit-backdrop-filter: blur(8px) !important;
-            border-bottom: 1px solid var(--gold-shadow) !important;
+            );
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--gold-shadow);
         }
 
         /* QUANTUM ENTANGLEMENT THREADS */
@@ -3567,43 +3512,6 @@
             50% { stroke-dashoffset: 0; }
         }
 
-        /* CHROMATIC ABERRATION HOVER */
-        .chromatic-hover {
-            position: relative;
-        }
-
-        .chromatic-hover::before,
-        .chromatic-hover::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .chromatic-hover::before {
-            color: rgba(255, 0, 0, 0.5);
-            animation: chromaticR 0.1s ease-out forwards;
-        }
-
-        .chromatic-hover::after {
-            color: rgba(0, 255, 255, 0.5);
-            animation: chromaticC 0.1s ease-out forwards;
-        }
-
-        .chromatic-hover:hover::before {
-            opacity: 0.7;
-            transform: translate(-2px, 0);
-        }
-
-        .chromatic-hover:hover::after {
-            opacity: 0.7;
-            transform: translate(2px, 0);
-        }
-
         /* BREATH ANIMATION - Site-wide consciousness pulse */
         @keyframes consciousnessBreath {
             0%, 100% {
@@ -3618,9 +3526,8 @@
             animation: consciousnessBreath 6s ease-in-out infinite;
         }
 
-        /* Site-wide subtle pulse */
-        body::before {
-            content: '';
+        /* Site-wide subtle pulse - using dedicated element to avoid conflict with North-Star optical layer */
+        .site-breath-layer {
             position: fixed;
             inset: 0;
             background: radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
@@ -3818,6 +3725,7 @@
             border-radius: 50%;
             animation: energyExpand 6s ease-out infinite;
             opacity: 0;
+            will-change: transform, opacity;
         }
 
         .energy-ring:nth-child(1) { animation-delay: 0s; }
@@ -3862,6 +3770,7 @@
             opacity: 0;
             animation: consciousnessFloat 15s ease-in-out infinite;
             box-shadow: 0 0 6px var(--gold-core), 0 0 12px rgba(212, 175, 55, 0.3);
+            will-change: transform, opacity;
         }
 
         @keyframes consciousnessFloat {
@@ -3963,7 +3872,7 @@
                 display: none;
             }
 
-            body::before {
+            .site-breath-layer {
                 display: none;
             }
         }
@@ -3981,7 +3890,7 @@
                 display: none !important;
             }
 
-            body::before,
+            .site-breath-layer,
             .feature-card::after,
             .feature-card .holo-overlay,
             .liquid-glass::before {
@@ -4233,8 +4142,8 @@
             }
         }
 
-        /* Energy Ring - pulsing glow orbit around center */
-        .energy-ring {
+        /* Proof Ring - pulsing glow orbit around center (renamed from .energy-ring to avoid hero section conflict) */
+        .proof-ring {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -4244,9 +4153,10 @@
             pointer-events: none;
             opacity: 0;
             transition: opacity 0.8s ease;
+            will-change: opacity;
         }
 
-        .energy-ring.active {
+        .proof-ring.active {
             opacity: 1;
         }
 
@@ -4260,6 +4170,7 @@
                 rgba(212, 175, 55, 0.15) 50%,
                 transparent 55%);
             animation: ringRotate 8s linear infinite;
+            will-change: transform;
         }
 
         .ring-pulse {
@@ -4292,11 +4203,11 @@
         }
 
         /* Converged state - ring stabilizes */
-        .energy-ring.converged .ring-glow {
+        .proof-ring.converged .ring-glow {
             animation-duration: 20s;
         }
 
-        .energy-ring.converged .ring-pulse {
+        .proof-ring.converged .ring-pulse {
             animation: none;
             opacity: 0.4;
             transform: scale(1);
@@ -5950,6 +5861,9 @@
 </head>
 <body data-proof-phase="idle">
 
+    <!-- Site Breathing Layer - Decorative ambient glow (moved from body::before to avoid North-Star conflict) -->
+    <div class="site-breath-layer" aria-hidden="true"></div>
+
     <!-- ════════════════════════════════════════════════════════════════
          EXECUTIVE-GRADE TRUST INFRASTRUCTURE
          Pre-hero signals for 3-5 second credibility window
@@ -6338,8 +6252,8 @@
                     <!-- Particle Field - floating golden motes -->
                     <div class="particle-field" id="particleField"></div>
 
-                    <!-- Energy Ring - pulsing glow orbit -->
-                    <div class="energy-ring" id="energyRing">
+                    <!-- Proof Ring - pulsing glow orbit -->
+                    <div class="proof-ring" id="energyRing">
                         <div class="ring-glow"></div>
                         <div class="ring-pulse"></div>
                     </div>
