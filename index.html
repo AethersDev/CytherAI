@@ -6383,7 +6383,7 @@
          Pre-hero signals for 3-5 second credibility window
     ════════════════════════════════════════════════════════════════ -->
 
-    <!-- Trust Strip - Above the fold -->
+    <!-- Trust Inspector // KERNEL — VERIFIED -->
     <div class="trust-strip" id="trustStrip">
         <div class="trust-strip-inner">
             <div class="trust-item verified">
@@ -6391,23 +6391,23 @@
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                     <path d="M9 12l2 2 4-4"/>
                 </svg>
-                <span>Deterministic Proofs</span>
+                <span>KERNEL — VERIFIED</span>
+            </div>
+            <div class="trust-item">
+                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                </svg>
+                <span>Network Requests: 0</span>
             </div>
             <div class="trust-item">
                 <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
-                <span>Zero Egress</span>
+                <span>External Origins: None</span>
             </div>
-            <div class="trust-item">
-                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 6v6l4 2"/>
-                </svg>
-                <span>Minutes, Not Months</span>
-            </div>
-            <span class="trust-badge">Open Source</span>
+            <span class="trust-badge">Sovereign Execution</span>
         </div>
     </div>
 
@@ -6991,9 +6991,9 @@
                     </header>
 
                     <h2 class="chapter-stamp cut-aware"><em>SOVEREIGN</em></h2>
-                    <p class="chapter-claim" data-disclosure="Suitable for defense, healthcare, and financial deployments requiring complete isolation.">
-                        Zero external dependencies. No API calls. No cloud inference.
-                        The entire system runs on your infrastructure with complete network isolation.
+                    <p class="chapter-claim" data-disclosure="Sovereign execution discipline for critical infrastructure.">
+                        Zero external dependencies. No API calls. No cloud inference.<br>
+                        The system runs inside your boundary — not beside it.
                     </p>
 
                     <div class="chapter-artifact">
@@ -7008,15 +7008,16 @@
                                 <line x1="160" y1="10" x2="160" y2="110" stroke="#d4af37" stroke-width="2"/>
                                 <text x="160" y="125" fill="#7a6428" font-family="monospace" font-size="8" text-anchor="middle">BOUNDARY</text>
                                 <rect x="200" y="20" width="180" height="80" stroke="#d4af37" stroke-width="1" fill="rgba(212,175,55,0.03)"/>
-                                <text x="290" y="45" fill="#d4af37" font-family="monospace" font-size="10" text-anchor="middle">CYTHERAI</text>
-                                <text x="290" y="62" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">tokenizer + weights + inference</text>
-                                <text x="290" y="78" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">127.0.0.1</text>
+                                <text x="290" y="40" fill="#d4af37" font-family="monospace" font-size="10" text-anchor="middle">CYTHERAI</text>
+                                <text x="290" y="56" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">tokenizer + weights</text>
+                                <text x="290" y="68" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">+ inference</text>
+                                <text x="290" y="82" fill="#9c9b96" font-family="monospace" font-size="8" text-anchor="middle">127.0.0.1</text>
                             </svg>
                         </div>
                     </div>
 
                     <p class="chapter-consequence">
-                        <strong>RESULT:</strong> Deployable in air-gapped, constrained, and regulated environments.
+                        <strong>RESULT:</strong> Deployable under isolation.
                     </p>
 
                     <div class="chapter-expand">
@@ -7026,11 +7027,9 @@
                         <div class="expand-content">
                             <div class="expand-inner">
                                 <ul class="expand-bullets">
-                                    <li>No OpenAI, Anthropic, or third-party inference APIs</li>
-                                    <li>Custom tokenizer trained on domain-specific corpora</li>
+                                    <li>No third-party inference APIs</li>
                                     <li>Weights stored locally; never transmitted</li>
-                                    <li>Zero egress by default; network calls require explicit allowlist</li>
-                                    <li>Suitable for defense, healthcare, and financial deployments</li>
+                                    <li>Zero egress by default; explicit allowlist only</li>
                                 </ul>
                             </div>
                         </div>
@@ -7052,10 +7051,10 @@
                         </div>
                     </header>
 
-                    <h2 class="chapter-stamp cut-aware">FROM <em>SCRATCH</em></h2>
-                    <p class="chapter-claim" data-disclosure="97.7% loss reduction achieved in 6 hours on a single RTX 4090—not a datacenter.">
-                        Random initialization. No pretrained foundation model. No inherited weights.
-                        Every parameter learned from first principles on curated data.
+                    <h2 class="chapter-stamp cut-aware">FROM <em>SCRATCH</em> // KERNEL</h2>
+                    <p class="chapter-claim" data-disclosure="Kernel provenance from random initialization — no upstream foundation models.">
+                        Random initialization. No pretrained foundation model. No inherited weights.<br>
+                        Every parameter learned inside the chain.
                     </p>
 
                     <div class="chapter-artifact">
@@ -7093,7 +7092,7 @@
                     </div>
 
                     <p class="chapter-consequence">
-                        <strong>RESULT:</strong> No inherited bias or dependency chains from upstream models.
+                        <strong>RESULT:</strong> No upstream dependency chain.
                     </p>
 
                     <div class="chapter-expand">
@@ -7103,11 +7102,11 @@
                         <div class="expand-content">
                             <div class="expand-inner">
                                 <ul class="expand-bullets">
-                                    <li>Xavier/He initialization from random seed</li>
-                                    <li>No transfer learning from GPT, LLaMA, or other foundations</li>
-                                    <li>Training data fully curated and auditable</li>
-                                    <li>Provenance chain from initialization to deployment</li>
-                                    <li>No license encumbrance from upstream model weights</li>
+                                    <li>Random-seed initialization</li>
+                                    <li>No transfer learning from external foundations</li>
+                                    <li>Curated corpus; auditable provenance</li>
+                                    <li>Provenance chain: initialization → training → deployment</li>
+                                    <li>No upstream weight encumbrance (Kernel)</li>
                                 </ul>
                             </div>
                         </div>
@@ -7129,10 +7128,10 @@
                         </div>
                     </header>
 
-                    <h2 class="chapter-stamp cut-aware"><em>REPRODUCIBLE</em></h2>
-                    <p class="chapter-claim" data-disclosure="Third-party auditors can reproduce training from scratch using sealed checkpoint hashes.">
-                        Same seed, same result. Tokenizer, training, and weights are deterministic.
-                        Full pipeline can be replayed and verified independently.
+                    <h2 class="chapter-stamp cut-aware"><em>REPRODUCIBLE</em> // KERNEL</h2>
+                    <p class="chapter-claim" data-disclosure="Deterministic pipeline from tokenizer to sealed checkpoint.">
+                        Same seed, same result. Tokenizer, training, and weights are deterministic.<br>
+                        The pipeline can be replayed. The artifact can be verified.
                     </p>
 
                     <div class="chapter-artifact">
@@ -7171,7 +7170,7 @@
                     </div>
 
                     <p class="chapter-consequence">
-                        <strong>RESULT:</strong> Auditability and repeatability for compliance-sensitive deployments.
+                        <strong>RESULT:</strong> Repeatability under scrutiny.
                     </p>
 
                     <div class="chapter-expand">
@@ -7181,11 +7180,11 @@
                         <div class="expand-content">
                             <div class="expand-inner">
                                 <ul class="expand-bullets">
-                                    <li>Fixed random seeds at every stochastic operation</li>
-                                    <li>Tokenizer vocabulary frozen and versioned</li>
-                                    <li>Training hyperparameters locked in config manifests</li>
+                                    <li>Fixed seeds across stochastic operations</li>
+                                    <li>Tokenizer frozen and versioned</li>
+                                    <li>Manifests locked</li>
                                     <li>Checkpoint hashes for integrity verification</li>
-                                    <li>Third-party auditors can reproduce training from scratch</li>
+                                    <li>Independent replay path (gated)</li>
                                 </ul>
                             </div>
                         </div>
@@ -7216,10 +7215,10 @@
                         </div>
                     </header>
 
-                    <h2 class="chapter-stamp cut-aware"><em>REASONING</em></h2>
-                    <p class="chapter-claim" data-disclosure="The only neural prover achieving formal verification without symbolic preprocessing.">
-                        Neural-symbolic architecture with formal proof discipline.
-                        Contradiction detection prevents hallucination. Every inference is auditable.
+                    <h2 class="chapter-stamp cut-aware"><em>REASONING</em> // KERNEL</h2>
+                    <p class="chapter-claim" data-disclosure="Neural-symbolic fusion with formal verification discipline.">
+                        Neural-symbolic discipline with proof behavior.<br>
+                        Contradictions are intercepted before output.
                     </p>
 
                     <div class="chapter-artifact">
@@ -7264,7 +7263,7 @@
                     </div>
 
                     <p class="chapter-consequence">
-                        <strong>RESULT:</strong> Correctness guarantees and contradiction handling for critical decisions.
+                        <strong>RESULT:</strong> Controlled reasoning for critical decisions.
                     </p>
 
                     <div class="chapter-expand">
@@ -7275,10 +7274,10 @@
                             <div class="expand-inner">
                                 <ul class="expand-bullets">
                                     <li>Hybrid neural-symbolic inference architecture</li>
-                                    <li>Built-in consistency checking at inference time</li>
-                                    <li>Formal proof traces for each reasoning step</li>
-                                    <li>Contradiction detection before output generation</li>
-                                    <li>Replayable audit logs for every decision</li>
+                                    <li>Consistency checking at inference time</li>
+                                    <li>Formal trace discipline per step</li>
+                                    <li>Contradiction gating</li>
+                                    <li>Replayable decision logs</li>
                                 </ul>
                             </div>
                         </div>
@@ -7300,31 +7299,71 @@
                         </div>
                     </header>
 
-                    <h2 class="chapter-stamp cut-aware">ALSO <em>BUILT</em></h2>
-                    <p class="chapter-claim" data-disclosure="Sovereign methodology proven across multiple domains—theorem proving and creative direction.">
-                        The same sovereign methodology applied to domain-specific models.
-                        Cythector: a local cinematic director LLM for film and virtual production.
+                    <h2 class="chapter-stamp cut-aware">ALSO <em>BUILT</em> // LAB</h2>
+                    <p class="chapter-claim" data-disclosure="Sovereign discipline extended to domain-specific applications.">
+                        The same sovereign discipline applied to domain systems.<br>
+                        Method persists. Origin varies.
                     </p>
 
-                    <div class="portfolio-card">
-                        <div class="portfolio-logo">
-                            <img src="/cythector_logo.svg" alt="Cythector">
-                        </div>
-                        <div class="portfolio-info">
-                            <h4>CYTHECTOR</h4>
-                            <p>
-                                Transforms narrative scene descriptions into structured cinematic breakdowns.
-                                100% local. Zero external API dependency.
-                            </p>
-                            <a href="/bots/cythector/" class="portfolio-link">
-                                CytherAI-DirectorBot/1.0 <span>→</span>
-                            </a>
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">CYTHECTOR — CINEMATIC DIRECTOR</span>
+                        <div class="portfolio-card">
+                            <div class="portfolio-logo">
+                                <img src="/cythector_logo.svg" alt="Cythector">
+                            </div>
+                            <div class="portfolio-info">
+                                <h4>CYTHECTOR</h4>
+                                <p>
+                                    Closed-loop cinematic director system for film and virtual production.<br>
+                                    Transforms narrative scenes into structured cinematic breakdowns. 100% local. Zero external API dependency.
+                                </p>
+                                <p style="font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #7a6428; margin-top: 12px;">
+                                    LINEAGE: OPEN WEIGHTS → LOCAL FINE-TUNE → CLOSED LOOP
+                                </p>
+                                <a href="/bots/cythector/" class="portfolio-link">
+                                    CytherAI-DirectorBot/1.0 <span>→</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
                     <p class="chapter-consequence">
-                        <strong>RESULT:</strong> Proof of methodology. Sovereign models for specialized domains.
+                        <strong>RESULT:</strong> Sovereign applications for specialized domains.
                     </p>
+
+                    <!-- Trust Inspector // LAB — VERIFIED -->
+                    <div class="trust-strip" style="margin-top: 48px; position: relative;">
+                        <div class="trust-strip-inner">
+                            <div class="trust-item verified">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    <path d="M9 12l2 2 4-4"/>
+                                </svg>
+                                <span>LAB — VERIFIED</span>
+                            </div>
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                                </svg>
+                                <span>Network Requests: 0</span>
+                            </div>
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2L2 7v7c0 5.5 3.8 10.7 10 12 6.2-1.3 10-6.5 10-12V7l-10-5z"/>
+                                    <path d="M12 10v4M12 16h.01"/>
+                                </svg>
+                                <span>External Origins: Open Weights</span>
+                            </div>
+                            <div class="trust-item">
+                                <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                                </svg>
+                                <span>Execution: Local</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </article>
 
@@ -7343,18 +7382,87 @@
                     </header>
 
                     <div class="gate-hard">
-                        <h2 class="gate-stamp">BRIEFING <em>GATE</em></h2>
+                        <h2 class="gate-stamp">DOSSIER <em>END</em></h2>
                         <p class="gate-subline">
-                            Full technical disclosure requires NDA.
-                            Architecture details, training methodology, and deployment specifications.
+                            This document is complete.<br>
+                            Internals remain sealed.
                         </p>
-                        <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request" class="gate-cta-primary">
-                            REQUEST NDA BRIEFING
-                        </a>
+                        <div class="file-closed-mark" style="margin-top: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.15em; color: #7a6428;">
+                            FILE: CLOSED
+                        </div>
                     </div>
 
                     <footer class="plate-footer">
                         <span class="plate-footer-mark">END OF DOSSIER</span>
+                    </footer>
+                </div>
+            </article>
+
+            <!-- ═══════════════════════════════════════
+                 CYTH-2025-007: NEXUS ROUTING TABLE
+            ═══════════════════════════════════════ -->
+            <article class="dossier-plate plate-final" id="ch-nexus" data-chapter="sovereignty" style="margin-top: 120px;">
+                <div class="plate-surface">
+                    <div class="plate-corners"></div>
+                    <header class="plate-header">
+                        <span class="plate-classification">APPENDIX</span>
+                        <div class="plate-docnum">
+                            <span>CYTH-2025-007</span>
+                            <span>APPENDIX</span>
+                        </div>
+                    </header>
+
+                    <h2 class="chapter-stamp cut-aware"><em>NEXUS</em></h2>
+                    <p class="chapter-claim">
+                        You don't negotiate the boundary.<br>
+                        You choose a route.
+                    </p>
+
+                    <div class="chapter-artifact">
+                        <span class="artifact-label">ROUTING TABLE</span>
+                        <div class="routing-paths" style="margin-top: 32px;">
+
+                            <!-- PATH A: PUBLIC -->
+                            <div class="routing-path" style="margin-bottom: 36px; padding: 24px; border-left: 2px solid #4a3d1a;">
+                                <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #7a6428; margin-bottom: 12px;">PATH A // PUBLIC</h4>
+                                <p style="font-size: 16px; color: #9c9b96; line-height: 1.6; margin-bottom: 8px;">
+                                    Surface artifacts. Demonstrations. Interfaces.<br>
+                                    <span style="font-size: 14px; color: #7a6428;">No internals. No chain disclosure.</span>
+                                </p>
+                                <a href="#hero" style="display: inline-block; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #d4af37; text-decoration: none; border-bottom: 1px solid #d4af37; padding-bottom: 2px;">
+                                    ENTER →
+                                </a>
+                            </div>
+
+                            <!-- PATH B: BRIEFING -->
+                            <div class="routing-path" style="margin-bottom: 36px; padding: 24px; border-left: 2px solid #7a6428;">
+                                <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #d4af37; margin-bottom: 12px;">PATH B // BRIEFING</h4>
+                                <p style="font-size: 16px; color: #9c9b96; line-height: 1.6; margin-bottom: 8px;">
+                                    Kernel architecture. Training method. Deployment spec.<br>
+                                    <span style="font-size: 14px; color: #7a6428;">Identity required.</span>
+                                </p>
+                                <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request" style="display: inline-block; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #d4af37; text-decoration: none; border-bottom: 1px solid #d4af37; padding-bottom: 2px;">
+                                    REQUEST NDA BRIEFING →
+                                </a>
+                            </div>
+
+                            <!-- PATH C: REVIEW -->
+                            <div class="routing-path" style="padding: 24px; border-left: 2px solid #d4af37;">
+                                <h4 style="font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.2em; color: #d4af37; margin-bottom: 12px;">PATH C // REVIEW</h4>
+                                <p style="font-size: 16px; color: #9c9b96; line-height: 1.6; margin-bottom: 8px;">
+                                    Supervised verification session.<br>
+                                    <span style="font-size: 14px; color: #7a6428;">Time-bound. Watermarked. Logged.</span>
+                                </p>
+                                <a href="mailto:review@cytherai.com?subject=Review%20Window%20Request" style="display: inline-block; margin-top: 12px; font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.1em; color: #d4af37; text-decoration: none; border-bottom: 1px solid #d4af37; padding-bottom: 2px;">
+                                    REQUEST REVIEW WINDOW →
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <footer class="plate-footer" style="margin-top: 48px;">
+                        <span class="plate-footer-mark">END OF NEXUS</span>
                     </footer>
                 </div>
             </article>
