@@ -7560,7 +7560,6 @@
         // ========================================
         // ✅ ACCESSIBILITY: Only enable custom cursor for fine pointer devices without reduced motion
         const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const enableCustomCursor = !isMobile && hasFinePointer && !prefersReducedMotion;
 
         if (enableCustomCursor) {
