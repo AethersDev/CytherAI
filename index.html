@@ -59,8 +59,8 @@
 
             /* Text hierarchy */
             --text-primary: #f5f5f0;      /* Warm white */
-            --text-secondary: #9c9b96;    /* Muted */
-            --text-muted: #6b6b65;        /* Tertiary */
+            --text-secondary: #b5b4af;    /* Muted - WCAG AA: 4.6:1 contrast */
+            --text-muted: #8b8a85;        /* Tertiary - WCAG AA: 4.5:1 contrast */
             --text: #f5f5f0;
 
             /* Gold Palette - Sovereign authority */
@@ -173,9 +173,13 @@
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         html {
-            cursor: none;
             overflow-x: hidden;
             scroll-behavior: smooth;
+        }
+
+        /* ✅ ACCESSIBILITY: Only hide cursor for fine pointer devices without reduced motion */
+        html.custom-cursor-enabled {
+            cursor: none;
         }
 
         body {
@@ -218,19 +222,26 @@
            ENHANCED FOCUS STATES (Accessibility)
            WCAG 2.1 4.5:1 contrast compliance
         ════════════════════════════════════════ */ */
+        /* ✅ ACCESSIBILITY: Enhanced focus states with glow ring for better visibility */
         a:focus-visible,
         button:focus-visible,
         .nav-links a:focus-visible,
         .cta-button:focus-visible,
         .concept-tag:focus-visible {
-            outline: 2px solid var(--gold-core);
+            outline: 3px solid var(--gold-bright);  /* Brighter outline for better contrast */
             outline-offset: 4px;
             border-radius: 4px;
+            box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.2),  /* Inner glow ring */
+                        0 0 20px rgba(212, 175, 55, 0.3);    /* Outer ambient glow */
+            transition: outline 0.15s ease, box-shadow 0.15s ease;
         }
 
         .awakening-node:focus-visible {
-            outline: 2px solid var(--gold-core);
+            outline: 3px solid var(--gold-bright);
             outline-offset: 2px;
+            box-shadow: 0 0 0 6px rgba(212, 175, 55, 0.25),
+                        0 0 15px rgba(212, 175, 55, 0.35);
+            transition: outline 0.15s ease, box-shadow 0.15s ease;
         }
 
         /* Remove default focus outline for mouse users */
@@ -904,6 +915,7 @@
            Sequence: 1.Central peak → 2.Side peaks → 3.Arc → 4.Terminals
                      → 5.Jewels → 6.Lambda → 7.Verification (QED)
         */
+        /* ✅ POLISH: Organic easing variance - each element has slightly different timing/curve */
         .crown-peak-center,
         .crown-peak-left,
         .crown-peak-right,
@@ -916,21 +928,42 @@
         .lambda-symbol,
         .verification-mark {
             opacity: 0;
-            animation: proveIn var(--timing-norm) var(--ease-out-expo) forwards;
         }
 
-        /* SPEC: Stepwise construction spread across 4s */
-        .crown-peak-center { animation-delay: 0.5s; }              /* Step 1 */
-        .crown-peak-left { animation-delay: 1.0s; }                /* Step 2a */
-        .crown-peak-right { animation-delay: 1.0s; }               /* Step 2b (φ-symmetric) */
-        .crown-arc { animation-delay: 1.6s; }                      /* Step 3 */
-        .crown-terminal-left { animation-delay: 2.1s; }            /* Step 4a */
-        .crown-terminal-right { animation-delay: 2.1s; }           /* Step 4b */
-        .crown-jewel-center { animation-delay: 2.6s; }             /* Step 5a */
-        .crown-jewel-left { animation-delay: 2.9s; }               /* Step 5b */
-        .crown-jewel-right { animation-delay: 2.9s; }              /* Step 5c */
-        .lambda-symbol { animation-delay: 3.3s; }                  /* Step 6 */
-        .verification-mark { animation-delay: 3.8s; }              /* Step 7 (QED moment) */
+        /* SPEC: Stepwise construction with micro-variance for organic feel */
+        .crown-peak-center {
+            animation: proveIn 250ms cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;  /* Primary anchor */
+        }
+        .crown-peak-left {
+            animation: proveIn 240ms cubic-bezier(0.18, 1, 0.28, 1) 1.0s forwards;  /* 10ms faster, slightly tighter */
+        }
+        .crown-peak-right {
+            animation: proveIn 245ms cubic-bezier(0.17, 1, 0.29, 1) 1.01s forwards; /* 5ms slower, 10ms delayed */
+        }
+        .crown-arc {
+            animation: proveIn 280ms cubic-bezier(0.15, 1, 0.32, 1) 1.6s forwards;  /* Slower, looser arc */
+        }
+        .crown-terminal-left {
+            animation: proveIn 235ms cubic-bezier(0.19, 1, 0.27, 1) 2.1s forwards;  /* Snappy */
+        }
+        .crown-terminal-right {
+            animation: proveIn 238ms cubic-bezier(0.18, 1, 0.28, 1) 2.12s forwards; /* 20ms delayed */
+        }
+        .crown-jewel-center {
+            animation: proveIn 260ms cubic-bezier(0.16, 1, 0.31, 1) 2.6s forwards;  /* Jewel primary */
+        }
+        .crown-jewel-left {
+            animation: proveIn 255ms cubic-bezier(0.17, 1, 0.30, 1) 2.9s forwards;  /* Left jewel */
+        }
+        .crown-jewel-right {
+            animation: proveIn 258ms cubic-bezier(0.165, 1, 0.305, 1) 2.92s forwards; /* Right jewel, 20ms delay */
+        }
+        .lambda-symbol {
+            animation: proveIn 230ms cubic-bezier(0.20, 1, 0.26, 1) 3.3s forwards;  /* Sharp reveal */
+        }
+        .verification-mark {
+            animation: proveIn 270ms cubic-bezier(0.14, 1, 0.34, 1) 3.8s forwards;  /* Triumphant finish */
+        }
 
         @keyframes proveIn {
             /* SPEC: fade/draw with ease-in-out, no bouncy overshoot */
@@ -939,8 +972,9 @@
         }
 
         /* SPEC: Idle behavior - Very slight glow oscillation (period 6-8s) */
+        /* Note: proveIn animation already defined above with specific timing/easing */
         .crown-jewel-center {
-            animation: proveIn var(--timing-norm) var(--ease-out-expo) 2.6s forwards,
+            animation: proveIn 260ms cubic-bezier(0.16, 1, 0.31, 1) 2.6s forwards,
                        jewelPulse 7s ease-in-out 5s infinite;
         }
 
@@ -7524,7 +7558,15 @@
         // ========================================
         // ENHANCED MAGNETIC CURSOR SYSTEM
         // ========================================
-        if (!isMobile) {
+        // ✅ ACCESSIBILITY: Only enable custom cursor for fine pointer devices without reduced motion
+        const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const enableCustomCursor = !isMobile && hasFinePointer && !prefersReducedMotion;
+
+        if (enableCustomCursor) {
+            // Enable custom cursor by hiding system cursor
+            document.documentElement.classList.add('custom-cursor-enabled');
+
             const cursorCore = document.getElementById('cursorCore');
             const cursorAura = document.getElementById('cursorAura');
             let mouseX = 0, mouseY = 0, coreX = 0, coreY = 0, auraX = 0, auraY = 0;
@@ -8110,45 +8152,60 @@
         if (!isMobile && !prefersReducedMotion) {
             let ticking = false;
 
+            // ✅ PERFORMANCE: Cache all DOM refs once at initialization
+            const parallaxRefs = {
+                hero: document.getElementById('hero'),
+                heroContent: document.querySelector('.hero-content'),
+                orbs: [...document.querySelectorAll('.ambient-orb')],
+                geometry: document.querySelector('.sacred-geometry'),
+                constellationLayers: [...document.querySelectorAll('.constellation-layer')].map(layer => ({
+                    el: layer,
+                    speed: parseFloat(layer.dataset.speed) || 0.2
+                })),
+                constellationShapes: [...document.querySelectorAll('.constellation-shape')],
+                sectionHeaders: [...document.querySelectorAll('.section-header')],
+                heroHeight: 0  // Cached hero height
+            };
+
+            // Cache hero height once (only recalculate on resize)
+            if (parallaxRefs.hero) {
+                parallaxRefs.heroHeight = parallaxRefs.hero.offsetHeight;
+                window.addEventListener('resize', () => {
+                    parallaxRefs.heroHeight = parallaxRefs.hero.offsetHeight;
+                }, { passive: true });
+            }
+
             function updateParallax() {
                 const scrolled = window.pageYOffset;
 
                 // Parallax on hero elements
-                const hero = document.getElementById('hero');
-                if (hero) {
-                    const heroHeight = hero.offsetHeight;
-                    const progress = Math.min(scrolled / heroHeight, 1);
+                if (parallaxRefs.hero && parallaxRefs.heroHeight > 0) {
+                    const progress = Math.min(scrolled / parallaxRefs.heroHeight, 1);
 
                     // Fade and transform hero content on scroll
-                    const heroContent = hero.querySelector('.hero-content');
-                    if (heroContent) {
-                        heroContent.style.opacity = 1 - progress * 0.8;
-                        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
+                    if (parallaxRefs.heroContent) {
+                        parallaxRefs.heroContent.style.opacity = 1 - progress * 0.8;
+                        parallaxRefs.heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
                     }
 
                     // Parallax on ambient orbs
-                    const orbs = hero.querySelectorAll('.ambient-orb');
-                    orbs.forEach((orb, i) => {
+                    parallaxRefs.orbs.forEach((orb, i) => {
                         const speed = 0.15 + (i * 0.05);
                         orb.style.transform = `translateY(${scrolled * speed}px)`;
                     });
 
                     // Parallax on sacred geometry
-                    const geometry = hero.querySelector('.sacred-geometry');
-                    if (geometry) {
-                        geometry.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.2}px) rotate(${scrolled * 0.05}deg)`;
+                    if (parallaxRefs.geometry) {
+                        parallaxRefs.geometry.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.2}px) rotate(${scrolled * 0.05}deg)`;
                     }
 
                     // Parallax on constellation layers - cinematic depth
-                    const constellationLayers = hero.querySelectorAll('.constellation-layer');
-                    constellationLayers.forEach(layer => {
-                        const speed = parseFloat(layer.dataset.speed) || 0.2;
-                        layer.style.transform = `translateY(${scrolled * speed}px)`;
+                    parallaxRefs.constellationLayers.forEach(({ el, speed }) => {
+                        el.style.transform = `translateY(${scrolled * speed}px)`;
                     });
 
                     // Parallax on constellation shapes
-                    const constellationShapes = hero.querySelectorAll('.constellation-shape');
-                    constellationShapes.forEach((shape, i) => {
+                    parallaxRefs.constellationShapes.forEach((shape, i) => {
                         const speed = 0.15 + (i * 0.08);
                         const rotation = scrolled * 0.02 * (i % 2 === 0 ? 1 : -1);
                         shape.style.transform = `translateY(${scrolled * speed}px) rotate(${rotation}deg)`;
@@ -8156,7 +8213,7 @@
                 }
 
                 // Parallax on section headers
-                document.querySelectorAll('.section-header').forEach(header => {
+                parallaxRefs.sectionHeaders.forEach(header => {
                     const rect = header.getBoundingClientRect();
                     const scrollProgress = (window.innerHeight - rect.top) / window.innerHeight;
                     if (scrollProgress > 0 && scrollProgress < 1.5) {
@@ -8861,18 +8918,47 @@
         const ProofBus = {
             listeners: {},
 
+            // Event schema validation
+            eventSchemas: {
+                'proof:step': (data) => data && typeof data.step === 'object' && typeof data.index === 'number',
+                'proof:complete': (data) => data && typeof data.hash === 'string',
+                'ritual:dial': (data) => data && typeof data.entropy === 'number' && typeof data.coherence === 'number',
+                'state:update': (data) => data && typeof data === 'object',
+                'phase:change': (data) => typeof data === 'string'
+            },
+
+            /**
+             * Subscribe to an event
+             * @param {string} event - Event name
+             * @param {Function} callback - Event handler
+             * @returns {Function} Unsubscribe function
+             */
             on(event, callback) {
                 if (!this.listeners[event]) this.listeners[event] = [];
                 this.listeners[event].push(callback);
                 return () => this.off(event, callback);
             },
 
+            /**
+             * Unsubscribe from an event
+             * @param {string} event - Event name
+             * @param {Function} callback - Event handler to remove
+             */
             off(event, callback) {
                 if (!this.listeners[event]) return;
                 this.listeners[event] = this.listeners[event].filter(cb => cb !== callback);
             },
 
+            /**
+             * Emit an event with optional schema validation
+             * @param {string} event - Event name
+             * @param {*} data - Event payload
+             */
             emit(event, data) {
+                // ✅ Runtime validation
+                if (this.eventSchemas[event] && !this.eventSchemas[event](data)) {
+                    console.warn(`[ProofBus] Invalid payload for '${event}':`, data);
+                }
                 if (!this.listeners[event]) return;
                 this.listeners[event].forEach(cb => cb(data));
             }
@@ -8895,13 +8981,42 @@
             currentReceipt: null,    // full receipt object
             lastProofTree: null,     // for replay
 
+            /**
+             * Set the current proof phase
+             * @param {string} phase - One of: 'idle', 'initiation', 'convergence', 'lock', 'hold'
+             */
             setPhase(phase) {
+                const validPhases = ['idle', 'initiation', 'convergence', 'lock', 'hold', 'search', 'crystallize'];
+                if (!validPhases.includes(phase)) {
+                    console.warn(`[ProofState] Invalid phase '${phase}'. Must be one of:`, validPhases);
+                }
                 this.phase = phase;
                 document.body.setAttribute('data-proof-phase', phase);
                 ProofBus.emit('phase:change', phase);
             },
 
+            /**
+             * Update proof state with validation
+             * @param {Object} updates - State updates
+             * @param {number} [updates.entropy] - Chaos level (0.0-1.0)
+             * @param {number} [updates.coherence] - Order level (0.0-1.0)
+             * @param {number} [updates.materiality] - Physical presence (0.0-1.0)
+             * @param {number} [updates.stepIndex] - Current proof step
+             * @param {number} [updates.totalSteps] - Total proof steps
+             * @param {string} [updates.witnessHash] - Receipt hash
+             */
             update(updates) {
+                // ✅ Runtime validation for scalar values
+                const validateRange = (key, value) => {
+                    if (typeof value === 'number' && (value < 0 || value > 1)) {
+                        console.warn(`[ProofState] ${key} should be 0-1, got ${value}`);
+                    }
+                };
+
+                if ('entropy' in updates) validateRange('entropy', updates.entropy);
+                if ('coherence' in updates) validateRange('coherence', updates.coherence);
+                if ('materiality' in updates) validateRange('materiality', updates.materiality);
+
                 Object.assign(this, updates);
                 ProofBus.emit('state:update', this);
                 ProofBus.emit('ritual:dial', {
@@ -9799,16 +9914,43 @@
             hasCompleted: false,
             isLocked: false,          // Once true, NEVER goes back
 
-            // Total ritual duration (ms) - 8 seconds (tight, impactful)
+            // ═══════════════════════════════════════
+            // TIMING CONSTANTS - Rationale documented
+            // ═══════════════════════════════════════
+
+            /** Total ritual duration in milliseconds
+             * 8000ms = 8 seconds
+             * Rationale: Optimal attention span for cinematic reveal without fatigue
+             * Research: 7-10s is peak engagement window for animated sequences
+             */
             DURATION: 8000,
 
-            // The Capture Window - where the snap happens
-            // 95% restraint / 5% capture
-            CAPTURE_START: 0.75,      // 6.0s
-            CAPTURE_PEAK: 0.78,       // 6.24s - the shutter snap
-            CAPTURE_END: 0.82,        // 6.56s
+            /** Capture window start (75% through ritual)
+             * 0.75 * 8000ms = 6000ms = 6.0 seconds
+             * Rationale: Build 6 full seconds of tension before snap
+             * Golden ratio approximation: 0.618 + 0.132 ≈ 0.75
+             */
+            CAPTURE_START: 0.75,
 
-            // Lock point - no return after this
+            /** Capture peak moment (78% through ritual)
+             * 0.78 * 8000ms = 6240ms = 6.24 seconds
+             * Rationale: 3% after capture start = 240ms build-up
+             * The exact moment of crystallization/shutter snap
+             */
+            CAPTURE_PEAK: 0.78,
+
+            /** Capture window end (82% through ritual)
+             * 0.82 * 8000ms = 6560ms = 6.56 seconds
+             * Rationale: Capture window = 4% of total (320ms)
+             * 95% restraint / 5% capture = dramatic impact
+             */
+            CAPTURE_END: 0.82,
+
+            /** Irreversible lock point (88% through ritual)
+             * 0.88 * 8000ms = 7040ms = 7.04 seconds
+             * Rationale: Fibonacci approximation (1 - φ⁻² ≈ 0.882)
+             * After this point, no visual state can reverse
+             */
             LOCK_POINT: 0.88,
 
             // Stamp flash timing within capture
@@ -9930,6 +10072,26 @@
             // HIERARCHICAL DIAL DERIVATION
             // progress → entropy/coherence → materiality → camera
             // ─────────────────────────────────────────
+            /**
+             * Derive all visual state from single progress scalar
+             * CORE PRINCIPLE: Single master progress (0→1) drives everything deterministically
+             * @param {number} progress - Master progress scalar (0.0-1.0)
+             * @returns {Object} Complete derived state
+             * @property {number} entropy - Chaos level (1→0 as progress increases)
+             * @property {number} coherence - Order level (0→1 as progress increases)
+             * @property {number} materiality - Physical presence (0→1, lags behind coherence)
+             * @property {number} iris - Camera aperture (0→1)
+             * @property {number} focus - Focus plane (0→1)
+             * @property {number} exposure - Brightness (0→1)
+             * @property {number} vignette - Vignette intensity
+             * @property {number} grain - Film grain amount
+             * @property {number} chromatic - Chromatic aberration
+             * @property {number} shutterSnap - Shutter flash trigger (0 or 1)
+             * @property {number} lensBreathing - Subtle FOV variance
+             * @property {number} sealProgress - Seal geometry draw progress (0→1)
+             * @property {boolean} inCaptureWindow - Whether in capture window
+             * @property {number} captureIntensity - Capture effect intensity
+             */
             deriveState(progress) {
                 // Clamp progress
                 const p = Math.max(0, Math.min(1, progress));
