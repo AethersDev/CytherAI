@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCAN | CytherAI Animation Bot Information</title>
+    <meta name="description" content="CytherAI-AnimationBot is a research web crawler for collecting anime character data for training character-centric animation models.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://cytherai.com/bots/ccan/">
+    
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a24;
+            --text-primary: #e8e8ec;
+            --text-secondary: #9898a8;
+            --text-muted: #68687a;
+            --accent: #7c3aed;
+            --accent-glow: rgba(124, 58, 237, 0.3);
+            --border: #2a2a3a;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: var(--accent);
+        }
+        
+        .logo-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 20px var(--accent-glow));
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            font-family: var(--mono);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .badges {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        
+        .badge-dot.warning {
+            background: var(--warning);
+        }
+        
+        code, .code-block {
+            font-family: var(--mono);
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+        }
+        
+        code {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .code-block {
+            display: block;
+            padding: 1rem 1.25rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+        
+        ul {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        li strong {
+            color: var(--text-primary);
+        }
+        
+        .highlight {
+            color: var(--text-primary);
+        }
+        
+        .warning-text {
+            color: var(--warning);
+        }
+        
+        .contact-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .contact-section a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        
+        .contact-section a:hover {
+            text-decoration: underline;
+        }
+        
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .tech-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+        }
+        
+        .tech-item strong {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tech-item span {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+        }
+        
+        footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--accent);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← CYTHERAI HOME</a>
+        
+        <div class="logo-section">
+            <!-- CCAN Logo - character silhouette with motion lines -->
+            <svg class="logo" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="60" cy="60" r="55" stroke="#7c3aed" stroke-width="2" opacity="0.3"/>
+                <circle cx="60" cy="60" r="45" stroke="#7c3aed" stroke-width="1" opacity="0.5"/>
+                <!-- Stylized character silhouette -->
+                <path d="M60 25 C50 25 45 35 45 45 C45 52 48 58 55 62 L50 90 L55 90 L58 70 L60 70 L62 70 L65 90 L70 90 L65 62 C72 58 75 52 75 45 C75 35 70 25 60 25Z" fill="#7c3aed" opacity="0.8"/>
+                <!-- Motion lines -->
+                <path d="M30 50 L38 50" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <path d="M28 60 L40 60" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+                <path d="M30 70 L38 70" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+                <!-- Head circle -->
+                <circle cx="60" cy="38" r="10" fill="#7c3aed"/>
+            </svg>
+            
+            <h1>CCAN</h1>
+            <p class="subtitle">CytherAI-AnimationBot/1.0 — Research Crawler for Character Animation AI</p>
+        </div>
+        
+        <div class="badges">
+            <span class="badge"><span class="badge-dot"></span>Non-commercial</span>
+            <span class="badge"><span class="badge-dot"></span>Research Use</span>
+            <span class="badge"><span class="badge-dot warning"></span>Respectful</span>
+        </div>
+        
+        <div class="section">
+            <h2>What is this bot?</h2>
+            <p>
+                <code>CytherAI-AnimationBot</code> is a research web crawler operated by CytherAI.
+                It collects publicly available anime character images and animation references
+                for training a <strong class="highlight">Character-Centric Animation Network (CCAN)</strong> —
+                an AI model that generates consistent character animations from reference images.
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>User-Agent String</h2>
+            <pre class="code-block">CytherAI-AnimationBot/1.0 (+https://cytherai.com/bots/ccan; contact: Aethdev@cytherai.com)</pre>
+        </div>
+        
+        <div class="section">
+            <h2>Crawling Behavior</h2>
+            <ul>
+                <li><strong>Respects robots.txt</strong> — We honor all directives in your robots.txt file</li>
+                <li><strong>Rate limited</strong> — Maximum 1 request per 3 seconds per domain</li>
+                <li><strong>Low volume</strong> — Typically &lt;1000 images per character tag</li>
+                <li><strong>API-first</strong> — Uses official APIs when available (Danbooru, Gelbooru)</li>
+                <li><strong>Caches responses</strong> — We don't re-request content unnecessarily</li>
+                <li><strong>Identifies itself</strong> — Always sends the User-Agent string above</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>What We Collect</h2>
+            <ul>
+                <li>Character reference images (single character, clear poses)</li>
+                <li>Expression sheets and character turnarounds</li>
+                <li>Animation keyframes from sakugabooru (credited animators)</li>
+                <li>Publicly tagged metadata (character names, pose tags, expression tags)</li>
+            </ul>
+            <p>
+                We do <strong class="warning-text">not</strong> collect: personal data, login-protected content,
+                images marked as "do not repost", NSFW content, or any content from artists who have
+                opted out of AI training.
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>Artist Opt-Out</h2>
+            <p>
+                We respect artist wishes. If you are an artist and want your work excluded:
+            </p>
+            <ul>
+                <li>Email us at <a href="mailto:optout@cytherai.com">optout@cytherai.com</a> with your artist tag/name</li>
+                <li>We maintain an exclusion list and will remove any cached content within 48 hours</li>
+                <li>We also honor the <code>ai:no</code> and <code>do_not_train</code> tags on imageboards</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>How to Block This Bot</h2>
+            <p>Add the following to your <code>robots.txt</code> file:</p>
+            <pre class="code-block">User-agent: CytherAI-AnimationBot
+Disallow: /</pre>
+            <p>Or to block specific directories:</p>
+            <pre class="code-block">User-agent: CytherAI-AnimationBot
+Disallow: /gallery/
+Disallow: /private/</pre>
+        </div>
+        
+        <div class="contact-section">
+            <h2>Contact</h2>
+            <p><strong>Email:</strong> <a href="mailto:Aethdev@cytherai.com">Aethdev@cytherai.com</a></p>
+            <p><strong>Opt-Out:</strong> <a href="mailto:optout@cytherai.com">optout@cytherai.com</a></p>
+            <p><strong>Website:</strong> <a href="https://cytherai.com">cytherai.com</a></p>
+            <p><strong>Response time:</strong> We respond to all inquiries within 24-48 hours</p>
+            <p style="margin-top: 1rem; color: var(--text-muted);">
+                If you have concerns about our crawler's behavior or would like us to remove
+                cached content, please contact us and we will address it promptly.
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>Technical Details</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>IP Range</strong>
+                    <span>Dynamic IPs (cloud/residential)</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Request Headers</strong>
+                    <span>Standard HTTP/1.1 + gzip</span>
+                </div>
+                <div class="tech-item">
+                    <strong>JavaScript</strong>
+                    <span>Does not execute JS</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Cookies</strong>
+                    <span>Does not store cookies</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Rate Limit</strong>
+                    <span>1 req / 3 sec / domain</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Concurrent</strong>
+                    <span>Max 3 connections</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Related Projects</h2>
+            <ul>
+                <li><a href="/bots/cythector/" style="color: var(--accent);">CytherAI-DirectorBot</a> — Cinematic director AI crawler</li>
+            </ul>
+        </div>
+        
+        <footer>
+            <p>© CYTHERAI — ALL RIGHTS RESERVED</p>
+            <p><a href="https://cytherai.com">cytherai.com</a></p>
+        </footer>
+    </div>
+</body>
+</html>
