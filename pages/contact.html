@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | CytherAI</title>
+    <meta name="description" content="Request a briefing or initiate contact with CytherAI. Secure communication channels available.">
+    <meta name="theme-color" content="#050508">
+    <link rel="stylesheet" href="/css/cytherai.css">
+</head>
+<body>
+    <nav class="nav" role="navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">CYTHERAI</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/pages/brief.html">Brief</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content" style="padding-top: 120px;">
+        <article class="section">
+            <div style="max-width: 600px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">COMMUNICATION PROTOCOL</div>
+                <h1 style="margin-bottom: 2rem;">Initiate Contact</h1>
+
+                <p style="color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.7;">
+                    Leave your coordinates below. We respond to all briefing requests within 24–48 hours.
+                    No tracking, no spam, plain email only.
+                </p>
+
+                <!-- Contact Form - Works without JavaScript -->
+                <form
+                    action="https://formspree.io/f/YOUR_FORM_ID"
+                    method="POST"
+                    style="margin-bottom: 3rem;"
+                >
+                    <!-- Note: Replace formspree with your own backend or use mailto: as fallback -->
+                    <!-- For production: Set up proper form handling backend -->
+
+                    <div class="form-group">
+                        <label for="name" class="form-label">Name *</label>
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            class="form-input"
+                            required
+                            autocomplete="name"
+                            placeholder="Your name"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-input"
+                            required
+                            autocomplete="email"
+                            placeholder="your@email.com"
+                        >
+                        <div class="form-hint">Response channel. We won't share this.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="organization" class="form-label">Organization</label>
+                        <input
+                            type="text"
+                            id="organization"
+                            name="organization"
+                            class="form-input"
+                            autocomplete="organization"
+                            placeholder="Your organization (optional)"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">Message *</label>
+                        <textarea
+                            id="message"
+                            name="message"
+                            class="form-textarea"
+                            required
+                            placeholder="What brings you to CytherAI? (e.g., 'Requesting technical briefing for financial compliance use case')"
+                        ></textarea>
+                        <div class="form-hint">Brief context helps us route your request appropriately.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; font-family: var(--font-sans); font-size: 0.875rem; color: var(--text-secondary);">
+                            <input type="checkbox" required name="consent" style="width: auto;">
+                            I agree to the <a href="/pages/privacy.html" style="color: var(--gold); text-decoration: underline;">privacy policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        TRANSMIT MESSAGE
+                    </button>
+                </form>
+
+                <!-- Direct Contact -->
+                <div style="border-top: 1px solid var(--border); padding-top: 2rem; margin-top: 2rem;">
+                    <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Direct Channels</h2>
+
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">
+                                General Inquiries
+                            </div>
+                            <a href="mailto:contact@cytherai.com" style="color: var(--gold); font-family: var(--font-mono);">
+                                contact@cytherai.com
+                            </a>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">
+                                Security Issues
+                            </div>
+                            <a href="mailto:security@cytherai.com" style="color: var(--gold); font-family: var(--font-mono);">
+                                security@cytherai.com
+                            </a>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                See <a href="/pages/security.html" style="color: var(--text-secondary); text-decoration: underline;">disclosure policy</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.25rem;">
+                                NDA Requests
+                            </div>
+                            <a href="mailto:nda@cytherai.com" style="color: var(--gold); font-family: var(--font-mono);">
+                                nda@cytherai.com
+                            </a>
+                            <div style="font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                For access to detailed technical documentation
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PGP Key (Optional) -->
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px;">
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;">
+                        Secure Communication
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                        For encrypted communication, PGP key available upon request.
+                    </p>
+                    <button class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.5rem 1rem;" onclick="navigator.clipboard.writeText('contact@cytherai.com'); alert('Email copied to clipboard');">
+                        COPY EMAIL ADDRESS
+                    </button>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">© 2026 CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="/pages/security.html">Security</a></li>
+                <li><a href="/pages/privacy.html">Privacy</a></li>
+                <li><a href="/pages/terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="/js/cytherai.js" defer></script>
+    <script src="/js/command-palette.js" defer></script>
+</body>
+</html>

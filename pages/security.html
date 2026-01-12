@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security | CytherAI</title>
+    <meta name="description" content="CytherAI vulnerability disclosure policy and security contact information.">
+    <meta name="theme-color" content="#050508">
+    <link rel="stylesheet" href="/css/cytherai.css">
+</head>
+<body>
+    <nav class="nav" role="navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">CYTHERAI</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/pages/brief.html">Brief</a></li>
+                <li><a href="/pages/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content" style="padding-top: 120px;">
+        <article class="section">
+            <div style="max-width: 800px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">SECURITY PROTOCOL</div>
+                <h1 style="margin-bottom: 2rem;">Vulnerability Disclosure</h1>
+
+                <p style="color: var(--text-secondary); margin-bottom: 3rem; line-height: 1.7;">
+                    CytherAI takes security seriously. We appreciate responsible disclosure of
+                    security vulnerabilities and commit to working with the security community
+                    to verify and address issues promptly.
+                </p>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Scope</h2>
+                    <p>This policy applies to:</p>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li>CytherAI core system (neural theorem prover)</li>
+                        <li>Build and verification tooling</li>
+                        <li>Official websites and infrastructure</li>
+                        <li>Deployment containers and orchestration scripts</li>
+                    </ul>
+
+                    <h3 style="margin-top: 1.5rem;">Out of Scope</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li>Third-party dependencies (report to upstream maintainers)</li>
+                        <li>Theoretical attacks without proof of concept</li>
+                        <li>Social engineering attacks</li>
+                        <li>Physical security of customer deployments</li>
+                    </ul>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Reporting a Vulnerability</h2>
+
+                    <div style="background: var(--bg-elevated); border: 1px solid var(--border-accent); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <h3 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--gold);">Security Contact</h3>
+                        <p style="margin-bottom: 0.5rem;"><strong>Email:</strong> <a href="mailto:security@cytherai.com" style="color: var(--gold); font-family: var(--font-mono);">security@cytherai.com</a></p>
+                        <p style="font-size: 0.875rem; color: var(--text-muted);">
+                            For encrypted communication, request our PGP key via the above email.
+                        </p>
+                    </div>
+
+                    <h3 style="margin-top: 1.5rem;">What to Include</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Description:</strong> Clear summary of the vulnerability</li>
+                        <li><strong>Impact:</strong> Potential security impact and attack scenarios</li>
+                        <li><strong>Reproduction:</strong> Step-by-step instructions to reproduce</li>
+                        <li><strong>Environment:</strong> Affected versions, configurations, dependencies</li>
+                        <li><strong>Proof of Concept:</strong> Code, logs, or screenshots if applicable</li>
+                    </ul>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Response Timeline</h2>
+                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
+                        <p><strong>Initial Response:</strong> Within 48 hours</p>
+                        <p style="margin-top: 0.5rem;"><strong>Triage & Validation:</strong> Within 7 days</p>
+                        <p style="margin-top: 0.5rem;"><strong>Fix Timeline:</strong> Severity-dependent (see below)</p>
+                        <p style="margin-top: 0.5rem;"><strong>Disclosure:</strong> Coordinated with reporter</p>
+                    </div>
+
+                    <h3 style="margin-top: 1.5rem;">Severity Levels</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Critical:</strong> Fix within 7 days (remote code execution, authentication bypass)</li>
+                        <li><strong>High:</strong> Fix within 30 days (privilege escalation, data exposure)</li>
+                        <li><strong>Medium:</strong> Fix within 90 days (denial of service, information disclosure)</li>
+                        <li><strong>Low:</strong> Fix in next release cycle</li>
+                    </ul>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Safe Harbor</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        We consider security research conducted under this policy to be:
+                    </p>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                        <li>Authorized under applicable law</li>
+                        <li>Exempt from DMCA claims</li>
+                        <li>Protected from legal action by CytherAI</li>
+                    </ul>
+
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        <strong>Requirements:</strong> Follow responsible disclosure practices, do not access
+                        customer data, do not cause service disruption, and report findings promptly.
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Coordinated Disclosure</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        We prefer coordinated disclosure. We will:
+                    </p>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8; margin-top: 1rem;">
+                        <li>Work with you to understand and validate the vulnerability</li>
+                        <li>Develop and test a fix before public disclosure</li>
+                        <li>Credit you in security advisories (unless you prefer anonymity)</li>
+                        <li>Coordinate disclosure timing with you</li>
+                    </ul>
+
+                    <p style="margin-top: 1rem; color: var(--text-secondary); line-height: 1.7;">
+                        Typical disclosure window: <strong>90 days</strong> after initial report or fix availability,
+                        whichever comes first.
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Hall of Thanks</h2>
+                    <p style="color: var(--text-secondary); line-height: 1.7;">
+                        We publicly acknowledge security researchers who report valid vulnerabilities.
+                        Researchers will be listed here (with permission) upon disclosure.
+                    </p>
+                    <div style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-top: 1rem; text-align: center;">
+                        <p style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--text-muted);">
+                            No disclosures yet. Be the first.
+                        </p>
+                    </div>
+                </section>
+
+                <section style="margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border);">
+                    <h2 style="margin-bottom: 1rem;">Questions?</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                        For clarification on this policy or non-security inquiries, contact:
+                    </p>
+                    <a href="mailto:contact@cytherai.com" class="btn btn-secondary">
+                        GENERAL CONTACT
+                    </a>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">© 2026 CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="/pages/privacy.html">Privacy</a></li>
+                <li><a href="/pages/terms.html">Terms</a></li>
+                <li><a href="/">Home</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="/js/cytherai.js" defer></script>
+    <script src="/js/command-palette.js" defer></script>
+</body>
+</html>
