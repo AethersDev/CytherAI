@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | CytherAI</title>
+    <meta name="description" content="CytherAI Privacy Policy. Zero tracking. Zero analytics. Zero cookies.">
+    <meta name="theme-color" content="#0F1217">
+
+    <style>
+        /* Extracted from main site - exact same tokens */
+        :root {
+            --bg-primary: #050508;
+            --bg-elevated: #0a0a0f;
+            --bg-surface: #12121a;
+            --text-primary: #f5f5f0;
+            --text-secondary: #b5b4af;
+            --text-muted: #8b8a85;
+            --gold: #d4af37;
+            --gold-dim: #7a6428;
+            --gold-shadow: #4a3d1a;
+            --border: #1a1a1a;
+            --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            --radius-md: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            z-index: 1000;
+            background: rgba(5, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-brand-icon {
+            width: 32px;
+            height: 38px;
+        }
+
+        .nav-brand-text {
+            font-weight: 600;
+            letter-spacing: 0.15em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 140px 2rem 4rem;
+        }
+
+        .doc-stamp {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--gold-dim);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-date {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        ul {
+            color: var(--text-secondary);
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--text-primary);
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            background: var(--bg-elevated);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .doc-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { gap: 1rem; }
+            .nav-links a { font-size: 0.7rem; }
+            main { padding: 120px 1.5rem 3rem; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <svg class="nav-brand-icon" viewBox="0 0 32 38" fill="none">
+                    <polygon points="16,2 22,12 10,12" fill="#D4AF37"/>
+                    <polygon points="6,7 11,15 1,15" fill="#B8942A"/>
+                    <polygon points="26,7 31,15 21,15" fill="#B8942A"/>
+                    <path d="M 0 17 Q 16 24 32 17" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                    <text x="16" y="31" fill="#D4AF37" font-family="serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                </svg>
+                <span class="nav-brand-text">CYTHERAI</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">HOME</a></li>
+                <li><a href="/terms.html">TERMS</a></li>
+                <li><a href="/security.html">SECURITY</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="doc-stamp">LEGAL DOCUMENT</div>
+        <h1>Privacy Policy</h1>
+        <div class="doc-date">Last Updated: January 12, 2026</div>
+
+        <p><strong>Short version:</strong> We don't track you. We don't use analytics. We don't use cookies. This site makes zero external requests.</p>
+
+        <div class="doc-divider"></div>
+
+        <h2>1. What We Collect</h2>
+
+        <h3>1.1 Website Visits (This Site)</h3>
+        <p><strong>Nothing.</strong> This website makes zero external requests. No analytics, no tracking pixels, no cookies.</p>
+        <p>Your web browser may send standard HTTP request data to our server (IP address, user agent, timestamp), which appears in server logs. We do not process, analyze, or retain this data beyond standard log rotation (7 days).</p>
+
+        <h3>1.2 If You Contact Us</h3>
+        <p>If you email us, we collect:</p>
+        <ul>
+            <li>Your email address</li>
+            <li>Any information you choose to provide in your message</li>
+        </ul>
+        <p>We use this only to respond to your inquiry and do not share it with third parties.</p>
+
+        <h3>1.3 If You Use CytherAI Product (Under NDA)</h3>
+        <p>The CytherAI software itself makes <strong>zero external network requests</strong>. It runs entirely offline after deployment.</p>
+        <p>If you license CytherAI, we may collect:</p>
+        <ul>
+            <li>Organization name, contact person</li>
+            <li>License configuration (number of seats, deployment environment)</li>
+            <li>Support request details (if you contact us for help)</li>
+        </ul>
+
+        <h2>2. What We Don't Collect</h2>
+        <ul>
+            <li><strong>No cookies</strong> (session or persistent)</li>
+            <li><strong>No third-party analytics</strong> (Google Analytics, Mixpanel, etc.)</li>
+            <li><strong>No advertising trackers</strong></li>
+            <li><strong>No social media widgets</strong></li>
+            <li><strong>No fingerprinting</strong></li>
+            <li><strong>No behavioral tracking</strong></li>
+        </ul>
+
+        <h2>3. How We Use Your Data</h2>
+        <p>If you contact us:</p>
+        <ul>
+            <li>We read your email to understand your question</li>
+            <li>We respond to your email</li>
+            <li>We may keep the email thread for context in future correspondence</li>
+        </ul>
+        <p>If you license CytherAI:</p>
+        <ul>
+            <li>We use your contact information to fulfill the license agreement</li>
+            <li>We may contact you about critical security updates</li>
+            <li>We use support request details to help you resolve issues</li>
+        </ul>
+
+        <h2>4. Who We Share Your Data With</h2>
+        <p><strong>No one,</strong> except:</p>
+        <ul>
+            <li><strong>If required by law:</strong> We comply with valid legal process (subpoenas, court orders)</li>
+            <li><strong>If you request it:</strong> e.g., if you ask us to CC someone on an email</li>
+        </ul>
+        <p>We do not sell, rent, or share your data with advertisers, data brokers, or marketing companies.</p>
+
+        <h2>5. Data Retention</h2>
+        <ul>
+            <li><strong>Server logs:</strong> Rotated after 7 days</li>
+            <li><strong>Email correspondence:</strong> Retained until you request deletion or relationship ends</li>
+            <li><strong>License records:</strong> Retained for duration of license + 7 years (legal/tax requirement)</li>
+        </ul>
+
+        <h2>6. Your Rights</h2>
+        <p>You have the right to:</p>
+        <ul>
+            <li><strong>Access:</strong> Request a copy of any personal data we hold about you</li>
+            <li><strong>Deletion:</strong> Request deletion of your data (subject to legal retention requirements)</li>
+            <li><strong>Correction:</strong> Request correction of inaccurate data</li>
+            <li><strong>Portability:</strong> Request your data in a machine-readable format</li>
+        </ul>
+        <p>To exercise these rights, email <code>privacy@cytherai.com</code></p>
+
+        <h2>7. Security</h2>
+        <p>We use industry-standard security practices:</p>
+        <ul>
+            <li>HTTPS for all connections</li>
+            <li>Strong Content Security Policy (CSP) headers</li>
+            <li>Encrypted email for sensitive communications (PGP available on request)</li>
+            <li>Access controls on internal systems</li>
+        </ul>
+        <p>However, no system is 100% secure. If you discover a vulnerability, report it to <code>security@cytherai.com</code></p>
+
+        <h2>8. Children's Privacy</h2>
+        <p>CytherAI is not directed at children under 13. We do not knowingly collect data from children.</p>
+
+        <h2>9. International Data Transfers</h2>
+        <p>Our servers are located in <strong>[SPECIFY LOCATION]</strong>. If you access this site from outside that jurisdiction, your data may cross international borders.</p>
+
+        <h2>10. Changes to This Policy</h2>
+        <p>We may update this policy. Material changes will be announced 30 days in advance via a notice on this page.</p>
+        <p>Last updated: <strong>January 12, 2026</strong></p>
+
+        <div class="doc-divider"></div>
+
+        <h2>Contact</h2>
+        <p>Questions about this policy? Email <code>privacy@cytherai.com</code></p>
+    </main>
+
+    <footer>
+        <div class="footer-brand">
+            <svg viewBox="0 0 24 28" fill="none" style="width: 24px; height: 28px;">
+                <polygon points="12,1 16,8 8,8" fill="#D4AF37"/>
+                <polygon points="5,5 8,10 2,10" fill="#B8942A"/>
+                <polygon points="19,5 22,10 16,10" fill="#B8942A"/>
+                <path d="M 1 12 Q 12 16 23 12" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                <text x="12" y="22" fill="#D4AF37" font-family="serif" font-size="12" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="footer-brand-text">© <span id="year"></span> CYTHERAI</span>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy.html">PRIVACY</a>
+            <a href="/terms.html">TERMS</a>
+            <a href="/security.html">SECURITY</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
