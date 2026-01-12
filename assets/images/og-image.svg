@@ -1,0 +1,36 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#050508"/>
+
+  <!-- Border -->
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.3"/>
+
+  <!-- Title -->
+  <text x="600" y="220" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="600" fill="#f5f5f0" text-anchor="middle" letter-spacing="-0.02em">
+    CytherAI
+  </text>
+
+  <!-- Tagline -->
+  <text x="600" y="280" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#b5b4af" text-anchor="middle">
+    Sovereign AI Systems
+  </text>
+  <text x="600" y="325" font-family="system-ui, -apple-system, sans-serif" font-size="32" fill="#b5b4af" text-anchor="middle">
+    Built as Sealed Artifacts
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="400" font-family="'SF Mono', monospace" font-size="18" fill="#7a6428" text-anchor="middle" letter-spacing="0.1em">
+    OFFLINE-CAPABLE • INSPECTABLE • REPRODUCIBLE
+  </text>
+
+  <!-- Bottom Stamp -->
+  <text x="600" y="520" font-family="'SF Mono', monospace" font-size="14" fill="#4a3d1a" text-anchor="middle" letter-spacing="0.2em">
+    CLASSIFICATION: PUBLIC TEASER
+  </text>
+
+  <!-- Decorative Elements -->
+  <circle cx="200" cy="150" r="4" fill="#d4af37" opacity="0.4"/>
+  <circle cx="1000" cy="480" r="4" fill="#d4af37" opacity="0.4"/>
+  <circle cx="150" cy="480" r="3" fill="#d4af37" opacity="0.3"/>
+  <circle cx="1050" cy="150" r="3" fill="#d4af37" opacity="0.3"/>
+</svg>

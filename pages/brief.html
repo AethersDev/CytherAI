@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Brief | CytherAI</title>
+    <meta name="description" content="Technical overview of CytherAI's architecture, deployment model, and verification capabilities.">
+    <meta name="theme-color" content="#050508">
+    <link rel="stylesheet" href="/css/cytherai.css">
+</head>
+<body>
+    <nav class="nav" role="navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">CYTHERAI</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/pages/contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content" style="padding-top: 120px;">
+        <article class="section">
+            <div style="max-width: 800px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">DOCUMENT TYPE: TECHNICAL BRIEF</div>
+                <h1 style="margin-bottom: 2rem;">CytherAI Technical Overview</h1>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>What It Is</h2>
+                    <p>
+                        CytherAI is a <strong>sovereign neural theorem prover</strong> designed for
+                        enterprise code verification. It runs entirely offline, requires zero external
+                        dependencies, and provides end-to-end reproducibility from random initialization
+                        to final model weights.
+                    </p>
+                    <p>
+                        Unlike conventional AI systems that rely on cloud inference or pretrained models,
+                        CytherAI is built as a <strong>sealed artifact</strong>: deterministic, inspectable,
+                        and engineered for verification.
+                    </p>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Who It's For</h2>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Security-critical enterprises</strong> requiring offline AI capabilities</li>
+                        <li><strong>Regulated industries</strong> (finance, healthcare, defense) with strict compliance requirements</li>
+                        <li><strong>Research institutions</strong> needing reproducible AI for scientific work</li>
+                        <li><strong>Organizations</strong> with air-gapped infrastructure or sovereignty requirements</li>
+                    </ul>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>What Problems It Solves</h2>
+                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
+                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Supply Chain Trust</h3>
+                        <p style="color: var(--text-secondary);">
+                            Deterministic builds allow bit-for-bit verification. Same source code + same seed
+                            = identical model weights every time.
+                        </p>
+                    </div>
+
+                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
+                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Cloud Dependency Risk</h3>
+                        <p style="color: var(--text-secondary);">
+                            Runs entirely on-premises. No internet required after deployment. No external
+                            API calls, no telemetry, no third-party dependencies.
+                        </p>
+                    </div>
+
+                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
+                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Reproducibility Gap</h3>
+                        <p style="color: var(--text-secondary);">
+                            Full audit trail from training initialization to convergence. Every decision
+                            is logged, every state transition is deterministic.
+                        </p>
+                    </div>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Deployment & Security Posture</h2>
+
+                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem;">Deployment Options</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li><strong>Containerized:</strong> Docker/Kubernetes deployment with standard orchestration</li>
+                        <li><strong>Air-Gapped:</strong> Full offline operation with sneakernet updates</li>
+                        <li><strong>Hardware Requirements:</strong> 16GB RAM minimum, GPU optional for training acceleration</li>
+                    </ul>
+
+                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem;">Security Architecture</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li>Reproducible builds mitigate supply chain attacks</li>
+                        <li>Runtime integrity checks detect tampering</li>
+                        <li>Deterministic training prevents model poisoning</li>
+                        <li>No network egress required (zero-trust compatible)</li>
+                    </ul>
+
+                    <div style="background: var(--bg-elevated); border: 1px solid var(--border-accent); border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+                        <strong style="color: var(--gold);">Security Note:</strong>
+                        <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9375rem;">
+                            External security audit scheduled Q2 2026. Current status: internal testing phase.
+                            Not recommended for production deployment without additional security review.
+                        </p>
+                    </div>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>What's Verifiable Today vs. What's Research</h2>
+
+                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem; color: var(--gold);">✓ Verifiable Today</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li>Deterministic build reproducibility (same binary every build)</li>
+                        <li>Zero external network requests during runtime</li>
+                        <li>Complete training logs and state transitions</li>
+                        <li>Source code inspection (available upon NDA)</li>
+                    </ul>
+
+                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem; color: var(--text-muted);">⧗ Research Stage</h3>
+                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
+                        <li>Formal verification of theorem proving soundness</li>
+                        <li>Zero-knowledge proofs of correct execution</li>
+                        <li>Hardware-level attestation</li>
+                        <li>Side-channel resistance guarantees</li>
+                    </ul>
+                </section>
+
+                <section style="margin-bottom: 3rem;">
+                    <h2>Access & Licensing</h2>
+                    <p>
+                        CytherAI is currently in <strong>private alpha</strong>. Access requires NDA and
+                        is limited to qualified enterprises with legitimate use cases.
+                    </p>
+                    <p>
+                        <strong>Licensing:</strong> Commercial licensing with source-available option.
+                        Pricing based on deployment size and support tier.
+                    </p>
+                    <p>
+                        <strong>Open Source:</strong> Core components (build tooling, verification scripts)
+                        will be open-sourced upon public release.
+                    </p>
+                </section>
+
+                <section style="text-align: center; margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border);">
+                    <h2 style="margin-bottom: 1rem;">Request Detailed Documentation</h2>
+                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+                        For architecture diagrams, API documentation, and deployment guides,
+                        request access via secure channel.
+                    </p>
+                    <a href="/pages/contact.html" class="btn btn-primary">
+                        REQUEST BRIEFING
+                    </a>
+                </section>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">© 2026 CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="/pages/security.html">Security</a></li>
+                <li><a href="/pages/privacy.html">Privacy</a></li>
+                <li><a href="/pages/terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="/js/cytherai.js" defer></script>
+    <script src="/js/command-palette.js" defer></script>
+</body>
+</html>
