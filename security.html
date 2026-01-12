@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security | CytherAI</title>
+    <meta name="description" content="CytherAI Security and Vulnerability Disclosure Policy">
+    <meta name="theme-color" content="#0F1217">
+
+    <style>
+        /* Extracted from main site - exact same tokens */
+        :root {
+            --bg-primary: #050508;
+            --bg-elevated: #0a0a0f;
+            --bg-surface: #12121a;
+            --text-primary: #f5f5f0;
+            --text-secondary: #b5b4af;
+            --text-muted: #8b8a85;
+            --gold: #d4af37;
+            --gold-dim: #7a6428;
+            --gold-shadow: #4a3d1a;
+            --border: #1a1a1a;
+            --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            --radius-md: 8px;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-display);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            z-index: 1000;
+            background: rgba(5, 5, 8, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .nav-brand-icon {
+            width: 32px;
+            height: 38px;
+        }
+
+        .nav-brand-text {
+            font-weight: 600;
+            letter-spacing: 0.15em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 140px 2rem 4rem;
+        }
+
+        .doc-stamp {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: var(--gold-dim);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-date {
+            font-family: var(--font-mono);
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        ul {
+            color: var(--text-secondary);
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        strong {
+            color: var(--text-primary);
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.9em;
+            background: var(--bg-elevated);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+        }
+
+        .doc-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 3rem 0;
+        }
+
+        .contact-box {
+            background: var(--bg-elevated);
+            border-left: 3px solid var(--gold);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .contact-box strong {
+            color: var(--gold);
+        }
+
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            margin-top: 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .footer-brand-text {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { gap: 1rem; }
+            .nav-links a { font-size: 0.7rem; }
+            main { padding: 120px 1.5rem 3rem; }
+            footer { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <svg class="nav-brand-icon" viewBox="0 0 32 38" fill="none">
+                    <polygon points="16,2 22,12 10,12" fill="#D4AF37"/>
+                    <polygon points="6,7 11,15 1,15" fill="#B8942A"/>
+                    <polygon points="26,7 31,15 21,15" fill="#B8942A"/>
+                    <path d="M 0 17 Q 16 24 32 17" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                    <text x="16" y="31" fill="#D4AF37" font-family="serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                </svg>
+                <span class="nav-brand-text">CYTHERAI</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/">HOME</a></li>
+                <li><a href="/privacy.html">PRIVACY</a></li>
+                <li><a href="/terms.html">TERMS</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="doc-stamp">SECURITY PROTOCOL</div>
+        <h1>Vulnerability Disclosure</h1>
+        <div class="doc-date">Last Updated: January 12, 2026</div>
+
+        <p>CytherAI values the security community. We appreciate responsible disclosure and commit to working with researchers to verify and address issues promptly.</p>
+
+        <div class="contact-box">
+            <strong>Security Contact:</strong> <code>security@cytherai.com</code><br>
+            <span style="font-size: 0.875rem; color: var(--text-muted);">For encrypted communication, request PGP key via above email.</span>
+        </div>
+
+        <h2>Scope</h2>
+        <p>This policy applies to:</p>
+        <ul>
+            <li>CytherAI core system (neural theorem prover)</li>
+            <li>Build and verification tooling</li>
+            <li>Official websites and infrastructure</li>
+            <li>Deployment containers and orchestration</li>
+        </ul>
+
+        <h3>Out of Scope</h3>
+        <ul>
+            <li>Third-party dependencies (report to upstream maintainers)</li>
+            <li>Theoretical attacks without proof of concept</li>
+            <li>Social engineering attacks</li>
+            <li>Physical security of customer deployments</li>
+        </ul>
+
+        <h2>Reporting a Vulnerability</h2>
+        <p>Email <code>security@cytherai.com</code> with:</p>
+        <ul>
+            <li><strong>Description:</strong> Clear summary of the vulnerability</li>
+            <li><strong>Impact:</strong> Potential security impact and attack scenarios</li>
+            <li><strong>Reproduction:</strong> Step-by-step instructions</li>
+            <li><strong>Environment:</strong> Affected versions, configurations</li>
+            <li><strong>Proof of Concept:</strong> Code, logs, or screenshots if applicable</li>
+        </ul>
+
+        <h2>Response Timeline</h2>
+        <ul>
+            <li><strong>Initial Response:</strong> Within 48 hours</li>
+            <li><strong>Triage & Validation:</strong> Within 7 days</li>
+            <li><strong>Fix Timeline:</strong> Severity-dependent (see below)</li>
+            <li><strong>Disclosure:</strong> Coordinated with reporter</li>
+        </ul>
+
+        <h3>Severity Levels</h3>
+        <ul>
+            <li><strong>Critical:</strong> Fix within 7 days (RCE, auth bypass)</li>
+            <li><strong>High:</strong> Fix within 30 days (privilege escalation, data exposure)</li>
+            <li><strong>Medium:</strong> Fix within 90 days (DoS, information disclosure)</li>
+            <li><strong>Low:</strong> Fix in next release cycle</li>
+        </ul>
+
+        <h2>Safe Harbor</h2>
+        <p>We consider security research under this policy to be:</p>
+        <ul>
+            <li>Authorized under applicable law</li>
+            <li>Exempt from DMCA claims</li>
+            <li>Protected from legal action by CytherAI</li>
+        </ul>
+
+        <p><strong>Requirements:</strong> Follow responsible disclosure, do not access customer data, do not cause service disruption, report findings promptly.</p>
+
+        <h2>Coordinated Disclosure</h2>
+        <p>We prefer coordinated disclosure. We will:</p>
+        <ul>
+            <li>Work with you to understand and validate the vulnerability</li>
+            <li>Develop and test a fix before public disclosure</li>
+            <li>Credit you in security advisories (unless you prefer anonymity)</li>
+            <li>Coordinate disclosure timing with you</li>
+        </ul>
+
+        <p>Typical disclosure window: <strong>90 days</strong> after report or fix availability, whichever comes first.</p>
+
+        <h2>Hall of Thanks</h2>
+        <p>We publicly acknowledge researchers who report valid vulnerabilities (with permission).</p>
+        <div style="background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-top: 1rem; text-align: center;">
+            <span style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--text-muted);">No disclosures yet. Be the first.</span>
+        </div>
+
+        <div class="doc-divider"></div>
+
+        <h2>Non-Security Contact</h2>
+        <p>For non-security inquiries: <code>contact@cytherai.com</code></p>
+    </main>
+
+    <footer>
+        <div class="footer-brand">
+            <svg viewBox="0 0 24 28" fill="none" style="width: 24px; height: 28px;">
+                <polygon points="12,1 16,8 8,8" fill="#D4AF37"/>
+                <polygon points="5,5 8,10 2,10" fill="#B8942A"/>
+                <polygon points="19,5 22,10 16,10" fill="#B8942A"/>
+                <path d="M 1 12 Q 12 16 23 12" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                <text x="12" y="22" fill="#D4AF37" font-family="serif" font-size="12" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="footer-brand-text">© <span id="year"></span> CYTHERAI</span>
+        </div>
+        <div class="footer-links">
+            <a href="/privacy.html">PRIVACY</a>
+            <a href="/terms.html">TERMS</a>
+            <a href="/security.html">SECURITY</a>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
