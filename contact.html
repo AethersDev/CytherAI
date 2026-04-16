@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | CytherAI</title>
+    <meta name="description" content="Request a briefing or initiate contact with CytherAI. Sovereign channel. No trackers.">
+    <meta name="theme-color" content="#E7DFD1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none';">
+    <link rel="stylesheet" href="css/cytherai.css">
+</head>
+<body>
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="pages/brief.html">Brief</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content" style="padding-top: 120px;">
+        <article class="section">
+            <div style="max-width: 600px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">COMMUNICATION PROTOCOL</div>
+                <h1 style="margin-bottom: 2rem;">Initiate Contact</h1>
+
+                <p style="color: var(--ink-mid); margin-bottom: 3rem; line-height: 1.7;">
+                    Leave your coordinates below. We respond to all briefing requests within
+                    24–48 hours. No tracking, no spam, plain email only.
+                </p>
+
+                <!--
+                  DEPLOYMENT NOTE:
+                  This form uses method="POST" action="mailto:" as a zero-external-dependency
+                  fallback that works without any backend.
+
+                  For production, replace the form action with one of:
+                    a) A serverless function endpoint on your own domain
+                    b) A self-hosted form handler (e.g. PHP, Netlify Functions, Cloudflare Workers)
+
+                  Do NOT use third-party form services (Formspree, Typeform, etc.) if you want
+                  to maintain the zero-external-requests guarantee.
+                -->
+                <form
+                    id="contact-form"
+                    action="mailto:contact@cytherai.com"
+                    method="POST"
+                    enctype="text/plain"
+                    style="margin-bottom: 3rem;"
+                >
+                    <div class="form-group">
+                        <label for="contact-name" class="form-label">Name *</label>
+                        <input
+                            type="text"
+                            id="contact-name"
+                            name="name"
+                            class="form-input"
+                            required
+                            autocomplete="name"
+                            placeholder="Your name"
+                            minlength="2"
+                            maxlength="100"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-email" class="form-label">Email *</label>
+                        <input
+                            type="email"
+                            id="contact-email"
+                            name="email"
+                            class="form-input"
+                            required
+                            autocomplete="email"
+                            placeholder="your@email.com"
+                        >
+                        <div class="form-hint">Response channel. We will not share this.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-org" class="form-label">Organization</label>
+                        <input
+                            type="text"
+                            id="contact-org"
+                            name="organization"
+                            class="form-input"
+                            autocomplete="organization"
+                            placeholder="Your organization (optional)"
+                            maxlength="150"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-message" class="form-label">Message *</label>
+                        <textarea
+                            id="contact-message"
+                            name="message"
+                            class="form-textarea"
+                            required
+                            minlength="10"
+                            maxlength="2000"
+                            placeholder="What brings you to CytherAI? (e.g., 'Requesting technical briefing for financial compliance use case')"
+                        ></textarea>
+                        <div class="form-hint">Brief context helps us route your request.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer;">
+                            <input
+                                id="contact-consent"
+                                type="checkbox"
+                                required
+                                name="consent"
+                                style="width: auto; flex-shrink: 0; margin-top: 3px;"
+                            >
+                            <span style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--ink-mid);">
+                                I agree to the
+                                <a href="pages/privacy.html" style="color: var(--brass); text-decoration: underline;">privacy policy</a>
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Error/success messages -->
+                    <div
+                        id="form-feedback"
+                        role="alert"
+                        aria-live="polite"
+                        style="display:none; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1rem; font-size: 0.875rem; font-family: var(--font-mono);"
+                    ></div>
+
+                    <button
+                        type="submit"
+                        id="contact-submit"
+                        class="btn btn-primary"
+                        style="width: 100%;"
+                    >
+                        TRANSMIT MESSAGE
+                    </button>
+                </form>
+
+                <!-- Direct channels -->
+                <div style="border-top: 1px solid var(--rule); padding-top: 2rem; margin-top: 2rem;">
+                    <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Direct Channels</h2>
+
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                General Inquiries
+                            </div>
+                            <a
+                                href="mailto:contact@cytherai.com"
+                                id="general-email-link"
+                                style="color: var(--brass); font-family: var(--font-mono);"
+                            >contact@cytherai.com</a>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                Security Issues
+                            </div>
+                            <a href="mailto:security@cytherai.com" style="color: var(--brass); font-family: var(--font-mono);">security@cytherai.com</a>
+                            <div style="font-size: 0.875rem; color: var(--ink-quiet); margin-top: 0.25rem;">
+                                See <a href="pages/security.html" style="color: var(--ink-mid); text-decoration: underline;">disclosure policy</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                NDA Requests
+                            </div>
+                            <a href="mailto:nda@cytherai.com" style="color: var(--brass); font-family: var(--font-mono);">nda@cytherai.com</a>
+                            <div style="font-size: 0.875rem; color: var(--ink-quiet); margin-top: 0.25rem;">
+                                For access to detailed technical documentation
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copy email utility -->
+                <div style="margin-top: 2rem; padding: 1rem; background: var(--paper-lifted); border: 1px solid var(--rule); border-radius: 8px;">
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.5rem;">
+                        Secure Communication
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--ink-mid); margin-bottom: 0.75rem;">
+                        For encrypted communication, PGP key available upon request.
+                    </p>
+                    <button
+                        id="copy-email-btn"
+                        class="btn btn-secondary"
+                        style="font-size: 0.75rem; padding: 0.5rem 1rem;"
+                    >
+                        COPY EMAIL ADDRESS
+                    </button>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">&copy; 2026 CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="pages/security.html">Security</a></li>
+                <li><a href="pages/privacy.html">Privacy</a></li>
+                <li><a href="pages/terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="js/cytherai.js" defer></script>
+    <script src="js/command-palette.js" defer></script>
+
+    <script>
+      /**
+       * Contact page — progressive enhancement layer
+       *
+       * Without JS: form submits via mailto: action (opens mail client).
+       * With JS: client-side validation, feedback messages, copy-email button.
+       *
+       * No external requests are made anywhere in this script.
+       */
+      (function () {
+        'use strict';
+
+        /* ── Validation ─────────────────────────────────────────── */
+        function validateForm (form) {
+          var errors = [];
+          var name    = form.querySelector('#contact-name');
+          var email   = form.querySelector('#contact-email');
+          var message = form.querySelector('#contact-message');
+          var consent = form.querySelector('#contact-consent');
+
+          if (!name.value.trim() || name.value.trim().length < 2)
+            errors.push('Name must be at least 2 characters.');
+
+          var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRe.test(email.value.trim()))
+            errors.push('Please enter a valid email address.');
+
+          if (!message.value.trim() || message.value.trim().length < 10)
+            errors.push('Message must be at least 10 characters.');
+
+          if (!consent.checked)
+            errors.push('Please accept the privacy policy.');
+
+          return errors;
+        }
+
+        /* ── Feedback ───────────────────────────────────────────── */
+        function showFeedback (message, isError) {
+          var el = document.getElementById('form-feedback');
+          if (!el) return;
+          el.textContent       = message;
+          el.style.display     = 'block';
+          el.style.background  = isError ? 'rgba(255,107,107,.1)'  : 'rgba(122,91,27,.1)';
+          el.style.border      = isError ? '1px solid rgba(255,107,107,.3)' : '1px solid rgba(122,91,27,.25)';
+          el.style.color       = isError ? '#ff6b6b' : '#7A5B1B';
+        }
+
+        /* ── Form submit ────────────────────────────────────────── */
+        var form   = document.getElementById('contact-form');
+        var submit = document.getElementById('contact-submit');
+
+        if (form && submit) {
+          form.addEventListener('submit', function (e) {
+            var errors = validateForm(form);
+            if (errors.length) {
+              e.preventDefault();
+              showFeedback(errors[0], true);
+              var firstInvalid = form.querySelector(':invalid');
+              if (firstInvalid) firstInvalid.focus();
+              return;
+            }
+
+            submit.disabled     = true;
+            submit.textContent  = 'OPENING MAIL CLIENT\u2026';
+            showFeedback(
+              'Your mail client should open. If it does not, email us directly at contact@cytherai.com',
+              false
+            );
+            setTimeout(function () {
+              submit.disabled    = false;
+              submit.textContent = 'TRANSMIT MESSAGE';
+            }, 4000);
+          });
+        }
+
+        /* ── Copy email ─────────────────────────────────────────── */
+        var copyBtn = document.getElementById('copy-email-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function () {
+            var addr = 'contact@cytherai.com';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(addr)
+                .then(function () { copyBtn.textContent = 'COPIED!'; })
+                .catch(function () { copyBtn.textContent = 'COPY FAILED \u2014 SEE ABOVE'; });
+            } else {
+              var ta = document.createElement('textarea');
+              ta.value = addr;
+              ta.style.cssText = 'position:fixed;opacity:0';
+              document.body.appendChild(ta);
+              ta.select();
+              try { document.execCommand('copy'); copyBtn.textContent = 'COPIED!'; }
+              catch (err) { copyBtn.textContent = 'COPY FAILED'; }
+              document.body.removeChild(ta);
+            }
+            setTimeout(function () { copyBtn.textContent = 'COPY EMAIL ADDRESS'; }, 2000);
+          });
+        }
+
+      })();
+    </script>
+</body>
+</html>
