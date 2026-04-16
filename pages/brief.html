@@ -4,36 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Technical Brief | CytherAI</title>
-    <meta name="description" content="Technical overview of CytherAI's architecture, deployment model, and verification capabilities.">
-    <meta name="theme-color" content="#050508">
-    <link rel="stylesheet" href="/css/cytherai.css">
+    <meta name="description" content="CytherAI technical overview. Sovereign operational AI systems built for environments where failure has consequence.">
+    <meta name="theme-color" content="#E7DFD1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none';">
+    <link rel="stylesheet" href="../css/cytherai.css">
 </head>
 <body>
-    <nav class="nav" role="navigation">
+    <nav class="nav" role="navigation" aria-label="Main navigation">
         <div class="nav-container">
-            <a href="/" class="nav-brand">CYTHERAI</a>
+            <a href="../index.html" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
             <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="/pages/contact.html">Contact</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="brief.html" aria-current="page">Brief</a></li>
             </ul>
         </div>
     </nav>
 
     <main id="main-content" style="padding-top: 120px;">
         <article class="section">
-            <div style="max-width: 800px; margin: 0 auto; padding: 0 1.5rem;">
-                <div class="hero-stamp">DOCUMENT TYPE: TECHNICAL BRIEF</div>
-                <h1 style="margin-bottom: 2rem;">CytherAI Technical Overview</h1>
+            <div style="max-width: 700px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">CAPABILITY BRIEF</div>
+                <h1 style="margin-bottom: 2rem;">Technical Overview</h1>
+                <p style="color: var(--ink-mid); margin-bottom: 3rem; line-height: 1.85;">
+                    CytherAI designs and delivers operational AI systems for organisations that need ownership, traceability, and disciplined implementation. This brief outlines our public-facing technical posture.
+                </p>
 
-                <section style="margin-bottom: 3rem;">
-                    <h2>What It Is</h2>
-                    <p>
-                        CytherAI is a <strong>sovereign neural theorem prover</strong> designed for
-                        enterprise code verification. It runs entirely offline, requires zero external
-                        dependencies, and provides end-to-end reproducibility from random initialization
-                        to final model weights.
+                <div style="color: var(--ink-mid); line-height: 1.85; font-size: .9rem;">
+
+                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Architecture Philosophy</h2>
+                    <p>Every system we build follows three constraints:</p>
+                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
+                        <li><strong style="color: var(--ink);">Zero external dependencies</strong> at the core execution path. Systems must operate without cloud connectivity when required.</li>
+                        <li><strong style="color: var(--ink);">Measurable correctness.</strong> Acceptance criteria, benchmarks, and release gates are defined before implementation begins.</li>
+                        <li><strong style="color: var(--ink);">Deployment-aware design.</strong> On-prem, private cloud, constrained edge, or air-gapped environments are first-class architectural targets.</li>
+                    </ul>
+
+                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">CytherCAD</h2>
+                    <p>A generative CAD system that produces executable parametric construction programs. Architecture: compact autoregressive model + constrained decoding + kernel-backed geometric verification.</p>
+                    <div style="background: var(--paper-lifted); border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">100%</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">GVR encoder path</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">100%</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">GVR free-gen (n=1k)</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">16.1M</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Parameters</div>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--rule); font-family: var(--font-mono); font-size: .6rem; letter-spacing: .08em; color: var(--ink-quiet); text-transform: uppercase; text-align: center;">
+                            Constrained decoding + kernel-backed geometric verification
+                        </div>
+                    </div>
+
+                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">SijilOS</h2>
+                    <p>An event-sourced transactional ledger engine for the Saudi market. Financial-grade, compliance-aware, fully offline-capable. Stores intent over time rather than current state.</p>
+                    <div style="background: var(--paper-lifted); border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">Zero</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Cloud dependency</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">ZATCA</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Phase 1</div>
+                            </div>
+                            <div>
+                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">Live</div>
+                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Beta deploy</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Research &amp; IP</h2>
+                    <p>US Provisional Patent filed (2025): <em>Neural Network System and Method for Generating Proofs with Zero External Dependencies.</em> A zero-dependency transformer trained from random initialisation without pretrained weights or transfer-learning assumptions.</p>
+
+                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Next Step</h2>
+                    <p>For kernel architecture details, training methodology, deployment specifications, and engagement scoping:</p>
+                    <div style="margin-top: 1.5rem;">
+                        <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request"
+                           class="btn btn-primary"
+                           style="display: inline-block;">
+                            REQUEST NDA BRIEFING
+                        </a>
+                    </div>
+                    <p style="font-family: var(--font-mono); font-size: .7rem; color: var(--ink-quiet); margin-top: 1rem; letter-spacing: .08em;">
+                        Identity required &middot; NDA required &middot; Qualified inquiries only
                     </p>
-                    <p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">&copy; 2026 CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="security.html">Security</a></li>
+                <li><a href="privacy.html">Privacy</a></li>
+                <li><a href="terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <script src="../js/cytherai.js" defer></script>
+    <script src="../js/command-palette.js" defer></script>
+</body>
+</html>
                         Unlike conventional AI systems that rely on cloud inference or pretrained models,
                         CytherAI is built as a <strong>sealed artifact</strong>: deterministic, inspectable,
                         and engineered for verification.
