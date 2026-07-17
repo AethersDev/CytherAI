@@ -84,8 +84,9 @@ function checkRenderManifest() {
 /* ================= the registry ================= */
 const CLAIMS = [
   { id: "CL-01", text: "ZERO EXTERNAL REQUESTS", run: () => {
-    const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").length : -1;
-    return { ok: n === 0, detail: n === 0 ? "0 resources fetched" : (n < 0 ? "no timing api" : n + " resources fetched") }; } },
+    /* same-origin module/manifest fetches are the page's own body; the claim is about leaving the origin */
+    const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length : -1;
+    return { ok: n === 0, detail: n === 0 ? "0 external requests" : (n < 0 ? "no timing api" : n + " external requests") }; } },
   { id: "CL-02", text: "RENDER ≡ MANIFEST", run: checkRenderManifest },
   { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION", run: null },   /* set by site.js async verifier */
   { id: "CL-04", text: "SERIAL ≡ STATE", run: () => {

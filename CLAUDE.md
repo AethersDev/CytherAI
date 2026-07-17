@@ -43,7 +43,8 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 
-**Infra:** `sw.js` (cache-first, `CACHE='cytherai-substrate-v1'`), `manifest.webmanifest`,
+**Infra:** `sw.js` (cache-first; `CACHE` name carries the build hash, stamped by
+`generate-integrity.sh`, so each build installs atomically), `manifest.webmanifest`,
 `generate-integrity.sh` (SRI + build-hash). **Engine stack** (`engine/*`, `content/record.js`,
 `profiles/disclosure.js`, `js/console.js`) is a separate project served only by
 `pages/runner.html` — the homepage does not load it.

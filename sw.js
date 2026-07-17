@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-v1';
+var CACHE = 'cytherai-substrate-A1CBE61D4DAE130F';   /* version stamped with the build hash by generate-integrity.sh */
 
 var ASSETS = [
   'index.html',
@@ -57,7 +57,9 @@ self.addEventListener('activate', function (e) {
   );
 });
 
-// Cache-first: serve from cache, fall back to network, update cache on success
+// Cache-first. A build's cache is immutable — refreshing entries one by one could
+// pair an old index.html with a new module and fail its SRI check. Updates ship as
+// a new build hash ⇒ new CACHE name ⇒ atomic re-install, old cache deleted on activate.
 self.addEventListener('fetch', function (e) {
   // Only handle same-origin GET requests
   if (e.request.method !== 'GET') return;
@@ -65,17 +67,7 @@ self.addEventListener('fetch', function (e) {
 
   e.respondWith(
     caches.match(e.request).then(function (cached) {
-      if (cached) {
-        // Serve cached version immediately; update cache in background
-        fetch(e.request).then(function (response) {
-          if (response.ok) {
-            caches.open(CACHE).then(function (cache) {
-              cache.put(e.request, response);
-            });
-          }
-        }).catch(function () { /* offline — cache stays current */ });
-        return cached;
-      }
+      if (cached) return cached;
       // Not cached — go to network, cache the response
       return fetch(e.request).then(function (response) {
         if (response.ok) {
