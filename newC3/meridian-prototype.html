@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian — essays set in real light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --skyTop:#0B1122; --skyBot:#26325C; --ink:#D6DEF2; --paper:rgba(13,18,36,.55);
+  --sun:#F3D9A6; --accent:#8FA3D9; --shadowA:0; --glowA:.0;
+  --sdx:0px; --sdy:4px; --sblur:10px;
+  --horFar:#141B33; --horNear:#0A0F20; --starA:.7;
+  --sunX:6vw; --sunY:82vh; --sunSize:9vmin;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Newsreader',serif;color:var(--ink);background:var(--skyTop);overflow-x:hidden;transition:color .2s linear}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+/* ------- the world (fixed layers) ------- */
+.sky{position:fixed;inset:0;z-index:-4;background:linear-gradient(to bottom,var(--skyTop) 0%,var(--skyBot) 100%)}
+#stars{position:fixed;inset:0;z-index:-3;opacity:var(--starA);pointer-events:none}
+.sun{position:fixed;z-index:-2;left:var(--sunX);top:var(--sunY);width:var(--sunSize);height:var(--sunSize);
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 45%, var(--sun) 0%, color-mix(in srgb, var(--sun) 55%, transparent) 45%, transparent 72%);
+  filter:blur(1px);pointer-events:none}
+.sun::after{content:"";position:absolute;inset:-160%;border-radius:50%;
+  background:radial-gradient(circle, color-mix(in srgb, var(--sun) 26%, transparent) 0%, transparent 62%)}
+.horizon{position:fixed;left:0;right:0;bottom:0;z-index:-1;pointer-events:none;display:block;width:100%;height:26vh}
+.horizon .far{fill:var(--horFar)} .horizon .near{fill:var(--horNear)}
+
+/* ------- chrome ------- */
+.chrome{position:fixed;top:0;left:0;right:0;display:flex;align-items:center;gap:12px;padding:14px 26px;z-index:10;mix-blend-mode:normal}
+.wordmark{font-family:'Fraunces',serif;font-weight:600;font-size:17px;letter-spacing:.06em}
+.proto{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.08em;opacity:.75;border:1px solid color-mix(in srgb,var(--ink) 40%,transparent);border-radius:99px;padding:2px 9px}
+.clock{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;opacity:.85}
+
+/* ------- solar dial nav ------- */
+.dial{position:fixed;right:22px;bottom:22px;z-index:10;background:var(--paper);backdrop-filter:blur(10px);
+  border:1px solid color-mix(in srgb,var(--ink) 22%,transparent);border-radius:16px;padding:12px 14px 10px;width:172px}
+.dial svg{display:block;width:100%;height:auto}
+.dial .arc{fill:none;stroke:color-mix(in srgb,var(--ink) 30%,transparent);stroke-width:1.2;stroke-dasharray:2 4}
+.dial .sunDot{fill:var(--sun)}
+.dial .ticks{display:flex;justify-content:space-between;margin-top:6px}
+.dial .ticks button{background:none;border:none;color:var(--ink);opacity:.7;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.08em;padding:2px 1px}
+.dial .ticks button:hover{opacity:1;color:var(--accent)}
+
+/* ------- content ------- */
+.col{max-width:640px;margin:0 auto;padding:0 24px;position:relative}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.hero h1{font-family:'Fraunces',serif;font-optical-sizing:auto;font-weight:300;font-size:clamp(44px,8.4vw,104px);line-height:.98;letter-spacing:-.015em;
+  text-shadow:var(--sdx) var(--sdy) var(--sblur) rgba(20,10,0,var(--shadowA)), 0 0 26px color-mix(in srgb, var(--accent) calc(var(--glowA)*100%), transparent)}
+.hero .dek{font-size:clamp(17px,2.1vw,22px);font-style:italic;margin-top:22px;max-width:30ch;opacity:.94}
+.hero .down{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;margin-top:9vh;opacity:.7}
+.byline{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.75;margin-bottom:18px}
+
+.chapter{padding:16vh 0 10vh}
+.ch-label{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:14px}
+.chapter h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(30px,4.6vw,52px);line-height:1.04;letter-spacing:-.01em;margin-bottom:26px;
+  text-shadow:var(--sdx) var(--sdy) var(--sblur) rgba(20,10,0,var(--shadowA)), 0 0 22px color-mix(in srgb, var(--accent) calc(var(--glowA)*90%), transparent)}
+.prose{background:var(--paper);backdrop-filter:blur(6px);border-radius:14px;padding:26px 26px 8px;
+  border:1px solid color-mix(in srgb,var(--ink) 12%,transparent)}
+.prose p{font-size:17.5px;line-height:1.78;margin-bottom:20px}
+.prose p:first-of-type::first-letter{font-family:'Fraunces',serif;font-weight:600;font-size:3.1em;float:left;line-height:.82;padding:4px 10px 0 0;color:var(--accent)}
+.pull{font-family:'Fraunces',serif;font-style:italic;font-weight:400;font-size:clamp(22px,3.2vw,30px);line-height:1.3;margin:7vh 0;padding-left:20px;
+  border-left:2px solid var(--accent);
+  text-shadow:var(--sdx) var(--sdy) var(--sblur) rgba(20,10,0,calc(var(--shadowA)*.7))}
+
+.colophon{padding:14vh 0 22vh;text-align:left}
+.colophon .prose p{font-size:15.5px}
+.mech{font-family:'IBM Plex Mono',monospace;font-size:11.5px;line-height:1.9;opacity:.85}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media(max-width:640px){.dial{width:140px;right:12px;bottom:12px}}
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<canvas id="stars"></canvas>
+<div class="sun" id="sun"></div>
+<svg class="horizon" viewBox="0 0 1440 260" preserveAspectRatio="none" aria-hidden="true">
+  <path class="far"  d="M0,140 L120,96 L260,150 L430,70 L610,160 L790,88 L980,168 L1150,104 L1320,150 L1440,110 L1440,260 L0,260 Z"/>
+  <path class="near" d="M0,205 L180,168 L340,215 L560,150 L760,220 L960,170 L1180,225 L1360,185 L1440,205 L1440,260 L0,260 Z"/>
+</svg>
+
+<header class="chrome">
+  <span class="wordmark">Meridian</span>
+  <span class="proto">DESIGN PROTOTYPE A/3</span>
+  <span class="clock" id="clock">04:40 · PRE-DAWN</span>
+</header>
+
+<nav class="dial" aria-label="Time of day navigation">
+  <svg viewBox="0 0 144 62">
+    <path class="arc" d="M 10 56 A 62 62 0 0 1 134 56"/>
+    <circle class="sunDot" id="dialSun" cx="10" cy="56" r="4.5"/>
+  </svg>
+  <div class="ticks">
+    <button data-t="0.14">DAWN</button>
+    <button data-t="0.50">NOON</button>
+    <button data-t="0.80">DUSK</button>
+    <button data-t="1.00">NIGHT</button>
+  </div>
+</nav>
+
+<main class="col">
+  <section class="hero">
+    <div class="byline">Meridian · Essay № 07 · reading time moves the sun</div>
+    <h1>Notation<br>for Light</h1>
+    <p class="dek">An essay set across one day. The page keeps time with your reading — scroll, and the sun answers.</p>
+    <div class="down">↓ SCROLL TO SUNRISE</div>
+  </section>
+
+  <section class="chapter" id="dawn">
+    <div class="ch-label">I · FIRST LIGHT</div>
+    <h2>Everything begins as temperature</h2>
+    <div class="prose">
+      <p>Before dawn is a color, it is a temperature. The sky warms a full half-hour before it brightens, and the first thing light does to a landscape is not reveal it but tune it — pulling the blue hour toward amber one degree at a time, the way an orchestra drifts toward A.</p>
+      <p>Painters learned this before physicists named it. What Turner mixed into his skies was not pigment so much as time of day; you can date his canvases by their Kelvin. The page you are reading now is doing the same thing in reverse — it has no clock, only your attention, and it converts the one into the other.</p>
+    </div>
+    <div class="pull">“Shadows are the punctuation of light — long at the margins of the day, nearly silent at its center.”</div>
+  </section>
+
+  <section class="chapter" id="noon">
+    <div class="ch-label">II · MERIDIAN</div>
+    <h2>Noon is the least honest hour</h2>
+    <div class="prose">
+      <p>At the meridian, light arrives from directly above and the world loses its depth of field. Shadows contract to their minimum; contrast is total but modeling is gone. Photographers call it flat light — it shows everything and tells you nothing.</p>
+      <p>Notice what has happened to the type on this page. The long warm shadows of the last chapter have pulled in tight beneath the letterforms; the sky has gone from ember to porcelain; ink has darkened to hold its contrast. None of this was a scene change. It is one continuous model, and you are the one moving through it.</p>
+    </div>
+    <div class="pull">“The sun does not switch scenes. It interpolates — and so should a page.”</div>
+  </section>
+
+  <section class="chapter" id="dusk">
+    <div class="ch-label">III · THE LONG SHADOW</div>
+    <h2>Golden hour is geometry, not romance</h2>
+    <div class="prose">
+      <p>What we call golden hour is just an angle: light traveling sideways through forty times more atmosphere, arriving scattered, reddened, and low. Every surface becomes a sundial. Shadows stretch to their full sentence length and swing to the opposite side of the page from where they woke.</p>
+      <p>Check the headline above — its shadow has crossed over. This is the detail no themed website gets right: dark mode and light mode are two photographs, but light itself is a continuous function. Meridian's wager is that a reader can feel the difference between a toggle and a day.</p>
+    </div>
+    <div class="pull">“A toggle has two states. A day has none — only motion.”</div>
+  </section>
+
+  <section class="chapter" id="night">
+    <div class="ch-label">IV · NOCTURNE</div>
+    <h2>The dark is a different instrument</h2>
+    <div class="prose">
+      <p>Night does not remove light; it changes its source. Shadows, which need a single strong sun, dissolve entirely — and the type on this page has traded them for a faint moonlit glow, because that is what actually happens to edges after dusk.</p>
+      <p>The stars overhead were here all along, held at zero opacity since the first paragraph, waiting for the sky to get out of their way. So it is with most good endings: nothing new arrives. Something is finally allowed to show.</p>
+    </div>
+    <div class="pull">“Nothing new arrives at night. Something is finally allowed to show.”</div>
+  </section>
+
+  <section class="colophon">
+    <div class="ch-label">COLOPHON · HOW THIS PAGE WORKS</div>
+    <div class="prose mech">
+      <p>ONE LIGHT MODEL, FOURTEEN VARIABLES.<br>
+      scroll position → solar elevation → { sky gradient · color temperature · ink contrast · shadow angle · shadow length · shadow blur · star opacity · horizon tint · glow } — interpolated continuously between seven photographed keyframes. No images. No scene switches. Type: Fraunces &amp; Newsreader. Everything else is arithmetic.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ---------- keyframes: t, skyTop, skyBot, ink, paperRGBA, sun, accent, shadowA, starA, horFar, horNear, glowA ---------- */
+const K = [
+ [0.00,"#0B1122","#26325C","#D6DEF2",[13,18,36,.55],"#F3D9A6","#8FA3D9",0.00,0.70,"#141B33","#0A0F20",0.05],
+ [0.14,"#3A4677","#F2A47C","#2A2233",[255,244,232,.72],"#FFD9A0","#C25E3F",0.32,0.06,"#6C5B7C","#3A3153",0.00],
+ [0.32,"#7FA9DB","#F7E7C6","#22293A",[255,252,244,.78],"#FFEFC2","#2E5E8E",0.22,0.00,"#7C93AE","#4E6076",0.00],
+ [0.50,"#8FC0EC","#F4F1E3","#1B222E",[255,255,250,.82],"#FFF7DE","#1F6E5C",0.14,0.00,"#93A8B8","#5E7484",0.00],
+ [0.66,"#6F7FBE","#F7B267","#2E2230",[255,246,230,.78],"#FFC978","#B4552E",0.34,0.00,"#8A6E8C","#55405F",0.00],
+ [0.82,"#35315F","#C86B62","#E9DFEC",[32,26,52,.62],"#FF9E6B","#E39A7B",0.20,0.28,"#4A3C63","#2A2344",0.10],
+ [1.00,"#06090F","#131E38","#C4D1EC",[8,12,26,.60],"#E8ECF7","#9FB4E8",0.00,0.95,"#10182C","#070C1A",0.32]
+];
+const hex2rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const mixHex=(a,b,t)=>{const A=hex2rgb(a),B=hex2rgb(b);return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")})`;};
+const mixArr=(a,b,t)=>a.map((v,i)=>v+(b[i]-v)*t);
+const lerp=(a,b,t)=>a+(b-a)*t;
+
+const root=document.documentElement.style;
+const clockNames=[[0,"04:40 · PRE-DAWN"],[.14,"06:10 · DAWN"],[.25,"08:30 · MORNING"],[.42,"11:00 · LATE MORNING"],[.5,"12:00 · MERIDIAN"],[.62,"15:30 · AFTERNOON"],[.72,"17:40 · GOLDEN HOUR"],[.82,"19:05 · DUSK"],[.9,"21:00 · EVENING"],[1,"23:30 · NIGHT"]];
+
+function frameAt(p){
+  let i=0; while(i<K.length-2 && p>K[i+1][0]) i++;
+  const a=K[i], b=K[i+1];
+  const t=Math.min(1,Math.max(0,(p-a[0])/(b[0]-a[0])));
+  return {t, a, b};
+}
+function apply(p){
+  const {t,a,b}=frameAt(p);
+  root.setProperty("--skyTop", mixHex(a[1],b[1],t));
+  root.setProperty("--skyBot", mixHex(a[2],b[2],t));
+  root.setProperty("--ink",    mixHex(a[3],b[3],t));
+  const pp=mixArr(a[4],b[4],t);
+  root.setProperty("--paper",  `rgba(${pp[0]|0},${pp[1]|0},${pp[2]|0},${pp[3].toFixed(2)})`);
+  root.setProperty("--sun",    mixHex(a[5],b[5],t));
+  root.setProperty("--accent", mixHex(a[6],b[6],t));
+  root.setProperty("--horFar", mixHex(a[9],b[9],t));
+  root.setProperty("--horNear",mixHex(a[10],b[10],t));
+  root.setProperty("--shadowA",lerp(a[7],b[7],t).toFixed(3));
+  root.setProperty("--starA",  lerp(a[8],b[8],t).toFixed(3));
+  root.setProperty("--glowA",  lerp(a[11],b[11],t).toFixed(3));
+
+  /* --- sun / moon path --- */
+  const isSun = p<=0.86;
+  const sp = isSun ? p/0.86 : (p-0.86)/0.14;
+  const elev = Math.sin(Math.PI*Math.min(1,sp)*(isSun?1:0.9));
+  const x = isSun ? 6+88*sp : 18+52*sp;
+  const y = isSun ? 84-64*elev : 72-42*elev;
+  root.setProperty("--sunX", x.toFixed(2)+"vw");
+  root.setProperty("--sunY", y.toFixed(2)+"vh");
+  root.setProperty("--sunSize",(isSun?lerp(11,7.5,elev):5.2)+"vmin");
+
+  /* --- shadow physics: away from sun, longer when low --- */
+  const len = isSun ? (1.7-elev) : 0.4;
+  root.setProperty("--sdx", ((0.5-(isSun?sp:0.5))*40*len).toFixed(1)+"px");
+  root.setProperty("--sdy", (3+9*len).toFixed(1)+"px");
+  root.setProperty("--sblur",(8+15*len).toFixed(1)+"px");
+
+  /* --- dial + clock --- */
+  const dial=document.getElementById("dialSun");
+  dial.setAttribute("cx",(72-62*Math.cos(Math.PI*p)).toFixed(1));
+  dial.setAttribute("cy",(56-52*Math.sin(Math.PI*p)).toFixed(1));
+  let name=clockNames[0][1];
+  for(const [tt,nm] of clockNames){ if(p>=tt-1e-6) name=nm; }
+  document.getElementById("clock").textContent=name;
+}
+
+/* ---------- scroll driver ---------- */
+let ticking=false;
+function progress(){
+  const max=document.documentElement.scrollHeight-innerHeight;
+  return max>0? Math.min(1,Math.max(0,scrollY/max)) : 0;
+}
+addEventListener("scroll",()=>{ if(!ticking){ticking=true;requestAnimationFrame(()=>{apply(progress());ticking=false;});} },{passive:true});
+addEventListener("resize",()=>apply(progress()));
+
+/* dial buttons */
+document.querySelectorAll(".dial .ticks button").forEach(b=>b.addEventListener("click",()=>{
+  const max=document.documentElement.scrollHeight-innerHeight;
+  scrollTo({top:parseFloat(b.dataset.t)*max, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}));
+
+/* ---------- stars ---------- */
+const sc=document.getElementById("stars"), sx=sc.getContext("2d");
+function drawStars(){
+  const d=Math.min(devicePixelRatio||1,2);
+  sc.width=innerWidth*d; sc.height=innerHeight*d;
+  sc.style.width=innerWidth+"px"; sc.style.height=innerHeight+"px";
+  sx.setTransform(d,0,0,d,0,0); sx.clearRect(0,0,innerWidth,innerHeight);
+  let s=1234; const rnd=()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};
+  for(let i=0;i<170;i++){
+    const x=rnd()*innerWidth, y=rnd()*innerHeight*0.72, r=rnd()*1.3+0.3, a=0.35+rnd()*0.65;
+    sx.beginPath(); sx.arc(x,y,r,0,7); sx.fillStyle=`rgba(226,235,255,${a})`; sx.fill();
+  }
+}
+drawStars(); addEventListener("resize",drawStars);
+
+apply(0);
+</script>
+</body>
+</html>

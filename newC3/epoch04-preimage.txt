@@ -1,0 +1,11 @@
+CYTHERAI EVALUATION COMMITMENT · EPOCH 04
+PROTOCOL: CytherCAD v1.2 dimensional-accuracy evaluation
+  - benchmark: Text2CAD-192, full split, unmodified
+  - environment: air-gapped, Apple Silicon M4, local inference only
+  - metrics: IR, GVR(beam), GVR(completion), DimAcc +/-3mm, +/-5mm (n=100)
+ACCEPTANCE CRITERIA (pre-registered):
+  - IR <= 0.00 pct; GVR >= 99 pct both modes; DimAcc(+/-5mm) >= 95 pct
+  - any regression vs epoch 03 published values is disclosed as regression
+NONCE: 7c1f4a9e02b356d8
+NOTE: in production this preimage remains private until the epoch discloses;
+it sits beside the prototype only to demonstrate the verify flow.

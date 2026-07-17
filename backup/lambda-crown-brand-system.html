@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Lambda Crown | CytherAI Brand Mark Development</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --void: #000000;
+            --abyss: #050505;
+            --deep: #0a0a0a;
+            --surface: #0f0f0f;
+            --elevated: #161616;
+            --border: #1a1a1a;
+            --border-light: #252525;
+            
+            --gold-darkest: #2a2008;
+            --gold-shadow: #3d2e0a;
+            --gold-dim: #6b5a2f;
+            --gold-muted: #8b7355;
+            --gold: #b8942a;
+            --gold-core: #d4af37;
+            --gold-bright: #e8c547;
+            --gold-light: #f4d675;
+            --gold-pale: #fae8a0;
+            --gold-white: #fdf6e3;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--void);
+            color: var(--gold-white);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--gold-shadow);
+            background: linear-gradient(180deg, var(--abyss) 0%, var(--void) 100%);
+        }
+
+        .header-eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 0.4em;
+            color: var(--gold-dim);
+            margin-bottom: 1rem;
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(180deg, var(--gold-white) 0%, var(--gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-sub {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--gold-muted);
+            letter-spacing: 0.1em;
+        }
+
+        /* Sections */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 3rem;
+        }
+
+        .section-number {
+            font-size: 0.6rem;
+            letter-spacing: 0.3em;
+            color: var(--gold-shadow);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--gold-white);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-desc {
+            font-size: 0.8rem;
+            color: var(--gold-dim);
+            max-width: 600px;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-shadow), transparent);
+            margin: 0 2rem;
+        }
+
+        /* Logo Display Grid */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .logo-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .logo-card:hover {
+            border-color: var(--gold-dim);
+            box-shadow: 0 0 60px rgba(212, 175, 55, 0.08);
+        }
+
+        .logo-display {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--void);
+            position: relative;
+        }
+
+        .logo-display::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(212,175,55,0.03) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .logo-display svg {
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.15));
+            transition: all 0.3s ease;
+        }
+
+        .logo-card:hover .logo-display svg {
+            filter: drop-shadow(0 0 40px rgba(212, 175, 55, 0.25));
+        }
+
+        .logo-info {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .logo-name {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.3rem;
+        }
+
+        .logo-desc {
+            font-size: 0.7rem;
+            color: var(--gold-dim);
+            line-height: 1.6;
+        }
+
+        /* Hero Logo */
+        .hero-logo {
+            padding: 6rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--void);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-logo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(212,175,55,0.05) 0%, transparent 50%);
+        }
+
+        .hero-logo svg {
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.3));
+        }
+
+        .hero-label {
+            margin-top: 3rem;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            color: var(--gold-white);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Construction Grid */
+        .construction-display {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .construction-display svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Color Swatches */
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+
+        .swatch {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .swatch:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .swatch-label {
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        .swatch-hex {
+            font-size: 0.55rem;
+            opacity: 0.6;
+        }
+
+        /* Application Mockups */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .app-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .app-display {
+            padding: 2rem;
+            background: var(--deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .app-info {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .app-name {
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.3rem;
+        }
+
+        .app-desc {
+            font-size: 0.65rem;
+            color: var(--gold-dim);
+        }
+
+        /* Favicon Preview */
+        .favicon-sizes {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .favicon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .favicon-box {
+            background: var(--void);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+
+        .favicon-label {
+            font-size: 0.6rem;
+            color: var(--gold-dim);
+        }
+
+        /* Business Card */
+        .business-card {
+            width: 350px;
+            height: 200px;
+            background: var(--void);
+            border: 1px solid var(--gold-shadow);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .business-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at top right, rgba(212,175,55,0.05) 0%, transparent 70%);
+        }
+
+        .bc-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .bc-wordmark {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+        }
+
+        .bc-tagline {
+            font-size: 0.55rem;
+            color: var(--gold-dim);
+            letter-spacing: 0.15em;
+        }
+
+        .bc-info {
+            font-size: 0.65rem;
+            color: var(--gold-muted);
+        }
+
+        .bc-info div {
+            margin-bottom: 0.2rem;
+        }
+
+        /* Animated Logo */
+        .animated-logo {
+            padding: 4rem;
+            background: var(--void);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes crownGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(212,175,55,0.3)); }
+            50% { filter: drop-shadow(0 0 30px rgba(212,175,55,0.6)); }
+        }
+
+        @keyframes lambdaPulse {
+            0%, 100% { opacity: 0.9; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes crownFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .animate-glow {
+            animation: crownGlow 3s ease-in-out infinite;
+        }
+
+        .animate-float {
+            animation: crownFloat 4s ease-in-out infinite;
+        }
+
+        .animate-pulse .lambda-char {
+            animation: lambdaPulse 2s ease-in-out infinite;
+        }
+
+        /* Wordmark Styles */
+        .wordmark-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+
+        .wordmark-text {
+            font-family: var(--font-display);
+            letter-spacing: 0.25em;
+        }
+
+        .wordmark-text.size-sm { font-size: 1.2rem; }
+        .wordmark-text.size-md { font-size: 1.8rem; }
+        .wordmark-text.size-lg { font-size: 2.5rem; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header { padding: 3rem 1.5rem; }
+            section { padding: 3rem 1.5rem; }
+            .logo-grid { grid-template-columns: 1fr; }
+            .hero-logo { padding: 4rem 1.5rem; }
+            .business-card { width: 100%; max-width: 350px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <div class="header-eyebrow">BRAND MARK DEVELOPMENT</div>
+        <h1>THE LAMBDA CROWN</h1>
+        <p class="header-sub">λ — Where Thought Becomes Form</p>
+    </header>
+
+    <!-- Hero Logo -->
+    <section class="hero-logo">
+        <svg width="240" height="280" viewBox="0 0 240 280" fill="none" xmlns="http://www.w3.org/2000/svg" class="animate-glow">
+            <!-- Crown Structure -->
+            <g class="crown-group">
+                <!-- Central peak -->
+                <polygon points="120,15 138,55 102,55" fill="#D4AF37"/>
+                <!-- Left peak -->
+                <polygon points="70,35 88,65 52,65" fill="#B8942A"/>
+                <!-- Right peak -->
+                <polygon points="170,35 188,65 152,65" fill="#B8942A"/>
+                
+                <!-- Crown band arc -->
+                <path d="M40 70 Q120 95 200 70" stroke="#D4AF37" stroke-width="3" fill="none"/>
+                
+                <!-- Peak jewels -->
+                <circle cx="120" cy="30" r="4" fill="#F4D675"/>
+                <circle cx="70" cy="45" r="3" fill="#E8C547"/>
+                <circle cx="170" cy="45" r="3" fill="#E8C547"/>
+            </g>
+            
+            <!-- Lambda Symbol -->
+            <text x="120" y="175" 
+                  fill="#D4AF37" 
+                  font-family="'Cormorant Garamond', serif" 
+                  font-size="140" 
+                  font-style="italic" 
+                  font-weight="300"
+                  text-anchor="middle" 
+                  dominant-baseline="middle"
+                  class="lambda-char">λ</text>
+            
+            <!-- Verification mark (subtle) -->
+            <path d="M95 230 L110 245 L145 205" 
+                  stroke="#6B5A2F" 
+                  stroke-width="3" 
+                  fill="none" 
+                  stroke-linecap="round" 
+                  stroke-linejoin="round"
+                  opacity="0.6"/>
+        </svg>
+        <div class="hero-label">CYTHERAI</div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Primary Variations -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">01 — PRIMARY VARIATIONS</span>
+            <h2 class="section-title">Core Mark Expressions</h2>
+            <p class="section-desc">Different approaches to balancing the crown and lambda elements. Each variation maintains the core meaning while adjusting visual weight and complexity.</p>
+        </div>
+
+        <div class="logo-grid">
+            
+            <!-- Variation A: Integrated -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Crown peaks emerge from lambda -->
+                        <polygon points="80,8 92,35 68,35" fill="#D4AF37"/>
+                        <polygon points="45,22 57,42 33,42" fill="#B8942A"/>
+                        <polygon points="115,22 127,42 103,42" fill="#B8942A"/>
+                        <path d="M28 48 Q80 68 132 48" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        
+                        <!-- Lambda -->
+                        <text x="80" y="115" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="95" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                        
+                        <!-- Subtle check -->
+                        <path d="M62 152 L72 162 L98 132" stroke="#6B5A2F" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.5"/>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Integrated Crown</h3>
+                    <p class="logo-desc">Crown peaks emerge organically from the lambda structure. Balanced, unified composition.</p>
+                </div>
+            </div>
+
+            <!-- Variation B: Minimal -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Single peak crown hint -->
+                        <polygon points="80,15 90,35 70,35" fill="#D4AF37"/>
+                        <line x1="55" y1="40" x2="105" y2="40" stroke="#D4AF37" stroke-width="2"/>
+                        
+                        <!-- Lambda -->
+                        <text x="80" y="110" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="90" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Minimal Crown</h3>
+                    <p class="logo-desc">Reduced to essential elements. Single peak with base line. Maximum elegance.</p>
+                </div>
+            </div>
+
+            <!-- Variation C: Geometric -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Geometric crown -->
+                        <polygon points="80,10 120,45 40,45" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                        <polygon points="80,20 105,42 55,42" fill="#D4AF37"/>
+                        
+                        <!-- Lambda in circle -->
+                        <circle cx="80" cy="110" r="50" stroke="#3D2E0A" stroke-width="1" fill="none"/>
+                        <text x="80" y="118" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="80" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Geometric Frame</h3>
+                    <p class="logo-desc">Precise triangular crown with lambda contained in circular frame. Technical precision.</p>
+                </div>
+            </div>
+
+            <!-- Variation D: Serif Crown -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Ornate crown with serifs -->
+                        <polygon points="80,8 95,40 65,40" fill="#D4AF37"/>
+                        <polygon points="50,20 62,45 38,45" fill="#B8942A"/>
+                        <polygon points="110,20 122,45 98,45" fill="#B8942A"/>
+                        
+                        <!-- Crown band with terminals -->
+                        <path d="M30 50 Q80 70 130 50" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        <circle cx="30" cy="50" r="3" fill="#D4AF37"/>
+                        <circle cx="130" cy="50" r="3" fill="#D4AF37"/>
+                        
+                        <!-- Peak orbs -->
+                        <circle cx="80" cy="18" r="3" fill="#F4D675"/>
+                        <circle cx="50" cy="28" r="2" fill="#E8C547"/>
+                        <circle cx="110" cy="28" r="2" fill="#E8C547"/>
+                        
+                        <!-- Lambda -->
+                        <text x="80" y="118" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="90" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Ornate Crown</h3>
+                    <p class="logo-desc">Detailed crown with jewel accents and terminal flourishes. Regal, luxurious feel.</p>
+                </div>
+            </div>
+
+            <!-- Variation E: Abstract -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Abstract crown rays -->
+                        <line x1="80" y1="15" x2="80" y2="40" stroke="#D4AF37" stroke-width="3"/>
+                        <line x1="55" y1="25" x2="60" y2="45" stroke="#B8942A" stroke-width="2"/>
+                        <line x1="105" y1="25" x2="100" y2="45" stroke="#B8942A" stroke-width="2"/>
+                        <line x1="35" y1="38" x2="45" y2="50" stroke="#6B5A2F" stroke-width="1.5"/>
+                        <line x1="125" y1="38" x2="115" y2="50" stroke="#6B5A2F" stroke-width="1.5"/>
+                        
+                        <!-- Lambda -->
+                        <text x="80" y="115" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="90" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Abstract Rays</h3>
+                    <p class="logo-desc">Crown abstracted to radiating lines. Suggests illumination and emanation of intelligence.</p>
+                </div>
+            </div>
+
+            <!-- Variation F: Contained -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="180" viewBox="0 0 160 180" fill="none">
+                        <!-- Shield/badge shape -->
+                        <path d="M80 10 L130 30 L130 100 Q130 150 80 170 Q30 150 30 100 L30 30 Z" stroke="#6B5A2F" stroke-width="1.5" fill="none"/>
+                        
+                        <!-- Inner crown -->
+                        <polygon points="80,25 90,42 70,42" fill="#D4AF37"/>
+                        <polygon points="58,35 66,48 50,48" fill="#B8942A"/>
+                        <polygon points="102,35 110,48 94,48" fill="#B8942A"/>
+                        <path d="M45 52 Q80 65 115 52" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                        
+                        <!-- Lambda -->
+                        <text x="80" y="110" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="70" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Shield Contained</h3>
+                    <p class="logo-desc">Full mark within heraldic shield. Works as badge, seal, or certification mark.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Weight Variations -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">02 — WEIGHT VARIATIONS</span>
+            <h2 class="section-title">Light to Bold</h2>
+            <p class="section-desc">The same core mark at different visual weights. Light for refined applications, bold for high-impact contexts.</p>
+        </div>
+
+        <div class="logo-grid">
+            
+            <!-- Ultra Light -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none">
+                        <polygon points="70,10 80,35 60,35" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                        <polygon points="42,22 52,42 32,42" stroke="#B8942A" stroke-width="0.75" fill="none"/>
+                        <polygon points="98,22 108,42 88,42" stroke="#B8942A" stroke-width="0.75" fill="none"/>
+                        <path d="M25 48 Q70 65 115 48" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                        <text x="70" y="105" fill="none" stroke="#D4AF37" stroke-width="0.75" font-family="'Cormorant Garamond', serif" font-size="80" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Ultra Light</h3>
+                    <p class="logo-desc">Hairline strokes. Ethereal, premium print applications.</p>
+                </div>
+            </div>
+
+            <!-- Light -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none">
+                        <polygon points="70,10 82,38 58,38" fill="#D4AF37"/>
+                        <polygon points="40,24 50,44 30,44" fill="#8B7355"/>
+                        <polygon points="100,24 110,44 90,44" fill="#8B7355"/>
+                        <path d="M25 50 Q70 68 115 50" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                        <text x="70" y="105" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="80" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Light</h3>
+                    <p class="logo-desc">Delicate presence. Elegant, sophisticated contexts.</p>
+                </div>
+            </div>
+
+            <!-- Regular -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none">
+                        <polygon points="70,8 85,40 55,40" fill="#D4AF37"/>
+                        <polygon points="38,22 52,48 24,48" fill="#B8942A"/>
+                        <polygon points="102,22 116,48 88,48" fill="#B8942A"/>
+                        <path d="M20 52 Q70 72 120 52" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        <text x="70" y="108" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="85" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Regular</h3>
+                    <p class="logo-desc">Standard weight. Primary usage across applications.</p>
+                </div>
+            </div>
+
+            <!-- Bold -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none">
+                        <polygon points="70,5 90,45 50,45" fill="#D4AF37"/>
+                        <polygon points="35,20 55,52 15,52" fill="#B8942A"/>
+                        <polygon points="105,20 125,52 85,52" fill="#B8942A"/>
+                        <path d="M12 55 Q70 80 128 55" stroke="#D4AF37" stroke-width="4" fill="none"/>
+                        <text x="70" y="112" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="90" font-style="italic" font-weight="500" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Bold</h3>
+                    <p class="logo-desc">Strong presence. High-impact, small-scale applications.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Monochrome -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">03 — MONOCHROME VERSIONS</span>
+            <h2 class="section-title">Single Color Applications</h2>
+            <p class="section-desc">For contexts requiring single-color reproduction: embossing, watermarks, limited palettes.</p>
+        </div>
+
+        <div class="logo-grid">
+            
+            <!-- Gold on Black -->
+            <div class="logo-card">
+                <div class="logo-display" style="background: #000;">
+                    <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+                        <polygon points="60,8 75,38 45,38" fill="#D4AF37"/>
+                        <polygon points="35,22 48,45 22,45" fill="#D4AF37"/>
+                        <polygon points="85,22 98,45 72,45" fill="#D4AF37"/>
+                        <path d="M18 50 Q60 68 102 50" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                        <text x="60" y="95" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="72" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Gold on Black</h3>
+                    <p class="logo-desc">Primary brand expression. Maximum impact.</p>
+                </div>
+            </div>
+
+            <!-- Black on Gold -->
+            <div class="logo-card">
+                <div class="logo-display" style="background: #D4AF37;">
+                    <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+                        <polygon points="60,8 75,38 45,38" fill="#000"/>
+                        <polygon points="35,22 48,45 22,45" fill="#000"/>
+                        <polygon points="85,22 98,45 72,45" fill="#000"/>
+                        <path d="M18 50 Q60 68 102 50" stroke="#000" stroke-width="2" fill="none"/>
+                        <text x="60" y="95" fill="#000" font-family="'Cormorant Garamond', serif" font-size="72" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Black on Gold</h3>
+                    <p class="logo-desc">Inverted. Premium materials, special editions.</p>
+                </div>
+            </div>
+
+            <!-- White on Black -->
+            <div class="logo-card">
+                <div class="logo-display" style="background: #000;">
+                    <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+                        <polygon points="60,8 75,38 45,38" fill="#FDF6E3"/>
+                        <polygon points="35,22 48,45 22,45" fill="#FDF6E3"/>
+                        <polygon points="85,22 98,45 72,45" fill="#FDF6E3"/>
+                        <path d="M18 50 Q60 68 102 50" stroke="#FDF6E3" stroke-width="2" fill="none"/>
+                        <text x="60" y="95" fill="#FDF6E3" font-family="'Cormorant Garamond', serif" font-size="72" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">White on Black</h3>
+                    <p class="logo-desc">Neutral. Technical documentation, co-branding.</p>
+                </div>
+            </div>
+
+            <!-- Outline Only -->
+            <div class="logo-card">
+                <div class="logo-display" style="background: #000;">
+                    <svg width="120" height="140" viewBox="0 0 120 140" fill="none">
+                        <polygon points="60,8 75,38 45,38" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                        <polygon points="35,22 48,45 22,45" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                        <polygon points="85,22 98,45 72,45" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                        <path d="M18 50 Q60 68 102 50" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                        <text x="60" y="95" fill="none" stroke="#D4AF37" stroke-width="1" font-family="'Cormorant Garamond', serif" font-size="72" font-style="italic" font-weight="300" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Outline</h3>
+                    <p class="logo-desc">Stroke only. Watermarks, background patterns, embossing.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Construction -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">04 — CONSTRUCTION GRID</span>
+            <h2 class="section-title">Geometric Foundation</h2>
+            <p class="section-desc">The mathematical construction underlying the mark. Based on golden ratio proportions and triangular geometry.</p>
+        </div>
+
+        <div class="construction-display">
+            <svg width="500" height="500" viewBox="0 0 500 500" fill="none">
+                <!-- Grid -->
+                <defs>
+                    <pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse">
+                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#1a1a1a" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="500" height="500" fill="url(#grid)"/>
+                
+                <!-- Center lines -->
+                <line x1="250" y1="0" x2="250" y2="500" stroke="#2a2008" stroke-width="1"/>
+                <line x1="0" y1="250" x2="500" y2="250" stroke="#2a2008" stroke-width="1"/>
+                
+                <!-- Construction circles -->
+                <circle cx="250" cy="250" r="200" stroke="#3d2e0a" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+                <circle cx="250" cy="250" r="150" stroke="#3d2e0a" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+                <circle cx="250" cy="250" r="100" stroke="#3d2e0a" stroke-width="1" fill="none" stroke-dasharray="5,5"/>
+                
+                <!-- Golden ratio rectangle -->
+                <rect x="96" y="75" width="308" height="350" stroke="#6b5a2f" stroke-width="1" fill="none"/>
+                
+                <!-- Triangle construction for crown -->
+                <polygon points="250,75 375,175 125,175" stroke="#8b7355" stroke-width="1" fill="none"/>
+                
+                <!-- Crown peaks -->
+                <polygon points="250,75 280,140 220,140" fill="#D4AF37"/>
+                <polygon points="165,110 195,155 135,155" fill="#B8942A"/>
+                <polygon points="335,110 365,155 305,155" fill="#B8942A"/>
+                
+                <!-- Crown band -->
+                <path d="M100 165 Q250 210 400 165" stroke="#D4AF37" stroke-width="3" fill="none"/>
+                
+                <!-- Lambda baseline -->
+                <line x1="125" y1="350" x2="375" y2="350" stroke="#3d2e0a" stroke-width="1" stroke-dasharray="3,3"/>
+                
+                <!-- Lambda -->
+                <text x="250" y="300" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="180" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                
+                <!-- Dimension markers -->
+                <g stroke="#6b5a2f" stroke-width="1" fill="#6b5a2f" font-size="10" font-family="'JetBrains Mono', monospace">
+                    <!-- Width -->
+                    <line x1="96" y1="440" x2="404" y2="440"/>
+                    <line x1="96" y1="435" x2="96" y2="445"/>
+                    <line x1="404" y1="435" x2="404" y2="445"/>
+                    <text x="250" y="455" text-anchor="middle">1.618 : 1 (φ)</text>
+                    
+                    <!-- Height markers -->
+                    <line x1="430" y1="75" x2="430" y2="425"/>
+                    <line x1="425" y1="75" x2="435" y2="75"/>
+                    <line x1="425" y1="425" x2="435" y2="425"/>
+                </g>
+                
+                <!-- Key points -->
+                <circle cx="250" cy="75" r="5" fill="#F4D675"/>
+                <circle cx="165" cy="110" r="4" fill="#E8C547"/>
+                <circle cx="335" cy="110" r="4" fill="#E8C547"/>
+                <circle cx="250" cy="250" r="4" fill="#D4AF37"/>
+            </svg>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Icon Sizes -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">05 — ICON SCALING</span>
+            <h2 class="section-title">Favicon & App Icon</h2>
+            <p class="section-desc">The mark simplified for small-scale reproduction. Crown reduced to essential peak for favicon clarity.</p>
+        </div>
+
+        <div class="favicon-sizes">
+            <!-- 16px -->
+            <div class="favicon-item">
+                <div class="favicon-box" style="width: 16px; height: 16px;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <polygon points="8,1 10,4 6,4" fill="#D4AF37"/>
+                        <text x="8" y="11" fill="#D4AF37" font-family="serif" font-size="10" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">16px</span>
+            </div>
+
+            <!-- 32px -->
+            <div class="favicon-item">
+                <div class="favicon-box" style="width: 32px; height: 32px;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <polygon points="16,2 20,9 12,9" fill="#D4AF37"/>
+                        <polygon points="9,5 12,10 6,10" fill="#B8942A"/>
+                        <polygon points="23,5 26,10 20,10" fill="#B8942A"/>
+                        <text x="16" y="22" fill="#D4AF37" font-family="serif" font-size="18" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">32px</span>
+            </div>
+
+            <!-- 64px -->
+            <div class="favicon-item">
+                <div class="favicon-box" style="width: 64px; height: 64px;">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <polygon points="32,4 40,18 24,18" fill="#D4AF37"/>
+                        <polygon points="18,10 24,20 12,20" fill="#B8942A"/>
+                        <polygon points="46,10 52,20 40,20" fill="#B8942A"/>
+                        <path d="M10 22 Q32 30 54 22" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                        <text x="32" y="44" fill="#D4AF37" font-family="serif" font-size="36" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">64px</span>
+            </div>
+
+            <!-- 128px -->
+            <div class="favicon-item">
+                <div class="favicon-box" style="width: 128px; height: 128px;">
+                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+                        <polygon points="64,8 80,36 48,36" fill="#D4AF37"/>
+                        <polygon points="36,20 48,40 24,40" fill="#B8942A"/>
+                        <polygon points="92,20 104,40 80,40" fill="#B8942A"/>
+                        <path d="M20 44 Q64 60 108 44" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                        <circle cx="64" cy="18" r="3" fill="#F4D675"/>
+                        <text x="64" y="88" fill="#D4AF37" font-family="serif" font-size="72" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">128px</span>
+            </div>
+
+            <!-- 256px -->
+            <div class="favicon-item">
+                <div class="favicon-box" style="width: 180px; height: 180px;">
+                    <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+                        <polygon points="90,10 112,50 68,50" fill="#D4AF37"/>
+                        <polygon points="50,28 68,58 32,58" fill="#B8942A"/>
+                        <polygon points="130,28 148,58 112,58" fill="#B8942A"/>
+                        <path d="M25 62 Q90 85 155 62" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        <circle cx="90" cy="22" r="4" fill="#F4D675"/>
+                        <circle cx="50" cy="38" r="3" fill="#E8C547"/>
+                        <circle cx="130" cy="38" r="3" fill="#E8C547"/>
+                        <text x="90" y="125" fill="#D4AF37" font-family="serif" font-size="100" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">256px</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Wordmark Integration -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">06 — WORDMARK INTEGRATION</span>
+            <h2 class="section-title">Logo + Typography</h2>
+            <p class="section-desc">The mark combined with the CytherAI wordmark in various configurations.</p>
+        </div>
+
+        <!-- Horizontal -->
+        <div class="wordmark-row">
+            <svg width="60" height="70" viewBox="0 0 60 70" fill="none">
+                <polygon points="30,4 38,18 22,18" fill="#D4AF37"/>
+                <polygon points="16,10 22,20 10,20" fill="#B8942A"/>
+                <polygon points="44,10 50,20 38,20" fill="#B8942A"/>
+                <path d="M8 24 Q30 32 52 24" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                <text x="30" y="50" fill="#D4AF37" font-family="serif" font-size="40" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="wordmark-text size-lg">CYTHERAI</span>
+        </div>
+
+        <!-- With tagline -->
+        <div class="wordmark-row" style="flex-direction: column; align-items: flex-start;">
+            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                <svg width="50" height="60" viewBox="0 0 50 60" fill="none">
+                    <polygon points="25,3 32,14 18,14" fill="#D4AF37"/>
+                    <polygon points="13,8 18,16 8,16" fill="#B8942A"/>
+                    <polygon points="37,8 42,16 32,16" fill="#B8942A"/>
+                    <path d="M6 19 Q25 26 44 19" stroke="#D4AF37" stroke-width="1.5" fill="none"/>
+                    <text x="25" y="42" fill="#D4AF37" font-family="serif" font-size="32" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                </svg>
+                <div>
+                    <div class="wordmark-text size-md">CYTHERAI</div>
+                    <div style="font-size: 0.65rem; letter-spacing: 0.2em; color: var(--gold-dim); margin-top: 0.3rem;">WHERE THOUGHT BECOMES FORM</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stacked -->
+        <div class="wordmark-row" style="flex-direction: column; text-align: center;">
+            <svg width="80" height="95" viewBox="0 0 80 95" fill="none">
+                <polygon points="40,5 52,24 28,24" fill="#D4AF37"/>
+                <polygon points="22,14 30,28 14,28" fill="#B8942A"/>
+                <polygon points="58,14 66,28 50,28" fill="#B8942A"/>
+                <path d="M10 32 Q40 44 70 32" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                <text x="40" y="68" fill="#D4AF37" font-family="serif" font-size="52" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+            </svg>
+            <span class="wordmark-text size-md" style="margin-top: 1rem;">CYTHERAI</span>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Applications -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">07 — APPLICATIONS</span>
+            <h2 class="section-title">Real-World Usage</h2>
+            <p class="section-desc">The Lambda Crown in context. Business materials, digital interfaces, merchandise.</p>
+        </div>
+
+        <div class="app-grid">
+            
+            <!-- Business Card -->
+            <div class="app-card">
+                <div class="app-display">
+                    <div class="business-card">
+                        <div class="bc-logo">
+                            <svg width="35" height="42" viewBox="0 0 35 42" fill="none">
+                                <polygon points="17.5,2 23,10 12,10" fill="#D4AF37"/>
+                                <polygon points="9,6 13,12 5,12" fill="#B8942A"/>
+                                <polygon points="26,6 30,12 22,12" fill="#B8942A"/>
+                                <path d="M4 14 Q17.5 20 31 14" stroke="#D4AF37" stroke-width="1" fill="none"/>
+                                <text x="17.5" y="30" fill="#D4AF37" font-family="serif" font-size="24" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                            </svg>
+                            <div>
+                                <div class="bc-wordmark">CYTHERAI</div>
+                                <div class="bc-tagline">NEURAL THEOREM PROVER</div>
+                            </div>
+                        </div>
+                        <div class="bc-info">
+                            <div>Malek Ahmed</div>
+                            <div>Founder & CEO</div>
+                            <div>CytherAi.com</div>
+                            <div>Malek@CytherAi.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">BUSINESS CARD</h3>
+                    <p class="app-desc">Horizontal lockup with contact information</p>
+                </div>
+            </div>
+
+            <!-- App Icon -->
+            <div class="app-card">
+                <div class="app-display">
+                    <div style="display: flex; gap: 1.5rem; align-items: flex-end;">
+                        <div style="width: 120px; height: 120px; background: linear-gradient(135deg, #0a0a0a 0%, #000 100%); border-radius: 24px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                            <svg width="80" height="90" viewBox="0 0 80 90" fill="none">
+                                <polygon points="40,5 52,22 28,22" fill="#D4AF37"/>
+                                <polygon points="22,12 30,25 14,25" fill="#B8942A"/>
+                                <polygon points="58,12 66,25 50,25" fill="#B8942A"/>
+                                <path d="M12 28 Q40 38 68 28" stroke="#D4AF37" stroke-width="2" fill="none"/>
+                                <text x="40" y="62" fill="#D4AF37" font-family="serif" font-size="50" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                            </svg>
+                        </div>
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #0a0a0a 0%, #000 100%); border-radius: 14px; display: flex; align-items: center; justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                            <svg width="40" height="45" viewBox="0 0 40 45" fill="none">
+                                <polygon points="20,3 26,11 14,11" fill="#D4AF37"/>
+                                <text x="20" y="32" fill="#D4AF37" font-family="serif" font-size="28" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">APP ICONS</h3>
+                    <p class="app-desc">iOS/Android app icon with rounded corners</p>
+                </div>
+            </div>
+
+            <!-- Watermark -->
+            <div class="app-card">
+                <div class="app-display" style="background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);">
+                    <div style="position: relative; width: 250px; height: 150px; display: flex; align-items: center; justify-content: center;">
+                        <svg width="200" height="120" viewBox="0 0 200 120" style="opacity: 0.08; position: absolute;">
+                            <polygon points="100,5 130,45 70,45" fill="#D4AF37"/>
+                            <polygon points="50,20 70,50 30,50" fill="#D4AF37"/>
+                            <polygon points="150,20 170,50 130,50" fill="#D4AF37"/>
+                            <path d="M20 55 Q100 85 180 55" stroke="#D4AF37" stroke-width="3" fill="none"/>
+                            <text x="100" y="95" fill="#D4AF37" font-family="serif" font-size="60" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                        </svg>
+                        <div style="font-size: 0.7rem; color: var(--gold-muted); letter-spacing: 0.1em; text-align: center; position: relative; z-index: 1;">
+                            DOCUMENT CONTENT<br>
+                            <span style="font-size: 0.6rem; opacity: 0.6;">Protected by CytherAI</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">WATERMARK</h3>
+                    <p class="app-desc">Background watermark for documents and outputs</p>
+                </div>
+            </div>
+
+            <!-- Code Badge -->
+            <div class="app-card">
+                <div class="app-display">
+                    <div style="background: #0d1117; border: 1px solid #30363d; border-radius: 6px; padding: 1rem 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                        <svg width="24" height="28" viewBox="0 0 24 28" fill="none">
+                            <polygon points="12,1 16,7 8,7" fill="#D4AF37"/>
+                            <text x="12" y="20" fill="#D4AF37" font-family="serif" font-size="16" font-style="italic" text-anchor="middle" dominant-baseline="middle">λ</text>
+                        </svg>
+                        <div>
+                            <div style="font-size: 0.75rem; color: #c9d1d9;">Verified by CytherAI</div>
+                            <div style="font-size: 0.6rem; color: #6b5a2f; font-family: monospace;">proof: 0x7f3a...8c2d</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">VERIFICATION BADGE</h3>
+                    <p class="app-desc">Proof verification badge for code and documents</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Animated -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">08 — ANIMATED MARK</span>
+            <h2 class="section-title">Motion Identity</h2>
+            <p class="section-desc">The Lambda Crown with subtle animation for digital applications. Hover to see different states.</p>
+        </div>
+
+        <div class="logo-grid">
+            
+            <!-- Glow Animation -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none" class="animate-glow">
+                        <polygon points="70,8 85,40 55,40" fill="#D4AF37"/>
+                        <polygon points="38,22 52,48 24,48" fill="#B8942A"/>
+                        <polygon points="102,22 116,48 88,48" fill="#B8942A"/>
+                        <path d="M20 52 Q70 72 120 52" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        <circle cx="70" cy="20" r="3" fill="#F4D675"/>
+                        <text x="70" y="108" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="85" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Consciousness Glow</h3>
+                    <p class="logo-desc">Breathing glow effect. Suggests active processing, living intelligence.</p>
+                </div>
+            </div>
+
+            <!-- Float Animation -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="160" viewBox="0 0 140 160" fill="none" class="animate-float">
+                        <polygon points="70,8 85,40 55,40" fill="#D4AF37"/>
+                        <polygon points="38,22 52,48 24,48" fill="#B8942A"/>
+                        <polygon points="102,22 116,48 88,48" fill="#B8942A"/>
+                        <path d="M20 52 Q70 72 120 52" stroke="#D4AF37" stroke-width="2.5" fill="none"/>
+                        <circle cx="70" cy="20" r="3" fill="#F4D675"/>
+                        <text x="70" y="108" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="85" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Sovereign Float</h3>
+                    <p class="logo-desc">Gentle vertical float. Ethereal, elevated presence.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Color Palette -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">09 — COLOR SYSTEM</span>
+            <h2 class="section-title">Brand Palette</h2>
+            <p class="section-desc">The complete gold spectrum used throughout the Lambda Crown identity.</p>
+        </div>
+
+        <div class="swatch-grid">
+            <div class="swatch" style="background: #000000;">
+                <span class="swatch-label" style="color: #D4AF37;">VOID</span>
+                <span class="swatch-hex" style="color: #6b5a2f;">#000000</span>
+            </div>
+            <div class="swatch" style="background: #2a2008;">
+                <span class="swatch-label" style="color: #D4AF37;">DARKEST</span>
+                <span class="swatch-hex" style="color: #6b5a2f;">#2A2008</span>
+            </div>
+            <div class="swatch" style="background: #3d2e0a;">
+                <span class="swatch-label" style="color: #D4AF37;">SHADOW</span>
+                <span class="swatch-hex" style="color: #8b7355;">#3D2E0A</span>
+            </div>
+            <div class="swatch" style="background: #6b5a2f;">
+                <span class="swatch-label" style="color: #D4AF37;">DIM</span>
+                <span class="swatch-hex" style="color: #D4AF37;">#6B5A2F</span>
+            </div>
+            <div class="swatch" style="background: #8b7355;">
+                <span class="swatch-label" style="color: #D4AF37;">MUTED</span>
+                <span class="swatch-hex" style="color: #D4AF37;">#8B7355</span>
+            </div>
+            <div class="swatch" style="background: #b8942a;">
+                <span class="swatch-label" style="color: #000;">GOLD</span>
+                <span class="swatch-hex" style="color: #3d2e0a;">#B8942A</span>
+            </div>
+            <div class="swatch" style="background: #D4AF37;">
+                <span class="swatch-label" style="color: #000;">CORE</span>
+                <span class="swatch-hex" style="color: #3d2e0a;">#D4AF37</span>
+            </div>
+            <div class="swatch" style="background: #e8c547;">
+                <span class="swatch-label" style="color: #000;">BRIGHT</span>
+                <span class="swatch-hex" style="color: #3d2e0a;">#E8C547</span>
+            </div>
+            <div class="swatch" style="background: #f4d675;">
+                <span class="swatch-label" style="color: #000;">LIGHT</span>
+                <span class="swatch-hex" style="color: #3d2e0a;">#F4D675</span>
+            </div>
+            <div class="swatch" style="background: #fdf6e3;">
+                <span class="swatch-label" style="color: #000;">WHITE</span>
+                <span class="swatch-hex" style="color: #6b5a2f;">#FDF6E3</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Final Recommendation -->
+    <section style="text-align: center; padding: 6rem 2rem;">
+        <div class="section-header" style="margin-bottom: 4rem;">
+            <span class="section-number">RECOMMENDATION</span>
+            <h2 class="section-title">Primary Mark</h2>
+            <p class="section-desc" style="max-width: 500px; margin: 1rem auto 0;">The integrated crown variation with jewel accents offers the ideal balance of sophistication, meaning, and versatility.</p>
+        </div>
+
+        <svg width="200" height="230" viewBox="0 0 200 230" fill="none" style="filter: drop-shadow(0 0 60px rgba(212, 175, 55, 0.3));">
+            <!-- Crown -->
+            <polygon points="100,10 120,50 80,50" fill="#D4AF37"/>
+            <polygon points="55,28 75,58 35,58" fill="#B8942A"/>
+            <polygon points="145,28 165,58 125,58" fill="#B8942A"/>
+            <path d="M28 65 Q100 92 172 65" stroke="#D4AF37" stroke-width="3" fill="none"/>
+            
+            <!-- Jewels -->
+            <circle cx="100" cy="22" r="5" fill="#F4D675"/>
+            <circle cx="55" cy="40" r="3.5" fill="#E8C547"/>
+            <circle cx="145" cy="40" r="3.5" fill="#E8C547"/>
+            
+            <!-- Lambda -->
+            <text x="100" y="150" fill="#D4AF37" font-family="'Cormorant Garamond', serif" font-size="120" font-style="italic" font-weight="400" text-anchor="middle" dominant-baseline="middle">λ</text>
+            
+            <!-- Subtle verification -->
+            <path d="M78 195 L90 207 L122 170" stroke="#6B5A2F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+        </svg>
+
+        <div style="margin-top: 3rem; font-family: var(--font-display); font-size: 2.2rem; letter-spacing: 0.3em;">CYTHERAI</div>
+        <div style="margin-top: 0.5rem; font-size: 0.7rem; letter-spacing: 0.25em; color: var(--gold-dim);">WHERE THOUGHT BECOMES FORM</div>
+    </section>
+
+    <footer style="padding: 2rem; text-align: center; border-top: 1px solid var(--gold-shadow);">
+        <div style="font-size: 0.65rem; letter-spacing: 0.15em; color: var(--gold-dim);">
+            THE LAMBDA CROWN — BRAND MARK SYSTEM — CYTHERAI © 2025
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filament — a specimen you can handle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wdth,wght@8..144,25..151,100..1000&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F1EB; --ink:#17130E; --hair:#D9D3C6; --cobalt:#2036C7; --muted:#7A7160;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Roboto Flex',sans-serif;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+.chrome{display:flex;align-items:baseline;gap:14px;padding:18px 28px;border-bottom:1px solid var(--hair)}
+.wordmark{font-size:17px;font-weight:800;letter-spacing:.02em;font-variation-settings:"wdth" 120}
+.proto{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);border:1px solid var(--hair);border-radius:99px;padding:2px 9px}
+.chrome .hint{margin-left:auto;font-size:12px;color:var(--muted);font-weight:450}
+
+/* ---------- hero field ---------- */
+.hero{padding:5vh 28px 6vh;border-bottom:1px solid var(--hair)}
+.field{user-select:none;cursor:crosshair;line-height:1.04;text-align:justify;text-align-last:justify;
+  font-size:clamp(30px,5.4vw,72px);letter-spacing:.01em;word-break:break-all;max-height:56vh;overflow:hidden}
+.field span{display:inline-block;font-variation-settings:"wght" 120,"wdth" 88;will-change:font-variation-settings;color:var(--ink)}
+.hero-meta{display:flex;flex-wrap:wrap;gap:18px;align-items:baseline;margin-top:4vh}
+.hero-meta h1{font-size:clamp(20px,2.6vw,30px);font-weight:700;font-variation-settings:"wdth" 112;letter-spacing:-.01em}
+.hero-meta p{color:var(--muted);font-size:14px;max-width:46ch;font-weight:450;line-height:1.55}
+.hero-meta .mono{font-size:11px;color:var(--cobalt);margin-left:auto;align-self:center}
+
+/* ---------- section scaffolding ---------- */
+section{padding:9vh 28px;border-bottom:1px solid var(--hair)}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--cobalt);margin-bottom:3vh}
+
+/* ---------- tension (scroll velocity) ---------- */
+.tension-word{font-size:clamp(52px,11.5vw,160px);font-weight:850;line-height:.92;letter-spacing:-.02em;
+  font-variation-settings:"wght" 850,"wdth" 60;will-change:font-variation-settings;white-space:nowrap}
+.tension-cap{margin-top:2.5vh;color:var(--muted);font-size:14px;max-width:52ch;font-weight:450;line-height:1.55}
+.gauge{height:2px;background:var(--hair);margin-top:3vh;position:relative;max-width:420px}
+.gauge i{position:absolute;top:-2px;left:0;height:6px;width:0%;background:var(--cobalt);display:block}
+
+/* ---------- wave specimens ---------- */
+.spec{display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:baseline;padding:3.2vh 0;border-top:1px dashed var(--hair)}
+.spec:first-of-type{border-top:none}
+.spec .no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted)}
+.spec h3{font-size:clamp(30px,5.8vw,66px);font-weight:300;line-height:1.05;letter-spacing:-.01em;cursor:pointer}
+.spec h3 span{display:inline-block;font-variation-settings:"wght" 260,"wdth" 96;will-change:font-variation-settings}
+.spec .axes{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);margin-top:8px}
+@media(max-width:640px){.spec{grid-template-columns:1fr;gap:6px}}
+
+/* ---------- colophon ---------- */
+.colophon p{font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:2;color:var(--muted);max-width:70ch}
+.colophon b{color:var(--ink);font-weight:500}
+footer{padding:20px 28px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.field span,.spec h3 span,.tension-word{transition:none}}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <span class="wordmark">FILAMENT</span>
+  <span class="proto">DESIGN PROTOTYPE B/3</span>
+  <span class="hint">Move your cursor through the letters · press and hold to sink in · scroll fast through TENSION · hover the specimens</span>
+</header>
+
+<!-- ============ 01 · the field ============ -->
+<div class="hero">
+  <div class="field" id="field" aria-label="Interactive type field"></div>
+  <div class="hero-meta">
+    <h1>A specimen you can handle.</h1>
+    <p>Every glyph on this page is one variable font under live tension. No images, no video, no canvas — the letters themselves are the material, and your cursor is the hand.</p>
+    <span class="mono" id="fieldReadout">wght 120 · wdth 88</span>
+  </div>
+</div>
+
+<!-- ============ 02 · tension ============ -->
+<section>
+  <div class="eyebrow">02 · SCROLL VELOCITY → WIDTH AXIS</div>
+  <div class="tension-word" id="tension">TENSION</div>
+  <div class="gauge"><i id="gauge"></i></div>
+  <p class="tension-cap">This word is coupled to your scroll speed through a spring. Flick the page and the letterforms stretch wide under load, then settle back to rest — momentum you can read.</p>
+</section>
+
+<!-- ============ 03 · specimens ============ -->
+<section>
+  <div class="eyebrow">03 · SPECIMENS — HOVER TO SEND A WAVE</div>
+  <div class="spec">
+    <span class="no">FLM-001</span>
+    <div><h3 data-wave>Filament Grotesk</h3><div class="axes">wght 100–1000 · wdth 25–151 · opsz 8–144</div></div>
+  </div>
+  <div class="spec">
+    <span class="no">FLM-002</span>
+    <div><h3 data-wave>Weight is a verb</h3><div class="axes">a pulse of mass travels the baseline, glyph by glyph</div></div>
+  </div>
+  <div class="spec">
+    <span class="no">FLM-003</span>
+    <div><h3 data-wave>Hamburgefonstiv</h3><div class="axes">the classic test word, finally allowed to move</div></div>
+  </div>
+</section>
+
+<!-- ============ colophon ============ -->
+<section class="colophon">
+  <div class="eyebrow">COLOPHON · HOW THIS PAGE WORKS</div>
+  <p><b>One font. Two axes. Zero images.</b><br>
+  Every effect on this page is <b>font-variation-settings</b> driven by three inputs — cursor proximity (field), scroll velocity through a critically-damped spring (tension), and a travelling gaussian pulse (specimens). Each glyph carries its own current/target state and eases toward it every frame, which is why the type feels like cloth instead of a switch. Roboto Flex · ~190 live glyphs · one requestAnimationFrame loop that sleeps when the type is at rest.</p>
+</section>
+
+<footer>filament-prototype.html · the letters are the interface</footer>
+
+<script>
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ================= 01 · magnetic field ================= */
+const FIELD_TEXT = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789&?!§@#ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ÆØfiffja";
+const field = document.getElementById("field");
+const glyphs = [];
+[...FIELD_TEXT].forEach(ch=>{
+  const s=document.createElement("span");
+  s.textContent=ch;
+  field.appendChild(s);
+  glyphs.push({el:s, x:0, y:0, w:120, wd:88, tw:120, twd:88, col:0, tcol:0});
+});
+function cacheGlyphPositions(){
+  glyphs.forEach(g=>{
+    const r=g.el.getBoundingClientRect();
+    g.x=r.left+r.width/2+scrollX; g.y=r.top+r.height/2+scrollY;
+  });
+}
+addEventListener("load",cacheGlyphPositions);
+addEventListener("resize",()=>setTimeout(cacheGlyphPositions,60));
+
+let px=-9999, py=-9999, pressed=false, pointerActive=false;
+addEventListener("pointermove",e=>{px=e.pageX;py=e.pageY;pointerActive=true;wake();},{passive:true});
+addEventListener("pointerdown",e=>{pressed=true;px=e.pageX;py=e.pageY;wake();});
+addEventListener("pointerup",()=>{pressed=false;wake();});
+addEventListener("pointerleave",()=>{pointerActive=false;});
+
+const readout=document.getElementById("fieldReadout");
+function fieldStep(){
+  const R = pressed?300:190;
+  const maxW = pressed?1000:900;
+  let peak=0, peakWd=0;
+  for(const g of glyphs){
+    const dx=g.x-px, dy=g.y-py;
+    const d=Math.hypot(dx,dy);
+    let f=0;
+    if(d<R) f=0.5*(1+Math.cos(Math.PI*d/R));      /* smooth cosine falloff */
+    g.tw  = 120 + (maxW-120)*f;
+    g.twd = 88  + (151-88)*f;
+    g.tcol= f;
+    const k = reduced?1:0.16;
+    g.w  += (g.tw -g.w )*k;
+    g.wd += (g.twd-g.wd)*k;
+    g.col+= (g.tcol-g.col)*k;
+    if(Math.abs(g.tw-g.w)>0.5 || g.col>0.01){
+      g.el.style.fontVariationSettings=`"wght" ${g.w.toFixed(0)},"wdth" ${g.wd.toFixed(1)}`;
+      g.el.style.color = g.col>0.03? `color-mix(in srgb, var(--cobalt) ${(g.col*100)|0}%, var(--ink))` : "";
+    }
+    if(g.w>peak){peak=g.w;peakWd=g.wd;}
+  }
+  readout.textContent=`wght ${peak|0} · wdth ${peakWd|0}`;
+}
+
+/* ================= 02 · tension spring ================= */
+const tension=document.getElementById("tension");
+const gauge=document.getElementById("gauge");
+let vel=0, springX=0, springV=0, lastY=scrollY;
+addEventListener("scroll",()=>{
+  vel += Math.abs(scrollY-lastY);
+  lastY=scrollY;
+  wake();
+},{passive:true});
+function tensionStep(){
+  vel*=0.86;                                  /* decay input */
+  const target=Math.min(1,vel/260);
+  const k=0.09, damp=0.82;                    /* spring */
+  springV += (target-springX)*k; springV*=damp; springX+=springV;
+  const x=Math.max(0,Math.min(1,springX));
+  const wdth=60+ x*(151-60);
+  const wght=850 - x*420;
+  tension.style.fontVariationSettings=`"wght" ${wght.toFixed(0)},"wdth" ${wdth.toFixed(1)}`;
+  gauge.style.width=(x*100).toFixed(1)+"%";
+}
+
+/* ================= 03 · weight waves ================= */
+const waves=[];
+document.querySelectorAll("[data-wave]").forEach(h=>{
+  const text=h.textContent; h.textContent="";
+  const spans=[...text].map(ch=>{
+    const s=document.createElement("span");
+    s.textContent=ch===" "?"\u00A0":ch;
+    h.appendChild(s); return s;
+  });
+  const state=spans.map(()=>({w:260,wd:96}));
+  h.addEventListener("pointerenter",()=>{waves.push({spans,state,t:0});wake();});
+  h.addEventListener("click",()=>{waves.push({spans,state,t:0});wake();});
+});
+function waveStep(){
+  for(let i=waves.length-1;i>=0;i--){
+    const w=waves[i];
+    w.t += reduced?3:0.9;                      /* pulse position in glyph units */
+    const n=w.spans.length;
+    for(let j=0;j<n;j++){
+      const d=j-w.t;
+      const f=Math.exp(-(d*d)/6);              /* gaussian pulse */
+      const wt=260+640*f, wd=96+40*f;
+      w.spans[j].style.fontVariationSettings=`"wght" ${wt.toFixed(0)},"wdth" ${wd.toFixed(1)}`;
+      w.spans[j].style.color = f>0.25? "var(--cobalt)":"";
+    }
+    if(w.t>n+6){
+      w.spans.forEach(s=>{s.style.fontVariationSettings=`"wght" 260,"wdth" 96`;s.style.color="";});
+      waves.splice(i,1);
+    }
+  }
+}
+
+/* ================= shared rAF loop with sleep ================= */
+let running=false, idleFrames=0;
+function wake(){ if(!running){running=true;idleFrames=0;requestAnimationFrame(loop);} }
+function loop(){
+  fieldStep(); tensionStep(); waveStep();
+  const busy = pointerActive || pressed || waves.length>0 || Math.abs(springV)>0.0005 || springX>0.002 || vel>0.5;
+  idleFrames = busy?0:idleFrames+1;
+  if(idleFrames<40){ requestAnimationFrame(loop); } else { running=false; }
+}
+setTimeout(()=>{cacheGlyphPositions();wake();},120);
+</script>
+</body>
+</html>

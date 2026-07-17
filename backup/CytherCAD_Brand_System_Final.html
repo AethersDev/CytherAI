@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CytherCAD — Brand System v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════
+   CYTHERCAD BRAND SYSTEM — FINAL
+   Palette: warm parchment (my register)
+   Mark geometry: hexagonal constraint + tri-layer convergence (theirs)
+   Checkmark: eliminated from both registers
+═══════════════════════════════════════════════════════ */
+:root {
+  /* Parchment document palette */
+  --ink:        #F3F1EC;
+  --paper:      #1C1A18;
+  --gold:       #8C6A1F;      /* operational gold — document register */
+  --gold-line:  rgba(140,106,31,0.24);
+  --gold-dim:   rgba(140,106,31,0.09);
+  --wire:       rgba(28,26,24,0.09);
+  --wire-b:     rgba(28,26,24,0.17);
+  --muted:      rgba(28,26,24,0.52);
+  --dim:        rgba(28,26,24,0.27);
+  --danger:     #7A4C3E;
+  --confirm:    #3A6B4A;
+
+  /* Sovereign mark gold spectrum — used in SVGs on dark */
+  --g-shadow:  #3D2E0A;
+  --g-dim:     #6B5A2F;
+  --g-muted:   #8B7355;
+  --g-base:    #B8942A;
+  --g-core:    #D4AF37;
+  --g-bright:  #E8C547;
+  --g-white:   #FDF6E3;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px; line-height: 1.65;
+}
+
+/* ── Layout ── */
+.page { max-width: 1120px; margin: 0 auto; padding: 0 60px; }
+.section { padding: 80px 0; border-bottom: 1px solid var(--wire-b); }
+.section:last-of-type { border-bottom: none; }
+
+/* ── Cover ── */
+.cover {
+  background: var(--paper);
+  padding: 100px 80px 80px;
+}
+.cover-inner { max-width: 1000px; margin: 0 auto; }
+
+/* ── Type ── */
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px;
+}
+.eyebrow.light { color: rgba(140,106,31,0.6); }
+
+.display {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; text-transform: uppercase;
+  letter-spacing: -0.01em; line-height: 1.0;
+  color: var(--paper);
+}
+
+.body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px; color: var(--muted); line-height: 1.7;
+}
+.body strong { color: var(--paper); font-weight: 500; }
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; color: var(--muted); line-height: 1.7;
+}
+
+.rule { width: 40px; height: 1px; background: var(--gold); margin: 20px 0; }
+.rule-full { width: 100%; height: 1px; background: var(--wire-b); margin: 32px 0; }
+
+/* ── Panels ── */
+.panel {
+  border: 1px solid var(--wire-b);
+  padding: 18px 22px;
+}
+.panel .p-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 8px;
+}
+.panel p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.panel p strong { color: var(--paper); font-weight: 500; }
+
+.assertion {
+  padding: 20px 26px;
+  background: var(--gold-dim);
+  border: 1px solid var(--gold-line);
+  border-left: 2px solid var(--gold);
+}
+.assertion .a-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 9px;
+}
+.assertion p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.assertion p strong { color: var(--paper); font-weight: 500; }
+.assertion .qed {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--gold); opacity: 0.6;
+  text-align: right; margin-top: 10px;
+}
+
+.panel-d {
+  border: 1px solid rgba(122,76,62,0.22);
+  border-left: 2px solid var(--danger);
+  padding: 16px 20px;
+}
+.panel-d .p-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--danger); margin-bottom: 8px;
+}
+.panel-d p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.panel-d p strong { color: var(--paper); font-weight: 500; }
+
+.panel-ok {
+  border: 1px solid rgba(58,107,74,0.22);
+  border-left: 2px solid var(--confirm);
+  padding: 16px 20px;
+}
+.panel-ok .p-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--confirm); margin-bottom: 8px;
+}
+.panel-ok p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+.panel-ok p strong { color: var(--paper); font-weight: 500; }
+
+/* ── Tables ── */
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); padding: 9px 14px; text-align: left;
+  border-bottom: 1px solid var(--gold-line);
+}
+.tbl td {
+  padding: 10px 14px; border-bottom: 1px solid var(--wire);
+  font-size: 13px; color: var(--muted); vertical-align: top;
+}
+.tbl td:first-child { color: var(--paper); font-weight: 500; }
+.tbl td.mo { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--paper); }
+.tbl td.mu { color: var(--dim); font-size: 11px; font-style: italic; }
+.tbl td.go { color: var(--gold); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.tbl td.re { color: var(--danger); font-size: 12px; }
+.tbl td.ok { color: var(--confirm); font-size: 12px; font-weight: 500; }
+.tbl tr:last-child td { border-bottom: none; }
+
+/* ── Spec rows ── */
+.spec { display: flex; gap: 16px; padding: 9px 0; border-bottom: 1px solid var(--wire); align-items: baseline; }
+.spec:first-child { border-top: 1px solid var(--wire); }
+.spec-k { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); width: 200px; flex-shrink: 0; }
+.spec-v { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.spec-v strong { color: var(--paper); font-weight: 500; }
+
+/* ── Swatch ── */
+.swatch-row { display: flex; gap: 2px; background: var(--wire-b); margin: 16px 0; }
+.swatch { flex: 1; }
+.swatch-block { height: 56px; }
+.swatch-info { background: var(--ink); padding: 9px 10px; }
+.swatch-name { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--paper); font-weight: 500; margin-bottom: 2px; }
+.swatch-hex  { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); }
+.swatch-role { font-size: 11px; color: var(--dim); margin-top: 2px; }
+
+/* ── Construction panel ── */
+.cp {
+  background: var(--ink);
+  border: 1px solid var(--wire-b);
+  padding: 28px 28px 24px;
+}
+.cp-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 16px;
+}
+.cp-desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 14px; }
+
+/* ── Layout utils ── */
+.two   { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; background: var(--wire-b); }
+.three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; background: var(--wire-b); }
+.col   { display: flex; flex-direction: column; gap: 14px; }
+.two-free { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.three-free { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+</style>
+</head>
+<body>
+
+
+<!-- ══════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-inner">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(140,106,31,0.55);margin-bottom:36px;">CytherAI · Brand System · Product Mark</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:80px;text-transform:uppercase;letter-spacing:-0.01em;color:#FDF6E3;line-height:1;margin-bottom:6px;">CytherCAD</div>
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:300;font-style:italic;letter-spacing:0.2em;color:rgba(212,175,55,0.5);margin-bottom:52px;">Brand System v1.0</div>
+    <div style="width:40px;height:1px;background:rgba(140,106,31,0.45);margin-bottom:44px;"></div>
+    <div style="display:flex;gap:56px;flex-wrap:wrap;">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(140,106,31,0.55);margin-bottom:5px;">Mark geometry</div>
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:rgba(253,246,227,0.5);">Hexagonal constraint boundary · tri-layer convergence</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(140,106,31,0.55);margin-bottom:5px;">Register</div>
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:rgba(253,246,227,0.5);">Sovereign cover · Operational body</div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(140,106,31,0.55);margin-bottom:5px;">Reads as</div>
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-size:14px;color:rgba(253,246,227,0.5);">Constrained · verified · exact · proof-carrying</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="page">
+
+<!-- ══════════════════════════════════════════════
+     S0 — THE MARK
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 0 — The Mark</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">CytherCAD</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:48px;">
+    An artifact compiler mark. Not a tool logo. Not a SaaS identity. The mark encodes two properties of the system it names: <strong>constraint closure</strong> — represented by the closed hexagonal boundary — and <strong>verified construction</strong> — represented by the internal proof geometry. The mark is derived from system architecture, not designed from aesthetic preference.
+  </p>
+
+  <!-- Hero mark on dark field -->
+  <div style="background:#000000;padding:80px 60px;display:flex;align-items:center;justify-content:center;gap:100px;flex-wrap:wrap;margin-bottom:2px;">
+
+    <!-- Primary mark — full detail -->
+    <div style="text-align:center;">
+      <svg width="280" height="326" viewBox="0 0 360 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Construction grid — very faint -->
+        <line x1="180" y1="0" x2="180" y2="420" stroke="#1E2A3A" stroke-width="0.5" opacity="0.25"/>
+        <line x1="0" y1="210" x2="360" y2="210" stroke="#1E2A3A" stroke-width="0.5" opacity="0.25"/>
+        <!-- Outer boundary: hexagonal constraint envelope
+             FSM state space — closed, finite, six-vertex
+             Width = height / φ -->
+        <polygon points="180,28 318,100 318,290 180,362 42,290 42,100"
+                 fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linejoin="miter"/>
+        <!-- Three convergence beams: FSM · DOF · OCCT
+             Each beam originates at a vertex of the upper half
+             All three converge at the single verified output point -->
+        <line x1="80" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <line x1="280" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <line x1="180" y1="310" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <!-- Convergence point: the verified artifact
+             The only point where all three layers agree -->
+        <circle cx="180" cy="195" r="5" fill="#D4AF37"/>
+        <!-- Origin nodes at beam sources -->
+        <circle cx="80" cy="112" r="3.5" fill="#8B7355"/>
+        <circle cx="280" cy="112" r="3.5" fill="#8B7355"/>
+        <circle cx="180" cy="310" r="3.5" fill="#8B7355"/>
+        <!-- Layer labels -->
+        <text x="52" y="104" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="0.08em">FSM</text>
+        <text x="290" y="104" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="0.08em">DOF</text>
+        <text x="190" y="323" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9" letter-spacing="0.08em">OCCT</text>
+        <!-- Wordmark — Cormorant Garamond · Sovereign Register -->
+        <text x="180" y="396" fill="#D4AF37"
+              font-family="'Cormorant Garamond',Georgia,serif"
+              font-size="28" font-weight="300" letter-spacing="0.35em"
+              text-anchor="middle">CYTHERCAD</text>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;letter-spacing:0.15em;margin-top:16px;">PRIMARY MARK · SOVEREIGN REGISTER</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(107,90,47,0.5);letter-spacing:0.1em;margin-top:4px;">ARTIFACT COMPILER · PROOF-CARRYING OUTPUT</div>
+    </div>
+
+    <!-- Mark only — no wordmark -->
+    <div style="text-align:center;">
+      <svg width="140" height="140" viewBox="0 0 360 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90"
+                 fill="none" stroke="#D4AF37" stroke-width="3" stroke-linejoin="miter"/>
+        <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="2.5"/>
+        <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="2.5"/>
+        <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="2.5"/>
+        <circle cx="180" cy="180" r="6" fill="#D4AF37"/>
+        <circle cx="90" cy="102" r="4" fill="#8B7355"/>
+        <circle cx="270" cy="102" r="4" fill="#8B7355"/>
+        <circle cx="180" cy="288" r="4" fill="#8B7355"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;letter-spacing:0.15em;margin-top:16px;">MARK ONLY · NO WORDMARK</div>
+    </div>
+
+  </div>
+
+  <!-- Mark on parchment -->
+  <div style="background:var(--ink);border:1px solid var(--wire-b);border-top:none;padding:48px 60px;display:flex;align-items:center;justify-content:center;gap:80px;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <svg width="140" height="163" viewBox="0 0 360 420" fill="none">
+        <polygon points="180,28 318,100 318,290 180,362 42,290 42,100"
+                 fill="none" stroke="#8C6A1F" stroke-width="2.5" stroke-linejoin="miter"/>
+        <line x1="80" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2" opacity="0.7"/>
+        <line x1="280" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2" opacity="0.7"/>
+        <line x1="180" y1="310" x2="180" y2="195" stroke="#B8942A" stroke-width="2" opacity="0.7"/>
+        <circle cx="180" cy="195" r="5" fill="#8C6A1F"/>
+        <circle cx="80" cy="112" r="3" fill="#B8942A" opacity="0.6"/>
+        <circle cx="280" cy="112" r="3" fill="#B8942A" opacity="0.6"/>
+        <circle cx="180" cy="310" r="3" fill="#B8942A" opacity="0.6"/>
+        <text x="180" y="396" fill="#8C6A1F"
+              font-family="'Cormorant Garamond',Georgia,serif"
+              font-size="28" font-weight="300" letter-spacing="0.35em"
+              text-anchor="middle">CYTHERCAD</text>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:0.15em;margin-top:10px;">ON PARCHMENT · OPERATIONAL GOLD</div>
+    </div>
+
+    <!-- Operational wordmark lockup -->
+    <div style="text-align:left;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.15em;color:var(--dim);text-transform:uppercase;margin-bottom:18px;">Operational Register Lockup</div>
+      <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;">
+        <svg width="48" height="48" viewBox="0 0 360 360" fill="none">
+          <polygon points="180,18 310,90 310,270 180,342 50,270 50,90"
+                   fill="none" stroke="#8C6A1F" stroke-width="4.5" stroke-linejoin="miter"/>
+          <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="3.5"/>
+          <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="3.5"/>
+          <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="3.5"/>
+          <circle cx="180" cy="180" r="10" fill="#8C6A1F"/>
+        </svg>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:42px;text-transform:uppercase;letter-spacing:-0.01em;color:var(--paper);line-height:1;">CYTHERCAD</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+        <svg width="28" height="28" viewBox="0 0 360 360" fill="none">
+          <polygon points="180,18 310,90 310,270 180,342 50,270 50,90"
+                   fill="none" stroke="#8C6A1F" stroke-width="6" stroke-linejoin="miter"/>
+          <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="5"/>
+          <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="5"/>
+          <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="5"/>
+          <circle cx="180" cy="180" r="14" fill="#8C6A1F"/>
+        </svg>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:24px;text-transform:uppercase;letter-spacing:0;color:var(--paper);">CYTHERCAD</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 360 360" fill="none">
+          <polygon points="180,18 310,90 310,270 180,342 50,270 50,90"
+                   fill="none" stroke="#8C6A1F" stroke-width="8" stroke-linejoin="miter"/>
+          <circle cx="180" cy="180" r="20" fill="#8C6A1F"/>
+        </svg>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:16px;text-transform:uppercase;letter-spacing:0.02em;color:var(--muted);">CYTHERCAD</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S1 — CONSTRUCTION GEOMETRY
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 1 — Construction Geometry</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">Mark Derivation</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:40px;">
+    Every element traces to a system property. The mark is derived, not designed. Three construction principles govern every proportion. No element exists for aesthetic reasons. The geometry is a proof of the system's architecture rendered visually.
+  </p>
+
+  <div class="three" style="margin-bottom:32px;">
+    <!-- Principle 1: Boundary -->
+    <div class="cp">
+      <div class="cp-label">Principle 1 — Constraint Envelope</div>
+      <svg width="100%" viewBox="0 0 240 260" fill="none" style="max-width:260px;display:block;margin:0 auto;">
+        <rect width="240" height="260" fill="none" stroke="rgba(28,26,24,0.08)" stroke-dasharray="4"/>
+        <line x1="120" y1="0" x2="120" y2="260" stroke="rgba(28,26,24,0.08)" stroke-dasharray="4"/>
+        <line x1="0" y1="130" x2="240" y2="130" stroke="rgba(28,26,24,0.08)" stroke-dasharray="4"/>
+        <!-- Hexagon -->
+        <polygon points="120,20 205,65 205,195 120,240 35,195 35,65"
+                 fill="none" stroke="#8C6A1F" stroke-width="1.5" stroke-linejoin="miter"/>
+        <!-- Height annotation -->
+        <line x1="212" y1="65" x2="212" y2="195" stroke="rgba(140,106,31,0.35)" stroke-width="0.6"/>
+        <text x="220" y="133" fill="rgba(140,106,31,0.5)" font-family="'JetBrains Mono',monospace" font-size="9">h</text>
+        <!-- Width annotation -->
+        <line x1="35" y1="248" x2="205" y2="248" stroke="rgba(140,106,31,0.35)" stroke-width="0.6"/>
+        <text x="110" y="258" fill="rgba(140,106,31,0.5)" font-family="'JetBrains Mono',monospace" font-size="9">h / φ</text>
+      </svg>
+      <div class="cp-desc">
+        Hexagonal boundary. Six vertices.<br>Width = height / φ.<br><br>
+        <strong>Closed form</strong> — the FSM state space is finite and enumerable. The six sides are the six faces of the constraint closure. No opening, no ambiguity.
+      </div>
+    </div>
+
+    <!-- Principle 2: Convergence -->
+    <div class="cp">
+      <div class="cp-label">Principle 2 — Tri-Layer Convergence</div>
+      <svg width="100%" viewBox="0 0 240 260" fill="none" style="max-width:260px;display:block;margin:0 auto;">
+        <polygon points="120,20 205,65 205,195 120,240 35,195 35,65"
+                 fill="none" stroke="rgba(140,106,31,0.2)" stroke-width="0.8"/>
+        <!-- Three beams converging at center -->
+        <line x1="58" y1="72" x2="120" y2="128" stroke="#8C6A1F" stroke-width="2"/>
+        <line x1="182" y1="72" x2="120" y2="128" stroke="#8C6A1F" stroke-width="2"/>
+        <line x1="120" y1="208" x2="120" y2="128" stroke="#8C6A1F" stroke-width="2"/>
+        <!-- Origin nodes -->
+        <circle cx="58" cy="72" r="3.5" fill="#B8942A" opacity="0.6"/>
+        <circle cx="182" cy="72" r="3.5" fill="#B8942A" opacity="0.6"/>
+        <circle cx="120" cy="208" r="3.5" fill="#B8942A" opacity="0.6"/>
+        <!-- Convergence point -->
+        <circle cx="120" cy="128" r="5.5" fill="#8C6A1F"/>
+        <!-- Labels -->
+        <text x="28" y="66" fill="rgba(140,106,31,0.55)" font-family="'JetBrains Mono',monospace" font-size="8">L1 FSM</text>
+        <text x="188" y="66" fill="rgba(140,106,31,0.55)" font-family="'JetBrains Mono',monospace" font-size="8">L2 DOF</text>
+        <text x="128" y="218" fill="rgba(140,106,31,0.55)" font-family="'JetBrains Mono',monospace" font-size="8">L3 OCCT</text>
+        <text x="130" y="124" fill="rgba(140,106,31,0.55)" font-family="'JetBrains Mono',monospace" font-size="7">OUT</text>
+      </svg>
+      <div class="cp-desc">
+        Three verification layers converge at one point: the artifact.<br><br>
+        <strong>L1 = FSM · L2 = DOF · L3 = OCCT.</strong> The output exists only where all three layers agree. The convergence point is the gold dot — the only geometrically necessary point in the mark.
+      </div>
+    </div>
+
+    <!-- Principle 3: NO checkmark — the convergence point replaces it -->
+    <div class="cp">
+      <div class="cp-label">Principle 3 — Convergence as Proof</div>
+      <svg width="100%" viewBox="0 0 240 260" fill="none" style="max-width:260px;display:block;margin:0 auto;">
+        <polygon points="120,20 205,65 205,195 120,240 35,195 35,65"
+                 fill="none" stroke="rgba(140,106,31,0.2)" stroke-width="0.8"/>
+        <!-- Ghosted beams -->
+        <line x1="58" y1="72" x2="120" y2="128" stroke="rgba(140,106,31,0.2)" stroke-width="1.5"/>
+        <line x1="182" y1="72" x2="120" y2="128" stroke="rgba(140,106,31,0.2)" stroke-width="1.5"/>
+        <line x1="120" y1="208" x2="120" y2="128" stroke="rgba(140,106,31,0.2)" stroke-width="1.5"/>
+        <!-- The convergence point — prominent, the proof -->
+        <circle cx="120" cy="128" r="8" fill="#8C6A1F"/>
+        <!-- φ position annotation -->
+        <line x1="120" y1="140" x2="120" y2="170" stroke="rgba(140,106,31,0.3)" stroke-width="0.6" stroke-dasharray="3"/>
+        <text x="124" y="160" fill="rgba(140,106,31,0.4)" font-family="'JetBrains Mono',monospace" font-size="8">convergence</text>
+        <text x="124" y="170" fill="rgba(140,106,31,0.4)" font-family="'JetBrains Mono',monospace" font-size="8">= proof</text>
+        <!-- Cross-out ghost of old checkmark -->
+        <path d="M 88 168 L 104 186 L 140 150" stroke="rgba(122,76,62,0.15)" stroke-width="2" fill="none" stroke-dasharray="4"/>
+        <line x1="78" y1="145" x2="150" y2="195" stroke="rgba(122,76,62,0.3)" stroke-width="1"/>
+      </svg>
+      <div class="cp-desc">
+        The checkmark is eliminated. The convergence point is the proof. Three constraint layers meeting at one point is a stronger formal claim than a consumer verification icon. The gold dot does not say "approved" — it says <strong>"this is the only point where the constraints agree."</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- φ spec table -->
+  <div style="max-width:720px;">
+    <div class="spec"><span class="spec-k">Boundary shape</span><span class="spec-v"><strong>Regular hexagon</strong> — six vertices, six sides. Width = height / φ. Proportions are invariant.</span></div>
+    <div class="spec"><span class="spec-k">Beam origin positions</span><span class="spec-v">Two upper vertices (top-left, top-right) and one lower vertex (bottom center). <strong>Asymmetric by position</strong> — the bottom beam is vertical; the upper beams are diagonal.</span></div>
+    <div class="spec"><span class="spec-k">Convergence point</span><span class="spec-v"><strong>Above geometric center</strong> — positioned at optical center (slightly above mathematical center). This echoes the CytherAI crown's optical centering principle.</span></div>
+    <div class="spec"><span class="spec-k">Stroke linecap</span><span class="spec-v"><strong>No linecap specified for beams</strong> (default butt) — they terminate at the convergence point and origin nodes. The miter join on the boundary is structural.</span></div>
+    <div class="spec"><span class="spec-k">No checkmark</span><span class="spec-v"><strong>Eliminated from all registers.</strong> The convergence point is the verification statement. A checkmark introduces consumer iconography into an engineering mark.</span></div>
+    <div class="spec"><span class="spec-k">φ governance</span><span class="spec-v">Width/height ratio and convergence point positioning governed by φ = 1.618. The geometry should feel inevitable, not designed.</span></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S2 — WORDMARK SYSTEM
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 2 — Wordmark System</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">Typographic Identity</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:40px;">
+    Two typefaces. Two registers. They are not interchangeable. <strong>Cormorant Garamond</strong> belongs to the Sovereign Register and appears only alongside the mark in formal contexts. <strong>Barlow Condensed</strong> belongs to the Operational Register for all product surfaces, presentations, and documents.
+  </p>
+
+  <!-- Sovereign wordmark -->
+  <div style="padding:52px;background:#000000;text-align:center;margin-bottom:2px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:#6B5A2F;margin-bottom:28px;">Sovereign Register · Cormorant Garamond · 300 · Letter-spacing 0.35em</div>
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:64px;font-weight:300;color:#D4AF37;letter-spacing:0.35em;">CYTHERCAD</div>
+    <div style="font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:300;font-style:italic;color:#8B7355;letter-spacing:0.2em;margin-top:10px;">Artifact Compiler</div>
+  </div>
+
+  <!-- Operational wordmark -->
+  <div style="padding:52px;background:var(--ink);border:1px solid var(--wire-b);text-align:center;margin-bottom:28px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:28px;">Operational Register · Barlow Condensed · 800 · Letter-spacing −0.01em</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:72px;text-transform:uppercase;letter-spacing:-0.01em;color:var(--paper);line-height:1;">CYTHERCAD</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gold);letter-spacing:0.12em;margin-top:12px;">Verified construction · Proof-carrying output</div>
+  </div>
+
+  <!-- Type scale -->
+  <div>
+    <div class="eyebrow" style="margin-bottom:14px;">Operational type scale — Barlow Condensed</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:80px;text-transform:uppercase;letter-spacing:-0.01em;color:var(--paper);line-height:1;margin-bottom:6px;">CYTHERCAD</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:48px;text-transform:uppercase;letter-spacing:0;color:var(--paper);line-height:1;margin-bottom:6px;">CYTHERCAD</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:28px;text-transform:uppercase;letter-spacing:0.02em;color:var(--muted);line-height:1;margin-bottom:6px;">CYTHERCAD</div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:400;font-size:18px;text-transform:uppercase;letter-spacing:0.04em;color:var(--dim);line-height:1;">CYTHERCAD</div>
+    <p class="body" style="font-size:12px;margin-top:10px;">800 primary · 700 secondary · 600 tertiary · 400 auxiliary. Always uppercase. Cormorant Garamond forbidden in operational contexts.</p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S3 — COLOR SPECTRUM
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 3 — Color Spectrum</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">Gold Hierarchy</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:32px;">
+    The mark uses its own internal color hierarchy — a spectrum of gold, not a flat color. The sovereign register uses the mark gold spectrum on void black. The operational register uses a single muted operational gold on parchment. They are related but distinct — do not substitute one for the other.
+  </p>
+
+  <div class="eyebrow" style="margin-bottom:12px;">Sovereign mark spectrum — on void black</div>
+  <div class="swatch-row" style="margin-bottom:32px;">
+    <div class="swatch"><div class="swatch-block" style="background:#000000;border-bottom:1px solid rgba(255,255,255,0.06);"></div><div class="swatch-info"><div class="swatch-name">Void</div><div class="swatch-hex">#000000</div><div class="swatch-role">Mark background only</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#3D2E0A;"></div><div class="swatch-info"><div class="swatch-name">Gold Shadow</div><div class="swatch-hex">#3D2E0A</div><div class="swatch-role">Construction lines</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#6B5A2F;"></div><div class="swatch-info"><div class="swatch-name">Gold Dim</div><div class="swatch-hex">#6B5A2F</div><div class="swatch-role">Layer labels, annotations</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#8B7355;"></div><div class="swatch-info"><div class="swatch-name">Gold Muted</div><div class="swatch-hex">#8B7355</div><div class="swatch-role">Origin nodes</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#B8942A;"></div><div class="swatch-info"><div class="swatch-name">Gold</div><div class="swatch-hex">#B8942A</div><div class="swatch-role">Convergence beams</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#D4AF37;"></div><div class="swatch-info"><div class="swatch-name">Gold Core</div><div class="swatch-hex">#D4AF37</div><div class="swatch-role">Boundary · convergence point · wordmark</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#FDF6E3;"></div><div class="swatch-info"><div class="swatch-name">Gold White</div><div class="swatch-hex">#FDF6E3</div><div class="swatch-role">Text on dark</div></div></div>
+  </div>
+
+  <div class="eyebrow" style="margin-bottom:12px;">Operational register palette — on parchment</div>
+  <div class="swatch-row">
+    <div class="swatch"><div class="swatch-block" style="background:#F3F1EC;border:1px solid rgba(28,26,24,0.12);"></div><div class="swatch-info"><div class="swatch-name">Ink</div><div class="swatch-hex">#F3F1EC</div><div class="swatch-role">Document background</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#1C1A18;"></div><div class="swatch-info"><div class="swatch-name">Paper</div><div class="swatch-hex">#1C1A18</div><div class="swatch-role">Primary text</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#8C6A1F;"></div><div class="swatch-info"><div class="swatch-name">Operational Gold</div><div class="swatch-hex">#8C6A1F</div><div class="swatch-role">Mark on parchment · single accent</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:#B8942A;"></div><div class="swatch-info"><div class="swatch-name">Gold</div><div class="swatch-hex">#B8942A</div><div class="swatch-role">Mark on dark warm surfaces</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:rgba(28,26,24,0.52);"></div><div class="swatch-info"><div class="swatch-name">Muted</div><div class="swatch-hex">rgba(28,26,24,0.52)</div><div class="swatch-role">Body text, descriptions</div></div></div>
+    <div class="swatch"><div class="swatch-block" style="background:rgba(28,26,24,0.17);"></div><div class="swatch-info"><div class="swatch-name">Wire</div><div class="swatch-hex">rgba(28,26,24,0.17)</div><div class="swatch-role">Borders, dividers</div></div></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S4 — SCALE BEHAVIOR
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 4 — Scale Behavior</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">Mark at Multiple Sizes</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:40px;">
+    The mark simplifies progressively. Layer labels and origin node distinction are dropped below 80px boundary height. At favicon size, only the boundary and convergence point survive — they are the two essential elements.
+  </p>
+
+  <div style="background:#000000;padding:52px 60px;display:flex;align-items:flex-end;gap:52px;flex-wrap:wrap;margin-bottom:2px;">
+
+    <!-- 200px hero -->
+    <div style="text-align:center;">
+      <svg width="200" height="233" viewBox="0 0 360 420" fill="none">
+        <polygon points="180,28 318,100 318,290 180,362 42,290 42,100" fill="none" stroke="#D4AF37" stroke-width="2.5" stroke-linejoin="miter"/>
+        <line x1="80" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <line x1="280" y1="112" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <line x1="180" y1="310" x2="180" y2="195" stroke="#B8942A" stroke-width="2"/>
+        <circle cx="180" cy="195" r="5" fill="#D4AF37"/>
+        <circle cx="80" cy="112" r="3.5" fill="#8B7355"/>
+        <circle cx="280" cy="112" r="3.5" fill="#8B7355"/>
+        <circle cx="180" cy="310" r="3.5" fill="#8B7355"/>
+        <text x="52" y="104" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9">FSM</text>
+        <text x="290" y="104" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9">DOF</text>
+        <text x="190" y="323" fill="#6B5A2F" font-family="'JetBrains Mono',monospace" font-size="9">OCCT</text>
+        <text x="180" y="396" fill="#D4AF37" font-family="'Cormorant Garamond',Georgia,serif" font-size="28" font-weight="300" letter-spacing="0.35em" text-anchor="middle">CYTHERCAD</text>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">200px — Full mark + wordmark</div>
+    </div>
+
+    <!-- 100px header -->
+    <div style="text-align:center;">
+      <svg width="100" height="100" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#D4AF37" stroke-width="3.5" stroke-linejoin="miter"/>
+        <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="3"/>
+        <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="3"/>
+        <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="3"/>
+        <circle cx="180" cy="180" r="7" fill="#D4AF37"/>
+        <circle cx="90" cy="102" r="5" fill="#8B7355"/>
+        <circle cx="270" cy="102" r="5" fill="#8B7355"/>
+        <circle cx="180" cy="288" r="5" fill="#8B7355"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">100px — Header</div>
+    </div>
+
+    <!-- 60px -->
+    <div style="text-align:center;">
+      <svg width="60" height="60" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#D4AF37" stroke-width="5.5" stroke-linejoin="miter"/>
+        <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="4.5"/>
+        <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="4.5"/>
+        <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="4.5"/>
+        <circle cx="180" cy="180" r="12" fill="#D4AF37"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">60px — Compact</div>
+    </div>
+
+    <!-- 40px minimum -->
+    <div style="text-align:center;">
+      <svg width="40" height="40" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#D4AF37" stroke-width="7" stroke-linejoin="miter"/>
+        <line x1="90" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="6"/>
+        <line x1="270" y1="102" x2="180" y2="180" stroke="#B8942A" stroke-width="6"/>
+        <line x1="180" y1="288" x2="180" y2="180" stroke="#B8942A" stroke-width="6"/>
+        <circle cx="180" cy="180" r="16" fill="#D4AF37"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">40px — Minimum</div>
+    </div>
+
+    <!-- 24px favicon -->
+    <div style="text-align:center;">
+      <svg width="24" height="24" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#D4AF37" stroke-width="10" stroke-linejoin="miter"/>
+        <circle cx="180" cy="180" r="30" fill="#D4AF37"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">24px — Favicon</div>
+    </div>
+
+    <!-- 16px favicon minimal -->
+    <div style="text-align:center;">
+      <svg width="16" height="16" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#D4AF37" stroke-width="14" stroke-linejoin="miter"/>
+        <circle cx="180" cy="180" r="38" fill="#D4AF37"/>
+      </svg>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#6B5A2F;margin-top:8px;letter-spacing:0.1em;">16px — Icon</div>
+    </div>
+
+  </div>
+
+  <!-- Scale spec -->
+  <div style="max-width:720px;">
+    <div class="spec"><span class="spec-k">≥ 120px</span><span class="spec-v">Full mark: boundary + beams + origin nodes + layer labels (FSM/DOF/OCCT) + convergence point + wordmark.</span></div>
+    <div class="spec"><span class="spec-k">60–120px</span><span class="spec-v">Mark only: boundary + beams + origin nodes + convergence point. Labels and wordmark dropped.</span></div>
+    <div class="spec"><span class="spec-k">40–60px</span><span class="spec-v">Compact: boundary + beams + convergence point. Origin nodes dropped.</span></div>
+    <div class="spec"><span class="spec-k">24–40px</span><span class="spec-v">Favicon: boundary only + convergence point enlarged. Beams dropped.</span></div>
+    <div class="spec"><span class="spec-k">Below 24px</span><span class="spec-v">Boundary only + solid fill convergence point. The two irreducible elements.</span></div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S5 — SEMANTIC ENCODING
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 5 — Semantic Encoding</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">What the Mark Says</div>
+  <div class="rule"></div>
+
+  <div class="assertion" style="margin-bottom:32px;">
+    <div class="a-label">◈ Encoded meaning</div>
+    <p>
+      The hexagonal boundary is the FSM state space — closed, finite, six-vertex.<br>
+      The three convergence beams are the three verification layers — FSM, DOF, OCCT.<br>
+      The central convergence point is the only place all three agree — the verified artifact.<br><br>
+      The mark does not depict the product. <strong>It encodes the product's proof structure.</strong><br>
+      Strip the wordmark: an engineer reads "constrained convergence."<br>
+      Strip the geometry: an observer reads "formal authority, not startup energy."
+    </p>
+    <div class="qed">∎ derived from architecture · not designed from aesthetic preference</div>
+  </div>
+
+  <div class="two-free" style="gap:28px;margin-bottom:32px;">
+    <div class="panel">
+      <div class="p-label">Why hexagon · not circle or square</div>
+      <p>A circle implies infinite possibility — the opposite of a bounded constraint system. A square implies orthogonal simplicity. A hexagon has six faces — one for each vertex of closure — and is the most efficient tiling of planar space. It reads as engineered, not organic. <strong>The form earns its geometry.</strong></p>
+    </div>
+    <div class="panel">
+      <div class="p-label">Why three beams · not two or four</div>
+      <p>Two beams would suggest a binary choice. Four would dilute the specificity. Three is the exact number of constraint layers in the CytherCAD architecture: FSM, DOF, OCCT. <strong>The geometry is a proof of the stack.</strong> Any change to the architecture requires a re-derivation of the mark.</p>
+    </div>
+    <div class="panel">
+      <div class="p-label">Why the convergence point · not a checkmark</div>
+      <p>A checkmark is a consumer symbol — it says "done." The convergence point says "all three constraints agree at this location." That is a stronger and more specific claim. The dot is not approval. <strong>It is the artifact itself — the single point of constraint satisfaction.</strong></p>
+    </div>
+    <div class="panel">
+      <div class="p-label">Register transition rule</div>
+      <p>A document may open in the Sovereign Register (this mark, the wordmark) and transition to the Operational Register for its body. <strong>The mark introduces. The instrument system executes.</strong> They are not two styles — they are one theorem expressed in two notations.</p>
+    </div>
+  </div>
+
+  <p style="font-family:'Cormorant Garamond',Georgia,serif;font-size:22px;font-weight:300;font-style:italic;color:var(--gold);line-height:1.6;max-width:900px;border-left:2px solid var(--gold-line);padding-left:24px;">
+    CytherCAD is an engineering artifact compiler with proof-carrying output — and the proof is enforced during generation by an architecture whose correctness is demonstrated by the structure of its failures.
+  </p>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     S6 — USAGE RULES
+══════════════════════════════════════════════ -->
+<div class="section">
+  <div class="eyebrow">Section 6 — Mark Governance</div>
+  <div class="display" style="font-size:40px;margin-bottom:8px;">Legal and Illegal States</div>
+  <div class="rule"></div>
+  <p class="body" style="max-width:720px;margin-bottom:32px;">
+    The mark is a constrained system. Its rules derive from the same theorem that governs the product: illegal states must be structurally unrepresentable, not merely discouraged.
+  </p>
+
+  <div class="two-free" style="gap:24px;margin-bottom:28px;">
+    <div class="col">
+      <div class="panel-ok">
+        <div class="p-label">Permitted backgrounds</div>
+        <p>Void black (#000000) for sovereign contexts. Parchment (#F3F1EC) for operational contexts. Dark warm (#0E0C09) for cover pages. <strong>No colored surfaces.</strong></p>
+      </div>
+      <div class="panel-ok">
+        <div class="p-label">Permitted sizes</div>
+        <p>Mark at any scale ≥ 24px boundary height. Below 24px use only the boundary outline — no internal elements. <strong>Never scale the mark below legibility.</strong></p>
+      </div>
+      <div class="panel-ok">
+        <div class="p-label">Permitted contexts</div>
+        <p>Cover pages, patent filings, formal headings, investor covers, paper headers. Transition: sovereign cover → operational body is the correct document hierarchy.</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="panel-d">
+        <div class="p-label">Illegal — Mark states</div>
+        <p>Mark on colored backgrounds. Mark inside operational interfaces (dashboards, nav bars). <strong>Boundary separated from internal geometry.</strong> Convergence beams without boundary. Any element used independently.</p>
+      </div>
+      <div class="panel-d">
+        <div class="p-label">Illegal — Checkmark</div>
+        <p><strong>The verification checkmark is eliminated from all registers.</strong> It was present in early versions as a whispered claim. It is now absent. The convergence point is the proof. Do not reintroduce the checkmark in any form, at any opacity, in any context.</p>
+      </div>
+      <div class="panel-d">
+        <div class="p-label">Illegal — Typography</div>
+        <p>Cormorant Garamond in operational artifacts. Barlow Condensed or sans-serif in sovereign contexts. <strong>Wordmark without mark geometry.</strong> Tagline without wordmark. Any gradient on the wordmark.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Illegal state table -->
+  <table class="tbl">
+    <tr><th>Illegal state</th><th>Violated principle</th><th>Result</th></tr>
+    <tr><td>Checkmark at any opacity</td><td>Convergence point is the proof</td><td class="re">Consumer icon intrudes</td></tr>
+    <tr><td>Filled hexagon background</td><td>Boundary implies constraint closure, not mass</td><td class="re">Icon becomes brand shape, not proof structure</td></tr>
+    <tr><td>Beams without boundary</td><td>Convergence only meaningful within closed envelope</td><td class="re">Structure loses context</td></tr>
+    <tr><td>Rounded miter joins on boundary</td><td>Miter joins are engineering notation</td><td class="re">Mark drifts toward UI iconography</td></tr>
+    <tr><td>Cormorant Garamond in operational</td><td>Register distinction collapses</td><td class="re">Sovereign authority diluted</td></tr>
+    <tr><td>Mark on colored surface</td><td>Only parchment and void are legal backgrounds</td><td class="re">Gold hierarchy destroyed</td></tr>
+    <tr><td>Animation of boundary or beams</td><td>The mark is static — it is a proof, not a process</td><td class="re">Implies generative system, not constrained one</td></tr>
+    <tr><td>Mark proportions altered</td><td>φ-governed proportions are invariant</td><td class="re">Derivability test fails</td></tr>
+  </table>
+</div>
+
+
+<!-- ══════════════════════════════════════════════
+     FOOTER
+══════════════════════════════════════════════ -->
+<div style="padding:48px 0;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--wire-b);">
+  <div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+      <svg width="24" height="24" viewBox="0 0 360 360" fill="none">
+        <polygon points="180,18 310,90 310,270 180,342 50,270 50,90" fill="none" stroke="#8C6A1F" stroke-width="6" stroke-linejoin="miter"/>
+        <circle cx="180" cy="180" r="20" fill="#8C6A1F"/>
+      </svg>
+      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;text-transform:uppercase;letter-spacing:-0.01em;color:var(--paper);">CYTHERCAD</span>
+    </div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:var(--dim);">Brand System v1.0 · CytherAI · 2026</div>
+  </div>
+  <div style="text-align:right;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);line-height:1.7;">
+    Sovereign Register · Operational Register<br>
+    All proportions φ-governed<br>
+    Illegal states enforced · not discouraged<br>
+    Checkmark eliminated from all registers
+  </div>
+</div>
+
+</div><!-- end page -->
+</body>
+</html>

@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sijil Seal | سجل — Brand Mark Development</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Surfaces — blue-ink black, distinct from CytherAI's pure void */
+            --ink:          #050608;
+            --abyss:        #080A0C;
+            --deep:         #0D0F12;
+            --surface:      #121518;
+            --elevated:     #181C20;
+            --border:       #1E2328;
+            --border-light: #272D34;
+
+            /* Brass — aged, institutional, not startup-gold */
+            --brass-darkest: #1A1208;
+            --brass-shadow:  #2E200E;
+            --brass-dim:     #513A18;
+            --brass-muted:   #785528;
+            --brass:         #9E7B3C;
+            --brass-core:    #B8924A;
+            --brass-bright:  #CCA862;
+            --brass-light:   #DEC07A;
+            --brass-pale:    #EDD898;
+            --parchment:     #F5EDD8;
+
+            /* Seal crimson — anomaly, alert, critical marker */
+            --crimson-deep:  #3A0A0A;
+            --crimson:       #8B1A1A;
+            --crimson-core:  #B52020;
+
+            --font-arabic:  'Amiri', serif;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-mono:    'JetBrains Mono', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--ink);
+            color: var(--parchment);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+        }
+
+        /* ── Header ──────────────────────────────────────────── */
+        .header {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--brass-shadow);
+            background: linear-gradient(180deg, var(--abyss) 0%, var(--ink) 100%);
+        }
+        .header-eyebrow {
+            font-size: 0.6rem;
+            letter-spacing: 0.45em;
+            color: var(--brass-dim);
+            margin-bottom: 1rem;
+        }
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            letter-spacing: 0.2em;
+            margin-bottom: 0.4rem;
+            background: linear-gradient(180deg, var(--parchment) 0%, var(--brass) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-arabic {
+            font-family: var(--font-arabic);
+            font-size: 1.6rem;
+            color: var(--brass-muted);
+            margin-bottom: 0.6rem;
+            letter-spacing: 0.05em;
+        }
+        .header-sub {
+            font-size: 0.7rem;
+            color: var(--brass-dim);
+            letter-spacing: 0.25em;
+        }
+
+        /* ── Layout ──────────────────────────────────────────── */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .section-header { margin-bottom: 3rem; }
+        .section-number {
+            font-size: 0.58rem;
+            letter-spacing: 0.35em;
+            color: var(--brass-shadow);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            color: var(--parchment);
+            margin-bottom: 0.4rem;
+        }
+        .section-desc {
+            font-size: 0.75rem;
+            color: var(--brass-dim);
+            max-width: 600px;
+            line-height: 1.8;
+        }
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--brass-shadow), transparent);
+            margin: 0 2rem;
+        }
+
+        /* ── Logo Grid ───────────────────────────────────────── */
+        .logo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+        }
+        .logo-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .logo-card:hover {
+            border-color: var(--brass-dim);
+            box-shadow: 0 0 50px rgba(158, 123, 60, 0.07);
+        }
+        .logo-display {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--ink);
+            position: relative;
+        }
+        .logo-display::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(158,123,60,0.04) 0%, transparent 65%);
+            pointer-events: none;
+        }
+        .logo-display svg {
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 18px rgba(158, 123, 60, 0.12));
+            transition: all 0.3s ease;
+        }
+        .logo-card:hover .logo-display svg {
+            filter: drop-shadow(0 0 36px rgba(184, 146, 74, 0.22));
+        }
+        .logo-info {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .logo-name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            margin-bottom: 0.3rem;
+            color: var(--brass-light);
+        }
+        .logo-desc {
+            font-size: 0.68rem;
+            color: var(--brass-dim);
+            line-height: 1.7;
+        }
+
+        /* ── Hero ────────────────────────────────────────────── */
+        .hero-logo {
+            padding: 6rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--ink);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-logo::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, rgba(158,123,60,0.06) 0%, transparent 55%);
+        }
+        .hero-logo svg {
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 0 50px rgba(158, 123, 60, 0.25));
+        }
+        .hero-label {
+            margin-top: 2.5rem;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 300;
+            letter-spacing: 0.4em;
+            color: var(--parchment);
+            position: relative;
+            z-index: 1;
+        }
+        .hero-sublabel {
+            font-family: var(--font-arabic);
+            font-size: 1.1rem;
+            color: var(--brass-muted);
+            margin-top: 0.4rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── Construction ────────────────────────────────────── */
+        .construction-display {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ── Swatches ────────────────────────────────────────── */
+        .swatch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 1rem;
+        }
+        .swatch {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease;
+        }
+        .swatch:hover { transform: translateY(-3px); }
+        .swatch-label { font-size: 0.58rem; letter-spacing: 0.08em; margin-top: 0.5rem; }
+        .swatch-hex   { font-size: 0.52rem; opacity: 0.55; }
+
+        /* ── Favicon ─────────────────────────────────────────── */
+        .favicon-sizes {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+        .favicon-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .favicon-box {
+            background: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border);
+        }
+        .favicon-label { font-size: 0.58rem; color: var(--brass-dim); }
+
+        /* ── Applications ────────────────────────────────────── */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .app-card { background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+        .app-display {
+            padding: 2rem;
+            background: var(--deep);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 220px;
+        }
+        .app-info { padding: 1.5rem; border-top: 1px solid var(--border); }
+        .app-name { font-size: 0.75rem; letter-spacing: 0.2em; margin-bottom: 0.3rem; color: var(--brass-light); }
+        .app-desc { font-size: 0.62rem; color: var(--brass-dim); }
+
+        /* ── Business Card ───────────────────────────────────── */
+        .business-card {
+            width: 360px;
+            height: 205px;
+            background: var(--ink);
+            border: 1px solid var(--brass-shadow);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+        .business-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 160px; height: 160px;
+            background: radial-gradient(circle at top right, rgba(158,123,60,0.05) 0%, transparent 70%);
+        }
+        .business-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 2px; height: 60%;
+            background: linear-gradient(180deg, transparent, var(--brass-shadow), transparent);
+        }
+        .bc-top { display: flex; align-items: center; gap: 1rem; }
+        .bc-wordmark {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            letter-spacing: 0.25em;
+            color: var(--parchment);
+        }
+        .bc-arabic {
+            font-family: var(--font-arabic);
+            font-size: 0.9rem;
+            color: var(--brass-muted);
+            margin-top: 0.1rem;
+        }
+        .bc-tagline {
+            font-size: 0.48rem;
+            color: var(--brass-dim);
+            letter-spacing: 0.18em;
+            margin-top: 0.2rem;
+        }
+        .bc-bottom { }
+        .bc-name {
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            color: var(--parchment);
+            margin-bottom: 0.3rem;
+        }
+        .bc-details { font-size: 0.6rem; color: var(--brass-muted); line-height: 1.8; }
+
+        /* ── Wordmark Rows ───────────────────────────────────── */
+        .wordmark-row {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        .wordmark-text { font-family: var(--font-display); letter-spacing: 0.28em; color: var(--parchment); }
+        .wordmark-arabic { font-family: var(--font-arabic); color: var(--brass-light); }
+        .wordmark-text.sm { font-size: 1.1rem; }
+        .wordmark-text.md { font-size: 1.7rem; }
+        .wordmark-text.lg { font-size: 2.4rem; }
+
+        /* ── Typography Specimen ─────────────────────────────── */
+        .type-row {
+            padding: 2rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+        }
+        .type-meta { font-size: 0.58rem; color: var(--brass-dim); letter-spacing: 0.2em; margin-bottom: 0.8rem; }
+
+        /* ── Animations ──────────────────────────────────────── */
+        @keyframes sealGlow {
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(158,123,60,0.2)); }
+            50%       { filter: drop-shadow(0 0 40px rgba(184,146,74,0.45)); }
+        }
+        @keyframes outerRingSpin {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes sealFloat {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-6px); }
+        }
+        @keyframes brassPulse {
+            0%, 100% { opacity: 0.85; }
+            50%       { opacity: 1; }
+        }
+        .animate-glow  { animation: sealGlow 4s ease-in-out infinite; }
+        .animate-float { animation: sealFloat 5s ease-in-out infinite; }
+        .ring-spin     { transform-origin: center; animation: outerRingSpin 30s linear infinite; }
+        .animate-pulse { animation: brassPulse 3s ease-in-out infinite; }
+
+        /* ── Responsive ──────────────────────────────────────── */
+        @media (max-width: 768px) {
+            .header   { padding: 3rem 1.5rem; }
+            section   { padding: 3rem 1.5rem; }
+            .hero-logo { padding: 4rem 1.5rem; }
+            .logo-grid { grid-template-columns: 1fr; }
+            .business-card { width: 100%; max-width: 360px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <header class="header">
+        <div class="header-eyebrow">BRAND MARK DEVELOPMENT — SIJIL REGISTER SYSTEMS</div>
+        <h1>THE SIJIL SEAL</h1>
+        <div class="header-arabic">سجل — الختم الرسمي</div>
+        <p class="header-sub">IN BUSINESS, THERE IS OPINION. AND THERE IS THE SIJIL.</p>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- HERO -->
+    <section class="hero-logo">
+        <svg width="260" height="260" viewBox="0 0 260 260" fill="none"
+             xmlns="http://www.w3.org/2000/svg" class="animate-glow animate-float">
+            <defs>
+                <path id="heroRingPath"
+                      d="M 130,42 A 88,88 0 0,1 218,130 A 88,88 0 0,1 130,218 A 88,88 0 0,1 42,130 A 88,88 0 0,1 130,42"/>
+            </defs>
+
+            <!-- Outer octagon -->
+            <polygon
+                points="208,79 208,181 181,208 79,208 52,181 52,79 79,52 181,52"
+                stroke="#9E7B3C" stroke-width="1" fill="none" opacity="0.6"/>
+
+            <!-- Octagon vertex diamonds -->
+            <polygon points="208,75 212,79 208,83 204,79" fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="208,177 212,181 208,185 204,181" fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="181,204 185,208 181,212 177,208" fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="79,204 83,208 79,212 75,208"  fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="52,177 56,181 52,185 48,181" fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="52,75 56,79 52,83 48,79"    fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="79,48 83,52 79,56 75,52"    fill="#9E7B3C" opacity="0.5"/>
+            <polygon points="181,48 185,52 181,56 177,52" fill="#9E7B3C" opacity="0.5"/>
+
+            <!-- Outer spinning dashed ring (CSS animation target) -->
+            <g class="ring-spin">
+                <circle cx="130" cy="130" r="94"
+                        stroke="#9E7B3C" stroke-width="0.5" fill="none"
+                        stroke-dasharray="3,9" opacity="0.35"/>
+            </g>
+
+            <!-- Solid inner ring -->
+            <circle cx="130" cy="130" r="80"
+                    stroke="#B8924A" stroke-width="1.2" fill="none"/>
+
+            <!-- Inner fill -->
+            <circle cx="130" cy="130" r="79"
+                    fill="#080A0C"/>
+
+            <!-- Running text on ring -->
+            <text font-family="'JetBrains Mono', monospace" font-size="6.5"
+                  fill="#513A18" letter-spacing="5.2">
+                <textPath href="#heroRingPath">
+                    IMMUTABLE · LOCAL · SOVEREIGN · VERIFIED · IMMUTABLE · LOCAL · SOVEREIGN · VERIFIED ·
+                </textPath>
+            </text>
+
+            <!-- Arabic wordmark سجل -->
+            <text x="130" y="138"
+                  font-family="'Amiri', serif"
+                  font-size="82"
+                  fill="url(#brassGrad)"
+                  text-anchor="middle"
+                  dominant-baseline="middle">سجل</text>
+
+            <!-- Gradient definition -->
+            <defs>
+                <linearGradient id="brassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%"   stop-color="#DEC07A"/>
+                    <stop offset="50%"  stop-color="#B8924A"/>
+                    <stop offset="100%" stop-color="#9E7B3C"/>
+                </linearGradient>
+                <linearGradient id="brassGradDim" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%"   stop-color="#CCA862"/>
+                    <stop offset="100%" stop-color="#9E7B3C"/>
+                </linearGradient>
+            </defs>
+        </svg>
+
+        <div class="hero-label">S I J I L</div>
+        <div class="hero-sublabel">سجل — Register of Truth</div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §01 PRIMARY VARIATIONS -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">01 — PRIMARY VARIATIONS</span>
+            <h2 class="section-title">Core Seal Expressions</h2>
+            <p class="section-desc">Six approaches to the seal form, each maintaining the register's authority
+            while adjusting visual weight and context.</p>
+        </div>
+
+        <div class="logo-grid">
+
+            <!-- A: Full Seal (primary) -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <path id="ringA" d="M 80,18 A 62,62 0 0,1 142,80 A 62,62 0 0,1 80,142 A 62,62 0 0,1 18,80 A 62,62 0 0,1 80,18"/>
+                            <linearGradient id="bgA" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="128,48 128,112 112,128 48,128 32,112 32,48 48,32 112,32"
+                                 stroke="#9E7B3C" stroke-width="0.8" fill="none" opacity="0.5"/>
+                        <circle cx="80" cy="80" r="58" stroke="#9E7B3C" stroke-width="0.4" fill="none"
+                                stroke-dasharray="2,6" opacity="0.4"/>
+                        <circle cx="80" cy="80" r="50" stroke="#B8924A" stroke-width="1" fill="none"/>
+                        <circle cx="80" cy="80" r="49" fill="#080A0C"/>
+                        <text font-family="'JetBrains Mono'" font-size="5" fill="#2E200E" letter-spacing="4">
+                            <textPath href="#ringA">IMMUTABLE · LOCAL · SOVEREIGN · VERIFIED ·</textPath>
+                        </text>
+                        <text x="80" y="86" font-family="'Amiri', serif" font-size="52"
+                              fill="url(#bgA)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Full Seal</h3>
+                    <p class="logo-desc">Primary mark. Octagonal frame with running doctrine text and full Arabic wordmark. Default for all formal applications.</p>
+                </div>
+            </div>
+
+            <!-- B: Minimal Circle -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <linearGradient id="bgB" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="80" cy="80" r="56" stroke="#B8924A" stroke-width="1.2" fill="none"/>
+                        <circle cx="80" cy="80" r="55" fill="#080A0C"/>
+                        <text x="80" y="86" font-family="'Amiri', serif" font-size="54"
+                              fill="url(#bgB)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Minimal Circle</h3>
+                    <p class="logo-desc">Stripped to the essential: circle and wordmark. Favicons, small-scale digital, embossing.</p>
+                </div>
+            </div>
+
+            <!-- C: Geometric Octagon -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <linearGradient id="bgC" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Outer octagon filled -->
+                        <polygon points="120,38 122,80 120,122 80,124 40,122 38,80 40,38 80,36"
+                                 stroke="#9E7B3C" stroke-width="1.5" fill="none"/>
+                        <!-- Cross lines -->
+                        <line x1="80" y1="36" x2="80" y2="124" stroke="#2E200E" stroke-width="0.5"/>
+                        <line x1="38" y1="80" x2="122" y2="80" stroke="#2E200E" stroke-width="0.5"/>
+                        <!-- Center mark -->
+                        <circle cx="80" cy="80" r="4" fill="#9E7B3C" opacity="0.4"/>
+                        <text x="80" y="86" font-family="'Amiri', serif" font-size="46"
+                              fill="url(#bgC)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Geometric Frame</h3>
+                    <p class="logo-desc">Precise octagonal container with axis construction lines. Technical, architectural feel. Print headers.</p>
+                </div>
+            </div>
+
+            <!-- D: Document Stamp -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <linearGradient id="bgD" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Outer rectangle stamp -->
+                        <rect x="24" y="36" width="112" height="88" rx="4"
+                              stroke="#9E7B3C" stroke-width="1" fill="none"/>
+                        <rect x="30" y="42" width="100" height="76" rx="2"
+                              stroke="#513A18" stroke-width="0.5" fill="none"/>
+                        <!-- Top label -->
+                        <text x="80" y="58" font-family="'JetBrains Mono'" font-size="6"
+                              fill="#513A18" text-anchor="middle" letter-spacing="3">SIJIL REGISTER</text>
+                        <!-- Main Arabic -->
+                        <text x="80" y="98" font-family="'Amiri', serif" font-size="44"
+                              fill="url(#bgD)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                        <!-- Bottom date line -->
+                        <line x1="40" y1="108" x2="120" y2="108" stroke="#2E200E" stroke-width="0.5"/>
+                        <text x="80" y="117" font-family="'JetBrains Mono'" font-size="5.5"
+                              fill="#513A18" text-anchor="middle" letter-spacing="2">IMMUTABLE · VERIFIED</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Document Stamp</h3>
+                    <p class="logo-desc">Rectangular official stamp. Letterheads, formal documents, report headers. Closest to physical register format.</p>
+                </div>
+            </div>
+
+            <!-- E: Diamond Seal (rotated square) -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <linearGradient id="bgE" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Diamond (rotated square) -->
+                        <polygon points="80,22 138,80 80,138 22,80"
+                                 stroke="#9E7B3C" stroke-width="1.2" fill="none"/>
+                        <!-- Inner diamond -->
+                        <polygon points="80,34 126,80 80,126 34,80"
+                                 stroke="#513A18" stroke-width="0.5" fill="none"/>
+                        <!-- Corner nodes -->
+                        <circle cx="80"  cy="22" r="2.5" fill="#9E7B3C"/>
+                        <circle cx="138" cy="80" r="2.5" fill="#9E7B3C"/>
+                        <circle cx="80"  cy="138" r="2.5" fill="#9E7B3C"/>
+                        <circle cx="22"  cy="80" r="2.5" fill="#9E7B3C"/>
+                        <text x="80" y="86" font-family="'Amiri', serif" font-size="46"
+                              fill="url(#bgE)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Diamond Seal</h3>
+                    <p class="logo-desc">Rotated square — the physical form of a wax seal pressed at 45°. Distinctive, memorable, works at all sizes.</p>
+                </div>
+            </div>
+
+            <!-- F: Sin Monogram -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
+                        <defs>
+                            <linearGradient id="bgF" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%"   stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <!-- Minimal circle -->
+                        <circle cx="80" cy="80" r="54"
+                                stroke="#9E7B3C" stroke-width="1" fill="none" opacity="0.5"
+                                stroke-dasharray="1,8"/>
+                        <!-- Sin letter only — first letter as monogram -->
+                        <text x="80" y="91" font-family="'Amiri', serif" font-size="88"
+                              fill="url(#bgF)" text-anchor="middle" dominant-baseline="middle">س</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Sin Monogram</h3>
+                    <p class="logo-desc">First letter of سجل as standalone mark. Ultra-minimal. Profile pictures, watermarks, stitching, embossing at micro scale.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §02 WEIGHT VARIATIONS -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">02 — WEIGHT VARIATIONS</span>
+            <h2 class="section-title">Hairline to Solid</h2>
+            <p class="section-desc">The same primary seal at four visual weights. Hairline for premium print, solid for high-impact environments.</p>
+        </div>
+
+        <div class="logo-grid">
+
+            <!-- Hairline -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+                        <circle cx="70" cy="70" r="52" stroke="#9E7B3C" stroke-width="0.4" fill="none"/>
+                        <circle cx="70" cy="70" r="44" stroke="#9E7B3C" stroke-width="0.3" fill="none"
+                                stroke-dasharray="1,5"/>
+                        <text x="70" y="76" font-family="'Amiri', serif" font-size="44"
+                              fill="none" stroke="#9E7B3C" stroke-width="0.4"
+                              text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Hairline</h3>
+                    <p class="logo-desc">Stroke only, 0.4px. Engraving, embossing, luxury print on cream stock.</p>
+                </div>
+            </div>
+
+            <!-- Light -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+                        <defs>
+                            <linearGradient id="wL" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A" stop-opacity="0.7"/>
+                                <stop offset="100%" stop-color="#9E7B3C" stop-opacity="0.7"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="70" cy="70" r="52" stroke="#B8924A" stroke-width="0.8" fill="none" opacity="0.6"/>
+                        <circle cx="70" cy="70" r="44" stroke="#9E7B3C" stroke-width="0.4" fill="none"
+                                stroke-dasharray="1.5,6" opacity="0.4"/>
+                        <text x="70" y="76" font-family="'Amiri', serif" font-size="44"
+                              fill="url(#wL)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Light</h3>
+                    <p class="logo-desc">Reduced opacity fills. Elegant presence on dark backgrounds, secondary applications.</p>
+                </div>
+            </div>
+
+            <!-- Regular -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+                        <defs>
+                            <linearGradient id="wR" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="70" cy="70" r="52" stroke="#B8924A" stroke-width="1.2" fill="none"/>
+                        <circle cx="70" cy="70" r="51" fill="#080A0C"/>
+                        <circle cx="70" cy="70" r="44" stroke="#513A18" stroke-width="0.5" fill="none"
+                                stroke-dasharray="2,6"/>
+                        <text x="70" y="76" font-family="'Amiri', serif" font-size="46"
+                              fill="url(#wR)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Regular</h3>
+                    <p class="logo-desc">Standard weight. Primary usage. Business cards, app icons, all digital interfaces.</p>
+                </div>
+            </div>
+
+            <!-- Bold -->
+            <div class="logo-card">
+                <div class="logo-display">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+                        <defs>
+                            <linearGradient id="wB" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#F5EDD8"/>
+                                <stop offset="100%" stop-color="#CCA862"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="70" cy="70" r="54" stroke="#CCA862" stroke-width="2.5" fill="none"/>
+                        <circle cx="70" cy="70" r="53" fill="#080A0C"/>
+                        <text x="70" y="76" font-family="'Amiri', serif" font-size="48"
+                              font-weight="700" fill="url(#wB)"
+                              text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Bold</h3>
+                    <p class="logo-desc">Heavy weight. Signage, large-format print, contexts requiring maximum visual authority.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §03 MONOCHROME -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">03 — MONOCHROME VERSIONS</span>
+            <h2 class="section-title">Single Color Applications</h2>
+            <p class="section-desc">For contexts requiring single-color reproduction: legal printing, fax headers, embossing, co-branding.</p>
+        </div>
+
+        <div class="logo-grid">
+
+            <!-- Brass on Ink -->
+            <div class="logo-card">
+                <div class="logo-display" style="background:#050608;">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <circle cx="60" cy="60" r="46" stroke="#B8924A" stroke-width="1.2" fill="none"/>
+                        <circle cx="60" cy="60" r="45" fill="#050608"/>
+                        <circle cx="60" cy="60" r="38" stroke="#513A18" stroke-width="0.5" fill="none"
+                                stroke-dasharray="1.5,5"/>
+                        <text x="60" y="65" font-family="'Amiri', serif" font-size="38"
+                              fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Brass on Ink</h3>
+                    <p class="logo-desc">Primary brand expression. Maximum authority.</p>
+                </div>
+            </div>
+
+            <!-- Ink on Brass -->
+            <div class="logo-card">
+                <div class="logo-display" style="background:#B8924A;">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <circle cx="60" cy="60" r="46" stroke="#050608" stroke-width="1.5" fill="none"/>
+                        <circle cx="60" cy="60" r="45" fill="#B8924A"/>
+                        <text x="60" y="65" font-family="'Amiri', serif" font-size="38"
+                              fill="#050608" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Ink on Brass</h3>
+                    <p class="logo-desc">Inverted. Premium materials: brass plaques, special edition prints.</p>
+                </div>
+            </div>
+
+            <!-- Parchment on Ink -->
+            <div class="logo-card">
+                <div class="logo-display" style="background:#050608;">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <circle cx="60" cy="60" r="46" stroke="#F5EDD8" stroke-width="1" fill="none" opacity="0.8"/>
+                        <circle cx="60" cy="60" r="45" fill="#050608"/>
+                        <text x="60" y="65" font-family="'Amiri', serif" font-size="38"
+                              fill="#F5EDD8" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Parchment on Ink</h3>
+                    <p class="logo-desc">Warm white. Technical documentation, co-branding, neutral contexts.</p>
+                </div>
+            </div>
+
+            <!-- Outline Only -->
+            <div class="logo-card">
+                <div class="logo-display" style="background:#050608;">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <circle cx="60" cy="60" r="46" stroke="#B8924A" stroke-width="0.8" fill="none"/>
+                        <circle cx="60" cy="60" r="38" stroke="#B8924A" stroke-width="0.4" fill="none"
+                                stroke-dasharray="2,5"/>
+                        <text x="60" y="65" font-family="'Amiri', serif" font-size="38"
+                              fill="none" stroke="#B8924A" stroke-width="0.7"
+                              text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Outline</h3>
+                    <p class="logo-desc">Stroke-only. Watermarks, background textures, screen-print on fabric.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §04 CONSTRUCTION GRID -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">04 — CONSTRUCTION GRID</span>
+            <h2 class="section-title">Geometric Foundation</h2>
+            <p class="section-desc">The octagonal seal is built on an 8-point construction with golden ratio proportions.
+            The inner circle sits at φ ratio to the outer bound. The Arabic text center aligns with the optical center, not the mathematical center.</p>
+        </div>
+
+        <div class="construction-display">
+            <svg width="500" height="500" viewBox="0 0 500 500" fill="none">
+                <defs>
+                    <pattern id="constructionGrid" width="25" height="25" patternUnits="userSpaceOnUse">
+                        <path d="M 25 0 L 0 0 0 25" fill="none" stroke="#1a1a1a" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+
+                <!-- Grid -->
+                <rect width="500" height="500" fill="url(#constructionGrid)"/>
+
+                <!-- Axis lines -->
+                <line x1="250" y1="0"   x2="250" y2="500" stroke="#1E1408" stroke-width="1"/>
+                <line x1="0"   y1="250" x2="500" y2="250" stroke="#1E1408" stroke-width="1"/>
+                <line x1="75"  y1="75"  x2="425" y2="425" stroke="#1E1408" stroke-width="0.5" stroke-dasharray="3,8"/>
+                <line x1="425" y1="75"  x2="75"  y2="425" stroke="#1E1408" stroke-width="0.5" stroke-dasharray="3,8"/>
+
+                <!-- Outer construction circle -->
+                <circle cx="250" cy="250" r="200" stroke="#2E200E" stroke-width="1" fill="none" stroke-dasharray="5,8"/>
+
+                <!-- Outer octagon -->
+                <polygon
+                    points="390,157 390,343 343,390 157,390 110,343 110,157 157,110 343,110"
+                    stroke="#513A18" stroke-width="1" fill="none"/>
+
+                <!-- Golden ratio rectangle -->
+                <rect x="96" y="96" width="308" height="308" stroke="#2E200E" stroke-width="0.8" fill="none" stroke-dasharray="3,6"/>
+
+                <!-- Dashed ring -->
+                <circle cx="250" cy="250" r="165" stroke="#513A18" stroke-width="0.8" fill="none" stroke-dasharray="3,7"/>
+
+                <!-- Inner ring (solid, primary) -->
+                <circle cx="250" cy="250" r="148" stroke="#9E7B3C" stroke-width="1.5" fill="none"/>
+
+                <!-- Arabic text -->
+                <text x="250" y="265"
+                      font-family="'Amiri', serif" font-size="140"
+                      fill="#B8924A" opacity="0.6"
+                      text-anchor="middle" dominant-baseline="middle">سجل</text>
+
+                <!-- Key construction points -->
+                <circle cx="250" cy="110" r="5" fill="#CCA862"/>
+                <circle cx="390" cy="250" r="5" fill="#CCA862"/>
+                <circle cx="250" cy="390" r="5" fill="#CCA862"/>
+                <circle cx="110" cy="250" r="5" fill="#CCA862"/>
+                <circle cx="343" cy="110" r="4" fill="#9E7B3C"/>
+                <circle cx="390" cy="157" r="4" fill="#9E7B3C"/>
+                <circle cx="250" cy="250" r="4" fill="#DEC07A"/>
+
+                <!-- Optical center marker (slightly above mathematical center) -->
+                <circle cx="250" cy="244" r="3" fill="none" stroke="#CCA862" stroke-width="1"/>
+                <line x1="244" y1="244" x2="256" y2="244" stroke="#CCA862" stroke-width="0.8"/>
+                <line x1="250" y1="238" x2="250" y2="250" stroke="#CCA862" stroke-width="0.8"/>
+
+                <!-- Dimension markers -->
+                <g stroke="#513A18" stroke-width="0.8" font-family="'JetBrains Mono'" font-size="10" fill="#513A18">
+                    <!-- Width -->
+                    <line x1="96" y1="455" x2="404" y2="455"/>
+                    <line x1="96" y1="450" x2="96" y2="460"/>
+                    <line x1="404" y1="450" x2="404" y2="460"/>
+                    <text x="250" y="470" text-anchor="middle">1.618 : 1  (φ)</text>
+
+                    <!-- Inner circle radius -->
+                    <line x1="250" y1="250" x2="398" y2="250" stroke-dasharray="2,4"/>
+                    <text x="330" y="245" text-anchor="middle" font-size="9">r = 148</text>
+
+                    <!-- Outer ring radius -->
+                    <line x1="250" y1="250" x2="250" y2="102" stroke-dasharray="2,4"/>
+                    <text x="264" y="180" font-size="9">r = 148</text>
+
+                    <!-- Octagon side label -->
+                    <text x="270" y="108" font-size="9" fill="#9E7B3C">8-POINT</text>
+                </g>
+            </svg>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §05 ICON SCALING -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">05 — ICON SCALING</span>
+            <h2 class="section-title">Favicon & App Icon</h2>
+            <p class="section-desc">The seal simplified for small-scale reproduction. At 16px only the circle and sin (س) survive.
+            At 64px+ the full wordmark reads. The octagonal frame appears at 128px and above only.</p>
+        </div>
+
+        <div class="favicon-sizes">
+
+            <div class="favicon-item">
+                <div class="favicon-box" style="width:16px;height:16px;">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <circle cx="8" cy="8" r="7" stroke="#B8924A" stroke-width="0.8" fill="#050608"/>
+                        <text x="8" y="9.5" font-family="serif" font-size="9"
+                              fill="#B8924A" text-anchor="middle" dominant-baseline="middle">س</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">16px</span>
+            </div>
+
+            <div class="favicon-item">
+                <div class="favicon-box" style="width:32px;height:32px;">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="14" stroke="#B8924A" stroke-width="1" fill="#050608"/>
+                        <text x="16" y="19" font-family="'Amiri',serif" font-size="14"
+                              fill="#B8924A" text-anchor="middle" dominant-baseline="middle">س</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">32px</span>
+            </div>
+
+            <div class="favicon-item">
+                <div class="favicon-box" style="width:64px;height:64px;">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="29" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                        <circle cx="32" cy="32" r="23" stroke="#2E200E" stroke-width="0.4" fill="none"
+                                stroke-dasharray="1.5,4"/>
+                        <text x="32" y="35" font-family="'Amiri',serif" font-size="24"
+                              fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">64px</span>
+            </div>
+
+            <div class="favicon-item">
+                <div class="favicon-box" style="width:128px;height:128px;">
+                    <svg width="128" height="128" viewBox="0 0 128 128" fill="none">
+                        <polygon points="104,38 104,90 90,104 38,104 24,90 24,38 38,24 90,24"
+                                 stroke="#9E7B3C" stroke-width="0.8" fill="none" opacity="0.5"/>
+                        <circle cx="64" cy="64" r="50" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                        <circle cx="64" cy="64" r="42" stroke="#2E200E" stroke-width="0.4" fill="none"
+                                stroke-dasharray="2,5"/>
+                        <text x="64" y="69" font-family="'Amiri',serif" font-size="40"
+                              fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">128px</span>
+            </div>
+
+            <div class="favicon-item">
+                <div class="favicon-box" style="width:180px;height:180px;">
+                    <svg width="180" height="180" viewBox="0 0 180 180" fill="none">
+                        <defs>
+                            <linearGradient id="icon256" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                            <path id="iconRing" d="M 90,22 A 68,68 0 0,1 158,90 A 68,68 0 0,1 90,158 A 68,68 0 0,1 22,90 A 68,68 0 0,1 90,22"/>
+                        </defs>
+                        <polygon points="146,54 146,126 126,146 54,146 34,126 34,54 54,34 126,34"
+                                 stroke="#9E7B3C" stroke-width="1" fill="none" opacity="0.55"/>
+                        <circle cx="90" cy="90" r="68" stroke="#B8924A" stroke-width="1.5" fill="#050608"/>
+                        <text font-family="'JetBrains Mono'" font-size="6" fill="#2E200E" letter-spacing="4">
+                            <textPath href="#iconRing">IMMUTABLE · LOCAL · SOVEREIGN ·</textPath>
+                        </text>
+                        <text x="90" y="96" font-family="'Amiri',serif" font-size="58"
+                              fill="url(#icon256)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <span class="favicon-label">256px</span>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §06 WORDMARK INTEGRATION -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">06 — WORDMARK INTEGRATION</span>
+            <h2 class="section-title">Seal + Typography Lockups</h2>
+            <p class="section-desc">Arabic-first lockups. The Arabic name always precedes or equals the Latin transliteration.
+            Never Latin-only in a Saudi context.</p>
+        </div>
+
+        <!-- Arabic-first horizontal -->
+        <div class="wordmark-row">
+            <svg width="55" height="55" viewBox="0 0 55 55" fill="none">
+                <circle cx="27.5" cy="27.5" r="24" stroke="#B8924A" stroke-width="1" fill="#050608"/>
+                <text x="27.5" y="30" font-family="'Amiri',serif" font-size="20"
+                      fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+            </svg>
+            <div>
+                <div style="font-family:'Amiri',serif; font-size:1.6rem; color:var(--parchment); letter-spacing:0.05em;">سجل</div>
+                <div class="wordmark-text sm" style="letter-spacing:0.28em;">SIJIL</div>
+            </div>
+        </div>
+
+        <!-- With tagline — Arabic-first -->
+        <div class="wordmark-row" style="flex-direction:column; align-items:flex-start;">
+            <div style="display:flex; align-items:center; gap:1.5rem;">
+                <svg width="50" height="50" viewBox="0 0 50 50" fill="none">
+                    <circle cx="25" cy="25" r="22" stroke="#B8924A" stroke-width="1" fill="#050608"/>
+                    <text x="25" y="28" font-family="'Amiri',serif" font-size="18"
+                          fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                </svg>
+                <div>
+                    <div style="display:flex; gap:1rem; align-items:baseline;">
+                        <div style="font-family:'Amiri',serif; font-size:1.3rem; color:var(--parchment);">سجل</div>
+                        <div class="wordmark-text sm">SIJIL</div>
+                    </div>
+                    <div style="font-size:0.58rem; letter-spacing:0.22em; color:var(--brass-dim); margin-top:0.3rem;">
+                        REGISTER OF TRUTH — سجل الحقيقة
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stacked — centered -->
+        <div class="wordmark-row" style="flex-direction:column; align-items:center; text-align:center;">
+            <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+                <defs>
+                    <linearGradient id="wm3" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#DEC07A"/>
+                        <stop offset="100%" stop-color="#9E7B3C"/>
+                    </linearGradient>
+                </defs>
+                <circle cx="45" cy="45" r="40" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                <circle cx="45" cy="45" r="32" stroke="#2E200E" stroke-width="0.4" fill="none"
+                        stroke-dasharray="1.5,5"/>
+                <text x="45" y="49" font-family="'Amiri',serif" font-size="34"
+                      fill="url(#wm3)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+            </svg>
+            <div style="margin-top:1rem; font-family:'Amiri',serif; font-size:1.4rem; color:var(--parchment);">سجل</div>
+            <div class="wordmark-text sm" style="margin-top:0.3rem; letter-spacing:0.4em;">SIJIL</div>
+            <div style="font-size:0.55rem; color:var(--brass-dim); letter-spacing:0.2em; margin-top:0.2rem;">
+                IN BUSINESS, THERE IS OPINION.<br>AND THERE IS THE SIJIL.
+            </div>
+        </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §07 APPLICATIONS -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">07 — APPLICATIONS</span>
+            <h2 class="section-title">Real-World Context</h2>
+            <p class="section-desc">The Sijil seal in deployment. Business collateral, iOS app presence, document watermark.</p>
+        </div>
+
+        <div class="app-grid">
+
+            <!-- Business Card -->
+            <div class="app-card">
+                <div class="app-display">
+                    <div class="business-card">
+                        <div class="bc-top">
+                            <svg width="38" height="38" viewBox="0 0 38 38" fill="none">
+                                <circle cx="19" cy="19" r="17" stroke="#B8924A" stroke-width="1" fill="#050608"/>
+                                <circle cx="19" cy="19" r="13" stroke="#2E200E" stroke-width="0.4" fill="none"
+                                        stroke-dasharray="1.2,3.5"/>
+                                <text x="19" y="21" font-family="'Amiri',serif" font-size="13"
+                                      fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                            </svg>
+                            <div>
+                                <div class="bc-wordmark">SIJIL</div>
+                                <div class="bc-arabic">سجل</div>
+                                <div class="bc-tagline">REGISTER OF TRUTH — RESTAURANT OPERATIONS</div>
+                            </div>
+                        </div>
+                        <div class="bc-bottom">
+                            <div class="bc-name">Sovereign POS · النظام السيادي</div>
+                            <div class="bc-details">
+                                <div>sijil.app</div>
+                                <div>Offline · Local · Permanent</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">BUSINESS CARD</h3>
+                    <p class="app-desc">Bilingual horizontal lockup. Arabic-first wordmark with contact details.</p>
+                </div>
+            </div>
+
+            <!-- iOS App Icon -->
+            <div class="app-card">
+                <div class="app-display">
+                    <div style="display:flex; gap:1.5rem; align-items:flex-end;">
+                        <!-- Large app icon -->
+                        <div style="width:120px;height:120px;background:linear-gradient(145deg,#0D0F12 0%,#050608 100%);border-radius:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(0,0,0,0.6);">
+                            <svg width="88" height="88" viewBox="0 0 88 88" fill="none">
+                                <defs>
+                                    <linearGradient id="appIcon" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stop-color="#DEC07A"/>
+                                        <stop offset="100%" stop-color="#9E7B3C"/>
+                                    </linearGradient>
+                                </defs>
+                                <polygon points="68,22 68,66 66,68 22,68 20,66 20,22 22,20 66,20"
+                                         stroke="#9E7B3C" stroke-width="0.6" fill="none" opacity="0.4"/>
+                                <circle cx="44" cy="44" r="36" stroke="#B8924A" stroke-width="1.4" fill="none"/>
+                                <circle cx="44" cy="44" r="35" fill="#080A0C"/>
+                                <circle cx="44" cy="44" r="28" stroke="#2E200E" stroke-width="0.4" fill="none"
+                                        stroke-dasharray="1.5,5"/>
+                                <text x="44" y="48" font-family="'Amiri',serif" font-size="34"
+                                      fill="url(#appIcon)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                            </svg>
+                        </div>
+                        <!-- Small icon -->
+                        <div style="width:60px;height:60px;background:linear-gradient(145deg,#0D0F12 0%,#050608 100%);border-radius:14px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.5);">
+                            <svg width="42" height="42" viewBox="0 0 42 42" fill="none">
+                                <circle cx="21" cy="21" r="18" stroke="#B8924A" stroke-width="1" fill="#050608"/>
+                                <text x="21" y="23.5" font-family="'Amiri',serif" font-size="16"
+                                      fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">iOS APP ICON</h3>
+                    <p class="app-desc">120px × 120px (1×). Octagonal frame appears at full scale only.</p>
+                </div>
+            </div>
+
+            <!-- Document watermark -->
+            <div class="app-card">
+                <div class="app-display" style="position:relative; overflow:hidden;">
+                    <!-- Mock document -->
+                    <div style="width:220px;background:#F5EDD8;padding:1.5rem;position:relative;">
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:#3A3020;letter-spacing:0.15em;margin-bottom:1rem;border-bottom:1px solid #D4B880;padding-bottom:0.5rem;">
+                            SIJIL — TRANSACTION REGISTER<br>
+                            <span style="opacity:0.5;">27 FEB 2026 · 20:14:32 AST</span>
+                        </div>
+                        <div style="font-size:0.6rem;color:#4A3818;line-height:1.9;font-family:monospace;">
+                            #0047 · SAR 127.00 · PAID<br>
+                            #0048 · SAR 58.50 · PAID<br>
+                            #0049 · SAR 203.00 · OPEN<br>
+                        </div>
+                        <!-- Watermark seal overlay -->
+                        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+                            <svg width="140" height="140" viewBox="0 0 140 140" fill="none" opacity="0.07">
+                                <circle cx="70" cy="70" r="60" stroke="#9E7B3C" stroke-width="1.5" fill="none"/>
+                                <text x="70" y="76" font-family="'Amiri',serif" font-size="56"
+                                      fill="#9E7B3C" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-info">
+                    <h3 class="app-name">DOCUMENT WATERMARK</h3>
+                    <p class="app-desc">7% opacity seal. Proves document authenticity without obstructing content.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §08 COLOR SYSTEM -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">08 — COLOR SYSTEM</span>
+            <h2 class="section-title">The Brass & Ink Palette</h2>
+            <p class="section-desc">Intentionally distinct from CytherAI's bright gold. Sijil's brass is aged, institutional —
+            the color of a register that has been consulted for years, not a system launched yesterday.</p>
+        </div>
+
+        <!-- Primary surfaces -->
+        <div style="margin-bottom:1.5rem;">
+            <div style="font-size:0.6rem;letter-spacing:0.25em;color:var(--brass-dim);margin-bottom:1rem;">SURFACES</div>
+            <div class="swatch-grid">
+                <div class="swatch" style="background:#050608;">
+                    <span class="swatch-label" style="color:#513A18;">Ink</span>
+                    <span class="swatch-hex" style="color:#513A18;">#050608</span>
+                </div>
+                <div class="swatch" style="background:#080A0C;">
+                    <span class="swatch-label" style="color:#513A18;">Abyss</span>
+                    <span class="swatch-hex" style="color:#513A18;">#080A0C</span>
+                </div>
+                <div class="swatch" style="background:#0D0F12;">
+                    <span class="swatch-label" style="color:#513A18;">Deep</span>
+                    <span class="swatch-hex" style="color:#513A18;">#0D0F12</span>
+                </div>
+                <div class="swatch" style="background:#121518; border-color:#1E2328;">
+                    <span class="swatch-label" style="color:#9E7B3C;">Surface</span>
+                    <span class="swatch-hex" style="color:#513A18;">#121518</span>
+                </div>
+                <div class="swatch" style="background:#181C20; border-color:#1E2328;">
+                    <span class="swatch-label" style="color:#9E7B3C;">Elevated</span>
+                    <span class="swatch-hex" style="color:#513A18;">#181C20</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Brass scale -->
+        <div style="margin-bottom:1.5rem;">
+            <div style="font-size:0.6rem;letter-spacing:0.25em;color:var(--brass-dim);margin-bottom:1rem;">BRASS SCALE</div>
+            <div class="swatch-grid">
+                <div class="swatch" style="background:#1A1208;">
+                    <span class="swatch-label" style="color:#513A18;">Darkest</span>
+                    <span class="swatch-hex" style="color:#513A18;">#1A1208</span>
+                </div>
+                <div class="swatch" style="background:#2E200E;">
+                    <span class="swatch-label" style="color:#513A18;">Shadow</span>
+                    <span class="swatch-hex" style="color:#513A18;">#2E200E</span>
+                </div>
+                <div class="swatch" style="background:#513A18;">
+                    <span class="swatch-label" style="color:#9E7B3C;">Dim</span>
+                    <span class="swatch-hex" style="color:#9E7B3C;">#513A18</span>
+                </div>
+                <div class="swatch" style="background:#785528;">
+                    <span class="swatch-label" style="color:#DEC07A;">Muted</span>
+                    <span class="swatch-hex" style="color:#9E7B3C;">#785528</span>
+                </div>
+                <div class="swatch" style="background:#9E7B3C;">
+                    <span class="swatch-label" style="color:#F5EDD8;">Brass</span>
+                    <span class="swatch-hex" style="color:#DEC07A;">#9E7B3C</span>
+                </div>
+                <div class="swatch" style="background:#B8924A;">
+                    <span class="swatch-label" style="color:#F5EDD8;">Core ✦</span>
+                    <span class="swatch-hex" style="color:#F5EDD8;">#B8924A</span>
+                </div>
+                <div class="swatch" style="background:#CCA862;">
+                    <span class="swatch-label" style="color:#050608;">Bright</span>
+                    <span class="swatch-hex" style="color:#050608;">#CCA862</span>
+                </div>
+                <div class="swatch" style="background:#DEC07A;">
+                    <span class="swatch-label" style="color:#050608;">Light</span>
+                    <span class="swatch-hex" style="color:#050608;">#DEC07A</span>
+                </div>
+                <div class="swatch" style="background:#EDD898;">
+                    <span class="swatch-label" style="color:#050608;">Pale</span>
+                    <span class="swatch-hex" style="color:#050608;">#EDD898</span>
+                </div>
+                <div class="swatch" style="background:#F5EDD8;">
+                    <span class="swatch-label" style="color:#050608;">Parchment</span>
+                    <span class="swatch-hex" style="color:#050608;">#F5EDD8</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seal Crimson — anomaly/alert -->
+        <div>
+            <div style="font-size:0.6rem;letter-spacing:0.25em;color:var(--brass-dim);margin-bottom:1rem;">SEAL CRIMSON — ANOMALY / ALERT</div>
+            <div class="swatch-grid" style="grid-template-columns:repeat(3,minmax(110px,1fr));">
+                <div class="swatch" style="background:#3A0A0A;">
+                    <span class="swatch-label" style="color:#8B1A1A;">Deep</span>
+                    <span class="swatch-hex" style="color:#8B1A1A;">#3A0A0A</span>
+                </div>
+                <div class="swatch" style="background:#8B1A1A;">
+                    <span class="swatch-label" style="color:#F5EDD8;">Crimson</span>
+                    <span class="swatch-hex" style="color:#F5EDD8;">#8B1A1A</span>
+                </div>
+                <div class="swatch" style="background:#B52020;">
+                    <span class="swatch-label" style="color:#F5EDD8;">Alert ⚑</span>
+                    <span class="swatch-hex" style="color:#F5EDD8;">#B52020</span>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §09 TYPOGRAPHY -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">09 — TYPOGRAPHY</span>
+            <h2 class="section-title">The Type System</h2>
+            <p class="section-desc">Three roles. Amiri carries the Arabic voice — classical, document-weight.
+            Cormorant Garamond carries the Latin voice. JetBrains Mono carries the data and system voice.</p>
+        </div>
+
+        <!-- Amiri Arabic -->
+        <div class="type-row">
+            <div class="type-meta">AMIRI — ARABIC DISPLAY · قلم الرسمي</div>
+            <div style="font-family:'Amiri',serif; font-size:clamp(2rem,5vw,3.5rem); color:var(--brass-light); line-height:1.4; text-align:right; direction:rtl;">
+                في التجارة، هناك رأي. وهناك السجل.
+            </div>
+            <div style="font-family:'Amiri',serif; font-size:1.2rem; color:var(--brass-muted); margin-top:0.8rem; text-align:right; direction:rtl;">
+                كل معاملة. دائمة. ملكك.
+            </div>
+        </div>
+
+        <!-- Cormorant Latin -->
+        <div class="type-row">
+            <div class="type-meta">CORMORANT GARAMOND — LATIN DISPLAY · 300 WEIGHT</div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:clamp(1.8rem,4vw,3rem); font-weight:300; color:var(--brass-light); letter-spacing:0.15em; line-height:1.5;">
+                The Register of Truth
+            </div>
+            <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:300; font-style:italic; color:var(--brass-muted); margin-top:0.5rem; letter-spacing:0.1em;">
+                Forged, not assembled.
+            </div>
+        </div>
+
+        <!-- JetBrains Mono -->
+        <div class="type-row">
+            <div class="type-meta">JETBRAINS MONO — SYSTEM & DATA VOICE · 400 WEIGHT</div>
+            <div style="font-family:'JetBrains Mono',monospace; font-size:0.85rem; color:var(--brass-core); line-height:2;">
+                <span style="color:var(--brass-dim);">TIME     </span> EVENT                  ACTOR       AMOUNT<br>
+                <span style="color:var(--brass-dim);">20:14:32 </span> Order #0047             Ahmed K.    <span style="color:var(--brass-core);">SAR 127.00</span><br>
+                <span style="color:var(--brass-dim);">21:42:18 </span><span style="color:var(--crimson-core);">⚑</span> Discount 100%      Tariq M.    <span style="color:var(--crimson-core);">−SAR 250.00</span><br>
+                <span style="color:var(--brass-dim);">21:43:02 </span><span style="color:var(--crimson-core);">⚑</span> Cash Drawer Open   Tariq M.    —
+            </div>
+        </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- §10 MOTION REFERENCE -->
+    <section>
+        <div class="section-header">
+            <span class="section-number">10 — MOTION REFERENCE</span>
+            <h2 class="section-title">Animation Principles</h2>
+            <p class="section-desc">Three animations. All are slow, authoritative, never playful.
+            A register does not bounce. It settles.</p>
+        </div>
+
+        <div class="logo-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px,1fr));">
+
+            <!-- Seal Glow -->
+            <div class="logo-card">
+                <div class="logo-display" style="min-height:200px;">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none" class="animate-glow">
+                        <defs>
+                            <linearGradient id="anim1" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <circle cx="70" cy="70" r="58" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                        <text x="70" y="76" font-family="'Amiri',serif" font-size="46"
+                              fill="url(#anim1)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Seal Glow</h3>
+                    <p class="logo-desc">4s ease-in-out infinite. Drop shadow pulses between 15px and 40px brass opacity. Used on hero and idle splash state.</p>
+                </div>
+            </div>
+
+            <!-- Outer Ring Spin -->
+            <div class="logo-card">
+                <div class="logo-display" style="min-height:200px;">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none">
+                        <defs>
+                            <linearGradient id="anim2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <g class="ring-spin">
+                            <circle cx="70" cy="70" r="62"
+                                    stroke="#9E7B3C" stroke-width="0.6" fill="none"
+                                    stroke-dasharray="3,9" opacity="0.4"/>
+                        </g>
+                        <circle cx="70" cy="70" r="52" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                        <text x="70" y="76" font-family="'Amiri',serif" font-size="44"
+                              fill="url(#anim2)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Ring Spin</h3>
+                    <p class="logo-desc">30s linear infinite. Outer dashed ring rotates slowly. Suggests continuous recording — the register never stops. Loading and "system active" state.</p>
+                </div>
+            </div>
+
+            <!-- Float -->
+            <div class="logo-card">
+                <div class="logo-display" style="min-height:200px;">
+                    <svg width="140" height="140" viewBox="0 0 140 140" fill="none" class="animate-float">
+                        <defs>
+                            <linearGradient id="anim3" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#DEC07A"/>
+                                <stop offset="100%" stop-color="#9E7B3C"/>
+                            </linearGradient>
+                        </defs>
+                        <polygon points="110,42 110,98 98,110 42,110 30,98 30,42 42,30 98,30"
+                                 stroke="#9E7B3C" stroke-width="0.7" fill="none" opacity="0.4"/>
+                        <circle cx="70" cy="70" r="52" stroke="#B8924A" stroke-width="1.2" fill="#050608"/>
+                        <text x="70" y="76" font-family="'Amiri',serif" font-size="44"
+                              fill="url(#anim3)" text-anchor="middle" dominant-baseline="middle">سجل</text>
+                    </svg>
+                </div>
+                <div class="logo-info">
+                    <h3 class="logo-name">Seal Float</h3>
+                    <p class="logo-desc">5s ease-in-out infinite. ±6px vertical. Slow, gravity-aware. Hero section only — never inside the working POS interface.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Rules -->
+        <div style="margin-top:3rem; padding:2rem; background:var(--surface); border:1px solid var(--border);">
+            <div style="font-size:0.6rem; letter-spacing:0.3em; color:var(--brass-dim); margin-bottom:1.5rem;">ANIMATION RULES</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; font-size:0.72rem; color:var(--brass-muted); line-height:1.8;">
+                <div>
+                    <div style="color:var(--brass-core); margin-bottom:0.4rem; font-size:0.62rem; letter-spacing:0.15em;">DURATION</div>
+                    Minimum 3 seconds per cycle. No fast animations. Authority is measured in seconds, not milliseconds.
+                </div>
+                <div>
+                    <div style="color:var(--brass-core); margin-bottom:0.4rem; font-size:0.62rem; letter-spacing:0.15em;">EASING</div>
+                    ease-in-out only. No bounce, no spring, no elastic. The register settles — it does not bounce.
+                </div>
+                <div>
+                    <div style="color:var(--brass-core); margin-bottom:0.4rem; font-size:0.62rem; letter-spacing:0.15em;">CONTEXT</div>
+                    Hero, splash, and marketing only. Inside the active POS — no animations. Static seal. The restaurant doesn't need theater.
+                </div>
+                <div>
+                    <div style="color:var(--brass-core); margin-bottom:0.4rem; font-size:0.62rem; letter-spacing:0.15em;">HAPTIC PAIR</div>
+                    Stamp animation (.notificationOccurred(.success)). Single impact, not a pulse. Matches the seal-press metaphor exactly.
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- Footer -->
+    <footer style="padding:3rem 2rem; text-align:center; background:var(--abyss);">
+        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" style="margin-bottom:1.5rem; opacity:0.4;">
+            <circle cx="24" cy="24" r="21" stroke="#B8924A" stroke-width="1" fill="none"/>
+            <text x="24" y="27" font-family="'Amiri',serif" font-size="18"
+                  fill="#B8924A" text-anchor="middle" dominant-baseline="middle">سجل</text>
+        </svg>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:0.9rem; font-weight:300; font-style:italic; color:var(--brass-dim); letter-spacing:0.15em; margin-bottom:0.5rem;">
+            In business, there is opinion.
+        </div>
+        <div style="font-family:'Amiri',serif; font-size:1rem; color:var(--brass-muted); margin-bottom:1.5rem;">
+            وهناك السجل.
+        </div>
+        <div style="font-size:0.55rem; color:var(--brass-shadow); letter-spacing:0.3em;">
+            SIJIL BRAND SYSTEM — IMMUTABLE · LOCAL · SOVEREIGN
+        </div>
+    </footer>
+
+</body>
+</html>

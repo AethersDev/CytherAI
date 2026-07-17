@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CytherAI — The Model (v-next prototype 2 · multi-observer)</title>
+<style>
+  :root{
+    --bg:#0a0b0e; --panel:#0f1217; --panel2:#13171d; --line:#1d232b; --line2:#2c343f;
+    --ink:#e9edf2; --mid:#98a2ad; --quiet:#586571;
+    --val:#56d3e6; --pending:#d8a657; --invalid:#c2544e; --obs:#e0a33c;
+    --mono:'SF Mono',Menlo,'Courier New',monospace; --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto;padding:30px 28px 60px}
+  .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--val);text-transform:uppercase}
+  h1{font-size:24px;font-weight:540;margin:13px 0 9px;letter-spacing:-.01em}
+  .lead{color:var(--mid);font-size:13.5px;line-height:1.65;max-width:680px}
+  .how{margin:14px 0 20px;font-family:var(--mono);font-size:11px;color:var(--quiet);line-height:1.95;border-left:2px solid var(--line2);padding-left:14px}
+  .how b{color:var(--val);font-weight:400}.how .o{color:var(--obs)}.how .inv{color:var(--invalid)}
+
+  .board{border:1px solid var(--line);background:var(--panel)}
+  .ruler{display:grid;grid-template-columns:170px 1fr;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:9px;color:var(--quiet);letter-spacing:.16em}
+  .ruler .lab{padding:8px 12px;border-right:1px solid var(--line)}
+  .ruler .scale{position:relative;padding:8px 0;cursor:col-resize}
+  .ruler .scale span.t{position:absolute;top:8px;transform:translateX(-50%)}
+  .ruler .probehandle{position:absolute;top:0;bottom:0;width:11px;transform:translateX(-50%);cursor:ew-resize}
+  .ruler .probehandle::after{content:'◆ orient';position:absolute;top:2px;left:50%;transform:translateX(-50%);color:var(--val);white-space:nowrap;font-size:8px}
+  .row{display:grid;grid-template-columns:170px 1fr;border-bottom:1px solid var(--line);min-height:50px}
+  .row:last-child{border-bottom:0}
+  .row .name{padding:8px 12px;border-right:1px solid var(--line);font-family:var(--mono);font-size:10px;display:flex;flex-direction:column;justify-content:center;gap:3px}
+  .row .name .k{color:var(--ink)} .row .name .dep{color:var(--quiet);font-size:8.5px;letter-spacing:.1em}
+  .row.derived .name{background:var(--panel2)}
+  .tl{position:relative;overflow:hidden} .tl.editable{cursor:crosshair}
+  .seg{position:absolute;top:7px;bottom:7px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;border-right:1px solid var(--bg);overflow:hidden;white-space:nowrap;transition:background .25s}
+  .seg.v{background:rgba(86,211,230,.07);color:var(--val)}
+  .seg.coupled,.seg.allowed,.seg.cloud,.seg.ungated{background:rgba(152,162,173,.06);color:var(--mid)}
+  .seg.pending{background:rgba(216,166,87,.09);color:var(--pending);font-style:italic}
+  .seg.invalid{color:var(--invalid);background:repeating-linear-gradient(45deg,rgba(194,84,78,.05),rgba(194,84,78,.05) 5px,rgba(194,84,78,.13) 5px,rgba(194,84,78,.13) 6px)}
+  .row.flash .seg{animation:fl .55s ease}@keyframes fl{0%{box-shadow:inset 0 0 0 1px var(--val)}100%{box-shadow:none}}
+  .row.refuse{animation:rf .5s ease}@keyframes rf{0%,100%{background:transparent}40%{background:rgba(194,84,78,.10)}}
+
+  /* sealed-by-observation veil + the probe (orient) line */
+  .veil{position:absolute;top:0;bottom:0;left:0;background:rgba(7,8,10,.6);border-right:1px dashed var(--obs);pointer-events:none;z-index:4}
+  .probe{position:absolute;top:0;bottom:0;width:1px;background:var(--val);opacity:.7;pointer-events:none;z-index:6;box-shadow:0 0 7px rgba(86,211,230,.5)}
+  /* observers — draggable, releasable */
+  .obs{position:absolute;top:0;bottom:0;width:0;z-index:8;cursor:ew-resize}
+  .obs .stem{position:absolute;top:0;bottom:0;left:-1px;width:2px;background:var(--obs);opacity:.85}
+  .obs .pin{position:absolute;top:-1px;left:-6px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--obs)}
+  .obs .x{position:absolute;bottom:3px;left:-7px;width:14px;height:13px;line-height:12px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--obs);cursor:pointer;border:1px solid var(--line2);border-radius:2px;background:var(--bg)}
+  .obs .x:hover{color:var(--invalid);border-color:var(--invalid)}
+  .obs .id{position:absolute;top:9px;left:3px;font-family:var(--mono);font-size:8px;color:var(--obs)}
+
+  .read{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line);margin-top:1px}
+  .read .c{background:var(--panel2);padding:7px 9px;font-family:var(--mono)}
+  .read .c .k{font-size:8px;letter-spacing:.12em;color:var(--quiet)}
+  .read .c .v{font-size:12px;margin-top:3px}
+  .read .c .v.val{color:var(--val)}.read .c .v.pending{color:var(--pending);font-style:italic}.read .c .v.invalid{color:var(--invalid)}.read .c .v.mid{color:var(--mid)}
+  .read .c .f{font-size:8px;color:var(--obs);margin-top:2px;min-height:10px}
+
+  .meta{display:flex;justify-content:space-between;align-items:flex-end;margin-top:12px;gap:18px}
+  .plog{flex:1;border:1px solid var(--line);background:#070809;font-family:var(--mono);font-size:9.5px;color:var(--mid);padding:9px 12px;height:128px;overflow:hidden;line-height:1.75}
+  .plog .r{color:var(--quiet)}.plog .hit{color:var(--val)}.plog .skip{color:var(--quiet)}.plog .inv{color:var(--invalid)}
+  .ctrls{display:flex;flex-direction:column;gap:7px;font-family:var(--mono);font-size:10px}
+  .ctrls button{background:var(--panel);color:var(--mid);border:1px solid var(--line2);padding:7px 12px;letter-spacing:.08em;cursor:pointer;text-align:left}
+  .ctrls button:hover{color:var(--ink);border-color:var(--val)}
+  .legend{font-family:var(--mono);font-size:9px;color:var(--quiet);letter-spacing:.06em;margin-top:13px;display:flex;gap:16px;flex-wrap:wrap}
+  .legend .val{color:var(--val)}.legend .pending{color:var(--pending)}.legend .invalid{color:var(--invalid)}.legend .o{color:var(--obs)}
+  .back{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--quiet);text-decoration:none}
+  .back:hover{color:var(--val)}
+  .mobile-note{display:none}
+  @media(max-width:760px){
+    .board{overflow-x:auto}
+    .ruler,.row{min-width:640px}
+    .mobile-note{display:block;font-family:var(--mono);font-size:10.5px;color:var(--obs);
+         border:1px solid var(--line2);padding:9px 12px;margin:0 0 14px;line-height:1.6}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="./homepage.html">← CytherAI</a>
+  <div class="eyebrow" style="margin-top:14px">Sovereign Operational AI · live model</div>
+  <h1>The site is the reasoning — and it only commits what is observed.</h1>
+  <div class="mobile-note">This board is built for a mouse or trackpad — dragging observers and probing values needs precision a touchscreen won't give you cleanly. It'll scroll horizontally here, but it's at its best on a larger screen.</div>
+  <p class="lead">CytherAI's delivery doctrine as a live dependency graph. Top three rows are inputs; the four below are <em>derived</em> and repropagate themselves. A region is sealed not by being "in the past" but by being <em>observed</em>: each <span style="color:var(--obs)">observer</span> you place commits everything up to its frontier. Multiple observers can sit on one node; the seal is their <em>maximum</em>. Release one and the seal drops — and a write it was blocking goes through.</p>
+  <div class="how">
+    DRAG <b>◆ orient</b> (top) to point-query any moment — pure, moves freely. &nbsp; CLICK a source's future to rebase it.<br>
+    SHIFT-CLICK any track to drop an <span class="o">observer</span> (seals up to there) · drag it · click its <span class="o">✕</span> to release.<br>
+    An observer on a <em>derived</em> node seals its sources too (downstream). &nbsp; <span class="inv">▶ LIVENESS</span> scripts the proof: a rebase refused, then accepted the instant the blocking observer releases.
+  </div>
+
+  <div class="board" id="board">
+    <div class="ruler"><div class="lab">τ · TIMELINE →</div><div class="scale" id="scale"></div></div>
+    <div id="rows"></div>
+  </div>
+  <div class="read" id="read"></div>
+
+  <div class="meta">
+    <div class="plog" id="plog"></div>
+    <div class="ctrls">
+      <button id="live">▶ LIVENESS · release un-blocks</button>
+      <button id="reset">⟲ RESET</button>
+    </div>
+  </div>
+  <div class="legend">
+    <span class="val">■ value</span><span class="pending">■ pending</span><span class="invalid">▨ INVALID</span>
+    <span class="o">▲ observer (seals · max over observers · releasable)</span><span class="val">◆ orient probe (pure valueAt)</span>
+  </div>
+</div>
+
+<script>
+'use strict';
+/* ── engine core (edges · derive · rebase · repropagate) ── */
+const INVALID=Symbol('INVALID'), INDETERMINATE=Symbol('INDETERMINATE');
+const disp=v=> v===INVALID?'INVALID' : v===INDETERMINATE?'PENDING' : String(v);
+const kindOf=v=> v===INVALID?'invalid' : v===INDETERMINATE?'pending' : 'val';
+function seekAfter(E,t){let lo=0,hi=E.length;while(lo<hi){const m=(lo+hi)>>1;if(E[m].tau<=t)lo=m+1;else hi=m;}return lo;}
+function materialize(seed,surf){let p=seed,o=[];for(const s of surf){if(Object.is(p,s.value))continue;o.push({tau:s.tau,from:p,to:s.value});p=s.value;}return o;}
+function edgeLog(initial){return{ initial, edges:[],
+  append(es){for(const e of es){if(Object.is(e.from,e.to))continue;this.edges.push(e);}},
+  truncateAfter(t){return this.edges.splice(seekAfter(this.edges,t));},
+  valueAt(t){const i=seekAfter(this.edges,t);return i?this.edges[i-1].to:this.initial;} };}
+function breakpoints(logs){const s=new Set();for(const L of logs)for(const e of L.edges)s.add(e.tau);return[...s].sort((a,b)=>a-b);}
+function derive(logs,f){const initial=f(logs.map(L=>L.valueAt(-Infinity)));let prev=initial;const surf=[];
+  for(const tau of breakpoints(logs)){const v=f(logs.map(L=>L.valueAt(tau)));if(!Object.is(v,prev)){surf.push({tau,value:v});prev=v;}}
+  return{initial,surf};}
+
+/* ── the model ── */
+const NODES={
+  env :{label:'ENVIRONMENT', dep:'input', domain:['cloud','air-gapped'], log:edgeLog('cloud')},
+  dep :{label:'DEPENDENCIES',dep:'input', domain:['allowed','zero'],     log:edgeLog('allowed')},
+  evl :{label:'EVALUATION',  dep:'input', domain:['ungated','gated'],    log:edgeLog('ungated')},
+  arch:{label:'ARCHITECTURE',dep:'env · dep', src:['env','dep'], log:edgeLog(INVALID),
+        f:([e,d])=>(e===INVALID||d===INVALID)?INVALID:(d==='zero'&&e==='air-gapped')?'sovereign':d==='zero'?'portable':'coupled'},
+  val :{label:'VALIDATION',  dep:'arch · evl', src:['arch','evl'], log:edgeLog(INVALID),
+        f:([a,e])=>(a===INVALID||e===INVALID)?INVALID:e==='ungated'?INVALID:a==='coupled'?INDETERMINATE:'log-verified'},
+  dpl :{label:'DEPLOYABLE',  dep:'val · env', src:['val','env'], log:edgeLog(INVALID),
+        f:([v,e])=>v===INVALID?INVALID:v!=='log-verified'?INDETERMINATE:e==='air-gapped'?'YES · SOVEREIGN':'YES'},
+  dis :{label:'DISCLOSURE',  dep:'dpl', src:['dpl'], log:edgeLog('SEALED'),
+        f:([d])=>d===INVALID?'SEALED':String(d).indexOf('YES')===0?'PUBLIC':'RESTRICTED'},
+};
+const SRC=['env','dep','evl'], DER=['arch','val','dpl','dis'], ORDER=[...SRC,...DER];
+const SRCOF={arch:['env','dep'],val:['arch','evl'],dpl:['val','env'],dis:['dpl']};
+function downstream(src){const out=new Set();let ch=true;while(ch){ch=false;for(const d of DER){if(!out.has(d)&&SRCOF[d].some(s=>s===src||out.has(s))){out.add(d);ch=true;}}}return [...out];}
+const DOWN={}; SRC.forEach(s=>DOWN[s]=downstream(s));
+
+/* ── observers + orient probe ── */
+let observers=[], oid=0, probe=0.5;
+const maxFrontier=key=>observers.reduce((m,o)=>o.key===key?Math.max(m,o.tau):m,-Infinity);
+const effSeal=src=>Math.max(maxFrontier(src), ...DOWN[src].map(maxFrontier));
+
+function repropagate(reason){
+  plog('<span class="r">'+reason+'</span>');
+  for(const k of DER){const n=NODES[k];
+    const before=JSON.stringify(n.log.edges.map(e=>e.tau).concat([disp(n.log.initial)]));
+    const {initial,surf}=derive(n.src.map(s=>NODES[s].log),n.f);
+    n.log.initial=initial;n.log.edges.length=0;n.log.append(materialize(initial,surf));
+    const after=JSON.stringify(n.log.edges.map(e=>e.tau).concat([disp(n.log.initial)]));
+    if(after!==before){flash(k);plog('<span class="hit">  ↳ '+k+' repropagated → '+n.log.edges.length+' edge(s)</span>');}
+    else plog('<span class="skip">  ↳ '+k+' unchanged · edge-minimal</span>');
+  }
+  render();
+}
+function rebase(k,tau){
+  if(DER.includes(k)){plog('<span class="inv">  ✕ '+k+' is DERIVED — single writer is its own propagation; cannot author directly</span>');refuse(k);return;}
+  const seal=effSeal(k);
+  if(tau<=seal){
+    const b=observers.filter(o=>(o.key===k||DOWN[k].includes(o.key))&&o.tau>=tau).sort((a,b)=>b.tau-a.tau)[0];
+    plog('<span class="inv">  ✕ rebase '+k+'@τ'+tau.toFixed(2)+' REFUSED — observer #'+b.id+' on '+NODES[b.key].label+' @τ'+b.tau.toFixed(2)+(b.key===k?'':' (downstream)')+' holds the frontier</span>');
+    refuse(k);return;
+  }
+  const n=NODES[k];const cur=n.log.valueAt(tau);let i=n.domain.indexOf(cur);const nx=n.domain[(i+1)%n.domain.length];
+  n.log.truncateAfter(tau);n.log.append(materialize(n.log.valueAt(tau),[{tau,value:nx}]));
+  repropagate('rebase '+k+'@τ'+tau.toFixed(2)+' → '+nx+'  (future rewritten; observed past sealed)');
+}
+function addObserver(key,tau){observers.push({id:++oid,key,tau});plog('<span class="r">+ observer #'+oid+' on '+NODES[key].label+' @τ'+tau.toFixed(2)+' — seals to here'+(SRC.includes(key)?'':' (and its sources, downstream)')+'</span>');render();}
+function release(id){const o=observers.find(x=>x.id===id);if(!o)return;observers=observers.filter(x=>x.id!==id);plog('<span class="hit">− observer #'+id+' released ('+NODES[o.key].label+') → frontier drops; anything it blocked is now writable</span>');render();}
+
+/* ── render ── */
+const rowsEl=document.getElementById('rows'), readEl=document.getElementById('read'), scaleEl=document.getElementById('scale'), plogEl=document.getElementById('plog');
+[0,.25,.5,.75,1].forEach(t=>{const s=document.createElement('span');s.className='t';s.style.left=(t*100)+'%';s.textContent=t.toFixed(2);scaleEl.appendChild(s);});
+const probeHandle=document.createElement('div');probeHandle.className='probehandle';probeHandle.id='ph';scaleEl.appendChild(probeHandle);
+function segs(log){const o=[];let a=0,v=log.initial;for(const e of log.edges){o.push({a,b:e.tau,v});a=e.tau;v=e.to;}o.push({a,b:1,v});return o;}
+const rowEls={};
+ORDER.forEach(k=>{const n=NODES[k];const row=document.createElement('div');row.className='row '+(SRC.includes(k)?'source':'derived');
+  if(k==='arch')row.style.borderTop='1px solid var(--line2)';
+  const name=document.createElement('div');name.className='name';
+  name.innerHTML='<span class="k">'+n.label+'</span><span class="dep">'+(SRC.includes(k)?'INPUT · click=rebase':'← '+n.dep)+'</span>';
+  const tl=document.createElement('div');tl.className='tl'+(SRC.includes(k)?' editable':'');tl.dataset.node=k;
+  row.appendChild(name);row.appendChild(tl);rowsEl.appendChild(row);rowEls[k]={row,tl};});
+
+function render(){
+  for(const k of ORDER){const {tl}=rowEls[k];tl.querySelectorAll('.seg,.veil,.probe,.obs').forEach(x=>x.remove());
+    for(const s of segs(NODES[k].log)){const d=document.createElement('div');d.className='seg '+kindOf(s.v)+' '+String(s.v).replace(/[^a-z]/gi,'');
+      d.style.left=(s.a*100)+'%';d.style.width=((s.b-s.a)*100)+'%';d.textContent=disp(s.v);tl.appendChild(d);}
+    const seal=SRC.includes(k)?effSeal(k):maxFrontier(k);
+    if(seal>-Infinity){const veil=document.createElement('div');veil.className='veil';veil.style.width=(Math.min(seal,1)*100)+'%';tl.appendChild(veil);}
+    const pr=document.createElement('div');pr.className='probe';pr.style.left=(probe*100)+'%';tl.appendChild(pr);
+    for(const o of observers.filter(o=>o.key===k)){const el=document.createElement('div');el.className='obs';el.style.left=(o.tau*100)+'%';el.dataset.obs=o.id;
+      el.innerHTML='<div class="stem"></div><div class="pin"></div><div class="id">#'+o.id+'</div><div class="x" data-rel="'+o.id+'">✕</div>';tl.appendChild(el);}
+  }
+  readEl.innerHTML='';
+  for(const k of ORDER){const v=NODES[k].log.valueAt(probe);const mf=maxFrontier(k);const c=document.createElement('div');c.className='c';
+    c.innerHTML='<div class="k">'+k.toUpperCase()+'</div><div class="v '+(SRC.includes(k)?'mid':kindOf(v))+'">'+disp(v)+'</div><div class="f">'+(mf>-Infinity?'⊣ F='+mf.toFixed(2):'')+'</div>';
+    readEl.appendChild(c);}
+  probeHandle.style.left=(probe*100)+'%';
+}
+function flash(k){const r=rowEls[k].row;r.classList.remove('flash');void r.offsetWidth;r.classList.add('flash');}
+function refuse(k){const r=rowEls[k].row;r.classList.remove('refuse');void r.offsetWidth;r.classList.add('refuse');}
+function plog(html){const d=document.createElement('div');d.innerHTML=html;plogEl.prepend(d);while(plogEl.children.length>9)plogEl.lastChild.remove();}
+
+/* ── pointer wiring ── */
+function tauIn(el,e){const r=el.getBoundingClientRect();return Math.min(1,Math.max(0,(e.clientX-r.left)/r.width));}
+let drag=null;
+rowsEl.addEventListener('pointerdown',e=>{
+  const rel=e.target.closest('[data-rel]'); if(rel){release(+rel.dataset.rel);return;}
+  const ob=e.target.closest('.obs'); const tl=e.target.closest('.tl');
+  if(ob){drag={type:'obs',id:+ob.dataset.obs,tl};return;}
+  if(tl){ if(e.shiftKey){addObserver(tl.dataset.node, tauIn(tl,e));} else if(tl.classList.contains('editable')){rebase(tl.dataset.node, tauIn(tl,e));} }
+});
+scaleEl.addEventListener('pointerdown',e=>{drag={type:'probe',el:scaleEl};probe=tauIn(scaleEl,e);render();});
+window.addEventListener('pointermove',e=>{ if(!drag)return;
+  if(drag.type==='probe'){probe=tauIn(drag.el,e);render();}
+  else{const o=observers.find(x=>x.id===drag.id);if(o){o.tau=tauIn(drag.tl,e);render();}} });
+window.addEventListener('pointerup',()=>{drag=null;});
+
+document.getElementById('reset').onclick=()=>{NODES.env.log=edgeLog('cloud');NODES.dep.log=edgeLog('allowed');NODES.evl.log=edgeLog('ungated');observers=[];oid=0;probe=0.5;repropagate('reset');};
+document.getElementById('live').onclick=()=>{
+  observers=[];oid=0;render();plog('<span class="r">── LIVENESS: does releasing actually un-block? ──</span>');
+  addObserver('dpl',0.70);                                   // observer on a DERIVED node
+  setTimeout(()=>plog('<span class="skip">now try to author the past of a SOURCE the sealed derived depends on…</span>'),650);
+  setTimeout(()=>rebase('env',0.50),1200);                   // refused: dpl@0.70 is downstream of env
+  setTimeout(()=>{const o=observers[observers.length-1];release(o.id);},2200);
+  setTimeout(()=>{plog('<span class="skip">…retry the EXACT same write…</span>');rebase('env',0.50);},2900); // now accepted
+};
+repropagate('model initialised · derived computed from inputs');
+</script>
+</body>
+</html>

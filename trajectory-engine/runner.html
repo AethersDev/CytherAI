@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>trajectory-engine-v2 · test runner</title>
+<style>
+  :root { color-scheme: dark; }
+  body { background:#0f1115; color:#d6d9de; font:13px/1.65 'SF Mono', Menlo, 'Courier New', monospace; margin:0; padding:22px 24px; }
+  h1 { font-size:13px; color:#9aa4b2; font-weight:600; letter-spacing:.05em; text-transform:uppercase; margin:0 0 2px; }
+  .meta { color:#6b7280; margin:0 0 18px; font-size:11px; }
+  #out { white-space:pre-wrap; word-break:break-word; }
+  #out span { display:block; }
+  .pass { color:#5bd68a; }
+  .fail { color:#ff6b6b; font-weight:600; }
+  .err  { color:#ffb073; }
+  #summary { margin-top:18px; padding:11px 14px; border-radius:6px; font-weight:600; display:inline-block; }
+  #summary.ok  { background:rgba(91,214,138,.12);  color:#5bd68a;  border:1px solid rgba(91,214,138,.3); }
+  #summary.bad { background:rgba(255,107,107,.12); color:#ff6b6b; border:1px solid rgba(255,107,107,.3); }
+  #summary.pending { color:#6b7280; }
+</style>
+</head>
+<body>
+  <h1>trajectory-engine-v2.js — browser runner</h1>
+  <p class="meta">Node shims (assert/strict · module · process) provided in-page · engine loaded unmodified · same suite as <code>bun trajectory-engine-v2.js</code></p>
+  <div id="out"></div>
+  <div id="summary" class="pending">running…</div>
+
+  <!-- 1. Node shims, installed BEFORE the engine loads -->
+  <script>
+  (function () {
+    'use strict';
+    const out = document.getElementById('out');
+    function emit(text, cls) {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      span.textContent = String(text);
+      out.appendChild(span);
+    }
+    // Route the engine's console output onto the page (and keep devtools).
+    const _log = console.log.bind(console), _err = console.error.bind(console);
+    console.log = function (...a) { const s = a.join(' '); emit(s, /^PASS/.test(s) ? 'pass' : ''); _log(...a); };
+    console.error = function (...a) {
+      const s = a.map(x => (x && x.stack) ? x.stack : String(x)).join(' ');
+      emit(s, /^FAIL/.test(s) ? 'fail' : 'err'); _err(...a);
+    };
+
+    // Faithful-enough assert/strict: Object.is leaves, structural deep equality.
+    class AssertionError extends Error { constructor(m) { super(m || 'assertion failed'); this.name = 'AssertionError'; } }
+    function deepEqual(a, b) {
+      if (Object.is(a, b)) return true;
+      if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;
+      if (Array.isArray(a) !== Array.isArray(b)) return false;
+      const ka = Object.keys(a), kb = Object.keys(b);
+      if (ka.length !== kb.length) return false;
+      for (const k of ka) {
+        if (!Object.prototype.hasOwnProperty.call(b, k)) return false;
+        if (!deepEqual(a[k], b[k])) return false;
+      }
+      return true;
+    }
+    function assert(value, message) { if (!value) throw new AssertionError(message); }
+    assert.ok = assert;
+    assert.equal = (a, b, m) => { if (!Object.is(a, b)) throw new AssertionError(m || (display(a) + ' !== ' + display(b))); };
+    assert.notEqual = (a, b, m) => { if (Object.is(a, b)) throw new AssertionError(m || ('unexpected equality: ' + display(a))); };
+    assert.deepEqual = (a, b, m) => { if (!deepEqual(a, b)) throw new AssertionError(m || ('deepEqual failed')); };
+    assert.notDeepEqual = (a, b, m) => { if (deepEqual(a, b)) throw new AssertionError(m || 'unexpected deepEqual'); };
+    assert.throws = (fn, expected, m) => {
+      let e = null;
+      try { fn(); } catch (caught) { e = caught; }
+      if (!e) throw new AssertionError(m || 'expected function to throw, but it did not');
+      if (expected instanceof RegExp && !expected.test(e.message)) {
+        throw new AssertionError((m || 'throw message did not match ' + expected) + ' — got: ' + e.message);
+      }
+    };
+    assert.AssertionError = AssertionError;
+    function display(v) { return typeof v === 'symbol' ? v.toString() : String(v); }
+
+    // require / module / process shims
+    window.require = function (id) {
+      if (id === 'node:assert/strict' || id === 'assert/strict' || id === 'assert') return assert;
+      throw new Error('browser shim: cannot require("' + id + '")');
+    };
+    window.module = { exports: {} };
+    window.exports = window.module.exports;
+    window.process = { exitCode: 0, exit() {}, env: {}, argv: [] };
+  })();
+  </script>
+
+  <!-- 2. Engine, unmodified — run() executes at load and prints into #out -->
+  <script src="trajectory-engine-v2.js"></script>
+
+  <!-- 3. Summary, after the engine has run -->
+  <script>
+  (function () {
+    'use strict';
+    const passes = document.querySelectorAll('#out .pass').length;
+    const fails = document.querySelectorAll('#out .fail').length;
+    const code = (window.process && (window.process.exitCode | 0)) || 0;
+    const ok = fails === 0 && code === 0;
+    const s = document.getElementById('summary');
+    s.className = ok ? 'ok' : 'bad';
+    s.textContent = ok
+      ? `✓  ${passes} passed · exitCode ${code}`
+      : `✗  ${fails} failed / ${passes} passed · exitCode ${code}`;
+  })();
+  </script>
+</body>
+</html>

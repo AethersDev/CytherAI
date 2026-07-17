@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>CytherAI — Substrate Demo · The Mark as World</title>
+<style>
+/* ============ tokens — ambient values are written by the observation driver ============ */
+:root{
+  --bg:#ECF0F4; --ink:#101620; --accent:#2036C7;
+  --panel:rgba(255,255,255,.6); --hair:color-mix(in srgb,var(--ink) 16%,transparent);
+  --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --display:system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.mono{font-family:var(--mono)}
+
+/* ============ the substrate — four exposures of one object ============ */
+.tile{position:fixed;inset:0;z-index:-2;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
+#substrate{position:fixed;inset:0;z-index:0}          /* gesture surface (transparent) */
+body.forking #substrate{cursor:grabbing}
+
+/* ============ chrome ============ */
+.chrome{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;align-items:baseline;gap:12px;
+  padding:12px 18px;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(12px)}
+.wordmark{font-size:14px;font-weight:750;letter-spacing:.14em}
+.proto{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:color-mix(in srgb,var(--ink) 55%,transparent);
+  border:1px solid var(--hair);border-radius:99px;padding:2px 8px;white-space:nowrap}
+.gauge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-align:right;line-height:1.6}
+.gauge b{color:var(--accent);font-weight:500}
+@media(max-width:640px){.proto{display:none}.gauge{font-size:9px}}
+
+/* ============ core sample — where in the form you are ============ */
+.core{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:10;width:56px}
+.core canvas{display:block;width:56px;border:1px solid var(--hair);
+  background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(8px)}
+.core .core-wrap{position:relative}
+#coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);
+  pointer-events:none;will-change:transform}
+.core .lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-align:center;margin-top:5px;
+  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+
+/* ============ content ============ */
+main{position:relative;z-index:1;pointer-events:none}
+main a,main button,main .panel{pointer-events:auto}
+section{min-height:120vh;display:flex;flex-direction:column;justify-content:center;
+  padding:16vh 20px;max-width:760px;margin:0 auto}
+.zone{font-family:var(--mono);font-size:9.5px;letter-spacing:.22em;
+  color:color-mix(in srgb,var(--ink) 58%,transparent);margin-bottom:3.5vh}
+.zone b{color:var(--accent);font-weight:500}
+h1{font-size:clamp(30px,7.4vw,58px);font-weight:250;line-height:1.08;letter-spacing:-.015em;max-width:16ch}
+h2{font-size:clamp(22px,5vw,38px);font-weight:300;line-height:1.14;letter-spacing:-.01em;max-width:22ch}
+.panel{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair);
+  padding:20px 22px;margin-top:3.5vh;max-width:560px}
+.panel p{font-size:13.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent)}
+.panel p+p{margin-top:12px}
+.panel b{color:var(--ink);font-weight:600}
+.kv{font-family:var(--mono);font-size:10px;line-height:2.1;letter-spacing:.08em;margin-top:14px;
+  border-top:1px solid var(--hair);padding-top:12px;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.kv b{color:var(--accent);font-weight:500}
+.law{font-size:clamp(20px,4.6vw,34px);font-weight:300;line-height:1.5;max-width:22ch}
+.hint{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;margin-top:5vh;
+  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+
+/* ============ serial strip — the mark's record, always present ============ */
+.strip{position:fixed;left:0;right:0;bottom:0;z-index:10;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(12px);
+  border-top:1px solid var(--hair);color:color-mix(in srgb,var(--ink) 70%,transparent)}
+.strip b{color:var(--ink);font-weight:500}
+.strip .st{color:var(--accent)}
+.strip button{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 0;
+  color:color-mix(in srgb,var(--ink) 72%,transparent);border-bottom:1px solid var(--hair)}
+.strip button:hover,.strip button.on{color:var(--accent);border-color:var(--accent)}
+.strip .grow{flex:1}
+@media(max-width:640px){.strip{gap:9px;font-size:8.5px}}
+footer{position:relative;z-index:1;padding:14px 18px 64px;font-family:var(--mono);font-size:9px;
+  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+</style>
+</head>
+<body>
+
+<!-- four pre-rendered exposures of one derived object -->
+<canvas class="tile" id="t0"></canvas>
+<canvas class="tile" id="t1"></canvas>
+<canvas class="tile" id="t2"></canvas>
+<canvas class="tile" id="t3"></canvas>
+<div id="substrate" aria-hidden="true"></div>
+
+<header class="chrome">
+  <span class="wordmark">CYTHERAI</span>
+  <span class="proto">SUBSTRATE DEMO · THE MARK AS WORLD</span>
+  <span class="gauge" id="gauge">OBS <b>FAR-FIELD</b> · ×0.9<br>STRATUM SURFACE</span>
+</header>
+
+<div class="core" aria-hidden="true">
+  <div class="core-wrap">
+    <canvas id="coreMap"></canvas>
+    <i id="coreRect"></i>
+  </div>
+  <div class="lbl">POSITION<br>IN FORM</div>
+</div>
+
+<main>
+  <!-- surface: the object seen from far -->
+  <section id="surface">
+    <div class="zone">SURFACE · <b>FAR FIELD</b> · THE OBJECT AT DISTANCE</div>
+    <h1>The mark is not on this page. This page is inside the mark.</h1>
+    <div class="panel">
+      <p>What reads as atmosphere around this text is the canonical orbit itself, observed from far — its own sparse periphery, not decoration. There is no framed emblem anywhere on this page, and nothing ambient that is not derived.</p>
+      <p><b>Scroll is the observation function.</b> Descending the strata moves a camera into the object's density. The journey ends inside the filament core — where the record lives.</p>
+    </div>
+    <div class="hint">↓ DESCEND — ON A PHONE, THIS IS THE WHOLE POINT</div>
+  </section>
+
+  <!-- mid: structure resolves -->
+  <section id="structure">
+    <div class="zone">DESCENT · <b>STRUCTURE</b> · SAME OBJECT, CLOSER OBSERVATION</div>
+    <h2>Nothing changed but the observation.</h2>
+    <div class="panel">
+      <p>The form resolving around you is the same 220,000-point orbit that framed the surface — no new asset, no scene switch. Every statistic is a function of <b>(data, observation function)</b>; this page renders that sentence. The data is fixed by derivation. Your scroll supplies the observation.</p>
+      <div class="kv">CAMERA ANCHORS — <b>DERIVED</b> · densest cells of the canonical orbit, ordered by digest<br>The journey through the mark is not designed either.</div>
+    </div>
+  </section>
+
+  <!-- deep: approaching the core -->
+  <section id="approach">
+    <div class="zone">DEPTH · <b>NEAR FIELD</b> · THE FILAMENT LAYER</div>
+    <h2>Depth conditions — now literally.</h2>
+    <div class="panel">
+      <p>The surface showed the claim's silhouette; depth shows its construction. The elegance gradient of the page is no longer an accident of which stratum got the better furniture — it is the object itself, disclosing structure with proximity.</p>
+    </div>
+  </section>
+
+  <!-- floor: inside the core -->
+  <section id="floor">
+    <div class="zone">FLOOR · <b>INTERIOR</b> · INSIDE THE CANONICAL FORM</div>
+    <div class="law">One object.<br>Four exposures.<br>Zero raster per frame.<br>The scroll chooses the observation.</div>
+    <div class="panel">
+      <div class="kv" style="border-top:none;padding-top:0;margin-top:0">
+        OBJECT — <b>CANONICAL ORBIT</b> · n = 220,000 · precomputed once at boot<br>
+        CAMERA — <b>DERIVED</b> · anchors = top-density cells by digest<br>
+        EXPOSURES — <b>4 TILES</b> · far ×0.9 → interior ×6.8<br>
+        SCROLL COST — <b>TRANSFORM + OPACITY</b> · the substrate never re-rasters<br>
+        RASTER PER FRAME — <b>0 SUBSTRATE RASTERS</b> · reticle is a styled overlay · no running loop<br>
+        COMPOSITING ERROR — <b>&lt; 0.05 px</b> · transform quantization · measured worst-case<br>
+        FORK — drag (desktop) · <b>long-press then drag</b> (touch) · re-develops async
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="strip">
+  <span>MARK <b id="serial">…</b></span>
+  <span class="st" id="obsline">×0.90</span>
+  <button id="forkBtn">FORK</button>
+  <span class="st" id="status">CANONICAL</span>
+  <span class="grow"></span>
+  <button id="resetBtn" hidden>RETURN TO CANONICAL</button>
+</div>
+
+<footer>substrate-demo.html · mechanism proof for porting into rev 5 · closed causality: no fonts, no requests, no images · the dust was the mark all along</footer>
+
+<script>
+(function(){
+"use strict";
+const reduced=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $=id=>document.getElementById(id);
+function fnv(str){let h=0x811c9dc5;for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0;}return h>>>0;}
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smooth=t=>t*t*(3-2*t);
+
+/* ================= the derived object ================= */
+let P=[-1.4,1.6,1.0,0.7];                       /* canonical params (stand-in for manifest derivation) */
+const CANON=P.slice();
+const N=220000;
+let pts=new Float32Array(N*2), bounds={};
+
+function computeOrbit(params){
+  const [a,b,c,d]=params;
+  let x=0.08,y=0.12;
+  for(let i=0;i<40;i++){const nx=Math.sin(a*y)+c*Math.cos(a*x),ny=Math.sin(b*x)+d*Math.cos(b*y);x=nx;y=ny;}
+  let minx=1e9,maxx=-1e9,miny=1e9,maxy=-1e9;
+  for(let i=0;i<N;i++){
+    const nx=Math.sin(a*y)+c*Math.cos(a*x),ny=Math.sin(b*x)+d*Math.cos(b*y);
+    x=nx;y=ny;
+    pts[i*2]=x;pts[i*2+1]=y;
+    if(x<minx)minx=x;if(x>maxx)maxx=x;if(y<miny)miny=y;if(y>maxy)maxy=y;
+  }
+  bounds={minx,maxx,miny,maxy,cx:(minx+maxx)/2,cy:(miny+maxy)/2,
+          span:Math.max(maxx-minx,maxy-miny,1e-3)}; /* floor: a collapsed fork must not divide by zero */
+}
+
+/* ================= the derived camera =================
+   anchors = densest cells of the orbit, chosen by digest,
+   spaced apart so the journey actually travels. */
+let ANCH=[],ZOOMS=[];
+function deriveCamera(params){
+  const G=96, grid=new Float32Array(G*G);
+  const {minx,miny,span}=bounds;
+  for(let i=0;i<N;i++){
+    const gx=clamp(((pts[i*2]-minx)/span*G)|0,0,G-1);
+    const gy=clamp(((pts[i*2+1]-miny)/span*G)|0,0,G-1);
+    grid[gy*G+gx]++;
+  }
+  const cells=[];
+  for(let i=0;i<G*G;i++) if(grid[i]>0) cells.push([grid[i],i]);
+  cells.sort((u,v)=>v[0]-u[0]);
+  const top=cells.slice(0,48);
+  const h=fnv("camera:"+params.map(v=>v.toFixed(3)).join(","));
+  const chosen=[]; let k=h%top.length;
+  /* bounded walk — a collapsed fork can make the spacing test unsatisfiable;
+     after 256 tries the center fallback below takes over instead of hanging */
+  for(let tries=0; tries<256 && chosen.length<3 && top.length; tries++){
+    const idx=top[k%top.length][1];
+    const ax=minx+((idx%G)+0.5)/G*span, ay=miny+(((idx/G)|0)+0.5)/G*span;
+    if(chosen.every(c=>Math.hypot(c[0]-ax,c[1]-ay)>span*0.16)) chosen.push([ax,ay]);
+    k=(k*31+7)%9973;
+  }
+  while(chosen.length<3) chosen.push([bounds.cx,bounds.cy]);
+  ANCH=[[bounds.cx,bounds.cy],...chosen];
+  ZOOMS=[0.9,1.9,3.6,6.8];
+}
+
+/* ================= four exposures — rendered once ================= */
+let W,H,U,DPR;
+const tiles=[ $("t0"),$("t1"),$("t2"),$("t3") ];
+const TILE_N=[38000,80000,140000,220000];
+const TILE_STYLE=[
+  {col:[16,22,32],  a:0.32, acc:0},
+  {col:[36,52,110], a:0.30, acc:0},
+  {col:[150,175,235],a:0.30, acc:9},
+  {col:[192,212,255],a:0.28, acc:6}
+];
+function renderTile(i){
+  const cv=tiles[i], z=ZOOMS[i], c=ANCH[i];
+  cv.width=W*DPR; cv.height=H*DPR;
+  cv.style.width=W+"px"; cv.style.height=H+"px";
+  const g=cv.getContext("2d");
+  g.setTransform(DPR,0,0,DPR,0,0);
+  g.clearRect(0,0,W,H);
+  const st=TILE_STYLE[i], n=TILE_N[i];
+  const zu=z*U, ox=W/2-c[0]*zu, oy=H/2-c[1]*zu;
+  g.fillStyle=`rgba(${st.col[0]},${st.col[1]},${st.col[2]},${st.a})`;
+  for(let k=0;k<n;k++){
+    const sx=pts[k*2]*zu+ox, sy=pts[k*2+1]*zu+oy;
+    if(sx<-2||sy<-2||sx>W+2||sy>H+2) continue;
+    g.fillRect(sx,sy,1,1);
+  }
+  if(st.acc){
+    g.fillStyle="rgba(127,160,255,.5)";
+    for(let k=0;k<n;k+=st.acc){
+      const sx=pts[k*2]*zu+ox, sy=pts[k*2+1]*zu+oy;
+      if(sx<-2||sy<-2||sx>W+2||sy>H+2) continue;
+      g.fillRect(sx,sy,1,1);
+    }
+  }
+}
+
+/* ================= core sample minimap ================= */
+const coreCv=$("coreMap");
+function renderCore(){
+  const cw=56, ch=Math.round(56*(H/W)*1.4);
+  coreCv.width=cw*2; coreCv.height=ch*2; coreCv.style.height=ch+"px";
+  const g=coreCv.getContext("2d"); g.setTransform(2,0,0,2,0,0);
+  g.clearRect(0,0,cw,ch);
+  const s=Math.min(cw,ch)*0.86/bounds.span;
+  const ox=cw/2-bounds.cx*s, oy=ch/2-bounds.cy*s;
+  g.fillStyle="rgba(120,135,160,.5)";
+  for(let k=0;k<N;k+=11) g.fillRect(pts[k*2]*s+ox, pts[k*2+1]*s+oy, .7,.7);
+  coreCv.dataset.s=s; coreCv.dataset.ox=ox; coreCv.dataset.oy=oy;
+}
+function drawCoreRect(cx,cy,z){
+  /* the reticle is a styled overlay — the minimap canvas never re-rasters on scroll */
+  const s=+coreCv.dataset.s, ox=+coreCv.dataset.ox, oy=+coreCv.dataset.oy;
+  const hw=(W/(2*z*U))*s, hh=(H/(2*z*U))*s;
+  const r=$("coreRect");
+  r.style.width=(hw*2).toFixed(1)+"px"; r.style.height=(hh*2).toFixed(1)+"px";
+  r.style.transform=`translate(${(cx*s+ox-hw).toFixed(1)}px,${(cy*s+oy-hh).toFixed(1)}px)`;
+}
+
+/* ================= observation driver — transform + opacity only ================= */
+const ZONES=[["SURFACE","FAR-FIELD"],["DESCENT","STRUCTURE"],["DEPTH","NEAR FIELD"],["FLOOR","INTERIOR"]];
+const BGS=[["#ECF0F4","#101620"],["#B9C3D2","#131A26"],["#3A4658","#DDE6F2"],["#070A10","#C7D2E4"]];
+const PANELS=[[255,255,255,.60],[240,245,251,.55],[14,20,29,.50],[10,15,23,.55]];
+function observe(){
+  const max=document.documentElement.scrollHeight-innerHeight;
+  const p=max>0?clamp(scrollY/max,0,1):0;
+  const d=p*3;
+  const i=clamp(d|0,0,2), f=d-i;
+  const z=ZOOMS[i]*Math.pow(ZOOMS[i+1]/ZOOMS[i], f);           /* log-space zoom */
+  const sf=smooth(f);
+  const cx=lerp(ANCH[i][0],ANCH[i+1][0],sf);
+  const cy=lerp(ANCH[i][1],ANCH[i+1][1],sf);
+  for(let k=0;k<4;k++){
+    const o=clamp(1-Math.abs(d-k),0,1);
+    const cv=tiles[k];
+    if(o<=0){ cv.style.opacity=0; cv.style.visibility="hidden"; continue; }
+    cv.style.visibility="visible"; cv.style.opacity=o.toFixed(3);
+    const A=z/ZOOMS[k];
+    const tx=(1-A)*W/2+(ANCH[k][0]-cx)*z*U;
+    const ty=(1-A)*H/2+(ANCH[k][1]-cy)*z*U;
+    cv.style.transform=`translate(${tx.toFixed(2)}px,${ty.toFixed(2)}px) scale(${A.toFixed(5)})`;
+  }
+  /* ambient — bg + ink interpolate with depth */
+  const bi=clamp(d|0,0,2), bf=d-bi;
+  const mix=(a,b,t)=>{const A=[1,3,5].map(j=>parseInt(a.slice(j,j+2),16));
+    const B=[1,3,5].map(j=>parseInt(b.slice(j,j+2),16));
+    return `rgb(${A.map((v,j)=>Math.round(v+(B[j]-v)*t)).join(",")})`;};
+  document.documentElement.style.setProperty("--bg", mix(BGS[bi][0],BGS[bi+1][0],bf));
+  document.documentElement.style.setProperty("--ink",mix(BGS[bi][1],BGS[bi+1][1],bf));
+  const PA=PANELS[bi], PB=PANELS[bi+1];
+  const pn=PA.map((v,j)=>v+(PB[j]-v)*bf);
+  document.documentElement.style.setProperty("--panel",
+    `rgba(${pn[0]|0},${pn[1]|0},${pn[2]|0},${pn[3].toFixed(2)})`); /* no toggles — the panel descends too */
+  /* gauge + strip + core sample */
+  const zi=clamp(Math.round(d),0,3);
+  $("gauge").innerHTML=`OBS <b>${ZONES[zi][1]}</b> · ×${z.toFixed(2)}<br>STRATUM ${ZONES[zi][0]}`;
+  $("obsline").textContent="×"+z.toFixed(2);
+  drawCoreRect(cx,cy,z);
+}
+let tick=false;
+addEventListener("scroll",()=>{ if(!tick){tick=true;requestAnimationFrame(()=>{observe();tick=false;});} },{passive:true});
+
+/* ================= fork — long-press on touch, toggle on desktop ================= */
+let forking=false, developing=false, lastX=0, lastY=0, pressTimer=null;
+const fmt=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(3);
+function setSerial(){
+  $("serial").innerHTML=P.map(fmt).join(" ");
+  const canonical=P.every((v,i)=>Math.abs(v-CANON[i])<0.0015);
+  $("status").textContent=developing?"DEVELOPING…":(canonical?"CANONICAL":"LOCAL FORK");
+  $("resetBtn").hidden=canonical;
+}
+function setFork(on){
+  forking=on; document.body.classList.toggle("forking",on);
+  $("forkBtn").classList.toggle("on",on);
+  $("forkBtn").textContent=on?"FORKING — DRAG":"FORK";
+  document.body.style.overflow=on?"hidden":"";
+  if(!on) redevelop();
+}
+$("forkBtn").addEventListener("click",()=>setFork(!forking));
+$("resetBtn").addEventListener("click",()=>{ P=CANON.slice(); redevelop(); });
+
+const sub=$("substrate");
+sub.style.pointerEvents="auto";
+sub.addEventListener("pointerdown",e=>{
+  lastX=e.clientX; lastY=e.clientY;
+  if(e.pointerType==="touch" && !forking){
+    pressTimer=setTimeout(()=>setFork(true),550);          /* long-press: never fights scroll */
+  }
+});
+sub.addEventListener("pointermove",e=>{
+  if(pressTimer && Math.hypot(e.clientX-lastX,e.clientY-lastY)>12){ clearTimeout(pressTimer); pressTimer=null; }
+  if(!forking) return;
+  P[0]=clamp(P[0]+(e.clientX-lastX)*0.0014,-2.2,2.2);
+  P[1]=clamp(P[1]+(e.clientY-lastY)*0.0014,-2.2,2.2);
+  P[2]=clamp(P[2]+(e.clientX-lastX)*0.0005,-2.2,2.2);
+  P[3]=clamp(P[3]-(e.clientY-lastY)*0.0005,-2.2,2.2);
+  lastX=e.clientX; lastY=e.clientY; setSerial();
+});
+sub.addEventListener("pointerup",e=>{
+  clearTimeout(pressTimer); pressTimer=null;
+  if(forking && e.pointerType==="touch") setFork(false);
+});
+sub.addEventListener("pointercancel",()=>{
+  clearTimeout(pressTimer); pressTimer=null;
+  if(forking) setFork(false); /* a browser-cancelled gesture must never strand the fork lock */
+});
+
+/* re-develop the exposures from the (possibly forked) params — async, chunked */
+function redevelop(){
+  developing=true; setSerial();
+  setTimeout(()=>{
+    computeOrbit(P); deriveCamera(P);
+    let k=0;
+    (function chunk(){
+      renderTile(k); k++;
+      if(k<4) setTimeout(chunk,0);
+      else { renderCore(); observe(); developing=false; setSerial(); }
+    })();
+  },10);
+}
+
+/* ================= boot ================= */
+function layout(){
+  W=innerWidth; H=innerHeight;
+  DPR=Math.min(devicePixelRatio||1, W>800?2:1.6);
+  U=Math.min(W,H)/bounds.span*0.92;
+}
+function boot(){
+  computeOrbit(P);
+  deriveCamera(P);
+  layout();
+  for(let k=0;k<4;k++) renderTile(k);
+  renderCore();
+  setSerial();
+  observe();
+}
+let rzT=null;
+addEventListener("resize",()=>{
+  /* mobile URL-bar show/hide fires height-only resizes mid-scroll — never re-develop
+     four tiles for that. Geometry stays at last-rendered W/H so the compositing
+     identity holds; the debounced pass heals coverage once the gesture settles. */
+  const heightOnly=innerWidth===W&&Math.abs(innerHeight-H)<160;
+  clearTimeout(rzT);
+  rzT=setTimeout(()=>{ layout(); for(let k=0;k<4;k++) renderTile(k); renderCore(); observe(); },
+    heightOnly?450:160);
+  observe();
+});
+boot();
+})();
+</script>
+</body>
+</html>

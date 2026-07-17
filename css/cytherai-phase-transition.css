@@ -1,0 +1,169 @@
+/* ══════════════════════════════════════════════════════════════
+   PHASE TRANSITION ENGINE — CSS
+   "Fast reveals nothing. Slow reveals truth."
+
+   Doctrine: reveal resolution, never spectacle.
+
+   Hot  → detail recedes. Metadata fades. Structure persists.
+   Warm → baseline. No modifications. The document as designed.
+   Cold → detail surfaces. Contrast sharpens. Annotations emerge.
+
+   Cold depths:
+     1 — micro-contrast (immediate on stillness)
+     2 — secondary metadata surfaces (800ms stationary)
+     3 — full resolution: hashes, footnotes, IDs (1600ms stationary)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Transition timing on elements that will change ── */
+.rail-marginalia,
+.section-strip,
+.proof-fragment-source,
+.proof-fragment-field,
+.doc-exhibit-type,
+.doc-exhibit-header-id,
+.doc-rail-note,
+.colophon-row-val,
+.validation-footnote-dagger,
+.validation-footnote-note,
+.validation-methodology-label {
+    transition: color 1.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   HOT — fast scroll (>600 px/s), detail recedes
+   ═══════════════════════════════════════════════════════ */
+
+[data-thermal="hot"] .rail-marginalia            { opacity: 0.2; }
+[data-thermal="hot"] .section-strip              { color: var(--rule); }
+[data-thermal="hot"] .proof-fragment-source       { color: var(--rule); }
+[data-thermal="hot"] .proof-fragment-field        { color: var(--rule); }
+[data-thermal="hot"] .doc-exhibit-type            { color: var(--rule); }
+[data-thermal="hot"] .doc-exhibit-header-id       { color: var(--rule); }
+[data-thermal="hot"] .validation-methodology-label { color: var(--rule); }
+
+
+/* ═══════════════════════════════════════════════════════
+   COLD — stationary, resolution increases with depth
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Depth 1: micro-contrast (immediate) ── */
+[data-thermal="cold"] .rail-marginalia { opacity: 0.72; }
+[data-thermal="cold"] .section-strip   { color: var(--ink-mid); }
+
+/* ── Depth 2: secondary metadata surfaces (800ms) ── */
+[data-thermal="cold"][data-crystal-depth="2"] .doc-rail-note          { color: var(--ink-quiet); }
+[data-thermal="cold"][data-crystal-depth="2"] .proof-fragment-source   { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="2"] .colophon-row-val        { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="2"] .validation-methodology-label { color: var(--ink-mid); }
+
+/* Depth 3 inherits depth 2 — compound selectors */
+[data-thermal="cold"][data-crystal-depth="3"] .doc-rail-note          { color: var(--ink-quiet); }
+[data-thermal="cold"][data-crystal-depth="3"] .proof-fragment-source   { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="3"] .colophon-row-val        { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="3"] .validation-methodology-label { color: var(--ink-mid); }
+
+/* ── Depth 3: full resolution — hashes, footnotes, IDs (1600ms) ── */
+[data-thermal="cold"][data-crystal-depth="3"] .doc-exhibit-header-id   { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="3"] .validation-footnote-dagger { color: var(--ink-mid); }
+[data-thermal="cold"][data-crystal-depth="3"] .validation-footnote-note   { color: var(--ink-mid); }
+
+
+/* ═══════════════════════════════════════════════════════
+   TRIPLE POINT — φ⁻¹ scroll position at 150–400 px/s
+   Momentary. 800ms. A flicker of all three states.
+   ═══════════════════════════════════════════════════════ */
+
+[data-triple-point="true"] .doc-section {
+    border-top-color: rgba(12, 124, 111, 0.12);
+    transition: border-top-color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   ENGINE DOM ELEMENTS
+   ═══════════════════════════════════════════════════════ */
+
+/* Thermal vignette — edge darkening in hot state only.
+   3% opacity radial gradient. Felt, not seen. */
+.thermal-vignette {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9996;
+    opacity: 0;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgba(0, 0, 0, 0.03) 100%
+    );
+    transition: opacity 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-thermal="hot"] .thermal-vignette { opacity: 1; }
+
+/* Reticle, Brownian field, calibration marks — suppressed.
+   These are spectacle, not resolution. */
+.thermal-reticle,
+.brownian-field,
+.calibration-mark { display: none; }
+
+/* Seed crystals — faint geometric marks at φ landmarks.
+   Fixed to right edge. Visible only near their scroll landmark. */
+.seed-crystal {
+    position: fixed;
+    right: 18px;
+    width: 16px;
+    height: 16px;
+    pointer-events: none;
+    z-index: 9996;
+    color: var(--rule);
+    opacity: 0;
+    transition: opacity 2.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.seed-crystal[data-visible="true"]                              { opacity: 0.12; }
+[data-thermal="cold"] .seed-crystal[data-visible="true"]        { opacity: 0.22; }
+
+.seed-crystal[data-position="emergence"]  { top: 38.2%; }
+.seed-crystal[data-position="balance"]    { top: 61.8%; }
+.seed-crystal[data-position="completion"] { top: 85.4%; }
+
+
+/* ═══════════════════════════════════════════════════════
+   GUARDS
+   ═══════════════════════════════════════════════════════ */
+
+/* Mobile — suppress overlay elements, let text changes ride */
+@media (max-width: 768px) {
+    .thermal-vignette,
+    .seed-crystal { display: none; }
+}
+
+/* Reduced motion — no transitions, no overlays */
+@media (prefers-reduced-motion: reduce) {
+    .thermal-vignette,
+    .seed-crystal { display: none; }
+
+    .rail-marginalia,
+    .section-strip,
+    .proof-fragment-source,
+    .proof-fragment-field,
+    .doc-exhibit-type,
+    .doc-exhibit-header-id,
+    .doc-rail-note,
+    .colophon-row-val,
+    .validation-footnote-dagger,
+    .validation-footnote-note,
+    .validation-methodology-label {
+        transition: none !important;
+    }
+}
+
+/* Print — no phase effects */
+@media print {
+    .thermal-vignette,
+    .seed-crystal,
+    .thermal-reticle,
+    .brownian-field,
+    .calibration-mark { display: none !important; }
+}

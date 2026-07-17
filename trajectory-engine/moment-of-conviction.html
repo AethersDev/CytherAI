@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CytherAI — try to break it</title>
+<style>
+  :root{
+    --bg:#08090c; --ink:#eceee9; --mid:#9aa0a6; --quiet:#565c63; --line:#1b1f25;
+    --glass:rgba(120,140,150,.05); --signal:#5ad0e0; --signal-dim:#2a5a61;
+    --fail:#b56b66; --held:#6fae9c;   /* desaturated — instrument, not alarm */
+    --serif:Georgia,'Times New Roman',serif; --mono:'SF Mono',Menlo,'Courier New',monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{margin:0;background:radial-gradient(120% 80% at 50% -10%,#0c0e12,var(--bg));color:var(--ink);
+       font-family:var(--serif);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;min-height:100%}
+  .challenge{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;color:var(--quiet);text-align:center;
+       padding:20px 24px 0;line-height:1.7;max-width:620px;margin:0 auto}
+  .challenge b{color:var(--mid);font-weight:400}
+
+  .stage{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 24px 8px;max-width:760px;margin:0 auto;width:100%}
+  .record{width:100%;max-width:600px;display:flex;flex-direction:column;gap:18px;min-height:230px;justify-content:center}
+  .line{font-size:25px;line-height:1.4;letter-spacing:-.01em;opacity:0;transform:translateY(6px);
+        transition:opacity .6s ease,transform .6s ease,color .5s ease;border-left:2px solid transparent;padding-left:16px}
+  .line.shown{opacity:1;transform:none}
+  .line.sealed{color:var(--ink);border-left-color:var(--signal-dim);background:linear-gradient(90deg,var(--glass),transparent)}
+  .line.provisional{opacity:.3;color:var(--signal);font-style:italic}
+  .line.modified{color:var(--fail);border-left-color:var(--fail)}     /* changes quietly — the monitor is the alarm, not this */
+
+  .prompt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--quiet);min-height:18px;text-align:center;transition:opacity .4s}
+
+  /* instrument: τ line + frontier + the monitor as laboratory equipment */
+  .instrument{max-width:600px;margin:0 auto;width:100%;padding:0 24px}
+  .tl{position:relative;height:2px;background:var(--line);margin:22px 0 8px}
+  .tl .seg{position:absolute;top:0;height:2px;background:var(--signal-dim)}
+  .tl .frontier{position:absolute;top:-7px;width:1px;height:16px;background:var(--signal);opacity:0;transition:left .55s cubic-bezier(.6,0,.2,1)}
+  .tl .frontier::after{content:'';position:absolute;left:-2px;top:-2px;width:5px;height:5px;border-radius:50%;background:var(--signal)}
+  .tl .mark{position:absolute;top:-3px;width:1px;height:8px;background:var(--quiet)}
+
+  .monitor{font-family:var(--mono);font-size:11px;border:1px solid var(--line);background:#090b0e;margin:12px auto 0;max-width:600px;
+       opacity:0;max-height:0;overflow:hidden;transition:opacity .45s ease,max-height .45s ease}
+  .monitor.on{opacity:1;max-height:260px}
+  .monitor .h{padding:8px 14px;border-bottom:1px solid var(--line);color:var(--quiet);letter-spacing:.18em;line-height:1.6}
+  .monitor .h .t{color:var(--mid)}
+  .monitor .field{display:flex;justify-content:space-between;padding:6px 14px;border-top:1px solid var(--line);letter-spacing:.06em}
+  .monitor .field:first-of-type{border-top:0}
+  .monitor .field .l{color:var(--quiet);letter-spacing:.14em}
+  .monitor .field .v{color:var(--ink)}
+  .monitor .field .v.fail{color:var(--fail)} .monitor .field .v.held{color:var(--held)}
+  .monitor .note{padding:7px 14px;border-top:1px solid var(--line);color:var(--mid)}
+  .monitor .exp{padding:6px 14px;border-top:1px solid var(--line);color:var(--quiet);cursor:pointer;letter-spacing:.06em}
+  .monitor .exp:hover{color:var(--mid)}
+  .monitor .expbody{padding:0 14px;max-height:0;overflow:hidden;color:var(--quiet);transition:max-height .35s,padding .35s}
+  .monitor .expbody.open{max-height:60px;padding:0 14px 9px}
+
+  .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:22px 24px 10px}
+  button.act{font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:transparent;color:var(--ink);
+       border:1px solid var(--signal-dim);padding:12px 22px;cursor:pointer;transition:.2s;border-radius:1px}
+  button.act:hover{border-color:var(--signal);background:rgba(90,208,224,.06)}
+  button.act .sub{color:var(--quiet);display:block;font-size:8.5px;letter-spacing:.16em;margin-top:4px;text-transform:uppercase}
+  button.act.adv{border-color:rgba(181,107,102,.4)} button.act.adv:hover{border-color:var(--fail);background:rgba(181,107,102,.06)}
+  button.act:active{transform:translateY(1px)}
+  button.act.depress{animation:dep .5s}@keyframes dep{0%{transform:translateY(2px);opacity:.55}100%{transform:none;opacity:1}}
+
+  .inspect{max-width:600px;margin:0 auto;width:100%;padding:0 24px;opacity:0;max-height:0;overflow:hidden;transition:opacity .6s,max-height .9s}
+  .inspect.on{opacity:1;max-height:720px}
+  .law{font-family:var(--mono);font-size:14px;line-height:1.75;color:var(--ink);border-left:2px solid var(--signal);padding:14px 18px;background:var(--glass);margin:8px 0}
+  .law .k,.bridge .k,.suite .k,.code .k{color:var(--quiet);font-size:10px;letter-spacing:.2em;display:block;margin-bottom:8px}
+  .bridge{font-family:var(--serif);font-size:16px;line-height:1.6;color:var(--mid);padding:10px 18px;margin:8px 0;border-left:2px solid var(--line)}
+  .code{font-family:var(--mono);font-size:11px;color:var(--mid);background:#06070a;border:1px solid var(--line);padding:13px 16px;margin:10px 0;white-space:pre;overflow-x:auto;line-height:1.6}
+  .code .c{color:var(--quiet)} .code .s{color:var(--signal)} .code .b{color:var(--fail)}
+  .suite{font-family:var(--mono);font-size:11px;border:1px solid var(--line);background:#06070a;padding:13px 16px;margin:10px 0;line-height:1.85;color:var(--mid)}
+  .suite .pass{color:var(--signal)} .suite .n{color:var(--ink);font-size:15px}
+  .close{text-align:center;padding:32px 24px 54px}
+  .close .big{font-family:var(--serif);font-size:21px;line-height:1.5;color:var(--ink);max-width:520px;margin:0 auto 24px}
+  .close a{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--signal);text-decoration:none;border:1px solid var(--signal-dim);padding:12px 24px;display:inline-block}
+  .close a:hover{background:rgba(90,208,224,.06)}
+  .reveal{opacity:0;transform:translateY(8px);transition:opacity .6s,transform .6s}
+  .reveal.on{opacity:1;transform:none}
+</style>
+</head>
+<body>
+  <div class="challenge"><b>Every important claim should survive an adversary, not a demonstration.</b><br>Everything that follows is simply evidence.</div>
+
+  <div class="stage">
+    <div class="record" id="record"></div>
+    <div class="prompt" id="prompt"></div>
+  </div>
+
+  <div class="instrument">
+    <div class="tl" id="tl"><div class="frontier" id="frontier"></div></div>
+    <div class="monitor" id="monitor">
+      <div class="h">INTEGRITY MONITOR<br><span class="t">Committed Prefix Preservation</span></div>
+      <div id="monbody"></div>
+    </div>
+  </div>
+
+  <div class="actions" id="actions"></div>
+  <div class="inspect" id="inspect"></div>
+
+<script>
+'use strict';
+/* ====== the record as a trajectory; the monitor runs the REAL check + guard ====== */
+const RECORD=[
+  { tau:0.16, value:'Operational AI should be inspectable.', cyc:null },
+  { tau:0.45, value:'Most AI systems hide their operational state.', cyc:['hide their reasoning.','hide their assumptions.','hide their operational state.'] },
+  { tau:0.74, value:'A claim you cannot inspect is a claim you must trust.', cyc:null },
+];
+let F=0;
+const committed=()=>RECORD.filter(r=>r.tau<=F);
+function checkPrefix(before){for(const b of before){const now=RECORD.find(r=>r.tau===b.tau);if(now.value!==b.v)return{tau:b.tau,was:b.v,now:now.value};}return null;}
+function guardedRewrite(tau,v){ if(tau<=F) throw new Error('discontinuity before observation frontier'); RECORD.find(r=>r.tau===tau).value=v; }
+
+/* ====== DOM ====== */
+const recordEl=document.getElementById('record'), promptEl=document.getElementById('prompt'),
+      actionsEl=document.getElementById('actions'), frontierEl=document.getElementById('frontier'),
+      tlEl=document.getElementById('tl'), monEl=document.getElementById('monitor'),
+      monBody=document.getElementById('monbody'), inspectEl=document.getElementById('inspect');
+const lineEls=new Map();
+RECORD.forEach(r=>{ const el=document.createElement('div'); el.className='line'; recordEl.appendChild(el); lineEls.set(r.tau,el);
+  const m=document.createElement('div'); m.className='mark'; m.style.left=(r.tau*100)+'%'; tlEl.appendChild(m); });
+
+function paintLine(r){ const el=lineEls.get(r.tau);
+  if(r.tau<=F){ el.className='line shown sealed'; el.textContent=r.value; }
+  else { el.className='line shown provisional'; el.textContent=r._disp||r.value; } }
+function frontierTo(pos,instant){ if(instant){ frontierEl.style.transition='none'; } frontierEl.style.left=(pos*100)+'%'; frontierEl.style.opacity=1;
+  if(instant){ void frontierEl.offsetWidth; frontierEl.style.transition='left .55s cubic-bezier(.6,0,.2,1)'; }
+  let seg=tlEl.querySelector('.seg'); if(!seg){seg=document.createElement('div');seg.className='seg';tlEl.appendChild(seg);} seg.style.left=0; seg.style.width=(pos*100)+'%'; }
+const setActions=h=>actionsEl.innerHTML=h;
+const showMonitor=on=>monEl.classList.toggle('on',on);
+
+/* ====== act flow ====== */
+let idx=0, cyc=null;
+function showOpening(){
+  const first=lineEls.get(RECORD[0].tau); first.className='line shown'; first.textContent=RECORD[0].value;
+  setActions('<button class="act" onclick="begin()">Observe</button>');   // not "Continue" — you advance the frontier
+}
+window.begin=function(){
+  F=RECORD[0].tau; frontierTo(F,true);            // the frontier simply exists where you observed — never introduced
+  paintLine(RECORD[0]); idx=1; advanceReveal();
+  promptEl.textContent='what lies ahead is not yet fixed.';
+  setActions('<button class="act" onclick="step()">Observe</button>');
+};
+function advanceReveal(){
+  if(idx>=RECORD.length){ recordComplete(); return; }
+  const r=RECORD[idx]; r._disp=r.cyc?r.cyc[0]:r.value; paintLine(r);
+  if(cyc) clearInterval(cyc);
+  if(r.cyc){ let i=0; cyc=setInterval(()=>{ i=(i+1)%r.cyc.length; r._disp=r.cyc[i]; paintLine(r); },520); }
+}
+window.step=function(){
+  if(idx>=RECORD.length) return;
+  if(cyc){ clearInterval(cyc); cyc=null; }
+  const r=RECORD[idx]; F=r.tau; frontierTo(F); paintLine(r); idx++;     // crystallizes into the sealed record
+  if(idx<RECORD.length){ advanceReveal(); } else { F=0.92; frontierTo(F); recordComplete(); }
+};
+function recordComplete(){
+  promptEl.textContent='you committed this record by observing it. now try to change what is behind you.';
+  setActions('<button class="act adv" onclick="runConventional()">Run conventional AI<span class="sub">try violating it</span></button>');
+}
+
+/* ── Break: conventional AI rewrites the committed past; the oracle catches it ── */
+window.runConventional=function(){
+  const before=committed().map(r=>({tau:r.tau,v:r.value}));
+  RECORD[0].value='Operational AI should be explainable.'; paintLine(RECORD[0]);   // silent change, behind the frontier
+  lineEls.get(RECORD[0].tau).classList.add('modified');
+  const v=checkPrefix(before);
+  monBody.innerHTML=
+    '<div class="field"><span class="l">STATUS</span><span class="v fail">✕ FAILED</span></div>'+
+    '<div class="field"><span class="l">OBSERVATION FRONTIER</span><span class="v">τ = '+v.tau.toFixed(2)+'</span></div>'+
+    '<div class="note">Past modified.</div>';
+  showMonitor(true);
+  promptEl.textContent='it changed something behind you, silently. the instrument saw what you might not have.';
+  setActions('<button class="act" onclick="runCyther()">Run Cyther Engine<span class="sub">the same attempt</span></button>');
+};
+
+/* ── Repair: the engine refuses the identical write ── */
+window.runCyther=function(){
+  RECORD[0].value='Operational AI should be inspectable.'; lineEls.get(RECORD[0].tau).classList.remove('modified'); paintLine(RECORD[0]);
+  let reason=null; try{ guardedRewrite(0.16,'Operational AI should be explainable.'); }catch(e){ reason=e.message; }
+  monBody.innerHTML=
+    '<div class="field"><span class="l">STATUS</span><span class="v held">✓ HELD</span></div>'+
+    '<div class="field"><span class="l">WRITE</span><span class="v">REJECTED</span></div>'+
+    '<div class="note">Past cannot be rewritten.</div>'+
+    '<div class="exp" onclick="this.nextElementSibling.classList.toggle(\x27open\x27)">▸ reason</div>'+
+    '<div class="expbody">'+reason+'</div>';
+  showMonitor(true);
+  document.querySelectorAll('button.act').forEach(b=>b.classList.add('depress'));
+  promptEl.textContent='it did not warn you. it refused.';
+  setActions('<button class="act" onclick="inspect()">Why did it hold?<span class="sub">inspect the proof</span></button>');
+};
+
+/* ── Inspect: law → how it is enforced → the guard → how we know it works ── */
+let st=0;
+function reveal(html,btn){ inspectEl.classList.add('on'); inspectEl.insertAdjacentHTML('beforeend',html);
+  const r=inspectEl.querySelectorAll('.reveal'); setTimeout(()=>r[r.length-1].classList.add('on'),30); setActions(btn); }
+window.inspect=function(){ st++;
+  if(st===1){
+    reveal('<div class="law reveal"><span class="k">THE LAW</span>No accepted operation may change valueAt(τ) for any τ ≤ F,<br>where F is the committed observation frontier.</div>',
+           '<button class="act" onclick="inspect()">How the engine enforces it<span class="sub">the bridge</span></button>');
+    promptEl.textContent='that is the entire claim. you already felt it twice.';
+  } else if(st===2){
+    reveal('<div class="bridge reveal"><span class="k">HOW THE ENGINE ENFORCES IT</span>Before any write takes effect, the engine compares where it would land to the frontier you advanced. A write at or behind that frontier never executes — that is the refusal you just triggered.</div>',
+           '<button class="act" onclick="inspect()">Show the guard<span class="sub">the line of code</span></button>');
+    promptEl.textContent='';
+  } else if(st===3){
+    reveal('<div class="code reveal"><span class="k">THE GUARD</span><span class="c">// checked before every write — nothing past the frontier moves</span>\nassert(tau <span class="s">></span> maxFrontier(key),\n  <span class="b">\x27cannot terminate at or behind a consumed frontier\x27</span>);</div>',
+           '<button class="act" onclick="inspect()">How we know it works<span class="sub">reproduce the result</span></button>');
+  } else if(st===4){
+    reveal('<div class="suite reveal"><span class="k">HOW WE KNOW IT WORKS</span><span class="n">33 / 33</span> &nbsp;property suite · mutation-verified<br>'+
+      '<span class="pass">PASS</span> V1 &nbsp;committed prefix · 200×50 adversarial ops<br>'+
+      '<span class="pass">PASS</span> V2 &nbsp;derived-on-derived chains, depth 5<br>'+
+      '<span class="pass">PASS</span> V3 &nbsp;up to 10 simultaneous observers · release<br>'+
+      '<span class="pass">PASS</span> V4 &nbsp;release un-blocks · liveness witness<br>'+
+      '<span class="c">// remove any guard and exactly its witness fails — nothing is asserted that isn\x27t checked</span></div>',
+      '<button class="act" onclick="finale()">—<span class="sub">finish</span></button>');
+  }
+};
+window.finale=function(){
+  document.querySelector('.stage').style.display='none'; document.querySelector('.instrument').style.display='none'; actionsEl.innerHTML='';
+  inspectEl.insertAdjacentHTML('beforeend',
+    '<div class="close reveal"><div class="big">Everything on this page remained true after you tried to break it.</div>'+
+    '<a href="runner.html" target="_blank">Reproduce the result →</a></div>');
+  const r=inspectEl.querySelectorAll('.reveal'); setTimeout(()=>r[r.length-1].classList.add('on'),30);
+};
+
+showOpening();
+</script>
+</body>
+</html>

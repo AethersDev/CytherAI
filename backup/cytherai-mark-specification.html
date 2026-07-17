@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DOC-2026-MARK-02 · CytherAI Mark Specifications · Production</title>
+<style>
+:root {
+  --paper:         #E7DFD1;
+  --paper-dense:   #DDD4C4;
+  --paper-lifted:  #F1EBE0;
+  --ink:           #171612;
+  --ink-mid:       #4D493F;
+  --ink-quiet:     #7B7467;
+  --rule:          #B9AE97;
+  --brass:         #7A5B1B;
+  --brass-pale:    rgba(122,91,27,.1);
+  --dark:          #202226;
+  --font-mono:     'SF Mono', Menlo, 'Courier New', monospace;
+  --font-serif:    Georgia, 'Times New Roman', serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-mono);
+  background: var(--paper-dense);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+body::after {
+  content: ''; position: fixed; inset: 0;
+  pointer-events: none; z-index: 10000;
+  opacity: .02; mix-blend-mode: multiply;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+@media (prefers-reduced-motion: reduce) { body::after { display: none; } }
+
+.reg { position: fixed; z-index: 9997; pointer-events: none; }
+.reg i { position: absolute; background: rgba(23,22,18,.07); display: block; }
+.reg-tl { top: 12px; left: 12px; }
+.reg-tr { top: 12px; right: 12px; }
+.reg-bl { bottom: 12px; left: 12px; }
+.reg-br { bottom: 12px; right: 12px; }
+.reg i.h { width: 18px; height: 1px; }
+.reg i.v { width: 1px; height: 18px; }
+
+/* ── Doc control ── */
+.doc-control {
+  background: var(--paper-dense);
+  border-bottom: 1px solid var(--rule);
+}
+.dc-row {
+  height: 22px; display: flex; align-items: center;
+  padding: 0 28px; justify-content: space-between;
+  font-size: 8.5px; letter-spacing: .18em;
+  color: var(--ink-quiet); text-transform: uppercase;
+}
+.dc-row + .dc-row { border-top: 1px solid rgba(185,174,151,.4); }
+.dc-scope { color: var(--brass); }
+
+/* ── Section ── */
+.sec-header {
+  background: var(--paper-dense);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 9px 28px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sec-id { font-size: 9px; letter-spacing: .22em; color: var(--brass); text-transform: uppercase; }
+.sec-title { font-size: 9px; letter-spacing: .14em; color: var(--ink-quiet); text-transform: uppercase; }
+
+/* ── Page intro ── */
+.intro {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 44px 28px 36px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.intro-head { font-family: var(--font-serif); font-size: clamp(20px,2.8vw,30px); font-weight: 400; line-height: 1.2; color: var(--ink); margin-bottom: 12px; }
+.intro-body { font-size: 11px; color: var(--ink-mid); line-height: 1.85; }
+.intro-meta { font-size: 10px; color: var(--ink-quiet); line-height: 1.85; }
+.intro-decision {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--brass);
+  padding: 14px 16px;
+}
+.intro-decision-label { font-size: 8.5px; letter-spacing: .2em; color: var(--brass); text-transform: uppercase; margin-bottom: 8px; }
+
+/* ── Master mark section ── */
+.mark-hero {
+  background: var(--paper);
+  padding: 36px 28px;
+  border-bottom: 1px solid var(--rule);
+}
+.mark-hero-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+.mark-stage {
+  display: flex; align-items: center; justify-content: center;
+  padding: 36px; min-height: 200px;
+}
+.mark-stage-paper {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+}
+.mark-stage-dark {
+  background: var(--dark);
+  border: 1px solid rgba(185,174,151,.1);
+}
+.mark-annotation { font-size: 9px; letter-spacing: .14em; color: var(--ink-quiet); text-transform: uppercase; margin-top: 6px; text-align: center; }
+.mark-desc-label { font-size: 8.5px; letter-spacing: .2em; color: var(--ink-quiet); text-transform: uppercase; margin-bottom: 7px; margin-top: 18px; }
+.mark-desc-label:first-child { margin-top: 0; }
+.mark-desc-body { font-size: 11px; color: var(--ink-mid); line-height: 1.85; margin-bottom: 4px; }
+
+/* ── Size grid ── */
+.size-grid {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 24px 28px;
+}
+.size-row {
+  display: flex; gap: 2px; flex-wrap: wrap;
+}
+.size-cell {
+  background: var(--paper-dense);
+  border: 1px solid var(--rule);
+  padding: 14px 10px;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 10px;
+  min-width: 72px;
+}
+.size-label { font-size: 7.5px; letter-spacing: .12em; color: var(--rule); text-transform: uppercase; }
+.size-spec { font-size: 8px; letter-spacing: .08em; color: var(--ink-quiet); text-align: center; line-height: 1.6; }
+
+/* ── Reduction rules ── */
+.reduction-rules {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+  padding: 18px 20px;
+  margin: 0 28px 24px;
+}
+.rule-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: center;
+  font-size: 10px;
+}
+.rule-row:last-child { border-bottom: none; }
+.rule-size { color: var(--brass); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; }
+.rule-desc { color: var(--ink-mid); }
+
+/* ── Variant grid ── */
+.variant-band {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 24px 28px;
+}
+.variant-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 2px;
+}
+.variant-cell {
+  border: 1px solid var(--rule);
+  display: flex; flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+.variant-stage {
+  width: 100%; display: flex;
+  align-items: center; justify-content: center;
+  padding: 24px 16px; min-height: 120px;
+}
+.variant-label {
+  width: 100%; padding: 7px 10px;
+  border-top: 1px solid var(--rule);
+  font-size: 8px; letter-spacing: .12em;
+  color: var(--ink-quiet); text-transform: uppercase;
+  text-align: center;
+  background: var(--paper-dense);
+}
+
+/* ── Stress tests ── */
+.stress-section {
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  padding: 28px 28px;
+}
+.stress-label {
+  font-size: 8.5px; letter-spacing: .2em; color: var(--ink-quiet);
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.stress-pass {
+  font-size: 9px; letter-spacing: .1em; color: var(--brass);
+  text-transform: uppercase; margin-bottom: 14px;
+}
+.stress-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+}
+.stress-cell {
+  border: 1px solid var(--rule);
+  display: flex; flex-direction: column;
+}
+.stress-stage {
+  flex: 1; display: flex; align-items: center;
+  justify-content: center; padding: 24px 12px; min-height: 110px;
+}
+.stress-name {
+  padding: 7px 10px; border-top: 1px solid var(--rule);
+  font-size: 7.5px; letter-spacing: .12em;
+  color: var(--ink-quiet); text-transform: uppercase;
+  text-align: center; background: var(--paper-dense);
+}
+.stress-verdict {
+  padding: 5px 10px 8px;
+  font-size: 8px; color: var(--brass);
+  letter-spacing: .1em; text-transform: uppercase;
+  text-align: center; background: var(--paper-dense);
+}
+
+/* ── Secondary marks ── */
+.secondary-grid {
+  background: var(--paper);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-bottom: 1px solid var(--rule);
+}
+.secondary-card {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+  padding: 22px;
+}
+.secondary-header {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.secondary-number { font-size: 8.5px; letter-spacing: .2em; color: var(--ink-quiet); text-transform: uppercase; }
+.secondary-name { font-family: var(--font-serif); font-size: 15px; color: var(--ink); font-style: italic; }
+.secondary-role-label { font-size: 8px; letter-spacing: .18em; color: var(--brass); text-transform: uppercase; margin-bottom: 6px; margin-top: 14px; }
+.secondary-role-body { font-size: 11px; color: var(--ink-mid); line-height: 1.8; }
+.secondary-stages {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 2px; margin-bottom: 14px;
+}
+.mini-stage {
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px 12px; min-height: 100px; position: relative;
+}
+.mini-label {
+  position: absolute; bottom: 6px; left: 0; right: 0;
+  text-align: center; font-size: 7.5px;
+  letter-spacing: .1em; text-transform: uppercase;
+}
+
+/* ── Hierarchy diagram ── */
+.hierarchy {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+  margin: 0 28px 28px;
+  padding: 0;
+}
+.hierarchy-row {
+  display: grid;
+  grid-template-columns: 120px 60px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: center;
+  min-height: 52px;
+}
+.hierarchy-row:last-child { border-bottom: none; }
+.h-tier {
+  padding: 12px 14px;
+  font-size: 8.5px; letter-spacing: .16em;
+  text-transform: uppercase; border-right: 1px solid var(--rule);
+}
+.h-tier-primary { color: var(--brass); }
+.h-tier-secondary { color: var(--ink-quiet); }
+.h-icon {
+  display: flex; align-items: center; justify-content: center;
+  padding: 10px; border-right: 1px solid var(--rule);
+  height: 100%;
+}
+.h-desc {
+  padding: 10px 16px;
+  font-size: 10px; color: var(--ink-mid); line-height: 1.7;
+}
+.h-name { font-size: 10px; color: var(--ink); margin-bottom: 2px; }
+
+/* ── Spec table ── */
+.spec-table {
+  background: var(--paper-lifted);
+  border: 1px solid var(--rule);
+  margin: 0 28px 28px;
+}
+.spec-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 10px;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key {
+  padding: 8px 14px;
+  font-size: 9px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-quiet);
+  border-right: 1px solid var(--rule);
+  display: flex; align-items: center;
+}
+.spec-val {
+  padding: 8px 14px;
+  color: var(--ink-mid);
+  font-family: var(--font-mono);
+}
+.spec-val.code { font-size: 9px; letter-spacing: .04em; }
+
+/* ── Tags ── */
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.tag { font-size: 8px; letter-spacing: .1em; padding: 3px 8px; border: 1px solid var(--rule); color: var(--ink-quiet); text-transform: uppercase; }
+.tag-brass { border-color: rgba(122,91,27,.28); color: var(--brass); background: var(--brass-pale); }
+
+/* ── Footer ── */
+.doc-footer {
+  background: var(--paper-dense); border-top: 1px solid var(--rule);
+  padding: 14px 28px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.doc-close {
+  background: var(--paper-dense); border-top: 1px solid var(--rule);
+  height: 20px; display: flex; align-items: center; justify-content: center;
+  font-size: 7.5px; letter-spacing: .32em; color: var(--rule); text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .intro { grid-template-columns: 1fr; }
+  .mark-hero-grid { grid-template-columns: 1fr; }
+  .stress-grid { grid-template-columns: repeat(3, 1fr); }
+  .secondary-grid { grid-template-columns: 1fr; }
+  .hierarchy-row { grid-template-columns: 100px 48px 1fr; }
+}
+@media (max-width: 640px) {
+  .stress-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="reg reg-tl" aria-hidden="true"><i class="h"></i><i class="v"></i></div>
+<div class="reg reg-tr" aria-hidden="true"><i class="h" style="right:0"></i><i class="v" style="right:0"></i></div>
+<div class="reg reg-bl" aria-hidden="true"><i class="h"></i><i class="v"></i></div>
+<div class="reg reg-br" aria-hidden="true"><i class="h" style="right:0"></i><i class="v" style="right:0"></i></div>
+
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);">CytherAI — Mark Production Specification · Three-Tier Identity System · DOC-2026-MARK-02</h1>
+
+<div class="doc-control">
+  <div class="dc-row">
+    <span>DOC-2026-MARK-02 · REV 1.0</span>
+    <span>ISSUED 15 APR 2026</span>
+    <span class="dc-scope">SCOPE: PRODUCTION SPECIFICATION</span>
+    <span>THREE-TIER IDENTITY SYSTEM</span>
+  </div>
+</div>
+
+<!-- Intro -->
+<div class="intro">
+  <div>
+    <div style="font-size:9px;letter-spacing:.3em;color:var(--brass);text-transform:uppercase;margin-bottom:14px;">CytherAI · Identity System · Final Mark Specification</div>
+    <div class="intro-head">Three marks.<br><em>One doctrine.</em></div>
+    <p class="intro-body" style="margin-top:12px;">The master mark was chosen on durability, not doctrine-fit. A mark that can bear the company across procurement packets, product surfaces, legal documents, and a future beyond the current visual thesis. This file is the production specification for all three tiers.</p>
+  </div>
+  <div>
+    <div class="intro-decision">
+      <div class="intro-decision-label">Identity Hierarchy — Locked</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;">
+        <div style="font-size:11px;color:var(--ink);line-height:1.7;"><span style="color:var(--brass);">Primary mark —</span> Concept 01 · Document Stamp</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.7;"><span style="color:var(--brass);">Official seal —</span> Concept 06 · Notary Seal</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.7;"><span style="color:var(--brass);">Proof mark —</span> Concept 04 · QED Block</div>
+      </div>
+    </div>
+    <div style="margin-top:14px;font-size:10px;color:var(--ink-quiet);line-height:1.85;">
+      <strong style="color:var(--ink-mid);">The strategic logic:</strong> 01 represents institutional authentication. 06 represents issuance ceremony. 04 represents proof of state. Together they give the brand authority at the center, ceremony in reserve, and proof in the system.
+    </div>
+  </div>
+</div>
+
+<!-- §01 MASTER MARK -->
+<div class="sec-header">
+  <span class="sec-id">§01 · MASTER MARK</span>
+  <span class="sec-title">Concept 01 · Document Stamp · Production refinement</span>
+</div>
+
+<div class="mark-hero">
+  <div class="mark-hero-grid">
+    <div>
+      <div class="mark-stage mark-stage-paper" style="min-height:200px;">
+        <svg width="100" height="100" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Document stamp mark, primary version on paper">
+          <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.6" fill="none"/>
+          <text x="40" y="52" fill="#7A5B1B" font-family="Georgia,'Times New Roman',serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+        </svg>
+      </div>
+      <div class="mark-annotation">paper · full specification</div>
+      <div class="mark-stage mark-stage-dark" style="margin-top:2px;min-height:120px;">
+        <svg width="70" height="70" viewBox="0 0 80 80" fill="none" aria-label="Document stamp mark on dark restricted background">
+          <rect x="6" y="6" width="68" height="68" stroke="rgba(231,223,209,.55)" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="rgba(122,91,27,.55)" stroke-width="0.6" fill="none"/>
+          <text x="40" y="52" fill="rgba(122,91,27,.75)" font-family="Georgia,'Times New Roman',serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="rgba(231,223,209,.55)"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="rgba(231,223,209,.55)"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="rgba(231,223,209,.55)"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="rgba(231,223,209,.55)"/>
+        </svg>
+      </div>
+      <div class="mark-annotation">dark · restricted state</div>
+    </div>
+    <div>
+      <div class="mark-desc-label">Why this mark won</div>
+      <p class="mark-desc-body">The square hallmark format is the oldest Western authentication signal. Not a brand shape. Not a document icon. A certification instrument. The double frame creates a containment hierarchy: the outer border is the formal container, the inner border is the authenticated zone, the λ is the certified content. Corner registration marks are process residue — they signal the mark was aligned and verified before application.</p>
+      <div class="mark-desc-label">Anatomy</div>
+      <p class="mark-desc-body">Outer frame: ink (#171612), 1.2px stroke. Inner frame: brass (#7A5B1B), 0.6px stroke — half weight of outer, creates depth without competing. Lambda: Georgia italic, brass, centered. Corner squares: 3×3px solid ink, positioned at exact corners — they frame the mark without touching it. Total mark area: 80×80px canonical, scales from 16px to any print dimension.</p>
+      <div class="mark-desc-label">The corner squares — pressure test result</div>
+      <p class="mark-desc-body">Tested with and without. Without corners: the mark reads as a branded monogram. With corners: the mark reads as a hallmark. The corners win because the brief requires institutional authentication, not monogram branding. At sizes below 24px the corners collapse to a single pixel or disappear — this is acceptable and specified in the reduction rules.</p>
+      <div class="tags">
+        <span class="tag tag-brass">MASTER MARK · LOCKED</span>
+        <span class="tag">AUTHENTICATION</span>
+        <span class="tag">PRINT-FIRST</span>
+        <span class="tag">FULL SYSTEM RANGE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SIZE GRID -->
+<div class="sec-header" style="border-top:none;">
+  <span class="sec-id" style="color:var(--ink-quiet);">SIZE PROGRESSION</span>
+  <span class="sec-title">Reduction rules applied per size</span>
+</div>
+<div class="size-grid">
+  <div class="size-row">
+    <!-- 120px — full detail -->
+    <div class="size-cell" style="min-width:96px;">
+      <svg width="120" height="120" viewBox="0 0 80 80" fill="none">
+        <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+        <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.6" fill="none"/>
+        <text x="40" y="52" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+        <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+        <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+        <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+        <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+      </svg>
+      <div class="size-label">120px</div>
+      <div class="size-spec">Full detail<br>Both frames<br>Corners</div>
+    </div>
+    <!-- 64px -->
+    <div class="size-cell" style="min-width:80px;">
+      <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+        <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+        <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.6" fill="none"/>
+        <text x="40" y="52" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+        <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+        <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+        <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+        <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+      </svg>
+      <div class="size-label">64px</div>
+      <div class="size-spec">Full detail<br>Both frames<br>Corners</div>
+    </div>
+    <!-- 40px — nav size -->
+    <div class="size-cell" style="min-width:68px;">
+      <svg width="40" height="40" viewBox="0 0 80 80" fill="none">
+        <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.5" fill="none"/>
+        <rect x="12" y="12" width="56" height="56" stroke="#7A5B1B" stroke-width="0.8" fill="none"/>
+        <text x="40" y="53" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+        <rect x="5" y="5" width="4" height="4" fill="#171612"/>
+        <rect x="71" y="5" width="4" height="4" fill="#171612"/>
+        <rect x="5" y="71" width="4" height="4" fill="#171612"/>
+        <rect x="71" y="71" width="4" height="4" fill="#171612"/>
+      </svg>
+      <div class="size-label">40px nav</div>
+      <div class="size-spec">Thicker stroke<br>Both frames<br>Corners</div>
+    </div>
+    <!-- 26px — small nav -->
+    <div class="size-cell" style="min-width:62px;">
+      <svg width="26" height="26" viewBox="0 0 80 80" fill="none">
+        <rect x="5" y="5" width="70" height="70" stroke="#171612" stroke-width="2" fill="none"/>
+        <text x="40" y="54" fill="#7A5B1B" font-family="Georgia,serif" font-size="36" font-style="italic" text-anchor="middle">λ</text>
+        <rect x="4" y="4" width="5" height="5" fill="#171612"/>
+        <rect x="71" y="4" width="5" height="5" fill="#171612"/>
+        <rect x="4" y="71" width="5" height="5" fill="#171612"/>
+        <rect x="71" y="71" width="5" height="5" fill="#171612"/>
+      </svg>
+      <div class="size-label">26px</div>
+      <div class="size-spec">Single frame<br>No inner ring<br>Corners</div>
+    </div>
+    <!-- 20px -->
+    <div class="size-cell" style="min-width:58px;">
+      <svg width="20" height="20" viewBox="0 0 80 80" fill="none">
+        <rect x="4" y="4" width="72" height="72" stroke="#171612" stroke-width="3" fill="none"/>
+        <text x="40" y="56" fill="#7A5B1B" font-family="Georgia,serif" font-size="38" font-style="italic" text-anchor="middle">λ</text>
+      </svg>
+      <div class="size-label">20px</div>
+      <div class="size-spec">Single frame<br>No corners<br>λ only</div>
+    </div>
+    <!-- 16px — favicon -->
+    <div class="size-cell" style="min-width:58px;">
+      <svg width="16" height="16" viewBox="0 0 80 80" fill="none">
+        <rect x="4" y="4" width="72" height="72" stroke="#171612" stroke-width="4" fill="none"/>
+        <text x="40" y="58" fill="#7A5B1B" font-family="Georgia,serif" font-size="42" font-style="italic" text-anchor="middle">λ</text>
+      </svg>
+      <div class="size-label">16px</div>
+      <div class="size-spec">Single frame<br>No corners<br>λ fills</div>
+    </div>
+  </div>
+</div>
+
+<!-- REDUCTION RULES -->
+<div class="reduction-rules">
+  <div style="font-size:9px;letter-spacing:.2em;color:var(--ink-quiet);text-transform:uppercase;margin-bottom:12px;">Reduction Rules</div>
+  <div class="rule-row">
+    <span class="rule-size">≥ 40px</span>
+    <span class="rule-desc">Full mark — outer frame (ink), inner frame (brass .6px), λ (brass), 4 corner squares (ink 3×3)</span>
+  </div>
+  <div class="rule-row">
+    <span class="rule-size">24–39px</span>
+    <span class="rule-desc">Outer frame only (increase stroke weight to 1.5px), λ, 4 corner squares (increase to 4px for visibility)</span>
+  </div>
+  <div class="rule-row">
+    <span class="rule-size">16–23px</span>
+    <span class="rule-desc">Single frame (2–3px), λ only — corners collapse and are omitted</span>
+  </div>
+  <div class="rule-row">
+    <span class="rule-size">Favicon</span>
+    <span class="rule-desc">Single thick frame (4px), oversized λ to fill interior — frame provides containment signal</span>
+  </div>
+</div>
+
+<!-- COLOR VARIANTS -->
+<div class="sec-header" style="border-top:none;">
+  <span class="sec-id" style="color:var(--ink-quiet);">COLOR VARIANTS</span>
+  <span class="sec-title">One-color · reversed · monochrome tests</span>
+</div>
+<div class="variant-band">
+  <div class="variant-grid">
+
+    <!-- Standard -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:var(--paper-lifted);">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.6" fill="none"/>
+          <text x="40" y="52" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+        </svg>
+      </div>
+      <div class="variant-label">Standard · paper</div>
+    </div>
+
+    <!-- One-color ink — monochrome test -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:var(--paper-lifted);">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#171612" stroke-width="0.5" fill="none"/>
+          <text x="40" y="52" fill="#171612" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+        </svg>
+      </div>
+      <div class="variant-label">One-color ink · PASS ✓</div>
+    </div>
+
+    <!-- One-color brass -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:var(--paper-lifted);">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="#7A5B1B" stroke-width="1.4" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.5" fill="none" opacity=".55"/>
+          <text x="40" y="52" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#7A5B1B"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#7A5B1B"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#7A5B1B"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#7A5B1B"/>
+        </svg>
+      </div>
+      <div class="variant-label">One-color brass</div>
+    </div>
+
+    <!-- Dark context -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:var(--dark);">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="rgba(231,223,209,.6)" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="rgba(122,91,27,.55)" stroke-width="0.6" fill="none"/>
+          <text x="40" y="52" fill="rgba(122,91,27,.75)" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="rgba(231,223,209,.6)"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="rgba(231,223,209,.6)"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="rgba(231,223,209,.6)"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="rgba(231,223,209,.6)"/>
+        </svg>
+      </div>
+      <div class="variant-label">Dark · restricted</div>
+    </div>
+
+    <!-- Reversed — white on dark -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:#171612;">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="#E7DFD1" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#E7DFD1" stroke-width="0.4" fill="none" opacity=".5"/>
+          <text x="40" y="52" fill="#E7DFD1" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#E7DFD1"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#E7DFD1"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#E7DFD1"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#E7DFD1"/>
+        </svg>
+      </div>
+      <div class="variant-label">Reversed · ink bg</div>
+    </div>
+
+    <!-- Embossed approximation -->
+    <div class="variant-cell">
+      <div class="variant-stage" style="background:var(--paper);">
+        <svg width="64" height="64" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="rgba(23,22,18,.18)" stroke-width="1.5" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="rgba(23,22,18,.1)" stroke-width="0.8" fill="none"/>
+          <text x="40" y="52" fill="rgba(23,22,18,.15)" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="rgba(23,22,18,.18)"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="rgba(23,22,18,.18)"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="rgba(23,22,18,.18)"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="rgba(23,22,18,.18)"/>
+        </svg>
+      </div>
+      <div class="variant-label">Blind emboss approx.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FIVE BRUTAL TESTS -->
+<div class="sec-header" style="border-top:none;">
+  <span class="sec-id" style="color:var(--ink-quiet);">STRESS TESTS</span>
+  <span class="sec-title">Five conditions · mark must survive as a document artifact</span>
+</div>
+<div class="stress-section">
+  <div class="stress-label">Test protocol — five conditions that expose marks relying on screen rendering, color, or digital precision</div>
+  <div class="stress-pass">All five: PASS</div>
+  <div class="stress-grid">
+
+    <!-- Test 1: One-color black on paper -->
+    <div class="stress-cell">
+      <div class="stress-stage" style="background:var(--paper-lifted);">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none">
+          <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.2" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="#171612" stroke-width="0.5" fill="none"/>
+          <text x="40" y="52" fill="#171612" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="5.5" width="3" height="3" fill="#171612"/>
+          <rect x="5.5" y="71.5" width="3" height="3" fill="#171612"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#171612"/>
+        </svg>
+      </div>
+      <div class="stress-name">1 · One-color black</div>
+      <div class="stress-verdict">Passes ✓</div>
+    </div>
+
+    <!-- Test 2: Blind emboss -->
+    <div class="stress-cell">
+      <div class="stress-stage" style="background:var(--paper);">
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none">
+          <!-- Deboss approximation: lighter than paper, slight shadow/highlight -->
+          <rect x="6" y="6" width="68" height="68" stroke="rgba(23,22,18,.14)" stroke-width="1.8" fill="none"/>
+          <rect x="11" y="11" width="58" height="58" stroke="rgba(23,22,18,.08)" stroke-width="1" fill="none"/>
+          <text x="40" y="52" fill="rgba(23,22,18,.12)" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="5.5" y="5.5" width="3.5" height="3.5" fill="rgba(23,22,18,.14)"/>
+          <rect x="71" y="5.5" width="3.5" height="3.5" fill="rgba(23,22,18,.14)"/>
+          <rect x="5.5" y="71" width="3.5" height="3.5" fill="rgba(23,22,18,.14)"/>
+          <rect x="71" y="71" width="3.5" height="3.5" fill="rgba(23,22,18,.14)"/>
+        </svg>
+      </div>
+      <div class="stress-name">2 · Blind emboss</div>
+      <div class="stress-verdict">Passes ✓</div>
+    </div>
+
+    <!-- Test 3: Rubber stamp impression -->
+    <div class="stress-cell">
+      <div class="stress-stage" style="background:var(--paper-lifted);">
+        <!-- Simulated stamp: single color, slightly imperfect, stamp-ink brown -->
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none">
+          <!-- Intentional slight irregularity to simulate stamp -->
+          <rect x="6.5" y="6" width="67" height="68.5" stroke="#5C3D14" stroke-width="2" fill="none" opacity=".82"/>
+          <text x="40.5" y="52.5" fill="#5C3D14" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle" opacity=".85">λ</text>
+          <rect x="5" y="5" width="4" height="4" fill="#5C3D14" opacity=".75"/>
+          <rect x="71" y="5.5" width="4" height="3.5" fill="#5C3D14" opacity=".8"/>
+          <rect x="5.5" y="71" width="3.5" height="4" fill="#5C3D14" opacity=".7"/>
+          <rect x="71.5" y="71.5" width="3" height="3" fill="#5C3D14" opacity=".82"/>
+        </svg>
+      </div>
+      <div class="stress-name">3 · Rubber stamp</div>
+      <div class="stress-verdict">Passes ✓</div>
+    </div>
+
+    <!-- Test 4: Fax / photocopy degradation -->
+    <div class="stress-cell">
+      <div class="stress-stage" style="background:#EEE8DC;">
+        <!-- Simulated fax: higher contrast, slight bleed -->
+        <svg width="56" height="56" viewBox="0 0 80 80" fill="none">
+          <rect x="5" y="5" width="70" height="70" stroke="#2A2520" stroke-width="2.5" fill="none"/>
+          <text x="40" y="53" fill="#2A2520" font-family="Georgia,serif" font-size="36" font-style="italic" text-anchor="middle">λ</text>
+          <rect x="4" y="4" width="5" height="5" fill="#2A2520"/>
+          <rect x="71" y="4" width="5" height="5" fill="#2A2520"/>
+          <rect x="4" y="71" width="5" height="5" fill="#2A2520"/>
+          <rect x="71" y="71" width="5" height="5" fill="#2A2520"/>
+          <!-- Fax noise approximation: small scattered marks -->
+          <rect x="20" y="32" width="1" height="1" fill="#2A2520" opacity=".3"/>
+          <rect x="55" y="48" width="1.5" height="1" fill="#2A2520" opacity=".25"/>
+          <rect x="38" y="20" width="1" height="1.5" fill="#2A2520" opacity=".2"/>
+        </svg>
+      </div>
+      <div class="stress-name">4 · Fax / photocopy</div>
+      <div class="stress-verdict">Passes ✓</div>
+    </div>
+
+    <!-- Test 5: 16px + 24px browser -->
+    <div class="stress-cell">
+      <div class="stress-stage" style="background:var(--paper-dense);gap:12px;flex-direction:column;">
+        <div style="text-align:center;">
+          <svg width="24" height="24" viewBox="0 0 80 80" fill="none">
+            <rect x="4" y="4" width="72" height="72" stroke="#171612" stroke-width="3.5" fill="none"/>
+            <text x="40" y="55" fill="#7A5B1B" font-family="Georgia,serif" font-size="40" font-style="italic" text-anchor="middle">λ</text>
+          </svg>
+          <div style="font-size:7px;color:var(--rule);margin-top:3px;">24px nav</div>
+        </div>
+        <div style="text-align:center;">
+          <svg width="16" height="16" viewBox="0 0 80 80" fill="none">
+            <rect x="4" y="4" width="72" height="72" stroke="#171612" stroke-width="5" fill="none"/>
+            <text x="40" y="58" fill="#7A5B1B" font-family="Georgia,serif" font-size="44" font-style="italic" text-anchor="middle">λ</text>
+          </svg>
+          <div style="font-size:7px;color:var(--rule);margin-top:3px;">16px favicon</div>
+        </div>
+      </div>
+      <div class="stress-name">5 · 16px + 24px</div>
+      <div class="stress-verdict">Passes ✓</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- §02 SECONDARY MARKS -->
+<div class="sec-header">
+  <span class="sec-id">§02 · SECONDARY MARKS</span>
+  <span class="sec-title">Official seal · Proof mark · Usage hierarchy</span>
+</div>
+
+<div class="secondary-grid">
+
+  <!-- Concept 06 — Notary Seal -->
+  <div class="secondary-card">
+    <div class="secondary-header">
+      <span class="secondary-number">CONCEPT 06</span>
+      <span class="secondary-name">The Notary Seal</span>
+    </div>
+    <div class="secondary-stages">
+      <div class="mini-stage" style="background:var(--paper-lifted);border:1px solid var(--rule);">
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <defs>
+            <path id="sp2" d="M 45,45 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0"/>
+          </defs>
+          <circle cx="45" cy="45" r="36" stroke="#171612" stroke-width="1" fill="none"/>
+          <circle cx="45" cy="45" r="30" stroke="#B9AE97" stroke-width="0.7" stroke-dasharray="3 2" fill="none"/>
+          <text font-family="'SF Mono',Menlo,monospace" font-size="5.8" fill="#171612" letter-spacing=".12em">
+            <textPath href="#sp2">CYTHERAI · DOC-2026-001 · ISSUED · VERIFIED ·&nbsp;</textPath>
+          </text>
+          <text x="45" y="53" fill="#7A5B1B" font-family="Georgia,serif" font-size="24" font-style="italic" text-anchor="middle">λ</text>
+          <line x1="45" y1="9" x2="45" y2="15" stroke="#171612" stroke-width="0.8"/>
+          <line x1="45" y1="75" x2="45" y2="81" stroke="#171612" stroke-width="0.8"/>
+          <line x1="9" y1="45" x2="15" y2="45" stroke="#171612" stroke-width="0.8"/>
+          <line x1="75" y1="45" x2="81" y2="45" stroke="#171612" stroke-width="0.8"/>
+        </svg>
+        <span class="mini-label" style="color:var(--rule);">paper</span>
+      </div>
+      <div class="mini-stage" style="background:var(--dark);border:1px solid rgba(185,174,151,.1);">
+        <svg width="90" height="90" viewBox="0 0 90 90" fill="none">
+          <defs>
+            <path id="sp3" d="M 45,45 m -34,0 a 34,34 0 1,1 68,0 a 34,34 0 1,1 -68,0"/>
+          </defs>
+          <circle cx="45" cy="45" r="36" stroke="rgba(231,223,209,.35)" stroke-width="1" fill="none"/>
+          <circle cx="45" cy="45" r="30" stroke="rgba(185,174,151,.18)" stroke-width="0.7" stroke-dasharray="3 2" fill="none"/>
+          <text font-family="'SF Mono',Menlo,monospace" font-size="5.8" fill="rgba(231,223,209,.28)" letter-spacing=".12em">
+            <textPath href="#sp3">CYTHERAI · DOC-2026-001 · ISSUED · VERIFIED ·&nbsp;</textPath>
+          </text>
+          <text x="45" y="53" fill="rgba(122,91,27,.65)" font-family="Georgia,serif" font-size="24" font-style="italic" text-anchor="middle">λ</text>
+          <line x1="45" y1="9" x2="45" y2="15" stroke="rgba(231,223,209,.22)" stroke-width="0.8"/>
+          <line x1="45" y1="75" x2="45" y2="81" stroke="rgba(231,223,209,.22)" stroke-width="0.8"/>
+          <line x1="9" y1="45" x2="15" y2="45" stroke="rgba(231,223,209,.22)" stroke-width="0.8"/>
+          <line x1="75" y1="45" x2="81" y2="45" stroke="rgba(231,223,209,.22)" stroke-width="0.8"/>
+        </svg>
+        <span class="mini-label" style="color:rgba(185,174,151,.22);">dark</span>
+      </div>
+    </div>
+    <div class="secondary-role-label">Role</div>
+    <p class="secondary-role-body">Document watermark on cover pages. Certificate stamps. NDA cover sheet. Diligence-room access artifact. Appendix certification. The text-on-path ring carries the document reference — self-referential provenance. Not used as everyday identity.</p>
+    <div class="secondary-role-label">Rule</div>
+    <p class="secondary-role-body">Never used as primary brand mark. Never used at sizes below 80px — the text-on-path is illegible below that point and the mark loses its distinction from a simple circular logo. At 7% opacity on cover backgrounds; at 40–60% for certification stamps.</p>
+    <div class="tags">
+      <span class="tag tag-brass">OFFICIAL SEAL</span>
+      <span class="tag">WATERMARK</span>
+      <span class="tag">COVER PAGES</span>
+      <span class="tag">≥ 80px only</span>
+    </div>
+  </div>
+
+  <!-- Concept 04 — QED Block -->
+  <div class="secondary-card">
+    <div class="secondary-header">
+      <span class="secondary-number">CONCEPT 04</span>
+      <span class="secondary-name">The QED Block</span>
+    </div>
+    <div class="secondary-stages">
+      <div class="mini-stage" style="background:var(--paper-lifted);border:1px solid var(--rule);">
+        <svg width="70" height="70" viewBox="0 0 80 80" fill="none">
+          <rect x="8" y="8" width="64" height="64" stroke="#171612" stroke-width="1" fill="none"/>
+          <rect x="22" y="22" width="36" height="36" fill="#7A5B1B" opacity=".85"/>
+          <rect x="30" y="30" width="20" height="20" fill="#F1EBE0"/>
+        </svg>
+        <span class="mini-label" style="color:var(--rule);">paper</span>
+      </div>
+      <div class="mini-stage" style="background:var(--dark);border:1px solid rgba(185,174,151,.1);">
+        <svg width="70" height="70" viewBox="0 0 80 80" fill="none">
+          <rect x="8" y="8" width="64" height="64" stroke="rgba(231,223,209,.3)" stroke-width="1" fill="none"/>
+          <rect x="22" y="22" width="36" height="36" fill="rgba(122,91,27,.7)"/>
+          <rect x="30" y="30" width="20" height="20" fill="rgba(32,34,38,.9)"/>
+        </svg>
+        <span class="mini-label" style="color:rgba(185,174,151,.22);">dark</span>
+      </div>
+    </div>
+    <!-- Small size strip -->
+    <div style="display:flex;gap:2px;margin-bottom:14px;">
+      <div style="flex:1;background:var(--paper-dense);border:1px solid var(--rule);padding:10px;display:flex;flex-direction:column;align-items:center;gap:7px;">
+        <svg width="24" height="24" viewBox="0 0 80 80" fill="none"><rect x="8" y="8" width="64" height="64" stroke="#171612" stroke-width="1" fill="none"/><rect x="22" y="22" width="36" height="36" fill="#7A5B1B" opacity=".85"/><rect x="30" y="30" width="20" height="20" fill="#F1EBE0"/></svg>
+        <span class="size-label">24px</span>
+      </div>
+      <div style="flex:1;background:var(--paper-dense);border:1px solid var(--rule);padding:10px;display:flex;flex-direction:column;align-items:center;gap:7px;">
+        <svg width="16" height="16" viewBox="0 0 80 80" fill="none"><rect x="14" y="14" width="52" height="52" fill="#7A5B1B"/><rect x="28" y="28" width="24" height="24" fill="#E7DFD1"/></svg>
+        <span class="size-label">16px</span>
+      </div>
+      <div style="flex:1;background:var(--paper-dense);border:1px solid var(--rule);padding:10px;display:flex;flex-direction:column;align-items:center;gap:7px;">
+        <svg width="12" height="12" viewBox="0 0 80 80" fill="none"><rect x="10" y="10" width="60" height="60" fill="#7A5B1B"/><rect x="26" y="26" width="28" height="28" fill="#E7DFD1"/></svg>
+        <span class="size-label">12px</span>
+      </div>
+    </div>
+    <div class="secondary-role-label">Role</div>
+    <p class="secondary-role-body">Proof-passed state indicator. Validation badge on reports and exhibits. Verification UI in product interfaces. Favicon alternative. Quality seal on appendix covers. ■ QED — proof complete, no further argument required.</p>
+    <div class="secondary-role-label">Rule</div>
+    <p class="secondary-role-body">Never competes with the master mark in the same layout zone. Used as a system icon or state indicator, not as brand identity. The outer ring is optional at small sizes — the inner filled square plus void reads alone at 12px and above.</p>
+    <div class="tags">
+      <span class="tag tag-brass">PROOF MARK</span>
+      <span class="tag">VALIDATION STATE</span>
+      <span class="tag">FAVICON ALT</span>
+      <span class="tag">WORKS AT 12px</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- §03 BRAND HIERARCHY -->
+<div class="sec-header">
+  <span class="sec-id">§03 · HIERARCHY</span>
+  <span class="sec-title">When to use which mark</span>
+</div>
+
+<div class="hierarchy" style="margin:20px 28px;">
+  <div class="hierarchy-row">
+    <div class="h-tier h-tier-primary">PRIMARY MARK</div>
+    <div class="h-icon">
+      <svg width="28" height="28" viewBox="0 0 80 80" fill="none">
+        <rect x="6" y="6" width="68" height="68" stroke="#171612" stroke-width="1.5" fill="none"/>
+        <rect x="11" y="11" width="58" height="58" stroke="#7A5B1B" stroke-width="0.7" fill="none"/>
+        <text x="40" y="53" fill="#7A5B1B" font-family="Georgia,serif" font-size="34" font-style="italic" text-anchor="middle">λ</text>
+        <rect x="5" y="5" width="4" height="4" fill="#171612"/>
+        <rect x="71" y="5" width="4" height="4" fill="#171612"/>
+        <rect x="5" y="71" width="4" height="4" fill="#171612"/>
+        <rect x="71" y="71" width="4" height="4" fill="#171612"/>
+      </svg>
+    </div>
+    <div class="h-desc">
+      <div class="h-name">Document Stamp — used everywhere</div>
+      Website nav, email signatures, business cards, invoices, procurement packets, partner decks, product shell headers, legal documents, presentation covers, merchandise. The mark that bears the company across all surfaces and all futures.
+    </div>
+  </div>
+  <div class="hierarchy-row">
+    <div class="h-tier h-tier-secondary">OFFICIAL SEAL</div>
+    <div class="h-icon">
+      <svg width="28" height="28" viewBox="0 0 90 90" fill="none">
+        <circle cx="45" cy="45" r="36" stroke="#171612" stroke-width="1.5" fill="none"/>
+        <text x="45" y="55" fill="#7A5B1B" font-family="Georgia,serif" font-size="28" font-style="italic" text-anchor="middle">λ</text>
+      </svg>
+    </div>
+    <div class="h-desc">
+      <div class="h-name">Notary Seal — ceremonial and issuing contexts only</div>
+      Document watermarks, NDA cover sheets, diligence-room artifacts, certificate stamps, appendix certifications, controlled-review headers. Never used as everyday identity. Never under 80px.
+    </div>
+  </div>
+  <div class="hierarchy-row">
+    <div class="h-tier h-tier-secondary">PROOF MARK</div>
+    <div class="h-icon">
+      <svg width="24" height="24" viewBox="0 0 80 80" fill="none">
+        <rect x="8" y="8" width="64" height="64" stroke="#171612" stroke-width="1" fill="none"/>
+        <rect x="22" y="22" width="36" height="36" fill="#7A5B1B" opacity=".85"/>
+        <rect x="30" y="30" width="20" height="20" fill="#F1EBE0"/>
+      </svg>
+    </div>
+    <div class="h-desc">
+      <div class="h-name">QED Block — proof states and validation contexts</div>
+      Validated exhibits, proof-passed indicators, quality seals in reports, verification UI in product interfaces, favicon alternative. A state signal, not an identity element. Reads at 12px.
+    </div>
+  </div>
+</div>
+
+<!-- §04 IMPLEMENTATION SPEC -->
+<div class="sec-header">
+  <span class="sec-id">§04 · IMPLEMENTATION</span>
+  <span class="sec-title">SVG specifications for codebase</span>
+</div>
+
+<div class="spec-table" style="margin:20px 28px 0;">
+  <div class="spec-row">
+    <div class="spec-key">Nav brand icon</div>
+    <div class="spec-val code">26×26px viewBox="0 0 80 80" · single frame · stroke-width 2.5 · no inner ring · corners present</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Cover mark</div>
+    <div class="spec-val code">50×50px viewBox="0 0 80 80" · full spec · both frames · corners · .lambda-breathe animation class</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Document seal</div>
+    <div class="spec-val code">160×160px Notary Seal · opacity .055 on paper cover · .seal-ring animation · ink-toned fills</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">favicon.ico</div>
+    <div class="spec-val code">16×16 + 32×32 in one file · single frame stroke-width 4–5 · λ fills interior · no corners</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">QED proof badge</div>
+    <div class="spec-val code">16–24px · outer ring optional · inner filled rect + void · standalone context only</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Outer frame ink</div>
+    <div class="spec-val code">#171612 (--ink) on paper · rgba(231,223,209,.55) on dark</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Inner frame + λ</div>
+    <div class="spec-val code">#7A5B1B (--brass) on paper · rgba(122,91,27,.75) on dark</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Corner squares</div>
+    <div class="spec-val code">3×3px filled · same color as outer frame · omit at sizes ≤ 23px</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">λ typeface</div>
+    <div class="spec-val code">Georgia, 'Times New Roman', serif · font-style: italic · no font loaded externally</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Wordmark pairing</div>
+    <div class="spec-val code">'SF Mono', Menlo, 'Courier New', monospace · 0.22em letter-spacing · uppercase · --ink color</div>
+  </div>
+  <div class="spec-row">
+    <div class="spec-key">Breathing animation</div>
+    <div class="spec-val code">opacity .72 → .94 → .72 · 5s ease-in-out infinite · no glow or drop-shadow · prefers-reduced-motion: off</div>
+  </div>
+</div>
+
+<div style="margin:20px 28px 28px;">
+  <div style="background:var(--paper-lifted);border:1px solid var(--rule);border-left:2px solid var(--brass);padding:14px 16px;">
+    <div style="font-size:8.5px;letter-spacing:.2em;color:var(--brass);text-transform:uppercase;margin-bottom:8px;">Implementation note </div>
+    <p style="font-size:11px;color:var(--ink-mid);line-height:1.85;">The nav brand icon in the current site uses the old lambda-crown SVG. Replace with the Document Stamp at 26×26 (single frame + corners). The cover hero uses a larger version at 50×50 (full spec, add .lambda-breathe class). The cover page watermark (Notary Seal) should replace the old crown watermark using the ink-toned palette at 7% opacity. Update CLAUDE.md to reference this file and instruct Claude Code to use these exact specifications.</p>
+  </div>
+</div>
+
+<div class="doc-footer">
+  <span style="font-size:8.5px;letter-spacing:.14em;color:var(--ink-quiet);text-transform:uppercase;">© 2026 CytherAI · Mark Production Specification · Internal Review</span>
+  <span style="font-size:8.5px;letter-spacing:.14em;color:var(--ink-quiet);text-transform:uppercase;">DOC-2026-MARK-02 · Three-tier system · Locked</span>
+</div>
+<div class="doc-close" aria-hidden="true">End of Document · DOC-2026-MARK-02 · Three-Tier Identity System · April 2026</div>
+
+</body>
+</html>

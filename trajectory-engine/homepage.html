@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CytherAI — Operational AI should be inspectable.</title>
+<style>
+  :root{
+    --void:#07080a; --paper:#eef1f4; --ghost:#4b515b; --ghost-dim:#2a2e34;
+    --you:#d9b65c; --you-dim:#5c4e2c;
+    --sealed:#5fa0c4; --sealed-dim:#2c4452;
+    --invalid:#d6584f; --invalid-dim:#52271f;
+    --authA:#54d6e8; --authB:#e0639a;
+    --serif:'Iowan Old Style','Palatino Linotype',Georgia,'Times New Roman',serif;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    --mono:'SF Mono',Menlo,'Courier New',monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:auto}
+  body{margin:0;background:var(--void);color:var(--paper);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  button{font:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--you);outline-offset:3px}
+
+  #spine{position:fixed;left:16px;top:0;bottom:0;width:1px;background:var(--ghost-dim);
+       z-index:50;opacity:0;transition:opacity .8s ease}
+  #spine.live{opacity:1}
+  #spine .sealedFill{position:absolute;left:0;top:0;width:1px;background:var(--sealed);
+       box-shadow:0 0 6px rgba(95,160,196,.5);height:0}
+  #spine .sealedFlag{position:absolute;left:6px;top:0;transform:translateY(-50%);
+       font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;color:var(--sealed);
+       white-space:nowrap;opacity:.9}
+  #spine .caretNode{position:absolute;left:-3px;width:7px;height:7px;border-radius:50%;
+       background:var(--you);box-shadow:0 0 9px 2px rgba(217,182,92,.55);transform:translateY(-3px)}
+
+  #nav{position:fixed;left:32px;top:50%;transform:translateY(-50%);z-index:50;
+       display:flex;flex-direction:column;gap:14px;opacity:0;transition:opacity .8s ease;
+       font-family:var(--mono);font-size:9.5px;letter-spacing:.22em}
+  #nav.live{opacity:1}
+  #nav button{background:none;border:none;color:var(--ghost);padding:0;text-align:left;
+       transition:color .3s ease}
+  #nav button.active{color:var(--you)}
+  #nav button:hover{color:var(--paper)}
+
+  .stack{position:relative}
+  section{position:relative}
+  .stage{position:sticky;top:0;min-height:100vh;display:flex;align-items:center;
+       justify-content:center;padding:0 24px}
+  .stageInner{max-width:600px;width:100%}
+
+  #s-open{height:280vh}
+  #thesis{font-family:var(--serif);font-size:clamp(22px,4.4vw,34px);line-height:1.42;
+       font-weight:400;text-align:center;margin:0;letter-spacing:-.005em}
+  #thesis.flick{animation:flick .14s ease}
+  @keyframes flick{0%{opacity:1}45%{opacity:.35;letter-spacing:.01em}100%{opacity:1}}
+  #scrollHint{position:fixed;left:0;right:0;bottom:26px;text-align:center;z-index:40;
+       font-family:var(--mono);font-size:9.5px;letter-spacing:.3em;color:var(--ghost);
+       opacity:1;transition:opacity 1s ease;pointer-events:none}
+  #scrollHint::after{content:'';display:block;width:1px;height:14px;background:var(--ghost);
+       margin:8px auto 0}
+  #scrollHint.hidden{opacity:0}
+
+  .observedTag{position:fixed;left:30px;z-index:50;font-family:var(--mono);font-size:8.5px;
+       letter-spacing:.18em;color:var(--you);white-space:nowrap;opacity:0;transition:opacity .6s ease}
+  .observedTag.live{opacity:.9}
+
+  .module{height:150vh}
+  .module .stageInner{display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+  .eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--ghost);
+       text-transform:uppercase}
+  .lead{font-family:var(--serif);font-size:clamp(18px,2.6vw,23px);line-height:1.4;margin:0;
+       max-width:520px}
+  .sub{color:var(--ghost);font-size:13px;line-height:1.6;max-width:480px;margin:0}
+
+  .panel{border:1px solid var(--ghost-dim);background:rgba(255,255,255,.015);padding:20px 22px;
+       width:100%;max-width:520px}
+  .btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+  .btn{background:var(--void);border:1px solid var(--ghost-dim);color:var(--ghost);
+       font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;padding:9px 14px;
+       transition:color .2s,border-color .2s}
+  .btn:hover{color:var(--paper);border-color:var(--ghost)}
+  .btn:disabled{opacity:.35;cursor:not-allowed}
+  .btn.warn:hover{border-color:var(--invalid);color:var(--invalid)}
+  .btn.go:hover{border-color:var(--sealed);color:var(--sealed)}
+  .readout{font-family:var(--mono);font-size:12px;margin-top:14px;min-height:34px;
+       line-height:1.7;color:var(--ghost)}
+  .readout b{font-weight:400}
+  .readout.ok{color:var(--sealed)}
+  .readout.bad{color:var(--invalid)}
+  .display{font-family:var(--serif);font-size:18px;color:var(--paper)}
+
+  .track{position:relative;width:100%;max-width:420px;height:46px;border-top:1px solid var(--ghost-dim);
+       margin-top:8px;cursor:default}
+  .handle{position:absolute;top:-1px;width:0;cursor:ew-resize;touch-action:none}
+  .handle .pin{position:absolute;top:-7px;left:-6px;width:0;height:0;border-left:6px solid transparent;
+       border-right:6px solid transparent}
+  .handle.you .pin{border-top:9px solid var(--you)}
+  .handle.model .pin{border-top:9px solid var(--authA)}
+  .handle .lbl{position:absolute;top:6px;left:50%;transform:translateX(-50%);font-family:var(--mono);
+       font-size:8.5px;letter-spacing:.1em;white-space:nowrap}
+  .handle.you .lbl{color:var(--you)}
+  .handle.model .lbl{color:var(--authA)}
+  .handle .read{position:absolute;top:22px;left:50%;transform:translateX(-50%);font-family:var(--mono);
+       font-size:9.5px;white-space:nowrap;color:var(--paper)}
+
+  .toggles{display:flex;gap:10px;flex-wrap:wrap}
+  .toggle{background:var(--void);border:1px solid var(--ghost-dim);padding:10px 14px;
+       font-family:var(--mono);font-size:10.5px;color:var(--ghost);text-align:left;min-width:120px}
+  .toggle .k{letter-spacing:.14em;font-size:9px;color:var(--ghost)}
+  .toggle .v{margin-top:4px;font-size:12px}
+  .toggle.bad{border-color:var(--invalid-dim)}
+  .toggle.bad .v{color:var(--invalid)}
+  .toggle.ok .v{color:var(--sealed)}
+  .missionBig{font-family:var(--serif);font-size:22px;margin-top:8px}
+  .missionBig.approved{color:var(--sealed)}
+  .missionBig.invalid{color:var(--invalid)}
+
+  .authrow{display:flex;gap:10px}
+  .authBtn{border:1px solid;padding:10px 16px;font-family:var(--mono);font-size:10.5px;background:var(--void)}
+  .authBtn.a{border-color:var(--authA);color:var(--authA)}
+  .authBtn.b{border-color:var(--authB);color:var(--authB)}
+  .authBtn:disabled{opacity:.3;cursor:not-allowed}
+  .statusBig{font-family:var(--serif);font-size:20px;margin-top:10px}
+  .statusTag{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;margin-left:8px}
+  .statusTag.a{color:var(--authA)}.statusTag.b{color:var(--authB)}
+  .lockNote{margin-top:14px;font-family:var(--mono);font-size:11px;color:var(--invalid);
+       display:none;line-height:1.6}
+  .lockNote.show{display:block}
+
+  #s-law{height:120vh}
+  .lawblock{border:1px solid var(--ghost-dim);background:rgba(255,255,255,.02);
+       font-family:var(--mono);font-size:13px;line-height:1.9;padding:26px 30px;color:var(--paper)}
+  .lawblock .name{color:var(--you);letter-spacing:.06em;margin-bottom:14px;display:block}
+
+  #s-close{height:100vh}
+  #s-close .stage{flex-direction:column;text-align:center}
+  #s-close p{font-family:var(--serif);font-size:clamp(18px,2.8vw,24px);line-height:1.5;margin:0 0 8px;max-width:480px}
+  #s-close p.dim{color:var(--ghost);font-size:14px;font-family:var(--sans);margin-bottom:26px}
+  .cta{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;
+       letter-spacing:.1em;color:var(--you);text-decoration:none;border:1px solid var(--you-dim);
+       padding:13px 22px;transition:background .2s,border-color .2s}
+  .cta:hover{background:rgba(217,182,92,.08);border-color:var(--you)}
+  .cta .arrow{transition:transform .2s}
+  .cta:hover .arrow{transform:translateX(3px)}
+
+  @media(max-width:680px){
+    #nav{display:none}
+    #spine{left:10px}
+    section.module .stageInner{padding-left:4px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation-duration:.001s !important;transition-duration:.001s !important}
+  }
+</style>
+</head>
+<body>
+
+<div id="spine"><div class="sealedFill" id="sealedFill"></div><div class="sealedFlag" id="sealedFlag">sealed to here</div><div class="caretNode" id="caretNode"></div></div>
+<div class="observedTag" id="observedTag">● observed</div>
+<div id="nav">
+  <button data-i="0">OBSERVE</button>
+  <button data-i="1">BREAK</button>
+  <button data-i="2">QUESTION</button>
+  <button data-i="3">REPAIR</button>
+  <button data-i="4">INSPECT</button>
+</div>
+<div id="scrollHint">scroll</div>
+
+<main class="stack">
+
+  <section id="s-open">
+    <div class="stage"><div class="stageInner">
+      <h1 id="thesis">Operational AI should be inspectable.</h1>
+    </div></div>
+  </section>
+
+  <section id="s-break" class="module">
+    <div class="stage"><div class="stageInner">
+      <span class="eyebrow">Break it</span>
+      <p class="lead">Most AI products would let you do this.</p>
+      <div class="panel">
+        <div class="display">Operational AI should be <span id="breakWord">inspectable</span>.</div>
+        <div class="btnrow">
+          <button class="btn warn" id="btnHack">What most AI systems do</button>
+          <button class="btn" id="btnUndo">Undo</button>
+          <button class="btn go" id="btnEngine">Try it through the engine</button>
+        </div>
+        <div class="readout" id="breakReadout"></div>
+      </div>
+    </div></div>
+  </section>
+
+  <section id="s-question" class="module" style="height:90vh">
+    <div class="stage"><div class="stageInner">
+      <span class="eyebrow">Why</span>
+      <p class="lead">Why did that feel wrong?</p>
+      <p class="sub">Most software rewrites history. Ours can't. That's the difference.</p>
+    </div></div>
+  </section>
+
+  <section id="s-observers" class="module">
+    <div class="stage"><div class="stageInner">
+      <span class="eyebrow">Two observers</span>
+      <p class="lead">Drag either marker. The timeline doesn't move — only the view does.</p>
+      <div class="track" id="track">
+        <div class="handle you" id="handleYou" tabindex="0" role="slider" aria-label="Your viewpoint" aria-valuemin="0" aria-valuemax="100">
+          <div class="pin"></div><div class="lbl">YOU</div><div class="read" id="readYou"></div>
+        </div>
+        <div class="handle model" id="handleModel" tabindex="0" role="slider" aria-label="The model's viewpoint" aria-valuemin="0" aria-valuemax="100">
+          <div class="pin"></div><div class="lbl">MODEL</div><div class="read" id="readModel"></div>
+        </div>
+      </div>
+      <div class="sub" id="obsCaption" style="margin-top:30px;opacity:0;transition:opacity .6s ease">Neither of you changed what's true. You only changed where you're looking.</div>
+    </div></div>
+  </section>
+
+  <section id="s-mission" class="module">
+    <div class="stage"><div class="stageInner">
+      <span class="eyebrow">What depends on what</span>
+      <p class="lead">Mission Approved depends on Fuel, Weather, and Communications.</p>
+      <div class="toggles">
+        <button class="toggle ok" id="tgFuel"><span class="k">FUEL</span><span class="v">OK</span></button>
+        <button class="toggle ok" id="tgWeather"><span class="k">WEATHER</span><span class="v">CLEAR</span></button>
+        <button class="toggle ok" id="tgComms"><span class="k">COMMS</span><span class="v">UP</span></button>
+      </div>
+      <div class="missionBig approved" id="missionBig">MISSION → APPROVED</div>
+    </div></div>
+  </section>
+
+  <section id="s-split" class="module">
+    <div class="stage"><div class="stageInner">
+      <span class="eyebrow">Two writers</span>
+      <p class="lead">Two authorities. One value. Watch.</p>
+      <div class="panel">
+        <div>MISSION STATUS: <span class="statusBig" id="statusVal" style="display:inline">STABLE</span><span class="statusTag" id="statusTag"></span></div>
+        <div class="authrow" style="margin-top:14px">
+          <button class="authBtn a" id="authA">Authority A</button>
+          <button class="authBtn b" id="authB">Authority B</button>
+          <button class="btn" id="authConflict">Simulate conflict</button>
+        </div>
+        <div class="lockNote" id="lockNote">🔒 The engine forbids this. One writer, always.</div>
+      </div>
+    </div></div>
+  </section>
+
+  <section id="s-law">
+    <div class="stage"><div class="stageInner">
+      <div class="lawblock">
+        <span class="name">COMMITTED PREFIX PRESERVATION</span>
+        No accepted operation may change valueAt(τ)<br>
+        for any τ ≤ F.
+      </div>
+    </div></div>
+  </section>
+
+  <section id="s-close">
+    <div class="stage"><div class="stageInner">
+      <p>Every claim on this site can be reproduced.</p>
+      <p class="dim">Nothing here asks for trust. Only observation.</p>
+      <a class="cta" href="./model.html">Open the engine <span class="arrow">→</span></a>
+    </div></div>
+  </section>
+
+</main>
+
+<script>
+'use strict';
+function edgeLog(initial){
+  const edges=[];
+  return { edges, initial,
+    append(es){ for(const e of es){ if(Object.is(e.from,e.to)) continue; edges.push(e); } },
+    valueAt(t){ let lo=0,hi=edges.length; while(lo<hi){const m=(lo+hi)>>1; if(edges[m].tau<=t)lo=m+1; else hi=m;} return lo?edges[lo-1].to:initial; }
+  };
+}
+function materialize(seed,surf){ let p=seed,o=[]; for(const s of surf){o.push({tau:s.tau,from:p,to:s.value});p=s.value;} return o; }
+function canWriteAt(tau, frontier){ return tau > frontier; }
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+let frontier = -1;
+let frontierActive = false;
+let lastTau = 0;
+
+const spine = document.getElementById('spine');
+const sealedFill = document.getElementById('sealedFill');
+const sealedFlag = document.getElementById('sealedFlag');
+const caretNode = document.getElementById('caretNode');
+const observedTag = document.getElementById('observedTag');
+const nav = document.getElementById('nav');
+const navBtns = [...nav.querySelectorAll('button')];
+const scrollHint = document.getElementById('scrollHint');
+
+const sOpen = document.getElementById('s-open');
+const sBreak = document.getElementById('s-break');
+const sSplit = document.getElementById('s-split');
+const sLaw = document.getElementById('s-law');
+
+function docFrac(){
+  const max = document.documentElement.scrollHeight - innerHeight;
+  return max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
+}
+function localProgress(el, anchorFrac){
+  const rect = el.getBoundingClientRect();
+  const total = rect.height - innerHeight;
+  if (total <= 0) return 1;
+  const traveled = anchorFrac*innerHeight - rect.top;
+  return Math.min(1, Math.max(0, traveled/total));
+}
+
+const thesisLog = edgeLog('Operational AI should be inspectable.');
+thesisLog.append(materialize('Operational AI should be inspectable.', [
+  {tau:0.40, value:'Most AI systems hide their reasoning.'},
+  {tau:0.75, value:'Most AI systems hide their operational state.'},
+]));
+const thesisEl = document.getElementById('thesis');
+let lastThesisVal = thesisLog.initial;
+
+let cursorActivationY = 0;
+function recomputeOffsets(){
+  cursorActivationY = sBreak.offsetTop - innerHeight*0.15;
+}
+
+function frame(){
+  const tau = docFrac();
+  lastTau = tau;
+
+  const lp = localProgress(sOpen, 0.46);
+  const v = thesisLog.valueAt(lp);
+  if (!Object.is(v, lastThesisVal)){
+    thesisEl.textContent = v;
+    if (!reduceMotion){ thesisEl.classList.remove('flick'); void thesisEl.offsetWidth; thesisEl.classList.add('flick'); }
+    lastThesisVal = v;
+  }
+
+  if (!frontierActive && scrollY > cursorActivationY){
+    frontierActive = true;
+    frontier = tau;
+    spine.classList.add('live');
+    nav.classList.add('live');
+  }
+  if (frontierActive){
+    frontier = Math.max(frontier, tau);
+    const docH = document.documentElement.scrollHeight;
+    sealedFill.style.height = (frontier*docH) + 'px';
+    sealedFlag.style.top = (frontier*docH) + 'px';
+    caretNode.style.top = (tau*docH) + 'px';
+    observedTag.style.top = (tau*docH - 4) + 'px';
+    observedTag.classList.add('live');
+  }
+
+  let activeIdx = 0;
+  for (let i=0;i<navBtns.length;i++) if (tau >= navBuckets[i]) activeIdx = i;
+  navBtns.forEach((b,i)=>b.classList.toggle('active', i===activeIdx));
+
+  if (scrollY > 40) scrollHint.classList.add('hidden');
+
+  ticking = false;
+}
+let ticking=false;
+addEventListener('scroll', ()=>{ if(!ticking){ ticking=true; requestAnimationFrame(frame); } }, {passive:true});
+addEventListener('resize', ()=>{ recomputeOffsets(); requestAnimationFrame(frame); });
+
+let navBuckets = [0,0,0,0,0];
+function recomputeNavBuckets(){
+  const docH = document.documentElement.scrollHeight - innerHeight;
+  const at = el => Math.min(1, el.offsetTop / docH);
+  navBuckets = [0, at(sBreak), at(document.getElementById('s-question')), at(sSplit), at(sLaw)];
+}
+navBtns.forEach((b,i)=>b.addEventListener('click', ()=>{
+  const docH = document.documentElement.scrollHeight - innerHeight;
+  scrollTo({ top: navBuckets[i]*docH + 2, behavior: reduceMotion?'auto':'smooth' });
+}));
+
+const demoTau = 0.05;
+let hacked = false, hackedWord = 'explainable';
+const breakWordLog = edgeLog('inspectable');
+const breakWordEl = document.getElementById('breakWord');
+const breakReadout = document.getElementById('breakReadout');
+
+function renderBreak(){
+  breakWordEl.textContent = hacked ? hackedWord : breakWordLog.valueAt(demoTau);
+}
+document.getElementById('btnHack').addEventListener('click', ()=>{
+  hacked = true; renderBreak();
+  breakReadout.className = 'readout bad';
+  breakReadout.innerHTML = '⚠ something changed behind the frontier — silently, with no check.';
+});
+document.getElementById('btnUndo').addEventListener('click', ()=>{
+  hacked = false; renderBreak();
+  breakReadout.className = 'readout';
+  breakReadout.innerHTML = 'reverted — but that wasn\'t the engine. you just turned the hack back off.';
+});
+document.getElementById('btnEngine').addEventListener('click', ()=>{
+  const F = frontierActive ? frontier : lastTau;
+  if (canWriteAt(demoTau, F)){
+    breakWordLog.append(materialize(breakWordLog.valueAt(demoTau), [{tau:demoTau+0.001, value:'rewritten'}]));
+    renderBreak();
+    breakReadout.className='readout ok';
+    breakReadout.innerHTML = 'accepted — τ '+demoTau.toFixed(2)+' was still ahead of the frontier.';
+  } else {
+    breakReadout.className='readout bad';
+    breakReadout.innerHTML = '✕ rebase refused — τ '+demoTau.toFixed(2)+' ≤ frontier '+F.toFixed(2)+'<br><span style="color:var(--ghost)">the engine has no \'undo\' for this. it never allowed the write.</span>';
+  }
+});
+renderBreak();
+
+const capLog = edgeLog('UNVERIFIED');
+capLog.append(materialize('UNVERIFIED', [{tau:0.5, value:'VALIDATED'}]));
+const track = document.getElementById('track');
+const handleYou = document.getElementById('handleYou');
+const handleModel = document.getElementById('handleModel');
+const readYou = document.getElementById('readYou');
+const readModel = document.getElementById('readModel');
+const obsCaption = document.getElementById('obsCaption');
+let posYou = 0.2, posModel = 0.8, movedYou=false, movedModel=false;
+
+function renderTrack(){
+  const w = track.clientWidth;
+  handleYou.style.left = (posYou*w) + 'px';
+  handleModel.style.left = (posModel*w) + 'px';
+  readYou.textContent = capLog.valueAt(posYou);
+  readModel.textContent = capLog.valueAt(posModel);
+  if (movedYou && movedModel) obsCaption.style.opacity = '1';
+}
+function dragHandle(el, setter, marker){
+  let active=false;
+  el.addEventListener('pointerdown', e=>{ active=true; el.setPointerCapture(e.pointerId); });
+  el.addEventListener('pointermove', e=>{
+    if(!active) return;
+    const r = track.getBoundingClientRect();
+    setter(Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)));
+    marker();
+    renderTrack();
+  });
+  el.addEventListener('pointerup', ()=>active=false);
+  el.addEventListener('keydown', e=>{
+    const step = e.shiftKey?0.1:0.02;
+    if (e.key==='ArrowLeft'){ setter(Math.max(0, (el===handleYou?posYou:posModel)-step)); marker(); renderTrack(); }
+    if (e.key==='ArrowRight'){ setter(Math.min(1,(el===handleYou?posYou:posModel)+step)); marker(); renderTrack(); }
+  });
+}
+dragHandle(handleYou, v=>posYou=v, ()=>movedYou=true);
+dragHandle(handleModel, v=>posModel=v, ()=>movedModel=true);
+renderTrack();
+
+let clock = 0;
+const fuelLog = edgeLog('OK'), weatherLog = edgeLog('CLEAR'), commsLog = edgeLog('UP');
+function toggleLog(log, a, b){
+  clock++;
+  const cur = log.valueAt(Infinity);
+  const nxt = cur===a ? b : a;
+  log.append(materialize(cur, [{tau:clock, value:nxt}]));
+}
+function deriveMission(){
+  const f=fuelLog.valueAt(Infinity), w=weatherLog.valueAt(Infinity), c=commsLog.valueAt(Infinity);
+  if (w!=='CLEAR') return {status:'INVALID', cause:'WEATHER'};
+  if (f!=='OK') return {status:'INVALID', cause:'FUEL'};
+  if (c!=='UP') return {status:'INVALID', cause:'COMMS'};
+  return {status:'APPROVED', cause:null};
+}
+const tgFuel = document.getElementById('tgFuel'), tgWeather = document.getElementById('tgWeather'), tgComms = document.getElementById('tgComms');
+const missionBig = document.getElementById('missionBig');
+function renderMission(){
+  const f=fuelLog.valueAt(Infinity), w=weatherLog.valueAt(Infinity), c=commsLog.valueAt(Infinity);
+  tgFuel.querySelector('.v').textContent=f; tgFuel.classList.toggle('bad', f!=='OK'); tgFuel.classList.toggle('ok', f==='OK');
+  tgWeather.querySelector('.v').textContent=w; tgWeather.classList.toggle('bad', w!=='CLEAR'); tgWeather.classList.toggle('ok', w==='CLEAR');
+  tgComms.querySelector('.v').textContent=c; tgComms.classList.toggle('bad', c!=='UP'); tgComms.classList.toggle('ok', c==='UP');
+  const m = deriveMission();
+  missionBig.textContent = m.status==='APPROVED' ? 'MISSION → APPROVED' : 'MISSION → INVALID · cause: '+m.cause;
+  missionBig.classList.toggle('approved', m.status==='APPROVED');
+  missionBig.classList.toggle('invalid', m.status!=='APPROVED');
+}
+tgFuel.addEventListener('click', ()=>{ toggleLog(fuelLog,'OK','LOW'); renderMission(); });
+tgWeather.addEventListener('click', ()=>{ toggleLog(weatherLog,'CLEAR','STORM'); renderMission(); });
+tgComms.addEventListener('click', ()=>{ toggleLog(commsLog,'UP','DOWN'); renderMission(); });
+renderMission();
+
+let statusVal = 'STABLE', statusBy = null, locked = false;
+const statusValEl = document.getElementById('statusVal');
+const statusTagEl = document.getElementById('statusTag');
+const lockNote = document.getElementById('lockNote');
+const authA = document.getElementById('authA'), authB = document.getElementById('authB'), authConflict = document.getElementById('authConflict');
+
+function renderSplit(){
+  statusValEl.textContent = statusVal;
+  statusTagEl.textContent = statusBy ? ('written by '+statusBy) : '';
+  statusTagEl.className = 'statusTag '+(statusBy==='A'?'a':statusBy==='B'?'b':'');
+}
+function unguardedWrite(who, val){
+  if (locked){
+    lockNote.classList.add('show');
+    statusTagEl.textContent = '✕ second writer refused';
+    statusTagEl.className = 'statusTag '+(who==='A'?'a':'b');
+    return;
+  }
+  statusVal = val; statusBy = who; renderSplit();
+}
+authA.addEventListener('click', ()=>unguardedWrite('A','APPROVED'));
+authB.addEventListener('click', ()=>unguardedWrite('B','BLOCKED'));
+authConflict.addEventListener('click', ()=>{
+  if (locked) return;
+  let n=0;
+  const steps = reduceMotion ? 2 : 9;
+  const iv = setInterval(()=>{
+    n++;
+    statusVal = n%2 ? 'APPROVED' : 'BLOCKED';
+    statusBy = n%2 ? 'A' : 'B';
+    renderSplit();
+    if (n>=steps){
+      clearInterval(iv);
+      locked = true;
+      authA.disabled = false; authB.disabled = false;
+      lockNote.classList.add('show');
+    }
+  }, reduceMotion?260:90);
+});
+renderSplit();
+
+recomputeOffsets();
+recomputeNavBuckets();
+addEventListener('load', ()=>{ recomputeOffsets(); recomputeNavBuckets(); frame(); });
+frame();
+</script>
+</body>
+</html>
