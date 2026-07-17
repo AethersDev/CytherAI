@@ -3,250 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Technical Brief | CytherAI</title>
-    <meta name="description" content="CytherAI technical overview. Sovereign operational AI systems built for environments where failure has consequence.">
-    <meta name="theme-color" content="#E7DFD1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none';">
-    <link rel="stylesheet" href="../css/cytherai.css">
+    <title>DOC-2026-002 &middot; Capability Brief | CytherAI</title>
+    <meta name="description" content="CytherAI capability brief. Public-surface technical position for CytherCAD and SijilOS.">
+    <meta name="theme-color" content="#F4F5F2">
+    <link rel="manifest" href="../manifest.webmanifest">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self';">
+    <link rel="stylesheet" href="../css/cytherai.css" integrity="sha384-84FGSekX6yovhgnL2KUg0NyjhDye3LUpDuLaPIkUtzNXFEiANH7RRulcxdiaKTVj" crossorigin="anonymous">
+    <style>
+    .doc-section { display: block; }
+    .section-label { font-family:var(--font-mono); font-size:9px; letter-spacing:.28em; color:var(--ink-quiet); text-transform:uppercase; margin-bottom:20px; }
+    .section-title { font-family:var(--font-serif); font-size:20px; font-weight:400; color:var(--ink); line-height:1.3; margin-bottom:6px; }
+    .section-title em { color:var(--ink-mid); font-style:italic; }
+    .section-body { font-family:var(--font-mono); font-size:12px; color:var(--ink-mid); line-height:1.9; max-width:560px; }
+    </style>
 </head>
 <body>
-    <nav class="nav" role="navigation" aria-label="Main navigation">
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+
+    <nav class="nav" role="navigation" aria-label="Site">
         <div class="nav-container">
             <a href="../index.html" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
-            <ul class="nav-links">
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="brief.html" aria-current="page">Brief</a></li>
-            </ul>
+            <span class="nav-scope">CAPABILITY BRIEF &middot; <b>PUBLIC SURFACE</b></span>
         </div>
     </nav>
 
-    <main id="main-content" style="padding-top: 120px;">
-        <article class="section">
-            <div style="max-width: 700px; margin: 0 auto; padding: 0 1.5rem;">
-                <div class="hero-stamp">CAPABILITY BRIEF</div>
-                <h1 style="margin-bottom: 2rem;">Technical Overview</h1>
-                <p style="color: var(--ink-mid); margin-bottom: 3rem; line-height: 1.85;">
-                    CytherAI designs and delivers operational AI systems for organisations that need ownership, traceability, and disciplined implementation. This brief outlines our public-facing technical posture.
-                </p>
+<main id="main-content">
 
-                <div style="color: var(--ink-mid); line-height: 1.85; font-size: .9rem;">
+<!-- ════════ §01 BRIEF ════════ -->
+<section class="doc-section" id="brief-cover" style="background:var(--paper);" aria-label="Capability Brief">
+    <div class="section-stamp" aria-hidden="true"><span class="section-stamp-id">&sect;01 &middot; BRIEF</span><span class="section-stamp-page">01 / 04</span></div>
+    <div class="doc-content">
+        <div class="section-label">CAPABILITY BRIEF &middot; DOC-2026-002</div>
+        <h1 class="section-title">Technical posture, <em>made legible.</em></h1>
+        <p class="section-body" style="margin-bottom:22px;">This document summarises CytherAI&rsquo;s public-surface technical position across two filed exhibits. Disclosure level governs access depth. Detailed architecture, training methodology, and deployment specifications are available under qualified review.</p>
+        <div class="proof-fragment">
+            <div class="proof-fragment-source">FROM: Architectural Constraints &mdash; All Deliverables</div>
+            <p class="proof-fragment-body">Zero external dependencies at the execution path. Measurable correctness with defined acceptance gates. Deployment-aware design from day one.</p>
+            <div class="proof-fragment-field">&middot; Constraint set applied to: CytherCAD, SijilOS, NTP</div>
+        </div>
+    </div>
+    <div class="section-strip"><span>Capability Brief</span><span>01 / 04</span></div>
+</section>
 
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Architecture Philosophy</h2>
-                    <p>Every system we build follows three constraints:</p>
-                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
-                        <li><strong style="color: var(--ink);">Zero external dependencies</strong> at the core execution path. Systems must operate without cloud connectivity when required.</li>
-                        <li><strong style="color: var(--ink);">Measurable correctness.</strong> Acceptance criteria, benchmarks, and release gates are defined before implementation begins.</li>
-                        <li><strong style="color: var(--ink);">Deployment-aware design.</strong> On-prem, private cloud, constrained edge, or air-gapped environments are first-class architectural targets.</li>
-                    </ul>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">CytherCAD</h2>
-                    <p>A generative CAD system that produces executable parametric construction programs. Architecture: compact autoregressive model + constrained decoding + kernel-backed geometric verification.</p>
-                    <div style="background: var(--paper-lifted); border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0;">
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">100%</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">GVR encoder path</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">100%</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">GVR free-gen (n=1k)</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">16.1M</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Parameters</div>
-                            </div>
-                        </div>
-                        <div style="margin-top: 1rem; padding-top: .75rem; border-top: 1px solid var(--rule); font-family: var(--font-mono); font-size: .6rem; letter-spacing: .08em; color: var(--ink-quiet); text-transform: uppercase; text-align: center;">
-                            Constrained decoding + kernel-backed geometric verification
-                        </div>
-                    </div>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">SijilOS</h2>
-                    <p>An event-sourced transactional ledger engine for the Saudi market. Financial-grade, compliance-aware, fully offline-capable. Stores intent over time rather than current state.</p>
-                    <div style="background: var(--paper-lifted); border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; margin: 1.5rem 0;">
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center;">
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">Zero</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Cloud dependency</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">ZATCA</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Phase 1</div>
-                            </div>
-                            <div>
-                                <div style="font-size: 1.4rem; color: var(--brass); font-weight: 500;">Live</div>
-                                <div style="font-family: var(--font-mono); font-size: .6rem; letter-spacing: .1em; color: var(--ink-quiet); text-transform: uppercase; margin-top: .25rem;">Beta deploy</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Research &amp; IP</h2>
-                    <p>US Provisional Patent filed (2025): <em>Neural Network System and Method for Generating Proofs with Zero External Dependencies.</em> A zero-dependency transformer trained from random initialisation without pretrained weights or transfer-learning assumptions.</p>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Next Step</h2>
-                    <p>For kernel architecture details, training methodology, deployment specifications, and engagement scoping:</p>
-                    <div style="margin-top: 1.5rem;">
-                        <a href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request"
-                           class="btn btn-primary"
-                           style="display: inline-block;">
-                            REQUEST NDA BRIEFING
-                        </a>
-                    </div>
-                    <p style="font-family: var(--font-mono); font-size: .7rem; color: var(--ink-quiet); margin-top: 1rem; letter-spacing: .08em;">
-                        Identity required &middot; NDA required &middot; Qualified inquiries only
-                    </p>
+<!-- ════════ §02 EXHIBIT A — CytherCAD ════════ -->
+<section class="doc-section" id="cythercad" style="background:var(--paper-dense);" aria-label="Exhibit A — CytherCAD">
+    <div class="section-stamp" aria-hidden="true"><span class="section-stamp-id">&sect;02 &middot; EXHIBIT A</span><span class="section-stamp-page">02 / 04</span></div>
+    <div class="doc-content">
+        <div class="section-label">SECTION 02 &middot; EXHIBIT A &mdash; TECHNICAL RECORD</div>
+        <div class="doc-exhibit" style="max-width:640px;">
+            <div class="doc-exhibit-header"><span class="doc-exhibit-header-label">EXHIBIT A</span><span class="doc-exhibit-header-id">CAD-2024-001</span></div>
+            <div class="doc-exhibit-body">
+                <div class="doc-exhibit-type">TECHNICAL VALIDATION RECORD</div>
+                <div class="doc-exhibit-title">CytherCAD &mdash; Controlled Generative CAD</div>
+                <p class="section-body" style="margin-bottom:14px;">Compact autoregressive model producing executable parametric construction programs. Constrained decoding enforces geometric validity at generation time. Kernel-backed verification confirms dimensional accuracy post-generation.</p>
+                <table>
+                    <tbody>
+                    <tr><td>Status</td><td>Production-validated</td></tr>
+                    <tr><td>Verified</td><td>Log + external benchmark</td></tr>
+                    <tr><td>Context</td><td>On-prem &middot; Private &middot; Air-gapped</td></tr>
+                    <tr><td>Parameters</td><td>16.1M</td></tr>
+                    </tbody>
+                </table>
+                <div class="doc-exhibit-outcome">
+                    <div class="doc-exhibit-outcome-label">Key Outcome</div>
+                    <div class="doc-exhibit-outcome-value">IR 0.00% vs 10.00% (DeepCAD) &middot; Text2CAD-192</div>
                 </div>
+                <div style="margin-bottom:12px;">
+                    <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;color:var(--ink-quiet);text-transform:uppercase;margin-bottom:10px;">VALIDATION SUMMARY &middot; v1.1</div>
+                    <table>
+                        <tbody>
+                        <tr><td>GVR &middot; Constrained Beam (n=100)</td><td style="color:var(--brass);font-weight:500;">100%</td></tr>
+                        <tr><td>GVR &middot; Completion (n=100)</td><td style="color:var(--brass);font-weight:500;">100%</td></tr>
+                        <tr><td>Dimensional Accuracy &plusmn;3mm (n=35)</td><td style="color:var(--brass);font-weight:500;">99%</td></tr>
+                        <tr><td>Dimensional Accuracy &plusmn;5mm (n=35)</td><td style="color:var(--brass);font-weight:500;">97%</td></tr>
+                        <tr><td>Multi-Op Accuracy &middot; Encoder (n=35)</td><td style="color:var(--brass);font-weight:500;">91%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding-top:10px;border-top:1px solid var(--rule);">
+                    <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--ink-quiet);text-transform:uppercase;margin-bottom:4px;">Methodology</div>
+                    <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-mid);line-height:1.75;margin-bottom:10px;">Autoregressive generation &middot; constrained decoding &middot; kernel-backed geometric verification</div>
+                    <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--ink-quiet);text-transform:uppercase;margin-bottom:4px;">Benchmark Source</div>
+                    <div style="font-family:var(--font-mono);font-size:10px;color:var(--ink-mid);line-height:1.75;">Text2CAD-192 &middot; External &middot; Published &middot; Not operated by CytherAI</div>
+                </div>
+                <div class="doc-exhibit-footer" style="margin-top:12px;"><span class="doc-exhibit-disclosure">Disclosure: Public Surface</span></div>
             </div>
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-text">&copy; 2026 CytherAI</div>
-            <ul class="footer-links">
-                <li><a href="security.html">Security</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-                <li><a href="terms.html">Terms</a></li>
-            </ul>
         </div>
-    </footer>
+    </div>
+    <div class="section-strip"><span>Exhibit A &middot; CytherCAD</span><span>02 / 04</span></div>
+</section>
 
-    <script src="../js/cytherai.js" defer></script>
-    <script src="../js/command-palette.js" defer></script>
-</body>
-</html>
-                        Unlike conventional AI systems that rely on cloud inference or pretrained models,
-                        CytherAI is built as a <strong>sealed artifact</strong>: deterministic, inspectable,
-                        and engineered for verification.
-                    </p>
-                </section>
-
-                <section style="margin-bottom: 3rem;">
-                    <h2>Who It's For</h2>
-                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Security-critical enterprises</strong> requiring offline AI capabilities</li>
-                        <li><strong>Regulated industries</strong> (finance, healthcare, defense) with strict compliance requirements</li>
-                        <li><strong>Research institutions</strong> needing reproducible AI for scientific work</li>
-                        <li><strong>Organizations</strong> with air-gapped infrastructure or sovereignty requirements</li>
-                    </ul>
-                </section>
-
-                <section style="margin-bottom: 3rem;">
-                    <h2>What Problems It Solves</h2>
-                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
-                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Supply Chain Trust</h3>
-                        <p style="color: var(--text-secondary);">
-                            Deterministic builds allow bit-for-bit verification. Same source code + same seed
-                            = identical model weights every time.
-                        </p>
-                    </div>
-
-                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
-                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Cloud Dependency Risk</h3>
-                        <p style="color: var(--text-secondary);">
-                            Runs entirely on-premises. No internet required after deployment. No external
-                            API calls, no telemetry, no third-party dependencies.
-                        </p>
-                    </div>
-
-                    <div style="border-left: 3px solid var(--gold-dim); padding-left: 1.5rem; margin: 1.5rem 0;">
-                        <h3 style="font-size: 1.125rem; margin-bottom: 0.5rem;">Reproducibility Gap</h3>
-                        <p style="color: var(--text-secondary);">
-                            Full audit trail from training initialization to convergence. Every decision
-                            is logged, every state transition is deterministic.
-                        </p>
-                    </div>
-                </section>
-
-                <section style="margin-bottom: 3rem;">
-                    <h2>Deployment & Security Posture</h2>
-
-                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem;">Deployment Options</h3>
-                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
-                        <li><strong>Containerized:</strong> Docker/Kubernetes deployment with standard orchestration</li>
-                        <li><strong>Air-Gapped:</strong> Full offline operation with sneakernet updates</li>
-                        <li><strong>Hardware Requirements:</strong> 16GB RAM minimum, GPU optional for training acceleration</li>
-                    </ul>
-
-                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem;">Security Architecture</h3>
-                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
-                        <li>Reproducible builds mitigate supply chain attacks</li>
-                        <li>Runtime integrity checks detect tampering</li>
-                        <li>Deterministic training prevents model poisoning</li>
-                        <li>No network egress required (zero-trust compatible)</li>
-                    </ul>
-
-                    <div style="background: var(--bg-elevated); border: 1px solid var(--border-accent); border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
-                        <strong style="color: var(--gold);">Security Note:</strong>
-                        <p style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9375rem;">
-                            External security audit scheduled Q2 2026. Current status: internal testing phase.
-                            Not recommended for production deployment without additional security review.
-                        </p>
-                    </div>
-                </section>
-
-                <section style="margin-bottom: 3rem;">
-                    <h2>What's Verifiable Today vs. What's Research</h2>
-
-                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem; color: var(--gold);">✓ Verifiable Today</h3>
-                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
-                        <li>Deterministic build reproducibility (same binary every build)</li>
-                        <li>Zero external network requests during runtime</li>
-                        <li>Complete training logs and state transitions</li>
-                        <li>Source code inspection (available upon NDA)</li>
-                    </ul>
-
-                    <h3 style="font-size: 1.125rem; margin-top: 1.5rem; color: var(--text-muted);">⧗ Research Stage</h3>
-                    <ul style="list-style-position: inside; color: var(--text-secondary); line-height: 1.8;">
-                        <li>Formal verification of theorem proving soundness</li>
-                        <li>Zero-knowledge proofs of correct execution</li>
-                        <li>Hardware-level attestation</li>
-                        <li>Side-channel resistance guarantees</li>
-                    </ul>
-                </section>
-
-                <section style="margin-bottom: 3rem;">
-                    <h2>Access & Licensing</h2>
-                    <p>
-                        CytherAI is currently in <strong>private alpha</strong>. Access requires NDA and
-                        is limited to qualified enterprises with legitimate use cases.
-                    </p>
-                    <p>
-                        <strong>Licensing:</strong> Commercial licensing with source-available option.
-                        Pricing based on deployment size and support tier.
-                    </p>
-                    <p>
-                        <strong>Open Source:</strong> Core components (build tooling, verification scripts)
-                        will be open-sourced upon public release.
-                    </p>
-                </section>
-
-                <section style="text-align: center; margin-top: 4rem; padding-top: 3rem; border-top: 1px solid var(--border);">
-                    <h2 style="margin-bottom: 1rem;">Request Detailed Documentation</h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 2rem;">
-                        For architecture diagrams, API documentation, and deployment guides,
-                        request access via secure channel.
-                    </p>
-                    <a href="/pages/contact.html" class="btn btn-primary">
-                        REQUEST BRIEFING
-                    </a>
-                </section>
+<!-- ════════ §03 EXHIBIT B — SijilOS ════════ -->
+<section class="doc-section" id="sijilos" style="background:var(--paper-dense);" aria-label="Exhibit B — SijilOS">
+    <div class="section-stamp" aria-hidden="true"><span class="section-stamp-id">&sect;03 &middot; EXHIBIT B</span><span class="section-stamp-page">03 / 04</span></div>
+    <div class="doc-content">
+        <div class="section-label">SECTION 03 &middot; EXHIBIT B &mdash; OPERATIONAL RECORD</div>
+        <div class="doc-exhibit" style="max-width:640px;">
+            <div class="doc-exhibit-header"><span class="doc-exhibit-header-label">EXHIBIT B</span><span class="doc-exhibit-header-id">SIJ-2025-001</span></div>
+            <div class="doc-exhibit-body">
+                <div class="doc-exhibit-type">DEPLOYMENT OPERATIONAL RECORD</div>
+                <div class="doc-exhibit-title">SijilOS &mdash; Event-Sourced Ledger Engine</div>
+                <p class="section-body" style="margin-bottom:14px;">Event-sourced transactional ledger for the Saudi market. Financial-grade, compliance-aware, fully offline-capable. Stores intent over time rather than current state.</p>
+                <div class="doc-exhibit-certification">
+                    <div class="doc-exhibit-certification-label">COMPLIANCE CERTIFICATION</div>
+                    <div class="doc-exhibit-certification-value">ZATCA Phase 1 &middot; Kingdom of Saudi Arabia<br>Certified compliant &middot; April 2025</div>
+                </div>
+                <div style="margin-bottom:12px;">
+                    <div class="doc-exhibit-status-label">OPERATIONAL STATUS</div>
+                    <div class="doc-exhibit-status-value">Live beta &middot; 2 production environments<br>Offline-first &middot; Zero core cloud dependency</div>
+                </div>
+                <table>
+                    <tbody>
+                    <tr><td>Architecture</td><td>Event-sourced &middot; Immutable log</td></tr>
+                    <tr><td>Deployment</td><td>On-prem &middot; Offline-first</td></tr>
+                    <tr><td>Cloud dependency</td><td>Zero at core</td></tr>
+                    </tbody>
+                </table>
+                <div class="doc-exhibit-outcome">
+                    <div class="doc-exhibit-outcome-label">Key Outcome</div>
+                    <div class="doc-exhibit-outcome-value">Zero core cloud dependency &middot; Full offline operation</div>
+                </div>
+                <div class="doc-exhibit-footer"><span class="doc-exhibit-disclosure">Disclosure: Public Surface</span></div>
             </div>
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-text">© 2026 CytherAI</div>
-            <ul class="footer-links">
-                <li><a href="/pages/security.html">Security</a></li>
-                <li><a href="/pages/privacy.html">Privacy</a></li>
-                <li><a href="/pages/terms.html">Terms</a></li>
-            </ul>
         </div>
-    </footer>
+    </div>
+    <div class="section-strip"><span>Exhibit B &middot; SijilOS</span><span>03 / 04</span></div>
+</section>
 
-    <script src="/js/cytherai.js" defer></script>
-    <script src="/js/command-palette.js" defer></script>
+<!-- ════════ §04 ACCESS ════════ -->
+<section class="doc-section" id="clearance" style="background:var(--paper-dense);" aria-label="Access">
+    <div class="section-stamp" aria-hidden="true"><span class="section-stamp-id">&sect;04 &middot; ACCESS</span><span class="section-stamp-page">04 / 04</span></div>
+    <div class="doc-content">
+        <div class="section-label">SECTION 04 &middot; ACCESS</div>
+        <h2 class="section-title">Qualified access <em>begins here.</em></h2>
+        <p class="section-body" style="margin-bottom:20px;">Kernel architecture, training methodology, deployment specifications, and engagement scoping are available under qualified review. Identity and NDA required.</p>
+        <a href="mailto:nda@cytherai.com?subject=Capability%20Review%20Request" class="clearance-cta-primary" style="max-width:280px;">Request Briefing</a>
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.1em;color:var(--ink-quiet);text-transform:uppercase;margin-top:12px;">Identity required &middot; NDA required &middot; Qualified inquiries</div>
+    </div>
+    <div class="section-strip"><span>Access</span><span>04 / 04</span></div>
+</section>
+
+</main>
+
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-text">&copy; <span class="js-year">2026</span> CytherAI</div>
+        <ul class="footer-links">
+            <li><a href="security.html">Security</a></li>
+            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="terms.html">Terms</a></li>
+        </ul>
+    </div>
+</footer>
+
 </body>
 </html>

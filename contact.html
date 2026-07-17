@@ -5,22 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact | CytherAI</title>
     <meta name="description" content="Request a briefing or initiate contact with CytherAI. Sovereign channel. No trackers.">
-    <meta name="theme-color" content="#E7DFD1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none';">
-    <link rel="stylesheet" href="css/cytherai.css">
+    <meta name="theme-color" content="#F4F5F2">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self';">
+    <link rel="stylesheet" href="css/cytherai.css" integrity="sha384-84FGSekX6yovhgnL2KUg0NyjhDye3LUpDuLaPIkUtzNXFEiANH7RRulcxdiaKTVj" crossorigin="anonymous">
 </head>
 <body>
-    <nav class="nav" role="navigation" aria-label="Main navigation">
+        <nav class="nav" role="navigation" aria-label="Site">
         <div class="nav-container">
-            <a href="/" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
-            <ul class="nav-links">
-                <li><a href="/">Home</a></li>
-                <li><a href="pages/brief.html">Brief</a></li>
-            </ul>
+            <a href="index.html" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
+            <span class="nav-scope">CONTACT &middot; <b>PUBLIC SURFACE</b></span>
         </div>
     </nav>
 
-    <main id="main-content" style="padding-top: 120px;">
+    <main id="main-content">
         <article class="section">
             <div style="max-width: 600px; margin: 0 auto; padding: 0 1.5rem;">
                 <div class="hero-stamp">COMMUNICATION PROTOCOL</div>
@@ -200,7 +198,7 @@
 
     <footer class="footer">
         <div class="footer-container">
-            <div class="footer-text">&copy; 2026 CytherAI</div>
+            <div class="footer-text">&copy; <span class="js-year">2026</span> CytherAI</div>
             <ul class="footer-links">
                 <li><a href="pages/security.html">Security</a></li>
                 <li><a href="pages/privacy.html">Privacy</a></li>
@@ -209,8 +207,6 @@
         </div>
     </footer>
 
-    <script src="js/cytherai.js" defer></script>
-    <script src="js/command-palette.js" defer></script>
 
     <script>
       /**
@@ -254,9 +250,9 @@
           if (!el) return;
           el.textContent       = message;
           el.style.display     = 'block';
-          el.style.background  = isError ? 'rgba(255,107,107,.1)'  : 'rgba(122,91,27,.1)';
-          el.style.border      = isError ? '1px solid rgba(255,107,107,.3)' : '1px solid rgba(122,91,27,.25)';
-          el.style.color       = isError ? '#ff6b6b' : '#7A5B1B';
+          el.style.background  = isError ? 'rgba(178,58,46,.1)'  : 'rgba(12,124,111,.1)';
+          el.style.border      = isError ? '1px solid rgba(178,58,46,.3)' : '1px solid rgba(12,124,111,.25)';
+          el.style.color       = isError ? '#B23A2E' : '#0C7C6F';
         }
 
         /* ── Form submit ────────────────────────────────────────── */
@@ -299,12 +295,14 @@
             } else {
               var ta = document.createElement('textarea');
               ta.value = addr;
-              ta.style.cssText = 'position:fixed;opacity:0';
+              ta.setAttribute('readonly', '');
+              ta.style.cssText = 'position:fixed;left:-9999px';
               document.body.appendChild(ta);
               ta.select();
-              try { document.execCommand('copy'); copyBtn.textContent = 'COPIED!'; }
-              catch (err) { copyBtn.textContent = 'COPY FAILED'; }
+              var ok = false;
+              try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
               document.body.removeChild(ta);
+              copyBtn.textContent = ok ? 'COPIED!' : 'COPY FAILED';
             }
             setTimeout(function () { copyBtn.textContent = 'COPY EMAIL ADDRESS'; }, 2000);
           });
