@@ -1,403 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOC-2026-001 · CytherAI — Sovereign Operational AI</title>
-    <meta name="description" content="CytherAI builds sovereign operational AI for environments where being wrong has consequence. Nothing here is hidden — the only proof offered is one you can observe and re-derive yourself.">
-    <meta property="og:title" content="CytherAI — Sovereign Operational AI">
-    <meta property="og:description" content="A claim you can audit, or it isn't a claim. Observe it. Reproduce it. Try to break it.">
-    <meta name="theme-color" content="#F4F5F2">
-    <meta name="build-hash" content="86DE7B8D2A345A68">
-    <link rel="manifest" href="manifest.webmanifest">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
-    <style>
-    /* ════════════ OBSERVABLE · drafting light ════════════
-       Work done in the open. The core insight is observability —
-       so the surface is a bright drafting table with a blueprint
-       grid, not a dark vault. Colour is mapped 1:1 to engine state. */
-    :root{
-        --ground:#F4F5F2; --panel:#FFFFFF; --panel2:#FBFCFA; --rule:#D9DCD5; --grid:#E7E9E2;
-        --ink:#17191B; --label:#545A5E; --quiet:#62686E;
-        --seal:#0C7C6F;          /* SEALED / log-verified */
-        --pending:#9A6A12;       /* INDETERMINATE / pending */
-        --refuse:#B23A2E;        /* REFUSED / fail */
-        --seal-tint:rgba(12,124,111,.08);
-        --mono:'SF Mono',Menlo,Consolas,ui-monospace,monospace;
-        --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-    }
-    *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
-    body{margin:0;color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.55;
-         font-variant-numeric:tabular-nums;-webkit-font-smoothing:antialiased;
-         background:var(--ground);
-         background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-         background-size:28px 28px;background-position:-1px -1px}
-    h1,h2{font-family:var(--sans);font-weight:560;letter-spacing:-.012em;margin:0}
-    a{color:inherit}
-    .wrap{max-width:1000px;margin:0 auto;padding:0 28px}
-    .skip-link{position:absolute;left:-9999px}.skip-link:focus{left:8px;top:8px;background:var(--ink);color:var(--ground);padding:8px 12px;z-index:100}
-    ::selection{background:rgba(12,124,111,.18)}
-    body.kbd :focus-visible{outline:2px solid var(--seal);outline-offset:2px}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>CytherAI — Sovereign Operational AI</title>
+<meta name="description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
+<meta property="og:title" content="CytherAI — Sovereign Operational AI">
+<meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
+<meta name="theme-color" content="#101620">
+<meta name="build-hash" content="0000000000000000">
+<link rel="manifest" href="manifest.webmanifest">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<style>
+/* ════════════ tokens — the world writes the ambient (§4.1) ════════════
+   Four exposures of one derived object are the background; scroll moves a
+   derived camera into the filament core. --bg/--ink/--panel/--accent are
+   written by CytherSubstrate.observe() across four keyframes. No dark mode
+   toggle — the light descends continuously. No webfonts, no images, no CDNs. */
+:root{
+  --bg:#ECF0F4; --ink:#101620; --accent:#2036C7;
+  --panel:rgba(255,255,255,.60);
+  --hair:color-mix(in srgb, var(--ink) 16%, transparent);
+  --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --display:system-ui,-apple-system,'Segoe UI Variable Display','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.mono{font-family:var(--mono)}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:12px;top:12px;z-index:100;background:var(--ink);color:var(--bg);
+  padding:8px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
 
-    /* 00 · custody header */
-    .custody{position:sticky;top:0;z-index:50;background:rgba(244,245,242,.92);backdrop-filter:saturate(1.4) blur(6px);border-bottom:1px solid var(--rule)}
-    .custody .row{display:flex;align-items:center;max-width:1000px;margin:0 auto;padding:0 28px;height:46px;font-size:10.5px;letter-spacing:.04em}
-    .custody .brand{color:var(--ink);white-space:nowrap}.custody .brand b{color:var(--seal);font-weight:500}
-    .custody .fields{display:flex;gap:18px;margin:0 18px;flex:1;min-width:0;overflow:hidden;color:var(--label)}
-    .custody .f{white-space:nowrap}.custody .f span,.custody .f a{color:var(--ink)}
-    .custody .f a{text-decoration:none;border-bottom:1px solid var(--rule)}.custody .f a:hover{border-color:var(--seal)}
-    .custody .recompute{margin-left:6px;color:var(--quiet);cursor:pointer;border-bottom:1px dotted var(--rule)}.custody .recompute:hover{color:var(--seal)}
-    .custody .scope{color:var(--seal);white-space:nowrap;margin-left:auto}
-    .custody .access{margin-left:16px;white-space:nowrap;background:var(--ink);color:#fff;padding:7px 14px;text-decoration:none;letter-spacing:.06em;text-transform:uppercase;font-size:9.5px}
-    .custody .access:hover{background:var(--seal)}
-    @media(max-width:820px){.custody .fields{display:none}}
+/* ════════════ the substrate — four exposures of one object ════════════ */
+.tile{position:fixed;inset:0;z-index:-2;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
+#substrate{position:fixed;inset:0;z-index:0}
+body.forking #substrate{cursor:grabbing}
 
-    section{border-bottom:1px solid var(--rule);padding:54px 0}
-    .seclabel{font-size:9px;letter-spacing:.24em;color:var(--quiet);text-transform:uppercase;margin-bottom:16px}
-    h2{font-size:17px;color:var(--ink);margin-bottom:10px}
-    .lead{font-family:var(--sans);font-size:23px;line-height:1.28;letter-spacing:-.018em;color:var(--ink);max-width:680px}
-    .sub{color:var(--label);max-width:600px;margin-top:14px;line-height:1.7}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-    .btn{font-size:10px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;padding:11px 18px;border:1px solid var(--rule);color:var(--ink);background:var(--panel)}
-    .btn:hover{border-color:var(--seal)}
-    .btn.primary{background:var(--ink);color:#fff;border-color:var(--ink)}.btn.primary:hover{background:var(--seal);border-color:var(--seal)}
+/* ════════════ chrome ════════════ */
+.chrome{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:baseline;gap:14px;
+  padding:12px 22px;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(12px)}
+.wordmark{font-size:15px;font-weight:750;letter-spacing:.14em}
+.gauge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-align:right;line-height:1.7}
+.gauge b{color:var(--accent);font-weight:500}
+@media(max-width:640px){.gauge{font-size:9px}}
 
-    .panel{border:1px solid var(--rule);background:var(--panel)}
-    table{width:100%;border-collapse:collapse;font-size:12px}
-    th{text-align:left;font-weight:400;color:var(--quiet);font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:10px 14px;border-bottom:1px solid var(--rule)}
-    td{padding:11px 14px;border-bottom:1px solid var(--rule);color:var(--label);vertical-align:top}
-    tr:last-child td{border-bottom:0}
-    td.stmt{color:var(--ink)}
-    .verify a,.verify button{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink);background:var(--panel);border:1px solid var(--rule);padding:5px 10px;cursor:pointer;text-decoration:none;white-space:nowrap}
-    .verify a:hover,.verify button:hover{border-color:var(--seal)}
-    .glyph{display:inline-block;width:1.1em}
-    .s-seal{color:var(--seal)} .s-pending{color:var(--pending)} .s-refuse{color:var(--refuse)}
+/* ════════════ core sample — position in the form ════════════ */
+.core{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:20;width:56px}
+.core canvas{display:block;width:56px;border:1px solid var(--hair);
+  background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(8px)}
+.core .core-wrap{position:relative}
+#coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);pointer-events:none;will-change:transform}
+.core .lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-align:center;margin-top:5px;
+  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+@media(max-width:900px){.core{right:6px}}
 
-    .exhibits{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
-    .ex{border:1px solid var(--rule);background:var(--panel);display:flex;flex-direction:column}
-    .ex .h{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--rule);font-size:9px;letter-spacing:.14em;color:var(--quiet);text-transform:uppercase}
-    .ex .b{padding:14px;flex:1;display:flex;flex-direction:column;gap:9px}
-    .ex .type{font-size:9px;letter-spacing:.14em;color:var(--quiet);text-transform:uppercase}
-    .ex .title{font-family:var(--sans);font-size:14px;color:var(--ink);line-height:1.3}
-    .ex dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:11px}
-    .ex dt{color:var(--quiet)} .ex dd{margin:0;color:var(--label);text-align:right}
-    .ex .out{border-left:2px solid var(--seal);padding:8px 11px;background:var(--seal-tint);font-size:11px;color:var(--label)}
-    .ex .out b{color:var(--seal);font-weight:500}
-    .ex .foot{margin-top:auto;padding-top:11px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;font-size:10px}
-    .ex .tier{color:var(--seal)} .ex .tier small{display:block;color:var(--quiet);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
-    .ex a.req{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--rule)}.ex a.req:hover{border-color:var(--seal)}
-    .ex.absent{background:repeating-linear-gradient(45deg,#EFF1EC,#EFF1EC 7px,#E7E9E2 7px,#E7E9E2 8px)}
-    .ex.absent .title{color:var(--quiet)}
-    .ex.absent .seal{font-size:11px;color:var(--quiet)} .ex.absent .seal b{color:var(--label);font-weight:500}
-    @media(max-width:760px){.exhibits{grid-template-columns:1fr}}
+/* ════════════ content scaffolding ════════════ */
+main{position:relative;z-index:1;pointer-events:none}
+main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
+section{padding:15vh 28px;max-width:1160px;margin:0 auto}
+.zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--ink) 70%,transparent);margin-bottom:4.5vh}
+.zone-label b{color:var(--accent);font-weight:500}
+.sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
+  max-width:26ch;margin-bottom:5vh;color:var(--ink)}
+.glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
 
-    .val .vtable{width:100%;border-collapse:collapse;font-size:11px}
-    .val .vtable th[scope=col]{text-align:right;color:var(--quiet);font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:400;padding:9px 14px;border-bottom:1px solid var(--rule)}
-    .val .vtable th[scope=col]:first-child{text-align:left}
-    .val .vtable th[scope=row]{text-align:left;color:var(--label);font-weight:400;padding:9px 14px;border-bottom:1px solid var(--rule)}
-    .val .vtable td{text-align:right;color:var(--quiet);padding:9px 14px;border-bottom:1px solid var(--rule)}
-    .val .vtable td.vc{color:var(--seal);font-weight:500}
-    .val .vtable tbody tr:last-child th,.val .vtable tbody tr:last-child td{border-bottom:0}
-    .val .meth{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);margin-top:1px}
-    .val .meth>div{background:var(--panel);padding:10px 14px}
-    .val .meth .k{font-size:9px;letter-spacing:.12em;color:var(--quiet);text-transform:uppercase;margin-bottom:3px}
-    .val .meth .v{font-size:11px;color:var(--label)}
-    .val .note{padding:11px 14px;border-top:1px solid var(--rule);font-size:10px;color:var(--quiet);line-height:1.7}
-    @media(max-width:640px){.val .vtable td.t2,.val .vtable th.t2{display:none}}
+/* ════════════ hero — the claim ════════════ */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:16vh 28px 12vh;max-width:900px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:22px}
+.thesis{font-size:clamp(38px,5.6vw,72px);font-weight:250;line-height:1.05;letter-spacing:-.015em;
+  cursor:default;user-select:none;max-width:15ch}
+.thesis .wd{white-space:nowrap;display:inline-block}
+.thesis .g{display:inline-block;font-weight:250;will-change:font-weight}
+.dek{font-size:14.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
+  max-width:54ch;margin-top:3.4vh}
+.decomp{font-family:var(--mono);font-size:10px;letter-spacing:.14em;line-height:2;
+  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:3.4vh}
+.decomp b{color:color-mix(in srgb,var(--ink) 85%,transparent);font-weight:500}
+.ctas{display:flex;gap:12px;margin-top:4vh;flex-wrap:wrap}
+.btn{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  padding:12px 18px;text-decoration:none;border:1px solid color-mix(in srgb,var(--ink) 26%,transparent);
+  color:color-mix(in srgb,var(--ink) 85%,transparent)}
+.btn:hover{border-color:var(--ink);color:var(--ink)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{filter:brightness(1.12);color:#fff}
+.coords{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:5vh}
 
-    /* 05 · the observable record — the canvas signature */
-    .record{margin-top:8px;border:1px solid var(--rule);background:var(--panel)}
-    .record .rh{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--rule);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--quiet)}
-    .record .rh .legend span{margin-left:14px}
-    .record .rh .legend b{font-weight:400}
-    .record .stage{position:relative;width:100%;height:300px}
-    .record canvas{display:block;width:100%;height:100%}
-    .record svg.fallback{display:block;width:100%;height:100%}
-    .record .ctl{display:flex;gap:10px;flex-wrap:wrap;padding:14px 16px;border-top:1px solid var(--rule)}
-    .record .ctl button{font-family:var(--mono);font-size:11px;color:var(--ink);background:var(--panel2);border:1px solid var(--rule);padding:9px 14px;cursor:pointer}
-    .record .ctl button:hover{border-color:var(--seal)}
-    .record .readout{padding:0 16px 16px;font-size:11px;line-height:1.75;color:var(--quiet);min-height:18px}
-    .record .readout .refused{color:var(--refuse);font-weight:500} .record .readout .accepted{color:var(--seal);font-weight:500}
-    .record .readout code{color:var(--label);background:var(--panel2);padding:1px 5px;border:1px solid var(--rule)}
-    .record-meta{margin-top:14px;font-size:11px;color:var(--quiet);line-height:1.7;max-width:680px}
-    .record-meta a{color:var(--seal);text-decoration:none;border-bottom:1px solid var(--rule)}
+/* ════════════ definition ladder ════════════ */
+.defs{max-width:760px}
+.def{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:2.6vh 0;align-items:baseline;
+  border-top:1px solid var(--hair)}
+.def .d-mode{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:500}
+.def .d-body{font-size:13px;line-height:1.7;color:color-mix(in srgb,var(--ink) 78%,transparent)}
+@media(max-width:640px){.def{grid-template-columns:1fr;gap:6px}}
 
-    /* 06 · the derivation graph (live engine propagation) */
-    .model{margin-top:8px;border:1px solid var(--rule);background:var(--panel);padding:18px}
-    .model .inputs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
-    .model .src{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;text-align:left;background:var(--panel2);border:1px solid var(--rule);padding:9px 13px;cursor:pointer;color:var(--quiet)}
-    .model .src:hover{border-color:var(--seal)} .model .src:focus-visible{outline:2px solid var(--seal);outline-offset:2px}
-    .model .src b{display:block;color:var(--ink);font-weight:500;font-size:13px;margin-top:4px;letter-spacing:0;text-transform:none}
-    .model .chain{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap}
-    .model .node{flex:1;min-width:132px;border:1px solid var(--rule);background:var(--panel2);padding:10px 12px;transition:box-shadow .25s,border-color .25s}
-    .model .node.flash{box-shadow:inset 0 0 0 1px var(--seal);border-color:var(--seal)}
-    .model .nl{display:block;font-size:8.5px;letter-spacing:.14em;color:var(--quiet);text-transform:uppercase}
-    .model .nv{display:block;font-size:14px;margin:5px 0 4px;color:var(--ink)}
-    .model .nv.is-value{color:var(--seal);font-weight:500}
-    .model .nv.is-pending{color:var(--pending);font-style:italic}
-    .model .nv.is-invalid{color:var(--quiet);text-decoration:line-through;text-decoration-color:var(--quiet)}
-    .model .nv.is-refuse{color:var(--refuse);font-weight:500}
-    .model .nd{display:block;font-size:8px;color:var(--quiet)}
-    .model .arrow{align-self:center;color:var(--quiet)}
-    .model .readout{margin-top:16px;font-size:11px;line-height:1.7;color:var(--quiet)}
-    .model .readout b{color:var(--ink);font-weight:400}
-    @media(max-width:760px){.model .arrow{display:none}.model .node{min-width:45%}}
+/* ════════════ architecture ladder ════════════ */
+.ladder{max-width:860px}
+.rung{display:grid;grid-template-columns:200px 26px 240px 1fr;gap:14px;padding:2.4vh 0;align-items:baseline;
+  border-top:1px solid var(--hair);font-family:var(--mono)}
+.rung .r-mode{font-size:10px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.rung .r-arrow{font-size:10px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
+.rung .r-mech{font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:500}
+.rung .r-impl{font-size:9.5px;letter-spacing:.1em;text-align:right}
+.rung .r-impl.disclosed{color:var(--accent)}
+.rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 48%,transparent)}
+@media(max-width:760px){.rung{grid-template-columns:1fr;gap:4px}.rung .r-arrow{display:none}.rung .r-impl{text-align:left}}
 
-    .clear{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:6px}
-    .path{border:1px solid var(--rule);background:var(--panel);padding:16px;display:flex;flex-direction:column}
-    .path.feat{border-color:var(--seal);position:relative}.path.feat::before{content:'';position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--seal)}
-    .path .pl{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--quiet);margin-bottom:8px}
-    .path .pt{font-family:var(--sans);font-size:14px;color:var(--ink);margin-bottom:8px}
-    .path p{font-size:11px;color:var(--label);line-height:1.65;margin:0 0 14px}
-    .path a.cta{font-size:10px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:9px 14px;text-align:center;margin-top:auto}
-    .path a.cta.p{background:var(--ink);color:#fff}.path a.cta.p:hover{background:var(--seal)}
-    .path a.cta.s{border:1px solid var(--rule);color:var(--ink)}.path a.cta.s:hover{border-color:var(--seal)}
-    .path .pn{font-size:9px;color:var(--quiet);margin-top:10px}
-    .tiers{margin-top:18px;font-size:10px;color:var(--quiet);line-height:1.8}.tiers b{color:var(--label);font-weight:400}
-    @media(max-width:760px){.clear{grid-template-columns:1fr}}
+.sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6vh}
+.sys{padding:24px 24px 26px}
+.sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px}
+.sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
+.sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
+.sys .o-label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:18px}
+.sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;margin-top:6px;line-height:1.7}
 
-    .colo{background:var(--panel);border-top:1px solid var(--rule)}
-    .colo .grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:36px;padding:34px 0}
-    .colo h3{font-size:9px;letter-spacing:.2em;color:var(--quiet);text-transform:uppercase;margin:0 0 12px;font-family:var(--mono);font-weight:400}
-    .colo .rev{display:grid;grid-template-columns:auto auto 1fr;gap:4px 12px;font-size:10px}
-    .colo .rev .k{color:var(--quiet)}.colo .rev .cur{color:var(--ink)}.colo .rev .old{color:var(--quiet)}
-    .colo .kv{display:flex;justify-content:space-between;font-size:10px;padding:2px 0;color:var(--quiet)}.colo .kv span:last-child{color:var(--label)}.colo .kv .seal{color:var(--seal)}
-    .colo .recompute{cursor:pointer;border-bottom:1px dotted var(--rule);color:var(--quiet)}.colo .recompute:hover{color:var(--seal)}
-    .foot{border-top:1px solid var(--rule);padding:16px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--quiet)}
-    .foot a{color:var(--quiet);text-decoration:none;margin-left:16px}.foot a:hover{color:var(--seal)}
-    @media(max-width:760px){.colo .grid{grid-template-columns:1fr;gap:24px}}
-    #mismatch{display:none;background:var(--refuse);color:#fff;font-weight:600;font-size:11px;padding:9px 28px;letter-spacing:.04em}
-    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-    </style>
+.cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
+  font-family:var(--mono);font-size:10px;line-height:2.1}
+.cause .c-k{color:color-mix(in srgb,var(--ink) 58%,transparent);letter-spacing:.12em}
+.cause .c-v{color:var(--accent);font-weight:500;letter-spacing:.12em}
+.cause .c-v.none{color:var(--ink)}
+
+/* ════════════ boundary instrument ════════════ */
+.bi{margin-top:6vh;padding:20px 22px;max-width:860px}
+.bi-head{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.bi-head b{color:var(--accent);font-weight:500}
+.bi-cap{font-size:12.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
+.bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
+#biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
+.bi-log{font-family:var(--mono);font-size:9.5px;line-height:1.9;min-width:220px;flex:1;min-height:130px;
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.bi-log .adm{color:var(--accent)}
+.bi-stats{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;margin-top:12px;
+  color:color-mix(in srgb,var(--ink) 74%,transparent)}
+.bi-stats b{color:var(--accent);font-weight:500}
+
+/* ════════════ measurement ════════════ */
+.val-panel{padding:22px 24px 6px;max-width:860px}
+.legend{display:flex;gap:22px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--ink) 58%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
+.legend .lv{color:var(--accent)}
+table{width:100%;border-collapse:collapse;font-family:var(--mono)}
+th{font-size:9px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+  text-align:right;font-weight:400;padding:14px 0 8px}
+th:first-child{text-align:left}
+th.cy{color:var(--accent)}
+td{font-size:11px;color:color-mix(in srgb,var(--ink) 80%,transparent);padding:9px 0;
+  border-top:1px solid var(--hair);text-align:right}
+td:first-child{text-align:left}
+td .mk{color:var(--accent);margin-right:8px}
+td .mk.ext{color:color-mix(in srgb,var(--ink) 45%,transparent)}
+td.cy{color:var(--accent);font-weight:500}
+td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
+.meth{display:grid;grid-template-columns:170px 1fr;gap:6px 18px;font-family:var(--mono);font-size:10px;
+  line-height:1.8;padding:18px 0 14px;border-top:1px solid var(--hair);margin-top:4px}
+.meth .k{color:color-mix(in srgb,var(--ink) 58%,transparent);letter-spacing:.12em}
+.meth .v{color:color-mix(in srgb,var(--ink) 80%,transparent)}
+.footnote{border-top:1px solid var(--hair);padding:12px 0 16px}
+.footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 55%,transparent)}
+.footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 55%,transparent);line-height:1.8;margin-top:4px}
+
+/* ════════════ the boundary ════════════ */
+.boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
+.boundary .b-line{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--ink)}
+.boundary .b-sub{font-family:var(--mono);font-size:10px;line-height:1.9;
+  color:color-mix(in srgb,var(--ink) 58%,transparent);margin:14px auto 0;max-width:52ch}
+.b-hold{position:relative;overflow:hidden;display:inline-block;margin-top:3.4vh;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:13px 22px;
+  border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);color:var(--ink)}
+.b-hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in srgb,var(--accent) 28%,transparent)}
+.b-hold span{position:relative}
+.b-hold:hover{border-color:var(--accent)}
+.b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--accent)}
+.b-state{font-family:var(--mono);font-size:9px;letter-spacing:.18em;margin-top:14px;
+  color:color-mix(in srgb,var(--ink) 58%,transparent)}
+body.crossed .b-state{color:var(--accent)}
+
+/* ════════════ controlled stratum ════════════ */
+.sealed{min-height:72vh;display:flex;flex-direction:column;justify-content:center}
+.ghost{font-size:clamp(34px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spacing:-.015em;
+  color:color-mix(in srgb,var(--ink) 10%,transparent);user-select:none}
+body.crossed .ghost{color:color-mix(in srgb,var(--ink) 24%,transparent)}
+.sealed-fields{font-family:var(--mono);font-size:10.5px;line-height:2;margin-top:4vh;
+  color:color-mix(in srgb,var(--ink) 58%,transparent);opacity:.35;transition:opacity .6s}
+body.crossed .sealed-fields{opacity:1}
+@media(prefers-reduced-motion:reduce){.sealed-fields{transition:none}}
+.sealed-fields .fv{color:color-mix(in srgb,var(--ink) 82%,transparent)}
+.locked-note{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--ink) 45%,transparent);margin-top:2.2vh}
+body.crossed .locked-note{display:none}
+.sealed .depth-line{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:5vh}
+.sealed .btn{margin-top:2.4vh;align-self:flex-start}
+
+/* ════════════ clearance ════════════ */
+.clearance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px}
+.path{padding:22px 20px 24px;position:relative}
+.path-featured{border-color:var(--accent)}
+.path .p-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.path h4{font-size:17px;font-weight:600;margin-top:12px}
+.path p{font-size:12.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
+.path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:14px}
+.path .btn{margin-top:16px}
+
+/* ════════════ the floor — law + records ════════════ */
+.law{font-size:clamp(22px,3vw,38px);font-weight:300;line-height:1.5;letter-spacing:.01em;max-width:22ch;color:var(--ink)}
+.manifest{margin-top:8vh;max-width:540px;font-family:var(--mono)}
+.manifest .m-title{font-size:9px;letter-spacing:.24em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.manifest .m-row{display:flex;justify-content:space-between;gap:18px;font-size:10.5px;letter-spacing:.08em;
+  padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
+.manifest .m-k{color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.manifest .m-v{color:var(--ink);font-weight:500;text-align:right}
+.manifest .m-v.acc{color:var(--accent)}
+.manifest .m-v.ok{color:var(--accent)}
+.manifest .m-v.bad{color:var(--ink);font-weight:700}
+.manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 45%,transparent);font-weight:400}
+.manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 55%,transparent);font-weight:400}
+
+.epochs{margin-top:8vh;max-width:660px}
+.ep-title{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.ep-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0 6px}
+.ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.ep canvas{display:block;border:1px solid var(--hair);margin-bottom:6px}
+.ep.current{color:var(--ink)}
+.ep.current canvas{border-color:var(--accent)}
+.ep .st{color:var(--accent)}
+.ep-arrow{font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
+.ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+
+.colophon-notes{margin-top:8vh}
+.colophon-notes p{font-family:var(--mono);font-size:11px;line-height:2;
+  color:color-mix(in srgb,var(--ink) 62%,transparent);max-width:74ch;margin-bottom:16px}
+.colophon-notes b{color:var(--ink);font-weight:500}
+
+footer{padding:20px 28px 88px;display:flex;gap:20px;flex-wrap:wrap;max-width:1160px;margin:0 auto;
+  font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+footer .right{margin-left:auto}
+footer a{border-bottom:1px solid var(--hair)}
+footer a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ════════════ shared action affordances ════════════ */
+.i-actions{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:2px 0;
+  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}
+.i-btn:hover{color:var(--accent);border-color:var(--accent)}
+.copied{font-family:var(--mono);font-size:9.5px;color:var(--accent)}
+
+/* ════════════ reader ledger ════════════ */
+.rledger{position:fixed;left:22px;bottom:54px;z-index:25;width:268px;font-family:var(--mono)}
+.rl-head{display:block;width:100%;text-align:left;font-size:9px;letter-spacing:.14em;padding:9px 12px;
+  background:var(--panel);backdrop-filter:blur(12px);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.rl-head:hover{border-color:var(--accent)}
+#rlDigest{color:var(--accent)}
+.rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
+  border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
+.rl-note{font-size:8.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
+.rl-log b{color:var(--accent);font-weight:500}
+.rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+
+/* ════════════ serial strip — the mark's record, always present ════════════ */
+.strip{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(12px);
+  border-top:1px solid var(--hair);color:color-mix(in srgb,var(--ink) 72%,transparent)}
+.strip b{color:var(--ink);font-weight:500}
+.strip .st{color:var(--accent)}
+.strip button{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 0;
+  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid var(--hair)}
+.strip button:hover,.strip button.on{color:var(--accent);border-color:var(--accent)}
+.strip .grow{flex:1}
+@media(max-width:640px){.strip{gap:9px;font-size:8.5px}#forkStatus{display:none}}
+
+/* ════════════ responsive ════════════ */
+@media(max-width:900px){
+  section{padding:12vh 20px}
+  .hero{padding:14vh 20px 12vh}
+  .sys-grid{grid-template-columns:1fr}
+  .clearance-grid{grid-template-columns:1fr}
+  .chrome{padding:12px 16px}
+  th.t2,td.t2{display:none}
+  .rledger{left:12px;right:12px;bottom:60px;width:auto}
+}
+</style>
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
-<div id="mismatch" role="alert"></div>
 
-<header class="custody">
-    <div class="row">
-        <span class="brand">CYTHERAI&nbsp; <b>SOVEREIGN OPERATIONAL AI</b></span>
-        <div class="fields">
-            <span class="f">RECORD <span data-record-hash>EB16C2A4</span><span class="recompute" data-recompute role="button" tabindex="0" title="Recompute the record hash in your browser">[recompute]</span></span>
-            <span class="f">REV <span data-rev>2.0</span></span>
-            <span class="f">SUITE <a href="pages/runner.html">33/33</a></span>
-            <span class="f">EXT <span data-ext>0</span></span>
-        </div>
-        <span class="scope">SCOPE <span data-scope>PUBLIC SURFACE</span></span>
-        <a class="access" href="#clearance">Request Access →</a>
-    </div>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- four pre-rendered exposures of one derived object -->
+<canvas class="tile" id="t0"></canvas>
+<canvas class="tile" id="t1"></canvas>
+<canvas class="tile" id="t2"></canvas>
+<canvas class="tile" id="t3"></canvas>
+<div id="substrate" aria-hidden="true"></div>
+
+<header class="chrome">
+  <span class="wordmark">CYTHERAI</span>
+  <span class="gauge" id="gauge">OBS <b>FAR-FIELD</b> · ×0.90<br>DEPTH 00% · CLAIM · PUBLIC SURFACE</span>
 </header>
 
-<main id="main">
+<div class="core" aria-hidden="true">
+  <div class="core-wrap"><canvas id="coreMap"></canvas><i id="coreRect"></i></div>
+  <div class="lbl">POSITION<br>IN FORM</div>
+</div>
 
-<section id="standing"><div class="wrap">
-    <div class="seclabel">01 · Standing</div>
-    <h1 class="lead">Nothing here is hidden. A claim you can audit, or it isn't a claim.</h1>
-    <p class="sub">CytherAI builds sovereign operational AI for environments where being wrong has consequence. We work in the open: the only proof we offer is one you can observe, reproduce, and try to break — here, now, with the network cable pulled.</p>
-    <div class="actions">
-        <a class="btn primary" href="#prefix">Watch the record ↓</a>
-        <a class="btn" href="pages/runner.html">Reproduce the suite →</a>
+<aside class="rledger" aria-label="Reader ledger — recorded locally, transmitted only by your explicit act">
+  <button class="rl-head" id="rlHead" aria-expanded="false">READER LEDGER · <span id="rlCount">0</span> ACTS · <span id="rlDigest">00000000</span></button>
+  <div class="rl-body" id="rlBody" hidden>
+    <div class="rl-note">Your reading, recorded — locally, in full view. Nothing is transmitted. This is a self-report: it attests your reading to you, not to anyone else. Path 2 attaches it only when you send it.</div>
+    <div class="rl-log" id="rlLog"></div>
+    <div class="rl-actions">
+      <button class="i-btn" id="rlVerify">VERIFY CANONICAL CHECKSUM</button>
+      <button class="i-btn" id="rlClear">CLEAR LEDGER</button>
     </div>
-</div></section>
+  </div>
+</aside>
 
-<section id="ledger"><div class="wrap">
-    <div class="seclabel">02 · Claim Ledger</div>
-    <h2>Every claim, beside the way to check it.</h2>
-    <p class="sub">Read the statement column top to bottom; it carries the whole case. Each verification handle is real.</p>
-    <div class="panel" style="margin-top:24px">
-    <table>
-        <thead><tr><th scope="col">Statement</th><th scope="col">Evidence</th><th scope="col" style="text-align:right">Verify</th></tr></thead>
+<main id="main-content">
+
+  <!-- ════════════ the claim ════════════ -->
+  <section class="hero" id="surface" aria-label="Surface — the claim">
+    <div class="eyebrow">SOVEREIGN OPERATIONAL AI</div>
+    <h1 class="thesis" id="thesis">Built for environments where failure has consequence.</h1>
+    <p class="dek">Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request. What reads as atmosphere around this text is the canonical mark itself, observed from far — its own sparse periphery, not decoration. What follows is not a sitemap: it is this claim, unfolding into the conditions that make it true. Scroll is the observation function.</p>
+    <div class="decomp">THE DESCENT — <b>CLAIM</b> → DEFINITION → ARCHITECTURE → MEASUREMENT → CONTROLLED → ACCESS → FLOOR</div>
+    <div class="ctas">
+      <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a Conversation</a>
+      <a class="btn" href="#definition">Begin the Descent</a>
+    </div>
+    <div class="coords">24°41′N 46°43′E · UTC+3 · RIYADH, KSA</div>
+  </section>
+
+  <!-- ════════════ definition ════════════ -->
+  <section id="definition" aria-label="Definition">
+    <div class="zone-label">STRATUM 01 · DEFINITION · MODE <b>EXPLORE</b> · AUTHORITY PUBLIC</div>
+    <h2 class="sec-h">At the surface, failure is one word. It is not one thing.</h2>
+    <div class="defs">
+      <div class="def"><span class="d-mode">INVALID OUTPUT</span><span class="d-body">Output that violates the constraints of its target domain — geometry, schema, or policy.</span></div>
+      <div class="def"><span class="d-mode">UNAUTHORIZED ACTION</span><span class="d-body">An action taken without a deciding rule that admits it.</span></div>
+      <div class="def"><span class="d-mode">UNTRACEABLE DECISION</span><span class="d-body">An output whose causal path cannot be reproduced from records.</span></div>
+      <div class="def"><span class="d-mode">EXTERNAL DEPENDENCY</span><span class="d-body">Correctness contingent on infrastructure outside the deployment boundary.</span></div>
+      <div class="def"><span class="d-mode">STALE STATE</span><span class="d-body">A decision made against a state of the world that no longer holds.</span></div>
+    </div>
+  </section>
+
+  <!-- ════════════ architecture ════════════ -->
+  <section id="architecture" aria-label="Architecture">
+    <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS 06 INDEXED · 02 DISCLOSED</div>
+    <h2 class="sec-h">Each failure mode acquires a governing mechanism.</h2>
+
+    <div class="ladder">
+      <div class="rung"><span class="r-mode">INVALID OUTPUT</span><span class="r-arrow">→</span><span class="r-mech">CONSTRAINED GENERATION</span><span class="r-impl disclosed">CYTHERCAD · DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">UNAUTHORIZED ACTION</span><span class="r-arrow">→</span><span class="r-mech">DETERMINISTIC ADMISSION</span><span class="r-impl controlled">INDEXED · ENTRY 005 · NOT DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">UNTRACEABLE DECISION</span><span class="r-arrow">→</span><span class="r-mech">EXECUTION RECEIPT</span><span class="r-impl controlled">INDEXED · ENTRY 004 · NOT DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">EXTERNAL DEPENDENCY</span><span class="r-arrow">→</span><span class="r-mech">LOCAL RUNTIME BOUNDARY</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">STALE STATE</span><span class="r-arrow">→</span><span class="r-mech">EXPLICIT FRESHNESS STATE</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
+    </div>
+
+    <div class="sys-grid">
+      <div class="sys glass">
+        <span class="s-id">CAD-2024-001 · TECHNICAL VALIDATION</span>
+        <h3 data-wave>CytherCAD — Controlled Generative CAD</h3>
+        <div class="facts">Production-validated · Log + external benchmark · On-prem · Private</div>
+        <span class="o-label">KEY OUTCOME</span>
+        <span class="o-val">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span>
+      </div>
+      <div class="sys glass">
+        <span class="s-id">SIJ-2025-001 · DEPLOYMENT OPERATIONAL</span>
+        <h3 data-wave>SijilOS — Event-Sourced Ledger Engine</h3>
+        <div class="facts">ZATCA Phase 1 · Kingdom of Saudi Arabia · Certified compliant, April 2025 · Live beta · 2 production environments</div>
+        <span class="o-label">KEY OUTCOME</span>
+        <span class="o-val">Zero core cloud dependency · Full offline operation</span>
+      </div>
+    </div>
+
+    <div class="cause" aria-label="Causality termination">
+      <span class="c-k">MODEL</span><span class="c-v">LOCAL</span>
+      <span class="c-k">POLICY</span><span class="c-v">LOCAL</span>
+      <span class="c-k">STATE</span><span class="c-v">LOCAL</span>
+      <span class="c-k">VERIFICATION</span><span class="c-v">LOCAL</span>
+      <span class="c-k">RECORD</span><span class="c-v">LOCAL</span>
+      <span class="c-k">REQUIRED CLOUD</span><span class="c-v none">NONE</span>
+    </div>
+
+    <div class="bi glass" id="bi" aria-label="Boundary instrument — live constrained generation">
+      <div class="bi-head">BOUNDARY INSTRUMENT · <b>LIVE</b> · SEED 01 · DETERMINISTIC</div>
+      <p class="bi-cap">A deliberately hostile proposer streams arbitrary tokens at the constraint boundary — junk symbols, wrong axis, out-of-range arguments, premature closure. The boundary admits token by token; an independent kernel re-verifies every program before emission. Nothing inadmissible is ever emitted: validity is a property of the boundary, not the proposer. Same seed, same stream, same admissions — on every machine.</p>
+      <div class="bi-row">
+        <canvas id="biCanvas" aria-label="Latest admitted profile"></canvas>
+        <div class="bi-log" id="biLog">— proposer idle —</div>
+      </div>
+      <div class="bi-stats" id="biStats">PROPOSED 0 · REJECTED 0 · DISCARDED 0 · <b>ADMITTED 0</b> · INVALID EMITTED 0</div>
+      <div class="i-actions">
+        <button class="i-btn" id="biRun">RUN PROPOSER</button>
+        <button class="i-btn" id="biAudit">AUDIT 10,000 PROPOSALS</button>
+        <span class="copied" id="biReceipt"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ measurement ════════════ -->
+  <section id="measurement" aria-label="Measurement">
+    <div class="zone-label">STRATUM 03 · MEASUREMENT · MODE <b>VERIFY</b> · CYTHERCAD v1.1 · TEXT2CAD-192</div>
+    <h2 class="sec-h">Numbers with their conditions attached.</h2>
+
+    <div class="val-panel glass">
+      <div class="legend">
+        <span><span class="lv">●</span> LOG-VERIFIED</span>
+        <span>◌ EXT-VALIDATED</span>
+        <span>— NOT DISCLOSED</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD†</th></tr>
+        </thead>
         <tbody>
-        <tr><td class="stmt">Zero external dependency at the execution path.</td><td>live · the page itself</td><td class="verify" style="text-align:right">EXT <span class="s-seal" data-ext>0</span> — Network panel</td></tr>
-        <tr><td class="stmt">The engine's laws hold under mutation — 33 / 33.</td><td>reproducible</td><td class="verify" style="text-align:right"><a href="pages/runner.html">Reproduce →</a></td></tr>
-        <tr><td class="stmt">Restricted content is absent, not hidden.</td><td>checkable</td><td class="verify" style="text-align:right"><a href="#exhibits">Verify absence ↓</a></td></tr>
-        <tr><td class="stmt">The observed past cannot be silently rewritten.</td><td>observable</td><td class="verify" style="text-align:right"><a href="#prefix">Watch it ↓</a></td></tr>
-        <tr><td class="stmt">Disclosure tiers are derived from facts, not asserted.</td><td>computed</td><td class="verify" style="text-align:right"><a href="#exhibits">See §03 ↓</a></td></tr>
+          <tr><td><span class="mk ext">◌</span>Invalid Rate (↓ better)</td><td class="cy">0.00%</td><td>10.00%</td><td class="t2">0.93%</td></tr>
+          <tr><td><span class="mk">●</span>GVR · Constrained Beam (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>GVR · Completion (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Dimensional Accuracy ±3mm (n=35)</td><td class="cy">99%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Dimensional Accuracy ±5mm (n=35)</td><td class="cy">97%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Multi-Op Accuracy · Encoder (n=35)</td><td class="cy">91%</td><td class="na">—</td><td class="na t2">—</td></tr>
         </tbody>
-    </table>
+      </table>
+      <div class="meth">
+        <span class="k">METHODOLOGY</span><span class="v">Autoregressive generation · constrained decoding · kernel-backed geometric verification</span>
+        <span class="k">TEST ENVIRONMENT</span><span class="v">Air-gapped · No external calls · Apple Silicon M4 · Local inference only</span>
+        <span class="k">BENCHMARK SOURCE</span><span class="v">Text2CAD-192 · External · Published · Not operated by CytherAI</span>
+        <span class="k">EVALUATED BY</span><span class="v">CytherAI internal evaluation · April 2026 · Log-verified</span>
+        <span class="k">CONTROLLED RECORDS</span><span class="v">03 · structure indexed · values sealed</span>
+      </div>
+      <div class="footnote">
+        <span class="dagger">† Text2CAD-192 (T2CAD): 0.93% invalid rate.</span>
+        <p class="note">External benchmark; evaluation not conducted or curated by CytherAI.</p>
+      </div>
     </div>
-</div></section>
 
-<section id="exhibits"><div class="wrap">
-    <div class="seclabel">03 · Exhibits under custody</div>
-    <h2>Disclosed in full, or shown absent. Never faked.</h2>
-    <div class="exhibits" data-exhibits>
-        <div class="ex">
-            <div class="h"><span>Exhibit A</span><span>CAD-2024-001</span></div>
-            <div class="b">
-                <div class="type">Technical Validation Record</div>
-                <div class="title">CytherCAD — Controlled Generative CAD</div>
-                <dl><dt>Status</dt><dd>Production-validated</dd><dt>Verified</dt><dd>Log + external benchmark</dd><dt>Context</dt><dd>On-prem · Private</dd></dl>
-                <div class="out"><b>IR 0.00%</b> vs 10.00% (DeepCAD) · Text2CAD-192</div>
-                <div class="foot"><span class="tier" data-tier="CAD-2024-001">Public Surface<small>Derived from facts</small></span><a class="req" href="mailto:nda@cytherai.com?subject=CytherCAD%20Briefing">Briefing →</a></div>
-            </div>
-        </div>
-        <div class="ex">
-            <div class="h"><span>Exhibit B</span><span>SIJ-2025-001</span></div>
-            <div class="b">
-                <div class="type">Deployment Operational Record</div>
-                <div class="title">SijilOS — Event-Sourced Ledger Engine</div>
-                <dl><dt>Compliance</dt><dd>ZATCA Phase 1 · KSA</dd><dt>Status</dt><dd>Live · 2 prod environments</dd><dt>Context</dt><dd>Offline-first · Zero cloud</dd></dl>
-                <div class="out"><b>Zero core cloud dependency</b> · Full offline operation</div>
-                <div class="foot"><span class="tier" data-tier="SIJ-2025-001">Public Surface<small>Derived from facts</small></span><a class="req" href="mailto:nda@cytherai.com?subject=SijilOS%20Briefing">Briefing →</a></div>
-            </div>
-        </div>
-        <div class="ex absent">
-            <div class="h"><span>Exhibit C</span><span>NTP-2025-001</span></div>
-            <div class="b">
-                <div class="type">Appendix index · Entry 003</div>
-                <div class="title">Neural Theorem Prover</div>
-                <p class="seal"><b>SEALED</b> — content absent from this bundle.<br>Open devtools; there is nothing here to un-hide.</p>
-                <div class="foot"><span class="tier" data-tier="NTP-2025-001" style="color:var(--quiet)">Restricted Appendix<small>Content absent, not hidden</small></span><a class="req" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request clearance →</a></div>
-            </div>
-        </div>
+    <div class="boundary glass" id="boundary">
+      <div class="b-line">PUBLIC RECORD TERMINATES HERE</div>
+      <p class="b-sub">Beyond this line: the existence, reference class, and access conditions of controlled information. Nothing secret is shown by crossing — the index becomes legible, not its contents.</p>
+      <button class="b-hold" id="holdCross"><i id="holdFill"></i><span id="holdLabel">HOLD TO CROSS BOUNDARY</span></button>
+      <div class="b-state" id="bState">BOUNDARY — CLOSED · SCROLLING PAST REMAINS FREE</div>
     </div>
-</div></section>
+  </section>
 
-<section id="validation"><div class="wrap">
-    <div class="seclabel">04 · Validation readout</div>
-    <h2>CytherCAD v1.1 · the numbers, with their custody.</h2>
-    <p class="sub">Cells we cannot stand behind read “——”. We do not fabricate a comparison to fill a column.</p>
-    <div class="panel val" style="margin-top:24px" data-validation>
-        <table class="vtable">
-            <thead><tr><th scope="col">Metric</th><th scope="col">Cyther</th><th scope="col">DeepCAD</th><th scope="col" class="t2">T2CAD</th></tr></thead>
-            <tbody>
-            <tr><th scope="row"><span class="glyph s-pending">◌</span>Invalid Rate (↓ better)</th><td class="vc">0.00%</td><td>10.00%</td><td class="t2">0.93%</td></tr>
-            <tr><th scope="row"><span class="glyph s-seal">●</span>GVR · Constrained Beam (n=100)</th><td class="vc">100%</td><td>——</td><td class="t2">——</td></tr>
-            <tr><th scope="row"><span class="glyph s-seal">●</span>GVR · Completion (n=100)</th><td class="vc">100%</td><td>——</td><td class="t2">——</td></tr>
-            <tr><th scope="row"><span class="glyph s-seal">●</span>Dimensional Accuracy ±3mm (n=35)</th><td class="vc">99%</td><td>——</td><td class="t2">——</td></tr>
-            <tr><th scope="row"><span class="glyph s-seal">●</span>Dimensional Accuracy ±5mm (n=35)</th><td class="vc">97%</td><td>——</td><td class="t2">——</td></tr>
-            <tr><th scope="row"><span class="glyph s-seal">●</span>Multi-Op Accuracy · Encoder (n=35)</th><td class="vc">91%</td><td>——</td><td class="t2">——</td></tr>
-            </tbody>
-        </table>
-        <div class="meth">
-            <div><div class="k">Methodology</div><div class="v">Autoregressive generation · constrained decoding · kernel-backed geometric verification</div></div>
-            <div><div class="k">Test environment</div><div class="v">Air-gapped · no external calls · Apple Silicon M4 · local inference</div></div>
-            <div><div class="k">Benchmark source</div><div class="v">Text2CAD-192 · external · published · not operated by CytherAI</div></div>
-            <div><div class="k">Evaluated by</div><div class="v">CytherAI internal evaluation · April 2026 · log-verified</div></div>
-        </div>
-        <div class="note">● log-verified (n shown) &nbsp; ◌ external-validated &nbsp; —— not disclosed (genuine absence). &nbsp; † Text2CAD-192: 0.93% invalid rate — external benchmark, not conducted or curated by CytherAI. &nbsp; <a href="pages/runner.html" style="color:var(--seal);text-decoration:none;border-bottom:1px solid var(--rule)">These properties were produced by the suite — reproduce →</a></div>
+  <!-- ════════════ controlled ════════════ -->
+  <section class="sealed" id="sealed" aria-label="Controlled stratum">
+    <div class="zone-label">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</div>
+    <div class="ghost" aria-hidden="true">Neural Theorem Prover<br>Zero-Dependency NTP</div>
+    <div class="sealed-fields">
+      CONTENT — <span class="fv">SEALED PENDING ACCESS GRANT</span><br>
+      REFERENCE — <span class="fv">NTP-2025-001 · APPENDIX ENTRY 003</span><br>
+      REQUIREMENT — <span class="fv">VERIFIED CONTEXT · NDA · IDENTITY CONFIRMATION</span>
     </div>
-</div></section>
+    <div class="locked-note">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
+    <div class="depth-line">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
+    <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
+  </section>
 
-<section id="prefix"><div class="wrap">
-    <div class="seclabel">05 · The observable record</div>
-    <h2>State you can watch — and a past that refuses to change.</h2>
-    <p class="sub">Below is a real trajectory inside the engine: a value over a parameter τ. A cursor has observed it through the frontier F, sealing the past. Watch it — then ask it to rewrite what is behind the frontier.</p>
-    <figure class="record" data-record style="margin:24px 0 0">
-        <div class="rh"><span>RECORD · record:state</span><span class="legend"><span class="s-seal"><b>●</b> sealed</span><span style="color:var(--quiet)"><b>┄</b> provisional</span><span data-frontier>F = 3.0</span></span></div>
-        <div class="stage">
-            <canvas data-record-canvas style="display:none"></canvas>
-            <!-- no-JS / pre-canvas static diagram -->
-            <svg class="fallback" viewBox="0 0 1000 300" preserveAspectRatio="none" role="img" aria-label="Trajectory step plot: the past left of the frontier is sealed; the future right of it is provisional.">
-                <rect width="1000" height="300" fill="#FFFFFF"/>
-                <rect x="0" y="0" width="640" height="300" fill="rgba(12,124,111,.06)"/>
-                <line x1="640" y1="0" x2="640" y2="300" stroke="#0C7C6F" stroke-width="2"/>
-                <polyline points="0,210 200,210 200,150 430,150 430,95 640,95" fill="none" stroke="#17191B" stroke-width="2.5"/>
-                <polyline points="640,95 820,95 820,150 1000,150" fill="none" stroke="#9AA0A4" stroke-width="2" stroke-dasharray="6 6"/>
-                <text x="16" y="32" font-family="'SF Mono',monospace" font-size="13" fill="#6C7278">SEALED · τ ≤ F</text>
-                <text x="664" y="32" font-family="'SF Mono',monospace" font-size="13" fill="#9AA0A4">PROVISIONAL · τ &gt; F</text>
-            </svg>
-        </div>
-        <div class="ctl">
-            <button data-act="rewrite">Rewrite the sealed past&nbsp; (rebase at τ&lt;F)</button>
-            <button data-act="observe">Observe further →</button>
-            <button data-act="extend">Extend the future&nbsp; (rebase at τ&gt;F)</button>
-        </div>
-        <figcaption class="readout" data-readout aria-live="polite"><span class="refused">✕ REFUSED</span> — rewrite the sealed past: <code>cannot rebase a future a cursor has already consumed</code>. Committed Prefix Preservation. The value at τ&lt;F is byte-identical before and after.</figcaption>
-    </figure>
-    <p class="record-meta">The engine did not ask permission to refuse — it could not comply. Extending the future is <span class="s-seal">accepted</span>; only a rewrite of observed history is refused. This is the law the <a href="pages/runner.html">33/33 suite</a> verifies — revert it and exactly its witness fails. The visualisation is drawn from the real kernel running in this page; nothing here is animation standing in for proof.</p>
-</div></section>
+  <!-- ════════════ access ════════════ -->
+  <section id="clearance" aria-label="Access clearance">
+    <div class="zone-label">CLEARANCE · THREE PATHS DEEPER</div>
+    <h2 class="sec-h">Selective about what gets built. Thorough about how it gets built.</h2>
 
-<section id="model"><div class="wrap">
-    <div class="seclabel">06 · Positioning, derived</div>
-    <h2>Our conclusions are computed from our constraints — not asserted.</h2>
-    <p class="sub">These are CytherAI's published positioning rules, executed by the engine's own derivation graph — the same one that decides each exhibit's disclosure tier above. Move an input; the conclusions repropagate. When a premise fails, the derivation goes <em>absent</em> mid-chain — an unvalidated, coupled system cannot be reported deployable by assertion.</p>
-    <div class="model" data-model>
-        <div class="inputs">
-            <button class="src" data-src="environment">Environment<b data-srcv>cloud</b></button>
-            <button class="src" data-src="dependency">Dependency<b data-srcv>coupled</b></button>
-            <button class="src" data-src="evaluation">Evaluation<b data-srcv>ungated</b></button>
-        </div>
-        <div class="chain">
-            <div class="node" data-node="architecture"><span class="nl">Architecture</span><span class="nv is-value" data-nodev>coupled</span><span class="nd">← env · dep</span></div>
-            <span class="arrow" aria-hidden="true">→</span>
-            <div class="node" data-node="validation"><span class="nl">Validation</span><span class="nv is-invalid" data-nodev>absent</span><span class="nd">← arch · eval</span></div>
-            <span class="arrow" aria-hidden="true">→</span>
-            <div class="node" data-node="deployability"><span class="nl">Deployability</span><span class="nv is-invalid" data-nodev>absent</span><span class="nd">← validation · env</span></div>
-            <span class="arrow" aria-hidden="true">→</span>
-            <div class="node" data-node="disclosure"><span class="nl">Disclosure</span><span class="nv is-refuse" data-nodev>restricted</span><span class="nd">← deployability</span></div>
-        </div>
-        <div class="readout" data-model-readout aria-live="polite">Inputs default to the weakest posture. Set them and watch the chain recompute through the real engine.</div>
+    <div class="clearance-grid">
+      <div class="path glass">
+        <span class="p-label">PATH 1 · OPEN</span>
+        <h4>Public materials</h4>
+        <p>This page and everything visible on the way down. Disclosed without qualification.</p>
+        <div class="p-note">OPEN ACCESS · NO QUALIFICATION</div>
+      </div>
+      <div class="path glass path-featured">
+        <span class="p-label">PATH 2 · QUALIFIED</span>
+        <h4>Capability review</h4>
+        <p>Full validation records, the controlled strata, and a working session with the systems — under NDA and identity confirmation.</p>
+        <div class="p-note" id="featNote">NDA · IDENTITY CONFIRMATION</div>
+        <a class="btn btn-primary" id="featCta" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA Briefing</a>
+      </div>
+      <div class="path glass">
+        <span class="p-label">PATH 3 · CONTROLLED</span>
+        <h4>Technical diligence</h4>
+        <p>Architecture, logs, and evaluation harnesses opened for inspection inside a controlled review window.</p>
+        <div class="p-note">SCOPED WINDOW · SUPERVISED</div>
+        <a class="btn" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request Diligence Window</a>
+      </div>
     </div>
-    <p class="record-meta">Each node is a real <code style="color:var(--label)">makeDerived</code> trajectory; toggling an input <code style="color:var(--label)">rebase</code>s a source and the engine repropagates in dependency order, edge-minimally. Absence (<span class="s-invalid" style="color:var(--quiet);text-decoration:line-through">absent</span>) flows through derivation — an unvalidated, coupled system cannot become “deployable” by assertion. The exhibit tiers above are outputs of exactly this graph.</p>
-</div></section>
+  </section>
 
-<section id="clearance"><div class="wrap">
-    <div class="seclabel">07 · Clearance &amp; the boundary</div>
-    <h2>Selective about what gets built. Thorough about how.</h2>
-    <p class="sub">A profile redacts presentation; it never gates access. Restricted content is absent, not hidden; access is governed out of band.</p>
-    <div class="clear">
-        <div class="path">
-            <div class="pl">Public materials</div><div class="pt">Open surface</div>
-            <p>This record, the live suite, the exhibits disclosed at public surface. No internals.</p>
-            <div class="pn">Open access · no qualification</div>
-        </div>
-        <div class="path feat">
-            <div class="pl">Capability review</div><div class="pt">Qualified access</div>
-            <p>Kernel architecture, training method, deployment specification, engagement scoping. Identity required.</p>
-            <a class="cta p" href="mailto:nda@cytherai.com?subject=Capability%20Review%20Request">Request briefing</a>
-            <div class="pn">Qualified inquiries · NDA · 24–48h</div>
-        </div>
-        <div class="path">
-            <div class="pl">Technical diligence</div><div class="pt">Controlled review</div>
-            <p>Time-bound, watermarked, logged access. Bring your own adversarial tests.</p>
-            <a class="cta s" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request diligence window</a>
-            <div class="pn">Time-bound · watermarked · logged</div>
-        </div>
+  <!-- ════════════ the floor ════════════ -->
+  <section id="floor" aria-label="The floor — governing law and public record">
+    <div class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></div>
+    <div class="law">The surface states.<br>Depth conditions.<br>Records substantiate.<br>Boundaries govern.<br>The reader is a record.<br>Nothing is stated that is not checked.</div>
+
+    <div class="epochs" aria-label="Epochal record — superseded disclosure states">
+      <div class="ep-title">EPOCHAL RECORD — SUPERSEDED, NEVER ERASED</div>
+      <div class="ep-row" id="epochRow"></div>
+      <div class="ep-note">Each prior mark remains derivable from its manifest. The record supersedes; it does not delete. Identity is the chain, not the tip. A commitment's precedence is provable only against an external anchor — repository history, a transparency log. The page renders the commitment; it does not notarize it.</div>
     </div>
-    <div class="tiers">Disclosure ladder: <b>Public Surface</b> · <b>Qualified Access</b> · <b>Restricted Appendix</b> · <b>Technical Diligence</b> — projection profiles over one canonical record. A tier changes what is shown, never what is true.</div>
-</div></section>
+
+    <div class="manifest claims" aria-label="Standing claims — predicates the page executes">
+      <div class="m-title">STANDING CLAIMS — PREDICATES THE PAGE EXECUTES AGAINST ITSELF</div>
+      <div id="claimRows"></div>
+      <div class="i-actions">
+        <button class="i-btn" id="claimsRecompute">RECOMPUTE ALL</button>
+        <span class="copied" id="claimsStamp"></span>
+      </div>
+    </div>
+
+    <div class="manifest" aria-label="Public manifest">
+      <div class="m-title">PUBLIC MANIFEST — THE STATE THIS PAGE WAS DERIVED FROM</div>
+      <div id="manifestRows"></div>
+    </div>
+
+    <div class="manifest" data-provenance aria-label="Provenance — chain of record">
+      <div class="m-title">PROVENANCE — CHAIN OF RECORD</div>
+      <div id="provenanceRows"></div>
+    </div>
+
+    <div class="manifest anti" data-provisional="true" aria-label="Not claimed — the boundary of the record">
+      <div class="m-title">NOT CLAIMED — THE BOUNDARY OF THE RECORD, DRAWN BY ITS AUTHOR</div>
+      <div id="antiRows"></div>
+      <div class="ep-note">The fastest calibration of a vendor is the boundary of its claims. Drawn here, and included in the canonical checksum.</div>
+    </div>
+
+    <div class="colophon-notes">
+      <p><b>One object, one world.</b> The mark is not framed on this page — this page is inside it. Four pre-rendered exposures of the canonical orbit are the background; scroll is the observation function, moving a derived camera from far-field into the filament core. The camera anchors are the orbit's densest cells, chosen by digest: the journey through the mark is derivation, not decoration.</p>
+      <p><b>The mark is derived, not designed.</b> Its four parameters are digests of the public manifest below — systems, validation index, revision, and the count of sealed references. When the disclosed state changes, the canonical form changes deterministically. Your drag forks a local variant; the canonical state is always recoverable, and a link reproduces any form exactly.</p>
+      <p><b>Closed causality.</b> No webfonts, no CDNs, no images, no external calls. Everything visible was present at initialization or derived locally from your interaction. Open the network tab — the artifact is sealed, and CL-01 observes it.</p>
+      <p><b>One loop, and it sleeps.</b> The weight-field on the thesis, the weight waves on the system titles, the world's fork re-development, and the boundary proposer share a single frame loop that stops completely at rest.</p>
+      <p><b>Two records, facing each other.</b> The manifest derives; the reading self-reports. They are not the same kind of record, and the page says so: the reading attests your descent to you, not to anyone else, and travels only by your explicit act. Standing claims run as predicates against the page itself; a hostile proposer demonstrates the boundary live; the record's own boundary is drawn in NOT CLAIMED. The page states nothing it cannot check.</p>
+    </div>
+  </section>
 
 </main>
 
-<footer class="colo"><div class="wrap">
-    <div class="seclabel" style="padding-top:30px">08 · Colophon &amp; attestation</div>
-    <div class="grid" style="padding-top:14px">
-        <div>
-            <h3>Revision history</h3>
-            <div class="rev" data-revisions>
-                <span class="k">REV</span><span class="k">DATE</span><span class="k">NOTE</span>
-                <span class="old">1.0</span><span class="old">2026.03</span><span class="old">Initial filing</span>
-                <span class="old">1.4</span><span class="old">2026.04</span><span class="old">Validation readout updated</span>
-                <span class="cur">2.0</span><span class="cur">2026.04</span><span class="cur">Protocol &amp; provenance sections added</span>
-            </div>
-        </div>
-        <div>
-            <h3>Integrity</h3>
-            <div class="kv"><span>Record hash</span><span><span data-record-hash>EB16C2A4</span> <span class="recompute" data-recompute role="button" tabindex="0">[recompute]</span></span></div>
-            <div class="kv"><span>Bundle / SRI</span><span data-bundle-hash>86DE7B8D2A345A68</span></div>
-            <div class="kv"><span>External requests</span><span class="seal" data-ext>0</span></div>
-            <div class="kv"><span>Egress policy</span><span>connect-src 'none'</span></div>
-        </div>
-        <div>
-            <h3>Attestation</h3>
-            <div class="kv"><span>Classification</span><span>Public Surface</span></div>
-            <div class="kv"><span>Distribution</span><span>Unrestricted</span></div>
-            <div class="kv"><span>Offline</span><span>PWA · service worker</span></div>
-            <div class="kv"><span>Subresource integrity</span><span>every asset, SRI-pinned</span></div>
-        </div>
-    </div>
-    <div class="foot">
-        <span>© <span id="yr">2026</span> CytherAI · Riyadh, KSA · US Patent Pending · This page made <span class="s-seal" data-ext>0</span> external requests — verify in your Network panel.</span>
-        <span><a href="pages/runner.html">Reproduce 33/33</a><a href="pages/security.html">Security</a><a href="pages/privacy.html">Privacy</a><a href="pages/terms.html">Terms</a><a href="contact.html">Contact</a></span>
-    </div>
-</div></footer>
+<div class="strip">
+  <span>MARK <b id="markSerial">…</b></span>
+  <span class="st" id="obsZoom">×0.90</span>
+  <button id="forkBtn">FORK</button>
+  <span class="st" id="forkStatus">CANONICAL STATE</span>
+  <span class="grow"></span>
+  <button id="captureBtn">CAPTURE BRIEFING STATE</button>
+  <span class="copied" id="captured"></span>
+  <button id="resetBtn" hidden>RETURN TO CANONICAL</button>
+</div>
 
-<script src="engine/trajectory-engine.js" defer integrity="sha384-5jUBvS15D9xJmKSdKnCM4ukHQ//VFhDJ6dxo+1mKYG+tFHuCjAH/C4YUXHBzBxwS" crossorigin="anonymous"></script>
-<script src="content/record.js" defer integrity="sha384-dQCgNz6miBofsSPWVLV9XXxMGSBNWEtR/XbBMvKHZNKm9uCaJCmmd+iijzz60D1J" crossorigin="anonymous"></script>
-<script src="profiles/disclosure.js" defer integrity="sha384-GAZbchwa6kpcTHZL7gSpIrVZNEHFOb8R7lzIrBJAfb+tofRsap0DAB2SJEu01Wm7" crossorigin="anonymous"></script>
-<script src="js/console.js" defer integrity="sha384-J7vG5jlqbCcid9nrjnZ9yy8WUs9g7/yP17g0ru6U4W357H8NdBgynF0GZEAKHHv+" crossorigin="anonymous"></script>
+<footer>
+  <span><span id="claimsFooter">CLAIMS —/—</span> · © 2026 CYTHERAI · RIYADH, KSA · US PATENT PENDING</span>
+  <span class="right"><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/brief.html">Brief</a> · <a href="mailto:contact@cytherai.com">Contact</a></span>
+</footer>
+
+<script src="js/manifest.js" defer></script>
+<script src="js/substrate.js" defer></script>
+<script src="js/claims.js" defer></script>
+<script src="js/ledger.js" defer></script>
+<script src="js/instrument.js" defer></script>
+<script src="js/site.js" defer></script>
 </body>
 </html>
