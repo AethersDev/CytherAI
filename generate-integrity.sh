@@ -10,7 +10,8 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-RESOURCES="css/cytherai.css css/cytherai-phase-transition.css js/cytherai.js js/command-palette.js js/sealed-artifact.js js/cytherai-phase-transition.js engine/trajectory-engine.js engine/trajectory-engine.test.js content/record.js profiles/disclosure.js js/console.js"
+# substrate homepage modules + subpage stylesheet + engine stack (runner suite)
+RESOURCES="css/cytherai.css js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js engine/trajectory-engine.js engine/trajectory-engine.test.js content/record.js profiles/disclosure.js js/console.js"
 
 # HTML files to patch
 HTML_FILES="index.html contact.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html pages/runner.html"

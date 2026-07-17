@@ -1,10 +1,10 @@
 {
-  "name": "CytherAI — DOC-2026-001",
+  "name": "CytherAI",
   "short_name": "CytherAI",
   "start_url": "index.html",
   "display": "standalone",
-  "theme_color": "#0E1113",
-  "background_color": "#0E1113",
+  "theme_color": "#101620",
+  "background_color": "#ECF0F4",
   "icons": [
     {
       "src": "icon.svg",
