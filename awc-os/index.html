@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>AWC-OS — بوابة التقييم · AMAD 2026</title>
+<style>
+:root{
+  --blue:#1B3C6B; --blue-mid:#2B5BA8; --blue-light:#E8EFF9; --blue-xlight:#F3F6FB;
+  --copper:#B5733A; --copper-mid:#CF8E55; --copper-light:#FBF2E9; --copper-xlt:#FEF9F4;
+  --lavender:#7562A8; --lav-mid:#9485C0; --lav-light:#EEEAF7; --lav-xlight:#F6F4FC;
+  --bg:#FAFAF7; --surface:#FFFFFF; --surface-2:#F4F1EB; --surface-3:#EDE9E0;
+  --border:#E0DBD1; --border-2:#CCC6BA;
+  --text:#1A2535; --text-2:#3D4F63; --text-3:#6B7A8D; --text-4:#9AA3AF;
+  --success:#1A6B42;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI','Helvetica Neue',sans-serif;font-size:14px;line-height:1.7}
+html[dir=rtl] body{font-family:'Geeza Pro','IBM Plex Sans Arabic',-apple-system,'Segoe UI',sans-serif}
+.mono,code,pre{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace}
+
+.doc-header{background:linear-gradient(135deg,#16325A,var(--blue));color:#fff;padding:34px 32px 30px}
+.doc-header .inner{max-width:880px;margin:0 auto;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.eyebrow{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;direction:ltr;text-align:inherit}
+.doc-header h1{font-size:26px;font-weight:700;line-height:1.2;color:#fff}
+html[dir=ltr] .doc-header h1{font-family:Palatino,Georgia,serif}
+.deck{color:rgba(255,255,255,.72);font-size:13px;margin-top:10px;max-width:620px}
+.tagline{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:14px;direction:ltr;text-align:inherit}
+.lang-toggle{display:flex;border:1px solid rgba(255,255,255,.3);border-radius:999px;overflow:hidden;flex:none}
+.lang-toggle button{background:none;border:none;color:rgba(255,255,255,.65);font-size:12px;padding:5px 14px;cursor:pointer;font-family:inherit}
+.lang-toggle button.on{background:rgba(255,255,255,.92);color:var(--blue);font-weight:600}
+
+.wrap{max-width:880px;margin:0 auto;padding:26px 20px 60px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-top:18px}
+.card h2{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-weight:400;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px}
+.launch{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.launch a.btn{background:var(--blue);color:#fff;text-decoration:none;border-radius:10px;padding:14px 30px;font-size:16px;font-weight:600;flex:none}
+.launch a.btn:hover{background:var(--blue-mid)}
+.launch .note{color:var(--text-2);font-size:12.5px;flex:1;min-width:240px}
+.paths{list-style:none;margin-top:4px}
+.paths li{padding:8px 0;border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:baseline}
+.paths li:last-child{border-bottom:none}
+.paths .n{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;color:var(--blue-mid);flex:none;direction:ltr}
+.paths .why{color:var(--text-3);font-size:12px}
+.pipe{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:13px 16px;font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11.5px;line-height:1.9;color:var(--text-2);direction:ltr;text-align:left;overflow-x:auto;white-space:pre}
+.claim{border-inline-start:3px solid var(--blue-mid);background:var(--blue-xlight);padding:10px 16px;border-radius:6px;margin-top:12px;font-size:13px;color:var(--text-2)}
+table.verd{width:100%;border-collapse:collapse;margin-top:12px}
+table.verd td{padding:8px 10px;border-top:1px solid var(--border);font-size:12.5px;vertical-align:top}
+table.verd td.v{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:11px;white-space:nowrap;direction:ltr}
+.b-exec{color:var(--success)} .b-ref{color:var(--lavender)} .b-blk{color:var(--copper)}
+.callout{border-inline-start:3px solid var(--copper);background:var(--copper-xlt);padding:12px 16px;border-radius:6px;margin-top:14px;font-size:12.5px;color:var(--text-2)}
+.callout b{color:var(--copper)}
+video{width:100%;border-radius:8px;border:1px solid var(--border);background:#000;margin-top:8px}
+.vidgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:700px){.vidgrid{grid-template-columns:1fr}}
+.vlabel{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);direction:ltr;text-align:inherit}
+.foot{margin-top:30px;padding-top:16px;border-top:1px solid var(--border);color:var(--text-3);font-size:12.5px}
+.foot .strong{color:var(--text-2);font-size:13px}
+.foot .tag{font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-4);margin-top:10px;direction:ltr;text-align:inherit}
+a{color:var(--blue-mid)}
+</style>
+</head>
+<body>
+
+<header class="doc-header">
+  <div class="inner">
+    <div>
+      <div class="eyebrow">AWC-OS · AMAD 2026 · Alinma Bank × Tuwaiq Academy · Evaluation Gateway</div>
+      <h1 data-ar="AWC-OS — بوابة التقييم" data-en="AWC-OS — Evaluation Gateway">AWC-OS — بوابة التقييم</h1>
+      <div class="deck" data-ar="طبقة ذكاء مالي دستورية: النموذج يقترح، والمحرك الرمزي الحتمي يُنفِّذ أو يرفض. النسخة الإنتاجية تعمل داخل البنية التحتية لمصرف الإنماء."
+           data-en="A constitutional financial-intelligence layer: the model proposes, a deterministic symbolic engine executes or refuses. Production runs inside Alinma's infrastructure.">طبقة ذكاء مالي دستورية: النموذج يقترح، والمحرك الرمزي الحتمي يُنفِّذ أو يرفض. النسخة الإنتاجية تعمل داخل البنية التحتية لمصرف الإنماء.</div>
+      <div class="tagline">One Step Ahead</div>
+    </div>
+    <div class="lang-toggle">
+      <button id="btn-ar" class="on" onclick="setLang('ar')">العربية</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="card">
+    <h2 data-ar="Live MVP · النموذج الحي" data-en="Live MVP">Live MVP · النموذج الحي</h2>
+    <div class="launch">
+      <a class="btn" href="./live/" target="_blank" rel="noopener"
+         data-ar="افتح النموذج الحي ↗" data-en="Launch Live MVP ↗">افتح النموذج الحي ↗</a>
+      <div class="note"
+        data-ar="توليد حي من النموذج المُدرَّب (٤–٨ ثوانٍ لكل سؤال)، والتنفيذ عبر محرك Swift الحتمي نفسه الذي يعمل على iPhone. يُخدَّم من جهاز تقييم مؤمَّن؛ إن تعذَّر الوصول فراجع «البديل الفني» أدناه."
+        data-en="Live synthesis from the fine-tuned model (4–8s per question), executed through the same deterministic Swift engine that runs on the iPhone. Served from a secured evaluation machine; if unreachable, see the technical fallback below.">توليد حي من النموذج المُدرَّب (٤–٨ ثوانٍ لكل سؤال)، والتنفيذ عبر محرك Swift الحتمي نفسه الذي يعمل على iPhone. يُخدَّم من جهاز تقييم مؤمَّن؛ إن تعذَّر الوصول فراجع «البديل الفني» أدناه.</div>
+    </div>
+    <ul class="paths">
+      <li><span class="n">01</span><span data-ar="الزكاة — تنفيذ حسابي دقيق (٤٬٢٢٦٫٢٥ ريال)" data-en="Zakat — exact numerical execution (SAR 4,226.25)">الزكاة — تنفيذ حسابي دقيق (٤٬٢٢٦٫٢٥ ريال)</span><span class="why" data-ar="حساب صحيح" data-en="correct computation">حساب صحيح</span></li>
+      <li><span class="n">02</span><span data-ar="تدقيق المحفظة — شهادات القيود وأثر التنفيذ" data-en="Portfolio audit — attestations and execution trace">تدقيق المحفظة — شهادات القيود وأثر التنفيذ</span><span class="why" data-ar="قابلية التفسير" data-en="explainability">قابلية التفسير</span></li>
+      <li><span class="n">03</span><span data-ar="التخطيط — سيناريو فقدان الوظيفة" data-en="Planning — job-loss cashflow scenario">التخطيط — سيناريو فقدان الوظيفة</span><span class="why" data-ar="توصية مستقبلية" data-en="forward recommendation">توصية مستقبلية</span></li>
+      <li><span class="n">04</span><span data-ar="السؤال العدائي — رفض دستوري ببديل متوافق واستشهاد أيوفي" data-en="Adversarial — constitutional refusal with compliant alternative and AAOIFI citation">السؤال العدائي — رفض دستوري ببديل متوافق واستشهاد أيوفي</span><span class="why" data-ar="الرفض الدستوري" data-en="constitutional refusal">الرفض الدستوري</span></li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2 data-ar="Architecture · البنية" data-en="Architecture">Architecture · البنية</h2>
+    <div class="pipe">question + financial state
+  → fine-tuned model (live synthesis, greedy decoding)
+  → FSL program
+  → Swift fsl-cli → AWCOSCore   (canonical interpreter — same engine as the iPhone app)
+  → EXECUTED · REFUSED · BLOCKED   + replayable receipt</div>
+    <div class="claim"
+      data-ar="النموذج المتصفحي والتطبيق الأصلي على iPhone يُنفِّذان البرامج المُولَّدة عبر محرك AWCOSCore Swift نفسه — لا إعادة تنفيذ لطبقة القواعد، ولا محاكاة نصية لها."
+      data-en="The browser MVP and the native iPhone application execute generated programs through the same Swift AWCOSCore engine — the rule layer is not reimplemented and not simulated.">النموذج المتصفحي والتطبيق الأصلي على iPhone يُنفِّذان البرامج المُولَّدة عبر محرك AWCOSCore Swift نفسه — لا إعادة تنفيذ لطبقة القواعد، ولا محاكاة نصية لها.</div>
+    <table class="verd">
+      <tr><td class="v b-exec">EXECUTED</td><td data-ar="البرنامج اجتاز جميع البنود والتأكيدات واكتمل تنفيذه." data-en="The program parsed, every predicate and assertion passed, execution completed.">البرنامج اجتاز جميع البنود والتأكيدات واكتمل تنفيذه.</td></tr>
+      <tr><td class="v b-ref">REFUSED</td><td data-ar="الطلب خالف بنداً دستورياً؛ قرار سياسة — يُرفَض الطلب ويُقدَّم بديل متوافق مع الشريعة." data-en="The request violated a constitutional predicate; a policy decision — refused, with an attested Sharia-compliant alternative.">الطلب خالف بنداً دستورياً؛ قرار سياسة — يُرفَض الطلب ويُقدَّم بديل متوافق مع الشريعة.</td></tr>
+      <tr><td class="v b-blk">BLOCKED</td><td data-ar="البرنامج لم يُثبت شروط التنفيذ (فشل تأكيد أو بوابة)؛ لا يُصرَّح بأي نتيجة." data-en="The proposal failed an assertion or could not establish execution conditions; no result is authorized.">البرنامج لم يُثبت شروط التنفيذ (فشل تأكيد أو بوابة)؛ لا يُصرَّح بأي نتيجة.</td></tr>
+    </table>
+    <div class="callout"
+      data-ar="<b>فشل مُقاس ومُحتفَظ به:</b> أحد أسئلة الادخار ولَّد برنامج تكافل مُبالِغاً في وعوده ففشل تأكيده وأعاد المحرك BLOCKED. لم تُخفَّف أي قاعدة ولم يُعدَّل أي ناتج لإنجاح العرض — السؤال متاح عبر الإدخال الحر."
+      data-en="<b>Measured failure retained:</b> one savings prompt generated an over-promising takaful program whose assertion failed; the engine returned BLOCKED. No rule was relaxed and no output was rewritten to force a successful demonstration — the prompt remains reachable through free-form input."></div>
+  </div>
+
+  <div class="card" id="films">
+    <h2 data-ar="Film · الفيلم" data-en="Film">Film · الفيلم</h2>
+    <div class="vidgrid">
+      <div><div class="vlabel">العربية</div><video controls preload="metadata" src="media/AWC_OS_film_ar.mp4"></video></div>
+      <div><div class="vlabel">English</div><video controls preload="metadata" src="media/AWC_OS_film_en.mp4"></video></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-ar="Technical fallback · البديل الفني" data-en="Technical fallback">Technical fallback · البديل الفني</h2>
+    <div data-ar="النموذج الحي يعمل على جهاز تقييم فعلي وليس على استضافة سحابية دائمة. إن كان الرابط غير متاح لحظياً فالفيلم وملخص البنية أعلاه يحملان التقييم، ويمكن طلب جلسة مباشرة عبر البريد:"
+         data-en="The live MVP runs on a real evaluation machine, not on always-on cloud hosting. If the link is momentarily unreachable, the film and the architecture summary above carry the evaluation, and a live session can be requested by email:">النموذج الحي يعمل على جهاز تقييم فعلي وليس على استضافة سحابية دائمة. إن كان الرابط غير متاح لحظياً فالفيلم وملخص البنية أعلاه يحملان التقييم، ويمكن طلب جلسة مباشرة عبر البريد:</div>
+    <div style="margin-top:6px"><a href="mailto:contact@cytherai.com?subject=AWC-OS%20Live%20Session%20Request" class="mono" style="direction:ltr">contact@cytherai.com</a></div>
+  </div>
+
+  <div class="foot">
+    <div class="strong"
+      data-ar="لا يقيس AWC-OS النجاح بأن يُنتج النموذج إجابةً دائماً، بل بأن تفشل الإجابات غير المُصرَّح بها فشلاً آمناً."
+      data-en="AWC-OS does not measure success by whether the model always produces an answer; it measures success by whether unauthorized answers fail safely.">لا يقيس AWC-OS النجاح بأن يُنتج النموذج إجابةً دائماً، بل بأن تفشل الإجابات غير المُصرَّح بها فشلاً آمناً.</div>
+    <div style="margin-top:8px"
+      data-ar="العرض التجريبي يعمل على iPhone 16 Pro Max دون اتصال؛ النسخة الإنتاجية تعمل داخل البنية التحتية لمصرف الإنماء."
+      data-en="The demo runs offline on an iPhone 16 Pro Max; production runs inside Alinma's infrastructure.">العرض التجريبي يعمل على iPhone 16 Pro Max دون اتصال؛ النسخة الإنتاجية تعمل داخل البنية التحتية لمصرف الإنماء.</div>
+    <div class="tag">AWC-OS · Financial Intelligence Layer · One Step Ahead</div>
+  </div>
+
+</main>
+
+<script>
+let lang = "ar";
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+  document.getElementById("btn-ar").classList.toggle("on", l==="ar");
+  document.getElementById("btn-en").classList.toggle("on", l==="en");
+  document.querySelectorAll("[data-ar]").forEach(e => {
+    if (e.classList.contains("callout")) e.innerHTML = e.dataset[l];
+    else e.textContent = e.dataset[l];
+  });
+}
+setLang("ar");
+fetch("media/AWC_OS_film_ar.mp4", {method:"HEAD"})
+  .then(r => { if (!r.ok) document.getElementById("films").style.display = "none"; })
+  .catch(() => { document.getElementById("films").style.display = "none"; });
+</script>
+</body>
+</html>
