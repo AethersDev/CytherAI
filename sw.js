@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-graphite-v2';
+var CACHE = 'cytherai-substrate-v1';
 
 var ASSETS = [
   'index.html',
@@ -13,19 +13,21 @@ var ASSETS = [
   'pages/security.html',
   'pages/terms.html',
   'pages/runner.html',
-  // engine-backed dossier (the graphite homepage + the live suite)
+  // the substrate homepage modules
+  'js/manifest.js',
+  'js/substrate.js',
+  'js/claims.js',
+  'js/ledger.js',
+  'js/instrument.js',
+  'js/site.js',
+  // subpage stylesheet
+  'css/cytherai.css',
+  // engine stack — still served to the live suite at pages/runner.html
   'engine/trajectory-engine.js',
   'engine/trajectory-engine.test.js',
   'content/record.js',
   'profiles/disclosure.js',
   'js/console.js',
-  // shared assets still used by the (unmigrated) subpages
-  'css/cytherai.css',
-  'css/cytherai-phase-transition.css',
-  'js/cytherai.js',
-  'js/command-palette.js',
-  'js/sealed-artifact.js',
-  'js/cytherai-phase-transition.js',
   'manifest.webmanifest',
   'icon.svg'
 ];
