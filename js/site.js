@@ -341,6 +341,7 @@ function verifyAdmissions() {
     setTimeout(() => Claims.recomputeClaims(), 150);
     setTimeout(verifyAdmissions, 500);
     setTimeout(cachePositions, 60);
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});   /* insecure context — run online-only */
     computeZones(); envUpdate();
     const dm = h.match(/d=([\d.]+)/);
     if (dm) {

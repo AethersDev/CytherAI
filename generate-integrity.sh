@@ -55,9 +55,11 @@ for HTML in $HTML_FILES; do
         continue
     fi
     sed -i '' -E "s|(<meta name=\"build-hash\" content=\")[^\"]*(\">)|\1${BUILD_HASH}\2|g" "$HTML"
-    # keep the no-JS colophon BUNDLE hash in lockstep with the meta (so it never re-rots)
-    sed -i '' -E "s|(data-bundle-hash>)[^<]*(<)|\1${BUILD_HASH}\2|g" "$HTML"
     echo "  $HTML ✓"
 done
+
+# Stamp the service-worker cache name: new build ⇒ new cache ⇒ atomic re-install
+sed -i '' -E "s|(var CACHE = 'cytherai-substrate-)[^']*(';)|\1${BUILD_HASH}\2|" sw.js
+echo "  sw.js ✓ (CACHE cytherai-substrate-${BUILD_HASH})"
 
 echo "[integrity] Done. Build: $BUILD_HASH"
