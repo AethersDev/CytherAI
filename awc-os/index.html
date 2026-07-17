@@ -118,12 +118,30 @@ a{color:var(--blue-mid)}
       data-en="<b>Measured failure retained:</b> one savings prompt generated an over-promising takaful program whose assertion failed; the engine returned BLOCKED. No rule was relaxed and no output was rewritten to force a successful demonstration — the prompt remains reachable through free-form input."></div>
   </div>
 
+  <div class="card">
+    <h2 data-ar="Source · المستودع المصدري" data-en="Source Code">Source · المستودع المصدري</h2>
+    <div data-ar="شيفرة النموذج المتصفحي كاملة ومتاحة للمراجعة — الخادم، وجسر المفسِّر القانوني (fsl-cli)، وواجهة التقييم:"
+         data-en="The complete browser-MVP runtime is open for review — server, canonical-interpreter bridge (fsl-cli), and the judge-facing UI:">شيفرة النموذج المتصفحي كاملة ومتاحة للمراجعة — الخادم، وجسر المفسِّر القانوني (fsl-cli)، وواجهة التقييم:</div>
+    <div style="margin-top:6px"><a href="https://github.com/CytherAi/aws-os_mvp" target="_blank" rel="noopener" class="mono" style="direction:ltr;display:inline-block">github.com/CytherAi/aws-os_mvp ↗</a></div>
+  </div>
+
   <div class="card" id="films">
     <h2 data-ar="Film · الفيلم" data-en="Film">Film · الفيلم</h2>
-    <div class="vidgrid">
+    <div class="vidgrid" id="vidgrid">
       <div><div class="vlabel">العربية</div><video controls preload="metadata" src="media/AWC_OS_film_ar.mp4"></video></div>
       <div><div class="vlabel">English</div><video controls preload="metadata" src="media/AWC_OS_film_en.mp4"></video></div>
     </div>
+    <div style="margin-top:12px">
+      <a href="https://www.youtube.com/watch?v=Ix2JSCripcg" target="_blank" rel="noopener"
+         data-ar="النسخة الكاملة بدقة 4K على يوتيوب ↗" data-en="Full 4K version on YouTube ↗">النسخة الكاملة بدقة 4K على يوتيوب ↗</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-ar="Deck · العرض التقديمي" data-en="Presentation Deck">Deck · العرض التقديمي</h2>
+    <div data-ar="نسخة العرض التقديمي المُقدَّمة في المسابقة (١٣ شريحة). يُحمَّل الملف ويُفتَح في PowerPoint أو Keynote — قالب المُنظِّم بمقاس عرض غير قياسي لا تدعمه نسخة PowerPoint على الويب."
+         data-en="The submitted competition deck (13 slides). Download and open in PowerPoint or Keynote — the organizer's template uses a non-standard slide width that PowerPoint for the web does not support.">نسخة العرض التقديمي المُقدَّمة في المسابقة (١٣ شريحة). يُحمَّل الملف ويُفتَح في PowerPoint أو Keynote — قالب المُنظِّم بمقاس عرض غير قياسي لا تدعمه نسخة PowerPoint على الويب.</div>
+    <div style="margin-top:6px"><a href="media/AWC_OS_AMAD2026_deck.pptx" download class="mono" style="direction:ltr;display:inline-block">AWC_OS_AMAD2026_deck.pptx · 7.9 MB ↓</a></div>
   </div>
 
   <div class="card">
@@ -160,8 +178,8 @@ function setLang(l){
 }
 setLang("ar");
 fetch("media/AWC_OS_film_ar.mp4", {method:"HEAD"})
-  .then(r => { if (!r.ok) document.getElementById("films").style.display = "none"; })
-  .catch(() => { document.getElementById("films").style.display = "none"; });
+  .then(r => { if (!r.ok) document.getElementById("vidgrid").style.display = "none"; })
+  .catch(() => { document.getElementById("vidgrid").style.display = "none"; });
 </script>
 </body>
 </html>
