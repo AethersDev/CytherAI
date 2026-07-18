@@ -34,7 +34,7 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 | Module | `window.*` | Role |
 |---|---|---|
 | `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin/dcos, admit, dsinOrbit, legibility, checksum) |
-| `js/substrate.js` | `CytherSubstrate` | the world: native-sin tiles, dsin-orbit camera anchors, `observe`, fork |
+| `js/substrate.js` | `CytherSubstrate` | the world: plate-developed exposure tiles (angular-lobe density, log tonemap, streamed via the shared loop), dsin-orbit camera anchors, `observe`, fork; minimap keeps the point-cloud measurement view |
 | `js/claims.js` | `CytherClaims` | CL-01…CL-08 + CL-06b predicates; `CLAIMS n/9 HOLDING` |
 | `js/ledger.js` | `CytherLedger` | reader self-report ledger, intent-adaptive CTA |
 | `js/instrument.js` | `CytherInstrument` | hostile-proposer boundary instrument (feeds CL-05) |
