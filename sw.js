@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-63DD818CB31414D4';   /* version stamped with the build hash by generate-integrity.sh */
+var CACHE = 'cytherai-substrate-F15692A67C90783D';   /* version stamped with the build hash by generate-integrity.sh */
 
 var ASSETS = [
   'index.html',

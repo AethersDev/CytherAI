@@ -219,6 +219,14 @@ function stripUpdate() {
   if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG" : "FORK"; }
   if (!canonical) Ledger.recordAct("MARK_FORKED");
   applyCorridors();   /* the atlas settles with the exposure */
+  if (document.body.classList.contains("at-rest")) conditionEnvelopes();
+}
+/* the streamed exposure narrates itself — true observables only */
+function exposureStep() {
+  if (!S.isDeveloping()) return false;
+  const e = S.exposure(), st = $("forkStatus");
+  if (e && st) st.textContent = "EXPOSING PLATE " + e.plate + "/4 · n = " + e.n.toExponential(1).replace("+", "") + " DEPOSITIONS";
+  return false;
 }
 function buildHash(full) {
   const parts = [], P = S.params();
@@ -381,6 +389,7 @@ function verifyAdmissions() {
   registerStep(fieldStep);
   registerStep(waveStep);
   registerStep(S.step);
+  registerStep(exposureStep);
   registerStep(Inst.step);
 
   Inst.wire({ wake });
