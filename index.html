@@ -308,12 +308,16 @@ body[data-optics="world"] #world{opacity:1}
   -webkit-mask-composite:source-in}
 body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
 body[data-optics="world"] .env::before{opacity:.18}
+/* the flip membrane is a reading GROUND, not attenuation — it holds at full strength
+   in every optics mode and during motion; CL-06's model depends on it */
+body[data-phase="flip"] .env::before{opacity:1}
 
 /* panels undergo a material phase change; the flip membrane also grounds envelopes */
 .glass,.rl-head,.rl-body,.chrome,.strip{transition:background .35s ease,color .25s ease}
 body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
 body[data-phase="flip"] .glass,body[data-phase="flip"] .rl-head,body[data-phase="flip"] .rl-body,
-body[data-phase="flip"] .chrome,body[data-phase="flip"] .strip{background:rgba(16,22,31,.82)}
+body[data-phase="flip"] .chrome,body[data-phase="flip"] .strip,
+body[data-phase="flip"] .optics button{background:rgba(16,22,31,.82)}
 body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phase="depth"] .rl-body{background:rgba(10,15,23,.62)}
 body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.9)}
 
