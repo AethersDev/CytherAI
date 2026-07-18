@@ -25,6 +25,11 @@ pre-rendered exposure tiles form the background, and scroll moves a derived came
 far-field into the filament core (transform + opacity only; zero substrate rasters per
 frame). Content descends by epistemic distance. Standing claims execute as predicates
 against the page itself; the reader keeps a local, owner-erasable self-report ledger.
+A separate **reading exposure** governs the record (P9): bistable reading ink with
+hysteresis (`CytherSubstrate.READING`, CL-06 checks it at every depth), phase-changed
+panel materials, density-conditioned legibility envelopes (`.env`, fed by the retained
+plate fields), corridor placement from the density atlas, rest-state world amplitude,
+and a reader optics control (WORLD · BALANCED · READ, session-local).
 
 **The law, printed at the floor:** *The surface states. Depth conditions. Records
 substantiate. Boundaries govern. The reader is a record. Nothing is stated that is not checked.*

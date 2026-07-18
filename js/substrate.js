@@ -45,8 +45,8 @@ const clamp  = (v,a,b) => Math.max(a, Math.min(b, v));
 const lerp   = (a,b,t) => a + (b - a) * t;
 const smooth = t => t * t * (3 - 2 * t);
 const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
-const mixHex = (a,b,t) => { const A=hex2rgb(a), B=hex2rgb(b);
-  return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(",")})`; };
+const mixRgb = (a,b,t) => { const A=hex2rgb(a), B=hex2rgb(b); return A.map((v,i)=>v+(B[i]-v)*t); };
+const mixHex = (a,b,t) => `rgb(${mixRgb(a,b,t).map(Math.round).join(",")})`;
 
 /* ================= the derived object — native orbit for the tiles ================= */
 function computeOrbit(params) {
@@ -134,8 +134,29 @@ function ambientAt(p) {
   };
 }
 
-/* pure surface — always available (used by CL-08, the compositing harness, ambient tests) */
-const API = { ZOOMS, BGS, PANELS, ACCENTS, computeOrbit, deriveAnchors, cameraAt, ambientAt };
+/* ================= reading exposure — the record's own law (P9) =================
+   Physics may be continuous; legibility is admitted or refused. Reading ink is
+   bistable with hysteresis. Constants calibrated against the ambient keyframes
+   (WCAG): dark ink holds ≥5.3:1 on raw ambient up to SW_DOWN; past the switch,
+   light ink grounds on the absorptive membrane (≥9:1 at any depth) until the
+   raw ambient alone carries ≥8:1. CL-06 re-derives this. */
+const READING = {
+  SW_DOWN: 1.44, SW_UP: 1.35, FLIP_END: 2.05,
+  DARK: "#101620", LIGHT: "#E3EAF4",
+  MEMBRANE: [16, 22, 31], MEMBRANE_A: 0.82
+};
+function bgRgbAt(d) { const bi = clamp(d|0, 0, 2), bf = d - bi; return mixRgb(BGS[bi][0], BGS[bi+1][0], bf); }
+function readingGroundAt(d, state) {
+  /* light ink before FLIP_END sits on the membrane (every flip-phase reading block carries it) */
+  if (state === "light" && d < READING.FLIP_END) {
+    const bg = bgRgbAt(d), m = READING.MEMBRANE, a = READING.MEMBRANE_A;
+    return m.map((v, i) => v*a + bg[i]*(1-a));
+  }
+  return bgRgbAt(d);
+}
+
+/* pure surface — always available (used by CL-06/CL-08, the compositing harness, ambient tests) */
+const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, ambientAt, bgRgbAt, readingGroundAt };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -174,7 +195,7 @@ if (typeof document !== "undefined") {
     const bw = Math.max(320, Math.round(W * sc)), bh = Math.max(240, Math.round(H * sc));
     const off = document.createElement("canvas"); off.width = bw; off.height = bh;
     const sp = PLATE[i];
-    const st = { i, g, bw, bh, off, octx: off.getContext("2d"),
+    const st = { i, g, bw, bh, sc, off, octx: off.getContext("2d"),
       total: new Float32Array(bw * bh),
       c0: new Float32Array(bw * bh), c1: new Float32Array(bw * bh),
       c2: new Float32Array(bw * bh), c3: new Float32Array(bw * bh),
@@ -276,7 +297,7 @@ if (typeof document !== "undefined") {
     }
     const amb = ambientAt(p);
     root_el.style.setProperty("--bg", amb.bg);
-    root_el.style.setProperty("--ink", amb.ink);
+    root_el.style.setProperty("--inkA", amb.ink);   /* ambient ink — hairlines/structure; reading ink is bistable (P9) */
     root_el.style.setProperty("--panel", amb.panel);
     root_el.style.setProperty("--accent", amb.accent);
     drawCoreRect(cam.cx, cam.cy, cam.z);
@@ -285,6 +306,7 @@ if (typeof document !== "undefined") {
 
   /* ================= develop the exposures (boot + fork) ================= */
   let plateQueue = [], plateDev = null;
+  const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
   let batch = 110000, lastT = 0;
   const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
   function developAll() {
@@ -293,6 +315,7 @@ if (typeof document !== "undefined") {
     layout();
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
+    fields[0] = fields[1] = fields[2] = fields[3] = null;
     plateDev = null; batch = 110000; lastT = nowMs();
     developing = true;
     hooks.wake();
@@ -314,10 +337,48 @@ if (typeof document !== "undefined") {
     const done = plateDev.dep >= plateDev.target || plateDev.it >= plateDev.cap;
     if (done || !reduced) tonemapPlate(plateDev);
     if (done) {
+      fields[plateDev.i] = { total: plateDev.total, bw: plateDev.bw, bh: plateDev.bh,
+                            sc: plateDev.sc, maxT: plateDev.maxT };   /* density outlives the develop; lobes are freed */
       plateDev = null;
       if (!plateQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
     }
     return true;
+  }
+
+  /* ================= the density field, read back (P9 reading exposure) ================= */
+  /* mean tone (0..1) of the dominant plate under a viewport rect — conditions envelopes at rest */
+  function fieldEnergy(rect) {
+    const cam = cameraAt(lastP, ANCH, U, W, H);
+    let k = 0, bo = -1;
+    for (let i = 0; i < 4; i++) if (cam.tiles[i].o > bo) { bo = cam.tiles[i].o; k = i; }
+    const f = fields[k]; if (!f) return null;
+    const t = cam.tiles[k], invLog = 1 / Math.log1p(f.maxT);
+    let sum = 0, n = 0;
+    for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 8; gx++) {
+      const vx = rect.left + (gx + .5) / 8 * rect.width, vy = rect.top + (gy + .5) / 6 * rect.height;
+      const bx = ((vx - t.tx) / t.A * f.sc) | 0, by = ((vy - t.ty) / t.A * f.sc) | 0;
+      if (bx < 0 || by < 0 || bx >= f.bw || by >= f.bh) continue;
+      const dep = f.total[by * f.bw + bx];
+      if (dep > 0) { let L = Math.log1p(dep) * invLog; sum += Math.sqrt(L) * L; }
+      n++;
+    }
+    return n ? sum / n : null;
+  }
+  /* quietest column third per plate — the negative-space atlas the corridors read */
+  function corridorsFor() {
+    const out = [];
+    for (let k = 0; k < 4; k++) {
+      const f = fields[k]; if (!f) return null;
+      const y0 = (f.bh * 0.25) | 0, y1 = (f.bh * 0.75) | 0;
+      const c1 = (f.bw / 3) | 0, c2 = (f.bw * 2 / 3) | 0;
+      const e = [0, 0, 0];
+      for (let y = y0; y < y1; y += 2) for (let x = 0; x < f.bw; x += 2) {
+        const dep = f.total[y * f.bw + x];
+        if (dep) e[x < c1 ? 0 : x < c2 ? 1 : 2] += Math.log1p(dep);
+      }
+      out.push(e[0] <= e[1] && e[0] <= e[2] ? "l" : e[2] <= e[1] ? "r" : "c");
+    }
+    return out;
   }
   /* redevelop from the (possibly forked) params — async via the render queue */
   function redevelop() {
@@ -417,6 +478,9 @@ if (typeof document !== "undefined") {
   API.params = () => P.slice();
   API.serial = serial;
   API.status = status;
+  API.isDeveloping = () => developing;
+  API.fieldEnergy = fieldEnergy;
+  API.corridors = corridorsFor;
 }
 
 root.CytherSubstrate = API;
