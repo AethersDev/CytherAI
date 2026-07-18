@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aion v2 — the living emblem, plate renderer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Albert+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{ --bg:#060608; --ink:#E9ECF4; --dim:#8A90A3; --hair:rgba(233,236,244,.14); --acc:#37C9A9; }
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Albert Sans',sans-serif;overflow:hidden}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:3px}
+
+#emblem{position:fixed;inset:0;z-index:0;cursor:grab}
+#emblem.dragging{cursor:grabbing}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at 60% 46%, transparent 46%, rgba(6,6,8,.66) 100%)}
+
+/* ---------- left rail ---------- */
+.rail{position:fixed;z-index:3;top:0;left:0;bottom:0;width:min(310px,86vw);padding:26px 24px 20px;display:flex;flex-direction:column;
+  border-right:1px solid var(--hair);background:linear-gradient(to right, rgba(6,6,8,.85), rgba(6,6,8,.3) 82%, transparent)}
+.brand{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;letter-spacing:.14em}
+.proto{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);border:1px solid var(--hair);border-radius:99px;padding:2px 8px;align-self:flex-start;margin-top:8px}
+.tag{color:var(--dim);font-size:12.5px;margin-top:14px;line-height:1.6;max-width:26ch}
+nav{margin-top:5vh;display:flex;flex-direction:column;gap:4px}
+nav button{display:flex;align-items:baseline;gap:10px;text-align:left;padding:11px 12px;border-radius:10px;border:1px solid transparent;transition:border-color .2s,background .2s}
+nav button:hover{background:rgba(233,236,244,.05)}
+nav button.active{border-color:var(--hair);background:rgba(233,236,244,.06)}
+nav .n-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;letter-spacing:.04em}
+nav .n-params{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim)}
+nav button.active .n-name{color:var(--acc)}
+.serial{margin-top:auto;border-top:1px solid var(--hair);padding-top:13px}
+.serial .lbl{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;color:var(--dim)}
+.serial .code{font-family:'IBM Plex Mono',monospace;font-size:12px;margin-top:6px;line-height:1.7}
+.serial .hint{font-size:11px;color:var(--dim);margin-top:7px;line-height:1.5}
+.serial .link{margin-top:9px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;border:1px solid var(--hair);border-radius:8px;padding:7px 10px}
+.serial .link:hover{border-color:var(--acc);color:var(--acc)}
+.copied{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--acc);margin-left:8px}
+
+/* ---------- content card ---------- */
+.card{position:fixed;z-index:3;right:3.4vw;top:8vh;width:min(340px,86vw);
+  border:1px solid var(--hair);border-radius:16px;padding:18px 20px;
+  background:rgba(8,9,13,.5);backdrop-filter:blur(12px)}
+.card h2{font-family:'Syne',sans-serif;font-weight:700;font-size:19px;letter-spacing:.03em;margin-bottom:8px}
+.card p{font-size:13px;line-height:1.65;color:var(--dim)}
+.card p b{color:var(--ink);font-weight:600}
+.card .k{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.16em;margin-bottom:9px}
+
+/* ---------- plate caption ---------- */
+.plate{position:fixed;z-index:3;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:20px;align-items:flex-end;
+  padding:12px 26px 14px;border-top:1px solid var(--hair);
+  background:linear-gradient(to top, rgba(6,6,8,.85), transparent);
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--dim);letter-spacing:.04em}
+.plate .l1{color:var(--ink);letter-spacing:.18em;font-size:11px}
+.plate .left,.plate .right{line-height:1.9}
+.plate .right{text-align:right}
+.plate b{color:var(--ink);font-weight:500}
+@media(max-width:820px){
+  .rail{width:100vw;bottom:auto;border-right:none;border-bottom:1px solid var(--hair);padding:14px 16px;background:linear-gradient(to bottom, rgba(6,6,8,.92), rgba(6,6,8,.4) 88%, transparent)}
+  nav{flex-direction:row;flex-wrap:wrap;margin-top:10px}
+  .serial,.tag{display:none}
+  .card{right:4vw;left:4vw;width:auto;top:auto;bottom:11vh}
+  .plate .left .eq{display:none}
+}
+</style>
+</head>
+<body>
+
+<canvas id="emblem" aria-label="Living emblem — drag to breed a variant"></canvas>
+<div class="vignette"></div>
+
+<aside class="rail">
+  <div class="brand">AION</div>
+  <span class="proto">PROTOTYPE C · v2 — PLATE RENDERER</span>
+  <p class="tag">The mark is not an image but a state. Watch it develop like a long exposure — then drag the field and it becomes yours.</p>
+
+  <nav id="nav" aria-label="Sections"></nav>
+
+  <div class="serial">
+    <div class="lbl">CURRENT STATE</div>
+    <div class="code" id="serial"></div>
+    <div class="hint">Drag anywhere to breed a variant. Release, and the exposure re-develops.</div>
+    <button class="link" id="copyLink">COPY LINK TO THIS EXACT FORM</button><span class="copied" id="copied"></span>
+  </div>
+</aside>
+
+<div class="card" id="card">
+  <span class="k" id="cardK"></span>
+  <h2 id="cardH"></h2>
+  <p id="cardP"></p>
+</div>
+
+<div class="plate">
+  <div class="left">
+    <div class="l1" id="plateTitle">AION · LIVING EMBLEM — STUDIO</div>
+    <div class="eq">x' = sin(a·y) + c·cos(a·x) &nbsp;&nbsp; y' = sin(b·x) + d·cos(b·y)</div>
+  </div>
+  <div class="right">
+    <div id="plateParams">a=−1.4&nbsp; b=1.6&nbsp; c=1.0&nbsp; d=0.7</div>
+    <div><b id="plateN">n = 0</b> depositions · seed <span id="plateSeed">4</span> · <span id="plateState">developing…</span></div>
+  </div>
+</div>
+
+<script>
+/* ================================================================
+   AION v2 — plate renderer
+   True orbit-density accumulation (like a 1e8-deposition print,
+   streamed live): histogram buffers + log tone-map + white cores
+   + angular lobe coloring. No libraries. No images.
+================================================================ */
+const SECTIONS = [
+ {key:"STUDIO", name:"Studio", p:[-1.4, 1.6, 1.0, 0.7], rot:0.12,
+  anchors:["#37C9A9","#D14B63","#E89A3C","#6C5CE0"], acc:"#37C9A9",
+  h:"The mark is a state, not a file.",
+  t:"This is the home configuration — the same four numbers as <b>Sedimentary Light, Plate I</b>. A print fixes one hundred million depositions forever; this page is the same organism, developing live and never finished."},
+ {key:"WORK", name:"Work", p:[1.7, 1.7, 0.6, 1.2], rot:0.35,
+  anchors:["#FFC98A","#FF5E3A","#F2E3C4","#B3502E"], acc:"#FFB36B",
+  h:"Every client gets a region of the space.",
+  t:"We don't deliver a logo; we deliver <b>coordinates</b>. A brand receives its own parameter region — infinite consistent variations for print, motion and product, all provably the same organism. The ember form on screen is one address in that space."},
+ {key:"ETHOS", name:"Ethos", p:[-1.8, -2.0, -0.5, -0.9], rot:0.62,
+  anchors:["#C99BFF","#5A43E8","#F0DFFF","#8A6BFF"], acc:"#C99BFF",
+  h:"Identity should behave, not sit still.",
+  t:"A static mark says the same thing to everyone forever. A living mark can respond — to section, to season, to the hand of the person watching. <b>The violet form shares every property of the first except its numbers.</b> That is the whole philosophy."},
+ {key:"CONTACT", name:"Contact", p:[-1.24, -1.25, -1.81, -1.91], rot:0.85, sc:0.155,
+  anchors:["#7FFFC9","#1FBF8F","#E2FFF1","#2E8FB3"], acc:"#7FFFC9",
+  h:"Bring us a brand that refuses to hold still.",
+  t:"hello@aion.studio — and when you write, <b>include the serial of the form you bred</b>. We keep a registry: every inquiry arrives with its own emblem, minted by the sender's hand, reproducible from four numbers and a seed."}
+];
+
+const $=id=>document.getElementById(id);
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv=$("emblem"), ctx=cv.getContext("2d");
+const hex2rgb=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const ease=t=>t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ---------------- buffers ---------------- */
+let W,H,bw,bh,buf,bctx,img,total,c0,c1,c2,c3,maxT,nDep;
+const seed = Math.floor(Math.random()*997)+1;
+let ox=(seed%89)/100, oy=(seed%67)/100;           /* orbit point */
+function resize(){
+  W=innerWidth; H=innerHeight;
+  cv.width=W; cv.height=H;
+  /* internal accumulation resolution — capped for tone-map speed */
+  const target=720000;
+  const scale=Math.min(1, Math.sqrt(target/(W*H)));
+  bw=Math.max(320,Math.round(W*scale)); bh=Math.max(240,Math.round(H*scale));
+  buf=document.createElement("canvas"); buf.width=bw; buf.height=bh;
+  bctx=buf.getContext("2d");
+  img=bctx.createImageData(bw,bh);
+  total=new Float32Array(bw*bh);
+  c0=new Float32Array(bw*bh); c1=new Float32Array(bw*bh);
+  c2=new Float32Array(bw*bh); c3=new Float32Array(bw*bh);
+  clearExposure();
+}
+function clearExposure(){
+  total.fill(0); c0.fill(0); c1.fill(0); c2.fill(0); c3.fill(0);
+  maxT=1e-6; nDep=0;
+}
+resize(); addEventListener("resize",()=>{resize(); if(reduced) developStatic();});
+
+/* ---------------- morph / drag state ---------------- */
+let from=SECTIONS[0].p.slice(), to=SECTIONS[0].p.slice(), morphT=1;
+let anchFrom=SECTIONS[0].anchors.map(hex2rgb), anchTo=anchFrom, rotFrom=SECTIONS[0].rot, rotTo=SECTIONS[0].rot;
+let dragOffset=[0,0,0,0], dragging=false, activeIdx=0;
+
+function effParams(){
+  const e=ease(Math.min(1,morphT));
+  return [0,1,2,3].map(i=> from[i]+(to[i]-from[i])*e + dragOffset[i]*(i<2?1:0.4));
+}
+function effAnchors(){
+  const e=ease(Math.min(1,morphT));
+  return anchFrom.map((A,i)=>A.map((v,k)=>v+(anchTo[i][k]-v)*e));
+}
+function effRot(){ const e=ease(Math.min(1,morphT)); return rotFrom+(rotTo-rotFrom)*e; }
+let scFrom=0.215, scTo=0.215;
+function effScale(){ const e=ease(Math.min(1,morphT)); return scFrom+(scTo-scFrom)*e; }
+
+/* ---------------- deposition ---------------- */
+const TAU=Math.PI*2;
+function deposit(n, params, rot){
+  const [a,b,c,d]=params;
+  const cx=bw*0.60, cy=bh*0.48;
+  const s=Math.min(bw,bh)*effScale();
+  let x=ox, y=oy, mt=maxT;
+  const sin=Math.sin, cos=Math.cos, atan2=Math.atan2;
+  for(let i=0;i<n;i++){
+    const nx=sin(a*y)+c*cos(a*x);
+    const ny=sin(b*x)+d*cos(b*y);
+    x=nx; y=ny;
+    const px=(cx+x*s)|0, py=(cy+y*s)|0;
+    if(px<0||py<0||px>=bw||py>=bh) continue;
+    const idx=py*bw+px;
+    /* angular lobe coloring: hue owned by region, not by time */
+    let u=(atan2(y,x)/TAU+0.5)*4 + rot*4;
+    u-= (u|0)>=4? 4*(((u|0)/4)|0) : 0;
+    const i0=(u|0)&3, f=u-(u|0);
+    const w1=f, w0=1-f;
+    if(i0===0){c0[idx]+=w0;c1[idx]+=w1;}
+    else if(i0===1){c1[idx]+=w0;c2[idx]+=w1;}
+    else if(i0===2){c2[idx]+=w0;c3[idx]+=w1;}
+    else {c3[idx]+=w0;c0[idx]+=w1;}
+    const t=(total[idx]+=1);
+    if(t>mt)mt=t;
+  }
+  ox=x; oy=y; maxT=mt; nDep+=n;
+}
+
+/* ---------------- tone map: log density → luminance, white-hot cores ---------------- */
+function tonemap(){
+  const A=effAnchors();
+  const d=img.data;
+  const invLog=1/Math.log1p(maxT);
+  const a0r=A[0][0],a0g=A[0][1],a0b=A[0][2], a1r=A[1][0],a1g=A[1][1],a1b=A[1][2],
+        a2r=A[2][0],a2g=A[2][1],a2b=A[2][2], a3r=A[3][0],a3g=A[3][1],a3b=A[3][2];
+  for(let i=0,j=0;i<total.length;i++,j+=4){
+    const t=total[i];
+    if(t<0.5){ d[j]=6; d[j+1]=6; d[j+2]=8; d[j+3]=255; continue; }
+    let L=Math.log1p(t)*invLog;
+    L=Math.sqrt(L)*L;                       /* ≈ gamma 1.5 on log density */
+    const inv=1/t;
+    let r=(c0[i]*a0r+c1[i]*a1r+c2[i]*a2r+c3[i]*a3r)*inv;
+    let g=(c0[i]*a0g+c1[i]*a1g+c2[i]*a2g+c3[i]*a3g)*inv;
+    let b=(c0[i]*a0b+c1[i]*a1b+c2[i]*a2b+c3[i]*a3b)*inv;
+    /* white-hot core where density saturates — the print look */
+    let core=L>0.68?(L-0.68)/0.32:0; core*=core*0.9;
+    r=r*L+(255-r*L)*core; g=g*L+(255-g*L)*core; b=b*L+(255-b*L)*core;
+    d[j]=6+r; d[j+1]=6+g; d[j+2]=8+b; d[j+3]=255;
+  }
+  bctx.putImageData(img,0,0);
+  ctx.imageSmoothingEnabled=true;
+  ctx.imageSmoothingQuality="high";
+  ctx.drawImage(buf,0,0,W,H);
+}
+
+/* ---------------- frame loop (adaptive batch) ---------------- */
+let batch=110000, lastNow=performance.now(), frameNo=0;
+function frame(now){
+  const dt=now-lastNow; lastNow=now;
+  /* adaptive: keep ~60fps */
+  if(dt>34) batch=Math.max(40000,batch*0.88);
+  else if(dt<22) batch=Math.min(240000,batch*1.04);
+
+  const settling = morphT<1 || dragging;
+  if(morphT<1) morphT=Math.min(1,morphT+dt/1700);
+  if(settling){
+    clearExposure();                        /* live wireframe while in motion */
+    deposit(70000, effParams(), effRot());
+  }else{
+    deposit(batch|0, effParams(), effRot());
+  }
+  tonemap();
+
+  if(++frameNo%8===0){
+    $("plateN").textContent="n = "+nDep.toExponential(2).replace("+","");
+    $("plateState").textContent= settling? "in motion" : nDep<2.5e6? "developing…" : "settled · still accumulating";
+    if(!dragging) setSerial();
+  }
+  requestAnimationFrame(frame);
+}
+function developStatic(){
+  clearExposure();
+  deposit(2600000, effParams(), effRot());
+  tonemap();
+  $("plateN").textContent="n = "+nDep.toExponential(2).replace("+","");
+  $("plateState").textContent="static exposure (reduced motion)";
+  setSerial();
+}
+
+/* ---------------- sections / nav ---------------- */
+const fmt=v=>(v>=0?"+":"−")+Math.abs(v).toFixed(3);
+function setSerial(){
+  const p=effParams();
+  $("serial").innerHTML=`a ${fmt(p[0])}&nbsp;&nbsp;b ${fmt(p[1])}<br>c ${fmt(p[2])}&nbsp;&nbsp;d ${fmt(p[3])}`;
+  $("plateParams").textContent=`a=${p[0].toFixed(2)}  b=${p[1].toFixed(2)}  c=${p[2].toFixed(2)}  d=${p[3].toFixed(2)}`;
+}
+const navEl=$("nav");
+function goTo(i, instant){
+  activeIdx=i;
+  const s=SECTIONS[i];
+  from=effParams().map((v,k)=>v-dragOffset[k]*(k<2?1:0.4));
+  to=s.p.slice(); dragOffset=[0,0,0,0];
+  anchFrom=effAnchors(); anchTo=s.anchors.map(hex2rgb);
+  rotFrom=effRot(); rotTo=s.rot;
+  scFrom=effScale(); scTo=s.sc||0.215;
+  morphT=(instant||reduced)?1:0;
+  document.documentElement.style.setProperty("--acc",s.acc);
+  $("cardK").textContent=s.key; $("cardH").textContent=s.h; $("cardP").innerHTML=s.t;
+  $("plateTitle").textContent="AION · LIVING EMBLEM — "+s.key;
+  [...navEl.children].forEach((b,k)=>b.classList.toggle("active",k===i));
+  if(reduced){ from=to.slice(); developStatic(); }
+  else if(instant){ clearExposure(); }
+  setSerial();
+}
+SECTIONS.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.innerHTML=`<span class="n-name">${s.name}</span><span class="n-params">${s.p.map(v=>v.toFixed(1)).join(" ")}</span>`;
+  b.addEventListener("click",()=>goTo(i));
+  navEl.appendChild(b);
+});
+
+/* ---------------- drag to breed ---------------- */
+let lastX=0,lastY=0;
+cv.addEventListener("pointerdown",e=>{dragging=true;lastX=e.clientX;lastY=e.clientY;cv.classList.add("dragging");cv.setPointerCapture(e.pointerId);});
+cv.addEventListener("pointermove",e=>{
+  if(!dragging)return;
+  dragOffset[0]=clamp(dragOffset[0]+(e.clientX-lastX)*0.0016,-0.5,0.5);
+  dragOffset[1]=clamp(dragOffset[1]+(e.clientY-lastY)*0.0016,-0.5,0.5);
+  dragOffset[2]=clamp(dragOffset[2]+(e.clientX-lastX)*0.0006,-0.3,0.3);
+  dragOffset[3]=clamp(dragOffset[3]-(e.clientY-lastY)*0.0006,-0.3,0.3);
+  lastX=e.clientX;lastY=e.clientY;
+  setSerial();
+  if(reduced) developStatic();
+});
+cv.addEventListener("pointerup",()=>{
+  dragging=false; cv.classList.remove("dragging");
+  clearExposure();                          /* re-develop the bred form */
+});
+
+/* ---------------- linkable state ---------------- */
+$("copyLink").addEventListener("click",async ()=>{
+  const p=effParams().map(v=>v.toFixed(3)).join(",");
+  const url=location.origin+location.pathname+"#s="+activeIdx+"&p="+p+"&seed="+seed;
+  try{ await navigator.clipboard.writeText(url); }catch(e){}
+  history.replaceState(null,"","#s="+activeIdx+"&p="+p+"&seed="+seed);
+  $("copied").textContent="✓ copied";
+  setTimeout(()=>$("copied").textContent="",1800);
+});
+(function boot(){
+  $("plateSeed").textContent=seed;
+  const m=location.hash.match(/s=(\d+)&p=([-\d.,]+)/);
+  if(m){
+    const i=Math.min(SECTIONS.length-1,parseInt(m[1],10)||0);
+    goTo(i,true);
+    const ps=m[2].split(",").map(Number);
+    if(ps.length===4&&ps.every(v=>isFinite(v))){ from=ps.slice(); to=ps.slice(); }
+  }else goTo(0,true);
+  if(reduced) developStatic();
+  else requestAnimationFrame(now=>{lastNow=now;frame(now);});
+})();
+</script>
+</body>
+</html>
