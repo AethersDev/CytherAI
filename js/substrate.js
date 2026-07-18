@@ -22,13 +22,23 @@ const BGS     = [["#ECF0F4","#101620"],["#B9C3D2","#131A26"],["#3A4658","#DDE6F2
 const PANELS  = [[255,255,255,.60],[240,245,251,.55],[14,20,29,.50],[10,15,23,.55]];
 const ACCENTS = ["#2036C7","#2A48D6","#5F7BFF","#7FA0FF"];
 const ORBIT_N = 220000;
-const TILE_N  = [38000, 80000, 140000, 220000];
-const TILE_STYLE = [
-  { col:[16,22,32],   a:0.32, acc:0 },
-  { col:[36,52,110],  a:0.30, acc:0 },
-  { col:[150,175,235],a:0.30, acc:9 },
-  { col:[192,212,255],a:0.28, acc:6 }
+/* ================= the plate grammar (P8 — plate replaces scatter) =================
+   aion-v2 deposition per exposure: four anchor inks per plate, hue owned by the
+   ANGULAR REGION of the orbit (not by time or density); one lobe of every plate
+   carries its depth's accent. rot re-indexes lobe ownership per exposure, so the
+   crossfade reads as another exposure of the same state, not a resolution level.
+   Light plates deposit ink (core = densest ink); dark plates are luminous
+   (core = white emission, earned only where density saturates). */
+const PLATE = [
+  { anchors:[[16,22,32],[30,44,96],[10,13,20],[32,54,199]],           rot:0.12, core:[6,9,18],      amax:0.95 },
+  { anchors:[[36,52,110],[22,32,72],[42,72,214],[16,22,48]],          rot:0.35, core:[8,12,32],     amax:0.95 },
+  { anchors:[[137,159,214],[95,123,255],[173,187,223],[109,132,205]], rot:0.62, core:[240,246,255], amax:0.97 },
+  { anchors:[[167,184,222],[127,160,255],[196,205,222],[83,107,222]], rot:0.85, core:[255,255,255], amax:1.00 }
 ];
+const PLATE_DEP = [900000, 1200000, 1800000, 2400000];   /* in-view deposit targets */
+const PLATE_CAP = [6e6, 9e6, 22e6, 34e6];                /* recurrence iteration ceilings */
+const BIN_TGT   = 720000;                                /* accumulation cells — v2's cap */
+const TAU = Math.PI * 2;
 
 /* ================= small math ================= */
 const clamp  = (v,a,b) => Math.max(a, Math.min(b, v));
@@ -153,29 +163,84 @@ if (typeof document !== "undefined") {
     U = Math.min(W, H) / bounds.span * 0.92;
   }
 
-  function renderTile(i) {
-    const cv = tiles[i], z = ZOOMS[i], c = ANCH[i];
+  function beginPlate(i) {
+    const z = ZOOMS[i], c = ANCH[i], cv = tiles[i];
     cv.width = W * DPR; cv.height = H * DPR;
     cv.style.width = W + "px"; cv.style.height = H + "px";
     const g = cv.getContext("2d");
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    g.clearRect(0, 0, W, H);
-    const st = TILE_STYLE[i], n = TILE_N[i];
-    const zu = z * U, ox = W/2 - c[0]*zu, oy = H/2 - c[1]*zu;
-    g.fillStyle = `rgba(${st.col[0]},${st.col[1]},${st.col[2]},${st.a})`;
-    for (let k = 0; k < n; k++) {
-      const sx = pts[k*2]*zu + ox, sy = pts[k*2+1]*zu + oy;
-      if (sx < -2 || sy < -2 || sx > W+2 || sy > H+2) continue;
-      g.fillRect(sx, sy, 1, 1);
+    /* accumulate at v2's capped internal resolution — the drawImage upscale is the plate grain */
+    const sc = Math.min(1, Math.sqrt(BIN_TGT / (W * H)));
+    const bw = Math.max(320, Math.round(W * sc)), bh = Math.max(240, Math.round(H * sc));
+    const off = document.createElement("canvas"); off.width = bw; off.height = bh;
+    const sp = PLATE[i];
+    const st = { i, g, bw, bh, off, octx: off.getContext("2d"),
+      total: new Float32Array(bw * bh),
+      c0: new Float32Array(bw * bh), c1: new Float32Array(bw * bh),
+      c2: new Float32Array(bw * bh), c3: new Float32Array(bw * bh),
+      zu: z * U * sc, ox: (W / 2) * sc - c[0] * z * U * sc, oy: (H / 2) * sc - c[1] * z * U * sc,
+      x: 0.08, y: 0.12, dep: 0, it: 0, maxT: 1e-6,
+      target: PLATE_DEP[i], cap: PLATE_CAP[i],
+      anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
+    st.img = st.octx.createImageData(bw, bh);
+    const a = P[0], b = P[1], cc = P[2], d = P[3];
+    for (let k = 0; k < 40; k++) { const nx = Math.sin(a*st.y) + cc*Math.cos(a*st.x), ny = Math.sin(b*st.x) + d*Math.cos(b*st.y); st.x = nx; st.y = ny; }
+    return st;
+  }
+
+  /* v2 deposition, verbatim grammar: angular lobe coloring — hue owned by region */
+  function depositBatch(st, n) {
+    const a = P[0], b = P[1], c = P[2], d = P[3];
+    const bw = st.bw, bh = st.bh, zu = st.zu, ox = st.ox, oy = st.oy, rot = st.rot;
+    const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
+    const sin = Math.sin, cos = Math.cos, atan2 = Math.atan2;
+    let x = st.x, y = st.y, mt = st.maxT, dep = st.dep, it = st.it;
+    for (let i = 0; i < n && it < st.cap; i++) {
+      const nx = sin(a*y) + c*cos(a*x), ny = sin(b*x) + d*cos(b*y);
+      x = nx; y = ny; it++;
+      const fx = x*zu + ox, fy = y*zu + oy;
+      if (fx < 0 || fy < 0 || fx >= bw || fy >= bh) continue;
+      const idx = (fy|0)*bw + (fx|0);
+      let u = (atan2(y, x)/TAU + 0.5)*4 + rot*4;
+      u -= ((u/4)|0)*4;
+      const i0 = u|0, f = u - i0, w0 = 1 - f;
+      if (i0 === 0) { c0[idx] += w0; c1[idx] += f; }
+      else if (i0 === 1) { c1[idx] += w0; c2[idx] += f; }
+      else if (i0 === 2) { c2[idx] += w0; c3[idx] += f; }
+      else { c3[idx] += w0; c0[idx] += f; }
+      const t = (total[idx] += 1);
+      if (t > mt) mt = t;
+      dep++;
     }
-    if (st.acc) {
-      g.fillStyle = "rgba(127,160,255,.5)";
-      for (let k = 0; k < n; k += st.acc) {
-        const sx = pts[k*2]*zu + ox, sy = pts[k*2+1]*zu + oy;
-        if (sx < -2 || sy < -2 || sx > W+2 || sy > H+2) continue;
-        g.fillRect(sx, sy, 1, 1);
-      }
+    st.x = x; st.y = y; st.maxT = mt; st.dep = dep; st.it = it;
+  }
+
+  /* v2 tone map: log density → luminance (γ1.5 on log), quadratic core (onset .68).
+     v2 bakes an opaque ground; here the ambient is the page, so luminance drives alpha. */
+  function tonemapPlate(st) {
+    const A = st.anchors, core = st.core, amax = st.amax, d = st.img.data;
+    const invLog = 1 / Math.log1p(st.maxT);
+    const a0r=A[0][0],a0g=A[0][1],a0b=A[0][2],a1r=A[1][0],a1g=A[1][1],a1b=A[1][2],
+          a2r=A[2][0],a2g=A[2][1],a2b=A[2][2],a3r=A[3][0],a3g=A[3][1],a3b=A[3][2];
+    const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
+    for (let i = 0, j = 0; i < total.length; i++, j += 4) {
+      const t = total[i];
+      if (t < 0.5) { d[j+3] = 0; continue; }
+      let L = Math.log1p(t) * invLog;
+      L = Math.sqrt(L) * L;                       /* ≈ gamma 1.5 on log density */
+      const inv = 1 / t;
+      let r = (c0[i]*a0r + c1[i]*a1r + c2[i]*a2r + c3[i]*a3r) * inv;
+      let g = (c0[i]*a0g + c1[i]*a1g + c2[i]*a2g + c3[i]*a3g) * inv;
+      let b = (c0[i]*a0b + c1[i]*a1b + c2[i]*a2b + c3[i]*a3b) * inv;
+      let cw = L > 0.68 ? (L - 0.68) / 0.32 : 0; cw *= cw * 0.9;
+      r += (core[0]-r)*cw; g += (core[1]-g)*cw; b += (core[2]-b)*cw;
+      d[j] = r; d[j+1] = g; d[j+2] = b;
+      d[j+3] = Math.min(255, L * amax * 255);
     }
+    st.octx.putImageData(st.img, 0, 0);
+    st.g.clearRect(0, 0, W, H);
+    st.g.imageSmoothingEnabled = true; st.g.imageSmoothingQuality = "high";
+    st.g.drawImage(st.off, 0, 0, st.bw, st.bh, 0, 0, W, H);
   }
 
   function renderCore() {
@@ -219,21 +284,39 @@ if (typeof document !== "undefined") {
   }
 
   /* ================= develop the exposures (boot + fork) ================= */
-  let renderQueue = [];
+  let plateQueue = [], plateDev = null;
+  let batch = 110000, lastT = 0;
+  const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
   function developAll() {
-    const g = computeOrbit(P); pts = g.pts;                  /* native — tiles */
+    const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
     const cam = deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;  /* dsin — camera */
     layout();
-    renderQueue = [0,1,2,3];
+    const d = lastP * 3;
+    plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
+    plateDev = null; batch = 110000; lastT = nowMs();
+    developing = true;
     hooks.wake();
   }
-  /* step() — registered with site's shared rAF loop; renders one queued tile per frame,
-     then the core + a settling observe. Returns busy so the loop stays awake until drained. */
+  /* step() — registered with site's shared rAF loop. Each frame deposits one adaptive batch
+     into the developing plate and tonemaps it — the streamed exposure — then the loop sleeps
+     once all four settle. Reduced motion: no progressive development; plates appear whole. */
   function step() {
-    if (!renderQueue.length) return false;
-    const i = renderQueue.shift();
-    renderTile(i);
-    if (!renderQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
+    if (!plateDev) {
+      if (!plateQueue.length) return false;
+      plateDev = beginPlate(plateQueue.shift());
+    }
+    const t = nowMs(), dt = t - lastT; lastT = t;
+    if (!reduced) {
+      if (dt > 34) batch = Math.max(40000, batch * 0.88);
+      else if (dt < 22) batch = Math.min(240000, batch * 1.04);
+    }
+    depositBatch(plateDev, reduced ? 600000 : batch | 0);
+    const done = plateDev.dep >= plateDev.target || plateDev.it >= plateDev.cap;
+    if (done || !reduced) tonemapPlate(plateDev);
+    if (done) {
+      plateDev = null;
+      if (!plateQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
+    }
     return true;
   }
   /* redevelop from the (possibly forked) params — async via the render queue */
@@ -300,11 +383,8 @@ if (typeof document !== "undefined") {
       P = opts.initialParams.slice();
       if (opts.fromLink) linkParams = P.slice();
     }
-    const g = computeOrbit(P); pts = g.pts;
-    const cam = deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;
     canonAnch = deriveAnchors(CM.CANON).ANCH;   /* canonical camera — the derivation CL-08 re-checks */
-    layout();
-    for (let k = 0; k < 4; k++) renderTile(k);
+    developAll();                               /* the site loop streams the exposure */
     renderCore();
     wireGestures();
     observe(0);
@@ -318,7 +398,7 @@ if (typeof document !== "undefined") {
        holds; the debounced pass heals coverage once the gesture settles */
     const heightOnly = innerWidth === W && Math.abs(innerHeight - H) < 160;
     clearTimeout(rzT);
-    rzT = setTimeout(() => { layout(); for (let k = 0; k < 4; k++) renderTile(k); renderCore(); observe(lastP); },
+    rzT = setTimeout(() => { developAll(); renderCore(); observe(lastP); },
       heightOnly ? 450 : 160);
     observe(lastP);
   }, { passive: true });
