@@ -307,7 +307,7 @@ if (typeof document !== "undefined") {
   /* ================= develop the exposures (boot + fork) ================= */
   let plateQueue = [], plateDev = null;
   const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
-  let batch = 110000, lastT = 0;
+  let batch = 110000, lastT = 0, devSum = 0, devPlateN = 0;
   const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
   function developAll() {
     const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
@@ -316,7 +316,7 @@ if (typeof document !== "undefined") {
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
     fields[0] = fields[1] = fields[2] = fields[3] = null;
-    plateDev = null; batch = 110000; lastT = nowMs();
+    plateDev = null; batch = 110000; lastT = nowMs(); devSum = 0; devPlateN = 0;
     developing = true;
     hooks.wake();
   }
@@ -327,6 +327,7 @@ if (typeof document !== "undefined") {
     if (!plateDev) {
       if (!plateQueue.length) return false;
       plateDev = beginPlate(plateQueue.shift());
+      devPlateN++;
     }
     const t = nowMs(), dt = t - lastT; lastT = t;
     if (!reduced) {
@@ -339,6 +340,7 @@ if (typeof document !== "undefined") {
     if (done) {
       fields[plateDev.i] = { total: plateDev.total, bw: plateDev.bw, bh: plateDev.bh,
                             sc: plateDev.sc, maxT: plateDev.maxT };   /* density outlives the develop; lobes are freed */
+      devSum += plateDev.dep;
       plateDev = null;
       if (!plateQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
     }
@@ -479,6 +481,7 @@ if (typeof document !== "undefined") {
   API.serial = serial;
   API.status = status;
   API.isDeveloping = () => developing;
+  API.exposure = () => developing ? { plate: devPlateN, n: devSum + (plateDev ? plateDev.dep : 0) } : null;
   API.fieldEnergy = fieldEnergy;
   API.corridors = corridorsFor;
 }

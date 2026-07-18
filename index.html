@@ -9,7 +9,7 @@
 <meta property="og:title" content="CytherAI — Sovereign Operational AI">
 <meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="63DD818CB31414D4">
+<meta name="build-hash" content="F15692A67C90783D">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
@@ -292,19 +292,23 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
    more attentional authority than its semantic role grants. */
 body{transition:color .25s ease}
 body[data-ink="light"]{--ink:#E3EAF4}
-body.at-rest #world{opacity:.72}
+/* the ink switch is a controlled crossfade, not a page flash; the weight-field
+   and wave glyphs (.g) keep their per-frame inline colors untransitioned */
+main *:not(.g),header *,footer *,aside *,.strip *,.optics *{transition-property:color;transition-duration:.25s}
+/* the world yields slowly and returns fast — focus pull, both directions honest */
+body.at-rest #world{opacity:.72;transition-duration:.6s}
 body[data-optics="read"] #world{opacity:.5}
 body[data-optics="world"] #world{opacity:1}
 
 .env{position:relative;z-index:0}
-.env::before{content:"";position:absolute;inset:-2.2em -2.6em;z-index:-1;pointer-events:none;
-  backdrop-filter:blur(calc(var(--envK,.7)*12px)) saturate(calc(1 - var(--envK,.7)*.45));
+.env::before{content:"";position:absolute;inset:-2.6em -3.2em;z-index:-1;pointer-events:none;
+  backdrop-filter:blur(calc(var(--envK,.7)*10px)) saturate(calc(1 - var(--envK,.7)*.45));
   opacity:.35;transition:opacity .35s ease,background .35s ease;
-  mask-image:linear-gradient(to right,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent),
-             linear-gradient(to bottom,transparent,#000 1.8em,#000 calc(100% - 1.8em),transparent);
+  mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
+             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
   mask-composite:intersect;
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent),
-             linear-gradient(to bottom,transparent,#000 1.8em,#000 calc(100% - 1.8em),transparent);
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
+             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
   -webkit-mask-composite:source-in}
 body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
 body[data-optics="world"] .env::before{opacity:.18}
@@ -318,8 +322,24 @@ body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
 body[data-phase="flip"] .glass,body[data-phase="flip"] .rl-head,body[data-phase="flip"] .rl-body,
 body[data-phase="flip"] .chrome,body[data-phase="flip"] .strip,
 body[data-phase="flip"] .optics button{background:rgba(16,22,31,.82)}
-body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phase="depth"] .rl-body{background:rgba(10,15,23,.62)}
-body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.9)}
+body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phase="depth"] .rl-body{background:rgba(10,15,23,.72)}
+body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.93)}
+
+/* secondary text does not dim merely for being secondary: on the dark phases the
+   low-alpha greys tuned for paper get swallowed — lift the mixes under light ink */
+body[data-ink="light"] .zone-label{color:color-mix(in srgb,var(--ink) 86%,transparent)}
+body[data-ink="light"] .dek,body[data-ink="light"] .def .d-body,body[data-ink="light"] td{color:color-mix(in srgb,var(--ink) 88%,transparent)}
+body[data-ink="light"] .bi-cap,body[data-ink="light"] .path p,body[data-ink="light"] .meth .v,body[data-ink="light"] .rl-log{color:color-mix(in srgb,var(--ink) 86%,transparent)}
+body[data-ink="light"] .bi-stats,body[data-ink="light"] .i-btn{color:color-mix(in srgb,var(--ink) 85%,transparent)}
+body[data-ink="light"] .bi-log,body[data-ink="light"] .colophon-notes p{color:color-mix(in srgb,var(--ink) 80%,transparent)}
+body[data-ink="light"] .sys .facts,body[data-ink="light"] .rl-note{color:color-mix(in srgb,var(--ink) 78%,transparent)}
+body[data-ink="light"] .sealed-fields,body[data-ink="light"] .b-sub,body[data-ink="light"] .ep{color:color-mix(in srgb,var(--ink) 76%,transparent)}
+body[data-ink="light"] .depth-line,body[data-ink="light"] .p-label,body[data-ink="light"] .p-note,
+body[data-ink="light"] .manifest .m-k,body[data-ink="light"] footer{color:color-mix(in srgb,var(--ink) 74%,transparent)}
+body[data-ink="light"] .locked-note,body[data-ink="light"] .legend,body[data-ink="light"] th,
+body[data-ink="light"] .meth .k,body[data-ink="light"] .m-title,body[data-ink="light"] .ep-title,
+body[data-ink="light"] .ep-note,body[data-ink="light"] .s-id,body[data-ink="light"] .cause .c-k{color:color-mix(in srgb,var(--ink) 72%,transparent)}
+body[data-ink="light"] .strip{color:color-mix(in srgb,var(--ink) 82%,transparent)}
 
 /* type weight is an optical instrument: heavier where the field is hardest, settling at rest */
 body[data-phase="surface"]{--hw:280}
@@ -328,6 +348,8 @@ body[data-phase="depth"]{--hw:330}
 body[data-phase="core"]{--hw:310}
 .sec-h{font-weight:var(--hw,300);transition:font-weight .3s ease,color .25s ease}
 body.at-rest .sec-h{font-weight:calc(var(--hw,300) + 30)}
+.law{transition:font-weight .35s ease,color .25s ease}
+body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
 /* the negative-space atlas: strata read from their plate's quiet third */
 @media(min-width:1100px){
@@ -640,10 +662,10 @@ body.at-rest .sec-h{font-weight:calc(var(--hw,300) + 30)}
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-NZC+VrSemaIbIpxVNoYzMWTpJgi69GwI1jL2T1dOjJj3kyV6PjvWptk5mULzNgl0" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-PWbbFF0NXco/izTMQJsj7L3vGcKhRWMwzFPbzI2UApVwidmyUxMBF8Q73krqwW2K" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-eskxveFebFiKFyZhfasyZx1InKwawJd/X279V9qkfyx4w3HnFlLMy4Ah5VqKoUXM" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-qAqRD8MIiXDyurDpLCG08wLzgPrFBBJ3yWebRDaf9wxnc1ovjdqnmWluvGHBGO3w" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-hc3dtLIX4t/da0jmRs6G28GZYUZz90fWgPlcCSI/x6geWBcglPyzAxfS3A4+nw3v" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-CSR7NDWmo8AOChVAx5PL24h/al49VxoJfvYeM4804NJe9PyZ8XU/s36TL4bB7D+3" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-d3B52290fLCTFJe85JbLqRFfL6Rb3wzT0UaNg+ftsvffw18VA+WPWPhSxEGbB6mI" crossorigin="anonymous"></script>
 </body>
 </html>
