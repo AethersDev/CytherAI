@@ -9,7 +9,7 @@
 <meta property="og:title" content="CytherAI — Sovereign Operational AI">
 <meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="CDEE3B42083BEB85">
+<meta name="build-hash" content="63DD818CB31414D4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
@@ -20,9 +20,9 @@
    written by CytherSubstrate.observe() across four keyframes. No dark mode
    toggle — the light descends continuously. No webfonts, no images, no CDNs. */
 :root{
-  --bg:#ECF0F4; --ink:#101620; --accent:#2036C7;
+  --bg:#ECF0F4; --ink:#101620; --inkA:#101620; --accent:#2036C7;
   --panel:rgba(255,255,255,.60);
-  --hair:color-mix(in srgb, var(--ink) 16%, transparent);
+  --hair:color-mix(in srgb, var(--inkA) 16%, transparent);
   --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
   --display:system-ui,-apple-system,'Segoe UI Variable Display','Segoe UI',sans-serif;
 }
@@ -39,7 +39,8 @@ a{color:inherit}
   padding:8px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
 
 /* ════════════ the substrate — four exposures of one object ════════════ */
-.tile{position:fixed;inset:0;z-index:-2;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
+#world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
+.tile{position:absolute;inset:0;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
 #substrate{position:fixed;inset:0;z-index:0}
 body.forking #substrate{cursor:grabbing}
 
@@ -65,7 +66,7 @@ body.forking #substrate{cursor:grabbing}
 main{position:relative;z-index:1;pointer-events:none}
 main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
 section{padding:15vh 28px;max-width:1160px;margin:0 auto}
-.zone-label{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;
+.zone-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
   color:color-mix(in srgb,var(--ink) 70%,transparent);margin-bottom:4.5vh}
 .zone-label b{color:var(--accent);font-weight:500}
 .sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
@@ -80,9 +81,9 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
   cursor:default;user-select:none;max-width:15ch}
 .thesis .wd{white-space:nowrap;display:inline-block}
 .thesis .g{display:inline-block;font-weight:250;will-change:font-weight}
-.dek{font-size:14.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
+.dek{font-size:15.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
   max-width:54ch;margin-top:3.4vh}
-.decomp{font-family:var(--mono);font-size:10px;letter-spacing:.14em;line-height:2;
+.decomp{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;line-height:2;
   color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:3.4vh}
 .decomp b{color:color-mix(in srgb,var(--ink) 85%,transparent);font-weight:500}
 .ctas{display:flex;gap:12px;margin-top:4vh;flex-wrap:wrap}
@@ -100,7 +101,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .def{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:2.6vh 0;align-items:baseline;
   border-top:1px solid var(--hair)}
 .def .d-mode{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:500}
-.def .d-body{font-size:13px;line-height:1.7;color:color-mix(in srgb,var(--ink) 78%,transparent)}
+.def .d-body{font-size:15px;line-height:1.7;color:color-mix(in srgb,var(--ink) 78%,transparent)}
 @media(max-width:640px){.def{grid-template-columns:1fr;gap:6px}}
 
 /* ════════════ architecture ladder ════════════ */
@@ -121,7 +122,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px}
 .sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
 .sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
-.sys .o-label{display:block;font-family:var(--mono);font-size:9px;letter-spacing:.18em;
+.sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
   color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:18px}
 .sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;margin-top:6px;line-height:1.7}
 
@@ -133,9 +134,9 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 
 /* ════════════ boundary instrument ════════════ */
 .bi{margin-top:6vh;padding:20px 22px;max-width:860px}
-.bi-head{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
 .bi-head b{color:var(--accent);font-weight:500}
-.bi-cap{font-size:12.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
+.bi-cap{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
 .bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
 #biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
 .bi-log{font-family:var(--mono);font-size:9.5px;line-height:1.9;min-width:220px;flex:1;min-height:130px;
@@ -147,11 +148,11 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 
 /* ════════════ measurement ════════════ */
 .val-panel{padding:22px 24px 6px;max-width:860px}
-.legend{display:flex;gap:22px;font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+.legend{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
   color:color-mix(in srgb,var(--ink) 58%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
 .legend .lv{color:var(--accent)}
 table{width:100%;border-collapse:collapse;font-family:var(--mono)}
-th{font-size:9px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent);
   text-align:right;font-weight:400;padding:14px 0 8px}
 th:first-child{text-align:left}
 th.cy{color:var(--accent)}
@@ -173,7 +174,7 @@ td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 /* ════════════ the boundary ════════════ */
 .boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
 .boundary .b-line{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--ink)}
-.boundary .b-sub{font-family:var(--mono);font-size:10px;line-height:1.9;
+.boundary .b-sub{font-family:var(--mono);font-size:10.5px;line-height:1.9;
   color:color-mix(in srgb,var(--ink) 58%,transparent);margin:14px auto 0;max-width:52ch}
 .b-hold{position:relative;overflow:hidden;display:inline-block;margin-top:3.4vh;
   font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:13px 22px;
@@ -189,14 +190,14 @@ body.crossed .b-state{color:var(--accent)}
 /* ════════════ controlled stratum ════════════ */
 .sealed{min-height:72vh;display:flex;flex-direction:column;justify-content:center}
 .ghost{font-size:clamp(34px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spacing:-.015em;
-  color:color-mix(in srgb,var(--ink) 10%,transparent);user-select:none}
-body.crossed .ghost{color:color-mix(in srgb,var(--ink) 24%,transparent)}
+  color:color-mix(in srgb,var(--inkA) 10%,transparent);user-select:none}
+body.crossed .ghost{color:color-mix(in srgb,var(--inkA) 24%,transparent)}
 .sealed-fields{font-family:var(--mono);font-size:10.5px;line-height:2;margin-top:4vh;
   color:color-mix(in srgb,var(--ink) 58%,transparent);opacity:.35;transition:opacity .6s}
 body.crossed .sealed-fields{opacity:1}
 @media(prefers-reduced-motion:reduce){.sealed-fields{transition:none}}
 .sealed-fields .fv{color:color-mix(in srgb,var(--ink) 82%,transparent)}
-.locked-note{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+.locked-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
   color:color-mix(in srgb,var(--ink) 45%,transparent);margin-top:2.2vh}
 body.crossed .locked-note{display:none}
 .sealed .depth-line{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
@@ -207,16 +208,16 @@ body.crossed .locked-note{display:none}
 .clearance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px}
 .path{padding:22px 20px 24px;position:relative}
 .path-featured{border-color:var(--accent)}
-.path .p-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
 .path h4{font-size:17px;font-weight:600;margin-top:12px}
-.path p{font-size:12.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
+.path p{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
 .path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:14px}
 .path .btn{margin-top:16px}
 
 /* ════════════ the floor — law + records ════════════ */
 .law{font-size:clamp(22px,3vw,38px);font-weight:300;line-height:1.5;letter-spacing:.01em;max-width:22ch;color:var(--ink)}
 .manifest{margin-top:8vh;max-width:540px;font-family:var(--mono)}
-.manifest .m-title{font-size:9px;letter-spacing:.24em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+.manifest .m-title{font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent);
   padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .manifest .m-row{display:flex;justify-content:space-between;gap:18px;font-size:10.5px;letter-spacing:.08em;
   padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
@@ -229,7 +230,7 @@ body.crossed .locked-note{display:none}
 .manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 55%,transparent);font-weight:400}
 
 .epochs{margin-top:8vh;max-width:660px}
-.ep-title{font-family:var(--mono);font-size:9px;letter-spacing:.24em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+.ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent);
   padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .ep-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0 6px}
 .ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 62%,transparent)}
@@ -266,7 +267,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 #rlDigest{color:var(--accent)}
 .rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
   border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
-.rl-note{font-size:8.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 62%,transparent)}
 .rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
 .rl-log b{color:var(--accent);font-weight:500}
 .rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
@@ -284,6 +285,61 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 .strip .grow{flex:1}
 @media(max-width:640px){.strip{gap:9px;font-size:8.5px}#forkStatus{display:none}}
 
+/* ════════════ reading exposure — the record's own law (P9) ════════════
+   Two exposures, independently governed. WORLD: depth → camera → plate → ambient.
+   READING: bistable ink (hysteresis in site.js), phase-changed panel materials,
+   density-conditioned envelopes, rest-state amplitude. No component exercises
+   more attentional authority than its semantic role grants. */
+body{transition:color .25s ease}
+body[data-ink="light"]{--ink:#E3EAF4}
+body.at-rest #world{opacity:.72}
+body[data-optics="read"] #world{opacity:.5}
+body[data-optics="world"] #world{opacity:1}
+
+.env{position:relative;z-index:0}
+.env::before{content:"";position:absolute;inset:-2.2em -2.6em;z-index:-1;pointer-events:none;
+  backdrop-filter:blur(calc(var(--envK,.7)*12px)) saturate(calc(1 - var(--envK,.7)*.45));
+  opacity:.35;transition:opacity .35s ease,background .35s ease;
+  mask-image:linear-gradient(to right,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent),
+             linear-gradient(to bottom,transparent,#000 1.8em,#000 calc(100% - 1.8em),transparent);
+  mask-composite:intersect;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent),
+             linear-gradient(to bottom,transparent,#000 1.8em,#000 calc(100% - 1.8em),transparent);
+  -webkit-mask-composite:source-in}
+body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
+body[data-optics="world"] .env::before{opacity:.18}
+
+/* panels undergo a material phase change; the flip membrane also grounds envelopes */
+.glass,.rl-head,.rl-body,.chrome,.strip{transition:background .35s ease,color .25s ease}
+body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
+body[data-phase="flip"] .glass,body[data-phase="flip"] .rl-head,body[data-phase="flip"] .rl-body,
+body[data-phase="flip"] .chrome,body[data-phase="flip"] .strip{background:rgba(16,22,31,.82)}
+body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phase="depth"] .rl-body{background:rgba(10,15,23,.62)}
+body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.9)}
+
+/* type weight is an optical instrument: heavier where the field is hardest, settling at rest */
+body[data-phase="surface"]{--hw:280}
+body[data-phase="flip"]{--hw:350}
+body[data-phase="depth"]{--hw:330}
+body[data-phase="core"]{--hw:310}
+.sec-h{font-weight:var(--hw,300);transition:font-weight .3s ease,color .25s ease}
+body.at-rest .sec-h{font-weight:calc(var(--hw,300) + 30)}
+
+/* the negative-space atlas: strata read from their plate's quiet third */
+@media(min-width:1100px){
+  .corridor-l{margin-left:max(28px,4vw);margin-right:auto;max-width:980px}
+  .corridor-r{margin-left:auto;margin-right:max(28px,4vw);max-width:980px}
+}
+
+/* reader-governed optics — the artifact does not force its aesthetic priority */
+.optics{position:fixed;right:10px;bottom:52px;z-index:25;display:flex;font-family:var(--mono)}
+.optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 62%,transparent);
+  background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
+.optics button+button{border-left:none}
+.optics button[aria-pressed="true"]{color:var(--accent)}
+@media(max-width:900px){.optics{right:12px;bottom:104px}}
+@media(max-width:640px){.env::before{backdrop-filter:blur(calc(var(--envK,.7)*8px)) saturate(calc(1 - var(--envK,.7)*.45))}}
+
 /* ════════════ responsive ════════════ */
 @media(max-width:900px){
   section{padding:12vh 20px}
@@ -300,11 +356,13 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
 <a class="skip-link" href="#main-content">Skip to main content</a>
 
-<!-- four pre-rendered exposures of one derived object -->
+<!-- four plate-developed exposures of one derived object -->
+<div id="world" aria-hidden="true">
 <canvas class="tile" id="t0"></canvas>
 <canvas class="tile" id="t1"></canvas>
 <canvas class="tile" id="t2"></canvas>
 <canvas class="tile" id="t3"></canvas>
+</div>
 <div id="substrate" aria-hidden="true"></div>
 
 <header class="chrome">
@@ -346,9 +404,11 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
   <!-- ════════════ definition ════════════ -->
   <section id="definition" aria-label="Definition">
+    <div class="env">
     <div class="zone-label">STRATUM 01 · DEFINITION · MODE <b>EXPLORE</b> · AUTHORITY PUBLIC</div>
     <h2 class="sec-h">At the surface, failure is one word. It is not one thing.</h2>
-    <div class="defs">
+    </div>
+    <div class="defs env">
       <div class="def"><span class="d-mode">INVALID OUTPUT</span><span class="d-body">Output that violates the constraints of its target domain — geometry, schema, or policy.</span></div>
       <div class="def"><span class="d-mode">UNAUTHORIZED ACTION</span><span class="d-body">An action taken without a deciding rule that admits it.</span></div>
       <div class="def"><span class="d-mode">UNTRACEABLE DECISION</span><span class="d-body">An output whose causal path cannot be reproduced from records.</span></div>
@@ -359,10 +419,12 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
   <!-- ════════════ architecture ════════════ -->
   <section id="architecture" aria-label="Architecture">
+    <div class="env">
     <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS 06 INDEXED · 02 DISCLOSED</div>
     <h2 class="sec-h">Each failure mode acquires a governing mechanism.</h2>
+    </div>
 
-    <div class="ladder">
+    <div class="ladder env">
       <div class="rung"><span class="r-mode">INVALID OUTPUT</span><span class="r-arrow">→</span><span class="r-mech">CONSTRAINED GENERATION</span><span class="r-impl disclosed">CYTHERCAD · DISCLOSED</span></div>
       <div class="rung"><span class="r-mode">UNAUTHORIZED ACTION</span><span class="r-arrow">→</span><span class="r-mech">DETERMINISTIC ADMISSION</span><span class="r-impl controlled">INDEXED · ENTRY 005 · NOT DISCLOSED</span></div>
       <div class="rung"><span class="r-mode">UNTRACEABLE DECISION</span><span class="r-arrow">→</span><span class="r-mech">EXECUTION RECEIPT</span><span class="r-impl controlled">INDEXED · ENTRY 004 · NOT DISCLOSED</span></div>
@@ -387,7 +449,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
       </div>
     </div>
 
-    <div class="cause" aria-label="Causality termination">
+    <div class="cause env" aria-label="Causality termination">
       <span class="c-k">MODEL</span><span class="c-v">LOCAL</span>
       <span class="c-k">POLICY</span><span class="c-v">LOCAL</span>
       <span class="c-k">STATE</span><span class="c-v">LOCAL</span>
@@ -414,8 +476,10 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
   <!-- ════════════ measurement ════════════ -->
   <section id="measurement" aria-label="Measurement">
+    <div class="env">
     <div class="zone-label">STRATUM 03 · MEASUREMENT · MODE <b>VERIFY</b> · CYTHERCAD v1.1 · TEXT2CAD-192</div>
     <h2 class="sec-h">Numbers with their conditions attached.</h2>
+    </div>
 
     <div class="val-panel glass">
       <div class="legend">
@@ -459,22 +523,24 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 
   <!-- ════════════ controlled ════════════ -->
   <section class="sealed" id="sealed" aria-label="Controlled stratum">
-    <div class="zone-label">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</div>
+    <div class="zone-label env">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</div>
     <div class="ghost" aria-hidden="true">Neural Theorem Prover<br>Zero-Dependency NTP</div>
-    <div class="sealed-fields">
+    <div class="sealed-fields env">
       CONTENT — <span class="fv">SEALED PENDING ACCESS GRANT</span><br>
       REFERENCE — <span class="fv">NTP-2025-001 · APPENDIX ENTRY 003</span><br>
       REQUIREMENT — <span class="fv">VERIFIED CONTEXT · NDA · IDENTITY CONFIRMATION</span>
     </div>
-    <div class="locked-note">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
-    <div class="depth-line">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
+    <div class="locked-note env">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
+    <div class="depth-line env">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
     <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
   </section>
 
   <!-- ════════════ access ════════════ -->
   <section id="clearance" aria-label="Access clearance">
+    <div class="env">
     <div class="zone-label">CLEARANCE · THREE PATHS DEEPER</div>
     <h2 class="sec-h">Selective about what gets built. Thorough about how it gets built.</h2>
+    </div>
 
     <div class="clearance-grid">
       <div class="path glass">
@@ -536,7 +602,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
       <div class="ep-note">The fastest calibration of a vendor is the boundary of its claims. Drawn here, and included in the canonical checksum.</div>
     </div>
 
-    <div class="colophon-notes">
+    <div class="colophon-notes env">
       <p><b>One object, one world.</b> The mark is not framed on this page — this page is inside it. Four pre-rendered exposures of the canonical orbit are the background; scroll is the observation function, moving a derived camera from far-field into the filament core. The camera anchors are the orbit's densest cells, chosen by digest: the journey through the mark is derivation, not decoration.</p>
       <p><b>The mark is derived, not designed.</b> Its four parameters are digests of the public manifest below — systems, validation index, revision, and the count of sealed references. When the disclosed state changes, the canonical form changes deterministically. Your drag forks a local variant; the canonical state is always recoverable, and a link reproduces any form exactly.</p>
       <p><b>Closed causality.</b> No webfonts, no CDNs, no images, no external calls. Everything visible was present at initialization or derived locally from your interaction. Open the network tab — the artifact is sealed, and CL-01 observes it.</p>
@@ -546,6 +612,12 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   </section>
 
 </main>
+
+<div class="optics" id="optics" role="group" aria-label="Optical mode — reader-governed exposure">
+  <button data-o="world" aria-pressed="false">WORLD</button>
+  <button data-o="balanced" aria-pressed="true">BALANCED</button>
+  <button data-o="read" aria-pressed="false">READ</button>
+</div>
 
 <div class="strip">
   <span>MARK <b id="markSerial">…</b></span>
@@ -564,10 +636,10 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-NZC+VrSemaIbIpxVNoYzMWTpJgi69GwI1jL2T1dOjJj3kyV6PjvWptk5mULzNgl0" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-9lpDpUGFhY4NRsW5CttrH3XcyA0DFD5PmeVnQ2cq5ddKFEwjRrDpkxo9yrn3QdLS" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-DHRM07MTO+CizP1ylJyLqg6W21GUWDhf6s+p6fxCWOkyV0FIHsKrE+yxdW2/Qf9q" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-PWbbFF0NXco/izTMQJsj7L3vGcKhRWMwzFPbzI2UApVwidmyUxMBF8Q73krqwW2K" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-qAqRD8MIiXDyurDpLCG08wLzgPrFBBJ3yWebRDaf9wxnc1ovjdqnmWluvGHBGO3w" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-hc3dtLIX4t/da0jmRs6G28GZYUZz90fWgPlcCSI/x6geWBcglPyzAxfS3A4+nw3v" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-p2C8wJHOeMXYzAwQuCKh0wwZnxcq9gyUm3qboYLFC2FyVmaKGL5Elw2dzXuFhkws" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-CSR7NDWmo8AOChVAx5PL24h/al49VxoJfvYeM4804NJe9PyZ8XU/s36TL4bB7D+3" crossorigin="anonymous"></script>
 </body>
 </html>
