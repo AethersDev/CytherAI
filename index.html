@@ -9,7 +9,7 @@
 <meta property="og:title" content="CytherAI — Sovereign Operational AI">
 <meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="F15692A67C90783D">
+<meta name="build-hash" content="C72619A54185DCE3">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
@@ -59,7 +59,7 @@ body.forking #substrate{cursor:grabbing}
 .core .core-wrap{position:relative}
 #coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);pointer-events:none;will-change:transform}
 .core .lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-align:center;margin-top:5px;
-  color:color-mix(in srgb,var(--ink) 55%,transparent)}
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
 @media(max-width:900px){.core{right:6px}}
 
 /* ════════════ content scaffolding ════════════ */
@@ -87,7 +87,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .dek{font-size:15.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
   max-width:54ch;margin-top:3.4vh}
 .decomp{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;line-height:2;
-  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:3.4vh}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:3.4vh}
 .decomp b{color:color-mix(in srgb,var(--ink) 85%,transparent);font-weight:500}
 .ctas{display:flex;gap:12px;margin-top:4vh;flex-wrap:wrap}
 .btn{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
@@ -97,7 +97,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn-primary:hover{filter:brightness(1.12);color:#fff}
 .coords{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
-  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:5vh}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
 
 /* ════════════ definition ladder ════════════ */
 .defs{max-width:760px}
@@ -111,33 +111,33 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .ladder{max-width:860px}
 .rung{display:grid;grid-template-columns:200px 26px 240px 1fr;gap:14px;padding:2.4vh 0;align-items:baseline;
   border-top:1px solid var(--hair);font-family:var(--mono)}
-.rung .r-mode{font-size:10px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.rung .r-mode{font-size:10px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .rung .r-arrow{font-size:10px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
 .rung .r-mech{font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:500}
 .rung .r-impl{font-size:9.5px;letter-spacing:.1em;text-align:right}
 .rung .r-impl.disclosed{color:var(--accent)}
-.rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 48%,transparent)}
+.rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 66%,transparent)}
 @media(max-width:760px){.rung{grid-template-columns:1fr;gap:4px}.rung .r-arrow{display:none}.rung .r-impl{text-align:left}}
 
 .sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6vh}
 .sys{padding:24px 24px 26px}
-.sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px}
 .sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
 .sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
 .sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 55%,transparent);margin-top:18px}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:18px}
 .sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;margin-top:6px;line-height:1.7}
 
 .cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
   font-family:var(--mono);font-size:10px;line-height:2.1}
-.cause .c-k{color:color-mix(in srgb,var(--ink) 58%,transparent);letter-spacing:.12em}
+.cause .c-k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
 .cause .c-v{color:var(--accent);font-weight:500;letter-spacing:.12em}
 .cause .c-v.none{color:var(--ink)}
 
 /* ════════════ boundary instrument ════════════ */
 .bi{margin-top:6vh;padding:20px 22px;max-width:860px}
-.bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .bi-head b{color:var(--accent);font-weight:500}
 .bi-cap{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
 .bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
@@ -152,10 +152,10 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 /* ════════════ measurement ════════════ */
 .val-panel{padding:22px 24px 6px;max-width:860px}
 .legend{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 58%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
 .legend .lv{color:var(--accent)}
 table{width:100%;border-collapse:collapse;font-family:var(--mono)}
-th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent);
   text-align:right;font-weight:400;padding:14px 0 8px}
 th:first-child{text-align:left}
 th.cy{color:var(--accent)}
@@ -163,22 +163,22 @@ td{font-size:11px;color:color-mix(in srgb,var(--ink) 80%,transparent);padding:9p
   border-top:1px solid var(--hair);text-align:right}
 td:first-child{text-align:left}
 td .mk{color:var(--accent);margin-right:8px}
-td .mk.ext{color:color-mix(in srgb,var(--ink) 45%,transparent)}
+td .mk.ext{color:color-mix(in srgb,var(--ink) 66%,transparent)}
 td.cy{color:var(--accent);font-weight:500}
 td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 .meth{display:grid;grid-template-columns:170px 1fr;gap:6px 18px;font-family:var(--mono);font-size:10px;
   line-height:1.8;padding:18px 0 14px;border-top:1px solid var(--hair);margin-top:4px}
-.meth .k{color:color-mix(in srgb,var(--ink) 58%,transparent);letter-spacing:.12em}
+.meth .k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
 .meth .v{color:color-mix(in srgb,var(--ink) 80%,transparent)}
 .footnote{border-top:1px solid var(--hair);padding:12px 0 16px}
-.footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 55%,transparent)}
-.footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 55%,transparent);line-height:1.8;margin-top:4px}
+.footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent);line-height:1.8;margin-top:4px}
 
 /* ════════════ the boundary ════════════ */
 .boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
 .boundary .b-line{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--ink)}
 .boundary .b-sub{font-family:var(--mono);font-size:10.5px;line-height:1.9;
-  color:color-mix(in srgb,var(--ink) 58%,transparent);margin:14px auto 0;max-width:52ch}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin:14px auto 0;max-width:52ch}
 .b-hold{position:relative;overflow:hidden;display:inline-block;margin-top:3.4vh;
   font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:13px 22px;
   border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);color:var(--ink)}
@@ -187,7 +187,7 @@ td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 .b-hold:hover{border-color:var(--accent)}
 .b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--accent)}
 .b-state{font-family:var(--mono);font-size:9px;letter-spacing:.18em;margin-top:14px;
-  color:color-mix(in srgb,var(--ink) 58%,transparent)}
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
 body.crossed .b-state{color:var(--accent)}
 
 /* ════════════ controlled stratum ════════════ */
@@ -196,64 +196,64 @@ body.crossed .b-state{color:var(--accent)}
   color:color-mix(in srgb,var(--inkA) 10%,transparent);user-select:none}
 body.crossed .ghost{color:color-mix(in srgb,var(--inkA) 24%,transparent)}
 .sealed-fields{font-family:var(--mono);font-size:10.5px;line-height:2;margin-top:4vh;
-  color:color-mix(in srgb,var(--ink) 58%,transparent);opacity:.35;transition:opacity .6s}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);opacity:.35;transition:opacity .6s}
 body.crossed .sealed-fields{opacity:1}
 @media(prefers-reduced-motion:reduce){.sealed-fields{transition:none}}
 .sealed-fields .fv{color:color-mix(in srgb,var(--ink) 82%,transparent)}
 .locked-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 45%,transparent);margin-top:2.2vh}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:2.2vh}
 body.crossed .locked-note{display:none}
 .sealed .depth-line{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
-  color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:5vh}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
 .sealed .btn{margin-top:2.4vh;align-self:flex-start}
 
 /* ════════════ clearance ════════════ */
 .clearance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px}
 .path{padding:22px 20px 24px;position:relative}
 .path-featured{border-color:var(--accent)}
-.path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 /* h3, not h4: the outline must not skip a level under the clearance h2. The
    1.33em bottom margin is the UA h4 value the swap would otherwise drop —
    stated here so the element change stays visually neutral. */
 .path h3{font-size:17px;font-weight:600;margin:12px 0 1.33em}
 .path p{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
-.path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:14px}
+.path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:14px}
 .path .btn{margin-top:16px}
 
 /* ════════════ the floor — law + records ════════════ */
 .law{font-size:clamp(22px,3vw,38px);font-weight:300;line-height:1.5;letter-spacing:.01em;max-width:22ch;color:var(--ink)}
 .manifest{margin-top:8vh;max-width:540px;font-family:var(--mono)}
-.manifest .m-title{font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+.manifest .m-title{font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
   padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .manifest .m-row{display:flex;justify-content:space-between;gap:18px;font-size:10.5px;letter-spacing:.08em;
   padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
-.manifest .m-k{color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.manifest .m-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .manifest .m-v{color:var(--ink);font-weight:500;text-align:right}
 .manifest .m-v.acc{color:var(--accent)}
 .manifest .m-v.ok{color:var(--accent)}
 .manifest .m-v.bad{color:var(--ink);font-weight:700}
-.manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 45%,transparent);font-weight:400}
-.manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 55%,transparent);font-weight:400}
+.manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
+.manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
 
 .epochs{margin-top:8vh;max-width:660px}
-.ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 58%,transparent);
+.ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
   padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .ep-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0 6px}
-.ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .ep canvas{display:block;border:1px solid var(--hair);margin-bottom:6px}
 .ep.current{color:var(--ink)}
 .ep.current canvas{border-color:var(--accent)}
 .ep .st{color:var(--accent)}
 .ep-arrow{font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
-.ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+.ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 
 .colophon-notes{margin-top:8vh}
 .colophon-notes p{font-family:var(--mono);font-size:11px;line-height:2;
-  color:color-mix(in srgb,var(--ink) 62%,transparent);max-width:74ch;margin-bottom:16px}
+  color:color-mix(in srgb,var(--ink) 66%,transparent);max-width:74ch;margin-bottom:16px}
 .colophon-notes b{color:var(--ink);font-weight:500}
 
 footer{padding:20px 28px 88px;display:flex;gap:20px;flex-wrap:wrap;max-width:1160px;margin:0 auto;
-  font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 58%,transparent)}
+  font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 footer .right{margin-left:auto}
 footer a{border-bottom:1px solid var(--hair)}
 footer a:hover{color:var(--accent);border-color:var(--accent)}
@@ -273,7 +273,7 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 #rlDigest{color:var(--accent)}
 .rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
   border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
-.rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 62%,transparent)}
+.rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
 .rl-log b{color:var(--accent);font-weight:500}
 .rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
@@ -332,7 +332,17 @@ body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phas
 body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.93)}
 
 /* secondary text does not dim merely for being secondary: on the dark phases the
-   low-alpha greys tuned for paper get swallowed — lift the mixes under light ink */
+   low-alpha greys tuned for paper get swallowed — lift the mixes under light ink.
+
+   Ink floor: 66%. No text carries less, because 66% is what reads 4.5:1 against
+   the ambient at the switch depth (READING.SW_DOWN = 1.00, rgb(185,195,210)) —
+   the derivation is in js/substrate.js and CL-06c re-checks it live. The five
+   quietest layers the paper phase used to distinguish (45 · 48 · 55 · 58 · 62%)
+   now share that floor; they stay distinct through size, tracking and weight —
+   7.5–10.5px tracked mono against 14–15.5px body — rather than through a tonal
+   difference no low-vision reader could resolve. Only genuinely decorative
+   glyphs sit below it: td.na em-dashes (28%) and the .r-arrow / .ep-arrow
+   connectors (40%), WCAG-exempt as incidental content. */
 body[data-ink="light"] .zone-label{color:color-mix(in srgb,var(--ink) 86%,transparent)}
 body[data-ink="light"] .dek,body[data-ink="light"] .def .d-body,body[data-ink="light"] td{color:color-mix(in srgb,var(--ink) 88%,transparent)}
 body[data-ink="light"] .bi-cap,body[data-ink="light"] .path p,body[data-ink="light"] .meth .v,body[data-ink="light"] .rl-log{color:color-mix(in srgb,var(--ink) 86%,transparent)}
@@ -365,7 +375,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
 /* reader-governed optics — the artifact does not force its aesthetic priority */
 .optics{position:fixed;right:10px;bottom:52px;z-index:25;display:flex;font-family:var(--mono)}
-.optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 62%,transparent);
+.optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 66%,transparent);
   background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
 .optics button+button{border-left:none}
 .optics button[aria-pressed="true"]{color:var(--accent)}
@@ -668,8 +678,8 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-NZC+VrSemaIbIpxVNoYzMWTpJgi69GwI1jL2T1dOjJj3kyV6PjvWptk5mULzNgl0" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-eskxveFebFiKFyZhfasyZx1InKwawJd/X279V9qkfyx4w3HnFlLMy4Ah5VqKoUXM" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-qAqRD8MIiXDyurDpLCG08wLzgPrFBBJ3yWebRDaf9wxnc1ovjdqnmWluvGHBGO3w" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-giBbIoTHcQR09+WgV5PbMUyHuvKxmaVureXCZSVDrMbDQGPYtC/Xn8hgTRPx0MOK" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-aJIl86rjzPNcGMZXj8o1CxtC6mfzyTDGhCeRCY6Rwss9kmYsYqZAhaq9nd0CESTy" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-hc3dtLIX4t/da0jmRs6G28GZYUZz90fWgPlcCSI/x6geWBcglPyzAxfS3A4+nw3v" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
 <script src="js/site.js" defer integrity="sha384-d3B52290fLCTFJe85JbLqRFfL6Rb3wzT0UaNg+ftsvffw18VA+WPWPhSxEGbB6mI" crossorigin="anonymous"></script>
