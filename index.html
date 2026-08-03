@@ -63,7 +63,14 @@ body.forking #substrate{cursor:grabbing}
 @media(max-width:900px){.core{right:6px}}
 
 /* ════════════ content scaffolding ════════════ */
-main{position:relative;z-index:1;pointer-events:none}
+/* clip, not hidden: the legibility envelope (.env::before) bleeds 3.2em past its
+   element on each side so its mask has something to fade across. Below ~1200px the
+   sections reach the viewport edge and that bleed becomes document overflow — on a
+   390px screen it widened the layout viewport to 421px, shrinking the whole page
+   and pushing the right-aligned gauge off-screen. `clip` stops it at the source and,
+   unlike `hidden`, leaves overflow-y visible so main never becomes a scroll
+   container — the camera is driven by document scroll. */
+main{position:relative;z-index:1;pointer-events:none;overflow-x:clip}
 main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
 section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 /* font-weight/margin-top are stated because the sealed and floor labels are h2
@@ -384,8 +391,14 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
 /* ════════════ responsive ════════════ */
 @media(max-width:900px){
-  section{padding:12vh 20px}
-  .hero{padding:14vh 20px 12vh}
+  /* The core-sample map is fixed in the right gutter and PRODUCTION_PLAN §4.3 keeps
+     it at every width ("core-sample map stays, 56px, right:6px"). Below 900px the
+     reading column reaches the viewport edge and body text runs underneath it —
+     observed at 390px, where the map covered ~38px of every line it passed. The
+     column yields the gutter; the instrument does not move. 74px = 6 right + 56
+     wide + 12 clear. */
+  section{padding:12vh 74px 12vh 20px}
+  .hero{padding:14vh 74px 12vh 20px}
   .sys-grid{grid-template-columns:1fr}
   .clearance-grid{grid-template-columns:1fr}
   .chrome{padding:12px 16px}
