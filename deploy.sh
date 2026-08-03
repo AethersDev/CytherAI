@@ -32,17 +32,12 @@ js/site.js
 css/cytherai.css
 engine/trajectory-engine.js
 engine/trajectory-engine.test.js
-content/record.js
-profiles/disclosure.js
-js/console.js
 sw.js
 manifest.webmanifest
 icon.svg"
 
-# content/record.js, profiles/disclosure.js and js/console.js are served by no
-# page. They ship only because sw.js still precaches them and cache.addAll() is
-# atomic — one 404 and the service worker never installs. Remove them here in
-# the same change that removes them from sw.js ASSETS.
+# content/record.js, profiles/disclosure.js and js/console.js are deliberately
+# absent: no page loads them. They stay on disk for the separate engine project.
 
 echo "[deploy] Building $DIST"
 rm -rf "$DIST"

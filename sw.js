@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-C72619A54185DCE3-r2';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-539201641520B521';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -25,12 +25,9 @@ var ASSETS = [
   'js/site.js',
   // subpage stylesheet
   'css/cytherai.css',
-  // engine stack — still served to the live suite at pages/runner.html
+  // engine stack — only what pages/runner.html actually loads
   'engine/trajectory-engine.js',
   'engine/trajectory-engine.test.js',
-  'content/record.js',
-  'profiles/disclosure.js',
-  'js/console.js',
   'manifest.webmanifest',
   'icon.svg'
 ];
