@@ -9,7 +9,14 @@
     <meta name="build-hash" content="F15692A67C90783D">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="icon.svg" type="image/svg+xml">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self';">
+    <!-- form-action is deliberately absent: the form posts to mailto:, and browser
+         handling of a mailto: source in form-action is inconsistent enough that
+         adding it unverified could silently break the only contact path. Add
+         "form-action 'self' mailto:;" only after a Safari submit test confirms the
+         mail client still opens. Omitting it leaves form-action unrestricted —
+         it does not fall back to default-src — so this is an unclaimed hardening,
+         not a regression. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self';">
     <link rel="stylesheet" href="css/cytherai.css" integrity="sha384-84FGSekX6yovhgnL2KUg0NyjhDye3LUpDuLaPIkUtzNXFEiANH7RRulcxdiaKTVj" crossorigin="anonymous">
 </head>
 <body>
