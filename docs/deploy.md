@@ -1,5 +1,20 @@
 # Deployment contract
 
+## Certification status
+
+| | |
+|---|---|
+| **Repository status** | ✓ Production-hardened |
+| **Execution status** | ✓ Verified in Chromium (Chrome 150, against the `dist/` artifact) |
+| **Outstanding browser certification** | 2 WebKit-critical (W1–W2) · 6 WebKit-platform observations (W3–W8) |
+| **Outstanding deployment certification** | Origin headers · HSTS · MIME · 404 behaviour |
+| **Outstanding owner certification** | Epoch-04 commitment · Manifest sign-off · Accent-state accessibility decision |
+| **Overall** | **Release candidate pending certification** |
+
+The remaining work is certification, not construction. Class A items can
+invalidate a public technical claim; Class B affect experience but not the
+truthfulness of the site; Class C cannot be resolved inside the repository.
+
 Not shipped. This file states what the repository cannot express: the response
 headers the origin must send, the MIME types it must serve, and the gate that
 must hold before the site is public.
@@ -113,10 +128,28 @@ None outstanding.
 
 ### WEBKIT-SPECIFIC — STILL REQUIRES SAFARI
 
+Run this as a **differential certification, not a second checklist.** Chrome has
+already established the baseline; Safari's job is to answer two questions only:
+
+1. Does WebKit disagree with Chromium?
+2. If it does, is the disagreement a bug, a compatibility difference, or purely
+   a rendering difference?
+
+Anything Chrome already settled does not need re-running — record only divergence.
+
+**Class A — release blockers.** These two can invalidate a claim the site makes
+about itself, so they are mandatory Safari observations.
+
 | # | Check | Why Chrome cannot settle it |
 |---|---|---|
 | W1 | Inline `<script type="module">` admitted under `script-src 'self' 'unsafe-inline'` | CSP/module interaction is engine-specific; Chrome admits it, WebKit must be confirmed. If it fails, `runner.html` shows the honest 0-test message rather than a false pass |
 | W2 | SRI on **module** fetches | Chrome enforces it (proven above). WebKit's module-script integrity path is a separate implementation |
+
+**Class B — platform behaviour.** Observed, but a platform-specific fallback
+here would not invalidate the architecture.
+
+| # | Check | Why Chrome cannot settle it |
+|---|---|---|
 | W3 | `mailto:` form submission actually opening a mail client | No mail client exists in headless Chrome. Chrome confirms only that the submit dispatches and is not CSP-blocked |
 | W4 | `form-action 'self' mailto:` | Deliberately omitted (see the comment in `contact.html`). Decide it on Safari: add it, submit, and keep it only if the mail client still opens |
 | W5 | Continuous `font-weight` kinetics (`.thesis .g`, `[data-wave]`) | Variable-weight animation is a WebKit text-rendering path; correctness here is visual, not measurable over CDP |
@@ -128,10 +161,57 @@ None outstanding.
 
 | # | Item |
 |---|---|
-| O1 | **Accent-coloured text crosses below AA in the mid-descent.** Worst 1.86:1 on the active optics button at d=1.05; 22 sample points below 4.5:1. Verified **pre-existing, not a P8 regression** — the pre-P8 tree (770d8c5) fails at five sample depths vs four now, and P8 improved the worst case from 1.88:1 to 2.49:1. Fixing it means changing the `ACCENTS` ramp (locked, §4.1) or how selected state is signalled |
+| O1 | **Accent-state accessibility decision — see the measured options below.** |
 | O2 | The epoch-04 commitment — see gate item 4 below |
 | O3 | The `PROVISIONAL` manifest values |
 | O4 | At 390px the `.optics` control transiently covers a zone label as content scrolls behind it. Same bottom chrome band the spec docks the reader ledger into, and it clears on scroll — recorded, not changed |
+
+#### O1 in detail — measured, with options
+
+**The finding.** Accent-coloured text drops below AA in the mid-descent: worst
+**2.14:1** at d=1.20. Verified **pre-existing, not a P8 regression** — the
+pre-P8 tree (770d8c5) fails at five sample depths against four now, and P8
+improved the worst case from 1.88:1 to 2.49:1.
+
+**The cause.** `BGS` and `ACCENTS` are both locked (§4.1) and their luminance
+ramps *cross* in the middle of the descent: the ambient falls from light to
+dark while the accent rises from #2036C7 to #7FA0FF. Where they meet, the
+accent is not separable from anything derived from the ambient.
+
+**What this rules out.** Moving state onto an accent-coloured rule or border
+does **not** help. Measured as a non-text indicator against the 3:1 threshold
+of WCAG 1.4.11, the accent still fails in the same band — 2.14:1 on panels at
+d=1.20, and 1.34:1 against the raw ambient at d=1.50. The channel is the
+problem, not the role it plays.
+
+**What works.** Ink is the one channel already proven to hold at every depth
+(CL-06 worst 8.27:1 at full strength). Three ink-drawn cues were prototyped in
+Chrome and measured across the descent; all three pass both thresholds with
+large margins, and none touches a locked token:
+
+| Candidate | worst text | worst cue | verdict |
+|---|---|---|---|
+| shipped — accent text | 2.14:1 | 2.14:1 | both fail |
+| **A** inverse fill (ink surface, counter-ink text) | 14.98:1 | 10.72:1 | **pass** |
+| **B** ink text + 2px ink underline | 10.72:1 | 10.72:1 | **pass** |
+| **C** ink text + enclosing ink hairline | 10.72:1 | 10.72:1 | **pass** |
+
+**The decision has two halves, and only the first is settled by the above.**
+
+1. *Selected-state controls* (`.optics button[aria-pressed="true"]`,
+   `body.crossed .b-state`). The Constitution requires that accent **marks**
+   state; it does not require that state be carried **solely** by
+   accent-coloured text. Adopting A, B or C keeps the accent as a mark while
+   the load-bearing cue becomes ink. Note the state is already exposed
+   non-visually via `aria-pressed`.
+2. *Accent-coloured prose* — roughly twenty rules (`.zone-label b`, `.gauge b`,
+   `.legend .lv`, `td .mk`, `.m-v.ok`, `.ep .st`, `.eyebrow`, …). Here the
+   words themselves are the content, so a non-colour cue cannot rescue them.
+   Either those runs stop being accent-coloured (ink plus the weight they
+   already carry), or the `ACCENTS` ramp changes — and the ramp is locked.
+
+Half 1 is a contained change. Half 2 is a register decision about whether the
+accent is ever a text colour. Owner call; nothing has been changed.
 
 ### ORIGIN DEPLOYMENT REQUIRED
 
