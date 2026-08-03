@@ -2,14 +2,21 @@
 
 ## Certification status
 
-| | |
-|---|---|
-| **Repository status** | ✓ Production-hardened |
-| **Execution status** | ✓ Verified in Chromium (Chrome 150, against the `dist/` artifact) |
-| **Outstanding browser certification** | 2 WebKit-critical (W1–W2) · 6 WebKit-platform observations (W3–W8) |
-| **Outstanding deployment certification** | Origin headers · HSTS · MIME · 404 behaviour |
-| **Outstanding owner certification** | Epoch-04 commitment · Manifest sign-off |
-| **Overall** | **Release candidate pending certification** |
+```
+Engineering implementation       COMPLETE
+Chromium certification           COMPLETE
+Essential text/state contrast    COMPLETE
+Known Chromium defects           FIXED
+WebKit differential checks       8 OPEN
+Origin certification             OPEN
+Epoch-04 owner decision          OPEN
+Manifest owner sign-off          OPEN
+```
+
+**The codebase is frozen at the Chromium-certified commit.** No further
+repository hardening before the remaining evidence is gathered — any change to
+candidate bytes invalidates the Chrome record and requires the full release
+battery again.
 
 The remaining work is certification, not construction. Class A items can
 invalidate a public technical claim; Class B affect experience but not the
@@ -161,12 +168,12 @@ here would not invalidate the architecture.
 
 | # | Item |
 |---|---|
-| ~~O1~~ | **Resolved** — accent-state accessibility decision taken; see below. |
+| ~~O1~~ | **CLOSED** — accent-state accessibility decision taken and implemented; see below. |
 | O2 | The epoch-04 commitment — see gate item 4 below |
 | O3 | The `PROVISIONAL` manifest values |
 | O4 | At 390px the `.optics` control transiently covers a zone label as content scrolls behind it. Same bottom chrome band the spec docks the reader ledger into, and it clears on scroll — recorded, not changed |
 
-#### O1 — RESOLVED. What was measured, and what was decided
+#### O1 — CLOSED. What was measured, and what was decided
 
 **The finding.** Accent-coloured text drops below AA in the mid-descent: worst
 **2.14:1** at d=1.20. Verified **pre-existing, not a P8 regression** — the
@@ -235,10 +242,46 @@ Implemented:
   changed; `ACCENTS` and `BGS` are untouched.
 
 Result: accent text below AA — **0 samples**. Ink layers unchanged at 4.63:1
-worst. Still open as a lesser question: accent used as a non-text *border* also
-sits under 3:1 in that band (`.path-featured`, `#coreRect`). Those are marks
-rather than sole carriers of information, so 1.4.11 is arguable; recorded here
-rather than changed.
+worst. O1 is closed.
+
+The most useful thing this produced is not the fix but the constraint it
+exposed, which should govern any future colour work:
+
+> **The accent ramp is not a universally usable contrast channel through the
+> descent.** Because the locked background and accent luminance curves cross,
+> turning accent text into an accent border merely moves the same failure from
+> text contrast (1.4.3) to non-text contrast (1.4.11). Essential information
+> belongs on the ink channel, which is proven at every depth.
+
+#### N1 — accent borders (non-blocking interpretation item, tracked separately)
+
+Two accent borders sit under 3:1 in the crossing band: `.path-featured` and
+`#coreRect`. This is **not** a launch blocker, and it is not automatically a
+violation: WCAG 1.4.11 applies where visual information is *required* to
+identify a component or its state, or where a graphical object is *necessary*
+to understand the content. A coloured border does not attract the 3:1 boundary
+merely by existing, and W3C techniques are advisory examples rather than
+mandatory implementations — compliance is with the success criterion's
+functional requirement.
+
+The deciding test: *remove the accent from the border. Is information lost that
+identifies the object, its state, or the meaning of the graphic?*
+
+Applied:
+
+* **`.path-featured`** — each clearance card names itself in text (`PATH 1 ·
+  OPEN`, `PATH 2 · QUALIFIED`, `PATH 3 · CONTROLLED`), carries its own heading,
+  and two carry their own CTA. The accent border visually weights the middle
+  path; it encodes no name or state not already written. **Supplemental.**
+* **`#coreRect`** — the graphic is labelled `POSITION IN FORM`, and the gauge
+  states `DEPTH nn%` continuously and unconditionally. The rectangle is a second
+  rendering of a reading always available as text. **Supplemental.** Worth
+  noting that the minimap does become less legible in the band, which is a
+  quality observation rather than an information loss.
+
+Both therefore pass as supplemental and the documented exception is defensible.
+Re-apply the test if either card or the minimap ever becomes the sole carrier of
+a state — that is the condition that would promote this to a blocker.
 
 ### ORIGIN DEPLOYMENT REQUIRED
 
@@ -277,3 +320,20 @@ decisions, not engineering steps.
 6. The `PROVISIONAL` values in `js/manifest.js` (epoch history, counts,
    commitment preimage) reviewed by the owner. Shipping them knowingly is
    permitted — they are marked in source — but it must be a decision.
+
+---
+
+## Next work — external certification and owner attestation
+
+Construction is finished; nothing below is a repository change.
+
+1. Run W1–W8 in Safari/WebKit as a **differential** against the Chrome record —
+   record divergence only.
+2. Deploy the exact candidate bytes to the intended origin.
+3. Verify headers, HSTS, MIME behaviour and 404 handling there (§1–§4).
+4. Decide whether epoch-04 remains an explicitly public demonstration or is
+   supplemented by a fresh genuine commitment (gate item 4).
+5. Sign off every `PROVISIONAL` manifest value at exactly its declared
+   evidentiary status.
+6. Re-run the complete release battery **only if candidate bytes change**.
+7. Tag the exact certified commit.
