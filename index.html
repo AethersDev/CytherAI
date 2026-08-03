@@ -66,8 +66,11 @@ body.forking #substrate{cursor:grabbing}
 main{position:relative;z-index:1;pointer-events:none}
 main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
 section{padding:15vh 28px;max-width:1160px;margin:0 auto}
+/* font-weight/margin-top are stated because the sealed and floor labels are h2
+   elements (they are those strata's only headings); the rest are divs. Both
+   forms must render identically. */
 .zone-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--ink) 70%,transparent);margin-bottom:4.5vh}
+  color:color-mix(in srgb,var(--ink) 70%,transparent);margin-top:0;margin-bottom:4.5vh;font-weight:inherit}
 .zone-label b{color:var(--accent);font-weight:500}
 .sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
   max-width:26ch;margin-bottom:5vh;color:var(--ink)}
@@ -209,7 +212,10 @@ body.crossed .locked-note{display:none}
 .path{padding:22px 20px 24px;position:relative}
 .path-featured{border-color:var(--accent)}
 .path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 58%,transparent)}
-.path h4{font-size:17px;font-weight:600;margin-top:12px}
+/* h3, not h4: the outline must not skip a level under the clearance h2. The
+   1.33em bottom margin is the UA h4 value the swap would otherwise drop —
+   stated here so the element change stays visually neutral. */
+.path h3{font-size:17px;font-weight:600;margin:12px 0 1.33em}
 .path p{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
 .path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 58%,transparent);margin-top:14px}
 .path .btn{margin-top:16px}
@@ -549,7 +555,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
   <!-- ════════════ controlled ════════════ -->
   <section class="sealed" id="sealed" aria-label="Controlled stratum">
-    <div class="zone-label env">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</div>
+    <h2 class="zone-label env">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</h2>
     <div class="ghost" aria-hidden="true">Neural Theorem Prover<br>Zero-Dependency NTP</div>
     <div class="sealed-fields env">
       CONTENT — <span class="fv">SEALED PENDING ACCESS GRANT</span><br>
@@ -571,20 +577,20 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
     <div class="clearance-grid">
       <div class="path glass">
         <span class="p-label">PATH 1 · OPEN</span>
-        <h4>Public materials</h4>
+        <h3>Public materials</h3>
         <p>This page and everything visible on the way down. Disclosed without qualification.</p>
         <div class="p-note">OPEN ACCESS · NO QUALIFICATION</div>
       </div>
       <div class="path glass path-featured">
         <span class="p-label">PATH 2 · QUALIFIED</span>
-        <h4>Capability review</h4>
+        <h3>Capability review</h3>
         <p>Full validation records, the controlled strata, and a working session with the systems — under NDA and identity confirmation.</p>
         <div class="p-note" id="featNote">NDA · IDENTITY CONFIRMATION</div>
         <a class="btn btn-primary" id="featCta" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA Briefing</a>
       </div>
       <div class="path glass">
         <span class="p-label">PATH 3 · CONTROLLED</span>
-        <h4>Technical diligence</h4>
+        <h3>Technical diligence</h3>
         <p>Architecture, logs, and evaluation harnesses opened for inspection inside a controlled review window.</p>
         <div class="p-note">SCOPED WINDOW · SUPERVISED</div>
         <a class="btn" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request Diligence Window</a>
@@ -594,7 +600,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
   <!-- ════════════ the floor ════════════ -->
   <section id="floor" aria-label="The floor — governing law and public record">
-    <div class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></div>
+    <h2 class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></h2>
     <div class="law">The surface states.<br>Depth conditions.<br>Records substantiate.<br>Boundaries govern.<br>The reader is a record.<br>Nothing is stated that is not checked.</div>
 
     <div class="epochs" aria-label="Epochal record — superseded disclosure states">
