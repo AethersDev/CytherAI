@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>CytherAI — Sovereign Operational AI</title>
+<meta name="description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
+<meta property="og:title" content="CytherAI — Sovereign Operational AI">
+<meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
+<meta name="theme-color" content="#101620">
+<meta name="build-hash" content="C4F7059DAC405AE6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<style>
+/* ════════════ tokens — the world writes the ambient (§4.1) ════════════
+   Four exposures of one derived object are the background; scroll moves a
+   derived camera into the filament core. --bg/--ink/--panel/--accent are
+   written by CytherSubstrate.observe() across four keyframes. No dark mode
+   toggle — the light descends continuously. No webfonts, no images, no CDNs. */
+:root{
+  --bg:#ECF0F4; --ink:#101620; --inkA:#101620; --accent:#2036C7;
+  --panel:rgba(255,255,255,.60);
+  --hair:color-mix(in srgb, var(--inkA) 16%, transparent);
+  --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --display:system-ui,-apple-system,'Segoe UI Variable Display','Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.mono{font-family:var(--mono)}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:12px;top:12px;z-index:100;background:var(--ink);color:var(--bg);
+  padding:8px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+
+/* ════════════ the substrate — four exposures of one object ════════════ */
+#world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
+.tile{position:absolute;inset:0;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
+#substrate{position:fixed;inset:0;z-index:0}
+body.forking #substrate{cursor:grabbing}
+
+/* ════════════ chrome ════════════ */
+.chrome{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:baseline;gap:14px;
+  padding:12px 22px;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(12px)}
+.wordmark{font-size:15px;font-weight:750;letter-spacing:.14em}
+.gauge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-align:right;line-height:1.7}
+/* ACCENT AS A TEXT COLOUR — bounded by measurement, not by taste.
+   BGS and ACCENTS are both locked (§4.1) and their luminance ramps CROSS in the
+   mid-descent, so around d≈1.0–1.4 the accent is separable from nothing the
+   design produces: 1.9:1 against the light ambient, 2.14:1 against the flip
+   membrane. An accent RULE or BORDER does not escape it either — as a non-text
+   indicator it still fails 1.4.11's 3:1 there (1.34:1 on raw ambient at d=1.50).
+   The channel is the problem, not the role it plays.
+   So any run that can be on screen inside that band carries INK, keeping the
+   weight that already marked it. Twenty rules were measured across the whole
+   descent; the six below never enter the band where they appear, and keep the
+   accent with their measured minimum recorded. Re-run the scoped harness after
+   any layout change — these six are safe by POSITION, which reflow can undo.
+     .eyebrow                 7.60:1   hero only, d=0
+     .rung .r-impl.disclosed  4.78:1   d≈0.48–0.60
+     .sys .o-val              5.60:1   d≈0.60–0.84
+     .bi-head b               5.30:1   d≈0.72–0.96
+     .manifest .m-v.acc       5.01:1   d≈2.52–2.76
+     footer a:hover           7.90:1   floor
+   Selected state on the optics control is an INK rule (10.72:1 worst), not an
+   accent colour: the accent still marks state, but nothing legible depends on
+   it, and aria-pressed carries it non-visually regardless.
+*/
+.gauge b{color:var(--ink);font-weight:500}
+@media(max-width:640px){.gauge{font-size:9px}}
+
+/* ════════════ core sample — position in the form ════════════ */
+.core{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:20;width:56px}
+.core canvas{display:block;width:56px;border:1px solid var(--hair);
+  background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(8px)}
+.core .core-wrap{position:relative}
+#coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);pointer-events:none;will-change:transform}
+.core .lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-align:center;margin-top:5px;
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
+@media(max-width:900px){.core{right:6px}}
+
+/* ════════════ content scaffolding ════════════ */
+/* clip, not hidden: the legibility envelope (.env::before) bleeds 3.2em past its
+   element on each side so its mask has something to fade across. Below ~1200px the
+   sections reach the viewport edge and that bleed becomes document overflow — on a
+   390px screen it widened the layout viewport to 421px, shrinking the whole page
+   and pushing the right-aligned gauge off-screen. `clip` stops it at the source and,
+   unlike `hidden`, leaves overflow-y visible so main never becomes a scroll
+   container — the camera is driven by document scroll. */
+main{position:relative;z-index:1;pointer-events:none;overflow-x:clip}
+main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
+section{padding:15vh 28px;max-width:1160px;margin:0 auto}
+/* font-weight/margin-top are stated because the sealed and floor labels are h2
+   elements (they are those strata's only headings); the rest are divs. Both
+   forms must render identically. */
+.zone-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
+  color:color-mix(in srgb,var(--ink) 70%,transparent);margin-top:0;margin-bottom:4.5vh;font-weight:inherit}
+.zone-label b{color:var(--ink);font-weight:500}
+.sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
+  max-width:26ch;margin-bottom:5vh;color:var(--ink)}
+.glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
+
+/* ════════════ hero — the claim ════════════ */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:16vh 28px 12vh;max-width:900px;margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:22px}
+.thesis{font-size:clamp(38px,5.6vw,72px);font-weight:250;line-height:1.05;letter-spacing:-.015em;
+  cursor:default;user-select:none;max-width:15ch}
+.thesis .wd{white-space:nowrap;display:inline-block}
+.thesis .g{display:inline-block;font-weight:250;will-change:font-weight}
+.dek{font-size:15.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
+  max-width:54ch;margin-top:3.4vh}
+.decomp{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;line-height:2;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:3.4vh}
+.decomp b{color:color-mix(in srgb,var(--ink) 85%,transparent);font-weight:500}
+.ctas{display:flex;gap:12px;margin-top:4vh;flex-wrap:wrap}
+.btn{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  padding:12px 18px;text-decoration:none;border:1px solid color-mix(in srgb,var(--ink) 26%,transparent);
+  color:color-mix(in srgb,var(--ink) 85%,transparent)}
+.btn:hover{border-color:var(--ink);color:var(--ink)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{filter:brightness(1.12);color:#fff}
+.coords{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
+
+/* ════════════ definition ladder ════════════ */
+.defs{max-width:760px}
+.def{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:2.6vh 0;align-items:baseline;
+  border-top:1px solid var(--hair)}
+.def .d-mode{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:500}
+.def .d-body{font-size:15px;line-height:1.7;color:color-mix(in srgb,var(--ink) 78%,transparent)}
+@media(max-width:640px){.def{grid-template-columns:1fr;gap:6px}}
+
+/* ════════════ architecture ladder ════════════ */
+.ladder{max-width:860px}
+.rung{display:grid;grid-template-columns:200px 26px 240px 1fr;gap:14px;padding:2.4vh 0;align-items:baseline;
+  border-top:1px solid var(--hair);font-family:var(--mono)}
+.rung .r-mode{font-size:10px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.rung .r-arrow{font-size:10px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
+.rung .r-mech{font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:500}
+.rung .r-impl{font-size:9.5px;letter-spacing:.1em;text-align:right}
+.rung .r-impl.disclosed{color:var(--accent)}
+.rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 66%,transparent)}
+@media(max-width:760px){.rung{grid-template-columns:1fr;gap:4px}.rung .r-arrow{display:none}.rung .r-impl{text-align:left}}
+
+.sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6vh}
+.sys{padding:24px 24px 26px}
+.sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px}
+.sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
+.sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
+.sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:18px}
+.sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;margin-top:6px;line-height:1.7}
+
+.cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
+  font-family:var(--mono);font-size:10px;line-height:2.1}
+.cause .c-k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
+.cause .c-v{color:var(--ink);font-weight:500;letter-spacing:.12em}
+.cause .c-v.none{color:var(--ink)}
+
+/* ════════════ boundary instrument ════════════ */
+.bi{margin-top:6vh;padding:20px 22px;max-width:860px}
+.bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.bi-head b{color:var(--accent);font-weight:500}
+.bi-cap{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
+.bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
+#biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
+.bi-log{font-family:var(--mono);font-size:9.5px;line-height:1.9;min-width:220px;flex:1;min-height:130px;
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.bi-log .adm{color:var(--ink);font-weight:500}
+.bi-stats{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;margin-top:12px;
+  color:color-mix(in srgb,var(--ink) 74%,transparent)}
+.bi-stats b{color:var(--ink);font-weight:500}
+
+/* ════════════ measurement ════════════ */
+.val-panel{padding:22px 24px 6px;max-width:860px}
+.legend{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
+.legend .lv{color:var(--ink);font-weight:500}
+table{width:100%;border-collapse:collapse;font-family:var(--mono)}
+th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent);
+  text-align:right;font-weight:400;padding:14px 0 8px}
+th:first-child{text-align:left}
+th.cy{color:var(--ink);font-weight:500}
+td{font-size:11px;color:color-mix(in srgb,var(--ink) 80%,transparent);padding:9px 0;
+  border-top:1px solid var(--hair);text-align:right}
+td:first-child{text-align:left}
+td .mk{color:var(--ink);margin-right:8px}
+td .mk.ext{color:color-mix(in srgb,var(--ink) 66%,transparent)}
+td.cy{color:var(--ink);font-weight:500}
+td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
+.meth{display:grid;grid-template-columns:170px 1fr;gap:6px 18px;font-family:var(--mono);font-size:10px;
+  line-height:1.8;padding:18px 0 14px;border-top:1px solid var(--hair);margin-top:4px}
+.meth .k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
+.meth .v{color:color-mix(in srgb,var(--ink) 80%,transparent)}
+.footnote{border-top:1px solid var(--hair);padding:12px 0 16px}
+.footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent);line-height:1.8;margin-top:4px}
+
+/* ════════════ the boundary ════════════ */
+.boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
+.boundary .b-line{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--ink)}
+.boundary .b-sub{font-family:var(--mono);font-size:10.5px;line-height:1.9;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin:14px auto 0;max-width:52ch}
+.b-hold{position:relative;overflow:hidden;display:inline-block;margin-top:3.4vh;
+  font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:13px 22px;
+  border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);color:var(--ink)}
+.b-hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in srgb,var(--accent) 28%,transparent)}
+.b-hold span{position:relative}
+.b-hold:hover{border-color:var(--accent)}
+.b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--ink)}
+.b-state{font-family:var(--mono);font-size:9px;letter-spacing:.18em;margin-top:14px;
+  color:color-mix(in srgb,var(--ink) 66%,transparent)}
+body.crossed .b-state{color:var(--ink);font-weight:500}
+
+/* ════════════ controlled stratum ════════════ */
+.sealed{min-height:72vh;display:flex;flex-direction:column;justify-content:center}
+.ghost{font-size:clamp(34px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spacing:-.015em;
+  color:color-mix(in srgb,var(--inkA) 10%,transparent);user-select:none}
+body.crossed .ghost{color:color-mix(in srgb,var(--inkA) 24%,transparent)}
+.sealed-fields{font-family:var(--mono);font-size:10.5px;line-height:2;margin-top:4vh;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);opacity:.35;transition:opacity .6s}
+body.crossed .sealed-fields{opacity:1}
+@media(prefers-reduced-motion:reduce){.sealed-fields{transition:none}}
+.sealed-fields .fv{color:color-mix(in srgb,var(--ink) 82%,transparent)}
+.locked-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:2.2vh}
+body.crossed .locked-note{display:none}
+.sealed .depth-line{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
+.sealed .btn{margin-top:2.4vh;align-self:flex-start}
+
+/* ════════════ clearance ════════════ */
+.clearance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px}
+.path{padding:22px 20px 24px;position:relative}
+.path-featured{border-color:var(--accent)}
+.path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+/* h3, not h4: the outline must not skip a level under the clearance h2. The
+   1.33em bottom margin is the UA h4 value the swap would otherwise drop —
+   stated here so the element change stays visually neutral. */
+.path h3{font-size:17px;font-weight:600;margin:12px 0 1.33em}
+.path p{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
+.path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:14px}
+.path .btn{margin-top:16px}
+
+/* ════════════ the floor — law + records ════════════ */
+.law{font-size:clamp(22px,3vw,38px);font-weight:300;line-height:1.5;letter-spacing:.01em;max-width:22ch;color:var(--ink)}
+.manifest{margin-top:8vh;max-width:540px;font-family:var(--mono)}
+.manifest .m-title{font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
+  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.manifest .m-row{display:flex;justify-content:space-between;gap:18px;font-size:10.5px;letter-spacing:.08em;
+  padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
+.manifest .m-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.manifest .m-v{color:var(--ink);font-weight:500;text-align:right}
+.manifest .m-v.acc{color:var(--accent)}
+.manifest .m-v.ok{color:var(--ink)}
+.manifest .m-v.bad{color:var(--ink);font-weight:700}
+.manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
+.manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
+
+.epochs{margin-top:8vh;max-width:660px}
+.ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
+  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.ep-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0 6px}
+.ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.ep canvas{display:block;border:1px solid var(--hair);margin-bottom:6px}
+.ep.current{color:var(--ink)}
+.ep.current canvas{border-color:var(--accent)}
+.ep .st{color:var(--ink);font-weight:500}
+.ep-arrow{font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
+.ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+
+.colophon-notes{margin-top:8vh}
+.colophon-notes p{font-family:var(--mono);font-size:11px;line-height:2;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);max-width:74ch;margin-bottom:16px}
+.colophon-notes b{color:var(--ink);font-weight:500}
+
+footer{padding:20px 28px 88px;display:flex;gap:20px;flex-wrap:wrap;max-width:1160px;margin:0 auto;
+  font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+footer .right{margin-left:auto}
+footer a{border-bottom:1px solid var(--hair)}
+footer a:hover{color:var(--accent);border-color:var(--accent)}
+
+/* ════════════ shared action affordances ════════════ */
+.i-actions{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;align-items:center}
+.i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:2px 0;
+  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}
+.i-btn:hover{color:var(--ink);border-color:var(--accent)}
+.copied{font-family:var(--mono);font-size:9.5px;color:var(--ink);font-weight:500}
+
+/* ════════════ reader ledger ════════════ */
+.rledger{position:fixed;left:22px;bottom:54px;z-index:25;width:268px;font-family:var(--mono)}
+.rl-head{display:block;width:100%;text-align:left;font-size:9px;letter-spacing:.14em;padding:9px 12px;
+  background:var(--panel);backdrop-filter:blur(12px);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
+.rl-head:hover{border-color:var(--accent)}
+#rlDigest{color:var(--ink);font-weight:500}
+.rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
+  border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
+.rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
+.rl-log b{color:var(--ink);font-weight:500}
+.rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+
+/* ════════════ serial strip — the mark's record, always present ════════════ */
+.strip{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:10px 18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
+  background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(12px);
+  border-top:1px solid var(--hair);color:color-mix(in srgb,var(--ink) 72%,transparent)}
+.strip b{color:var(--ink);font-weight:500}
+.strip .st{color:var(--ink);font-weight:500}
+.strip button{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 0;
+  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid var(--hair)}
+.strip button:hover,.strip button.on{color:var(--ink);border-color:var(--accent)}
+.strip .grow{flex:1}
+@media(max-width:640px){.strip{gap:9px;font-size:8.5px}#forkStatus{display:none}}
+
+/* ════════════ reading exposure — the record's own law (P9) ════════════
+   Two exposures, independently governed. WORLD: depth → camera → plate → ambient.
+   READING: bistable ink (hysteresis in site.js), phase-changed panel materials,
+   density-conditioned envelopes, rest-state amplitude. No component exercises
+   more attentional authority than its semantic role grants. */
+body{transition:color .25s ease}
+body[data-ink="light"]{--ink:#E3EAF4}
+/* the ink switch is a controlled crossfade, not a page flash; the weight-field
+   and wave glyphs (.g) keep their per-frame inline colors untransitioned */
+main *:not(.g),header *,footer *,aside *,.strip *,.optics *{transition-property:color;transition-duration:.25s}
+/* the world yields slowly and returns fast — focus pull, both directions honest */
+body.at-rest #world{opacity:.72;transition-duration:.6s}
+body[data-optics="read"] #world{opacity:.5}
+body[data-optics="world"] #world{opacity:1}
+
+.env{position:relative;z-index:0}
+.env::before{content:"";position:absolute;inset:-2.6em -3.2em;z-index:-1;pointer-events:none;
+  backdrop-filter:blur(calc(var(--envK,.7)*10px)) saturate(calc(1 - var(--envK,.7)*.45));
+  opacity:.35;transition:opacity .35s ease,background .35s ease;
+  mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
+             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
+  mask-composite:intersect;
+  -webkit-mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
+             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
+  -webkit-mask-composite:source-in}
+body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
+body[data-optics="world"] .env::before{opacity:.18}
+/* the flip membrane is a reading GROUND, not attenuation — it holds at full strength
+   in every optics mode and during motion; CL-06's model depends on it */
+body[data-phase="flip"] .env::before{opacity:1}
+
+/* Panels undergo a material phase change; the flip membrane also grounds envelopes.
+   ONE list for all three phases. Previously the flip list carried .chrome, .strip
+   and .optics button but the depth and core lists did not, so those surfaces
+   reverted to their paper backgrounds while the ink stayed light — measured in
+   Chrome at 2.99:1 on the optics control at d=2.10. .core .lbl was in no list at
+   all and read 1.36:1 through the entire flip band. Any surface that carries
+   reading text must change phase with the ink; if you add one, add it here. */
+.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl{transition:background .35s ease,color .25s ease}
+.core .lbl{padding:3px 2px}
+body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
+body[data-phase="flip"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(16,22,31,.82)}
+body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(10,15,23,.72)}
+body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(7,10,16,.93)}
+
+/* secondary text does not dim merely for being secondary: on the dark phases the
+   low-alpha greys tuned for paper get swallowed — lift the mixes under light ink.
+
+   Ink floor: 66%. No text carries less, because 66% is what reads 4.5:1 against
+   the ambient at the switch depth (READING.SW_DOWN = 1.00, rgb(185,195,210)) —
+   the derivation is in js/substrate.js and CL-06c re-checks it live. The five
+   quietest layers the paper phase used to distinguish (45 · 48 · 55 · 58 · 62%)
+   now share that floor; they stay distinct through size, tracking and weight —
+   7.5–10.5px tracked mono against 14–15.5px body — rather than through a tonal
+   difference no low-vision reader could resolve. Only genuinely decorative
+   glyphs sit below it: td.na em-dashes (28%) and the .r-arrow / .ep-arrow
+   connectors (40%), WCAG-exempt as incidental content. */
+body[data-ink="light"] .zone-label{color:color-mix(in srgb,var(--ink) 86%,transparent)}
+body[data-ink="light"] .dek,body[data-ink="light"] .def .d-body,body[data-ink="light"] td{color:color-mix(in srgb,var(--ink) 88%,transparent)}
+body[data-ink="light"] .bi-cap,body[data-ink="light"] .path p,body[data-ink="light"] .meth .v,body[data-ink="light"] .rl-log{color:color-mix(in srgb,var(--ink) 86%,transparent)}
+body[data-ink="light"] .bi-stats,body[data-ink="light"] .i-btn{color:color-mix(in srgb,var(--ink) 85%,transparent)}
+body[data-ink="light"] .bi-log,body[data-ink="light"] .colophon-notes p{color:color-mix(in srgb,var(--ink) 80%,transparent)}
+body[data-ink="light"] .sys .facts,body[data-ink="light"] .rl-note{color:color-mix(in srgb,var(--ink) 78%,transparent)}
+body[data-ink="light"] .sealed-fields,body[data-ink="light"] .b-sub,body[data-ink="light"] .ep{color:color-mix(in srgb,var(--ink) 76%,transparent)}
+body[data-ink="light"] .depth-line,body[data-ink="light"] .p-label,body[data-ink="light"] .p-note,
+body[data-ink="light"] .manifest .m-k,body[data-ink="light"] footer{color:color-mix(in srgb,var(--ink) 74%,transparent)}
+body[data-ink="light"] .locked-note,body[data-ink="light"] .legend,body[data-ink="light"] th,
+body[data-ink="light"] .meth .k,body[data-ink="light"] .m-title,body[data-ink="light"] .ep-title,
+body[data-ink="light"] .ep-note,body[data-ink="light"] .s-id,body[data-ink="light"] .cause .c-k{color:color-mix(in srgb,var(--ink) 72%,transparent)}
+body[data-ink="light"] .strip{color:color-mix(in srgb,var(--ink) 82%,transparent)}
+
+/* type weight is an optical instrument: heavier where the field is hardest, settling at rest */
+body[data-phase="surface"]{--hw:280}
+body[data-phase="flip"]{--hw:350}
+body[data-phase="depth"]{--hw:330}
+body[data-phase="core"]{--hw:310}
+.sec-h{font-weight:var(--hw,300);transition:font-weight .3s ease,color .25s ease}
+body.at-rest .sec-h{font-weight:calc(var(--hw,300) + 30)}
+.law{transition:font-weight .35s ease,color .25s ease}
+body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
+
+/* the negative-space atlas: strata read from their plate's quiet third */
+@media(min-width:1100px){
+  .corridor-l{margin-left:max(28px,4vw);margin-right:auto;max-width:980px}
+  .corridor-r{margin-left:auto;margin-right:max(28px,4vw);max-width:980px}
+}
+
+/* reader-governed optics — the artifact does not force its aesthetic priority */
+.optics{position:fixed;right:10px;bottom:52px;z-index:25;display:flex;font-family:var(--mono)}
+.optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 66%,transparent);
+  background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
+.optics button+button{border-left:none}
+.optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
+@media(max-width:900px){.optics{right:12px;bottom:104px}}
+@media(max-width:640px){.env::before{backdrop-filter:blur(calc(var(--envK,.7)*8px)) saturate(calc(1 - var(--envK,.7)*.45))}}
+
+/* ════════════ responsive ════════════ */
+@media(max-width:900px){
+  /* The core-sample map is fixed in the right gutter and PRODUCTION_PLAN §4.3 keeps
+     it at every width ("core-sample map stays, 56px, right:6px"). Below 900px the
+     reading column reaches the viewport edge and body text runs underneath it —
+     observed at 390px, where the map covered ~38px of every line it passed. The
+     column yields the gutter; the instrument does not move. 74px = 6 right + 56
+     wide + 12 clear. */
+  section{padding:12vh 74px 12vh 20px}
+  .hero{padding:14vh 74px 12vh 20px}
+  .sys-grid{grid-template-columns:1fr}
+  .clearance-grid{grid-template-columns:1fr}
+  .chrome{padding:12px 16px}
+  th.t2,td.t2{display:none}
+  .rledger{left:12px;right:12px;bottom:60px;width:auto}
+}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- four plate-developed exposures of one derived object -->
+<div id="world" aria-hidden="true">
+<canvas class="tile" id="t0"></canvas>
+<canvas class="tile" id="t1"></canvas>
+<canvas class="tile" id="t2"></canvas>
+<canvas class="tile" id="t3"></canvas>
+</div>
+<div id="substrate" aria-hidden="true"></div>
+
+<header class="chrome">
+  <span class="wordmark">CYTHERAI</span>
+  <span class="gauge" id="gauge">OBS <b>FAR-FIELD</b> · ×0.90<br>DEPTH 00% · CLAIM · PUBLIC SURFACE</span>
+</header>
+
+<div class="core" aria-hidden="true">
+  <div class="core-wrap"><canvas id="coreMap"></canvas><i id="coreRect"></i></div>
+  <div class="lbl">POSITION<br>IN FORM</div>
+</div>
+
+<aside class="rledger" aria-label="Reader ledger — recorded locally, transmitted only by your explicit act">
+  <button class="rl-head" id="rlHead" aria-expanded="false">READER LEDGER · <span id="rlCount">0</span> ACTS · <span id="rlDigest">00000000</span></button>
+  <div class="rl-body" id="rlBody" hidden>
+    <div class="rl-note">Your reading, recorded — locally, in full view. Nothing is transmitted. This is a self-report: it attests your reading to you, not to anyone else. Path 2 attaches it only when you send it.</div>
+    <div class="rl-log" id="rlLog"></div>
+    <div class="rl-actions">
+      <button class="i-btn" id="rlVerify">VERIFY CANONICAL CHECKSUM</button>
+      <button class="i-btn" id="rlClear">CLEAR LEDGER</button>
+    </div>
+  </div>
+</aside>
+
+<main id="main-content">
+
+  <!-- ════════════ the claim ════════════ -->
+  <section class="hero" id="surface" aria-label="Surface — the claim">
+    <div class="eyebrow">SOVEREIGN OPERATIONAL AI</div>
+    <h1 class="thesis" id="thesis">Built for environments where failure has consequence.</h1>
+    <p class="dek">Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request. What reads as atmosphere around this text is the canonical mark itself, observed from far — its own sparse periphery, not decoration. What follows is not a sitemap: it is this claim, unfolding into the conditions that make it true. Scroll is the observation function.</p>
+    <div class="decomp">THE DESCENT — <b>CLAIM</b> → DEFINITION → ARCHITECTURE → MEASUREMENT → CONTROLLED → ACCESS → FLOOR</div>
+    <div class="ctas">
+      <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a Conversation</a>
+      <a class="btn" href="#definition">Begin the Descent</a>
+    </div>
+    <div class="coords">24°41′N 46°43′E · UTC+3 · RIYADH, KSA</div>
+  </section>
+
+  <!-- ════════════ definition ════════════ -->
+  <section id="definition" aria-label="Definition">
+    <div class="env">
+    <div class="zone-label">STRATUM 01 · DEFINITION · MODE <b>EXPLORE</b> · AUTHORITY PUBLIC</div>
+    <h2 class="sec-h">At the surface, failure is one word. It is not one thing.</h2>
+    </div>
+    <div class="defs env">
+      <div class="def"><span class="d-mode">INVALID OUTPUT</span><span class="d-body">Output that violates the constraints of its target domain — geometry, schema, or policy.</span></div>
+      <div class="def"><span class="d-mode">UNAUTHORIZED ACTION</span><span class="d-body">An action taken without a deciding rule that admits it.</span></div>
+      <div class="def"><span class="d-mode">UNTRACEABLE DECISION</span><span class="d-body">An output whose causal path cannot be reproduced from records.</span></div>
+      <div class="def"><span class="d-mode">EXTERNAL DEPENDENCY</span><span class="d-body">Correctness contingent on infrastructure outside the deployment boundary.</span></div>
+      <div class="def"><span class="d-mode">STALE STATE</span><span class="d-body">A decision made against a state of the world that no longer holds.</span></div>
+    </div>
+  </section>
+
+  <!-- ════════════ architecture ════════════ -->
+  <section id="architecture" aria-label="Architecture">
+    <div class="env">
+    <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS 06 INDEXED · 02 DISCLOSED</div>
+    <h2 class="sec-h">Each failure mode acquires a governing mechanism.</h2>
+    </div>
+
+    <div class="ladder env">
+      <div class="rung"><span class="r-mode">INVALID OUTPUT</span><span class="r-arrow">→</span><span class="r-mech">CONSTRAINED GENERATION</span><span class="r-impl disclosed">CYTHERCAD · DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">UNAUTHORIZED ACTION</span><span class="r-arrow">→</span><span class="r-mech">DETERMINISTIC ADMISSION</span><span class="r-impl controlled">INDEXED · ENTRY 005 · NOT DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">UNTRACEABLE DECISION</span><span class="r-arrow">→</span><span class="r-mech">EXECUTION RECEIPT</span><span class="r-impl controlled">INDEXED · ENTRY 004 · NOT DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">EXTERNAL DEPENDENCY</span><span class="r-arrow">→</span><span class="r-mech">LOCAL RUNTIME BOUNDARY</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
+      <div class="rung"><span class="r-mode">STALE STATE</span><span class="r-arrow">→</span><span class="r-mech">EXPLICIT FRESHNESS STATE</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
+    </div>
+
+    <div class="sys-grid">
+      <div class="sys glass">
+        <span class="s-id">CAD-2024-001 · TECHNICAL VALIDATION</span>
+        <h3 data-wave>CytherCAD — Controlled Generative CAD</h3>
+        <div class="facts">Production-validated · Log + external benchmark · On-prem · Private</div>
+        <span class="o-label">KEY OUTCOME</span>
+        <span class="o-val">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span>
+      </div>
+      <div class="sys glass">
+        <span class="s-id">SIJ-2025-001 · DEPLOYMENT OPERATIONAL</span>
+        <h3 data-wave>SijilOS — Event-Sourced Ledger Engine</h3>
+        <div class="facts">ZATCA Phase 1 · Kingdom of Saudi Arabia · Certified compliant, April 2025 · Live beta · 2 production environments</div>
+        <span class="o-label">KEY OUTCOME</span>
+        <span class="o-val">Zero core cloud dependency · Full offline operation</span>
+      </div>
+    </div>
+
+    <div class="cause env" aria-label="Causality termination">
+      <span class="c-k">MODEL</span><span class="c-v">LOCAL</span>
+      <span class="c-k">POLICY</span><span class="c-v">LOCAL</span>
+      <span class="c-k">STATE</span><span class="c-v">LOCAL</span>
+      <span class="c-k">VERIFICATION</span><span class="c-v">LOCAL</span>
+      <span class="c-k">RECORD</span><span class="c-v">LOCAL</span>
+      <span class="c-k">REQUIRED CLOUD</span><span class="c-v none">NONE</span>
+    </div>
+
+    <div class="bi glass" id="bi" aria-label="Boundary instrument — live constrained generation">
+      <div class="bi-head">BOUNDARY INSTRUMENT · <b>LIVE</b> · SEED 01 · DETERMINISTIC</div>
+      <p class="bi-cap">A deliberately hostile proposer streams arbitrary tokens at the constraint boundary — junk symbols, wrong axis, out-of-range arguments, premature closure. The boundary admits token by token; an independent kernel re-verifies every program before emission. Nothing inadmissible is ever emitted: validity is a property of the boundary, not the proposer. Same seed, same stream, same admissions — on every machine.</p>
+      <div class="bi-row">
+        <canvas id="biCanvas" aria-label="Latest admitted profile"></canvas>
+        <div class="bi-log" id="biLog">— proposer idle —</div>
+      </div>
+      <div class="bi-stats" id="biStats">PROPOSED 0 · REJECTED 0 · DISCARDED 0 · <b>ADMITTED 0</b> · INVALID EMITTED 0</div>
+      <div class="i-actions">
+        <button class="i-btn" id="biRun">RUN PROPOSER</button>
+        <button class="i-btn" id="biAudit">AUDIT 10,000 PROPOSALS</button>
+        <span class="copied" id="biReceipt"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ measurement ════════════ -->
+  <section id="measurement" aria-label="Measurement">
+    <div class="env">
+    <div class="zone-label">STRATUM 03 · MEASUREMENT · MODE <b>VERIFY</b> · CYTHERCAD v1.1 · TEXT2CAD-192</div>
+    <h2 class="sec-h">Numbers with their conditions attached.</h2>
+    </div>
+
+    <div class="val-panel glass">
+      <div class="legend">
+        <span><span class="lv">●</span> LOG-VERIFIED</span>
+        <span>◌ EXT-VALIDATED</span>
+        <span>— NOT DISCLOSED</span>
+      </div>
+      <table>
+        <thead>
+          <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD†</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="mk ext">◌</span>Invalid Rate (↓ better)</td><td class="cy">0.00%</td><td>10.00%</td><td class="t2">0.93%</td></tr>
+          <tr><td><span class="mk">●</span>GVR · Constrained Beam (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>GVR · Completion (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Dimensional Accuracy ±3mm (n=35)</td><td class="cy">99%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Dimensional Accuracy ±5mm (n=35)</td><td class="cy">97%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span>Multi-Op Accuracy · Encoder (n=35)</td><td class="cy">91%</td><td class="na">—</td><td class="na t2">—</td></tr>
+        </tbody>
+      </table>
+      <div class="meth">
+        <span class="k">METHODOLOGY</span><span class="v">Autoregressive generation · constrained decoding · kernel-backed geometric verification</span>
+        <span class="k">TEST ENVIRONMENT</span><span class="v">Air-gapped · No external calls · Apple Silicon M4 · Local inference only</span>
+        <span class="k">BENCHMARK SOURCE</span><span class="v">Text2CAD-192 · External · Published · Not operated by CytherAI</span>
+        <span class="k">EVALUATED BY</span><span class="v">CytherAI internal evaluation · April 2026 · Log-verified</span>
+        <span class="k">CONTROLLED RECORDS</span><span class="v">03 · structure indexed · values sealed</span>
+      </div>
+      <div class="footnote">
+        <span class="dagger">† Text2CAD-192 (T2CAD): 0.93% invalid rate.</span>
+        <p class="note">External benchmark; evaluation not conducted or curated by CytherAI.</p>
+      </div>
+    </div>
+
+    <div class="boundary glass" id="boundary">
+      <div class="b-line">PUBLIC RECORD TERMINATES HERE</div>
+      <p class="b-sub">Beyond this line: the existence, reference class, and access conditions of controlled information. Nothing secret is shown by crossing — the index becomes legible, not its contents.</p>
+      <button class="b-hold" id="holdCross"><i id="holdFill"></i><span id="holdLabel">HOLD TO CROSS BOUNDARY</span></button>
+      <div class="b-state" id="bState">BOUNDARY — CLOSED · SCROLLING PAST REMAINS FREE</div>
+    </div>
+  </section>
+
+  <!-- ════════════ controlled ════════════ -->
+  <section class="sealed" id="sealed" aria-label="Controlled stratum">
+    <h2 class="zone-label env">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</h2>
+    <div class="ghost" aria-hidden="true">Neural Theorem Prover<br>Zero-Dependency NTP</div>
+    <div class="sealed-fields env">
+      CONTENT — <span class="fv">SEALED PENDING ACCESS GRANT</span><br>
+      REFERENCE — <span class="fv">NTP-2025-001 · APPENDIX ENTRY 003</span><br>
+      REQUIREMENT — <span class="fv">VERIFIED CONTEXT · NDA · IDENTITY CONFIRMATION</span>
+    </div>
+    <div class="locked-note env">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
+    <div class="depth-line env">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
+    <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
+  </section>
+
+  <!-- ════════════ access ════════════ -->
+  <section id="clearance" aria-label="Access clearance">
+    <div class="env">
+    <div class="zone-label">CLEARANCE · THREE PATHS DEEPER</div>
+    <h2 class="sec-h">Selective about what gets built. Thorough about how it gets built.</h2>
+    </div>
+
+    <div class="clearance-grid">
+      <div class="path glass">
+        <span class="p-label">PATH 1 · OPEN</span>
+        <h3>Public materials</h3>
+        <p>This page and everything visible on the way down. Disclosed without qualification.</p>
+        <div class="p-note">OPEN ACCESS · NO QUALIFICATION</div>
+      </div>
+      <div class="path glass path-featured">
+        <span class="p-label">PATH 2 · QUALIFIED</span>
+        <h3>Capability review</h3>
+        <p>Full validation records, the controlled strata, and a working session with the systems — under NDA and identity confirmation.</p>
+        <div class="p-note" id="featNote">NDA · IDENTITY CONFIRMATION</div>
+        <a class="btn btn-primary" id="featCta" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA Briefing</a>
+      </div>
+      <div class="path glass">
+        <span class="p-label">PATH 3 · CONTROLLED</span>
+        <h3>Technical diligence</h3>
+        <p>Architecture, logs, and evaluation harnesses opened for inspection inside a controlled review window.</p>
+        <div class="p-note">SCOPED WINDOW · SUPERVISED</div>
+        <a class="btn" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request Diligence Window</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════ the floor ════════════ -->
+  <section id="floor" aria-label="The floor — governing law and public record">
+    <h2 class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></h2>
+    <div class="law">The surface states.<br>Depth conditions.<br>Records substantiate.<br>Boundaries govern.<br>The reader is a record.<br>Nothing is stated that is not checked.</div>
+
+    <div class="epochs" aria-label="Epochal record — superseded disclosure states">
+      <div class="ep-title">EPOCHAL RECORD — SUPERSEDED, NEVER ERASED</div>
+      <div class="ep-row" id="epochRow"></div>
+      <div class="ep-note">Each prior mark remains derivable from its manifest. The record supersedes; it does not delete. Identity is the chain, not the tip. A commitment's precedence is provable only against an external anchor — repository history, a transparency log. The page renders the commitment; it does not notarize it.</div>
+    </div>
+
+    <div class="manifest claims" aria-label="Standing claims — predicates the page executes">
+      <div class="m-title">STANDING CLAIMS — PREDICATES THE PAGE EXECUTES AGAINST ITSELF</div>
+      <div id="claimRows"></div>
+      <div class="i-actions">
+        <button class="i-btn" id="claimsRecompute">RECOMPUTE ALL</button>
+        <span class="copied" id="claimsStamp"></span>
+      </div>
+    </div>
+
+    <div class="manifest" aria-label="Public manifest">
+      <div class="m-title">PUBLIC MANIFEST — THE STATE THIS PAGE WAS DERIVED FROM</div>
+      <div id="manifestRows"></div>
+    </div>
+
+    <div class="manifest" data-provenance aria-label="Provenance — chain of record">
+      <div class="m-title">PROVENANCE — CHAIN OF RECORD</div>
+      <div id="provenanceRows"></div>
+    </div>
+
+    <div class="manifest anti" data-provisional="true" aria-label="Not claimed — the boundary of the record">
+      <div class="m-title">NOT CLAIMED — THE BOUNDARY OF THE RECORD, DRAWN BY ITS AUTHOR</div>
+      <div id="antiRows"></div>
+      <div class="ep-note">The fastest calibration of a vendor is the boundary of its claims. Drawn here, and included in the canonical checksum.</div>
+    </div>
+
+    <div class="colophon-notes env">
+      <p><b>One object, one world.</b> The mark is not framed on this page — this page is inside it. Four pre-rendered exposures of the canonical orbit are the background; scroll is the observation function, moving a derived camera from far-field into the filament core. The camera anchors are the orbit's densest cells, chosen by digest: the journey through the mark is derivation, not decoration.</p>
+      <p><b>The mark is derived, not designed.</b> Its four parameters are digests of the public manifest below — systems, validation index, revision, and the count of sealed references. When the disclosed state changes, the canonical form changes deterministically. Your drag forks a local variant; the canonical state is always recoverable, and a link reproduces any form exactly.</p>
+      <p><b>Closed causality.</b> No webfonts, no CDNs, no images, no external calls. Everything visible was present at initialization or derived locally from your interaction. Open the network tab — the artifact is sealed, and CL-01 observes it.</p>
+      <p><b>One loop, and it sleeps.</b> The weight-field on the thesis, the weight waves on the system titles, the world's fork re-development, and the boundary proposer share a single frame loop that stops completely at rest.</p>
+      <p><b>Two records, facing each other.</b> The manifest derives; the reading self-reports. They are not the same kind of record, and the page says so: the reading attests your descent to you, not to anyone else, and travels only by your explicit act. Standing claims run as predicates against the page itself; a hostile proposer demonstrates the boundary live; the record's own boundary is drawn in NOT CLAIMED. The page states nothing it cannot check.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="optics" id="optics" role="group" aria-label="Optical mode — reader-governed exposure">
+  <button data-o="world" aria-pressed="false">WORLD</button>
+  <button data-o="balanced" aria-pressed="true">BALANCED</button>
+  <button data-o="read" aria-pressed="false">READ</button>
+</div>
+
+<div class="strip">
+  <span>MARK <b id="markSerial">…</b></span>
+  <span class="st" id="obsZoom">×0.90</span>
+  <button id="forkBtn">FORK</button>
+  <span class="st" id="forkStatus">CANONICAL STATE</span>
+  <span class="grow"></span>
+  <button id="captureBtn">CAPTURE BRIEFING STATE</button>
+  <span class="copied" id="captured"></span>
+  <button id="resetBtn" hidden>RETURN TO CANONICAL</button>
+</div>
+
+<footer>
+  <span><span id="claimsFooter">CLAIMS —/—</span> · © 2026 CYTHERAI · RIYADH, KSA · US PATENT PENDING</span>
+  <span class="right"><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a></span>
+</footer>
+
+<script src="js/manifest.js" defer integrity="sha384-oO8Nh1lA9H3PMDYweHsO787+WG9UC39zC7mnyjU4dt4QAlpzT6J5aczivOaQj3Kc" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-giBbIoTHcQR09+WgV5PbMUyHuvKxmaVureXCZSVDrMbDQGPYtC/Xn8hgTRPx0MOK" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-aJIl86rjzPNcGMZXj8o1CxtC6mfzyTDGhCeRCY6Rwss9kmYsYqZAhaq9nd0CESTy" crossorigin="anonymous"></script>
+<script src="js/ledger.js" defer integrity="sha384-hc3dtLIX4t/da0jmRs6G28GZYUZz90fWgPlcCSI/x6geWBcglPyzAxfS3A4+nw3v" crossorigin="anonymous"></script>
+<script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-/OpMZunB91YpG9Q0cc0Zteh5k9+bJ/sjv2zYcQE1OklT1NgtGJmF14oUXHoxGTFM" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+/* ============================================================================
+   css/cytherai.css — CytherAI public-surface subpages
+   Flat, cold, static. No substrate, no ambient interpolation, no JS requirement.
+   The homepage is the world; these pages are the public record around it. Every
+   token name the subpage markup references is defined here in the cold palette,
+   so the pages restyle without structural change. Accent (#2036C7) appears only
+   for links-as-actions, focus, form focus, and verified/status values.
+   ============================================================================ */
+
+:root{
+  /* surfaces (cold) */
+  --paper:#ECF0F4; --paper-lifted:#F3F6FA; --paper-dense:#E0E6EF;
+  --ground:#ECF0F4; --panel:#F6F8FB;
+  /* ink */
+  --ink:#101620; --ink-mid:#414A5B; --ink-quiet:#6B7688;
+  --label:#414A5B; --quiet:#6B7688;
+  /* structure */
+  --rule:color-mix(in srgb, #101620 14%, transparent);
+  --bezel:color-mix(in srgb, #101620 14%, transparent);
+  /* signal — accent only; a single red for form errors */
+  --accent:#2036C7;
+  --refuse:#B23A2E;
+  /* type */
+  --font-mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --font-sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --font-serif:Georgia,'Times New Roman',serif;
+  --mono:var(--font-mono); --sans:var(--font-sans);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ground);color:var(--ink);font-family:var(--font-sans);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3,h4{font-weight:500;letter-spacing:-.01em;line-height:1.2;color:var(--ink)}
+strong{font-weight:600}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body.kbd :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+::selection{background:color-mix(in srgb,var(--accent) 20%,transparent)}
+.skip-link{position:absolute;left:-9999px}
+.skip-link:focus{left:12px;top:12px;z-index:100;background:var(--ink);color:#fff;
+  padding:8px 12px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em}
+
+/* ════════ thin top strip — CYTHERAI · PAGE · PUBLIC SURFACE ════════ */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--ground) 90%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.nav-container{max-width:1000px;margin:0 auto;padding:0 24px;height:44px;display:flex;align-items:center;gap:12px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.14em}
+.nav-brand{font-weight:700;letter-spacing:.18em;text-decoration:none;color:var(--ink)}
+.nav-brand:hover{color:var(--accent)}
+.nav-scope{color:var(--ink-quiet);text-transform:uppercase}
+.nav-scope b{color:var(--accent);font-weight:500}
+.nav-links{display:flex;gap:16px;margin-left:auto;list-style:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.nav-links a{text-decoration:none;color:var(--ink-quiet)}
+.nav-links a:hover,.nav-links a[aria-current="page"]{color:var(--accent)}
+
+/* ════════ document control strip (brief) ════════ */
+.doc-control{background:var(--paper-dense);border-bottom:1px solid var(--rule)}
+.doc-control-row{max-width:1000px;margin:0 auto;padding:0 24px;min-height:26px;display:flex;align-items:center;
+  gap:18px;flex-wrap:wrap;font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-quiet)}
+.doc-control-scope{color:var(--accent);margin-left:auto}
+
+/* ════════ sections ════════ */
+.section{padding:56px 0;border-bottom:1px solid var(--rule)}
+.section:last-of-type{border-bottom:none}
+.hero-stamp{display:inline-block;font-family:var(--font-mono);font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--ink-quiet);padding-bottom:14px}
+h1{font-size:clamp(26px,4vw,40px)}
+
+.doc-section{display:block;max-width:1000px;margin:0 auto;padding:56px 24px;border-top:1px solid var(--rule)}
+.doc-section:first-of-type{border-top:none}
+.doc-content{max-width:680px}
+.section-stamp{display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--ink-quiet);padding-bottom:20px;margin-bottom:8px}
+.section-stamp-id{color:var(--ink-mid)}
+.section-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--ink-quiet);margin-bottom:20px}
+.section-title{font-family:var(--font-serif);font-size:clamp(22px,3vw,30px);font-weight:400;color:var(--ink);line-height:1.3;margin-bottom:10px}
+.section-title em{color:var(--ink-mid);font-style:italic}
+.section-body{font-family:var(--font-mono);font-size:12px;color:var(--ink-mid);line-height:1.9;max-width:600px}
+.section-strip{max-width:1000px;margin:28px auto 0;padding:12px 0 0;border-top:1px solid var(--rule);
+  display:flex;justify-content:space-between;font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-quiet)}
+
+/* ════════ proof fragment ════════ */
+.proof-fragment{border-left:2px solid var(--accent);background:var(--paper-lifted);
+  padding:16px 18px;margin-top:22px;max-width:600px}
+.proof-fragment-source{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-quiet);padding-bottom:10px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.proof-fragment-body{font-family:var(--font-mono);font-size:12px;font-style:italic;color:var(--ink-mid);line-height:1.8}
+.proof-fragment-field{font-family:var(--font-mono);font-size:10px;color:var(--ink-quiet);
+  border-left:1px solid var(--rule);padding-left:10px;margin-top:12px}
+
+/* ════════ exhibit record ════════ */
+.doc-exhibit{background:var(--paper);border:1px solid var(--rule)}
+.doc-exhibit-header{display:flex;justify-content:space-between;align-items:center;min-height:28px;padding:0 14px;
+  background:var(--paper-dense);border-bottom:1px solid var(--rule);
+  font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-quiet)}
+.doc-exhibit-header-id{color:var(--ink-mid)}
+.doc-exhibit-body{padding:16px 16px 18px}
+.doc-exhibit-type{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-quiet)}
+.doc-exhibit-title{font-family:var(--font-serif);font-size:20px;font-style:italic;color:var(--ink);margin:8px 0 14px}
+.doc-exhibit-outcome{border-left:2px solid var(--accent);background:var(--paper-lifted);padding:12px 14px;margin:16px 0}
+.doc-exhibit-outcome-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.doc-exhibit-outcome-value{font-family:var(--font-mono);font-size:11px;color:var(--ink);margin-top:6px;line-height:1.6}
+.doc-exhibit-certification{border-left:2px solid var(--rule);background:var(--paper-lifted);padding:12px 14px;margin:16px 0}
+.doc-exhibit-certification-label,.doc-exhibit-status-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-quiet)}
+.doc-exhibit-certification-value,.doc-exhibit-status-value{font-family:var(--font-mono);font-size:11px;color:var(--ink-mid);margin-top:6px;line-height:1.7}
+.doc-exhibit-footer{display:flex;justify-content:space-between;border-top:1px solid var(--rule);padding-top:12px;margin-top:16px}
+.doc-exhibit-disclosure{font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-quiet)}
+
+/* ════════ tables ════════ */
+table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:11px;margin:8px 0}
+td{padding:9px 0;border-top:1px solid var(--rule);color:var(--ink-mid);vertical-align:top}
+td:first-child{color:var(--ink-quiet);letter-spacing:.06em;width:46%}
+tr:first-child td{border-top:none}
+
+/* ════════ prose (legal pages) ════════ */
+.section p{max-width:680px}
+.section ul{max-width:680px}
+.section a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.section a:hover{text-decoration:none}
+
+/* ════════ forms ════════ */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-quiet);margin-bottom:8px}
+.form-input,.form-textarea{width:100%;background:var(--paper-lifted);border:1px solid var(--rule);
+  color:var(--ink);font-family:var(--font-mono);font-size:13px;padding:11px 13px;line-height:1.5}
+.form-textarea{min-height:130px;resize:vertical}
+.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent)}
+.form-input::placeholder,.form-textarea::placeholder{color:var(--ink-quiet)}
+.form-hint{font-family:var(--font-mono);font-size:10px;color:var(--ink-quiet);margin-top:6px}
+
+/* ════════ buttons ════════ */
+.btn,.clearance-cta-primary{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;text-decoration:none;padding:12px 18px;border:1px solid var(--rule);
+  color:var(--ink);background:transparent;cursor:pointer}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn-primary:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-secondary{border-color:var(--rule);color:var(--ink-mid)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.clearance-cta-primary{display:block;text-align:center;background:var(--accent);border-color:var(--accent);color:#fff}
+.clearance-cta-primary:hover{filter:brightness(1.1)}
+
+/* ════════ footer ════════ */
+.footer{border-top:1px solid var(--rule);background:var(--paper-dense)}
+.footer-container{max-width:1000px;margin:0 auto;padding:18px 24px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;color:var(--ink-quiet)}
+.footer-links{display:flex;gap:16px;margin-left:auto;list-style:none}
+.footer-links a{text-decoration:none;color:var(--ink-quiet)}
+.footer-links a:hover,.footer-links a[aria-current="page"]{color:var(--accent)}
+
+@media(max-width:640px){
+  .nav-container{gap:8px}
+  .nav-scope{font-size:9px}
+  .doc-section,.section{padding-left:20px;padding-right:20px}
+  .footer-container{flex-direction:column;align-items:flex-start}
+  .footer-links{margin-left:0}
+}

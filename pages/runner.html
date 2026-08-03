@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="build-hash" content="C4F7059DAC405AE6">
+<!-- without this the browser requests /favicon.ico and logs a 404 — a console
+     error on the one page whose purpose is to show a clean verification result -->
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self';">
+<title>Verification — reproduce the result</title>
+<style>
+  :root{
+    --ground:#F4F5F2;--panel:#FFFFFF;--bezel:#D9DCD5;--rule:#D9DCD5;
+    --ink:#17191B;--label:#545A5E;--quiet:#6C7278;--seal:#0C7C6F;--refuse:#B23A2E;
+    --mono:'SF Mono',Menlo,Consolas,ui-monospace,monospace;--sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:var(--mono);font-size:13px;
+       line-height:1.55;font-variant-numeric:tabular-nums;margin:0;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 28px 80px}
+  .head{border-bottom:1px solid var(--rule);padding-bottom:16px;margin-bottom:20px}
+  .eyebrow{font-size:9px;letter-spacing:.24em;color:var(--quiet);text-transform:uppercase}
+  h1{font-family:var(--sans);font-weight:560;font-size:22px;letter-spacing:-.015em;margin:10px 0 8px}
+  .sub{font-size:12px;color:var(--label);line-height:1.7;max-width:620px}
+  .sub a{color:var(--seal);text-decoration:none;border-bottom:1px solid var(--rule)}
+  #out{font-size:12px;line-height:1.85;white-space:pre-wrap;word-break:break-word;
+       border:1px solid var(--rule);background:var(--panel);box-shadow:inset 0 1px 0 var(--bezel);padding:16px}
+  #out span{display:block}
+  .pass{color:var(--seal)} .fail{color:var(--refuse);font-weight:600} .err{color:var(--label)}
+  #summary{margin-top:18px;padding:12px 16px;display:inline-block;font-size:13px;letter-spacing:.03em;
+       border:1px solid var(--rule);background:var(--panel)}
+  #summary.ok{color:var(--seal)} #summary.bad{color:var(--refuse)}
+  .back{display:inline-block;margin-top:26px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+       color:var(--ink);text-decoration:none;border:1px solid var(--bezel);padding:10px 18px}
+  .back:hover{border-color:var(--seal)}
+</style>
+</head>
+<body>
+<a href="#out" style="position:absolute;left:-9999px">Skip to output</a>
+<main class="wrap" id="main">
+  <div class="head">
+    <div class="eyebrow">Verification</div>
+    <h1>Reproduce the result.</h1>
+    <p class="sub">This page runs the same <a href="../engine/trajectory-engine.js">engine/trajectory-engine.js</a> the site is built on against its full property suite, live in your browser, under <code>connect-src 'none'</code>. Nothing here is a screenshot. Reverting any guard fails exactly its witness.</p>
+  </div>
+  <div id="out"></div>
+  <div id="summary">running…</div><br>
+  <a class="back" href="../index.html">← Return to the record</a>
+</main>
+
+<!-- All four scripts are type="module" and load-bearing: classic scripts share one
+     global lexical scope, so the test file's top-level `const {INVALID, INDETERMINATE, …}`
+     collides with the engine's top-level `const INVALID` and the suite never parses
+     (SyntaxError: Can't create duplicate variable). Module scope removes the collision.
+     Modules are deferred and execute in document order, so shim → engine → test → summary
+     holds. Do not revert any of these to a classic script. -->
+<script type="module">
+(function(){
+  'use strict';
+  var out=document.getElementById('out');
+  function line(t,c){var s=document.createElement('span');if(c)s.className=c;s.textContent=String(t);out.appendChild(s);}
+  var _log=console.log.bind(console),_err=console.error.bind(console);
+  console.log=function(){var s=[].join.call(arguments,' ');line(s,/^PASS/.test(s)?'pass':'');_log.apply(null,arguments);};
+  console.error=function(){var a=[].map.call(arguments,function(x){return (x&&x.stack)?x.stack:String(x);});var s=a.join(' ');line(s,/^FAIL/.test(s)?'fail':'err');_err.apply(null,arguments);};
+  function AssertionError(m){this.name='AssertionError';this.message=m||'assertion failed';this.stack=this.message;}
+  AssertionError.prototype=Object.create(Error.prototype);
+  function deepEqual(a,b){if(Object.is(a,b))return true;if(typeof a!=='object'||typeof b!=='object'||!a||!b)return false;
+    if(Array.isArray(a)!==Array.isArray(b))return false;var ka=Object.keys(a),kb=Object.keys(b);if(ka.length!==kb.length)return false;
+    for(var i=0;i<ka.length;i++){if(!Object.prototype.hasOwnProperty.call(b,ka[i]))return false;if(!deepEqual(a[ka[i]],b[ka[i]]))return false;}return true;}
+  function assert(v,m){if(!v)throw new AssertionError(m);}
+  assert.ok=assert;
+  assert.equal=function(a,b,m){if(!Object.is(a,b))throw new AssertionError(m||(String(a)+' !== '+String(b)));};
+  assert.notEqual=function(a,b,m){if(Object.is(a,b))throw new AssertionError(m||('unexpected equal '+String(a)));};
+  assert.deepEqual=function(a,b,m){if(!deepEqual(a,b))throw new AssertionError(m||'deepEqual failed');};
+  assert.notDeepEqual=function(a,b,m){if(deepEqual(a,b))throw new AssertionError(m||'unexpected deepEqual');};
+  assert.throws=function(fn,exp,m){var e=null;try{fn();}catch(x){e=x;}if(!e)throw new AssertionError(m||'expected throw');
+    if(exp instanceof RegExp&&!exp.test(e.message))throw new AssertionError((m||'throw mismatch')+': '+e.message);};
+  assert.AssertionError=AssertionError;
+  window.module={exports:{}};
+  window.process={exitCode:0,exit:function(){},env:{},argv:[]};
+  window.require=function(id){
+    if(id==='node:assert/strict'||id==='assert/strict'||id==='assert')return assert;
+    if(/trajectory-engine(\.js)?$/.test(id))return window.CytherEngine;
+    throw new Error('runner shim: cannot require("'+id+'")');
+  };
+})();
+</script>
+<script type="module" src="../engine/trajectory-engine.js" integrity="sha384-5jUBvS15D9xJmKSdKnCM4ukHQ//VFhDJ6dxo+1mKYG+tFHuCjAH/C4YUXHBzBxwS" crossorigin="anonymous"></script>
+<script type="module" src="../engine/trajectory-engine.test.js" integrity="sha384-dQb42o8cFdH+kXuCf7xcSH30f4LnemsqENvXEUsiKB+7EI6Yvh+gN9T65OYYBFhN" crossorigin="anonymous"></script>
+<script type="module">
+  var p=document.querySelectorAll('#out .pass').length, f=document.querySelectorAll('#out .fail').length;
+  var code=(window.process&&(window.process.exitCode|0))||0;
+  /* p>0 is the load witness: a suite that never parsed reports zero passes and
+     zero failures, which the old (f===0&&code===0) test read as success. */
+  var ok=(p>0&&f===0&&code===0);
+  var s=document.getElementById('summary'); s.className=ok?'ok':'bad';
+  s.textContent = ok ? ('✓  '+p+' / '+p+' passed · exitCode '+code+'  ·  mutation-verified')
+    : p===0 ? '✕  0 tests executed — the suite failed to load'
+    : ('✕  '+f+' failed / '+p+' passed · exitCode '+code);
+</script>
+</body>
+</html>
