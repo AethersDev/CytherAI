@@ -49,7 +49,29 @@ body.forking #substrate{cursor:grabbing}
   padding:12px 22px;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(12px)}
 .wordmark{font-size:15px;font-weight:750;letter-spacing:.14em}
 .gauge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-align:right;line-height:1.7}
-.gauge b{color:var(--accent);font-weight:500}
+/* ACCENT AS A TEXT COLOUR — bounded by measurement, not by taste.
+   BGS and ACCENTS are both locked (§4.1) and their luminance ramps CROSS in the
+   mid-descent, so around d≈1.0–1.4 the accent is separable from nothing the
+   design produces: 1.9:1 against the light ambient, 2.14:1 against the flip
+   membrane. An accent RULE or BORDER does not escape it either — as a non-text
+   indicator it still fails 1.4.11's 3:1 there (1.34:1 on raw ambient at d=1.50).
+   The channel is the problem, not the role it plays.
+   So any run that can be on screen inside that band carries INK, keeping the
+   weight that already marked it. Twenty rules were measured across the whole
+   descent; the six below never enter the band where they appear, and keep the
+   accent with their measured minimum recorded. Re-run the scoped harness after
+   any layout change — these six are safe by POSITION, which reflow can undo.
+     .eyebrow                 7.60:1   hero only, d=0
+     .rung .r-impl.disclosed  4.78:1   d≈0.48–0.60
+     .sys .o-val              5.60:1   d≈0.60–0.84
+     .bi-head b               5.30:1   d≈0.72–0.96
+     .manifest .m-v.acc       5.01:1   d≈2.52–2.76
+     footer a:hover           7.90:1   floor
+   Selected state on the optics control is an INK rule (10.72:1 worst), not an
+   accent colour: the accent still marks state, but nothing legible depends on
+   it, and aria-pressed carries it non-visually regardless.
+*/
+.gauge b{color:var(--ink);font-weight:500}
 @media(max-width:640px){.gauge{font-size:9px}}
 
 /* ════════════ core sample — position in the form ════════════ */
@@ -78,7 +100,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
    forms must render identically. */
 .zone-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
   color:color-mix(in srgb,var(--ink) 70%,transparent);margin-top:0;margin-bottom:4.5vh;font-weight:inherit}
-.zone-label b{color:var(--accent);font-weight:500}
+.zone-label b{color:var(--ink);font-weight:500}
 .sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
   max-width:26ch;margin-bottom:5vh;color:var(--ink)}
 .glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
@@ -139,7 +161,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
   font-family:var(--mono);font-size:10px;line-height:2.1}
 .cause .c-k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
-.cause .c-v{color:var(--accent);font-weight:500;letter-spacing:.12em}
+.cause .c-v{color:var(--ink);font-weight:500;letter-spacing:.12em}
 .cause .c-v.none{color:var(--ink)}
 
 /* ════════════ boundary instrument ════════════ */
@@ -151,27 +173,27 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 #biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
 .bi-log{font-family:var(--mono);font-size:9.5px;line-height:1.9;min-width:220px;flex:1;min-height:130px;
   color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.bi-log .adm{color:var(--accent)}
+.bi-log .adm{color:var(--ink);font-weight:500}
 .bi-stats{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;margin-top:12px;
   color:color-mix(in srgb,var(--ink) 74%,transparent)}
-.bi-stats b{color:var(--accent);font-weight:500}
+.bi-stats b{color:var(--ink);font-weight:500}
 
 /* ════════════ measurement ════════════ */
 .val-panel{padding:22px 24px 6px;max-width:860px}
 .legend{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
   color:color-mix(in srgb,var(--ink) 66%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
-.legend .lv{color:var(--accent)}
+.legend .lv{color:var(--ink);font-weight:500}
 table{width:100%;border-collapse:collapse;font-family:var(--mono)}
 th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent);
   text-align:right;font-weight:400;padding:14px 0 8px}
 th:first-child{text-align:left}
-th.cy{color:var(--accent)}
+th.cy{color:var(--ink);font-weight:500}
 td{font-size:11px;color:color-mix(in srgb,var(--ink) 80%,transparent);padding:9px 0;
   border-top:1px solid var(--hair);text-align:right}
 td:first-child{text-align:left}
-td .mk{color:var(--accent);margin-right:8px}
+td .mk{color:var(--ink);margin-right:8px}
 td .mk.ext{color:color-mix(in srgb,var(--ink) 66%,transparent)}
-td.cy{color:var(--accent);font-weight:500}
+td.cy{color:var(--ink);font-weight:500}
 td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 .meth{display:grid;grid-template-columns:170px 1fr;gap:6px 18px;font-family:var(--mono);font-size:10px;
   line-height:1.8;padding:18px 0 14px;border-top:1px solid var(--hair);margin-top:4px}
@@ -192,10 +214,10 @@ td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 .b-hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in srgb,var(--accent) 28%,transparent)}
 .b-hold span{position:relative}
 .b-hold:hover{border-color:var(--accent)}
-.b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--accent)}
+.b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--ink)}
 .b-state{font-family:var(--mono);font-size:9px;letter-spacing:.18em;margin-top:14px;
   color:color-mix(in srgb,var(--ink) 66%,transparent)}
-body.crossed .b-state{color:var(--accent)}
+body.crossed .b-state{color:var(--ink);font-weight:500}
 
 /* ════════════ controlled stratum ════════════ */
 .sealed{min-height:72vh;display:flex;flex-direction:column;justify-content:center}
@@ -237,7 +259,7 @@ body.crossed .locked-note{display:none}
 .manifest .m-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .manifest .m-v{color:var(--ink);font-weight:500;text-align:right}
 .manifest .m-v.acc{color:var(--accent)}
-.manifest .m-v.ok{color:var(--accent)}
+.manifest .m-v.ok{color:var(--ink)}
 .manifest .m-v.bad{color:var(--ink);font-weight:700}
 .manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
 .manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
@@ -250,7 +272,7 @@ body.crossed .locked-note{display:none}
 .ep canvas{display:block;border:1px solid var(--hair);margin-bottom:6px}
 .ep.current{color:var(--ink)}
 .ep.current canvas{border-color:var(--accent)}
-.ep .st{color:var(--accent)}
+.ep .st{color:var(--ink);font-weight:500}
 .ep-arrow{font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
 .ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 
@@ -269,20 +291,20 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
 .i-actions{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;align-items:center}
 .i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:2px 0;
   color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}
-.i-btn:hover{color:var(--accent);border-color:var(--accent)}
-.copied{font-family:var(--mono);font-size:9.5px;color:var(--accent)}
+.i-btn:hover{color:var(--ink);border-color:var(--accent)}
+.copied{font-family:var(--mono);font-size:9.5px;color:var(--ink);font-weight:500}
 
 /* ════════════ reader ledger ════════════ */
 .rledger{position:fixed;left:22px;bottom:54px;z-index:25;width:268px;font-family:var(--mono)}
 .rl-head{display:block;width:100%;text-align:left;font-size:9px;letter-spacing:.14em;padding:9px 12px;
   background:var(--panel);backdrop-filter:blur(12px);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
 .rl-head:hover{border-color:var(--accent)}
-#rlDigest{color:var(--accent)}
+#rlDigest{color:var(--ink);font-weight:500}
 .rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
   border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
 .rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
-.rl-log b{color:var(--accent);font-weight:500}
+.rl-log b{color:var(--ink);font-weight:500}
 .rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
 
 /* ════════════ serial strip — the mark's record, always present ════════════ */
@@ -291,10 +313,10 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
   background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(12px);
   border-top:1px solid var(--hair);color:color-mix(in srgb,var(--ink) 72%,transparent)}
 .strip b{color:var(--ink);font-weight:500}
-.strip .st{color:var(--accent)}
+.strip .st{color:var(--ink);font-weight:500}
 .strip button{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 0;
   color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid var(--hair)}
-.strip button:hover,.strip button.on{color:var(--accent);border-color:var(--accent)}
+.strip button:hover,.strip button.on{color:var(--ink);border-color:var(--accent)}
 .strip .grow{flex:1}
 @media(max-width:640px){.strip{gap:9px;font-size:8.5px}#forkStatus{display:none}}
 
@@ -390,7 +412,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 .optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 66%,transparent);
   background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
 .optics button+button{border-left:none}
-.optics button[aria-pressed="true"]{color:var(--accent)}
+.optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
 @media(max-width:900px){.optics{right:12px;bottom:104px}}
 @media(max-width:640px){.env::before{backdrop-filter:blur(calc(var(--envK,.7)*8px)) saturate(calc(1 - var(--envK,.7)*.45))}}
 

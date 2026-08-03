@@ -8,7 +8,7 @@
 | **Execution status** | ✓ Verified in Chromium (Chrome 150, against the `dist/` artifact) |
 | **Outstanding browser certification** | 2 WebKit-critical (W1–W2) · 6 WebKit-platform observations (W3–W8) |
 | **Outstanding deployment certification** | Origin headers · HSTS · MIME · 404 behaviour |
-| **Outstanding owner certification** | Epoch-04 commitment · Manifest sign-off · Accent-state accessibility decision |
+| **Outstanding owner certification** | Epoch-04 commitment · Manifest sign-off |
 | **Overall** | **Release candidate pending certification** |
 
 The remaining work is certification, not construction. Class A items can
@@ -161,12 +161,12 @@ here would not invalidate the architecture.
 
 | # | Item |
 |---|---|
-| O1 | **Accent-state accessibility decision — see the measured options below.** |
+| ~~O1~~ | **Resolved** — accent-state accessibility decision taken; see below. |
 | O2 | The epoch-04 commitment — see gate item 4 below |
 | O3 | The `PROVISIONAL` manifest values |
 | O4 | At 390px the `.optics` control transiently covers a zone label as content scrolls behind it. Same bottom chrome band the spec docks the reader ledger into, and it clears on scroll — recorded, not changed |
 
-#### O1 in detail — measured, with options
+#### O1 — RESOLVED. What was measured, and what was decided
 
 **The finding.** Accent-coloured text drops below AA in the mid-descent: worst
 **2.14:1** at d=1.20. Verified **pre-existing, not a P8 regression** — the
@@ -210,8 +210,35 @@ large margins, and none touches a locked token:
    Either those runs stop being accent-coloured (ink plus the weight they
    already carry), or the `ACCENTS` ramp changes — and the ramp is locked.
 
-Half 1 is a contained change. Half 2 is a register decision about whether the
-accent is ever a text colour. Owner call; nothing has been changed.
+**Decision taken (owner, this review): B for state, ink + existing weight for prose.**
+
+Implemented:
+
+* Selected state on the optics control is now full-strength ink text plus a 2px
+  ink underline — worst 10.72:1 at every depth, and the rule follows the ink
+  phase (dark at the surface, light through the flip). `aria-pressed` already
+  carried the state non-visually.
+* Twenty accent text rules were measured across the whole descent, taking the
+  minimum over **every** matching element (an earlier first-match-only scan
+  wrongly cleared `.zone-label b`, `th.cy`, `td .mk` and `td.cy`). The fourteen
+  that can appear inside the crossing band now carry ink, keeping the weight
+  that already marked them; three transient ones (`.copied`, `.rl-log b`,
+  `.bi-log .adm`) were forced on screen at d=1.08 to measure rather than assume,
+  and also failed at 1.9:1.
+* Six rules keep the accent because they provably never enter the band where
+  they appear, each annotated in the stylesheet with its measured minimum:
+  `.eyebrow` 7.60:1, `.rung .r-impl.disclosed` 4.78:1, `.sys .o-val` 5.60:1,
+  `.bi-head b` 5.30:1, `.manifest .m-v.acc` 5.01:1, `footer a:hover` 7.90:1.
+  These are safe by **position**, which a reflow can undo — re-run the scoped
+  harness after any layout change.
+* Accent retained on all 11 fill/border/hover-affordance uses. No locked token
+  changed; `ACCENTS` and `BGS` are untouched.
+
+Result: accent text below AA — **0 samples**. Ink layers unchanged at 4.63:1
+worst. Still open as a lesser question: accent used as a non-text *border* also
+sits under 3:1 in that band (`.path-featured`, `#coreRect`). Those are marks
+rather than sole carriers of information, so 1.4.11 is arguable; recorded here
+rather than changed.
 
 ### ORIGIN DEPLOYMENT REQUIRED
 
