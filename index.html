@@ -329,14 +329,19 @@ body[data-optics="world"] .env::before{opacity:.18}
    in every optics mode and during motion; CL-06's model depends on it */
 body[data-phase="flip"] .env::before{opacity:1}
 
-/* panels undergo a material phase change; the flip membrane also grounds envelopes */
-.glass,.rl-head,.rl-body,.chrome,.strip{transition:background .35s ease,color .25s ease}
+/* Panels undergo a material phase change; the flip membrane also grounds envelopes.
+   ONE list for all three phases. Previously the flip list carried .chrome, .strip
+   and .optics button but the depth and core lists did not, so those surfaces
+   reverted to their paper backgrounds while the ink stayed light — measured in
+   Chrome at 2.99:1 on the optics control at d=2.10. .core .lbl was in no list at
+   all and read 1.36:1 through the entire flip band. Any surface that carries
+   reading text must change phase with the ink; if you add one, add it here. */
+.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl{transition:background .35s ease,color .25s ease}
+.core .lbl{padding:3px 2px}
 body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
-body[data-phase="flip"] .glass,body[data-phase="flip"] .rl-head,body[data-phase="flip"] .rl-body,
-body[data-phase="flip"] .chrome,body[data-phase="flip"] .strip,
-body[data-phase="flip"] .optics button{background:rgba(16,22,31,.82)}
-body[data-phase="depth"] .glass,body[data-phase="depth"] .rl-head,body[data-phase="depth"] .rl-body{background:rgba(10,15,23,.72)}
-body[data-phase="core"] .glass,body[data-phase="core"] .rl-head,body[data-phase="core"] .rl-body{background:rgba(7,10,16,.93)}
+body[data-phase="flip"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(16,22,31,.82)}
+body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(10,15,23,.72)}
+body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(7,10,16,.93)}
 
 /* secondary text does not dim merely for being secondary: on the dark phases the
    low-alpha greys tuned for paper get swallowed — lift the mixes under light ink.
