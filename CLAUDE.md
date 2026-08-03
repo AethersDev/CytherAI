@@ -65,7 +65,11 @@ Accent `#2036C7` marks state only. BANNED in shipped files: fake meters (`−540
 owner-erasable), `1e-12` (the compositing bound is `< 0.05 px · transform quantization`).
 The commitment chip must keep: *"The page renders the commitment; it does not notarize it."*
 PROVISIONAL manifest values (epoch history, counts, commitment preimage) live only in
-`js/manifest.js`; replacing them is a data-only edit.
+`js/manifest.js`; replacing them is a data-only edit. The floor's commitment chip prints
+`COMMITMENTS[0].status` verbatim — it never asserts a status of its own. `PREIMAGE SEALED`
+may be set only when the preimage is in the owner's custody alone and appears in no
+history intended for public release; the shipped value is `PREIMAGE PUBLIC · DEMONSTRATION`
+because `newC3/epoch04-preimage.txt` hashes to the published digest.
 
 ## Provenance
 

@@ -71,11 +71,18 @@ decisions, not engineering steps.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
    the three 404 checks in §4 pass on staging.
 3. The origin sends the §1 headers (`curl -sI` verified).
-4. The epoch-04 commitment digest in `js/manifest.js` has a **private**
-   preimage — or the commitment is withheld from the shipped manifest data.
-   The page must not print `PREIMAGE SEALED` about a preimage that is public.
-   (`newC3/epoch04-preimage.txt` hashes to the currently published digest; the
-   allowlist keeps it off the origin, but the digest itself is still the demo one.)
+4. **Owner decision — the epoch-04 commitment.** The chip no longer claims a
+   seal it does not have: it prints `COMMITMENTS[0].status`, currently
+   `PREIMAGE PUBLIC · DEMONSTRATION`, which is true —
+   `newC3/epoch04-preimage.txt` hashes to the published digest, and the deploy
+   allowlist keeps that file off the origin but does not make the preimage
+   secret. Launch may proceed on that honest statement. To ship an actual
+   pre-registration instead, replace digest, date and status in `js/manifest.js`
+   (data-only) once the preimage exists in the owner's custody alone **and**
+   appears in no history intended for public release — note that the current
+   preimage is in the git history, so a real seal needs a fresh preimage, not
+   a deletion. Restoring `PREIMAGE SEALED` before that is true re-opens the
+   defect this replaced.
 5. Standard battery green at the release commit; claims `9/9 HOLDING` in a
    served browser check.
 6. The `PROVISIONAL` values in `js/manifest.js` (epoch history, counts,
