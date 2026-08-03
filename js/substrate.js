@@ -137,11 +137,21 @@ function ambientAt(p) {
 /* ================= reading exposure — the record's own law (P9) =================
    Physics may be continuous; legibility is admitted or refused. Reading ink is
    bistable with hysteresis. Constants calibrated against the ambient keyframes
-   (WCAG): dark ink holds ≥5.3:1 on raw ambient up to SW_DOWN; past the switch,
-   light ink grounds on the absorptive membrane (≥9:1 at any depth) until the
-   raw ambient alone carries ≥8:1. CL-06 re-derives this. */
+   (WCAG): dark ink holds on raw ambient up to SW_DOWN; past the switch, light
+   ink grounds on the absorptive membrane (≥9:1 at any depth) until the raw
+   ambient alone carries ≥8:1. CL-06 and CL-06c re-derive this.
+
+   SW_DOWN was 1.44 — the last depth at which PRIMARY ink (alpha 1.0) still held
+   5.3:1. That criterion ignored every quieter layer: at 1.44 the raw ambient is
+   rgb(134,145,161), where even 80% body ink reads 4.03:1 and a 55% label reads
+   2.58:1. Because the ambient darkens monotonically, holding the switch that
+   late forces EVERY text layer to ≥86% ink — one flat tone, no hierarchy at all.
+   The switch is therefore derived from the quietest meaningful layer instead of
+   the loudest: at d=1.00 the ambient is rgb(185,195,210) and 66% ink reads
+   4.5:1, so 66% is the stylesheet's ink floor and 1.00 is the switch. The
+   0.09 hysteresis gap is unchanged. */
 const READING = {
-  SW_DOWN: 1.44, SW_UP: 1.35, FLIP_END: 2.05,
+  SW_DOWN: 1.00, SW_UP: 0.91, FLIP_END: 2.05,
   DARK: "#101620", LIGHT: "#E3EAF4",
   MEMBRANE: [16, 22, 31], MEMBRANE_A: 0.82
 };
