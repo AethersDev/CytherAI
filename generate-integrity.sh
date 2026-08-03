@@ -64,8 +64,10 @@ for HTML in $HTML_FILES; do
     echo "  $HTML ✓"
 done
 
-# Stamp the service-worker cache name: new build ⇒ new cache ⇒ atomic re-install
-sed -i '' -E "s|(var CACHE = 'cytherai-substrate-)[^']*(';)|\1${BUILD_HASH}\2|" sw.js
+# Stamp the service-worker cache name: new build ⇒ new cache ⇒ atomic re-install.
+# Replace ONLY the hex hash: a trailing -rN (worker-logic revision at an unchanged
+# build) must survive, or a logic revision would be silently un-versioned here.
+sed -i '' -E "s|(var CACHE = 'cytherai-substrate-)[0-9A-F]*|\1${BUILD_HASH}|" sw.js
 echo "  sw.js ✓ (CACHE cytherai-substrate-${BUILD_HASH})"
 
 echo "[integrity] Done. Build: $BUILD_HASH"
