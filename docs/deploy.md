@@ -62,12 +62,39 @@ curl -s -o /dev/null -w '%{http_code}\n' https://HOST/PRODUCTION_PLAN.md        
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
 ```
 
-## 5. Launch gate
+## 5. Safari matrix — the outstanding certification
+
+Everything in the audit plan has been implemented and verified by executed
+harnesses under JavaScriptCore. **No item below has been observed in a browser**,
+because the build machine has none. This is the gate between "implementation
+complete" and "certified". Run it on the staging origin, in Safari, and record
+the result; several items exist specifically because a phase changed behaviour
+that only rendering can confirm.
+
+| # | Check | Why it is here |
+|---|---|---|
+| 1 | `pages/runner.html` shows `✓ 33 / 33 passed · exitCode 0` | P2 made all four scripts `type="module"`. Confirms Safari's module loading, SRI fetch on module scripts, and that inline modules are admitted under `script-src 'self' 'unsafe-inline'`. |
+| 2 | Console is clean on all 7 pages | P4 tightened subpage CSP to `script-src 'none'` + `object-src`/`base-uri`. Any violation here is real. |
+| 3 | Contact form submit opens the mail client | P4 deliberately did **not** add `form-action`. If the submit works, try adding `form-action 'self' mailto:;` and re-test; if it then fails, leave it off and keep the comment in `contact.html`. |
+| 4 | Offline: load once online, quit, go offline, navigate to `/` | P6's fix. Must render the homepage, not the network-error page. Also navigate to an uncached path — must fail cleanly. |
+| 5 | Storage shows exactly one cache, named for the current build hash | P6/P9. Confirms `activate` deletes prior generations and the new worker claims clients. |
+| 6 | VoiceOver rotor: headings read surface → definition · architecture (2) · measurement · controlled · clearance (3) · floor | P7 changed three `h4`→`h3` and made two `.zone-label` divs into `h2`. |
+| 7 | Tab from the address bar reveals the skip link on all 6 content pages | P7. |
+| 8 | Hero, clearance cards and floor are visually unchanged | P7 pinned `.path h3` bottom margin and `.zone-label` weight/margin to keep the element swaps neutral. Any shift means a selector was missed. |
+| 9 | Full descent: the reading hierarchy still reads as layered, and the ink flip at ~33% scroll looks deliberate | **P8 is the largest visual change in this series.** It moved the switch from 48% to 33% scroll and raised 33 declarations to a 66% ink floor. If the flip now feels early, that is the trade this bought — say so rather than reverting silently. |
+| 10 | Claims panel reads `CLAIMS 10/10 HOLDING` | P8 added CL-06c. |
+| 11 | Network tab is empty after load | CL-01, standing. |
+| 12 | Fork + return to canonical; capture link reproduces the mark | PRODUCTION_PLAN §9. |
+| 13 | Hold-to-cross in all three input modes (pointer hold, Enter/Space, AT double-activation) | PRODUCTION_PLAN §9. |
+| 14 | Proposer + 10k audit; reduced-motion pass; 390px pass | PRODUCTION_PLAN §9. Mobile is untested at any width. |
+
+## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
 decisions, not engineering steps.
 
-1. `pages/runner.html` shows `✓ 33 / 33 passed · exitCode 0` in Safari.
+1. The §5 Safari matrix has been run and recorded. Nothing below substitutes
+   for it: every phase was verified by harness, none by a browser.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
    the three 404 checks in §4 pass on staging.
 3. The origin sends the §1 headers (`curl -sI` verified).
@@ -83,7 +110,7 @@ decisions, not engineering steps.
    preimage is in the git history, so a real seal needs a fresh preimage, not
    a deletion. Restoring `PREIMAGE SEALED` before that is true re-opens the
    defect this replaced.
-5. Standard battery green at the release commit; claims `9/9 HOLDING` in a
+5. Standard battery green at the release commit; claims `10/10 HOLDING` in a
    served browser check.
 6. The `PROVISIONAL` values in `js/manifest.js` (epoch history, counts,
    commitment preimage) reviewed by the owner. Shipping them knowingly is
