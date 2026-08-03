@@ -55,6 +55,12 @@ for HTML in $HTML_FILES; do
         continue
     fi
     sed -i '' -E "s|(<meta name=\"build-hash\" content=\")[^\"]*(\">)|\1${BUILD_HASH}\2|g" "$HTML"
+    # sed is a silent no-op on a file with no such tag: an unstamped page would
+    # then claim provenance it does not carry. Assert the substitution landed.
+    if ! grep -q "<meta name=\"build-hash\" content=\"${BUILD_HASH}\">" "$HTML"; then
+        echo "  ERROR: $HTML has no build-hash meta to stamp" >&2
+        exit 1
+    fi
     echo "  $HTML ✓"
 done
 
