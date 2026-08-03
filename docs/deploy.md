@@ -62,39 +62,94 @@ curl -s -o /dev/null -w '%{http_code}\n' https://HOST/PRODUCTION_PLAN.md        
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
 ```
 
-## 5. Safari matrix — the outstanding certification
+## 5. Browser matrix — Chrome observed, WebKit residual
 
-Everything in the audit plan has been implemented and verified by executed
-harnesses under JavaScriptCore. **No item below has been observed in a browser**,
-because the build machine has none. This is the gate between "implementation
-complete" and "certified". Run it on the staging origin, in Safari, and record
-the result; several items exist specifically because a phase changed behaviour
-that only rendering can confirm.
+A Chrome 150 pass was executed against the **`dist/` artifact** (not the source
+tree) driven over the DevTools Protocol: eight routes, service-worker lifecycle
+with the origin genuinely killed, keyboard and focus, four viewport sizes,
+rendered-colour contrast sampled across the whole descent, and every live
+control. Each item below carries its status.
 
-| # | Check | Why it is here |
+Chrome cannot certify WebKit. Items marked **WEBKIT-SPECIFIC** are the residual
+and are the only reason this matrix is not closed.
+
+### CHROME OBSERVED — PASS
+
+| # | Check | Evidence |
 |---|---|---|
-| 1 | `pages/runner.html` shows `✓ 33 / 33 passed · exitCode 0` | P2 made all four scripts `type="module"`. Confirms Safari's module loading, SRI fetch on module scripts, and that inline modules are admitted under `script-src 'self' 'unsafe-inline'`. |
-| 2 | Console is clean on all 7 pages | P4 tightened subpage CSP to `script-src 'none'` + `object-src`/`base-uri`. Any violation here is real. |
-| 3 | Contact form submit opens the mail client | P4 deliberately did **not** add `form-action`. If the submit works, try adding `form-action 'self' mailto:;` and re-test; if it then fails, leave it off and keep the comment in `contact.html`. |
-| 4 | Offline: load once online, quit, go offline, navigate to `/` | P6's fix. Must render the homepage, not the network-error page. Also navigate to an uncached path — must fail cleanly. |
-| 5 | Storage shows exactly one cache, named for the current build hash | P6/P9. Confirms `activate` deletes prior generations and the new worker claims clients. |
-| 6 | VoiceOver rotor: headings read surface → definition · architecture (2) · measurement · controlled · clearance (3) · floor | P7 changed three `h4`→`h3` and made two `.zone-label` divs into `h2`. |
-| 7 | Tab from the address bar reveals the skip link on all 6 content pages | P7. |
-| 8 | Hero, clearance cards and floor are visually unchanged | P7 pinned `.path h3` bottom margin and `.zone-label` weight/margin to keep the element swaps neutral. Any shift means a selector was missed. |
-| 9 | Full descent: the reading hierarchy still reads as layered, and the ink flip at ~33% scroll looks deliberate | **P8 is the largest visual change in this series.** It moved the switch from 48% to 33% scroll and raised 33 declarations to a 66% ink floor. If the flip now feels early, that is the trade this bought — say so rather than reverting silently. |
-| 10 | Claims panel reads `CLAIMS 10/10 HOLDING` | P8 added CL-06c. |
-| 11 | Network tab is empty after load | CL-01, standing. |
-| 12 | Fork + return to canonical; capture link reproduces the mark | PRODUCTION_PLAN §9. |
-| 13 | Hold-to-cross in all three input modes (pointer hold, Enter/Space, AT double-activation) | PRODUCTION_PLAN §9. |
-| 14 | Proposer + 10k audit; reduced-motion pass; 390px pass | PRODUCTION_PLAN §9. Mobile is untested at any width. |
+| 1 | All 8 routes load from `dist/` | 0 console errors, 0 exceptions, 0 CSP violations, 0 failed loads, on first load and on hard reload |
+| 2 | Network posture | one host contacted (`127.0.0.1:8200`), 19 distinct URLs, **0 external requests** |
+| 3 | SRI is enforced on module scripts | negative control: one appended byte in `engine/trajectory-engine.js` → "Failed to find a valid digest in the 'integrity' attribute", module blocked |
+| 4 | `runner.html` executes its four module scripts | all four report `type=module`; 33 PASS lines, 0 FAIL, `✓ 33 / 33 passed · exitCode 0`, `CytherEngine` present |
+| 5 | The zero-test guard is honest under real failure | same negative control → `✕ 0 tests executed — the suite failed to load`, class `bad`. DEF-001 cannot silently return |
+| 6 | Direct navigation and refresh on every route | title stable, no new console output on reload |
+| 7 | Service worker installs and activates | scope `/`, state `activated`, cache name == build hash, 18 entries |
+| 8 | REL-001 scenario reproduced and fixed | landed on `/index.html` only (`"/"` never cached — confirmed absent), **killed the server** (`curl` → 000), navigated to `/` → homepage rendered, `CLAIMS 10/10 HOLDING`. CDP offline emulation was not trusted: it does not appear to cover the worker's own fetches |
+| 9 | Offline uncached path fails deliberately | Chrome network-error page, never the homepage |
+| 10 | Offline subresources | `runner.html` offline → 33/33 |
+| 11 | Update path | new build served → worker updated, old cache deleted, exactly one cache remains; offline root still works on the new generation |
+| 12 | Skip link | first Tab on all 6 content pages → `a.skip-link` at (12,12), visible, accent focus ring |
+| 13 | Heading outline | h1 → 7×h2 → 5×h3, **no level skips**, single h1 |
+| 14 | Focus | every sampled control accepts focus; `:focus-visible` rule live |
+| 15 | CSP is genuinely enforced | positive control: injected inline `<script>` blocked on both `index.html` (`script-src 'self'`) and `privacy.html` (`script-src 'none'`), violation logged |
+| 16 | Claims recompute live | 10/10 HOLDING with real detail; instrument audit 1500 proposals / 7 admitted / **0 invalid** |
+| 17 | Ledger | records, labels, `clear()` empties it, **does not survive reload**, `sessionStorage`/`localStorage` both empty — matches the privacy text exactly |
+| 18 | Optics | all three modes set `body[data-optics]`, persist to `sessionStorage`, and drive `#world` opacity (1.00 / 0.72 / 0.51) |
+| 19 | Hold-to-cross, three input modes | pointer hold, Enter keydown→keyup, and AT double-activation each cross and each record exactly one act |
+| 20 | Fork → capture → reproduce → reset | drag forked to `−1.536 +2.006 −0.906 −0.660`; capture wrote `#d=0.000&m=…`; reloading that link reproduced the mark exactly with `LOCAL FORK — VISITOR FORK OF THE PUBLIC CHECKSUM`; reset restored canonical |
+| 21 | Reduced motion | media matched, `scroll-behavior: auto`, claims 10/10, instrument synchronous, 0 console errors |
+| 22 | Responsive | 390×844, 768×1024, 1024×768, 1440×900 — no horizontal overflow, no centre-column obstruction |
+| 23 | Rendered contrast of every ink layer | worst **4.63:1** at d=0.90, sampled every 5% of the descent over elements actually in the viewport, ground = the real paint stack. CL-06c's model predicted a 4.51:1 floor and the rendered measurement agrees |
+
+Four defects were found and fixed during this pass: the `runner.html` favicon
+404; the `.env::before` bleed widening the mobile layout viewport to 421px; the
+core-sample map covering body text at 390px; and the phase-material lists
+having drifted apart, which left `.chrome`/`.strip`/`.optics button` on paper
+backgrounds at depth and `.core .lbl` at 1.36:1 through the whole flip band.
+
+### CHROME OBSERVED — FAIL
+
+None outstanding.
+
+### WEBKIT-SPECIFIC — STILL REQUIRES SAFARI
+
+| # | Check | Why Chrome cannot settle it |
+|---|---|---|
+| W1 | Inline `<script type="module">` admitted under `script-src 'self' 'unsafe-inline'` | CSP/module interaction is engine-specific; Chrome admits it, WebKit must be confirmed. If it fails, `runner.html` shows the honest 0-test message rather than a false pass |
+| W2 | SRI on **module** fetches | Chrome enforces it (proven above). WebKit's module-script integrity path is a separate implementation |
+| W3 | `mailto:` form submission actually opening a mail client | No mail client exists in headless Chrome. Chrome confirms only that the submit dispatches and is not CSP-blocked |
+| W4 | `form-action 'self' mailto:` | Deliberately omitted (see the comment in `contact.html`). Decide it on Safari: add it, submit, and keep it only if the mail client still opens |
+| W5 | Continuous `font-weight` kinetics (`.thesis .g`, `[data-wave]`) | Variable-weight animation is a WebKit text-rendering path; correctness here is visual, not measurable over CDP |
+| W6 | Service-worker and viewport behaviour where WebKit differs | Notably `100vh`/dynamic viewport on iOS Safari and WebKit's SW update timing |
+| W7 | VoiceOver rotor announcement | The heading DOM is verified; how VoiceOver reads it is AT-specific |
+| W8 | Plate rendering fidelity | Canvas output was screenshotted in Chrome and looks correct; WebKit compositing of `backdrop-filter` + `mask-composite` is its own path |
+
+### OWNER DECISION REQUIRED
+
+| # | Item |
+|---|---|
+| O1 | **Accent-coloured text crosses below AA in the mid-descent.** Worst 1.86:1 on the active optics button at d=1.05; 22 sample points below 4.5:1. Verified **pre-existing, not a P8 regression** — the pre-P8 tree (770d8c5) fails at five sample depths vs four now, and P8 improved the worst case from 1.88:1 to 2.49:1. Fixing it means changing the `ACCENTS` ramp (locked, §4.1) or how selected state is signalled |
+| O2 | The epoch-04 commitment — see gate item 4 below |
+| O3 | The `PROVISIONAL` manifest values |
+| O4 | At 390px the `.optics` control transiently covers a zone label as content scrolls behind it. Same bottom chrome band the spec docks the reader ledger into, and it clears on scroll — recorded, not changed |
+
+### ORIGIN DEPLOYMENT REQUIRED
+
+| # | Item |
+|---|---|
+| D1 | The §1 response headers, `curl -sI` verified on the live origin |
+| D2 | HSTS on the final domain only |
+| D3 | MIME types per §2 |
+| D4 | 404 behaviour per §3 |
 
 ## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
 decisions, not engineering steps.
 
-1. The §5 Safari matrix has been run and recorded. Nothing below substitutes
-   for it: every phase was verified by harness, none by a browser.
+1. The §5 WEBKIT-SPECIFIC residual (W1–W8) has been run in Safari and recorded.
+   The Chrome pass closed everything else observable in a browser; what remains
+   is genuinely engine-specific, not merely unobserved.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
    the three 404 checks in §4 pass on staging.
 3. The origin sends the §1 headers (`curl -sI` verified).
