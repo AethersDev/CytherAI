@@ -3,7 +3,10 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-F15692A67C90783D';   /* version stamped with the build hash by generate-integrity.sh */
+var CACHE = 'cytherai-substrate-F15692A67C90783D-r2';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+
+/* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
+var SCOPE = new URL('./', self.location).pathname;
 
 var ASSETS = [
   'index.html',
@@ -65,8 +68,16 @@ self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith(self.location.origin)) return;
 
+  // A navigation to the scope root requests "<scope>/", and cache matching is
+  // exact — it never pairs with the precached "index.html". Substituting the key
+  // is the whole fix: without it, offline navigation to "/" fails on any cache
+  // generation that has not already served "/" online.
+  var key = (e.request.mode === 'navigate' && new URL(e.request.url).pathname === SCOPE)
+    ? 'index.html'
+    : e.request;
+
   e.respondWith(
-    caches.match(e.request).then(function (cached) {
+    caches.match(key).then(function (cached) {
       if (cached) return cached;
       // Not cached — go to network, cache the response
       return fetch(e.request).then(function (response) {
@@ -78,6 +89,9 @@ self.addEventListener('fetch', function (e) {
         }
         return response;
       });
+    }).catch(function () {
+      // Offline with no cached copy: fail deliberately, not as an unhandled rejection.
+      return Response.error();
     })
   );
 });
