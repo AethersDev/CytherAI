@@ -50,9 +50,12 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 
 **Infra:** `sw.js` (cache-first; `CACHE` name carries the build hash, stamped by
 `generate-integrity.sh`, so each build installs atomically), `manifest.webmanifest`,
-`generate-integrity.sh` (SRI + build-hash). **Engine stack** (`engine/*`, `content/record.js`,
-`profiles/disclosure.js`, `js/console.js`) is a separate project served only by
-`pages/runner.html` — the homepage does not load it.
+`generate-integrity.sh` (SRI + build-hash), `deploy.sh` (publish allowlist → `dist/`;
+headers contract in `docs/deploy.md`). **Engine stack:** `engine/trajectory-engine.js`
+and its `.test.js` are served only by `pages/runner.html` — the homepage does not load
+them. `content/record.js`, `profiles/disclosure.js` and `js/console.js` belong to the
+same separate project but are served by **no page**: they are retained on disk, and are
+in neither the precache, the SRI fingerprint, nor the deploy allowlist.
 
 ## Register rules (grep-enforced)
 
