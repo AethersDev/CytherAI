@@ -18,7 +18,7 @@
   --rule:color-mix(in srgb, #101620 14%, transparent);
   --bezel:color-mix(in srgb, #101620 14%, transparent);
   /* signal — accent only; a single red for form errors */
-  --accent:#2036C7; --brass:#2036C7; --seal:#2036C7;
+  --accent:#2036C7;
   --refuse:#B23A2E;
   /* type */
   --font-mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
