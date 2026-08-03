@@ -63,10 +63,18 @@ const EPOCHS = [
 /* Pre-registration: digest published while sealed; preimage discloses with the epoch.
    Precedence needs an external anchor — the page renders the commitment; it does not
    notarize it. PROVISIONAL digest (newC3/epoch04-preimage.txt demo preimage). */
+/* PROVISIONAL. `status` is printed verbatim on the floor chip — it is the page's
+   statement about the preimage, so it must describe the preimage's actual custody.
+   This digest is sha256 of newC3/epoch04-preimage.txt, a tracked demonstration
+   file: the preimage is public, and the chip says so. Replacing this with a real
+   commitment is a data-only edit — new digest, new date, and status
+   "PREIMAGE SEALED" once the preimage exists only in the owner's custody and
+   appears in no history intended for public release. Do not restore "SEALED"
+   before that is true; the floor's law is that nothing is stated that is not checked. */
 const COMMITMENTS = [
   { epoch: 4, committed: "2026-07-17",
     digest: "c763fcd5faecb8c568c60f6b42f3b968babb95a5aa9c55593cf96e963187439d",
-    status: "SEALED" }
+    status: "PREIMAGE PUBLIC · DEMONSTRATION" }
 ];
 
 /* ================= FNV-1a ================= */

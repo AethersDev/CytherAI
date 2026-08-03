@@ -356,7 +356,11 @@ function renderEpochs() {
   const cm = CM.COMMITMENTS[0];
   const car = document.createElement("span"); car.className = "ep-arrow"; car.textContent = "→"; rowEl.appendChild(car);
   const cd = document.createElement("div"); cd.className = "ep";
-  cd.innerHTML = "EPOCH 0" + cm.epoch + " · <span class=\"st\">COMMITTED</span><br>sha256 " + cm.digest.slice(0, 16) + "…<br>" + cm.committed + " · PREIMAGE SEALED";
+  /* the chip prints the status the manifest DECLARES — it does not assert one.
+     "PREIMAGE SEALED" was hardcoded here while the preimage sat in the repository,
+     so the page stated as sealed a commitment anyone could open. Sealing is a fact
+     about the owner's custody of the preimage, which only the manifest can know. */
+  cd.innerHTML = "EPOCH 0" + cm.epoch + " · <span class=\"st\">COMMITTED</span><br>sha256 " + cm.digest.slice(0, 16) + "…<br>" + cm.committed + " · " + cm.status;
   rowEl.appendChild(cd);
 }
 
