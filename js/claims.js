@@ -1,12 +1,15 @@
 /* ============================================================================
    js/claims.js  →  window.CytherClaims
-   Standing claims as predicates the page executes against itself. Nine claims;
-   the footer reads CLAIMS n/9 HOLDING and any failure prints ✕ INVALID in place.
+   Standing claims as predicates the page executes against itself. Ten claims;
+   the footer reads CLAIMS n/10 HOLDING and any failure prints ✕ INVALID in place.
 
    Ported from newC3/synthesis-rev5.html. Amendments:
      · CL-06 flip band recomputed for the shipped BGS keyframes → 40–62%
        (contrast is measured against CytherSubstrate.ambientAt — the actual model).
      · CL-06b — text-lane legibility ≤ cap (§5.3).
+     · CL-06c — the quietest ink layer, not only the primary reading ink, holds
+       AA at every depth; CL-06's primary-ink-only scope is what allowed the
+       switch depth to be tuned past the point where labels stayed legible.
      · CL-08 — CAMERA ≡ DERIVATION: canonical anchors re-derived from the manifest
        equal the camera the page installed (§5.2).
 
@@ -32,17 +35,53 @@ const parseRGB = s => { const m = s.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/); ret
    other — the crossover is inherent (light falls continuously); contrast is asserted
    only outside it. Measured against CytherSubstrate.ambientAt, the same function
    observe() writes to the page. */
-const FLIP_LO = 0.40, FLIP_HI = 0.62;
+/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band).
+   Dark ink is valid up to READING.SW_DOWN on the raw ambient; light ink from
+   READING.SW_UP, grounded on the absorptive membrane through the flip phase
+   (every flip-phase reading block carries it), then on the raw ambient. */
+const hexRgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
 function contrastClaim() {
-  let worst = 99, at = 0;
-  for (let i = 0; i <= 200; i++) {
-    const p = i / 200;
-    if (p >= FLIP_LO && p <= FLIP_HI) continue;
-    const amb = S.ambientAt(p);
-    const r = wcagRatio(parseRGB(amb.ink), parseRGB(amb.bg));
-    if (r < worst) { worst = r; at = p; }
+  const R = S.READING;
+  let worst = 99, at = 0, ws = "dark";
+  for (let i = 0; i <= 300; i++) {
+    const d = i / 100;
+    if (d <= R.SW_DOWN) {
+      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
+    }
+    if (d >= R.SW_UP) {
+      const r = wcagRatio(hexRgb(R.LIGHT), S.readingGroundAt(d, "light"));
+      if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
   }
-  return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 at depth " + Math.round(at*100) + "%" };
+  return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + ws + " ink at depth " + Math.round(at/3*100) + "% · phase-locked" };
+}
+
+/* CL-06c: the QUIETEST meaningful ink layer, not just the primary reading ink,
+   holds AA at every depth in its phase. CL-06 alone is what let the switch depth
+   be calibrated against alpha 1.0 while a 55% label sat at 2.58:1 — this closes
+   that gap. INK_FLOOR mirrors the stylesheet's stated floor (index.html reading-
+   law block); it is a declared constant exactly as READING.DARK/LIGHT are, so
+   this predicate proves the floor is sufficient at every depth, not that every
+   rule respects it. Re-tuning SW_DOWN or the BGS keyframes fails it immediately. */
+const INK_FLOOR = 0.66;
+function secondaryContrastClaim() {
+  const R = S.READING, dark = hexRgb(R.DARK), light = hexRgb(R.LIGHT);
+  const lay = (ink, g) => ink.map((v, i) => v * INK_FLOOR + g[i] * (1 - INK_FLOOR));
+  let worst = 99, at = 0, ws = "dark";
+  for (let i = 0; i <= 300; i++) {
+    const d = i / 100;
+    if (d <= R.SW_DOWN) {
+      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
+    }
+    if (d >= R.SW_UP) {
+      const g = S.readingGroundAt(d, "light"), r = wcagRatio(lay(light, g), g);
+      if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+  }
+  return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + Math.round(INK_FLOOR * 100) +
+    "% ink · " + ws + " at depth " + Math.round(at / 3 * 100) + "%" };
 }
 
 /* CL-06b: the canonical mark does not flood the reading column — its text-lane
@@ -84,8 +123,9 @@ function checkRenderManifest() {
 /* ================= the registry ================= */
 const CLAIMS = [
   { id: "CL-01", text: "ZERO EXTERNAL REQUESTS", run: () => {
-    const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").length : -1;
-    return { ok: n === 0, detail: n === 0 ? "0 resources fetched" : (n < 0 ? "no timing api" : n + " resources fetched") }; } },
+    /* same-origin module/manifest fetches are the page's own body; the claim is about leaving the origin */
+    const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length : -1;
+    return { ok: n === 0, detail: n === 0 ? "0 external requests" : (n < 0 ? "no timing api" : n + " external requests") }; } },
   { id: "CL-02", text: "RENDER ≡ MANIFEST", run: checkRenderManifest },
   { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION", run: null },   /* set by site.js async verifier */
   { id: "CL-04", text: "SERIAL ≡ STATE", run: () => {
@@ -97,7 +137,8 @@ const CLAIMS = [
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
              : { ok: false, detail: "not yet run" }; } },
-  { id: "CL-06", text: "HEADINGS ≥4.5:1 OUTSIDE FLIP BAND 40–62%", run: contrastClaim },
+  { id: "CL-06", text: "READING INK ≥4.5:1 AT EVERY DEPTH", run: contrastClaim },
+  { id: "CL-06c", text: "QUIETEST INK LAYER ≥4.5:1 AT EVERY DEPTH", run: secondaryContrastClaim },
   { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE", run: legibilityClaim },
   { id: "CL-07", text: "DETERMINISTIC ADMISSION CORE", run: dsinClaim },
   { id: "CL-08", text: "CAMERA ≡ DERIVATION", run: cameraClaim }
@@ -131,7 +172,7 @@ function recomputeClaims() {
 
 const API = {
   CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, renderClaims, checkRenderManifest,
-  contrastClaim, legibilityClaim, dsinClaim, cameraClaim, FLIP_LO, FLIP_HI
+  contrastClaim, secondaryContrastClaim, legibilityClaim, dsinClaim, cameraClaim
 };
 root.CytherClaims = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;

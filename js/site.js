@@ -53,9 +53,71 @@ function progress() {
   const max = document.documentElement.scrollHeight - innerHeight;
   return max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0;
 }
+/* ================= reading exposure — phase machine + rest state (P9) ================= */
+/* Ink is bistable with hysteresis; panels phase-change with it. The world holds full
+   amplitude while the reader navigates and yields when they stop to read. */
+let inkState = "dark";
+function readingUpdate(d) {
+  const R = S.READING;
+  if (inkState === "dark" && d >= R.SW_DOWN) inkState = "light";
+  else if (inkState === "light" && d <= R.SW_UP) inkState = "dark";
+  const phase = inkState === "dark" ? "surface" : d < R.FLIP_END ? "flip" : d < 2.7 ? "depth" : "core";
+  const b = document.body;
+  if (b.dataset.ink !== inkState) b.dataset.ink = inkState;
+  if (b.dataset.phase !== phase) b.dataset.phase = phase;
+}
+let restT = null;
+function restArm() {
+  document.body.classList.remove("at-rest");
+  clearTimeout(restT);
+  restT = setTimeout(() => { document.body.classList.add("at-rest"); conditionEnvelopes(); }, 180);
+}
+/* at rest, each envelope's strength follows the actual plate density beneath it */
+function conditionEnvelopes() {
+  document.querySelectorAll(".env").forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight || !r.width) return;
+    const e = S.fieldEnergy(r);
+    if (e !== null) el.style.setProperty("--envK", (0.45 + 0.55 * Math.min(1, e * 1.6)).toFixed(2));
+  });
+}
+/* content follows the negative-space atlas: each stratum reads from its plate's quiet third */
+let corridorsKey = "";
+function applyCorridors() {
+  if (innerWidth < 1100 || S.isDeveloping()) return;
+  const key = S.serial() + "×" + innerWidth;
+  if (key === corridorsKey) return;
+  const c = S.corridors(); if (!c) return;
+  corridorsKey = key;
+  ZDEFS.forEach(([id], i) => {
+    if (id === "surface" || id === "floor") return;   /* statement + floor hold their composition */
+    const el = $(id); if (!el) return;
+    const z = zones[i] ? zones[i].f : i / 6;
+    const plate = Math.max(0, Math.min(3, Math.round(z * 3)));
+    el.classList.remove("corridor-l", "corridor-c", "corridor-r");
+    el.classList.add("corridor-" + c[plate]);
+  });
+}
+function wireOptics() {
+  const box = $("optics"); if (!box) return;
+  const apply = m => {
+    document.body.dataset.optics = m;
+    box.querySelectorAll("[data-o]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.o === m)));
+  };
+  let m = "balanced";
+  try { m = sessionStorage.getItem("cy-optics") || m; } catch (e) { /* SecurityError — session default only */ }
+  apply(m);
+  box.addEventListener("click", e => {
+    const b = e.target.closest("[data-o]"); if (!b) return;
+    apply(b.dataset.o);
+    try { sessionStorage.setItem("cy-optics", b.dataset.o); } catch (e) { /* SecurityError — preference lives this page only */ }
+  });
+}
+
 function envUpdate() {
   const p = progress();
   const zoom = S.observe(p);
+  readingUpdate(p * 3);
   let zoneName = zones.length ? zones[0].name : "CLAIM · PUBLIC SURFACE", mode = "EXPLORE";
   zones.forEach(z => { if (p >= z.f - 0.02) { zoneName = z.name; mode = z.mode; } });
   const pct = String(Math.round(p * 100)).padStart(2, "0");
@@ -64,6 +126,7 @@ function envUpdate() {
 }
 let envTick = false;
 addEventListener("scroll", () => {
+  restArm();
   if (!envTick) { envTick = true; requestAnimationFrame(() => { envUpdate(); envTick = false; }); }
 }, { passive: true });
 
@@ -95,7 +158,7 @@ function cachePositions() {
 let px = -9e3, py = -9e3;
 addEventListener("pointermove", e => { px = e.pageX; py = e.pageY; wake(); }, { passive: true });
 function fieldStep() {
-  if (reduced) return false;
+  if (reduced || document.body.dataset.optics === "read") return false;
   const R = 190, BASE = 250, PEAK = 740;
   let active = false;
   for (const g of glyphs) {
@@ -125,7 +188,7 @@ function wireWaves() {
       s.setAttribute("aria-hidden", "true");
       h.appendChild(s); return s;
     });
-    const send = () => { if (!reduced) { waves.push({ spans, t: 0 }); wake(); } };
+    const send = () => { if (!reduced && document.body.dataset.optics !== "read") { waves.push({ spans, t: 0 }); wake(); } };
     h.addEventListener("pointerenter", send);
     h.addEventListener("click", send);
   });
@@ -155,6 +218,15 @@ function stripUpdate() {
   const fb = $("forkBtn");
   if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG" : "FORK"; }
   if (!canonical) Ledger.recordAct("MARK_FORKED");
+  applyCorridors();   /* the atlas settles with the exposure */
+  if (document.body.classList.contains("at-rest")) conditionEnvelopes();
+}
+/* the streamed exposure narrates itself — true observables only */
+function exposureStep() {
+  if (!S.isDeveloping()) return false;
+  const e = S.exposure(), st = $("forkStatus");
+  if (e && st) st.textContent = "EXPOSING PLATE " + e.plate + "/4 · n = " + e.n.toExponential(1).replace("+", "") + " DEPOSITIONS";
+  return false;
 }
 function buildHash(full) {
   const parts = [], P = S.params();
@@ -234,7 +306,8 @@ function renderManifest() {
   const el = $("manifestRows"); if (!el) return;
   const M = CM.MANIFEST;
   const ext = (typeof performance !== "undefined" && performance.getEntriesByType)
-    ? performance.getEntriesByType("resource").length : M.external_runtime_calls;
+    ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length
+    : M.external_runtime_calls;
   const extStr = String(ext).padStart(2, "0") + (ext === M.external_runtime_calls ? "" : " ≠ CLAIMED 0" + M.external_runtime_calls);
   const rows = [
     ["PUBLIC DISCLOSURE EPOCH", "0" + M.epoch], ["DERIVED", M.derived],
@@ -283,7 +356,11 @@ function renderEpochs() {
   const cm = CM.COMMITMENTS[0];
   const car = document.createElement("span"); car.className = "ep-arrow"; car.textContent = "→"; rowEl.appendChild(car);
   const cd = document.createElement("div"); cd.className = "ep";
-  cd.innerHTML = "EPOCH 0" + cm.epoch + " · <span class=\"st\">COMMITTED</span><br>sha256 " + cm.digest.slice(0, 16) + "…<br>" + cm.committed + " · PREIMAGE SEALED";
+  /* the chip prints the status the manifest DECLARES — it does not assert one.
+     "PREIMAGE SEALED" was hardcoded here while the preimage sat in the repository,
+     so the page stated as sealed a commitment anyone could open. Sealing is a fact
+     about the owner's custody of the preimage, which only the manifest can know. */
+  cd.innerHTML = "EPOCH 0" + cm.epoch + " · <span class=\"st\">COMMITTED</span><br>sha256 " + cm.digest.slice(0, 16) + "…<br>" + cm.committed + " · " + cm.status;
   rowEl.appendChild(cd);
 }
 
@@ -316,12 +393,15 @@ function verifyAdmissions() {
   registerStep(fieldStep);
   registerStep(waveStep);
   registerStep(S.step);
+  registerStep(exposureStep);
   registerStep(Inst.step);
 
   Inst.wire({ wake });
   Ledger.wire();
   wireStrip();
   wireHold();
+  wireOptics();
+  restArm();   /* the page opens navigating; rest (and the reading exposure) follows */
   splitThesis();
   wireWaves();
   renderManifest();
@@ -341,6 +421,7 @@ function verifyAdmissions() {
     setTimeout(() => Claims.recomputeClaims(), 150);
     setTimeout(verifyAdmissions, 500);
     setTimeout(cachePositions, 60);
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});   /* insecure context — run online-only */
     computeZones(); envUpdate();
     const dm = h.match(/d=([\d.]+)/);
     if (dm) {
