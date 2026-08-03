@@ -45,7 +45,13 @@
   <a class="back" href="../index.html">← Return to the record</a>
 </main>
 
-<script>
+<!-- All four scripts are type="module" and load-bearing: classic scripts share one
+     global lexical scope, so the test file's top-level `const {INVALID, INDETERMINATE, …}`
+     collides with the engine's top-level `const INVALID` and the suite never parses
+     (SyntaxError: Can't create duplicate variable). Module scope removes the collision.
+     Modules are deferred and execute in document order, so shim → engine → test → summary
+     holds. Do not revert any of these to a classic script. -->
+<script type="module">
 (function(){
   'use strict';
   var out=document.getElementById('out');
@@ -76,15 +82,18 @@
   };
 })();
 </script>
-<script src="../engine/trajectory-engine.js" integrity="sha384-5jUBvS15D9xJmKSdKnCM4ukHQ//VFhDJ6dxo+1mKYG+tFHuCjAH/C4YUXHBzBxwS" crossorigin="anonymous"></script>
-<script src="../engine/trajectory-engine.test.js" integrity="sha384-dQb42o8cFdH+kXuCf7xcSH30f4LnemsqENvXEUsiKB+7EI6Yvh+gN9T65OYYBFhN" crossorigin="anonymous"></script>
-<script>
-(function(){
+<script type="module" src="../engine/trajectory-engine.js" integrity="sha384-5jUBvS15D9xJmKSdKnCM4ukHQ//VFhDJ6dxo+1mKYG+tFHuCjAH/C4YUXHBzBxwS" crossorigin="anonymous"></script>
+<script type="module" src="../engine/trajectory-engine.test.js" integrity="sha384-dQb42o8cFdH+kXuCf7xcSH30f4LnemsqENvXEUsiKB+7EI6Yvh+gN9T65OYYBFhN" crossorigin="anonymous"></script>
+<script type="module">
   var p=document.querySelectorAll('#out .pass').length, f=document.querySelectorAll('#out .fail').length;
-  var code=(window.process&&(window.process.exitCode|0))||0, ok=(f===0&&code===0);
+  var code=(window.process&&(window.process.exitCode|0))||0;
+  /* p>0 is the load witness: a suite that never parsed reports zero passes and
+     zero failures, which the old (f===0&&code===0) test read as success. */
+  var ok=(p>0&&f===0&&code===0);
   var s=document.getElementById('summary'); s.className=ok?'ok':'bad';
-  s.textContent=ok?('✓  '+p+' / '+p+' passed · exitCode '+code+'  ·  mutation-verified'):('✕  '+f+' failed / '+p+' passed · exitCode '+code);
-})();
+  s.textContent = ok ? ('✓  '+p+' / '+p+' passed · exitCode '+code+'  ·  mutation-verified')
+    : p===0 ? '✕  0 tests executed — the suite failed to load'
+    : ('✕  '+f+' failed / '+p+' passed · exitCode '+code);
 </script>
 </body>
 </html>
