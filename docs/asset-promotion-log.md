@@ -46,3 +46,23 @@ command and the output digest; a promoted asset with no receipt is a defect.
 | Deployment | `deploy.sh` allowlist (3 raster additions; icon.svg already listed). Rasters are not precached: `sw.js` ASSETS keeps `icon.svg` (the favicon every page links) — the PNGs are fetched by the OS at install/pin time, not by any page. |
 | Commit | *(this commit)* |
 | Owner sign-off | PENDING |
+
+---
+
+## EXHIBIT-A — the constraint boundary
+
+| | |
+|---|---|
+| Asset ID | IMG-003 |
+| Source study | `docs/audit/generation-studies/img/IMG-003-exhibit-a-composition-study.png` (visual-work, round 1) — composition reference only; no study pixel ships |
+| Classification | **ILLUSTRATIVE** — the adjacent caption states it: `FIGURE — ILLUSTRATIVE · NOT A MEASUREMENT` |
+| Command | `python3 tools/gen-exhibit-a.py` (LCG seed 11, grid 32px) |
+| Canonical inputs | None — a fixed algorithm and seed; the SVG is a pure function of the script. |
+| Method | SVG, 2560×800 (16:5): `#E0E6EF` ground; 1px hairline grid at ink opacity 0.12; eight open rejected rectilinear fragments (ink, opacity 0.14–0.25) thinning toward the left; exactly one closed axis-aligned cobalt ring — a rectangle with non-overlapping castellation notches, simple by construction. SVG chosen over PNG: rectilinear hairlines are resolution-independent, the file is 3 KB against ~100 KB raster, CSP `img-src 'self'` admits it, and `.svg` MIME is already in the deployment contract. |
+| Output | `assets/brief/exhibit-a-boundary.svg` · displayed in `pages/brief.html` §02 Exhibit A above the record type line |
+| SHA-256 | `ab3dbd18f85403eafce10c070ffd461e17c248c0d936d2a87fef34b6ad0335ca` |
+| Determinism | Pure text generation, no clock, no environment; two runs byte-identical. |
+| Acceptance checks | Exactly one accent element; the ring is closed, axis-aligned, spur-free and non-self-intersecting (segment-pair receipt); ring bbox inside the right 40% and clear of the top/bottom 15%; 8 fragments (window 8–12), all open, all axis-aligned, none left of x=640 — the left 25% label lane carries grid only; palette closed over {`#E0E6EF`, `#101620`, `#2036C7`}; no text, no curve commands, no arrows. |
+| Deployment | `deploy.sh` allowlist (24 files). Not precached — the brief is not an offline-critical surface and the figure is decoration on it. |
+| Commit | *(this commit)* |
+| Owner sign-off | PENDING |
