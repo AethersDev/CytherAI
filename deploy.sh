@@ -34,7 +34,8 @@ engine/trajectory-engine.js
 engine/trajectory-engine.test.js
 sw.js
 manifest.webmanifest
-icon.svg"
+icon.svg
+assets/og/og-card.png"
 
 # content/record.js, profiles/disclosure.js and js/console.js are deliberately
 # absent: no page loads them. They stay on disk for the separate engine project.
