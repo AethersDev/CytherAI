@@ -47,13 +47,16 @@ body.kbd :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
 .nav-container{max-width:1000px;margin:0 auto;padding:0 24px;height:44px;display:flex;align-items:center;gap:12px;
   font-family:var(--font-mono);font-size:10px;letter-spacing:.14em}
-.nav-brand{font-weight:700;letter-spacing:.18em;text-decoration:none;color:var(--ink)}
+.nav-brand{font-weight:700;letter-spacing:.18em;text-decoration:none;color:var(--ink);
+  display:inline-block;padding:16px 0}
 .nav-brand:hover{color:var(--accent)}
 .nav-scope{color:var(--ink-quiet);text-transform:uppercase}
 .nav-scope b{color:var(--accent);font-weight:500}
-.nav-links{display:flex;gap:16px;margin-left:auto;list-style:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
-.nav-links a{text-decoration:none;color:var(--ink-quiet)}
+.nav-links{display:flex;gap:14px;margin-left:auto;list-style:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.nav-links a{text-decoration:none;color:var(--ink-quiet);display:inline-block;padding:16px 2px}
 .nav-links a:hover,.nav-links a[aria-current="page"]{color:var(--accent)}
+/* current page is never colour-only: the accent run carries an underline */
+.nav-links a[aria-current="page"]{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:4px}
 
 /* ════════ document control strip (brief) ════════ */
 .doc-control{background:var(--paper-dense);border-bottom:1px solid var(--rule)}
@@ -133,6 +136,8 @@ tr:first-child td{border-top:none}
 .form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--ink-quiet)}
 .form-hint{font-family:var(--font-mono);font-size:10px;color:var(--ink-quiet);margin-top:6px}
+.form-input[aria-invalid="true"],.form-textarea[aria-invalid="true"]{border-color:var(--refuse)}
+.form-error{font-family:var(--font-mono);font-size:10px;color:var(--refuse);margin-top:6px}
 
 /* ════════ buttons ════════ */
 .btn,.clearance-cta-primary{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
@@ -155,8 +160,12 @@ tr:first-child td{border-top:none}
 .footer-links a:hover,.footer-links a[aria-current="page"]{color:var(--accent)}
 
 @media(max-width:640px){
-  .nav-container{gap:8px}
+  .nav-container{gap:8px;flex-wrap:wrap;height:auto;min-height:44px}
   .nav-scope{font-size:9px}
+  /* links drop to a second row: full-width, horizontally scrollable, and every
+     link keeps a 44px interaction height through padding, not font-size */
+  .nav-links{flex-basis:100%;margin-left:0;gap:4px;overflow-x:auto;white-space:nowrap}
+  .nav-links a{padding:15px 8px}
   .doc-section,.section{padding-left:20px;padding-right:20px}
   .footer-container{flex-direction:column;align-items:flex-start}
   .footer-links{margin-left:0}
