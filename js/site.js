@@ -113,6 +113,21 @@ function wireOptics() {
     try { sessionStorage.setItem("cy-optics", b.dataset.o); } catch (e) { /* SecurityError — preference lives this page only */ }
   });
 }
+/* ≤640 the strip is the ONE bottom surface (UI-004): the optics group and the
+   reader ledger dock into it; above 640 they return to their floating homes.
+   Reparenting keeps every listener and aria state — nothing is rewired. */
+function dockChrome() {
+  const strip = document.querySelector(".strip"), rl = document.querySelector(".rledger");
+  const box = $("optics"), main = $("main-content");
+  if (!strip || !rl || !box || !main) return;
+  const mq = matchMedia("(max-width:640px)");
+  const place = () => {
+    if (mq.matches) { strip.appendChild(rl); strip.appendChild(box); }
+    else { document.body.insertBefore(rl, main); document.body.insertBefore(box, strip); }
+  };
+  place();
+  mq.addEventListener("change", place);
+}
 
 function envUpdate() {
   const p = progress();
@@ -401,6 +416,7 @@ function verifyAdmissions() {
   wireStrip();
   wireHold();
   wireOptics();
+  dockChrome();
   restArm();   /* the page opens navigating; rest (and the reading exposure) follows */
   splitThesis();
   wireWaves();
