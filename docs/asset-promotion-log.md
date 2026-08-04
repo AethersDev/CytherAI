@@ -86,3 +86,23 @@ command and the output digest; a promoted asset with no receipt is a defect.
 | Deployment | `deploy.sh` allowlist (25 files). Not precached, same reasoning as Exhibit A. |
 | Commit | *(this commit)* |
 | Owner sign-off | PENDING |
+
+---
+
+## EMPTY-PLATE — the 404 emblem
+
+| | |
+|---|---|
+| Asset ID | IMG-005 |
+| Source study | `docs/audit/generation-studies/img/IMG-005-empty-plate-candidate.png` (visual-work, round 1) — reference only; the 1024px study is not upscaled and does not ship |
+| Classification | **ILLUSTRATIVE** — decorative on `404.html` (`alt=""`); the explanation is live HTML |
+| Command | `python3 tools/gen-empty-plate.py` (LCG seed 3) |
+| Canonical inputs | None — fixed algorithm and seed. |
+| Method | Transparent SVG, 1200×1200: one square hairline frame (720×720 = 60%, ink at 0.16, 2px stroke) and 200 fixed-seed stipple deposits entering from the frame's lower-left corner and dying out before the center. No accent — nothing is verified on an empty plate. CSS supplies the cold-paper ground. |
+| Output | `assets/error/plate-empty.svg` · displayed on the new `404.html` |
+| SHA-256 | `274b9c7ef354b50a50e8c840a9a03558b8ffad5b85019d9d88dad93f6641ab65` |
+| Determinism | Pure LCG; two runs byte-identical. |
+| Acceptance checks | 200 deposits (window 180–220), all inside the frame; nearest deposit 133px from center (floor 110) — the center is genuinely empty; drift density strictly decreasing (95/54/51 per band); one stroked element (the frame); no accent; no opaque ground. |
+| Deployment | `deploy.sh` allowlist (27 files, with `404.html`). `404.html` joins `generate-integrity.sh` HTML_FILES — it carries the build-hash meta and the stylesheet SRI like every shipped page; this does not move the build hash (the fingerprint is the nine JS/CSS resources). Not precached: the offline reader is served by the worker's cached routes; a styled 404 is origin behaviour, which must be verified live (docs/deploy.md §3–4). |
+| Commit | *(this commit)* |
+| Owner sign-off | PENDING |

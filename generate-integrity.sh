@@ -16,7 +16,7 @@ set -euo pipefail
 RESOURCES="css/cytherai.css js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js engine/trajectory-engine.js engine/trajectory-engine.test.js"
 
 # HTML files to patch
-HTML_FILES="index.html contact.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html pages/runner.html"
+HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html pages/runner.html"
 
 echo "[integrity] Computing SRI hashes..."
 
