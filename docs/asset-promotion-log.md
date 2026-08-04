@@ -66,3 +66,23 @@ command and the output digest; a promoted asset with no receipt is a defect.
 | Deployment | `deploy.sh` allowlist (24 files). Not precached — the brief is not an offline-critical surface and the figure is decoration on it. |
 | Commit | *(this commit)* |
 | Owner sign-off | PENDING |
+
+---
+
+## EXHIBIT-B — the event strata
+
+| | |
+|---|---|
+| Asset ID | IMG-004 |
+| Source study | `docs/audit/generation-studies/img/IMG-004-exhibit-b-composition-study.png` (visual-work, round 1) — composition reference only; no study pixel ships |
+| Classification | **ILLUSTRATIVE** — captioned `FIGURE — ILLUSTRATIVE · NOT A MEASUREMENT` |
+| Command | `python3 tools/gen-exhibit-b.py` (integer-hash stipple, seed 5) |
+| Canonical inputs | None — fixed algorithm and seed. |
+| Method | PNG, 2560×800: nine horizontal strata of per-pixel Bernoulli stipple under a deterministic integer hash — accumulation, not gradient; every pixel is exactly one of four colours. Coverage ramp 0.015 → 0.92 top-to-bottom; boundaries are piecewise-linear deposition lines (±9px, control points every 160px); stratum 8 of 9 is thin (48px nominal) and cobalt. |
+| Output | `assets/brief/exhibit-b-strata.png` · 247,669 bytes · displayed in `pages/brief.html` §03 Exhibit B above the record type line |
+| SHA-256 | `ff344466b0cfb4c48c8326144e4687012bc9b83d25165c0736316feb85c72149` |
+| Determinism | Pure integer arithmetic, no clock; two runs byte-identical. |
+| Acceptance checks | Nine strata, ink coverage strictly increasing downward (0.015 / 0.040 / 0.089 / 0.159 / 0.259 / 0.399 / 0.549 / 0.698 / 0.921); accent pixels 86,305 in the lower third and **0** above it; every stratum present at both 64px edge columns at ≥ 40% of its interior coverage (no truncation); palette exactly {`#E0E6EF`, `#3A4658`, `#101620`, `#2036C7`} — 4 colours total, which also proves stipple-not-gradient. |
+| Deployment | `deploy.sh` allowlist (25 files). Not precached, same reasoning as Exhibit A. |
+| Commit | *(this commit)* |
+| Owner sign-off | PENDING |

@@ -39,7 +39,8 @@ assets/og/og-card.png
 assets/icons/icon-180.png
 assets/icons/icon-192.png
 assets/icons/icon-512.png
-assets/brief/exhibit-a-boundary.svg"
+assets/brief/exhibit-a-boundary.svg
+assets/brief/exhibit-b-strata.png"
 
 # content/record.js, profiles/disclosure.js and js/console.js are deliberately
 # absent: no page loads them. They stay on disk for the separate engine project.
