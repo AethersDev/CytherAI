@@ -3,20 +3,30 @@
 ## Certification status
 
 ```
-Engineering implementation       COMPLETE
-Chromium certification           COMPLETE
-Essential text/state contrast    COMPLETE
-Known Chromium defects           FIXED
-WebKit differential checks       8 OPEN
-Origin certification             OPEN
+Engineering implementation       COMPLETE (incl. visual-integration V1–V10)
+Chromium certification           RE-ESTABLISHED LOCALLY against the new bytes
+                                 (headless CDP battery, see the track record
+                                 below); owner-run interactive pass optional
+WebKit differential checks       8 OPEN — run against the NEW candidate bytes
+Origin certification             OPEN — bytes and deployed paths changed
 Epoch-04 owner decision          OPEN
 Manifest owner sign-off          OPEN
+Asset promotion sign-off         OPEN — docs/asset-promotion-log.md
 ```
 
-**The codebase is frozen at the Chromium-certified commit.** No further
-repository hardening before the remaining evidence is gathered — any change to
-candidate bytes invalidates the Chrome record and requires the full release
-battery again.
+The d1281d6/bdebc59 Chromium record below remains true of those commits, but
+the visual-integration track changed candidate bytes (assets, HTML, CSS, three
+JS modules), so it no longer certifies this tree. A local battery re-ran the
+observable core against the rebuilt artifact over the DevTools Protocol with
+true device emulation — all pass: engine 33/33 (exitCode 0, mutation-verified);
+claims 10/10 HOLDING at 320/375/390/430/720/1440 with zero horizontal overflow;
+exactly two fixed surfaces at rest ≤640 with ≥44px hit targets; the ledger
+sheet ≤40vh on the strip, Escape-closable with focus return; per-claim re-run
+cannot mask an INVALID; reduced motion settles to 10/10; the service worker
+installs exactly one cache named by the current build hash, and with the origin
+genuinely killed `/` renders from the worker at CLAIMS 10/10. jsc suites
+(claims regression 8/8, motion laws 13/13) and all five asset generators
+reproduce committed bytes exactly.
 
 ### Release-candidate artifact equivalence
 
