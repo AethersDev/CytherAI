@@ -106,3 +106,34 @@ command and the output digest; a promoted asset with no receipt is a defect.
 | Deployment | `deploy.sh` allowlist (27 files, with `404.html`). `404.html` joins `generate-integrity.sh` HTML_FILES — it carries the build-hash meta and the stylesheet SRI like every shipped page; this does not move the build hash (the fingerprint is the nine JS/CSS resources). Not precached: the offline reader is served by the worker's cached routes; a styled 404 is origin behaviour, which must be verified live (docs/deploy.md §3–4). |
 | Commit | *(this commit)* |
 | Owner sign-off | PENDING |
+
+---
+
+## MOT-001 / MOT-002 — motion conformance (no asset; no implementation change)
+
+The two accepted motion studies are verification references. The shipped
+implementation was checked against their laws by `tools/test-motion.py`
+(13 mechanical assertions) and **required no change**:
+
+- **MOT-001, the ink flip** — bistable with a 0.09 hysteresis gap
+  (`READING` read from `js/substrate.js` under jsc); the retained-state
+  machine in `js/site.js` is authoritative; zero border-radius anywhere in
+  `index.html`; membrane softness is `mask-image` attenuation; none of the
+  43 `data-ink`/`data-phase` rules moves layout — colour and background
+  only; the flip is a 0.25s controlled crossfade. No illegible interpolated
+  midpoint exists in the model: the storyboard's panel-3 crossfade wording
+  was retired in round 2, and the implementation is what the study was
+  corrected toward.
+- **MOT-002, plate development** — the plate-0/1 tonemap monotonically
+  darkens with density for every anchor at exposure ceilings 10/100/1000;
+  light plates never exceed paper luminance (no emission, no bright core);
+  the cobalt anchor is hue, not luminance (L 60 vs paper 239); the shipped
+  plate render (`assets/og/og-card.png`, same grammar) shows a radial
+  profile rising monotonically out of the core — no bloom ring
+  (165→207→216→220→222); reduced motion develops whole plates and
+  tonemaps only at completion; development never touches the camera
+  anchors. The monotonic-core and radial-profile receipts from the
+  round-2 verification harness now live in the maintained tree as
+  `tools/test-motion.py`.
+
+Run: `python3 tools/test-motion.py` — exits nonzero on any breach.
