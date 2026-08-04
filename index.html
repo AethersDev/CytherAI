@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="FB9B24BC9C946D41">
+<meta name="build-hash" content="87C2467252E7272A">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -275,6 +275,16 @@ body.crossed .locked-note{display:none}
 .manifest .m-v.bad{color:var(--ink);font-weight:700}
 .manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
 .manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
+/* claim rows are openable evidence (UI-001): the key is a button, the row
+   silhouette is unchanged, expansion pushes content — never overlays */
+.manifest .m-kbtn{text-align:left;font-size:inherit;letter-spacing:inherit;padding:0}
+.manifest .m-kbtn:hover{color:var(--ink)}
+.manifest .m-row.open{border-bottom:none}
+.m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--hair);
+  font-size:9.5px;letter-spacing:.06em;line-height:1.95;
+  color:color-mix(in srgb,var(--ink) 74%,transparent)}
+.m-evidence .e-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
+.m-evidence .i-btn{margin-top:4px}
 
 .epochs{margin-top:8vh;max-width:660px}
 .ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
@@ -393,7 +403,8 @@ body[data-ink="light"] .dek,body[data-ink="light"] .def .d-body,body[data-ink="l
 body[data-ink="light"] .bi-cap,body[data-ink="light"] .path p,body[data-ink="light"] .meth .v,body[data-ink="light"] .rl-log{color:color-mix(in srgb,var(--ink) 86%,transparent)}
 body[data-ink="light"] .bi-stats,body[data-ink="light"] .i-btn{color:color-mix(in srgb,var(--ink) 85%,transparent)}
 body[data-ink="light"] .bi-log,body[data-ink="light"] .colophon-notes p{color:color-mix(in srgb,var(--ink) 80%,transparent)}
-body[data-ink="light"] .sys .facts,body[data-ink="light"] .rl-note{color:color-mix(in srgb,var(--ink) 78%,transparent)}
+body[data-ink="light"] .sys .facts,body[data-ink="light"] .rl-note,
+body[data-ink="light"] .m-evidence{color:color-mix(in srgb,var(--ink) 78%,transparent)}
 body[data-ink="light"] .sealed-fields,body[data-ink="light"] .b-sub,body[data-ink="light"] .ep{color:color-mix(in srgb,var(--ink) 76%,transparent)}
 body[data-ink="light"] .depth-line,body[data-ink="light"] .p-label,body[data-ink="light"] .p-note,
 body[data-ink="light"] .manifest .m-k,body[data-ink="light"] footer{color:color-mix(in srgb,var(--ink) 74%,transparent)}
@@ -751,7 +762,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
 <script src="js/manifest.js" defer integrity="sha384-oO8Nh1lA9H3PMDYweHsO787+WG9UC39zC7mnyjU4dt4QAlpzT6J5aczivOaQj3Kc" crossorigin="anonymous"></script>
 <script src="js/substrate.js" defer integrity="sha384-giBbIoTHcQR09+WgV5PbMUyHuvKxmaVureXCZSVDrMbDQGPYtC/Xn8hgTRPx0MOK" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-aJIl86rjzPNcGMZXj8o1CxtC6mfzyTDGhCeRCY6Rwss9kmYsYqZAhaq9nd0CESTy" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-hI33HZ8ncBBJFT2tAfNZuumYekKEaa/Vy62l3moofsYPI4G42uN5230K2GtMmvlZ" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
 <script src="js/site.js" defer integrity="sha384-j1MxjQJhcQiD7uwgyWot9hZDWs4OHig1z6gqZw4URy+uw2wClvNPYjNrIp7ygf8T" crossorigin="anonymous"></script>

@@ -120,58 +120,128 @@ function checkRenderManifest() {
   return { ok, detail: ok ? recomputed + " printed twice · derived once" : "render ≠ manifest" };
 }
 
-/* ================= the registry ================= */
+/* ================= the registry =================
+   `m` is the claim's METHOD — one sentence describing the predicate exactly as
+   implemented above. It renders in the row's evidence expansion; if a predicate
+   changes, its sentence changes in the same edit. */
 const CLAIMS = [
-  { id: "CL-01", text: "ZERO EXTERNAL REQUESTS", run: () => {
+  { id: "CL-01", text: "ZERO EXTERNAL REQUESTS",
+    m: "Counts Resource Timing entries whose URL leaves this origin; the claim holds only at exactly zero.",
+    run: () => {
     /* same-origin module/manifest fetches are the page's own body; the claim is about leaving the origin */
     const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length : -1;
     return { ok: n === 0, detail: n === 0 ? "0 external requests" : (n < 0 ? "no timing api" : n + " external requests") }; } },
-  { id: "CL-02", text: "RENDER ≡ MANIFEST", run: checkRenderManifest },
-  { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION", run: null },   /* set by site.js async verifier */
-  { id: "CL-04", text: "SERIAL ≡ STATE", run: () => {
+  { id: "CL-02", text: "RENDER ≡ MANIFEST",
+    m: "Re-derives the state checksum from the manifest tuple and compares it to both places the page prints it.",
+    run: checkRenderManifest },
+  { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION",
+    m: "The async verifier re-runs the published admission — nonce, richness and legibility screens — from the manifest, off the boot path.",
+    run: null },   /* set by site.js async verifier */
+  { id: "CL-04", text: "SERIAL ≡ STATE",
+    m: "Compares the serial printed in the strip to the live substrate parameters, formatted by the same function.",
+    run: () => {
     if (!hasDoc || !S.serial) return { ok: true, detail: "no DOM" };
     const got = (document.getElementById("markSerial") || { textContent: "" }).textContent.trim();
     const want = S.serial().trim();
     return { ok: got === want, detail: got === want ? "displayed serial equals live parameters" : "serial ≠ state" }; } },
-  { id: "CL-05", text: "BOUNDARY EMITS NO INVALID PROGRAM", run: () => {
+  { id: "CL-05", text: "BOUNDARY EMITS NO INVALID PROGRAM",
+    m: "Reads the boundary instrument's last audit; admitted must be positive and the invalid count exactly zero.",
+    run: () => {
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
              : { ok: false, detail: "not yet run" }; } },
-  { id: "CL-06", text: "READING INK ≥4.5:1 AT EVERY DEPTH", run: contrastClaim },
-  { id: "CL-06c", text: "QUIETEST INK LAYER ≥4.5:1 AT EVERY DEPTH", run: secondaryContrastClaim },
-  { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE", run: legibilityClaim },
-  { id: "CL-07", text: "DETERMINISTIC ADMISSION CORE", run: dsinClaim },
-  { id: "CL-08", text: "CAMERA ≡ DERIVATION", run: cameraClaim }
+  { id: "CL-06", text: "READING INK ≥4.5:1 AT EVERY DEPTH",
+    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked ground (the membrane through the flip) must hold 4.5:1.",
+    run: contrastClaim },
+  { id: "CL-06c", text: "QUIETEST INK LAYER ≥4.5:1 AT EVERY DEPTH",
+    m: "The same sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
+    run: secondaryContrastClaim },
+  { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE",
+    m: "Recomputes the canonical mark's text-lane density metric and compares it against the admission cap.",
+    run: legibilityClaim },
+  { id: "CL-07", text: "DETERMINISTIC ADMISSION CORE",
+    m: "Compares dsin to native sine at 1001 points across ±5; the admission core must agree within 1e-6.",
+    run: dsinClaim },
+  { id: "CL-08", text: "CAMERA ≡ DERIVATION",
+    m: "Re-derives the canonical camera anchors from the manifest and compares them to the anchors installed at boot.",
+    run: cameraClaim }
 ];
 
 const CLAIMSTATE = {};
+const OPEN = {};                       /* per-claim evidence expansion, survives re-render */
+const stamp = () => (typeof performance !== "undefined" && performance.now)
+  ? "T+" + (performance.now() / 1000).toFixed(1) + "S" : "T+0.0S";
+
+/* The suite summary is PURE and counts every claim from stored state — never
+   only the ones a given recompute touched. That is the property the jsc
+   regression (tools/test-claims.js) locks: one claim re-run can never mask a
+   standing INVALID elsewhere. */
+function summary() {
+  let hold = 0, bad = false, pending = 0;
+  CLAIMS.forEach(c => {
+    const s = CLAIMSTATE[c.id];
+    if (!s) { pending++; return; }
+    if (s.ok) hold++; else bad = true;
+  });
+  return { hold, total: CLAIMS.length, bad, pending };
+}
+
 function renderClaims() {
   if (!hasDoc) return;
   const el = document.getElementById("claimRows"); if (!el) return;
   el.textContent = "";
-  let hold = 0;
   CLAIMS.forEach(c => {
     const s = CLAIMSTATE[c.id];
-    const r = document.createElement("div"); r.className = "m-row";
-    const k = document.createElement("span"); k.className = "m-k"; k.textContent = c.id + " · " + c.text;
+    const open = !!OPEN[c.id];
+    const r = document.createElement("div"); r.className = "m-row" + (open ? " open" : "");
+    const k = document.createElement("button"); k.className = "m-k m-kbtn";
+    k.textContent = c.id + " · " + c.text;
+    k.setAttribute("aria-expanded", String(open));
+    k.addEventListener("click", () => { OPEN[c.id] = !OPEN[c.id]; renderClaims(); });
     const v = document.createElement("span");
     if (!s) { v.className = "m-v wait"; v.textContent = "CHECKING"; }
-    else if (s.ok) { v.className = "m-v ok"; v.textContent = "● HOLDING · " + s.detail; hold++; }
+    else if (s.ok) { v.className = "m-v ok"; v.textContent = "● HOLDING · " + s.detail; }
     else { v.className = "m-v bad"; v.textContent = "✕ INVALID · " + s.detail; }
     r.appendChild(k); r.appendChild(v); el.appendChild(r);
+    if (open) {
+      const e = document.createElement("div"); e.className = "m-evidence";
+      const line = (kk, vv) => { const d = document.createElement("div");
+        const a = document.createElement("span"); a.className = "e-k"; a.textContent = kk + " — ";
+        d.appendChild(a); d.appendChild(document.createTextNode(vv)); return d; };
+      e.appendChild(line("METHOD", c.m));
+      e.appendChild(line("VALUE", s ? s.detail : "not yet computed"));
+      e.appendChild(line("COMPUTED", s ? (s.t || "at load") : "pending" ));
+      if (c.run) {
+        const b = document.createElement("button"); b.className = "i-btn";
+        b.textContent = "RE-RUN THIS CLAIM";
+        b.addEventListener("click", () => recomputeOne(c.id));
+        e.appendChild(b);
+      } else {
+        e.appendChild(line("RE-RUN", "computed by the async verifier · RECOMPUTE ALL re-renders its stored result"));
+      }
+      el.appendChild(e);
+    }
   });
-  const bad = CLAIMS.some(c => CLAIMSTATE[c.id] && !CLAIMSTATE[c.id].ok);
+  const sm = summary();
   const f = document.getElementById("claimsFooter");
-  if (f) f.textContent = "CLAIMS " + hold + "/" + CLAIMS.length + " HOLDING" + (bad ? " · INVALID PRESENT" : "");
+  if (f) f.textContent = "CLAIMS " + sm.hold + "/" + sm.total + " HOLDING" + (sm.bad ? " · INVALID PRESENT" : "");
 }
-function setClaim(id, ok, detail) { CLAIMSTATE[id] = { ok, detail }; renderClaims(); }
+function setClaim(id, ok, detail) { CLAIMSTATE[id] = { ok, detail, t: stamp() }; renderClaims(); }
 function recomputeClaims() {
-  CLAIMS.forEach(c => { if (c.run) { const r = c.run(); CLAIMSTATE[c.id] = { ok: r.ok, detail: r.detail }; } });
+  CLAIMS.forEach(c => { if (c.run) { const r = c.run(); CLAIMSTATE[c.id] = { ok: r.ok, detail: r.detail, t: stamp() }; } });
+  renderClaims();
+}
+/* one claim, in isolation — updates only its own stored state */
+function recomputeOne(id) {
+  const c = CLAIMS.find(x => x.id === id);
+  if (!c || !c.run) return;
+  const r = c.run();
+  CLAIMSTATE[id] = { ok: r.ok, detail: r.detail, t: stamp() };
   renderClaims();
 }
 
 const API = {
-  CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, renderClaims, checkRenderManifest,
+  CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest,
   contrastClaim, secondaryContrastClaim, legibilityClaim, dsinClaim, cameraClaim
 };
 root.CytherClaims = API;
