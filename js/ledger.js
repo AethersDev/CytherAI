@@ -81,9 +81,18 @@ if (typeof document !== "undefined") {
 
   function wire() {
     const head = $("rlHead"), body = $("rlBody"), clr = $("rlClear"), vfy = $("rlVerify");
-    if (head && body) head.addEventListener("click", () => {
-      body.hidden = !body.hidden; head.setAttribute("aria-expanded", String(!body.hidden));
-    });
+    if (head && body) {
+      head.addEventListener("click", () => {
+        body.hidden = !body.hidden; head.setAttribute("aria-expanded", String(!body.hidden));
+      });
+      /* Escape closes the open ledger and returns focus to its chip. There is
+         no trap and no scrim — the ledger is a sheet, never a modal. */
+      document.addEventListener("keydown", e => {
+        if (e.key === "Escape" && !body.hidden) {
+          body.hidden = true; head.setAttribute("aria-expanded", "false"); head.focus();
+        }
+      });
+    }
     if (clr) clr.addEventListener("click", clear);
     if (vfy) vfy.addEventListener("click", () => {
       const r = root.CytherClaims.checkRenderManifest();
