@@ -19,10 +19,9 @@ import hashlib, math, os, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from pngout import write_png, downsample2x
+from canon import ROOT, dsin, dcos, canon_from_source
 
 REV = 1
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 OUT = os.path.join(ROOT, "assets/og/og-card.png")
 
 SRC_W, SRC_H = 2400, 1260          # 2x internal source (never written to disk)
@@ -39,34 +38,6 @@ ANCHORS = [(16, 22, 32), (30, 44, 96), (10, 13, 20), (32, 54, 199)]
 ROT, CORE, AMAX = 0.12, (6, 9, 18), 0.95
 GROUND = (236, 240, 244)           # #ECF0F4
 TAU = math.pi * 2
-
-# ---- deterministic sine — port of js/manifest.js dsin/dcos (IEEE-exact ops) ----
-TWO_PI, HALF_PI, D_PI = 6.283185307179586, 1.5707963267948966, 3.141592653589793
-
-def dsin(x):
-    x = x - TWO_PI * math.floor(x / TWO_PI + 0.5)
-    if x > HALF_PI: x = D_PI - x
-    elif x < -HALF_PI: x = -D_PI - x
-    x2 = x * x
-    return x * (1 + x2 * (-1/6 + x2 * (1/120 + x2 * (-1/5040 + x2 * (1/362880 + x2 * (-1/39916800))))))
-
-def dcos(x): return dsin(x + HALF_PI)
-
-def canon_from_source():
-    """CANON, ADMISSION_NONCE, CHECKSUM — from the repository source, via jsc."""
-    driver = ('print(JSON.stringify({p:CytherManifest.CANON,'
-              'n:CytherManifest.ADMISSION_NONCE,c:CytherManifest.CHECKSUM}))')
-    dpath = os.path.join(ROOT, "tools", ".canon-driver.js")
-    with open(dpath, "w") as f:
-        f.write(driver)
-    try:
-        out = subprocess.run([JSC, os.path.join(ROOT, "js/manifest.js"), dpath],
-                             check=True, capture_output=True, text=True).stdout
-    finally:
-        os.remove(dpath)
-    import json
-    j = json.loads(out)
-    return j["p"], j["n"], j["c"]
 
 def lum(r, g, b): return 0.2126*r + 0.7152*g + 0.0722*b
 
