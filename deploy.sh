@@ -18,6 +18,7 @@ DIST="$ROOT/dist"
 # The allowlist. Adding a page means adding it HERE and to sw.js ASSETS.
 FILES="index.html
 contact.html
+404.html
 pages/brief.html
 pages/privacy.html
 pages/security.html
@@ -40,7 +41,8 @@ assets/icons/icon-180.png
 assets/icons/icon-192.png
 assets/icons/icon-512.png
 assets/brief/exhibit-a-boundary.svg
-assets/brief/exhibit-b-strata.png"
+assets/brief/exhibit-b-strata.png
+assets/error/plate-empty.svg"
 
 # content/record.js, profiles/disclosure.js and js/console.js are deliberately
 # absent: no page loads them. They stay on disk for the separate engine project.

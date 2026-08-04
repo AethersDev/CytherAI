@@ -97,8 +97,10 @@ the SRI hashes both carry the build hash, so a build is atomic).
 - No SPA-style catch-all rewrite. A wrong path must 404, not silently render the
   homepage — the site's claims are per-page and a rewritten URL would state
   something the reader did not request.
-- A styled `404.html` does not exist yet (audit ADV-003, plan Phase 13; blocked
-  on the domain decision). Until it does, the host default is acceptable.
+- `404.html` exists in the artifact (closes ADV-003). Configure the origin to
+  serve it **with status 404** for path misses. Its URLs are absolute, so it
+  renders correctly at any depth. Local existence proves nothing about the
+  origin: verify the miss behaviour with the §4 checks.
 
 ## 4. Verification against a live origin
 
@@ -108,6 +110,8 @@ curl -s -o /dev/null -w '%{http_code}\n' https://HOST/newC3/epoch04-preimage.txt
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/backup/graphite-v2/index.html # expect 404
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/PRODUCTION_PLAN.md            # expect 404
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
+curl -s https://HOST/definitely-missing | grep -q "No record at this path"          # styled 404 body
+curl -s -o /dev/null -w '%{http_code}\n' https://HOST/definitely-missing            # AND status 404
 ```
 
 ## 5. Browser matrix — Chrome observed, WebKit residual
