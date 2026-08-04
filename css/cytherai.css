@@ -136,6 +136,8 @@ tr:first-child td{border-top:none}
 .form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--ink-quiet)}
 .form-hint{font-family:var(--font-mono);font-size:10px;color:var(--ink-quiet);margin-top:6px}
+.form-input[aria-invalid="true"],.form-textarea[aria-invalid="true"]{border-color:var(--refuse)}
+.form-error{font-family:var(--font-mono);font-size:10px;color:var(--refuse);margin-top:6px}
 
 /* ════════ buttons ════════ */
 .btn,.clearance-cta-primary{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
