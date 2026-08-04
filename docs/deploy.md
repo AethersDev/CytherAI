@@ -18,6 +18,32 @@ repository hardening before the remaining evidence is gathered — any change to
 candidate bytes invalidates the Chrome record and requires the full release
 battery again.
 
+### Release-candidate artifact equivalence
+
+```
+Chromium-observed source commit:      d1281d6
+Release-candidate repository commit:  bdebc59
+Repository delta:     ten generated study PNGs removed from assets/; no
+                      runtime, deployment, integrity, service-worker, HTML,
+                      CSS, or JS file changed
+Artifact equivalence: rebuilt dist/ contains 19 files; every file SHA-256
+                      identical to the d1281d6 Chromium-observed baseline;
+                      build hash remains C4F7059DAC405AE6; integrity
+                      regeneration is idempotent
+Conclusion:           Chrome certification evidence from d1281d6 remains
+                      applicable to bdebc59 because the complete
+                      browser-consumed artifact is byte-identical
+```
+
+The equivalence proof is per-file. Reproduce the manifest from inside `dist/`:
+
+```
+find . -type f -print0 | sort -z | xargs -0 shasum -a 256
+```
+
+Safari differential and origin certification run against the rebuilt `dist/`
+of the release-candidate commit.
+
 The remaining work is certification, not construction. Class A items can
 invalidate a public technical claim; Class B affect experience but not the
 truthfulness of the site; Class C cannot be resolved inside the repository.
