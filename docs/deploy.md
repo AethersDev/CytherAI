@@ -204,6 +204,26 @@ here would not invalidate the architecture.
 | W7 | VoiceOver rotor announcement | The heading DOM is verified; how VoiceOver reads it is AT-specific |
 | W8 | Plate rendering fidelity | Canvas output was screenshotted in Chrome and looks correct; WebKit compositing of `backdrop-filter` + `mask-composite` is its own path |
 
+#### SAFARI 27.0 OBSERVED (2026-08-05, safaridriver against the built artifact, commit 07a4221)
+
+Driven over WebDriver against `dist/` served on localhost, with a
+tampered-byte negative control on a second port. Divergence from the Chrome
+record: **none observed** in the automated set.
+
+| # | Result |
+|---|---|
+| **W1** | **PASS.** `runner.html`'s inline module executes under the CSP: `✓ 33 / 33 passed · exitCode 0 · mutation-verified` in WebKit. |
+| **W2** | **PASS, both directions.** Positive: all six SRI'd modules execute; `CLAIMS 10/10 HOLDING` computed live in WebKit. Negative: one byte appended to `engine/trajectory-engine.js` → the module is refused and the runner shows the honest `✕ 0 tests executed — the suite failed to load`. WebKit enforces integrity on module fetches. |
+| W5 | **Partial.** Static weight rendering matches the model exactly (thesis glyphs at 250; `.sec-h` at 340 = core-phase 310 + at-rest 30). Pointer-driven kinetics remain a visual observation. |
+| W6 | **PASS (macOS).** Service worker activates on localhost; exactly one cache, named `cytherai-substrate-87C2467252E7272A`. iOS dynamic-viewport behaviour not covered by this pass. |
+| **W8** | **PASS by observation.** At depth (gauge ×2.42, 46%): phase-changed panels ground light ink, the flip membrane holds, masked envelopes composite, the plate renders behind, the minimap and reticle draw, and the strip prints `CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED`. Narrow-window census: exactly two visible fixed surfaces, no horizontal overflow. |
+
+Remaining interactive: W3 (real `mailto:` handoff), W4 (form-action decision,
+contingent on W3), W7 (VoiceOver), and the pointer-driven half of W5.
+One environment observation, not a site defect: Safari's automatic Reader
+engaged on the homepage at wide windows in the test profile — user-setting
+controlled, content-neutral, worth one glance at launch.
+
 ### OWNER DECISION REQUIRED
 
 | # | Item |
