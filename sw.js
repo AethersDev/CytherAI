@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-87C2467252E7272A';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-F1FF314DEC2C4717';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;

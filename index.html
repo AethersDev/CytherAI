@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="87C2467252E7272A">
+<meta name="build-hash" content="F1FF314DEC2C4717">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -52,7 +52,7 @@ a{color:inherit}
 
 /* ════════════ the substrate — four exposures of one object ════════════ */
 #world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
-.tile{position:absolute;inset:0;transform-origin:0 0;will-change:transform,opacity;pointer-events:none}
+.tile{position:absolute;inset:0;transform-origin:0 0;pointer-events:none}
 #substrate{position:fixed;inset:0;z-index:0}
 body.forking #substrate{cursor:grabbing}
 
@@ -368,6 +368,10 @@ body[data-optics="world"] #world{opacity:1}
   -webkit-mask-composite:source-in}
 body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
 body[data-optics="world"] .env::before{opacity:.18}
+/* While the reader moves, the membrane background remains authoritative but
+   its expensive live blur is unnecessary. Rest restores the density-conditioned
+   optics; the flip phase still carries its full absorptive ground. */
+body:not(.at-rest) .env::before{backdrop-filter:none;-webkit-backdrop-filter:none}
 /* the flip membrane is a reading GROUND, not attenuation — it holds at full strength
    in every optics mode and during motion; CL-06's model depends on it */
 body[data-phase="flip"] .env::before{opacity:1}
@@ -457,6 +461,9 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
   .strip .optics{position:static;display:flex}
   .strip .optics button{padding:17px 6px;background:none;border:none;border-bottom:1px solid var(--hair)}
   .strip .optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
+  /* The strip can wrap to three rows. Its measured height is written by site.js;
+     terminal content must clear the actual surface, never a guessed breakpoint. */
+  footer{padding-bottom:calc(var(--stripH,142px) + 16px)}
 }
 
 /* ════════════ responsive ════════════ */
@@ -760,11 +767,11 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
   <span class="right"><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a></span>
 </footer>
 
-<script src="js/manifest.js" defer integrity="sha384-oO8Nh1lA9H3PMDYweHsO787+WG9UC39zC7mnyjU4dt4QAlpzT6J5aczivOaQj3Kc" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-giBbIoTHcQR09+WgV5PbMUyHuvKxmaVureXCZSVDrMbDQGPYtC/Xn8hgTRPx0MOK" crossorigin="anonymous"></script>
+<script src="js/manifest.js" defer integrity="sha384-JeiliPXAm2YSTXNOp91HNh4NzFbFSdxbuhox5Y2mtX11wCGo+q784Vui8aagJ0gF" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-K1Bv51SaQTz2sz0uTBkqzJ1/NYUWDLaLaUXMWDL7487afWvxw97RCF+pcpmneOnD" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-hI33HZ8ncBBJFT2tAfNZuumYekKEaa/Vy62l3moofsYPI4G42uN5230K2GtMmvlZ" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-j1MxjQJhcQiD7uwgyWot9hZDWs4OHig1z6gqZw4URy+uw2wClvNPYjNrIp7ygf8T" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-lMjka977KPoGZjuISbMqC+UBVBVWii+IMk7G8tF4vLhjW2E1KzLbGXTGdA1MrBnn" crossorigin="anonymous"></script>
 </body>
 </html>

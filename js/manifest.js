@@ -120,21 +120,12 @@ function derive(seed, lo, hi) {
   return ((h & 1) ? 1 : -1) * (lo + u * (hi - lo));
 }
 
-/* richness: the observable is the rendered orbit, not the attractor limit. Distinct
-   cells at scale ×40 over 280k points; a legible mark needs > 400. */
+/* Richness + legibility share the same deterministic 280k-point walk. The old
+   implementation walked it twice per nonce (once for richness, once for the
+   legibility grid), so the three published admission checks paid for 1.68m
+   recurrences. One bounded numeric cache now keeps only the two scalar results;
+   the orbit and Set are released after each previously unseen parameter tuple. */
 const RICHNESS_N = 280000, RICHNESS_FLOOR = 400;
-function renderedRichness(p) {
-  let a = p[0], b = p[1], c = p[2], d = p[3], x = 0.08, y = 0.12;
-  for (let i = 0; i < 40; i++) { const nx = dsin(a * y) + c * dcos(a * x), ny = dsin(b * x) + d * dcos(b * y); x = nx; y = ny; }
-  const s = new Set();
-  for (let i = 0; i < RICHNESS_N; i++) {
-    const nx = dsin(a * y) + c * dcos(a * x), ny = dsin(b * x) + d * dcos(b * y);
-    x = nx; y = ny;
-    if (!isFinite(x) || !isFinite(y)) return 0;
-    s.add(((x * 40) | 0) + ":" + ((y * 40) | 0));
-  }
-  return s.size;
-}
 
 /* legibility screen (§5.3): the far-field exposure (×0.9) centers the whole orbit
    behind the reading column. A candidate is admissible only if it does not pack
@@ -146,12 +137,33 @@ function renderedRichness(p) {
    it at LEGIBILITY_CAP = round(3 × canonical, 2) — 3× headroom over the shipped mark.
    CANONICAL LEGIBILITY (nonce 0) = 0.1887  →  LEGIBILITY_CAP = 0.57  (calibrated Phase 1) */
 const LEGIBILITY_G = 96, LEGIBILITY_N = 280000, LEGIBILITY_CAP = 0.57;
-function legibility(p) {
-  const G = LEGIBILITY_G, n = LEGIBILITY_N, orbit = dsinOrbit(p, n);
+const METRIC_CACHE = new Map(), METRIC_CACHE_MAX = 192;
+const metricKey = p => p.map(v => Number(v).toPrecision(17)).join(",");
+function admissionMetrics(p) {
+  const key = metricKey(p), cached = METRIC_CACHE.get(key);
+  if (cached) return cached;
+
+  const G = LEGIBILITY_G, n = LEGIBILITY_N;
+  const a = p[0], b = p[1], c = p[2], d = p[3];
+  let x = 0.08, y = 0.12;
+  for (let i = 0; i < 40; i++) {
+    const nx = dsin(a * y) + c * dcos(a * x), ny = dsin(b * x) + d * dcos(b * y);
+    x = nx; y = ny;
+  }
+  const orbit = new Float32Array(n * 2), occupied = new Set();
+  for (let i = 0; i < n; i++) {
+    const nx = dsin(a * y) + c * dcos(a * x), ny = dsin(b * x) + d * dcos(b * y);
+    x = nx; y = ny;
+    if (!isFinite(x) || !isFinite(y)) return { richness: 0, legibility: 1 };
+    /* Richness intentionally reads the unrounded recurrence, exactly as before;
+       the Float32 orbit remains the normative input to the legibility grid. */
+    occupied.add(((x * 40) | 0) + ":" + ((y * 40) | 0));
+    orbit[i * 2] = x; orbit[i * 2 + 1] = y;
+  }
+
   let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
   for (let i = 0; i < n; i++) {
     const x = orbit[i * 2], y = orbit[i * 2 + 1];
-    if (!isFinite(x) || !isFinite(y)) return 1;   /* degenerate = maximally illegible */
     if (x < minx) minx = x; if (x > maxx) maxx = x; if (y < miny) miny = y; if (y > maxy) maxy = y;
   }
   const span = Math.max(maxx - minx, maxy - miny, 1e-3);
@@ -167,8 +179,13 @@ function legibility(p) {
   const c0 = Math.round(G * 0.19), c1 = Math.round(G * 0.81);   /* central 62% */
   let lane = 0, dense = 0;
   for (let gy = 0; gy < G; gy++) for (let gx = c0; gx < c1; gx++) { lane++; if (grid[gy * G + gx] > mean) dense++; }
-  return lane ? dense / lane : 0;
+  const result = { richness: occupied.size, legibility: lane ? dense / lane : 0 };
+  if (METRIC_CACHE.size >= METRIC_CACHE_MAX) METRIC_CACHE.clear();
+  METRIC_CACHE.set(key, result);
+  return result;
 }
+function renderedRichness(p) { return admissionMetrics(p).richness; }
+function legibility(p) { return admissionMetrics(p).legibility; }
 
 /* ================= the normalized tuple → seeds → parameters ================= */
 function normalizeManifest(M) {

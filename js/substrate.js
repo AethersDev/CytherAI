@@ -38,6 +38,8 @@ const PLATE = [
 const PLATE_DEP = [900000, 1200000, 1800000, 2400000];   /* in-view deposit targets */
 const PLATE_CAP = [6e6, 9e6, 22e6, 34e6];                /* recurrence iteration ceilings */
 const BIN_TGT   = 720000;                                /* accumulation cells — v2's cap */
+const FIELD_TGT = 90000;                                 /* retained reading-field summary cells */
+const TONEMAP_MS = 80;                                   /* progressive exposure cadence */
 const TAU = Math.PI * 2;
 
 /* ================= small math ================= */
@@ -47,6 +49,8 @@ const smooth = t => t * t * (3 - 2 * t);
 const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
 const mixRgb = (a,b,t) => { const A=hex2rgb(a), B=hex2rgb(b); return A.map((v,i)=>v+(B[i]-v)*t); };
 const mixHex = (a,b,t) => `rgb(${mixRgb(a,b,t).map(Math.round).join(",")})`;
+const dprCapFor = w => w <= 640 ? 1.25 : w <= 800 ? 1.5 : 2;
+const binTargetFor = w => w <= 640 ? 360000 : w <= 900 ? 520000 : BIN_TGT;
 
 /* ================= the derived object — native orbit for the tiles ================= */
 function computeOrbit(params) {
@@ -166,7 +170,8 @@ function readingGroundAt(d, state) {
 }
 
 /* pure surface — always available (used by CL-06/CL-08, the compositing harness, ambient tests) */
-const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, ambientAt, bgRgbAt, readingGroundAt };
+const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, ambientAt,
+  bgRgbAt, readingGroundAt, dprCapFor, binTargetFor };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -179,7 +184,7 @@ if (typeof document !== "undefined") {
   let P = CM.CANON.slice();
   let linkParams = null;                 /* set from #m= at boot → REPRODUCED FROM LINK */
   let pts = null, bounds = null, ANCH = null;
-  let canonAnch = null;                  /* canonical camera snapshot for CL-08 — fork-independent */
+  let canonAnch = null, canonCam = null; /* canonical camera snapshot for CL-08 — fork-independent */
   let W = 0, H = 0, U = 0, DPR = 1;
   let lastP = 0, developing = false;
   let forking = false;
@@ -190,7 +195,7 @@ if (typeof document !== "undefined") {
 
   function layout() {
     W = innerWidth; H = innerHeight;
-    DPR = Math.min(devicePixelRatio || 1, W > 800 ? 2 : 1.6);
+    DPR = Math.min(devicePixelRatio || 1, dprCapFor(W));
     U = Math.min(W, H) / bounds.span * 0.92;
   }
 
@@ -201,7 +206,7 @@ if (typeof document !== "undefined") {
     const g = cv.getContext("2d");
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
     /* accumulate at v2's capped internal resolution — the drawImage upscale is the plate grain */
-    const sc = Math.min(1, Math.sqrt(BIN_TGT / (W * H)));
+    const sc = Math.min(1, Math.sqrt(binTargetFor(W) / (W * H)));
     const bw = Math.max(320, Math.round(W * sc)), bh = Math.max(240, Math.round(H * sc));
     const off = document.createElement("canvas"); off.width = bw; off.height = bh;
     const sp = PLATE[i];
@@ -210,7 +215,7 @@ if (typeof document !== "undefined") {
       c0: new Float32Array(bw * bh), c1: new Float32Array(bw * bh),
       c2: new Float32Array(bw * bh), c3: new Float32Array(bw * bh),
       zu: z * U * sc, ox: (W / 2) * sc - c[0] * z * U * sc, oy: (H / 2) * sc - c[1] * z * U * sc,
-      x: 0.08, y: 0.12, dep: 0, it: 0, maxT: 1e-6,
+      x: 0.08, y: 0.12, dep: 0, it: 0, maxT: 1e-6, lastTone: 0, tones: 0,
       target: PLATE_DEP[i], cap: PLATE_CAP[i],
       anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
     st.img = st.octx.createImageData(bw, bh);
@@ -274,6 +279,31 @@ if (typeof document !== "undefined") {
     st.g.drawImage(st.off, 0, 0, st.bw, st.bh, 0, 0, W, H);
   }
 
+  /* Reading envelopes need representative density and the quietest third, not
+     a second full-resolution render. Retain a bounded stratified summary so
+     the four completed plates occupy <= FIELD_TGT Float32 cells each instead
+     of four more BIN_TGT-sized grids. */
+  function summarizeField(st) {
+    const fs = Math.min(1, Math.sqrt(FIELD_TGT / (st.bw * st.bh)));
+    const fw = Math.max(96, Math.round(st.bw * fs)), fh = Math.max(72, Math.round(st.bh * fs));
+    const total = new Float32Array(fw * fh);
+    /* A stratified centre sample preserves the spatial field needed by the 8×6
+       envelope probe and quiet-third atlas without another full-grid scan. */
+    for (let gy = 0; gy < fh; gy++) {
+      const sy = Math.min(st.bh - 1, (((gy + 0.5) * st.bh / fh) | 0)), src = sy * st.bw;
+      for (let gx = 0; gx < fw; gx++) {
+        const sx = Math.min(st.bw - 1, (((gx + 0.5) * st.bw / fw) | 0));
+        total[gy * fw + gx] = st.total[src + sx];
+      }
+    }
+    let maxT = 1e-6;
+    for (let i = 0; i < total.length; i++) {
+      if (total[i] > maxT) maxT = total[i];
+    }
+    return { total, bw: fw, bh: fh,
+      scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
+  }
+
   function renderCore() {
     if (!coreCv) return;
     const cw = 56, ch = Math.round(56 * (H / W) * 1.4);
@@ -291,25 +321,35 @@ if (typeof document !== "undefined") {
     const r = $("coreRect"); if (!r || !coreCv) return;
     const s = +coreCv.dataset.s, ox = +coreCv.dataset.ox, oy = +coreCv.dataset.oy;
     const hw = (W / (2*z*U)) * s, hh = (H / (2*z*U)) * s;
-    r.style.width = (hw*2).toFixed(1) + "px"; r.style.height = (hh*2).toFixed(1) + "px";
-    r.style.transform = `translate(${(cx*s+ox-hw).toFixed(1)}px,${(cy*s+oy-hh).toFixed(1)}px)`;
+    const width = (hw*2).toFixed(1) + "px", height = (hh*2).toFixed(1) + "px";
+    const transform = `translate(${(cx*s+ox-hw).toFixed(1)}px,${(cy*s+oy-hh).toFixed(1)}px)`;
+    if (r.style.width !== width) r.style.width = width;
+    if (r.style.height !== height) r.style.height = height;
+    if (r.style.transform !== transform) r.style.transform = transform;
   }
 
   /* observe — transform + opacity + ambient, driven by scroll progress p (site owns scroll) */
+  const tilePaint = [{}, {}, {}, {}], ambientPaint = {};
   function observe(p) {
     lastP = p;
     const cam = cameraAt(p, ANCH, U, W, H);
     for (let k = 0; k < 4; k++) {
-      const t = cam.tiles[k], cv = tiles[k];
-      if (t.o <= 0) { cv.style.opacity = 0; cv.style.visibility = "hidden"; continue; }
-      cv.style.visibility = "visible"; cv.style.opacity = t.o.toFixed(3);
-      cv.style.transform = `translate(${t.tx.toFixed(2)}px,${t.ty.toFixed(2)}px) scale(${t.A.toFixed(5)})`;
+      const t = cam.tiles[k], cv = tiles[k], paint = tilePaint[k];
+      const visible = t.o > 0, visibility = visible ? "visible" : "hidden";
+      const opacity = visible ? t.o.toFixed(3) : "0";
+      const willChange = visible ? "transform, opacity" : "auto";
+      if (paint.visibility !== visibility) { cv.style.visibility = visibility; paint.visibility = visibility; }
+      if (paint.opacity !== opacity) { cv.style.opacity = opacity; paint.opacity = opacity; }
+      if (paint.willChange !== willChange) { cv.style.willChange = willChange; paint.willChange = willChange; }
+      if (!visible) continue;
+      const transform = `translate(${t.tx.toFixed(2)}px,${t.ty.toFixed(2)}px) scale(${t.A.toFixed(5)})`;
+      if (paint.transform !== transform) { cv.style.transform = transform; paint.transform = transform; }
     }
     const amb = ambientAt(p);
-    root_el.style.setProperty("--bg", amb.bg);
-    root_el.style.setProperty("--inkA", amb.ink);   /* ambient ink — hairlines/structure; reading ink is bistable (P9) */
-    root_el.style.setProperty("--panel", amb.panel);
-    root_el.style.setProperty("--accent", amb.accent);
+    const props = { "--bg": amb.bg, "--inkA": amb.ink, "--panel": amb.panel, "--accent": amb.accent };
+    Object.keys(props).forEach(name => {
+      if (ambientPaint[name] !== props[name]) { root_el.style.setProperty(name, props[name]); ambientPaint[name] = props[name]; }
+    });
     drawCoreRect(cam.cx, cam.cy, cam.z);
     return cam.z;
   }
@@ -319,9 +359,9 @@ if (typeof document !== "undefined") {
   const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
   let batch = 110000, lastT = 0, devSum = 0, devPlateN = 0;
   const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
-  function developAll() {
+  function developAll(preparedCam) {
     const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
-    const cam = deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;  /* dsin — camera */
+    const cam = preparedCam || deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;  /* dsin — camera */
     layout();
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
@@ -346,10 +386,13 @@ if (typeof document !== "undefined") {
     }
     depositBatch(plateDev, reduced ? 600000 : batch | 0);
     const done = plateDev.dep >= plateDev.target || plateDev.it >= plateDev.cap;
-    if (done || !reduced) tonemapPlate(plateDev);
+    /* The density arrays change every frame; the 720k-pixel tone map does not
+       need to. Preserve progressive exposure at a bounded 12.5 Hz and always
+       render the completed state. Reduced motion still renders once, at done. */
+    const toneNow = done || (!reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS));
+    if (toneNow) { tonemapPlate(plateDev); plateDev.lastTone = t; plateDev.tones++; }
     if (done) {
-      fields[plateDev.i] = { total: plateDev.total, bw: plateDev.bw, bh: plateDev.bh,
-                            sc: plateDev.sc, maxT: plateDev.maxT };   /* density outlives the develop; lobes are freed */
+      fields[plateDev.i] = summarizeField(plateDev);   /* compact density outlives the develop; full grids are freed */
       devSum += plateDev.dep;
       plateDev = null;
       if (!plateQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
@@ -368,7 +411,7 @@ if (typeof document !== "undefined") {
     let sum = 0, n = 0;
     for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 8; gx++) {
       const vx = rect.left + (gx + .5) / 8 * rect.width, vy = rect.top + (gy + .5) / 6 * rect.height;
-      const bx = ((vx - t.tx) / t.A * f.sc) | 0, by = ((vy - t.ty) / t.A * f.sc) | 0;
+      const bx = ((vx - t.tx) / t.A * f.scx) | 0, by = ((vy - t.ty) / t.A * f.scy) | 0;
       if (bx < 0 || by < 0 || bx >= f.bw || by >= f.bh) continue;
       const dep = f.total[by * f.bw + bx];
       if (dep > 0) { let L = Math.log1p(dep) * invLog; sum += Math.sqrt(L) * L; }
@@ -395,7 +438,7 @@ if (typeof document !== "undefined") {
   /* redevelop from the (possibly forked) params — async via the render queue */
   function redevelop() {
     developing = true; hooks.onChange();
-    developAll();
+    developAll(near(P, CM.CANON) ? canonCam : null);
   }
 
   /* ================= status / serial ================= */
@@ -456,8 +499,9 @@ if (typeof document !== "undefined") {
       P = opts.initialParams.slice();
       if (opts.fromLink) linkParams = P.slice();
     }
-    canonAnch = deriveAnchors(CM.CANON).ANCH;   /* canonical camera — the derivation CL-08 re-checks */
-    developAll();                               /* the site loop streams the exposure */
+    canonCam = deriveAnchors(CM.CANON);         /* one canonical derivation, reused by the initial canonical develop */
+    canonAnch = canonCam.ANCH;                   /* canonical camera — the derivation CL-08 re-checks */
+    developAll(near(P, CM.CANON) ? canonCam : null); /* the site loop streams the exposure */
     renderCore();
     wireGestures();
     observe(0);
@@ -469,10 +513,19 @@ if (typeof document !== "undefined") {
     /* mobile URL-bar show/hide fires height-only resizes mid-scroll — never re-develop
        four tiles for that; geometry stays at last-rendered W/H so the compositing identity
        holds; the debounced pass heals coverage once the gesture settles */
-    const heightOnly = innerWidth === W && Math.abs(innerHeight - H) < 160;
+    const nextDpr = Math.min(devicePixelRatio || 1, dprCapFor(innerWidth));
+    const heightOnly = innerWidth === W && nextDpr === DPR;
     clearTimeout(rzT);
-    rzT = setTimeout(() => { developAll(); renderCore(); observe(lastP); },
-      heightOnly ? 450 : 160);
+    if (heightOnly) {
+      /* Browser chrome changes viewport height repeatedly on mobile. Stretch
+         the already-developed exposure to the new coverage and update camera
+         geometry; width/DPR changes still take the full deterministic path. */
+      H = innerHeight; U = Math.min(W, H) / bounds.span * 0.92;
+      tiles.forEach(cv => { cv.style.height = H + "px"; });
+      renderCore(); observe(lastP);
+      return;
+    }
+    rzT = setTimeout(() => { developAll(near(P, CM.CANON) ? canonCam : null); renderCore(); observe(lastP); }, 160);
     observe(lastP);
   }, { passive: true });
 
@@ -492,6 +545,7 @@ if (typeof document !== "undefined") {
   API.status = status;
   API.isDeveloping = () => developing;
   API.exposure = () => developing ? { plate: devPlateN, n: devSum + (plateDev ? plateDev.dep : 0) } : null;
+  API.fieldCells = () => fields.reduce((n, f) => n + (f ? f.total.length : 0), 0);
   API.fieldEnergy = fieldEnergy;
   API.corridors = corridorsFor;
 }
