@@ -1,0 +1,143 @@
+{
+  "specification": "VAIC-0",
+  "version": 1,
+  "result_values": ["PASS", "FAIL", "NOT_EVALUATED"],
+  "coverage_classes": {
+    "EXHAUSTIVE": "All states or traces in the declared finite domain were evaluated.",
+    "MODEL_CHECKED": "All traces licensed by the named model, action alphabet, and initial-state set were evaluated.",
+    "BOUNDED": "All traces in the declared routes, contexts, and finite depth or state bound were evaluated.",
+    "SAMPLED": "Only the declared samples were evaluated; no universal proposition is licensed.",
+    "HUMAN_REVIEWED": "A named human protocol evaluated the declared contexts; no unobserved context is licensed."
+  },
+  "evaluators": [
+    {
+      "class": "STATIC_ANALYZER",
+      "authority": [
+        "source structure", "declared constants", "forbidden dependency absence",
+        "source-level resource contracts", "static disclosure wording"
+      ],
+      "relations": ["DERIVED_FROM", "DISCLOSED_AS", "AUTHORITY_NOT_ELEVATED", "BOUNDED_BY"],
+      "cannot_establish": [
+        "rendered geometry", "interaction traces", "perceptual adequacy",
+        "runtime performance", "assistive-technology intelligibility", "origin behavior"
+      ]
+    },
+    {
+      "class": "PURE_RUNTIME_HARNESS",
+      "authority": [
+        "deterministic pure functions", "finite state transitions", "fail-closed summaries",
+        "reproducibility within the declared input domain"
+      ],
+      "relations": [
+        "DERIVED_FROM", "REPRODUCIBLE_FROM", "DISCLOSED_AS",
+        "AUTHORITY_NOT_ELEVATED", "FAILURE_REMAINS_VISIBLE", "BOUNDED_BY"
+      ],
+      "cannot_establish": [
+        "rendered geometry", "perceptual adequacy", "browser behavior",
+        "assistive-technology intelligibility", "origin behavior"
+      ]
+    },
+    {
+      "class": "BROWSER_HARNESS",
+      "authority": [
+        "rendered geometry", "bounded interaction sequences", "viewport and media-query behavior",
+        "DOM-visible state transitions", "browser-observed artifact identity"
+      ],
+      "relations": [
+        "NON_OCCLUDING", "WITHIN_VIEWPORT", "MIN_TARGET", "UNCHANGED_UNDER",
+        "DISTINGUISHABLE", "PERSISTENT", "REACHABLE_WITHIN", "ORDERED",
+        "QUIESCENT_WHEN", "TRANSITION_CORRESPONDS_TO", "DERIVED_FROM",
+        "REPRODUCIBLE_FROM", "BOUNDED_BY"
+      ],
+      "cannot_establish": [
+        "unbounded interaction behavior", "human aesthetic recognition",
+        "actual assistive-technology intelligibility", "unobserved origin behavior"
+      ]
+    },
+    {
+      "class": "PERFORMANCE_HARNESS",
+      "authority": [
+        "timing", "memory proxies", "frame behavior", "resource-profile compliance"
+      ],
+      "relations": ["BOUNDED_BY", "QUIESCENT_WHEN"],
+      "cannot_establish": [
+        "semantic truth", "rhetorical adequacy", "human perceptual adequacy",
+        "unmeasured devices or runtimes"
+      ]
+    },
+    {
+      "class": "ACCESSIBILITY_HARNESS",
+      "authority": [
+        "machine-checkable accessibility structure", "programmatic names",
+        "focus order", "machine-checkable target geometry"
+      ],
+      "relations": ["WITHIN_VIEWPORT", "MIN_TARGET", "REACHABLE_WITHIN", "ORDERED", "DISTINGUISHABLE"],
+      "cannot_establish": [
+        "actual screen-reader intelligibility", "human hierarchy perception",
+        "unbounded interaction behavior"
+      ]
+    },
+    {
+      "class": "HUMAN_PERCEPTUAL_EVALUATOR",
+      "authority": [
+        "recognition", "hierarchy", "aesthetic-semantic discriminability",
+        "motion correspondence within the declared review protocol"
+      ],
+      "relations": ["DISTINGUISHABLE", "QUIESCENT_WHEN", "TRANSITION_CORRESPONDS_TO"],
+      "cannot_establish": [
+        "semantic correctness", "source integrity", "unreviewed contexts",
+        "universal beauty", "origin continuity"
+      ]
+    },
+    {
+      "class": "ASSISTIVE_TECH_REVIEW",
+      "authority": [
+        "actual assistive-technology navigation", "announced state",
+        "interaction intelligibility in the named assistive environment"
+      ],
+      "relations": ["REACHABLE_WITHIN", "ORDERED", "DISTINGUISHABLE", "PERSISTENT"],
+      "cannot_establish": [
+        "other assistive environments", "visual aesthetics", "origin continuity"
+      ]
+    },
+    {
+      "class": "ARTIFACT_VERIFIER",
+      "authority": [
+        "allowlist closure", "artifact hashes", "SRI/build/cache identity",
+        "absence of forbidden release trees"
+      ],
+      "relations": ["DERIVED_FROM", "REPRODUCIBLE_FROM", "BOUNDED_BY"],
+      "cannot_establish": [
+        "deployed bytes", "response headers", "browser rendering",
+        "perceptual adequacy", "origin continuity"
+      ]
+    },
+    {
+      "class": "MODEL_CHECKER",
+      "authority": [
+        "all traces in the named model", "declared action alphabet",
+        "declared initial-state set and state bound"
+      ],
+      "relations": [
+        "UNCHANGED_UNDER", "DISTINGUISHABLE", "PERSISTENT", "REACHABLE_WITHIN",
+        "ORDERED", "FAILURE_REMAINS_VISIBLE"
+      ],
+      "cannot_establish": [
+        "implementation-model equivalence unless separately proven",
+        "perceptual adequacy", "origin behavior"
+      ]
+    },
+    {
+      "class": "ORIGIN_HARNESS",
+      "authority": [
+        "time-indexed deployed route closure", "response hashes", "headers",
+        "TLS/HSTS", "MIME/status behavior", "service-worker generation"
+      ],
+      "relations": ["ORIGIN_MATCHES"],
+      "cannot_establish": [
+        "future origin continuity", "owner attestations", "unmeasured runtimes",
+        "human perceptual adequacy"
+      ]
+    }
+  ]
+}
