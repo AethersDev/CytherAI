@@ -1,0 +1,19 @@
+{
+  "specification": "VAIC-0",
+  "record_type": "release-disposition-register",
+  "note": "Institutional dispositions, not evidence. The validator states what a candidate's verdict IS; this register states what the owner has DECIDED about it. A disposition never changes a verdict, and the validator never reads this file. Documentation may explain a failure differently; it may not make the failure disappear.",
+  "rules": {
+    "current_fail": "Every obligation whose EFFECTIVE verdict for the current candidate is FAIL must appear here, keyed by obligation id.",
+    "recorded_fail": "Every FAIL observation recorded in the evidence ledger must appear here, keyed by its ledger anchor, even when its binding is expired and it is therefore not a current FAIL.",
+    "not_evaluated": "A NOT_EVALUATED verdict is NOT folded into either rule. Missing licensing evidence and a tested defect may both block release, but they do so under different clauses and must be decided separately."
+  },
+  "dispositions": [
+    {
+      "subject": "vaic/evidence/current-browser-observations.v0.json#mobile_targets",
+      "kind": "RECORDED_OBSERVATION",
+      "disposition": "OPEN_DEFECT",
+      "observed_against": "661AFC4C3C67BFD1",
+      "note": "The FORK control measured 33.28 px wide against a declared 44x44 target envelope at 320x844. The binding is expired, so this is not a current FAIL and does not condemn the present candidate; it is a known defect awaiting re-observation. It is registered here because the certification block in docs/deploy.md dropped the hit-target assertion without naming it as open."
+    }
+  ]
+}

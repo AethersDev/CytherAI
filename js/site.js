@@ -128,6 +128,13 @@ function dockChrome() {
   place();
   mq.addEventListener("change", place);
 }
+function wireStripClearance() {
+  const strip = document.querySelector(".strip"); if (!strip) return;
+  const sync = () => document.documentElement.style.setProperty("--stripH", Math.ceil(strip.getBoundingClientRect().height) + "px");
+  sync();
+  if (typeof ResizeObserver !== "undefined") new ResizeObserver(sync).observe(strip);
+  else addEventListener("resize", sync, { passive: true });
+}
 
 function envUpdate() {
   const p = progress();
@@ -136,8 +143,10 @@ function envUpdate() {
   let zoneName = zones.length ? zones[0].name : "CLAIM · PUBLIC SURFACE", mode = "EXPLORE";
   zones.forEach(z => { if (p >= z.f - 0.02) { zoneName = z.name; mode = z.mode; } });
   const pct = String(Math.round(p * 100)).padStart(2, "0");
-  if (gauge) gauge.innerHTML = `OBS <b>${mode}</b> · ×${zoom.toFixed(2)}<br>DEPTH ${pct}% · ${zoneName}`;
-  const oz = $("obsZoom"); if (oz) oz.textContent = "×" + zoom.toFixed(2);
+  const gaugeHtml = `OBS <b>${mode}</b> · ×${zoom.toFixed(2)}<br>DEPTH ${pct}% · ${zoneName}`;
+  if (gauge && gauge.innerHTML !== gaugeHtml) gauge.innerHTML = gaugeHtml;
+  const oz = $("obsZoom"), zoomText = "×" + zoom.toFixed(2);
+  if (oz && oz.textContent !== zoomText) oz.textContent = zoomText;
 }
 let envTick = false;
 addEventListener("scroll", () => {
@@ -417,6 +426,7 @@ function verifyAdmissions() {
   wireHold();
   wireOptics();
   dockChrome();
+  wireStripClearance();
   restArm();   /* the page opens navigating; rest (and the reading exposure) follows */
   splitThesis();
   wireWaves();

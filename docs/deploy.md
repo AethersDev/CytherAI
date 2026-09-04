@@ -3,30 +3,29 @@
 ## Certification status
 
 ```
-Engineering implementation       COMPLETE (incl. visual-integration V1–V10)
-Chromium certification           RE-ESTABLISHED LOCALLY against the new bytes
-                                 (headless CDP battery, see the track record
-                                 below); owner-run interactive pass optional
-WebKit differential checks       8 OPEN — run against the NEW candidate bytes
+Engineering implementation       COMPLETE (incl. performance-audit remediation)
+Current-candidate browser check  PARTIAL — in-app browser: engine 33/33,
+                                 claims 10/10, responsive footer and resize pass
+Chromium certification           OPEN — prior CDP record predates current bytes
+WebKit differential checks       OPEN — prior record predates current bytes
 Origin certification             OPEN — bytes and deployed paths changed
 Epoch-04 owner decision          OPEN
 Manifest owner sign-off          OPEN
 Asset promotion sign-off         OPEN — docs/asset-promotion-log.md
 ```
 
-The d1281d6/bdebc59 Chromium record below remains true of those commits, but
-the visual-integration track changed candidate bytes (assets, HTML, CSS, three
-JS modules), so it no longer certifies this tree. A local battery re-ran the
-observable core against the rebuilt artifact over the DevTools Protocol with
-true device emulation — all pass: engine 33/33 (exitCode 0, mutation-verified);
-claims 10/10 HOLDING at 320/375/390/430/720/1440 with zero horizontal overflow;
-exactly two fixed surfaces at rest ≤640 with ≥44px hit targets; the ledger
-sheet ≤40vh on the strip, Escape-closable with focus return; per-claim re-run
-cannot mask an INVALID; reduced motion settles to 10/10; the service worker
-installs exactly one cache named by the current build hash, and with the origin
-genuinely killed `/` renders from the worker at CLAIMS 10/10. jsc suites
-(claims regression 8/8, motion laws 13/13) and all five asset generators
-reproduce committed bytes exactly.
+The d1281d6/bdebc59 Chromium record below remains true of those commits, but it
+does not certify this tree. The performance-remediation track changed HTML and
+three hashed JS modules; the current build identity is `F1FF314DEC2C4717`.
+A local in-app-browser battery re-ran the current observable core with device-size
+emulation — all pass: engine 33/33 (exitCode 0, mutation-verified); homepage claims
+10/10 and admission verified; footer clearance with zero horizontal overflow at
+320/375/390/430 px; and a same-width height change preserved canvas backings
+without restarting exposure. The current non-browser battery passes claims 8/8,
+ledger 9/9, site integration 7/7, 15 motion/performance checks, and the 27-file
+artifact rebuild. Service-worker lifecycle, full interactive accessibility,
+Chromium and WebKit matrices remain open for these bytes. Known defects and their dispositions are registered in `vaic/release-dispositions.v0.json`, which `tools/test-site.py` gates: a FAIL recorded in the evidence ledger must be named there, so this block cannot become more optimistic by omission. This local evidence is
+useful but is not promoted to full browser certification for the new candidate.
 
 ### Release-candidate artifact equivalence
 
@@ -375,8 +374,8 @@ decisions, not engineering steps.
    preimage is in the git history, so a real seal needs a fresh preimage, not
    a deletion. Restoring `PREIMAGE SEALED` before that is true re-opens the
    defect this replaced.
-5. Standard battery green at the release commit; claims `10/10 HOLDING` in a
-   served browser check.
+5. `./verify.sh` green at the release commit; the browser-only runner reports
+   33/33 and the served homepage reports claims `10/10 HOLDING`.
 6. The `PROVISIONAL` values in `js/manifest.js` (epoch history, counts,
    commitment preimage) reviewed by the owner. Shipping them knowingly is
    permitted — they are marked in source — but it must be a decision.

@@ -26,6 +26,7 @@ s = C.summary();
 ok(s.hold === 9 && s.bad === true, "one invalid -> 9/10 and INVALID PRESENT");
 
 /* 3 — re-running a DIFFERENT single claim must not mask the invalid */
+/* EVIDENCE: standing-invalid-survives-recompute */
 C.recomputeOne("CL-07");                     /* dsin core — passes for real */
 s = C.summary();
 ok(C.CLAIMSTATE["CL-07"].ok === true, "re-run claim computed for real");

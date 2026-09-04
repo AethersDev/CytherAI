@@ -1,0 +1,103 @@
+{
+  "specification": "VAIC-0",
+  "receipt_type": "bounded-browser-observation-ledger",
+  "artifact_build": null,
+  "artifact_builds": ["F1FF314DEC2C4717", "661AFC4C3C67BFD1"],
+  "observed_at": "2026-08-14",
+  "evaluator": {
+    "class": "BROWSER_HARNESS",
+    "harness_identity": "Codex in-app browser bounded observation",
+    "harness_version": "2026-08-14"
+  },
+  "coverage": {
+    "class": "BOUNDED",
+    "domain": {
+      "routes": ["/index.html", "/pages/runner.html"],
+      "initial_states": ["canonical"],
+      "viewports": ["1280x720", "320x844", "375x844", "390x844", "430x844", "390x760", "390x720"],
+      "capability_profiles": ["desktop_full", "mobile_bounded"]
+    },
+    "action_alphabet": ["navigate", "wait_for_settle", "scroll_to_terminal", "resize_height", "enter_fork", "reset_canonical", "expand_claim"],
+    "depth_bound": 3,
+    "excluded_states": ["reduced_motion", "screen_reader", "production_origin", "WebKit_target_device"],
+    "model_identity": null,
+    "licenses_only_declared_contexts": true
+  },
+  "observations": {
+    "canonical_settle": {
+      "artifact_build": "F1FF314DEC2C4717",
+      "viewport": "1280x720",
+      "build_identity": "F1FF314DEC2C4717",
+      "claims": "CLAIMS 10/10 HOLDING",
+      "status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED",
+      "all_four_canvases_initialized": true,
+      "three_consecutive_valid_samples": true,
+      "warm_reload_settle_ms": 5007,
+      "engine_runner": "33/33 · exitCode 0 · mutation-verified"
+    },
+    "mobile_geometry": {
+      "artifact_build": "661AFC4C3C67BFD1",
+      "authority_for_current_candidate": false,
+      "viewports": ["320x844", "375x844", "390x844", "430x844"],
+      "horizontal_overflow_px": [0, 0, 0, 0],
+      "footer_action_clearance_px": [14.91, 14.77, 14.95, 15.70],
+      "terminal_scroll_verified": true,
+      "claims": "10/10",
+      "admission": "VERIFIED"
+    },
+    "mobile_targets": {
+      "artifact_build": "661AFC4C3C67BFD1",
+      "authority_for_current_candidate": false,
+      "viewports": ["320x844", "375x844", "390x844", "430x844"],
+      "required_surface": "persistent bottom instrument",
+      "required_minimum": {"width_px": 44, "height_px": 44},
+      "smallest_observed": {
+        "viewport": "320x844",
+        "control": "FORK",
+        "width_px": 33.28125,
+        "height_px": 45.5
+      },
+      "result": "FAIL",
+      "note": "The earlier audit checked control height. VAIC-0 correctly applies the declared two-dimensional target envelope."
+    },
+    "height_only_resize": {
+      "artifact_build": "661AFC4C3C67BFD1",
+      "authority_for_current_candidate": false,
+      "trace": ["390x760", "390x720"],
+      "effective_dpr": 1,
+      "backings_before": [[390, 760], [390, 760], [390, 760], [390, 760]],
+      "backings_after": [[390, 760], [390, 760], [390, 760], [390, 760]],
+      "css_heights_after_px": [720, 720, 720, 720],
+      "exposure_restarted": false,
+      "final_status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED"
+    },
+    "mobile_resource": {
+      "artifact_build": "661AFC4C3C67BFD1",
+      "authority_for_current_candidate": false,
+      "viewport": "390x844",
+      "effective_dpr": 1.25,
+      "canvas_backings": [[487, 1055], [487, 1055], [487, 1055], [487, 1055]],
+      "rgba_backing_mib": 7.84,
+      "visible_will_change_surfaces": 1,
+      "hidden_will_change_surfaces": 0
+    },
+    "fork_trace": {
+      "artifact_build": "prior_candidate_unbound",
+      "authority_for_current_candidate": false,
+      "source": "bounded current-artifact browser trace plus existing browser record in docs/deploy.md",
+      "canonical_precedes_fork": true,
+      "fork_status_distinguishable": true,
+      "reset_control_available": true,
+      "reset_restores_canonical": true,
+      "captured_fork_reproducible": true
+    },
+    "claim_evidence_trace": {
+      "artifact_build": "not_browser_observed",
+      "authority_for_current_candidate": false,
+      "claim_count": 10,
+      "action_depth": 1,
+      "each_row_exposes": ["METHOD", "VALUE", "COMPUTED"],
+      "all_rows_checked": true
+    }
+  }
+}
