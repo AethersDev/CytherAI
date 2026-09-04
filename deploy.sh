@@ -13,36 +13,14 @@
 set -eu
 
 ROOT=$(cd "$(dirname "$0")" && pwd)
-DIST="$ROOT/dist"
+# overridable so a test can build the artifact without touching the working tree
+DIST="${DIST:-$ROOT/dist}"
 
-# The allowlist. Adding a page means adding it HERE and to sw.js ASSETS.
-FILES="index.html
-contact.html
-404.html
-pages/brief.html
-pages/privacy.html
-pages/security.html
-pages/terms.html
-pages/runner.html
-js/manifest.js
-js/substrate.js
-js/claims.js
-js/ledger.js
-js/instrument.js
-js/site.js
-css/cytherai.css
-engine/trajectory-engine.js
-engine/trajectory-engine.test.js
-sw.js
-manifest.webmanifest
-icon.svg
-assets/og/og-card.png
-assets/icons/icon-180.png
-assets/icons/icon-192.png
-assets/icons/icon-512.png
-assets/brief/exhibit-a-boundary.svg
-assets/brief/exhibit-b-strata.png
-assets/error/plate-empty.svg"
+# The allowlist is DECLARED ONCE, in deploy.paths, and is read by both operations
+# that depend on it: this copy, and the artifact identity in tools/vaic_validate.py.
+# One declaration means the shipped set and the hashed set cannot drift apart.
+# EVIDENCE: artifact-source-allowlist
+FILES=$(cat "$ROOT/deploy.paths")
 
 # content/record.js, profiles/disclosure.js and js/console.js are deliberately
 # absent: no page loads them. They stay on disk for the separate engine project.

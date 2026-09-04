@@ -4,8 +4,143 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development
 
-Pure static site — no build system, no package manager, no bundler, no tests, no linter.
+Pure static site — no framework, package manager, bundler, or linter. The
+zero-dependency verification entrypoint is `./verify.sh`; it runs jsc module and
+logic regressions, Python integration/motion tests, and the deployment build.
+Browser-only engine, layout, and service-worker checks remain in `docs/deploy.md`.
 Serve with any static file server: `python3 -m http.server 8000` from the repo root.
+
+The first VAIC-0 research corpus lives under `vaic/`. `./verify.sh` validates its
+schema, receipt authority/build binding, coverage scope, and negative controls.
+Corpus `FAIL` or `NOT_EVALUATED` results are reported without being laundered into
+structural test failures; an invalid corpus or receipt exits nonzero.
+
+**A receipt says what was observed; its binding says where that observation applies;
+the verdict for the current candidate is derived from both.** An observation is
+immutable — never rewrite a recorded `PASS` into `NOT_EVALUATED` because the bytes
+moved. A new build expires the observation's authority, not the observation: a
+receipt naming an older build is `STALE` and derives `NOT_EVALUATED`, so a historical
+`FAIL` condemns a new candidate no more than a historical `PASS` certifies one. Both
+are history until reproduced. Re-running a harness therefore APPENDS a new receipt
+rather than editing an admitted one. `INVALID` is reserved for malformed data (bad digest,
+unresolvable evidence pointer, cycle, schema violation, or a receipt that claims the
+current build AND the current verifier while carrying another candidate's digest);
+stale-but-well-formed
+evidence keeps structure `VALID` and reports `current evidence: INCOMPLETE`. Result
+distributions are derived by the validator and never written into a test.
+
+**Admitted observations are immutable. Provisional observations may be discarded before
+admission. Re-evaluation appends; it never edits an admitted observation.** A harness
+runs many times while one verifier is being built, and those executions are facts but
+not institutional receipts. Immutability begins at ADMISSION, not at the moment a test
+process emitted `PASS`:
+
+```
+EXECUTION → PROVISIONAL OBSERVATION → candidate/verifier still moving?
+                                        yes → discard or replace it
+                                        no  → ADMIT → IMMUTABLE RECEIPT
+```
+
+**A commit records a state; canonical reachability admits it.** A receipt is *admitted*
+iff it occurs in a corpus state reachable from the **canonical admission lineage**,
+`refs/heads/master` (declared as `CANONICAL_REF` in `tools/test-vaic.py`, which is where
+the guards enforce it). Three strengths, never treated as equivalent:
+
+| state | claim |
+|---|---|
+| **PROVISIONAL** — working tree, or any development lineage | a reproducible development state |
+| **ADMITTED** — reachable from the canonical ref | an institutional state, immutable |
+| **ANCHORED** — additionally bound outside mutable git history | history cannot be silently rewritten undetected |
+
+A commit on a development branch is therefore a **candidate** state, still replaceable:
+a bogus receipt committed on a branch that is never merged creates no institutional
+history, and merging is the act of admission. Git is the enforcement boundary, not the
+concept — squashing or splitting commits changes nothing, but **a genesis commit must
+not be squashed away on merge**, or the named admission event survives only on a
+disposable branch while some other commit becomes the real first admission. CytherAI
+claims the first two rows today; only a signed tag or external transparency anchor would
+buy the third, and none is claimed.
+
+**Hard boundary: a receipt that has appeared in any committed canonical corpus may never
+later be reclassified as a draft.** "It was only intermediate" must be knowable at the
+time, never asserted afterwards because the history became inconvenient.
+`tools/test-vaic.py` enforces this against `HEAD`.
+
+It follows that **an epoch is an admitted institutional state on the canonical lineage,
+not every transient or merely committed computational state.** Three verifier edits
+inside one development transaction are one epoch, not three.
+
+**Admission freezes meaning, not incidental serialization.** What is immutable is the
+observation — obligation, observed candidate, verdict, method, environment, evidence,
+and verifier provenance as recorded. Exact equality is today's *implementation* of that
+rule because the corpus has seen no schema migration; a future `v0 → v1` representation
+change is permitted through a mechanically verified bijection preserving those
+semantics. "Byte-identical forever" is not the law and must not become a trap.
+
+**Three times stay distinct and are never conflated:** *observation time* (when the test
+or browser observation happened), *admission time* (when the institution accepted it into
+canonical history), and *applicability* (whether it licenses the candidate under
+consideration). **Genesis may admit observations older than the ledger. Admission does
+not rewrite their provenance, observation time, or authority.** Admitting a receipt whose
+verifier is `UNRECORDED` or `EXTERNAL` claims only that the observation is part of the
+record with exactly the limitations recorded — never that the current verifier produced
+it. `UNRECORDED` is bounded provenance, not shameful provenance; `EXTERNAL` is evidence
+from outside the recorded verification boundary, not invalid evidence. Never tidy either
+into something prettier before admitting it: the limitation is part of the historical fact.
+
+**Two guards, because they answer different questions.** The HEAD guard asks *am I about
+to delete or mutate admitted history?*; the history walk asks *has admitted history ever
+disappeared at any earlier transition?* — a receipt admitted in commit A and dropped in B
+is invisible from C. Both live in `tools/test-vaic.py`. Their altitude is **append-only
+relative to retained repository history, which is not externally anchored historical
+immutability**: a force-push, rebase, or repository replacement rewrites the universe the
+guards inspect. That is the same boundary the floor already draws — the page renders the
+commitment; it does not notarize it. A signed tag or external transparency anchor would
+buy the second property, and is not claimed today.
+
+**A location is not an identity.** Evidence resolves as
+`receipt → build identity → covered file identity → semantic anchor`, never by line
+number. An anchor is a language symbol (`js/ledger.js#mailtoBody`) or, where the file
+has none, an explicit `EVIDENCE: slug` comment; it must be defined exactly once in the
+cited file. Line numbers may drift without invalidating evidence; a deleted, renamed,
+or duplicated anchor is `INVALID`, because the historical record has stopped resolving.
+A receipt may only cite a file that `IDENTITY_COVERAGE` in `tools/vaic_validate.py`
+declares, so **adding a harness file means adding it there** — otherwise receipts
+cannot cite it. Identities stay separated by role (record, kernel, grammar, policy,
+artifact, verification) and are never collapsed into one digest, so a receipt states
+exactly what moved. An observation binds both the candidate and the verifier that
+produced it: editing any file in the verification set expires the receipts that set
+produced, and re-running the harness re-stamps them.
+
+**The validator boundary is total.** Every input yields exactly one of `VALID` (exit 0),
+`INVALID` (exit 1, a judgment about the *data*, errors enumerated), or `INTERNAL_ERROR`
+(exit 2, a defect in the validator, traceback printed). Malformed data must never escape
+as a Python exception, so a broken corpus cannot manufacture an apparent tooling outage
+in place of the verdict it has earned. Validation is staged — SHAPE, REFERENCE, IDENTITY,
+GRAPH, admissibility, effective verdict — and **invalid objects may be described but may
+not participate**: a row failing SHAPE never reaches the dependency graph, and a receipt
+that cannot be typed binds nothing. A structurally invalid corpus licenses **no**
+distribution; counts over parsed survivors are reported as `diagnostic_partial` under
+`status: NOT_LICENSED`, never as the corpus's verdict.
+
+**Artifact identity is a projection of tracked source, not a hash of `dist/`.** The
+deployable set is declared once in `deploy.paths`, read by `deploy.sh` and by the
+validator, so the shipped set and the hashed set cannot drift. Two clean checkouts of
+one commit produce the same identity **without building anything**; a stray
+`dist/.DS_Store` cannot change it, and deleting `dist/` leaves it computable. Paths are
+hashed beside their bytes, so moving a file is a different artifact. No commit id, dirty
+flag, or timestamp enters it: git says where bytes came from, artifact identity says
+which bytes constitute the candidate. `./verify.sh` is therefore **read-only** — it no
+longer runs `./deploy.sh`; a test builds into a temp directory instead (`DIST=` override).
+
+**Release policy consumes effective verdicts; the validator never reads policy.** The
+validator says what a verdict *is*; `vaic/release-dispositions.v0.json` records what the
+owner has *decided*, and a disposition never changes a verdict. Every obligation whose
+**effective** verdict is `FAIL` needs an obligation-keyed disposition, and every `FAIL`
+recorded in the evidence ledger must be named even when its binding has expired —
+documentation may explain a failure differently, but may not make it disappear. A
+`NOT_EVALUATED` is **not** folded into either rule: missing evidence and a tested defect
+may both block release, but under different clauses.
 
 Zero external requests, ever. The homepage CSP forbids inline `<script>`
 (`script-src 'self'`); all homepage JS is in external modules. No node, no Chrome on
@@ -16,6 +151,8 @@ Pure logic is guarded so it loads under jsc; DOM wiring is behind `typeof docume
 
 After changing any hashed resource, re-run `./generate-integrity.sh` (patches SRI +
 the `build-hash` meta across the HTML files).
+
+The architecture and change-impact guide is `docs/architecture.md`.
 
 ## Architecture — the substrate / disclosure engine
 
