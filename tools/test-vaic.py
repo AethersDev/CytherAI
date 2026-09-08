@@ -231,8 +231,12 @@ class VaicCorpusTests(unittest.TestCase):
         before = self.validate()
         corpus = copy.deepcopy(self.corpus)
         row = next(r for r in corpus["obligations"] if r["id"] == "CY-ART-001")
+        # only the CURRENT binding expires: earlier receipts already carry other
+        # builds, and rebinding them all onto one fake build would collide two
+        # recorded-verifier receipts into a duplicate identity, which is corruption
         for receipt in row["evaluation"]["receipts"]:
-            receipt["artifact_build"] = "0000000000000000"
+            if self.is_current(receipt, corpus["candidate"]):
+                receipt["artifact_build"] = "0000000000000000"
         result = self.validate(corpus)
         # well-formed data describing evidence that has expired is not corruption
         self.assertEqual(result["structure"], "VALID")
@@ -248,7 +252,8 @@ class VaicCorpusTests(unittest.TestCase):
         row["evaluation"]["result"] = "FAIL"
         for receipt in row["evaluation"]["receipts"]:
             receipt["result"] = "FAIL"
-            receipt["artifact_build"] = "0000000000000000"
+            if self.is_current(receipt, corpus["candidate"]):
+                receipt["artifact_build"] = "0000000000000000"
         result = self.validate(corpus)
         self.assertEqual(result["structure"], "VALID")
         self.assertEqual(self.observed(result)["FAIL"], 1)
