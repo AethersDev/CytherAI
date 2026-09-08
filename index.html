@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="DF8C26C4C3181973">
+<meta name="build-hash" content="B2F25BCB98E56EDC">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -54,6 +54,18 @@ p{text-wrap:pretty}
 /* ════════════ the substrate — four exposures of one object ════════════ */
 #world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
 .tile{position:absolute;inset:0;transform-origin:0 0;pointer-events:none}
+/* the promoted terminal exposure: assets/plate/surface-terminal.png IS plate 0's
+   terminal raster for a 1200x600 frame, produced by this kernel offline
+   (tools/promote-poster.js, receipt in docs/asset-promotion-log.md). It stands in
+   until the reader's own plate develops, then js/substrate.js removes it for good.
+   A background-image, not an <img>: it is decorative, and a display:none element's
+   background is never fetched, so the aspect window below is also a download rule.
+   The window is where a cover-fit IS the exact crop the developed plate would show
+   — vertical world extent is constant across landscape frames and horizontal scales
+   with aspect, so any aspect in [1,2] is exact and nothing else is shown at all. */
+#poster{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;display:none;
+  background:url(assets/plate/surface-terminal.png) center/cover no-repeat}
+@media (min-aspect-ratio:1/1) and (max-aspect-ratio:2/1){#poster{display:block}}
 #substrate{position:fixed;inset:0;z-index:0}
 body.forking #substrate{cursor:grabbing}
 
@@ -500,6 +512,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 
 <!-- four plate-developed exposures of one derived object -->
 <div id="world" aria-hidden="true">
+<div id="poster"></div>
 <canvas class="tile" id="t0"></canvas>
 <canvas class="tile" id="t1"></canvas>
 <canvas class="tile" id="t2"></canvas>
@@ -779,7 +792,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-6evoQ4Qm1ahfUr4ql1gfXyTxakzaNstVRMVPvKR1GBgC3nLqr+y/V8m7KKClqNFp" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-BcXrIyIX6enq+uo8HFamy5K6rsAAGNmgFUfjawmT/x7JGHo9b8MGMSlpLjcxJGpW" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-qIrOll2kSZQtzuImi5SusstrhKs4Xj8JCHTVVd7ITQlN9na1O7i4JrsnFc9H3nmP" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-hI33HZ8ncBBJFT2tAfNZuumYekKEaa/Vy62l3moofsYPI4G42uN5230K2GtMmvlZ" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>

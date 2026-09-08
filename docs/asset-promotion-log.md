@@ -109,6 +109,33 @@ command and the output digest; a promoted asset with no receipt is a defect.
 
 ---
 
+## SURFACE-TERMINAL — the promoted terminal exposure
+
+| | |
+|---|---|
+| Asset ID | IMG-006 |
+| Source study | None. The image is not composed; it is the plate the page's own kernel develops. |
+| Classification | **DERIVED** |
+| Command | `python3 tools/promote-poster.py` — which runs `jsc js/manifest.js js/substrate.js tools/promote-poster.js` and encodes what comes back |
+| Producer binding | The pixels come from the repository's substrate kernel, not a second renderer: `js/manifest.js` sha256 `df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b`, `js/substrate.js` sha256 `9660985995fdacd66c502da60b0ef69db3b7d7e206c0df6634604f6e3d039007`, `tools/promote-poster.js` sha256 `79f7c2e1ab45377fe1713e6c83880b5a0a3a78b4b943ecb08b0275f66811cee2`. The Python step is a lossless container writer and receipt printer; it computes no pixel. |
+| Provenance chain | manifest → kernel → terminal development state D_N → terminal raster R_N → encoded poster P. Recorded below at every edge. |
+| Canonical inputs | `CytherManifest.CANON = [-1.7515999999999998, 1.85944, -0.98268, -0.6072]`, admission nonce 0, state checksum `75D1:89D1`, epoch 3 — read by executing `js/manifest.js` under jsc, never hand-copied. |
+| Method | Plate 0 (`ZOOMS[0]` 0.9, `PLATE[0]` anchor inks, rot 0.12) developed by `developStep` at the fixed `DEV_BATCH` of 60,000 iterations to its terminal state, then `tonemapInto` — the same function the page calls — into a `Uint8ClampedArray`, whose round-half-even clamping is part of the exposure law. Every recurrence is `dsin`/`dcos`/`datan2` (§8.1), so D_N and R_N are engine-invariant: jsc and Chrome produce the identical raster (measured 2026-09-08, rgba FNV `4ca8930f` at a 800×343 probe frame). |
+| Reference frame | 1200×600. A real viewport frame whose bin raster is exactly `BIN_TGT` (720,000 cells) — the most the runtime ever develops — at the widest aspect the page presents it. |
+| Terminal state | step 15 · 900,000 deposits · 900,000 iterations · max density 201 · density hash (FNV-1a over the field and counters) `c19e9e9b` |
+| Terminal raster R_N | 1200×600 RGBA · sha256 `86be0b3dcd478489201633be29088c0f3f345f3f2edd2e8369fc3dff8d188df3` |
+| Encoder | `tools/pngout.py write_png(alpha=True)` — PNG colour type 6, 8-bit, filter 0 on every row, zlib level 9, no ancillary chunks. Lossless by construction: the poster is the canonical representation of a generated plate, not a bandwidth optimisation, so there is no gap between "the plate" and "an approximation shown until the real one arrives". |
+| Output | `assets/plate/surface-terminal.png` · 1200×600 · 251,884 bytes |
+| SHA-256 | `e56470c3a8866515d6bcc15e48801b1bb84e80d528ea51eba1e054b124c1c7ce` |
+| Determinism | Run twice; byte-identical output both runs (`tools/test-poster.py`). |
+| Acceptance checks | `python3 tools/test-poster.py`, five gates: producer determinism; **decode(P) == R_N pixel for pixel** (the load-bearing proof — not an equality between the PNG digest and the kernel's FNV checkpoint, which identify different objects); a change to any declared derivation input (`normalizeManifest`: epoch, derived, revision, disclosed, indexed, controlled, validation, not_claimed) moves the raster and makes these bytes stale, while a presentation-only manifest field does not; a one-bit pixel edit, a corrupted file, and a substituted valid image (`og-card.png`) each fail verification; the promotion log and deployment contract record this artifact. |
+| Presentation | A CSS `background-image` on `#poster` inside `#world`, under the tiles, shown only for viewport aspects in [1, 2] — the window where a `cover` fit **is** the exact crop the developed plate would show, because vertical world extent is constant across landscape frames and horizontal extent scales with aspect. Outside that window it is not shown at all, and because a `display:none` element's background is never fetched, the aspect window is also the download rule. `js/substrate.js` removes it the moment plate 0 reaches D_N and never restores it: a fork or a redevelopment is a different world and the poster cannot speak for it. |
+| Deployment | `deploy.sh` allowlist (28 files). **Not** in `sw.js` ASSETS: 246 KB at install time to save a few hundred milliseconds on a warm cache is a bad trade, and its absence degrades exactly to the previous behaviour — the reader's own plate develops. On a cold or slow connection the poster loses the race and is removed before it paints, which is the intended failure mode. Not in the SRI fingerprint (images cannot carry SRI); it does move the build identity, which since 2026-09-08 is a projection of every served byte. |
+| Commit | promoted on branch `visual-pass`; `git log --follow -- assets/plate/surface-terminal.png` names the commit |
+| Owner sign-off | PENDING |
+
+---
+
 ## MOT-001 / MOT-002 — motion conformance (no asset; no implementation change)
 
 The two accepted motion studies are verification references. The shipped

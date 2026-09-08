@@ -153,17 +153,21 @@ check(all(bands[i] < bands[i+1] + 1e-9 for i in range(len(bands)-1)),
 
 sub = open(os.path.join(ROOT, "js/substrate.js")).read()
 check("reduced ? Infinity" in sub
-      and "const toneNow = done || (!reduced" in sub
+      and "const toneNow = done || (streaming && !reduced" in sub
       and "if (toneNow)" in sub,
       "B5 reduced motion: whole-plate development, tonemap only at completion")
 check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
       "B6 development never touches the camera anchors")
 # EVIDENCE: retained-field-and-tonemap-bounds
 check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
-      and "fields[plateDev.i] = summarizeField(plateDev)" in sub,
+      and "fields[i] = summarizeField(plateDev)" in sub,
       "B7 completed plates retain bounded density summaries, not full grids")
 check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
       "B8 progressive tonemapping is cadence-bounded and completion-forced")
+# EVIDENCE: poster-swaps-at-equivalence
+check("let streaming = false;" in sub and "if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }" in sub
+      and "if (!streaming || devPlateN !== 1) return Infinity;" in sub,
+      "B11 the promoted exposure is replaced at the terminal state and never restored")
 # EVIDENCE: engine-invariant-world
 kernel = sub[sub.index("function computeOrbit"):sub.index("function tonemapInto")]
 check(not re.search(r"Math\.(sin|cos|atan2)\(", kernel) and "CM.datan2" in sub and "CM.dsin" in sub,

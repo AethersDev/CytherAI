@@ -30,6 +30,9 @@ python3 tools/test-site.py
 echo "[verify] motion and plate laws"
 python3 tools/test-motion.py
 
+echo "[verify] promoted terminal exposure"
+python3 tools/test-poster.py
+
 echo "[verify] VAIC-0 corpus structure and fail-closed controls"
 python3 tools/vaic_validate.py
 python3 tools/test-vaic.py

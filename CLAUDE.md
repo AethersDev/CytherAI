@@ -187,6 +187,13 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 
+The promoted terminal exposure `assets/plate/surface-terminal.png` IS plate 0's terminal
+raster at a 1200×600 frame, produced offline by the same kernel
+(`tools/promote-poster.js` → `tools/promote-poster.py`, verified by `tools/test-poster.py`:
+`decode(P) == R_N` pixel for pixel). It is the first paint inside the aspect window
+[1, 2] and `noscript`'s only mark, and it is removed for good when plate 0 reaches D_N —
+a fork or a redevelopment is a different world and the poster cannot speak for it.
+
 **Infra:** `sw.js` (cache-first; `CACHE` name carries the build hash, stamped by
 `generate-integrity.sh`, so each build installs atomically), `manifest.webmanifest`,
 `generate-integrity.sh` (SRI + build-hash), `deploy.sh` (publish allowlist → `dist/`;
