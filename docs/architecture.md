@@ -71,7 +71,7 @@ HTML detail.
 
 1. It parses optional captured state from the URL hash.
 2. `CytherSubstrate.boot()` derives the canonical camera once and queues all four
-   exposure plates. Plate development is streamed through the shared frame loop;
+   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; `REDEVELOP` replays the current world's sequence;
    responsive DPR/bin policies bound mobile allocation and tonemapping is cadence
    limited rather than repeated after every deposit batch.
 3. The instrument and ledger attach their DOM behavior; controls, mobile docking,

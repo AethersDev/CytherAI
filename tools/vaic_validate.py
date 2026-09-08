@@ -78,7 +78,7 @@ IDENTITY_COVERAGE = {
         "verify.sh", "deploy.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py",
         "tools/test-motion.py", "tools/test-claims.js", "tools/test-ledger.js",
-        "tools/vaic_restamp.py",
+        "tools/test-develop.js", "tools/vaic_restamp.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }

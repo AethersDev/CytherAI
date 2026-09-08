@@ -152,11 +152,11 @@ check(all(bands[i] < bands[i+1] + 1e-9 for i in range(len(bands)-1)),
       % " -> ".join("%.0f" % b for b in bands))
 
 sub = open(os.path.join(ROOT, "js/substrate.js")).read()
-check("reduced ? 600000" in sub
+check("reduced ? Infinity" in sub
       and "const toneNow = done || (!reduced" in sub
       and "if (toneNow)" in sub,
-      "B5 reduced motion: whole-plate batches, tonemap only at completion")
-check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("function depositBatch"):sub.index("function tonemapPlate")],
+      "B5 reduced motion: whole-plate development, tonemap only at completion")
+check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
       "B6 development never touches the camera anchors")
 # EVIDENCE: retained-field-and-tonemap-bounds
 check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
@@ -164,6 +164,10 @@ check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
       "B7 completed plates retain bounded density summaries, not full grids")
 check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
       "B8 progressive tonemapping is cadence-bounded and completion-forced")
+# EVIDENCE: fixed-step-development
+check("const DEV_BATCH = 60000" in sub and "developStep(plateDev, P)" in sub
+      and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
+      "B9 development is a fixed-step sequence; cadence never sizes a batch")
 
 print()
 if fails:
