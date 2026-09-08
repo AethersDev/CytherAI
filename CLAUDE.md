@@ -177,7 +177,7 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 
 | Module | `window.*` | Role |
 |---|---|---|
-| `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin/dcos, admit, dsinOrbit, legibility, checksum) |
+| `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin/dcos/datan2, admit, dsinOrbit, legibility, checksum) — the whole world runs on these, not on native transcendentals |
 | `js/substrate.js` | `CytherSubstrate` | the world: plate-developed exposure tiles (angular-lobe density, log tonemap; development is a deterministic fixed-step sequence streamed as genuine prefixes — cadence chooses the prefix shown, never its content; REDEVELOP replays the current world), dsin-orbit camera anchors, `observe`, fork; minimap keeps the point-cloud measurement view |
 | `js/claims.js` | `CytherClaims` | CL-01…CL-08 + CL-06b/CL-06c predicates; `CLAIMS n/10 HOLDING` |
 | `js/ledger.js` | `CytherLedger` | reader self-report ledger, intent-adaptive CTA |

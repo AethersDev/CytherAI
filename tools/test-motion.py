@@ -164,6 +164,12 @@ check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
       "B7 completed plates retain bounded density summaries, not full grids")
 check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
       "B8 progressive tonemapping is cadence-bounded and completion-forced")
+# EVIDENCE: engine-invariant-world
+kernel = sub[sub.index("function computeOrbit"):sub.index("function tonemapInto")]
+check(not re.search(r"Math\.(sin|cos|atan2)\(", kernel) and "CM.datan2" in sub and "CM.dsin" in sub,
+      "B10 the world's recurrence uses no engine-defined transcendental")
+check("datan2" in open(os.path.join(ROOT, "js/manifest.js")).read(),
+      "B10 the derivation core exports the deterministic angle")
 # EVIDENCE: fixed-step-development
 check("const DEV_BATCH = 60000" in sub and "developStep(plateDev, P)" in sub
       and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
