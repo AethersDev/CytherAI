@@ -236,7 +236,7 @@ function stripUpdate() {
   if (st) { let s = S.status(); if (canonical) s += " · ADMISSION " + admissionState; st.textContent = s; }
   const rb = $("resetBtn"); if (rb) rb.hidden = canonical;
   const fb = $("forkBtn");
-  if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG" : "FORK"; }
+  if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG · ARROWS" : "FORK"; }
   if (!canonical) Ledger.recordAct("MARK_FORKED");
   applyCorridors();   /* the atlas settles with the exposure */
   if (document.body.classList.contains("at-rest")) conditionEnvelopes();
