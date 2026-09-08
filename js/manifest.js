@@ -84,11 +84,13 @@ function fnv(str) {
   return h >>> 0;
 }
 
-/* ================= deterministic sine — the admission domain =================
-   Admission decides identity, so it runs on dsin/dcos: a polynomial sine over
-   IEEE-exact +,*,floor, bit-identical across engines. Math.sin is not normatively
-   specified and may differ in the last ulp per engine; the render keeps native sin
-   (the orbits agree to ~1e-7 per step) and admission never reads the render. */
+/* ================= deterministic transcendentals — the derivation domain =========
+   Identity runs on these, and since §8.1 so does the render: a polynomial sine and
+   arctangent over IEEE-exact +,-,*,/ and floor, bit-identical across engines.
+   Math.sin/Math.atan2 are not normatively specified and do differ — measured
+   2026-09-08, jsc and Chrome agree on Math.sin at probe points yet diverge by ~1e-10
+   after the plate's 40-step warmup, and Math.atan2 disagrees over an orbit sample.
+   A chaotic map amplifies either into a different world, so the world is arithmetic. */
 const TWO_PI = 6.283185307179586, HALF_PI = 1.5707963267948966, D_PI = 3.141592653589793;
 function dsin(x) {
   x = x - TWO_PI * Math.floor(x / TWO_PI + 0.5);
@@ -97,6 +99,25 @@ function dsin(x) {
   return x * (1 + x2 * (-1 / 6 + x2 * (1 / 120 + x2 * (-1 / 5040 + x2 * (1 / 362880 + x2 * (-1 / 39916800))))));
 }
 function dcos(x) { return dsin(x + HALF_PI); }
+/* datan2 — the engine-invariant angle the plate's hue is owned by (js/substrate.js
+   PLATE lobes). Octant reduction by exact comparison and division, then the
+   tan(pi/12) shift so the alternating Taylor series is evaluated on |t| <= 0.268,
+   where truncation after t^15/15 leaves < 1.2e-11 rad. Agreement with Math.atan2
+   over a canonical-orbit sample is pinned by tools/test-develop.js. */
+const S3 = 1.7320508075688772, PI_6 = 0.5235987755982988, TAN_PI_12 = 0.2679491924311227;
+function datan2(y, x) {
+  const ax = x < 0 ? -x : x, ay = y < 0 ? -y : y;
+  let t, r;
+  if (ay <= ax) { t = ax === 0 ? 0 : ay / ax; r = 0; }
+  else { t = ay === 0 ? 0 : ax / ay; r = -1; }          /* r = -1 marks the co-branch */
+  let a = 0;
+  if (t > TAN_PI_12) { a = PI_6; t = (t * S3 - 1) / (t + S3); }
+  const t2 = t * t;
+  let v = a + t * (1 + t2 * (-1 / 3 + t2 * (1 / 5 + t2 * (-1 / 7 + t2 * (1 / 9 + t2 * (-1 / 11 + t2 * (1 / 13 + t2 * (-1 / 15))))))));
+  if (r === -1) v = HALF_PI - v;
+  if (x < 0) v = D_PI - v;
+  return y < 0 ? -v : v;
+}
 
 /* the dsin orbit — n points, same warmup 40 and start (0.08, 0.12) as the render.
    The camera derives its anchors from THIS orbit (not the native-sin tiles), so the
@@ -238,7 +259,7 @@ const CHECKSUM = stateChecksum(NORM);
 const API = {
   MANIFEST, EPOCHS, COMMITMENTS, PUBLISHED_NONCES, NORM, CANON, ADMISSION_NONCE, CHECKSUM,
   LEGIBILITY_CAP,
-  fnv, dsin, dcos, dsinOrbit, derive, renderedRichness, legibility,
+  fnv, dsin, dcos, datan2, dsinOrbit, derive, renderedRichness, legibility,
   seedsFor, paramsFor, admit, normalizeManifest, stateChecksum
 };
 root.CytherManifest = API;

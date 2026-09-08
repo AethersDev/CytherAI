@@ -6,8 +6,14 @@
 
    Ported from newC3/substrate-demo.html. Amendment (§5.2): the camera ANCHORS are
    derived from CytherManifest.dsinOrbit(params, 220000) — the engine-invariant
-   orbit — not the native-sin tiles. The tiles are drawn from the native orbit
-   (fast, visual); the journey through the mark is derivation, verified by CL-08.
+   orbit. Amendment (§8.1): the PLATES are too. The deposition recurrence and the
+   minimap point cloud ran on native Math.sin/Math.cos, so the rendered world was
+   engine-dependent: measured 2026-09-08, jsc and Chrome agree on Math.sin at a
+   probe point yet diverge by ~1e-10 after the 40-step warmup, and a chaotic map
+   amplifies that into a different plate (terminal state 18188a0b vs b31403ff).
+   One object, one world means one recurrence: dsin/dcos everywhere — also FASTER
+   than native in Chrome (0.45x, measured). The camera derivation CL-08 re-checks
+   and the plates the reader sees are now the same arithmetic.
 
    Pure geometry (deriveAnchors / cameraAt / ambientAt) is DOM-free and testable
    under jsc; all canvas + gesture + boot wiring is guarded behind `document`.
@@ -75,8 +81,8 @@ function plateState(params, i, anchor, frame) {
     x: 0.08, y: 0.12, dep: 0, it: 0, k: 0, done: false, maxT: 1e-6,
     target: PLATE_DEP[i], cap: PLATE_CAP[i],
     anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
-  const [a, b, c, d] = params;
-  for (let w = 0; w < 40; w++) { const nx = Math.sin(a*st.y) + c*Math.cos(a*st.x), ny = Math.sin(b*st.x) + d*Math.cos(b*st.y); st.x = nx; st.y = ny; }
+  const [a, b, c, d] = params, dsin = CM.dsin, dcos = CM.dcos;
+  for (let w = 0; w < 40; w++) { const nx = dsin(a*st.y) + c*dcos(a*st.x), ny = dsin(b*st.x) + d*dcos(b*st.y); st.x = nx; st.y = ny; }
   return st;
 }
 /* v2 deposition, verbatim grammar: angular lobe coloring — hue owned by region */
@@ -84,7 +90,7 @@ function depositBatch(st, params, n) {
   const a = params[0], b = params[1], c = params[2], d = params[3];
   const bw = st.bw, bh = st.bh, zu = st.zu, ox = st.ox, oy = st.oy, rot = st.rot;
   const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
-  const sin = Math.sin, cos = Math.cos, atan2 = Math.atan2;
+  const sin = CM.dsin, cos = CM.dcos, atan2 = CM.datan2;
   let x = st.x, y = st.y, mt = st.maxT, dep = st.dep, it = st.it;
   for (let i = 0; i < n && it < st.cap; i++) {
     const nx = sin(a*y) + c*cos(a*x), ny = sin(b*x) + d*cos(b*y);
@@ -124,12 +130,13 @@ function stateHash(st) {
 /* ================= the derived object — native orbit for the tiles ================= */
 function computeOrbit(params) {
   const [a,b,c,d] = params;
+  const dsin = CM.dsin, dcos = CM.dcos;   /* the engine-invariant core — the whole world runs on it */
   let x = 0.08, y = 0.12;
-  for (let i = 0; i < 40; i++) { const nx = Math.sin(a*y)+c*Math.cos(a*x), ny = Math.sin(b*x)+d*Math.cos(b*y); x=nx; y=ny; }
+  for (let i = 0; i < 40; i++) { const nx = dsin(a*y)+c*dcos(a*x), ny = dsin(b*x)+d*dcos(b*y); x=nx; y=ny; }
   const pts = new Float32Array(ORBIT_N * 2);
   let minx=1e9, maxx=-1e9, miny=1e9, maxy=-1e9;
   for (let i = 0; i < ORBIT_N; i++) {
-    const nx = Math.sin(a*y)+c*Math.cos(a*x), ny = Math.sin(b*x)+d*Math.cos(b*y);
+    const nx = dsin(a*y)+c*dcos(a*x), ny = dsin(b*x)+d*dcos(b*y);
     x = nx; y = ny; pts[i*2] = x; pts[i*2+1] = y;
     if (x<minx) minx=x; if (x>maxx) maxx=x; if (y<miny) miny=y; if (y>maxy) maxy=y;
   }
@@ -252,9 +259,37 @@ function readingGroundAt(d, state) {
 }
 
 /* pure surface — always available (used by CL-06/CL-08, the compositing harness, ambient tests) */
+/* the exposure: v2 tone map — log density → luminance (γ1.5 on log), quadratic core
+   (onset .68). v2 baked an opaque ground; here the ambient is the page, so luminance
+   drives alpha. `data` must have Uint8ClampedArray assignment semantics (round-half-even,
+   clamped): the browser's ImageData and the offline poster producer round identically,
+   which is what makes a promoted raster comparable to a rendered one. */
+function tonemapInto(st, data) {
+  const d = data;
+  const A = st.anchors, core = st.core, amax = st.amax;
+  const invLog = 1 / Math.log1p(st.maxT);
+  const a0r=A[0][0],a0g=A[0][1],a0b=A[0][2],a1r=A[1][0],a1g=A[1][1],a1b=A[1][2],
+        a2r=A[2][0],a2g=A[2][1],a2b=A[2][2],a3r=A[3][0],a3g=A[3][1],a3b=A[3][2];
+  const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
+  for (let i = 0, j = 0; i < total.length; i++, j += 4) {
+    const t = total[i];
+    if (t < 0.5) { d[j+3] = 0; continue; }
+    let L = Math.log1p(t) * invLog;
+    L = Math.sqrt(L) * L;                       /* ≈ gamma 1.5 on log density */
+    const inv = 1 / t;
+    let r = (c0[i]*a0r + c1[i]*a1r + c2[i]*a2r + c3[i]*a3r) * inv;
+    let g = (c0[i]*a0g + c1[i]*a1g + c2[i]*a2g + c3[i]*a3g) * inv;
+    let b = (c0[i]*a0b + c1[i]*a1b + c2[i]*a2b + c3[i]*a3b) * inv;
+    let cw = L > 0.68 ? (L - 0.68) / 0.32 : 0; cw *= cw * 0.9;
+    r += (core[0]-r)*cw; g += (core[1]-g)*cw; b += (core[2]-b)*cw;
+    d[j] = r; d[j+1] = g; d[j+2] = b;
+    d[j+3] = Math.min(255, L * amax * 255);
+  }
+}
+
 const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, composeTile,
   ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
-  DEV_BATCH, frameFor, plateState, developStep, stateHash };
+  DEV_BATCH, frameFor, plateState, developStep, stateHash, tonemapInto };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -304,25 +339,7 @@ if (typeof document !== "undefined") {
   /* v2 tone map: log density → luminance (γ1.5 on log), quadratic core (onset .68).
      v2 bakes an opaque ground; here the ambient is the page, so luminance drives alpha. */
   function tonemapPlate(st) {
-    const A = st.anchors, core = st.core, amax = st.amax, d = st.img.data;
-    const invLog = 1 / Math.log1p(st.maxT);
-    const a0r=A[0][0],a0g=A[0][1],a0b=A[0][2],a1r=A[1][0],a1g=A[1][1],a1b=A[1][2],
-          a2r=A[2][0],a2g=A[2][1],a2b=A[2][2],a3r=A[3][0],a3g=A[3][1],a3b=A[3][2];
-    const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
-    for (let i = 0, j = 0; i < total.length; i++, j += 4) {
-      const t = total[i];
-      if (t < 0.5) { d[j+3] = 0; continue; }
-      let L = Math.log1p(t) * invLog;
-      L = Math.sqrt(L) * L;                       /* ≈ gamma 1.5 on log density */
-      const inv = 1 / t;
-      let r = (c0[i]*a0r + c1[i]*a1r + c2[i]*a2r + c3[i]*a3r) * inv;
-      let g = (c0[i]*a0g + c1[i]*a1g + c2[i]*a2g + c3[i]*a3g) * inv;
-      let b = (c0[i]*a0b + c1[i]*a1b + c2[i]*a2b + c3[i]*a3b) * inv;
-      let cw = L > 0.68 ? (L - 0.68) / 0.32 : 0; cw *= cw * 0.9;
-      r += (core[0]-r)*cw; g += (core[1]-g)*cw; b += (core[2]-b)*cw;
-      d[j] = r; d[j+1] = g; d[j+2] = b;
-      d[j+3] = Math.min(255, L * amax * 255);
-    }
+    tonemapInto(st, st.img.data);
     st.octx.putImageData(st.img, 0, 0);
     /* the plate's own raster frame, not the live viewport: a resize mid-develop
        must not clip or stretch the exposure already committed to this backing */
