@@ -165,7 +165,9 @@ far-field into the filament core (transform + opacity only; zero substrate raste
 frame). Content descends by epistemic distance. Standing claims execute as predicates
 against the page itself; the reader keeps a local, owner-erasable self-report ledger.
 A separate **reading exposure** governs the record (P9): bistable reading ink with
-hysteresis (`CytherSubstrate.READING`, CL-06/CL-06c check it at every depth), phase-changed
+hysteresis (`CytherSubstrate.READING`, CL-06/CL-06c check it against the AMBIENT ground at
+every depth — the plate is not in that model; the composited ground is CY-SEM-003, a
+browser obligation, because the page cannot read its own composited pixels), phase-changed
 panel materials, density-conditioned legibility envelopes (`.env`, fed by the retained
 plate fields), corridor placement from the density atlas, rest-state world amplitude,
 and a reader optics control (WORLD · BALANCED · READ, session-local).

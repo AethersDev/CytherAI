@@ -150,11 +150,11 @@ const CLAIMS = [
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
              : { ok: false, detail: "not yet run" }; } },
-  { id: "CL-06", text: "READING INK ≥4.5:1 AT EVERY DEPTH",
-    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked ground (the membrane through the flip) must hold 4.5:1.",
+  { id: "CL-06", text: "READING INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked AMBIENT ground (the membrane through the flip) must hold 4.5:1. It is a proposition about the colour model, complete over the declared depth domain. It does not see the plate: the composited ground is CY-SEM-003, a browser obligation, because the page cannot read its own composited pixels.",
     run: contrastClaim },
-  { id: "CL-06c", text: "QUIETEST INK LAYER ≥4.5:1 AT EVERY DEPTH",
-    m: "The same sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
+  { id: "CL-06c", text: "QUIETEST INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "The same ambient-ground sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
     run: secondaryContrastClaim },
   { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE",
     m: "Recomputes the canonical mark's text-lane density metric and compares it against the admission cap.",
