@@ -52,6 +52,75 @@ const mixHex = (a,b,t) => `rgb(${mixRgb(a,b,t).map(Math.round).join(",")})`;
 const dprCapFor = w => w <= 640 ? 1.25 : w <= 800 ? 1.5 : 2;
 const binTargetFor = w => w <= 640 ? 360000 : w <= 900 ? 520000 : BIN_TGT;
 
+/* ================= the development law — one trajectory per world =================
+   Development is a SEQUENCE, not a schedule: fixed batches of DEV_BATCH iterations,
+   the terminal step the first batch boundary at which the plate meets its deposit
+   target (or its iteration cap). For one manifest state, plate, and raster frame
+   there is exactly one ordered sequence D_0..D_N, and D_N is the finished plate.
+   Wall time, frame cadence, and CPU load choose which D_k is on screen; they never
+   choose what D_k contains. Every streamed tonemap is a genuine prefix of the same
+   accumulation — a canvas frozen mid-develop is a real half-developed plate.
+   tools/test-develop.js verifies this under jsc; test-motion.py B9 pins the form. */
+const DEV_BATCH = 60000;
+function frameFor(bounds, W, H) {
+  const U = Math.min(W, H) / bounds.span * 0.92;
+  const sc = Math.min(1, Math.sqrt(binTargetFor(W) / (W * H)));   /* v2's capped internal resolution */
+  return { W, H, U, sc, bw: Math.max(320, Math.round(W * sc)), bh: Math.max(240, Math.round(H * sc)) };
+}
+function plateState(params, i, anchor, frame) {
+  const z = ZOOMS[i], sp = PLATE[i], { W, H, U, sc, bw, bh } = frame, n = bw * bh;
+  const st = { i, bw, bh, sc, rw: W, rh: H,
+    total: new Float32Array(n), c0: new Float32Array(n), c1: new Float32Array(n), c2: new Float32Array(n), c3: new Float32Array(n),
+    zu: z * U * sc, ox: (W / 2) * sc - anchor[0] * z * U * sc, oy: (H / 2) * sc - anchor[1] * z * U * sc,
+    x: 0.08, y: 0.12, dep: 0, it: 0, k: 0, done: false, maxT: 1e-6,
+    target: PLATE_DEP[i], cap: PLATE_CAP[i],
+    anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
+  const [a, b, c, d] = params;
+  for (let w = 0; w < 40; w++) { const nx = Math.sin(a*st.y) + c*Math.cos(a*st.x), ny = Math.sin(b*st.x) + d*Math.cos(b*st.y); st.x = nx; st.y = ny; }
+  return st;
+}
+/* v2 deposition, verbatim grammar: angular lobe coloring — hue owned by region */
+function depositBatch(st, params, n) {
+  const a = params[0], b = params[1], c = params[2], d = params[3];
+  const bw = st.bw, bh = st.bh, zu = st.zu, ox = st.ox, oy = st.oy, rot = st.rot;
+  const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
+  const sin = Math.sin, cos = Math.cos, atan2 = Math.atan2;
+  let x = st.x, y = st.y, mt = st.maxT, dep = st.dep, it = st.it;
+  for (let i = 0; i < n && it < st.cap; i++) {
+    const nx = sin(a*y) + c*cos(a*x), ny = sin(b*x) + d*cos(b*y);
+    x = nx; y = ny; it++;
+    const fx = x*zu + ox, fy = y*zu + oy;
+    if (fx < 0 || fy < 0 || fx >= bw || fy >= bh) continue;
+    const idx = (fy|0)*bw + (fx|0);
+    let u = (atan2(y, x)/TAU + 0.5)*4 + rot*4;
+    u -= ((u/4)|0)*4;
+    const i0 = u|0, f = u - i0, w0 = 1 - f;
+    if (i0 === 0) { c0[idx] += w0; c1[idx] += f; }
+    else if (i0 === 1) { c1[idx] += w0; c2[idx] += f; }
+    else if (i0 === 2) { c2[idx] += w0; c3[idx] += f; }
+    else { c3[idx] += w0; c0[idx] += f; }
+    const t = (total[idx] += 1);
+    if (t > mt) mt = t;
+    dep++;
+  }
+  st.x = x; st.y = y; st.maxT = mt; st.dep = dep; st.it = it;
+}
+/* one development step, D_k → D_k+1; true once the plate is finished */
+function developStep(st, params) {
+  depositBatch(st, params, DEV_BATCH); st.k++;
+  st.done = st.dep >= st.target || st.it >= st.cap;
+  return st.done;
+}
+/* FNV-1a over the deposited field plus its counters — a checkpoint's identity */
+function stateHash(st) {
+  const bytes = new Uint8Array(st.total.buffer, st.total.byteOffset, st.total.byteLength);
+  let h = 0x811c9dc5;
+  for (let i = 0; i < bytes.length; i++) { h ^= bytes[i]; h = Math.imul(h, 0x01000193) >>> 0; }
+  h ^= st.dep; h = Math.imul(h, 0x01000193) >>> 0;
+  h ^= st.it;  h = Math.imul(h, 0x01000193) >>> 0;
+  return h.toString(16).padStart(8, "0");
+}
+
 /* ================= the derived object — native orbit for the tiles ================= */
 function computeOrbit(params) {
   const [a,b,c,d] = params;
@@ -184,7 +253,8 @@ function readingGroundAt(d, state) {
 
 /* pure surface — always available (used by CL-06/CL-08, the compositing harness, ambient tests) */
 const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, composeTile,
-  ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor };
+  ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
+  DEV_BATCH, frameFor, plateState, developStep, stateHash };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -214,7 +284,7 @@ if (typeof document !== "undefined") {
   }
 
   function beginPlate(i) {
-    const z = ZOOMS[i], c = ANCH[i], cv = tiles[i];
+    const cv = tiles[i];
     cv.width = W * DPR; cv.height = H * DPR;
     cv.style.width = W + "px"; cv.style.height = H + "px";
     /* the frame this backing is rasterized in — composition references it until
@@ -222,50 +292,13 @@ if (typeof document !== "undefined") {
     rasters[i] = { W, H, U };
     const g = cv.getContext("2d");
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    /* accumulate at v2's capped internal resolution — the drawImage upscale is the plate grain */
-    const sc = Math.min(1, Math.sqrt(binTargetFor(W) / (W * H)));
-    const bw = Math.max(320, Math.round(W * sc)), bh = Math.max(240, Math.round(H * sc));
-    const off = document.createElement("canvas"); off.width = bw; off.height = bh;
-    const sp = PLATE[i];
-    const st = { i, g, bw, bh, sc, rw: W, rh: H, off, octx: off.getContext("2d"),
-      total: new Float32Array(bw * bh),
-      c0: new Float32Array(bw * bh), c1: new Float32Array(bw * bh),
-      c2: new Float32Array(bw * bh), c3: new Float32Array(bw * bh),
-      zu: z * U * sc, ox: (W / 2) * sc - c[0] * z * U * sc, oy: (H / 2) * sc - c[1] * z * U * sc,
-      x: 0.08, y: 0.12, dep: 0, it: 0, maxT: 1e-6, lastTone: 0, tones: 0,
-      target: PLATE_DEP[i], cap: PLATE_CAP[i],
-      anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
-    st.img = st.octx.createImageData(bw, bh);
-    const a = P[0], b = P[1], cc = P[2], d = P[3];
-    for (let k = 0; k < 40; k++) { const nx = Math.sin(a*st.y) + cc*Math.cos(a*st.x), ny = Math.sin(b*st.x) + d*Math.cos(b*st.y); st.x = nx; st.y = ny; }
+    /* the deterministic state; the canvas backing is presentation, bolted on.
+       The drawImage upscale from the capped bin resolution is the plate grain. */
+    const st = plateState(P, i, ANCH[i], frameFor(bounds, W, H));
+    const off = document.createElement("canvas"); off.width = st.bw; off.height = st.bh;
+    st.g = g; st.off = off; st.octx = off.getContext("2d"); st.img = st.octx.createImageData(st.bw, st.bh);
+    st.lastTone = 0; st.tones = 0; st.t0 = nowMs();
     return st;
-  }
-
-  /* v2 deposition, verbatim grammar: angular lobe coloring — hue owned by region */
-  function depositBatch(st, n) {
-    const a = P[0], b = P[1], c = P[2], d = P[3];
-    const bw = st.bw, bh = st.bh, zu = st.zu, ox = st.ox, oy = st.oy, rot = st.rot;
-    const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
-    const sin = Math.sin, cos = Math.cos, atan2 = Math.atan2;
-    let x = st.x, y = st.y, mt = st.maxT, dep = st.dep, it = st.it;
-    for (let i = 0; i < n && it < st.cap; i++) {
-      const nx = sin(a*y) + c*cos(a*x), ny = sin(b*x) + d*cos(b*y);
-      x = nx; y = ny; it++;
-      const fx = x*zu + ox, fy = y*zu + oy;
-      if (fx < 0 || fy < 0 || fx >= bw || fy >= bh) continue;
-      const idx = (fy|0)*bw + (fx|0);
-      let u = (atan2(y, x)/TAU + 0.5)*4 + rot*4;
-      u -= ((u/4)|0)*4;
-      const i0 = u|0, f = u - i0, w0 = 1 - f;
-      if (i0 === 0) { c0[idx] += w0; c1[idx] += f; }
-      else if (i0 === 1) { c1[idx] += w0; c2[idx] += f; }
-      else if (i0 === 2) { c2[idx] += w0; c3[idx] += f; }
-      else { c3[idx] += w0; c0[idx] += f; }
-      const t = (total[idx] += 1);
-      if (t > mt) mt = t;
-      dep++;
-    }
-    st.x = x; st.y = y; st.maxT = mt; st.dep = dep; st.it = it;
   }
 
   /* v2 tone map: log density → luminance (γ1.5 on log), quadratic core (onset .68).
@@ -376,7 +409,7 @@ if (typeof document !== "undefined") {
   /* ================= develop the exposures (boot + fork) ================= */
   let plateQueue = [], plateDev = null;
   const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
-  let batch = 110000, lastT = 0, devSum = 0, devPlateN = 0;
+  let devSum = 0, devPlateN = 0;
   const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
   function developAll(preparedCam) {
     const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
@@ -385,26 +418,32 @@ if (typeof document !== "undefined") {
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
     fields[0] = fields[1] = fields[2] = fields[3] = null;
-    plateDev = null; batch = 110000; lastT = nowMs(); devSum = 0; devPlateN = 0;
+    plateDev = null; devSum = 0; devPlateN = 0;
     developing = true;
     hooks.wake();
   }
-  /* step() — registered with site's shared rAF loop. Each frame deposits one adaptive batch
-     into the developing plate and tonemaps it — the streamed exposure — then the loop sleeps
-     once all four settle. Reduced motion: no progressive development; plates appear whole. */
+  /* step() — registered with site's shared rAF loop. The development law fixes the
+     sequence D_0..D_N; this is the PRESENTATION law: for the plate on screen, elapsed
+     time chooses the target deposit (DEV_MS, ease-out) and a per-frame budget bounds
+     how many fixed steps run — a slow machine shows fewer prefixes of the same
+     sequence, never a different one. Off-screen plates run to the terminal state under
+     the budget alone. Reduced motion: whole-plate development, tonemap only at
+     completion; the terminal state is identical by construction. */
+  const DEV_MS = 2600, FRAME_BUDGET_MS = 12;
+  function depositGoal(st, t) {
+    if (devPlateN !== 1) return Infinity;
+    const u = Math.min(1, (t - st.t0) / DEV_MS);
+    return st.target * (1 - (1 - u) * (1 - u));
+  }
   function step() {
     if (!plateDev) {
       if (!plateQueue.length) return false;
       plateDev = beginPlate(plateQueue.shift());
       devPlateN++;
     }
-    const t = nowMs(), dt = t - lastT; lastT = t;
-    if (!reduced) {
-      if (dt > 34) batch = Math.max(40000, batch * 0.88);
-      else if (dt < 22) batch = Math.min(240000, batch * 1.04);
-    }
-    depositBatch(plateDev, reduced ? 600000 : batch | 0);
-    const done = plateDev.dep >= plateDev.target || plateDev.it >= plateDev.cap;
+    const t = nowMs(), goal = reduced ? Infinity : depositGoal(plateDev, t), budgetEnd = t + FRAME_BUDGET_MS;
+    while (!plateDev.done && plateDev.dep < goal && nowMs() < budgetEnd) developStep(plateDev, P);
+    const done = plateDev.done;
     /* The density arrays change every frame; the 720k-pixel tone map does not
        need to. Preserve progressive exposure at a bounded 12.5 Hz and always
        render the completed state. Reduced motion still renders once, at done. */

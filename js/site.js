@@ -262,6 +262,8 @@ async function copyState(hash, msg) {
 function wireStrip() {
   const fb = $("forkBtn"); if (fb) fb.addEventListener("click", () => S.setFork(!S.isForking()));
   const rb = $("resetBtn"); if (rb) rb.addEventListener("click", () => S.resetToCanonical());
+  /* an instrument command: replay the current world's own development sequence — a fork stays forked */
+  const rd = $("redevelopBtn"); if (rd) rd.addEventListener("click", () => S.redevelop());
   const cap = $("captureBtn"); if (cap) cap.addEventListener("click", () => { copyState(buildHash(true), "✓ briefing state captured to link"); Ledger.recordAct("STATE_CAPTURED"); });
   const cr = $("claimsRecompute"); if (cr) cr.addEventListener("click", () => {
     Claims.recomputeClaims(); Ledger.recordAct("CLAIMS_RECOMPUTED");

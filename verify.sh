@@ -21,6 +21,9 @@ echo "[verify] claims regression"
 echo "[verify] ledger regression"
 "$JSC" js/manifest.js js/ledger.js tools/test-ledger.js
 
+echo "[verify] development trajectory law"
+"$JSC" js/manifest.js js/substrate.js tools/test-develop.js
+
 echo "[verify] site/release integration"
 python3 tools/test-site.py
 
