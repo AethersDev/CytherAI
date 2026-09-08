@@ -3,14 +3,14 @@
   "corpus": "cytherai-current-artifact",
   "version": 1,
   "candidate": {
-    "build_identity": "1B341618A95834D0",
+    "build_identity": "C27AD347DF88A823",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
     "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
-    "kernel_hash": "58a79179fbe79aa6eb3cf64642233cf361c146224a80c699903e890557f63469",
-    "grammar_hash": "4d3c03d07af6e4903bb568cf9a83793320c1560641ec60304353fdcd2c66c4ad",
+    "kernel_hash": "ccdf50bd45d458c789263eff3fe4ec40fe2defa85713a025286803321fd7deee",
+    "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "5e084c00a6f6d776c89c9e3cde9a2ab97053d55575b7bd27bb664b04dd1aaccc",
+    "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
     "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb"
   },
   "semantics": {
@@ -143,6 +143,51 @@
             "observed_at": "2026-08-14"
           }
         ]
+      }
+    },
+    {
+      "id": "CY-SEM-003",
+      "version": 1,
+      "scope": "projection",
+      "layer": "semantic",
+      "severity": "mandatory",
+      "contexts": {
+        "routes": [
+          "/index.html"
+        ],
+        "states": [
+          "canonical",
+          "fork"
+        ]
+      },
+      "quantifier": "for each declared sample of reading element, depth, viewport and optics mode",
+      "trigger": "the homepage settles at a sampled depth and the plate has developed",
+      "subject": "rendered reading ink",
+      "relation": "DISTINGUISHABLE",
+      "object": "the ground actually composited beneath it — plate, envelope and panel material included",
+      "bound": {
+        "contrast_ratio_min": 4.5,
+        "measurement": "WCAG 2.1 relative luminance over rendered pixels at glyph support",
+        "universal_over_depth": false
+      },
+      "mandatory_source": "profile",
+      "authorized_evaluators": [
+        "BROWSER_HARNESS"
+      ],
+      "required_coverage": {
+        "classes": [
+          "SAMPLED"
+        ],
+        "domain": "declared depths, viewports and optics modes only; a finite in-view sweep licenses no universal proposition over depth"
+      },
+      "failure_semantics": "projection_invalid",
+      "depends_on": [],
+      "incompatible_with": [],
+      "relation_implementation": "reusable",
+      "evaluation": {
+        "result": "NOT_EVALUATED",
+        "reason": "CL-06 and CL-06c prove a proposition about the AMBIENT ground and cannot see the plate drawn between it and the ink; the page cannot read its own composited pixels either. This obligation names what only a browser harness can establish, and carries no receipt for the current candidate.",
+        "receipts": []
       }
     },
     {
@@ -426,6 +471,36 @@
             },
             "harness_identity": "tools/test-ledger.js",
             "harness_version": "1B341618A95834D0",
+            "method": {
+              "measurement": "decoded ledger mail payload prefix",
+              "threshold": "READING SELF-REPORT",
+              "units": "exact string"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-ledger.js#ledger-selfreport-prefix",
+              "js/ledger.js#mailtoBody"
+            ],
+            "observed_at": "2026-09-09"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "C27AD347DF88A823",
+            "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-ledger.js",
+            "harness_version": "C27AD347DF88A823",
             "method": {
               "measurement": "decoded ledger mail payload prefix",
               "threshold": "READING SELF-REPORT",
@@ -733,6 +808,36 @@
               "js/ledger.js#mailtoBody"
             ],
             "observed_at": "2026-09-09"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "C27AD347DF88A823",
+            "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-ledger.js",
+            "harness_version": "C27AD347DF88A823",
+            "method": {
+              "measurement": "decoded ledger epistemic limitation",
+              "threshold": "NOT INDEPENDENTLY VERIFIABLE",
+              "units": "exact string"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-ledger.js#ledger-authority-not-elevated",
+              "js/ledger.js#mailtoBody"
+            ],
+            "observed_at": "2026-09-09"
           }
         ]
       }
@@ -1029,6 +1134,36 @@
               "js/claims.js#renderClaims"
             ],
             "observed_at": "2026-09-09"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "C27AD347DF88A823",
+            "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "C27AD347DF88A823",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-09"
           }
         ]
       }
@@ -1314,6 +1449,36 @@
             },
             "harness_identity": "deploy.sh plus tools/test-site.py",
             "harness_version": "1B341618A95834D0",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-09"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "C27AD347DF88A823",
+            "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "C27AD347DF88A823",
             "method": {
               "measurement": "complete allowlist and dist closure",
               "threshold": "27 files, no forbidden trees, exact integrity identity",
@@ -1874,6 +2039,36 @@
             },
             "harness_identity": "tools/test-site.py plus tools/test-motion.py",
             "harness_version": "1B341618A95834D0",
+            "method": {
+              "measurement": "DPR, bin, retained-field, and tonemap policy probes",
+              "threshold": "exact beta profile bounds",
+              "units": "DPR, cells, milliseconds"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_performance_and_mobile_clearance_contract",
+              "tools/test-motion.py#retained-field-and-tonemap-bounds"
+            ],
+            "observed_at": "2026-09-09"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "C27AD347DF88A823",
+            "artifact_manifest_hash": "22b099d0571ed831a905de5d84a471f5fb3dc570bb51c3c55f3d48cfc5a5636b",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "e85f1de7d0d028b04f723da45fcc375c1031149a31108fea985fdb36c6f397f8",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "4233183bc5d49469e052cef682ee957d38d01704213cbdccdfcef4ebbb4d1cbb",
+            "environment": {
+              "capability_profile": "three_declared_width_profiles",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc plus source contract",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-site.py plus tools/test-motion.py",
+            "harness_version": "C27AD347DF88A823",
             "method": {
               "measurement": "DPR, bin, retained-field, and tonemap policy probes",
               "threshold": "exact beta profile bounds",

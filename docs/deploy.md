@@ -368,6 +368,68 @@ proves the offline half of the chain and exits nonzero on any breach.
 | P7 | Presentation architecture, A/B | **A** (poster → streamed development) composites the partial plate over the finished poster: at t+200–450 ms the mark reads darker and dirtier than its terminal state, then resolves — a visible finished→wrong→finished regression. **B** (shipped: poster → terminal canvas; REDEVELOP exposes the trajectory) is correct in every frame from t+200 ms. B is what ships. |
 
 
+## 5b. CY-SEM-003 — composited reading ground, Chrome observed, 2026-09-09
+
+Build `C27AD347DF88A823`, Chrome 141 headless (SwiftShader). Method: for every line box
+of every reading element in view (`.thesis, .dek, .sec-h, .d-body, .law, .b-sub`,
+obtained from a Range so multi-line elements are measured per line), the element's own
+computed colour is composited over **each background pixel beneath that line** — the page
+rendered with those elements hidden, so the ground is the real paint stack including
+plate, envelope and panel material — and the WCAG 2.1 ratio is taken. This measures the
+criterion WCAG actually states (text colour against background colour); antialiased glyph
+pixels are not the criterion and are not used.
+
+**This is a SAMPLED observation.** It licenses nothing about depths, viewports, optics
+modes or states it did not visit. `CY-SEM-003` carries no receipt: the numbers below are
+evidence for the owner to admit or reject, not a self-admitted verdict.
+
+| viewport | stop | phase | lines | bg px | worst | p01 | median | % below 4.5 | worst element |
+|---|---|---|---:|---:|---:|---:|---:|---:|---|
+| 1440×900 | surface | surface | 60 | 306,938 | 2.51:1 | 5.62:1 | 12.07:1 | 0.23% | `.dek` |
+| 1440×900 | definition | surface | 8 | 93,654 | 4.99:1 | 5.69:1 | 10.04:1 | 0.00% | `.d-body` |
+| 1440×900 | architecture | surface | 2 | 51,894 | 5.96:1 | 6.18:1 | 9.41:1 | 0.00% | `.sec-h` |
+| 1440×900 | measurement | flip | 2 | 40,392 | 10.82:1 | 10.82:1 | 11.29:1 | 0.00% | `.sec-h` |
+| 1440×900 | clearance | flip | 2 | 65,286 | 12.57:1 | 12.71:1 | 13.35:1 | 0.00% | `.sec-h` |
+| 1440×900 | floor | depth | 7 | 100,530 | 4.33:1 | 5.38:1 | 6.82:1 | 0.00% | `.law` |
+| 1200×600 | surface | surface | 60 | 273,413 | 2.22:1 | 5.63:1 | 11.85:1 | 0.15% | `.dek` |
+| 1200×600 | definition | surface | 8 | 88,020 | 5.22:1 | 5.83:1 | 9.61:1 | 0.00% | `.d-body` |
+| 1200×600 | architecture | surface | 2 | 46,104 | 7.46:1 | 7.88:1 | 10.04:1 | 0.00% | `.sec-h` |
+| 1200×600 | measurement | flip | 2 | 35,853 | 10.69:1 | 10.85:1 | 11.16:1 | 0.00% | `.sec-h` |
+| 1200×600 | clearance | flip | 2 | 58,089 | 12.41:1 | 12.57:1 | 12.74:1 | 0.00% | `.sec-h` |
+| 1200×600 | floor | flip | 7 | 91,074 | 3.73:1 | 4.62:1 | 6.21:1 | 0.50% | `.law` |
+| 390×844 | surface | surface | 65 | 122,994 | 2.07:1 | 4.54:1 | 10.55:1 | 0.94% | `.dek` |
+| 390×844 | definition | surface | 13 | 56,667 | 1.00:1 | 2.94:1 | 7.76:1 | 1.40% | `.d-body` |
+| 390×844 | architecture | surface | 2 | 16,560 | 6.49:1 | 6.84:1 | 10.56:1 | 0.00% | `.sec-h` |
+| 390×844 | measurement | flip | 2 | 12,870 | 10.69:1 | 10.69:1 | 10.69:1 | 0.00% | `.sec-h` |
+| 390×844 | clearance | flip | 3 | 20,670 | 12.73:1 | 12.73:1 | 13.08:1 | 0.00% | `.sec-h` |
+| 390×844 | floor | depth | 7 | 34,294 | 3.01:1 | 4.48:1 | 6.29:1 | 1.04% | `.law` |
+
+**Reading: the obligation would FAIL as sampled.** Six of eighteen samples contain
+background beneath text at less than 4.5:1, worst 1.00:1 — ink and ground identical — on
+mobile `.d-body`. Everything in the flip and controlled strata is comfortable (10–13:1);
+the exposure is on the pale surface paper and on the floor's `.law`.
+
+**It is a pre-existing defect, widened by the tone change, not created by it.** The same
+harness against `69550d8` (the build before `docs/audit/07`):
+
+| sample | before · worst / % below | after · worst / % below |
+|---|---|---|
+| 1440×900 surface | 2.57:1 / 0.09% | 2.51:1 / 0.23% |
+| 1440×900 floor | 4.75:1 / 0.00% | 4.33:1 / 0.00% |
+| 390×844 surface | 2.10:1 / 0.32% | 2.07:1 / 0.94% |
+| 390×844 definition | **1.00:1 / 1.41%** | **1.00:1 / 1.40%** |
+| 390×844 floor | 3.55:1 / 0.08% | 3.01:1 / 1.04% |
+
+(The 1200×600 rows of the earlier build are omitted: that run never reached a developed,
+scrolled state, so its numbers are not comparable and are not reported as if they were.)
+
+The worst values barely moved; the affected *area* grew. The structural cause is not the
+tone curve: the legibility envelope (`.env`) wraps zone labels and section headings, and
+the reading paragraphs — `.dek`, `.d-body`, `.law` — sit directly on the plate with no
+density-conditioned ground at all. Lowering the gamma again would shrink the symptom and
+leave the hole. Naming it is what `CY-SEM-003` is for; closing it is a change to the
+reading exposure and is the owner's to direct.
+
 ## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner

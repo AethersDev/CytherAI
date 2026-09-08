@@ -80,12 +80,76 @@ legibility envelope — reads the same tone the plate deposits, as it always sho
   renderer authority, and regenerating it would have to re-clear that asset's own
   acceptance checks (paper-lane luminance floor, core luminance, accent fraction).
 
-## Open finding — the reading laws do not see the plate
+## Resolved after review — the reading laws are split, not widened
 
 CL-06 and CL-06c compute contrast against `bgRgbAt(d)`, the ambient colour token, and
 never against the composited ground that includes the plate drawn behind the text. Every
 variant in this sweep reported an identical `worst 4.51:1` because the plate is not in
-the model at all. The claim reads "reading ink ≥4.5:1 at every depth" and measures a
-ground the reader never sees on its own. This is a coverage gap in the claim, not a
-defect in the code, and it is exactly the constraint that should govern how loud the
-mark may become. Left for the owner to decide: no claim was silently widened here.
+the model at all. The claim read "reading ink ≥4.5:1 at every depth" and measured a
+ground the reader never sees on its own.
+
+The existing predicates were **narrowed to the proposition they actually prove** rather
+than adjusted to approximate the composited ground:
+
+- `CL-06` / `CL-06c` — *ink ≥4.5:1 on the AMBIENT ground, every depth*. Unchanged
+  arithmetic, complete over the declared depth domain, and now saying so.
+- `CL-06R` — *ink ≥4.5:1 over the plate, where text is in view*. A separate, bounded,
+  environment-scoped measurement: for each reading element in the viewport it samples
+  the retained density field beneath that element, composites the dominant plate's core
+  ink at the peak tone under it — the most extreme ink, so the bound errs against the
+  page — and measures the element's own computed colour against the result. It is taken
+  before the envelope blur and any panel material, and it prints its scope (elements in
+  view, viewport, phase, optics) beside its value. It never claims "at every depth",
+  because a live sample cannot.
+
+A live page claim was built for the second proposition and **rejected before shipping**.
+The page cannot read its own composited pixels — `#world` opacity, the tile crossfade, the
+envelope's backdrop filter and the panel materials are all invisible to script — so the
+predicate had to model the ground from the retained density field. Checked against the
+rendered measurement already on record (`docs/deploy.md`, worst 4.63:1 at the previous
+build), the model reported 1.04:1: it would have put a permanent, false ✕ on the floor.
+Overclaiming invalidity is still overclaiming. The suite stays at `CLAIMS n/10`, and the
+composited-ground proposition became `CY-SEM-003` in the corpus — a `BROWSER_HARNESS`
+obligation with `SAMPLED` coverage, `NOT_EVALUATED` for this candidate, whose first
+evidence is recorded in `docs/deploy.md` §5b.
+
+That evidence says the obligation would **FAIL as sampled**: six of eighteen samples carry
+background beneath text below 4.5:1, worst 1.00:1 on mobile `.d-body`. Run against the
+build before this change, the same harness finds the same holes at nearly the same worst
+values — 1.00:1 on that element there too — with a smaller affected area. The defect is
+pre-existing and this change widened it. Its structural cause is that `.env` wraps zone
+labels and section headings while the reading paragraphs sit directly on the plate; the
+tone curve is the amplifier, not the hole.
+
+## Accent share — measured, because the tone change moves it
+
+Removing the gamma raises the saturated cobalt anchor faster than the neutral ones, so
+accent share had to be measured rather than assumed. Over the plate region of the hero
+(no chrome, no text, no accent-coloured controls):
+
+| variant | lit | accent | accent / lit |
+|---|---:|---:|---:|
+| gamma 1.5 · zoom 0.9 (was) | 20.91% | 4.53% | **21.67%** |
+| gamma 1.5 · zoom 1.3 | 46.08% | 3.52% | 7.65% |
+| gamma 1.2 · zoom 1.3 | 48.06% | 5.76% | 11.98% |
+| **gamma 1.0 · zoom 1.3 (shipped)** | 49.08% | 8.58% | **17.47%** |
+| gamma 0.8 · zoom 1.3 | 49.87% | 12.84% | 25.75% |
+
+Zoom dilutes accent by revealing neutral filaments; gamma concentrates it. The shipped
+combination carries a **lower** accent share than the state it replaced, so "the page
+reads monochrome until something is true" is better served, not worse.
+
+## The OG derivative — attempted, reverted
+
+`tools/render-og.py` was rebuilt at gamma 1.0 and **failed its own acceptance gate**:
+accent 9.12% against an 8% budget. Its framing is fixed by `FIELD_W`/`LANE_X` and gets
+none of the zoom dilution the page gets, so accent share of lit pixels doubled
+(19.58% → 38.98%) while lit coverage was unchanged at 23.39%. Everything else passed
+(lane floors 239.4, warm 0.00%, off-hue 0.00%, core L 144.5).
+
+The change was reverted. A promoted asset that fails its receipts is not promoted, and
+raising the budget to admit it would make a real failure disappear. The card therefore
+still carries the gamma-1.5 curve and is a lighter exposure than the site it previews.
+Closing that properly means re-composing the card at a framing matching the page's new
+zoom and re-clearing its checks — a composition decision against an approved study, and
+the owner's to take.
