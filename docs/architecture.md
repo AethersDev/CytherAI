@@ -71,7 +71,7 @@ HTML detail.
 
 1. It parses optional captured state from the URL hash.
 2. `CytherSubstrate.boot()` derives the canonical camera once and queues all four
-   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; `REDEVELOP` replays the current world's sequence;
+   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence;
    responsive DPR/bin policies bound mobile allocation and tonemapping is cadence
    limited rather than repeated after every deposit batch.
 3. The instrument and ledger attach their DOM behavior; controls, mobile docking,

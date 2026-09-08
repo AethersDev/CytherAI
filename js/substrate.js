@@ -311,6 +311,11 @@ if (typeof document !== "undefined") {
 
   const tiles = ["t0","t1","t2","t3"].map(id => $(id));
   const coreCv = $("coreMap");
+  let posterEl = $("poster");     /* the promoted terminal exposure, until plate 0 lands */
+  /* The first development is a SWAP: the poster already shows the terminal plate, so
+     streaming partial exposures over it would run the reader backwards from a finished
+     image to a sparse one. Every later development is a REVEAL. */
+  let streaming = false;
 
   function layout() {
     W = innerWidth; H = innerHeight;
@@ -419,6 +424,13 @@ if (typeof document !== "undefined") {
     Object.keys(props).forEach(name => {
       if (ambientPaint[name] !== props[name]) { root_el.style.setProperty(name, props[name]); ambientPaint[name] = props[name]; }
     });
+    if (posterEl) {
+      /* the promoted exposure rides tile 0's frame, so scrolling or resizing before
+         the plate lands moves it exactly as the plate it stands in for */
+      const t = composeTile(cam.tiles[0], W, H, U, rasters[0]);
+      posterEl.style.opacity = t.o.toFixed(3);
+      posterEl.style.transform = `translate(${t.tx.toFixed(2)}px,${t.ty.toFixed(2)}px) scale(${t.A.toFixed(5)})`;
+    }
     drawCoreRect(cam.cx, cam.cy, cam.z);
     return cam.z;
   }
@@ -448,7 +460,7 @@ if (typeof document !== "undefined") {
      completion; the terminal state is identical by construction. */
   const DEV_MS = 2600, FRAME_BUDGET_MS = 12;
   function depositGoal(st, t) {
-    if (devPlateN !== 1) return Infinity;
+    if (!streaming || devPlateN !== 1) return Infinity;
     const u = Math.min(1, (t - st.t0) / DEV_MS);
     return st.target * (1 - (1 - u) * (1 - u));
   }
@@ -464,13 +476,21 @@ if (typeof document !== "undefined") {
     /* The density arrays change every frame; the 720k-pixel tone map does not
        need to. Preserve progressive exposure at a bounded 12.5 Hz and always
        render the completed state. Reduced motion still renders once, at done. */
-    const toneNow = done || (!reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS));
+    const toneNow = done || (streaming && !reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS));
     if (toneNow) { tonemapPlate(plateDev); plateDev.lastTone = t; plateDev.tones++; }
     if (done) {
-      fields[plateDev.i] = summarizeField(plateDev);   /* compact density outlives the develop; full grids are freed */
+      const i = plateDev.i;
+      fields[i] = summarizeField(plateDev);   /* compact density outlives the develop; full grids are freed */
       devSum += plateDev.dep;
       plateDev = null;
-      if (!plateQueue.length) { renderCore(); observe(lastP); developing = false; hooks.onChange(); }
+      /* the same image, now the reader's own: swap at equivalence, never restore.
+         A fork or a redevelopment is a different world and the poster cannot speak
+         for it, so removal is permanent. */
+      if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }
+      if (!plateQueue.length) {
+        streaming = true;
+        renderCore(); observe(lastP); developing = false; hooks.onChange();
+      }
     }
     return true;
   }

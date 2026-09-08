@@ -351,6 +351,23 @@ a state — that is the condition that would promote this to a blocker.
 | D3 | MIME types per §2 |
 | D4 | 404 behaviour per §3 |
 
+## 5a. Promoted terminal exposure — Chrome observed, 2026-09-08
+
+Build `B2F25BCB98E56EDC`, Chrome 141 headless (SwiftShader), device scale factor 1.
+These are **browser observations**, not repository proofs; `tools/test-poster.py`
+proves the offline half of the chain and exits nonzero on any breach.
+
+| # | Check | Observed |
+|---|---|---|
+| P1 | Kernel equivalence — the browser's own kernel developed plate 0 at a 1200×600 frame and tonemapped it | terminal step 15; sha256 `86be0b3d…8d188df3`, **identical** to the offline producer under jsc and to the decoded shipped PNG. `decode(P) == R_N` holds in the browser. |
+| P2 | Displayed plate vs promoted raster | Canvas 2D stores **premultiplied** alpha, so `getImageData` read-back deviates by up to 12 levels on 11.36% of samples — every pixel of the plate is partially transparent (0 fully opaque pixels) and unpremultiplying amplifies quantisation. Compared in premultiplied space, which is what the compositor stores and shows: **max \|Δ\| = 0 over every sample**, alpha exact. The displayed plate is byte-identical to the promoted raster; the read-back delta is an artefact of the read-back. |
+| P3 | Swap at equivalence | The poster is removed in the same frame plate 0 reaches D_N. No intermediate state is drawn over it on first load. |
+| P4 | No poster authority under FORK | Removed after first development; still removed after FORK + arrow nudges + Escape (status `LOCAL FORK`), and after REDEVELOP. Removal is permanent. |
+| P5 | `noscript` | With JavaScript disabled the poster remains and is the page's canonical mark — a truthful static representation of the same terminal plate. Decorative inside `#world` (`aria-hidden`), consistent with the existing accessibility model: the page states in text everything the world shows. |
+| P6 | Aspect window (JS disabled, so the poster is never removed) | `display:block` at 1440×900 (1.60), 1200×600 (2.00), 1024×768 (1.33); `display:none` at 390×844 (0.46) and 2560×1080 (2.37). Shown exactly where a `cover` fit is the exact crop the developed plate would show, and — because a `display:none` element's background is never fetched — never downloaded elsewhere. |
+| P7 | Presentation architecture, A/B | **A** (poster → streamed development) composites the partial plate over the finished poster: at t+200–450 ms the mark reads darker and dirtier than its terminal state, then resolves — a visible finished→wrong→finished regression. **B** (shipped: poster → terminal canvas; REDEVELOP exposes the trajectory) is correct in every frame from t+200 ms. B is what ships. |
+
+
 ## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
