@@ -84,7 +84,6 @@ PLATES = {  # js/substrate.js PLATE[0..1] — the light plates
 import math
 def composited(anchor, core, amax, t, maxT):
     L = math.log1p(t) / math.log1p(maxT)
-    L = math.sqrt(L) * L
     cw = (L - 0.68) / 0.32 if L > 0.68 else 0.0
     cw = cw * cw * 0.9
     px = [a + (c - a) * cw for a, c in zip(anchor, core)]
@@ -152,6 +151,8 @@ check(all(bands[i] < bands[i+1] + 1e-9 for i in range(len(bands)-1)),
       % " -> ".join("%.0f" % b for b in bands))
 
 sub = open(os.path.join(ROOT, "js/substrate.js")).read()
+check("Math.sqrt(L)" not in sub and "Math.pow(L" not in sub,
+      "B1b the tone map applies no gamma beyond the log — the mirror above matches the source")
 check("reduced ? Infinity" in sub
       and "const toneNow = done || (streaming && !reduced" in sub
       and "if (toneNow)" in sub,
