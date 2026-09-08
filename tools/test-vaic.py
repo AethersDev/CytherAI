@@ -23,8 +23,12 @@ CANONICAL_REF = "refs/heads/master"
 sys.dont_write_bytecode = True
 SPEC = importlib.util.spec_from_file_location("vaic_validate", ROOT / "tools/vaic_validate.py")
 assert SPEC and SPEC.loader
-VAIC = importlib.util.module_from_spec(SPEC)
+VAIC = sys.modules["vaic_validate"] = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(VAIC)
+RESTAMP_SPEC = importlib.util.spec_from_file_location("vaic_restamp", ROOT / "tools/vaic_restamp.py")
+assert RESTAMP_SPEC and RESTAMP_SPEC.loader
+RESTAMP = importlib.util.module_from_spec(RESTAMP_SPEC)
+RESTAMP_SPEC.loader.exec_module(RESTAMP)
 
 
 class VaicCorpusTests(unittest.TestCase):
@@ -557,6 +561,79 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("escape" in error for error in result["errors"]))
         self.assertTrue(any("kill criterion" in error for error in result["errors"]))
+
+
+    # ---- the re-stamp tool: rebinding the candidate must never touch a receipt ----
+    def scrambled(self, tmp: str) -> tuple[Path, str]:
+        """A corpus whose candidate AND current receipts are bound to a fake build.
+
+        Rebinding every occurrence of the current build leaves the receipts expired
+        (one per obligation, so no duplicate identity) and the candidate stale — the
+        state a build change leaves behind before anyone re-stamps.
+        """
+        path = Path(tmp) / "corpus.json"
+        raw = (ROOT / CORPUS).read_text(encoding="utf-8")
+        text = raw.replace(self.corpus["candidate"]["build_identity"], "0" * 16)
+        path.write_text(text, encoding="utf-8")
+        return path, text
+
+    def test_restamp_rebinds_the_candidate_and_never_edits_a_receipt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path, before_text = self.scrambled(tmp)
+            before = json.loads(before_text)
+            self.assertEqual(RESTAMP.stamp(ROOT, path), ["build_identity"])
+            added = RESTAMP.append(ROOT, path, harness={k: ["true"] for k in RESTAMP.HARNESS}, today="2099-01-01")
+            text = path.read_text(encoding="utf-8")
+        after = json.loads(text)
+        self.assertEqual(after["candidate"], self.corpus["candidate"])
+        self.assertTrue(added)
+        for old_row, new_row in zip(before["obligations"], after["obligations"]):
+            old = old_row["evaluation"].get("receipts") or []
+            new = new_row["evaluation"].get("receipts") or []
+            self.assertEqual(new[:len(old)], old, new_row["id"])     # history intact, in order
+            self.assertLessEqual(len(new) - len(old), 1, new_row["id"])
+        # a text-level insertion: every hand-formatted line survives, in order
+        survivors = iter(line.rstrip(",") for line in text.splitlines())
+        for line in before_text.splitlines():
+            if line.strip().startswith('"build_identity"'):
+                continue                                                # the one value stamp rewrites
+            self.assertTrue(any(line.rstrip(",") == kept for kept in survivors), line)
+
+    def test_restamp_appends_one_current_receipt_per_automated_obligation_with_its_real_result(self) -> None:
+        failing = "deploy.sh plus tools/test-site.py"
+        harness = {k: (["false"] if k == failing else ["true"]) for k in RESTAMP.HARNESS}
+        with tempfile.TemporaryDirectory() as tmp:
+            path, before_text = self.scrambled(tmp)
+            before = json.loads(before_text)
+            with self.assertRaises(VAIC.CorpusError):
+                RESTAMP.append(ROOT, path, harness=harness)        # stale candidate: fail closed
+            RESTAMP.stamp(ROOT, path)
+            added = dict(RESTAMP.append(ROOT, path, harness=harness, today="2099-01-01"))
+            self.assertEqual(RESTAMP.append(ROOT, path, harness=harness), [])   # idempotent
+            after = json.loads(path.read_text(encoding="utf-8"))
+        cand = after["candidate"]
+        automated = {row["id"]: (row["evaluation"].get("receipts") or [])[-1]["harness_identity"]
+                     for row in before["obligations"]
+                     if any(r.get("harness_identity") in RESTAMP.HARNESS and r.get("verification_identity") != VAIC.EXTERNAL
+                            for r in row["evaluation"].get("receipts") or [])}
+        self.assertEqual(set(added), set(automated))
+        external = {row["id"] for row in before["obligations"]
+                    if any(r.get("verification_identity") == VAIC.EXTERNAL for r in row["evaluation"].get("receipts") or [])}
+        self.assertTrue(external and external.isdisjoint(added), "browser observations are never re-run here")
+        for row in after["obligations"]:
+            if row["id"] not in added:
+                continue
+            current = [r for r in row["evaluation"]["receipts"]
+                       if r["artifact_build"] == cand["build_identity"] and r["verification_identity"] == cand["verification_identity"]]
+            self.assertEqual(len(current), 1, row["id"])
+            receipt = current[0]
+            expected = "FAIL" if automated[row["id"]] == failing else "PASS"
+            self.assertEqual(receipt["result"], expected, row["id"])
+            self.assertEqual(row["evaluation"]["result"], expected, row["id"])
+            self.assertEqual(receipt["harness_version"], cand["build_identity"])
+            self.assertEqual(receipt["observed_at"], "2099-01-01")
+            self.assertEqual({k: receipt[k] for k in RESTAMP.RECEIPT_BINDING}, {k: cand[k] for k in RESTAMP.RECEIPT_BINDING})
+        self.assertIn("FAIL", added.values())
 
 
 if __name__ == "__main__":

@@ -1,7 +1,8 @@
 #!/bin/bash
 # ══════════════════════════════════════════════════════════════
 # CytherAI Integrity Generator
-# Computes SRI hashes for all CSS/JS files, then patches HTML
+# Computes SRI hashes for all CSS/JS files, derives the build identity from the
+# canonical served-artifact manifest (every deploy.paths file), then patches HTML
 # files in-place with integrity attributes and build-hash meta.
 #
 # Usage: ./generate-integrity.sh        (run from project root)
@@ -20,20 +21,20 @@ HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html
 
 echo "[integrity] Computing SRI hashes..."
 
-FINGERPRINT=""
-
 for FILE in $RESOURCES; do
     if [ ! -f "$FILE" ]; then
         echo "  ERROR: $FILE not found" >&2
         exit 1
     fi
 done
+while IFS= read -r P; do
+    [ -z "$P" ] || [ -f "$P" ] || { echo "  ERROR: deploy.paths declares $P, which is not in the tree" >&2; exit 1; }
+done < deploy.paths
 
 # Compute SRI for each resource and patch HTML files
 for FILE in $RESOURCES; do
     HASH=$(openssl dgst -sha384 -binary "$FILE" | openssl base64 -A)
     SRI="sha384-${HASH}"
-    FINGERPRINT="${FINGERPRINT}${SRI}"
     BASENAME=$(basename "$FILE")
     echo "  $FILE → ${SRI:0:24}..."
 
@@ -45,8 +46,25 @@ for FILE in $RESOURCES; do
     done
 done
 
-# Build hash = first 16 hex chars of SHA-256 of concatenated SRI values
-BUILD_HASH=$(printf '%s' "$FINGERPRINT" | openssl dgst -sha256 -hex | awk '{print $NF}' | cut -c1-16 | tr '[:lower:]' '[:upper:]')
+# Build identity = first 16 hex chars of SHA-256 of the canonical served-artifact
+# manifest: one `<sha256>  <path>` line per deploy.paths entry, byte-sorted, with
+# the two fields this identity is stamped INTO (the build-hash meta, the sw.js
+# CACHE hash) blanked before hashing. Every served first-party byte moves it —
+# HTML, the worker, assets — not only the SRI-covered resources, so one identity
+# names one served candidate. tools/vaic_validate.py recomputes the same
+# projection (build_identity) and rejects a stale stamp.
+served_manifest() {
+    LC_ALL=C sort deploy.paths | while IFS= read -r P; do
+        [ -n "$P" ] || continue
+        case "$P" in
+            *.html) H=$(sed -E 's|(<meta name="build-hash" content=")[^"]*(">)|\1\2|' "$P" | shasum -a 256 | awk '{print $1}') ;;
+            sw.js)  H=$(sed -E "s|(var CACHE = 'cytherai-substrate-)[0-9A-F]*|\1|" "$P" | shasum -a 256 | awk '{print $1}') ;;
+            *)      H=$(shasum -a 256 "$P" | awk '{print $1}') ;;
+        esac
+        printf '%s  %s\n' "$H" "$P"
+    done
+}
+BUILD_HASH=$(served_manifest | shasum -a 256 | awk '{print $1}' | cut -c1-16 | tr '[:lower:]' '[:upper:]')
 echo "[integrity] Build hash: $BUILD_HASH"
 
 # Patch build-hash meta tag in all HTML files

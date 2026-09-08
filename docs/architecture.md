@@ -49,7 +49,7 @@ HTML detail.
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---:|---|
-| `index.html` | Homepage structure and its inline visual system | Yes | Changing HTML alone does not move SRI; changing an inline style still changes candidate bytes |
+| `index.html` | Homepage structure and its inline visual system | Yes | Does not move SRI, but every HTML byte moves the build identity (served-artifact manifest): re-stamp after any edit |
 | `js/` | Homepage runtime; `console.js` is retained engine-project code and is not loaded | Six modules only | A hashed module change requires `./generate-integrity.sh` |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; regenerate integrity after edits |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
@@ -131,10 +131,13 @@ exactly one current page. The homepage intentionally uses its own descent model.
 The release flow is fail-closed:
 
 1. Edit source.
-2. For any change to the nine hashed JS/CSS resources, run
-   `./generate-integrity.sh`. It recomputes each SHA-384 SRI value, derives one
-   16-hex build identity, stamps all eight HTML files, and updates the service
-   worker cache name.
+2. For any change to a served file (anything in `deploy.paths` — HTML, JS/CSS,
+   the worker, assets), run `./generate-integrity.sh`. It recomputes each SHA-384
+   SRI value, derives the 16-hex build identity from the canonical served-artifact
+   manifest (every `deploy.paths` file, the two stamped fields blanked), stamps
+   all eight HTML files, and updates the service worker cache name. Then run
+   `python3 tools/vaic_restamp.py`: it re-stamps the VAIC candidate and appends
+   the automated-set receipts for the new build.
 3. Run `./verify.sh`. The integration test independently recomputes the same
    identities and checks local references, navigation, manifest icons, and the
    deploy/service-worker relationship.

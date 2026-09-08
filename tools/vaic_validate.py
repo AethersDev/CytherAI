@@ -78,6 +78,7 @@ IDENTITY_COVERAGE = {
         "verify.sh", "deploy.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py",
         "tools/test-motion.py", "tools/test-claims.js", "tools/test-ledger.js",
+        "tools/vaic_restamp.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }
@@ -138,6 +139,35 @@ def sha256_file(path: Path) -> str:
 def shasum_manifest_hash(root: Path, relatives: list[str]) -> str:
     manifest = "".join(f"{sha256_file(root / relative)}  {relative}\n" for relative in relatives)
     return hashlib.sha256(manifest.encode("utf-8")).hexdigest()
+
+
+# The build identity is stamped INTO two of the files it identifies, so those two
+# fields are blanked before hashing; generate-integrity.sh applies the same edits.
+STAMPED_FIELDS = (
+    (re.compile(r"\.html$"), re.compile(rb'(<meta name="build-hash" content=")[^"]*(">)'), rb"\1\2"),
+    (re.compile(r"^sw\.js$"), re.compile(rb"(var CACHE = 'cytherai-substrate-)[0-9A-F]*"), rb"\1"),
+)
+
+
+def build_identity(root: Path) -> str:
+    """The 16-hex identity the pages print: a projection of EVERY served byte.
+
+    The same canonical manifest as artifact_identity, over deploy.paths, with the
+    two stamped fields blanked so the identity can be written into what it names.
+    An HTML, worker, or asset change moves it exactly as a module change does, so
+    one identity names one served candidate.
+    """
+    lines = []
+    for relative in deploy_paths(root):
+        path = root / relative
+        if not path.is_file():
+            continue
+        data = path.read_bytes()
+        for name, field, blank in STAMPED_FIELDS:
+            if name.search(relative):
+                data = field.sub(blank, data)
+        lines.append(f"{hashlib.sha256(data).hexdigest()}  {relative}\n")
+    return hashlib.sha256("".join(lines).encode("utf-8")).hexdigest()[:16].upper()
 
 
 def deploy_paths(root: Path) -> list[str]:
@@ -328,6 +358,9 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         errors.append("corpus candidate must be an object")
         candidate = {}
     build = current_build(root)
+    served = build_identity(root)
+    if build != served:
+        errors.append(f"index.html build-hash {build!r} is stale: the served bytes identify as {served!r}")
     if candidate.get("build_identity") != build:
         errors.append(f"candidate build {candidate.get('build_identity')!r} "
                       f"does not match index.html {build!r}")
