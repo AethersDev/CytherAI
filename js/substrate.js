@@ -23,7 +23,13 @@
 const CM = root.CytherManifest;
 
 /* ================= locked constants (§4.1) ================= */
-const ZOOMS   = [0.9, 1.9, 3.6, 6.8];
+/* The zoom ladder. Far-field was 0.9, which framed the whole orbit as one soft ball:
+   the mark had structure the reader could not see. 1.3 shows the filament arcs and
+   caustics while the object still reads as a periphery observed from far, with paper
+   around it — 1.8 fills the frame with the dense interior and stops being a periphery
+   at all. The ladder is scaled whole, so the descent keeps its log-spaced ratios
+   (2.11, 1.89, 1.89) exactly. Measured sweep: docs/audit/07. */
+const ZOOMS   = [1.3, 2.75, 5.2, 9.8];
 const BGS     = [["#ECF0F4","#101620"],["#B9C3D2","#131A26"],["#3A4658","#DDE6F2"],["#070A10","#C7D2E4"]];
 const PANELS  = [[255,255,255,.60],[240,245,251,.55],[14,20,29,.50],[10,15,23,.55]];
 const ACCENTS = ["#2036C7","#2A48D6","#5F7BFF","#7FA0FF"];
@@ -274,8 +280,11 @@ function tonemapInto(st, data) {
   for (let i = 0, j = 0; i < total.length; i++, j += 4) {
     const t = total[i];
     if (t < 0.5) { d[j+3] = 0; continue; }
-    let L = Math.log1p(t) * invLog;
-    L = Math.sqrt(L) * L;                       /* ≈ gamma 1.5 on log density */
+    /* normalized log density, no gamma. The 1.5 curve here spent the mark's presence
+       for nothing: it put a typical filament at 16% alpha, so the density field was
+       computed and then thrown away at the last step. At 1.0 the same filament reads
+       at 29% and the cores are earned at the same 0.68 onset. */
+    const L = Math.log1p(t) * invLog;
     const inv = 1 / t;
     let r = (c0[i]*a0r + c1[i]*a1r + c2[i]*a2r + c3[i]*a3r) * inv;
     let g = (c0[i]*a0g + c1[i]*a1g + c2[i]*a2g + c3[i]*a3g) * inv;
@@ -509,7 +518,7 @@ if (typeof document !== "undefined") {
       const bx = ((vx - t.tx) / t.A * f.scx) | 0, by = ((vy - t.ty) / t.A * f.scy) | 0;
       if (bx < 0 || by < 0 || bx >= f.bw || by >= f.bh) continue;
       const dep = f.total[by * f.bw + bx];
-      if (dep > 0) { let L = Math.log1p(dep) * invLog; sum += Math.sqrt(L) * L; }
+      if (dep > 0) sum += Math.log1p(dep) * invLog;   /* the envelope reads the same tone the plate deposits */
       n++;
     }
     return n ? sum / n : null;
