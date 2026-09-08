@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="13F8E503B4802A9A">
+<meta name="build-hash" content="768825C04AB227DF">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -44,6 +44,7 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow-x:hidden}
 button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
 a{color:inherit}
+p{text-wrap:pretty}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .mono{font-family:var(--mono)}
 .skip-link{position:absolute;left:-9999px}
@@ -114,7 +115,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
   color:color-mix(in srgb,var(--ink) 70%,transparent);margin-top:0;margin-bottom:4.5vh;font-weight:inherit}
 .zone-label b{color:var(--ink);font-weight:500}
 .sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
-  max-width:26ch;margin-bottom:5vh;color:var(--ink)}
+  max-width:26ch;margin-bottom:5vh;color:var(--ink);text-wrap:balance}
 .glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
 
 /* ════════════ hero — the claim ════════════ */
@@ -122,7 +123,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
   padding:16vh 28px 12vh;max-width:900px;margin:0 auto}
 .eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:22px}
 .thesis{font-size:clamp(38px,5.6vw,72px);font-weight:250;line-height:1.05;letter-spacing:-.015em;
-  cursor:default;user-select:none;max-width:15ch}
+  cursor:default;user-select:none;max-width:15ch;text-wrap:balance}
 .wd{white-space:nowrap;display:inline-block}
 .thesis .g{display:inline-block;font-weight:250;will-change:font-weight}
 .dek{font-size:15.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
@@ -163,7 +164,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6vh}
 .sys{padding:24px 24px 26px}
 .sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px}
+.sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px;text-wrap:balance}
 .sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
 .sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
 .sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
@@ -214,6 +215,9 @@ td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
 .footnote{border-top:1px solid var(--hair);padding:12px 0 16px}
 .footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
 .footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent);line-height:1.8;margin-top:4px}
+/* the dagger is a two-way anchor: mark → note → back; targets clear the fixed chrome */
+.fnref,.fnback{text-decoration:none}
+.fnref,.footnote .dagger{scroll-margin-top:72px}
 
 /* ════════════ the boundary ════════════ */
 .boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
@@ -386,6 +390,12 @@ body[data-phase="flip"] .env::before{opacity:1}
 .glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl{transition:background .35s ease,color .25s ease}
 .core .lbl{padding:3px 2px}
 body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
+/* READ optics: the envelope stops negotiating with the world. A solid lane whose
+   color IS the modeled reading ground — --bg (bgRgbAt) in surface/depth/core, the
+   .82 membrane over --bg in flip — so the ground CL-06 measures is the ground shown. */
+body[data-optics="read"] .env::before{inset:-1em -1.4em;mask-image:none;-webkit-mask-image:none;
+  backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
+body[data-optics="read"][data-phase="flip"] .env::before{background:color-mix(in srgb,rgb(16,22,31) 82%,var(--bg))}
 body[data-phase="flip"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(16,22,31,.82)}
 body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(10,15,23,.72)}
 body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(7,10,16,.93)}
@@ -621,7 +631,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
       </div>
       <table>
         <thead>
-          <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD†</th></tr>
+          <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD<a class="fnref" id="fnref-t2cad" href="#fn-t2cad" aria-label="Footnote: Text2CAD-192 source">†</a></th></tr>
         </thead>
         <tbody>
           <tr><td><span class="mk ext">◌</span>Invalid Rate (↓ better)</td><td class="cy">0.00%</td><td>10.00%</td><td class="t2">0.93%</td></tr>
@@ -640,7 +650,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
         <span class="k">CONTROLLED RECORDS</span><span class="v">03 · structure indexed · values sealed</span>
       </div>
       <div class="footnote">
-        <span class="dagger">† Text2CAD-192 (T2CAD): 0.93% invalid rate.</span>
+        <span class="dagger" id="fn-t2cad">† Text2CAD-192 (T2CAD): 0.93% invalid rate. <a class="fnback" href="#fnref-t2cad" aria-label="Back to the table">↩</a></span>
         <p class="note">External benchmark; evaluation not conducted or curated by CytherAI.</p>
       </div>
     </div>
@@ -754,7 +764,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 <div class="strip">
   <span>MARK <b id="markSerial">…</b></span>
   <span class="st" id="obsZoom">×0.90</span>
-  <button id="forkBtn">FORK</button>
+  <button id="forkBtn" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Escape">FORK</button>
   <span class="st" id="forkStatus">CANONICAL STATE</span>
   <span class="grow"></span>
   <button id="captureBtn">CAPTURE BRIEFING STATE</button>
@@ -768,10 +778,10 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-JeiliPXAm2YSTXNOp91HNh4NzFbFSdxbuhox5Y2mtX11wCGo+q784Vui8aagJ0gF" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-SiZPgjSc9FUQMXqySZ5KzERlUwb2xOLjyx8XVV2NBzzMwLgz/XOsX0SaYjAQ4ind" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-FKihS8Hxsh7zd+Rhsi6NxOUpRLL6XN4kClf/cNdhw4XgCaQhd2z9iwdcTjN0FhZ7" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-hI33HZ8ncBBJFT2tAfNZuumYekKEaa/Vy62l3moofsYPI4G42uN5230K2GtMmvlZ" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-dwJ/5WDZRWYz+IRkaNTvsELuy6bETIHmDoR4Sa3HobMEeZZBbUOsCV8+PvO90Knn" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-oJlhp5nRx4LMUB4k7BZRsDyyEBqZJBMEsAnQ9mbhIUrMZKyKwpHvr+m+dCeXhp0I" crossorigin="anonymous"></script>
 </body>
 </html>

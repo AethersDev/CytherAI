@@ -481,6 +481,14 @@ if (typeof document !== "undefined") {
     if (!on) redevelop();
   }
   function resetToCanonical() { P = CM.CANON.slice(); redevelop(); }
+  /* one drag step in screen px → the four orbit parameters; pointer and keyboard share it */
+  function nudge(dx, dy) {
+    P[0] = clamp(P[0] + dx * 0.0014, -2.2, 2.2);
+    P[1] = clamp(P[1] + dy * 0.0014, -2.2, 2.2);
+    P[2] = clamp(P[2] + dx * 0.0005, -2.2, 2.2);
+    P[3] = clamp(P[3] - dy * 0.0005, -2.2, 2.2);
+    hooks.onChange();
+  }
 
   function wireGestures() {
     const sub = $("substrate"); if (!sub) return;
@@ -493,11 +501,8 @@ if (typeof document !== "undefined") {
     sub.addEventListener("pointermove", e => {
       if (pressTimer && Math.hypot(e.clientX-lastX, e.clientY-lastY) > 12) { clearTimeout(pressTimer); pressTimer = null; }
       if (!forking) return;
-      P[0] = clamp(P[0] + (e.clientX-lastX) * 0.0014, -2.2, 2.2);
-      P[1] = clamp(P[1] + (e.clientY-lastY) * 0.0014, -2.2, 2.2);
-      P[2] = clamp(P[2] + (e.clientX-lastX) * 0.0005, -2.2, 2.2);
-      P[3] = clamp(P[3] - (e.clientY-lastY) * 0.0005, -2.2, 2.2);
-      lastX = e.clientX; lastY = e.clientY; hooks.onChange();
+      nudge(e.clientX-lastX, e.clientY-lastY);
+      lastX = e.clientX; lastY = e.clientY;
     });
     sub.addEventListener("pointerup", e => {
       clearTimeout(pressTimer); pressTimer = null;
@@ -506,6 +511,14 @@ if (typeof document !== "undefined") {
     sub.addEventListener("pointercancel", () => {
       clearTimeout(pressTimer); pressTimer = null;
       if (forking) setFork(false);   /* a browser-cancelled gesture must never strand the fork lock */
+    });
+    /* keyboard parity: while forking, arrows apply the same step a 24px drag would;
+       Escape ends the fork exactly like toggling FORK off (redevelop, keep the variant) */
+    addEventListener("keydown", e => {
+      if (!forking || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.key === "Escape") { e.preventDefault(); setFork(false); return; }
+      const dx = { ArrowLeft: -24, ArrowRight: 24 }[e.key] || 0, dy = { ArrowUp: -24, ArrowDown: 24 }[e.key] || 0;
+      if (dx || dy) { e.preventDefault(); nudge(dx, dy); }
     });
   }
 
