@@ -149,8 +149,10 @@ this machine — verify JS with `jsc`:
 A ReferenceError on a browser global is a PASS for a parse check; SyntaxError is a fail.
 Pure logic is guarded so it loads under jsc; DOM wiring is behind `typeof document`.
 
-After changing any hashed resource, re-run `./generate-integrity.sh` (patches SRI +
-the `build-hash` meta across the HTML files).
+After changing any served file (anything in `deploy.paths`, HTML included — the build
+identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI + the
+`build-hash` meta + the worker cache name), then `python3 tools/vaic_restamp.py` (re-stamps
+the VAIC candidate, appends the automated-set receipts; existing receipts are never edited).
 
 The architecture and change-impact guide is `docs/architecture.md`.
 

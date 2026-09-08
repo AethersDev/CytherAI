@@ -218,8 +218,7 @@ class SiteContractTests(unittest.TestCase):
                     self.assertEqual(attrs.get("crossorigin"), "anonymous", f"{page}: {relative}")
         self.assertEqual(referenced, set(RESOURCES))
 
-        fingerprint = "".join(expected_sri[resource] for resource in RESOURCES)
-        build_hash = hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()[:16].upper()
+        build_hash = VAIC.build_identity(ROOT)
         for page in HTML_FILES:
             metas = [attrs for tag, attrs in parse_page(page).tags
                      if tag == "meta" and attrs.get("name") == "build-hash"]
@@ -227,6 +226,40 @@ class SiteContractTests(unittest.TestCase):
         cache = re.search(r"var CACHE = 'cytherai-substrate-([0-9A-F]+)(?:-r\d+)?'", SW_SOURCE)
         self.assertIsNotNone(cache)
         self.assertEqual(cache.group(1), build_hash)
+
+    def test_build_identity_commits_to_every_served_byte(self) -> None:
+        """Same identity ⇒ same served candidate.
+
+        A semantic HTML change, a worker change and an asset change must each move
+        the stamped identity, and the shell projection must equal the Python one.
+        What is not served — verifiers, docs, the receipt corpus — never moves it.
+        """
+        baseline = VAIC.build_identity(ROOT)
+        self.assertEqual(baseline, VAIC.current_build(ROOT), "the stamp is the projection")
+        mutations = {
+            "index.html": lambda b: b.replace(b'aria-label="Optical mode', b'aria-label="Optical mode (counterfactual)', 1),
+            "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
+            "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
+        }
+        for relative, mutate in mutations.items():
+            with tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                for path in DEPLOY_FILES + ["deploy.paths", "generate-integrity.sh"]:
+                    (root / path).parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy(ROOT / path, root / path)
+                original = (root / relative).read_bytes()
+                mutated = mutate(original)
+                self.assertNotEqual(original, mutated, relative)
+                (root / relative).write_bytes(mutated)
+                run = subprocess.run(["bash", "generate-integrity.sh"], cwd=root, capture_output=True, text=True)
+                self.assertEqual(run.returncode, 0, run.stderr)
+                stamped = VAIC.current_build(root)
+                self.assertNotEqual(stamped, baseline, relative)
+                self.assertEqual(stamped, VAIC.build_identity(root), relative)
+        served = set(DEPLOY_FILES)
+        for relative in (*VAIC.IDENTITY_COVERAGE["verification_identity"],
+                         "vaic/cytherai-obligations.v0.json", "docs/deploy.md", "CLAUDE.md"):
+            self.assertNotIn(relative, served, relative)
 
     def test_deploy_allowlist_and_service_worker_cannot_drift(self) -> None:
         self.assertEqual(len(DEPLOY_FILES), len(set(DEPLOY_FILES)), "deploy allowlist contains duplicates")
