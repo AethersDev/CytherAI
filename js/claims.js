@@ -36,22 +36,23 @@ const parseRGB = s => { const m = s.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/); ret
    only outside it. Measured against CytherSubstrate.ambientAt, the same function
    observe() writes to the page. */
 /* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band).
-   Dark ink is valid up to READING.SW_DOWN on the raw ambient; light ink from
-   READING.SW_UP, grounded on the absorptive membrane through the flip phase
-   (every flip-phase reading block carries it), then on the raw ambient. */
+   Light ink is valid up to READING.SW_DOWN — on the raw ambient while the field
+   is unexposed, then on the absorptive membrane through the flip phase (every
+   flip-phase reading block carries it); dark ink from READING.SW_UP, on the raw
+   ambient, which by then is paper. */
 const hexRgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
 function contrastClaim() {
   const R = S.READING;
-  let worst = 99, at = 0, ws = "dark";
+  let worst = 99, at = 0, ws = "light";
   for (let i = 0; i <= 300; i++) {
     const d = i / 100;
     if (d <= R.SW_DOWN) {
-      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
-      if (r < worst) { worst = r; at = d; ws = "dark"; }
-    }
-    if (d >= R.SW_UP) {
       const r = wcagRatio(hexRgb(R.LIGHT), S.readingGroundAt(d, "light"));
       if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
     }
   }
   return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + ws + " ink at depth " + Math.round(at/3*100) + "% · phase-locked" };
@@ -68,16 +69,16 @@ const INK_FLOOR = 0.66;
 function secondaryContrastClaim() {
   const R = S.READING, dark = hexRgb(R.DARK), light = hexRgb(R.LIGHT);
   const lay = (ink, g) => ink.map((v, i) => v * INK_FLOOR + g[i] * (1 - INK_FLOOR));
-  let worst = 99, at = 0, ws = "dark";
+  let worst = 99, at = 0, ws = "light";
   for (let i = 0; i <= 300; i++) {
     const d = i / 100;
     if (d <= R.SW_DOWN) {
-      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
-      if (r < worst) { worst = r; at = d; ws = "dark"; }
-    }
-    if (d >= R.SW_UP) {
       const g = S.readingGroundAt(d, "light"), r = wcagRatio(lay(light, g), g);
       if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
     }
   }
   return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + Math.round(INK_FLOOR * 100) +

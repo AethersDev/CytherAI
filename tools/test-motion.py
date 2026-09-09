@@ -57,8 +57,8 @@ check(R["SW_DOWN"] > R["SW_UP"], "A1 bistable: SW_DOWN %.2f > SW_UP %.2f" % (R["
 check(abs((R["SW_DOWN"] - R["SW_UP"]) - 0.09) < 1e-9, "A1 hysteresis gap is 0.09")
 
 site = open(os.path.join(ROOT, "js/site.js")).read()
-check('inkState === "dark" && d >= R.SW_DOWN' in site
-      and 'inkState === "light" && d <= R.SW_UP' in site,
+check('inkState === "light" && d >= R.SW_DOWN' in site
+      and 'inkState === "dark" && d <= R.SW_UP' in site,
       "A2 retained-state hysteresis machine present in site.js")
 
 html = open(os.path.join(ROOT, "index.html")).read()
@@ -77,31 +77,62 @@ check(re.search(r'body\{transition:color \.25s', html) is not None,
       "A6 flip is a 0.25s controlled crossfade")
 
 # ---------------- MOT-002 ----------------
-PLATES = {  # js/substrate.js PLATE[0..1] — the light plates
-    0: {"anchors": [(16,22,32),(30,44,96),(10,13,20),(32,54,199)], "core": (6,9,18), "amax": 0.95},
-    1: {"anchors": [(36,52,110),(22,32,72),(42,72,214),(16,22,48)], "core": (8,12,32), "amax": 0.95},
+# Two kinds of exposure, two directions, and they are laws in OPPOSITE senses.
+# The mirror must name the plates by what they are, not by index: an index pinned
+# to the wrong kind passes without testing anything, which is what happened when
+# the exposure order was turned over and these checks kept reporting PASS
+# against plates that had become luminous.
+FIELD = (7, 10, 16)                 # BGS[0][0] — the unexposed ground
+INK_PLATES = {  # js/substrate.js PLATE[2..3] — printed on paper
+    2: {"anchors": [(36,52,110),(22,32,72),(42,72,214),(16,22,48)], "core": (8,12,32), "amax": 0.95},
+    3: {"anchors": [(16,22,32),(30,44,96),(10,13,20),(32,54,199)], "core": (6,9,18), "amax": 0.95},
+}
+LUM_PLATES = {  # js/substrate.js PLATE[0..1] — emitted onto the field
+    0: {"anchors": [(167,184,222),(127,160,255),(196,205,222),(83,107,222)], "core": (255,255,255),
+        "amax": 1.00, "floor": 0.16, "gain": 0.65},
+    1: {"anchors": [(137,159,214),(95,123,255),(173,187,223),(109,132,205)], "core": (240,246,255),
+        "amax": 0.97, "floor": 0.16, "gain": 0.65},
 }
 import math
-def composited(anchor, core, amax, t, maxT):
-    L = math.log1p(t) / math.log1p(maxT)
+def composited(anchor, core, amax, t, maxT, ground, floor=0.0, gain=1.0):
+    L0 = min(1.0, math.log1p(t) / math.log1p(maxT))
+    if L0 <= floor: return list(ground)          # below threshold nothing is deposited
+    L = ((L0 - floor) / (1 - floor)) ** gain
     cw = (L - 0.68) / 0.32 if L > 0.68 else 0.0
     cw = cw * cw * 0.9
     px = [a + (c - a) * cw for a, c in zip(anchor, core)]
     al = min(1.0, L * amax)
-    return [p * (1 - al) + v * al for p, v in zip(PAPER, px)]
+    return [p * (1 - al) + v * al for p, v in zip(ground, px)]
 
 mono_ok = emit_ok = True
-for pi, P in PLATES.items():
+for pi, P in INK_PLATES.items():
     for anchor in P["anchors"]:
         for maxT in (10, 100, 1000):
             prev = 1e9
             for t in range(1, maxT + 1):
-                L = lum(*composited(anchor, P["core"], P["amax"], t, maxT))
+                L = lum(*composited(anchor, P["core"], P["amax"], t, maxT, PAPER))
                 if L > prev + 1e-9: mono_ok = False
                 if L > lum(*PAPER) + 1e-9: emit_ok = False
                 prev = L
-check(mono_ok, "B1 tonemap monotonically darkens with density (plates 0-1, all anchors)")
-check(emit_ok, "B2 light plates never exceed paper luminance (no emission)")
+check(mono_ok, "B1 ink plates darken monotonically with density (plates 2-3, all anchors)")
+check(emit_ok, "B2 ink plates never exceed paper luminance (no emission)")
+
+rise_ok = black_ok = bound_ok = True
+white = lum(255, 255, 255)
+for pi, P in LUM_PLATES.items():
+    for anchor in P["anchors"]:
+        for maxT in (10, 100, 1000):
+            prev = -1e9
+            for t in range(1, maxT + 1):
+                px = composited(anchor, P["core"], P["amax"], t, maxT, FIELD, P["floor"], P["gain"])
+                L = lum(*px)
+                if L < prev - 1e-9: rise_ok = False
+                if L > white + 1e-9: bound_ok = False
+                if math.log1p(t) / math.log1p(maxT) <= P["floor"] and px != list(FIELD): black_ok = False
+                prev = L
+check(rise_ok, "B1e luminous plates brighten monotonically with density (plates 0-1, all anchors)")
+check(black_ok, "B1f below the exposure threshold a luminous plate deposits nothing at all")
+check(bound_ok, "B2e luminous emission is bounded by its own white core")
 cob = lum(32, 54, 199)
 check(cob < 0.35 * lum(*PAPER), "B3 cobalt anchor is hue, not luminance (L %.0f vs paper %.0f)" % (cob, lum(*PAPER)))
 
@@ -151,8 +182,19 @@ check(all(bands[i] < bands[i+1] + 1e-9 for i in range(len(bands)-1)),
       % " -> ".join("%.0f" % b for b in bands))
 
 sub = open(os.path.join(ROOT, "js/substrate.js")).read()
-check("Math.sqrt(L)" not in sub and "Math.pow(L" not in sub,
-      "B1b the tone map applies no gamma beyond the log — the mirror above matches the source")
+# The tone map's ONLY transformation beyond the log is the exposure, and the
+# exposure is three declared per-plate numbers rather than a curve anyone may
+# add. The ink plates must declare the identity exposure, which is what keeps
+# docs/audit/07's result — no gamma on a printed plate — a law and not a memory.
+plate_rows = re.findall(r"\{ anchors:.*?\}", sub, re.S)
+declared = [dict(re.findall(r"(floor|gain|satQ):([\d.]+)", row)) for row in plate_rows]
+tone = sub[sub.index("function tonemapInto"):sub.index("const API =")]
+check("Math.sqrt(" not in tone and tone.count("Math.pow(") == 1
+      and "const L = gain === 1 ? Lf : Math.pow(Lf, gain);" in tone
+      and len(declared) == 4 and all(set(d) == {"floor", "gain", "satQ"} for d in declared)
+      and all(float(declared[i]["floor"]) == 0 and float(declared[i]["gain"]) == 1
+              and float(declared[i]["satQ"]) == 1 for i in (2, 3)),
+      "B1b the only transformation beyond the log is the declared exposure; the ink plates declare the identity")
 check("reduced ? Infinity" in sub
       and "const toneNow = done || (streaming && !reduced" in sub
       and "if (toneNow)" in sub,

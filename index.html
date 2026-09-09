@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="C27AD347DF88A823">
+<meta name="build-hash" content="E6C04107EED87D9D">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -30,10 +30,13 @@
    Four exposures of one derived object are the background; scroll moves a
    derived camera into the filament core. --bg/--ink/--panel/--accent are
    written by CytherSubstrate.observe() across four keyframes. No dark mode
-   toggle — the light descends continuously. No webfonts, no images, no CDNs. */
+   toggle — the light RISES continuously: the surface is an unexposed field on
+   which the mark is a live accumulation, and the floor is dry ink on paper,
+   because observation is luminous and a record is printed. No webfonts, no
+   images, no CDNs. */
 :root{
-  --bg:#ECF0F4; --ink:#101620; --inkA:#101620; --accent:#2036C7;
-  --panel:rgba(255,255,255,.60);
+  --bg:#070A10; --ink:#DCE6F5; --inkA:#DCE6F5; --accent:#7FA0FF;
+  --panel:rgba(10,15,23,.55);
   --hair:color-mix(in srgb, var(--inkA) 16%, transparent);
   --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
   --display:system-ui,-apple-system,'Segoe UI Variable Display','Segoe UI',sans-serif;
@@ -53,7 +56,13 @@ p{text-wrap:pretty}
 
 /* ════════════ the substrate — four exposures of one object ════════════ */
 #world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
-.tile{position:absolute;inset:0;transform-origin:0 0;pointer-events:none}
+/* An exposure ADDS light to an unexposed field; it does not paint over one. While
+   the reading ink is light the ambient is dark, and plus-lighter is what makes an
+   accumulating plate read as accumulation — the crossfade is unaffected, because
+   the two live tiles' opacities sum to 1 and plus-lighter is linear in them. Past
+   the switch the ambient is paper and the plates deposit ink, which is source-over. */
+.tile{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;mix-blend-mode:plus-lighter}
+body[data-ink="dark"] .tile{mix-blend-mode:normal}
 /* the promoted terminal exposure: assets/plate/surface-terminal.png IS plate 0's
    terminal raster for a 1200x600 frame, produced by this kernel offline
    (tools/promote-poster.js, receipt in docs/asset-promotion-log.md). It stands in
@@ -63,7 +72,11 @@ p{text-wrap:pretty}
    The window is where a cover-fit IS the exact crop the developed plate would show
    — vertical world extent is constant across landscape frames and horizontal scales
    with aspect, so any aspect in [1,2] is exact and nothing else is shown at all. */
+/* Composited exactly as the tile it stands in for: an accumulation that swapped
+   from plus-lighter to source-over at the terminal state would step in
+   brightness by the ground under it, and the swap is meant to be invisible. */
 #poster{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;display:none;
+  mix-blend-mode:plus-lighter;
   background:url(assets/plate/surface-terminal.png) center/cover no-repeat}
 @media (min-aspect-ratio:1/1) and (max-aspect-ratio:2/1){#poster{display:block}}
 #substrate{position:fixed;inset:0;z-index:0}
@@ -82,16 +95,20 @@ body.forking #substrate{cursor:grabbing}
    indicator it still fails 1.4.11's 3:1 there (1.34:1 on raw ambient at d=1.50).
    The channel is the problem, not the role it plays.
    So any run that can be on screen inside that band carries INK, keeping the
-   weight that already marked it. Twenty rules were measured across the whole
-   descent; the six below never enter the band where they appear, and keep the
-   accent with their measured minimum recorded. Re-run the scoped harness after
-   any layout change — these six are safe by POSITION, which reflow can undo.
-     .eyebrow                 7.60:1   hero only, d=0
-     .rung .r-impl.disclosed  4.78:1   d≈0.48–0.60
-     .sys .o-val              5.60:1   d≈0.60–0.84
-     .bi-head b               5.30:1   d≈0.72–0.96
-     .manifest .m-v.acc       5.01:1   d≈2.52–2.76
-     footer a:hover           7.90:1   floor
+   weight that already marked it. These are safe by POSITION, which reflow can
+   undo — and which turning the exposure order over also undid: the ambient and
+   the accent were reversed together, so each depth kept its (bg, accent) PAIR
+   but every rule kept its depth, and three survivors landed in the crossing
+   band that had moved underneath them. Re-derived on the turned ramp:
+     .eyebrow                 7.90:1   hero only, d=0            accent
+     .manifest .m-v.acc       5.60:1   d≈2.52–2.76               accent
+     footer a:hover           7.60:1   floor                     accent
+     .rung .r-impl.disclosed  4.37:1   d≈0.48–0.60   → INK, weight 600
+     .sys .o-val              3.23:1   d≈0.60–0.84   → INK, weight 500
+     .bi-head b               2.76:1   d≈0.72–0.96   → INK, weight 500
+   The three below AA now carry ink at the weight that already marked them;
+   the distinction they drew (disclosed vs controlled, value vs label) was
+   never carried by hue alone, so nothing legible was lost with it.
    Selected state on the optics control is an INK rule (10.72:1 worst), not an
    accent colour: the accent still marks state, but nothing legible depends on
    it, and aria-pressed carries it non-visually regardless.
@@ -131,27 +148,47 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
 
 /* ════════════ hero — the claim ════════════ */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
-  padding:16vh 28px 12vh;max-width:900px;margin:0 auto}
-.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.24em;color:var(--accent);margin-bottom:22px}
-.thesis{font-size:clamp(38px,5.6vw,72px);font-weight:250;line-height:1.05;letter-spacing:-.015em;
-  cursor:default;user-select:none;max-width:15ch;text-wrap:balance}
+/* The statement is set against the object, not on top of it: the column is
+   anchored to the lower band of the frame, where the far-field orbit is
+   sparsest, and the object keeps the centre. Two sizes only — one statement at
+   display scale and one rail at mono scale. Nothing sits between them, because
+   a middle size is what makes a page read as a brochure. */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 clamp(28px,5.2vw,76px) clamp(80px,10vh,120px);max-width:none;margin:0}
+/* The reading field is SHIELDED from the exposure rather than scrimmed by it.
+   The statement needs a ground the plate is not on; the object needs to stay
+   whole. A hard panel behind the text would give the first and destroy the
+   second, so the shield is a lateral falloff instead — full absorption at the
+   edge the column is set against, nothing at all by 58%, which is past the
+   longest line. It is the only element on the page that darkens the mark, and
+   it darkens exactly the part of the mark no one is looking at. */
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(97deg,#070A10 0%,rgba(7,10,16,.94) 24%,rgba(7,10,16,.62) 41%,transparent 58%)}
+.eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--accent);margin-bottom:26px}
+.eyebrow::before{content:"";display:block;width:34px;height:1px;background:var(--accent);margin-bottom:15px}
+.thesis{font-size:clamp(38px,5.4vw,76px);font-weight:200;line-height:.98;letter-spacing:-.026em;
+  cursor:default;user-select:none;max-width:11ch;text-wrap:balance}
 .wd{white-space:nowrap;display:inline-block}
-.thesis .g{display:inline-block;font-weight:250;will-change:font-weight}
-.dek{font-size:15.5px;line-height:1.75;color:color-mix(in srgb,var(--ink) 80%,transparent);
-  max-width:54ch;margin-top:3.4vh}
-.decomp{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;line-height:2;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:3.4vh}
-.decomp b{color:color-mix(in srgb,var(--ink) 85%,transparent);font-weight:500}
-.ctas{display:flex;gap:12px;margin-top:4vh;flex-wrap:wrap}
-.btn{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  padding:12px 18px;text-decoration:none;border:1px solid color-mix(in srgb,var(--ink) 26%,transparent);
-  color:color-mix(in srgb,var(--ink) 85%,transparent)}
-.btn:hover{border-color:var(--ink);color:var(--ink)}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn-primary:hover{filter:brightness(1.12);color:#fff}
-.coords{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
+.thesis .g{display:inline-block;font-weight:200;will-change:font-weight}
+.dek{font-size:13px;line-height:1.9;color:color-mix(in srgb,var(--ink) 66%,transparent);
+  max-width:40ch;margin-top:34px}
+.decomp{font-family:var(--mono);font-size:9px;letter-spacing:.2em;line-height:2;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:30px}
+.decomp b{color:var(--ink);font-weight:500}
+.ctas{display:flex;gap:36px;margin-top:26px;flex-wrap:wrap}
+/* No filled button anywhere on the page. A solid accent rectangle is the loudest
+   object a layout can contain, and here the loudest object must be the mark. The
+   primary path is marked by an accent RULE and full-strength ink; both survive
+   the accent's mid-descent luminance crossing because neither depends on hue. */
+.btn{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  padding:11px 0 9px;text-decoration:none;border:none;
+  border-bottom:1px solid color-mix(in srgb,var(--ink) 26%,transparent);
+  color:color-mix(in srgb,var(--ink) 72%,transparent)}
+.btn:hover{border-bottom-color:var(--ink);color:var(--ink)}
+.btn-primary{color:var(--ink);border-bottom-color:var(--accent);border-bottom-width:2px}
+.btn-primary:hover{border-bottom-color:var(--ink)}
+.coords{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
+  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:30px}
 
 /* ════════════ definition ladder ════════════ */
 .defs{max-width:760px}
@@ -169,7 +206,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .rung .r-arrow{font-size:10px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
 .rung .r-mech{font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:500}
 .rung .r-impl{font-size:9.5px;letter-spacing:.1em;text-align:right}
-.rung .r-impl.disclosed{color:var(--accent)}
+.rung .r-impl.disclosed{color:var(--ink);font-weight:600}
 .rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 66%,transparent)}
 @media(max-width:760px){.rung{grid-template-columns:1fr;gap:4px}.rung .r-arrow{display:none}.rung .r-impl{text-align:left}}
 
@@ -181,7 +218,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 .sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
 .sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
   color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:18px}
-.sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--accent);font-weight:500;margin-top:6px;line-height:1.7}
+.sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:500;margin-top:6px;line-height:1.7}
 
 .cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
   font-family:var(--mono);font-size:10px;line-height:2.1}
@@ -192,7 +229,7 @@ section{padding:15vh 28px;max-width:1160px;margin:0 auto}
 /* ════════════ boundary instrument ════════════ */
 .bi{margin-top:6vh;padding:20px 22px;max-width:860px}
 .bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.bi-head b{color:var(--accent);font-weight:500}
+.bi-head b{color:var(--ink);font-weight:500}
 .bi-cap{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
 .bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
 #biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
@@ -369,6 +406,10 @@ body[data-ink="light"]{--ink:#E3EAF4}
 main *:not(.g),header *,footer *,aside *,.strip *,.optics *{transition-property:color;transition-duration:.25s}
 /* the world yields slowly and returns fast — focus pull, both directions honest */
 body.at-rest #world{opacity:.72;transition-duration:.6s}
+/* The world yields to READING. At depth zero there is nothing to yield to: the
+   object is the content of the frame, and damping it there dims the only thing
+   the surface has to show. The yield begins with the record. */
+body.at-surface.at-rest #world{opacity:1}
 body[data-optics="read"] #world{opacity:.5}
 body[data-optics="world"] #world{opacity:1}
 
@@ -461,6 +502,15 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
   background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
 .optics button+button{border-left:none}
 .optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
+/* Depth zero is the instrument's own state: the object, the statement, and the
+   readout that describes them. The minimap, the reader ledger and the optics
+   control all report on the RECORD, and the record has not been entered yet —
+   they arrive with it. They are not display:none: they must stay focusable in
+   document order, so the withdrawal is opacity and hit-testing only, and any
+   focus inside one restores it immediately. */
+body.at-surface :is(.core,.rledger,.optics){opacity:0;pointer-events:none}
+body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-events:auto}
+:is(.core,.rledger,.optics){transition:opacity .45s ease}
 @media(max-width:900px){.optics{right:12px;bottom:104px}}
 
 /* ≤640 — the instrument chrome resolves to exactly TWO fixed surfaces: the top
@@ -548,7 +598,7 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
   <section class="hero" id="surface" aria-label="Surface — the claim">
     <div class="eyebrow">SOVEREIGN OPERATIONAL AI</div>
     <h1 class="thesis" id="thesis">Built for environments where failure has consequence.</h1>
-    <p class="dek">Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request. What reads as atmosphere around this text is the canonical mark itself, observed from far — its own sparse periphery, not decoration. What follows is not a sitemap: it is this claim, unfolding into the conditions that make it true. Scroll is the observation function.</p>
+    <p class="dek">Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request. The object in this frame is the canonical mark itself, accumulating live from the public manifest — not a picture of it.</p>
     <div class="decomp">THE DESCENT — <b>CLAIM</b> → DEFINITION → ARCHITECTURE → MEASUREMENT → CONTROLLED → ACCESS → FLOOR</div>
     <div class="ctas">
       <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a Conversation</a>
@@ -792,10 +842,10 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-6evoQ4Qm1ahfUr4ql1gfXyTxakzaNstVRMVPvKR1GBgC3nLqr+y/V8m7KKClqNFp" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-lDcpV5wXzxuArKwv9/FPonP8xcW8E5zyX4iM3bAHSqxEHiDQyotuFoojVzYru7/a" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-0ytVi06zfJPnHhWCvPyJIQHGyeh2HteQj6Tupk6RpDPR3IU09we7oQUOOthUMnIw" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-E99QHPOWyDLFzdA9XjoFHYnUu0Mo1N8TAq8s9HERb3RWCKaty74Hw7s8fFvq7ykK" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-fOD/zR6ERgqAjxCdGUrdSxGoQ/7So2HBSst80Q5HFKUIzBhhRDNQJBpBHv/HlAK+" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-WqC13Lx9UjJQXdgylW7jOeCdvXgn/eGN1+RMA/tXPqMoDCYca6TxadGzCPX/+PLU" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-apVAmbfaOPyMomfNVpHPImhfZffOFxsgIigmxtSsJ7Cs+TYEKGvWZOGkvQ5bHejj" crossorigin="anonymous"></script>
 </body>
 </html>

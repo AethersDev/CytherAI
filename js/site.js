@@ -56,15 +56,19 @@ function progress() {
 /* ================= reading exposure — phase machine + rest state (P9) ================= */
 /* Ink is bistable with hysteresis; panels phase-change with it. The world holds full
    amplitude while the reader navigates and yields when they stop to read. */
-let inkState = "dark";
+let inkState = "light";
 function readingUpdate(d) {
   const R = S.READING;
-  if (inkState === "dark" && d >= R.SW_DOWN) inkState = "light";
-  else if (inkState === "light" && d <= R.SW_UP) inkState = "dark";
-  const phase = inkState === "dark" ? "surface" : d < R.FLIP_END ? "flip" : d < 2.7 ? "depth" : "core";
+  if (inkState === "light" && d >= R.SW_DOWN) inkState = "dark";
+  else if (inkState === "dark" && d <= R.SW_UP) inkState = "light";
+  const phase = inkState === "light" ? (d > R.FLIP_START ? "flip" : "surface") : d < 2.7 ? "depth" : "core";
   const b = document.body;
   if (b.dataset.ink !== inkState) b.dataset.ink = inkState;
   if (b.dataset.phase !== phase) b.dataset.phase = phase;
+  /* the surface is the instrument's own state: one object, one statement, no
+     apparatus. Every fixed control that reads the RECORD is withdrawn until the
+     reader leaves depth zero. */
+  b.classList.toggle("at-surface", d < 0.05);
 }
 let restT = null;
 function restArm() {
