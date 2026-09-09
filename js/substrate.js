@@ -30,22 +30,57 @@ const CM = root.CytherManifest;
    at all. The ladder is scaled whole, so the descent keeps its log-spaced ratios
    (2.11, 1.89, 1.89) exactly. Measured sweep: docs/audit/07. */
 const ZOOMS   = [1.3, 2.75, 5.2, 9.8];
-const BGS     = [["#ECF0F4","#101620"],["#B9C3D2","#131A26"],["#3A4658","#DDE6F2"],["#070A10","#C7D2E4"]];
-const PANELS  = [[255,255,255,.60],[240,245,251,.55],[14,20,29,.50],[10,15,23,.55]];
-const ACCENTS = ["#2036C7","#2A48D6","#5F7BFF","#7FA0FF"];
+const BGS     = [["#070A10","#C7D2E4"],["#3A4658","#DDE6F2"],["#B9C3D2","#131A26"],["#ECF0F4","#101620"]];
+const PANELS  = [[10,15,23,.55],[14,20,29,.50],[240,245,251,.55],[255,255,255,.60]];
+const ACCENTS = ["#7FA0FF","#5F7BFF","#2A48D6","#2036C7"];
 const ORBIT_N = 220000;
 /* ================= the plate grammar (P8 — plate replaces scatter) =================
    aion-v2 deposition per exposure: four anchor inks per plate, hue owned by the
    ANGULAR REGION of the orbit (not by time or density); one lobe of every plate
    carries its depth's accent. rot re-indexes lobe ownership per exposure, so the
    crossfade reads as another exposure of the same state, not a resolution level.
-   Light plates deposit ink (core = densest ink); dark plates are luminous
-   (core = white emission, earned only where density saturates). */
+   Luminous plates emit (core = white emission, earned only where density
+   saturates); ink plates deposit (core = densest ink). The observation end of
+   the descent is luminous and the record end is printed: at the surface the
+   mark is a live accumulation on an unexposed field, and at the floor it is
+   dry ink on paper. The exposure order therefore runs emission -> ink, and the
+   ambient ramp above runs with it. */
+/* `floor` is the exposure threshold, and it is the one place the two kinds of
+   plate genuinely differ in physics rather than in palette. Paper records every
+   grain: a single deposit is ink, so the ink plates threshold at zero. An
+   unexposed field does not: counts below threshold are noise, not signal, and a
+   sensor that renders them produces fog instead of black. Without it the whole
+   orbit disc lifts off the ground as a uniform haze and the mark loses its
+   figure — 0.14 is just above a two-hit cell (0.137 of full log density at a
+   typical maxT), so the field between filaments is black and everything the
+   plate actually resolved keeps the range that haze was spending.
+
+   `gain` is the exponent applied AFTER the threshold, and it is not a return of
+   the tone gamma docs/audit/07 removed — that was 1.5, a DARKENING curve on a
+   printed exposure, and it is still 1.0 here for both ink plates. On paper the
+   ground is the brightest thing in the frame and the plate can only subtract
+   from it; on an unexposed field the plate is the only source of light, and a
+   filament left at 19% of range is not dim ink, it is an underexposed frame.
+   0.65 spends the range the threshold recovered on the structure the plate
+   actually resolved, and it is what lets the core onset (0.68) ever be reached
+   at the far field, where nothing else in the frame is bright.
+
+   `satQ` is where the exposure saturates, and it is the last of the three. A
+   plate normalized to its own maxT lets ONE outlier cell set the range for the
+   whole raster: with a long-tailed density field the hottest cell is far above
+   the structure the plate resolved, so the core onset is never reached and the
+   mark has no highlight anywhere. Measured on the shipped frame the object's
+   brightest pixel was L=0.45 against L=0.82 for the headline — the statement
+   was 1.8x brighter than the mark it was supposed to sit inside. An emissive
+   sensor has a full-well capacity and clips; exposing at the 99.7th percentile
+   of ink-bearing cells is that clip, and the 0.3% above it are the cores. Ink
+   does not clip — the densest deposit IS the densest deposit — so the printed
+   plates keep maxT normalization exactly as docs/audit/07 left it. */
 const PLATE = [
-  { anchors:[[16,22,32],[30,44,96],[10,13,20],[32,54,199]],           rot:0.12, core:[6,9,18],      amax:0.95 },
-  { anchors:[[36,52,110],[22,32,72],[42,72,214],[16,22,48]],          rot:0.35, core:[8,12,32],     amax:0.95 },
-  { anchors:[[137,159,214],[95,123,255],[173,187,223],[109,132,205]], rot:0.62, core:[240,246,255], amax:0.97 },
-  { anchors:[[167,184,222],[127,160,255],[196,205,222],[83,107,222]], rot:0.85, core:[255,255,255], amax:1.00 }
+  { anchors:[[167,184,222],[127,160,255],[196,205,222],[83,107,222]], rot:0.12, core:[255,255,255], amax:1.00, floor:0.16, gain:0.65, satQ:0.997 },
+  { anchors:[[137,159,214],[95,123,255],[173,187,223],[109,132,205]], rot:0.35, core:[240,246,255], amax:0.97, floor:0.16, gain:0.65, satQ:0.997 },
+  { anchors:[[36,52,110],[22,32,72],[42,72,214],[16,22,48]],          rot:0.62, core:[8,12,32],     amax:0.95, floor:0,    gain:1.00, satQ:1     },
+  { anchors:[[16,22,32],[30,44,96],[10,13,20],[32,54,199]],           rot:0.85, core:[6,9,18],      amax:0.95, floor:0,    gain:1.00, satQ:1     }
 ];
 const PLATE_DEP = [900000, 1200000, 1800000, 2400000];   /* in-view deposit targets */
 const PLATE_CAP = [6e6, 9e6, 22e6, 34e6];                /* recurrence iteration ceilings */
@@ -86,7 +121,7 @@ function plateState(params, i, anchor, frame) {
     zu: z * U * sc, ox: (W / 2) * sc - anchor[0] * z * U * sc, oy: (H / 2) * sc - anchor[1] * z * U * sc,
     x: 0.08, y: 0.12, dep: 0, it: 0, k: 0, done: false, maxT: 1e-6,
     target: PLATE_DEP[i], cap: PLATE_CAP[i],
-    anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax };
+    anchors: sp.anchors, rot: sp.rot, core: sp.core, amax: sp.amax, floor: sp.floor, gain: sp.gain, satQ: sp.satQ };
   const [a, b, c, d] = params, dsin = CM.dsin, dcos = CM.dcos;
   for (let w = 0; w < 40; w++) { const nx = dsin(a*st.y) + c*dcos(a*st.x), ny = dsin(b*st.x) + d*dcos(b*st.y); st.x = nx; st.y = ny; }
   return st;
@@ -240,24 +275,25 @@ function ambientAt(p) {
    ink grounds on the absorptive membrane (≥9:1 at any depth) until the raw
    ambient alone carries ≥8:1. CL-06 and CL-06c re-derive this.
 
-   SW_DOWN was 1.44 — the last depth at which PRIMARY ink (alpha 1.0) still held
-   5.3:1. That criterion ignored every quieter layer: at 1.44 the raw ambient is
-   rgb(134,145,161), where even 80% body ink reads 4.03:1 and a 55% label reads
-   2.58:1. Because the ambient darkens monotonically, holding the switch that
-   late forces EVERY text layer to ≥86% ink — one flat tone, no hierarchy at all.
-   The switch is therefore derived from the quietest meaningful layer instead of
-   the loudest: at d=1.00 the ambient is rgb(185,195,210) and 66% ink reads
-   4.5:1, so 66% is the stylesheet's ink floor and 1.00 is the switch. The
-   0.09 hysteresis gap is unchanged. */
+   The switch is derived from the QUIETEST meaningful layer, not the loudest —
+   calibrating on alpha 1.0 is what once let a 55% label sit at 2.58:1. On the
+   turned ladder the ambient BRIGHTENS monotonically, so light ink holds while
+   the field is unexposed and dark ink is admissible only once the ground is
+   genuinely paper: at d=2.15 the ambient is rgb(193,202,215), where 66% dark
+   ink reads 4.60:1 — and at 2.00 it reads 4.44:1, so the switch cannot come
+   earlier. 66% is the stylesheet's ink floor. The membrane opens at 0.90, the
+   last depth at which 66% LIGHT ink still holds on the raw ambient alone
+   (4.63:1 there, 4.49:1 one hundredth deeper). The 0.09 hysteresis gap is
+   unchanged. */
 const READING = {
-  SW_DOWN: 1.00, SW_UP: 0.91, FLIP_END: 2.05,
-  DARK: "#101620", LIGHT: "#E3EAF4",
+  SW_DOWN: 2.15, SW_UP: 2.06, FLIP_START: 0.90,
+  DARK: "#101620", LIGHT: "#DCE6F5",
   MEMBRANE: [16, 22, 31], MEMBRANE_A: 0.82
 };
 function bgRgbAt(d) { const bi = clamp(d|0, 0, 2), bf = d - bi; return mixRgb(BGS[bi][0], BGS[bi+1][0], bf); }
 function readingGroundAt(d, state) {
-  /* light ink before FLIP_END sits on the membrane (every flip-phase reading block carries it) */
-  if (state === "light" && d < READING.FLIP_END) {
+  /* light ink past FLIP_START sits on the membrane (every flip-phase reading block carries it) */
+  if (state === "light" && d > READING.FLIP_START) {
     const bg = bgRgbAt(d), m = READING.MEMBRANE, a = READING.MEMBRANE_A;
     return m.map((v, i) => v*a + bg[i]*(1-a));
   }
@@ -270,10 +306,35 @@ function readingGroundAt(d, state) {
    drives alpha. `data` must have Uint8ClampedArray assignment semantics (round-half-even,
    clamped): the browser's ImageData and the offline poster producer round identically,
    which is what makes a promoted raster comparable to a rendered one. */
+/* The exposure point in LOG space: the log-density at which the plate saturates.
+   Returned as a log so nothing has to be exponentiated back — expm1 would put a
+   second engine-defined transcendental in the raster path for no gain, and the
+   promoted poster's cross-engine equality depends on that path staying narrow. */
+const SAT_BINS = 1024;
+function exposureLog(st) {
+  const lm = Math.log1p(st.maxT);
+  if (st.satQ >= 1 || lm <= 0) return lm;
+  const total = st.total, hist = new Int32Array(SAT_BINS);
+  let nz = 0;
+  for (let i = 0; i < total.length; i++) {
+    const t = total[i];
+    if (t < 0.5) continue;
+    let b = (Math.log1p(t) / lm * SAT_BINS) | 0;
+    if (b >= SAT_BINS) b = SAT_BINS - 1;
+    hist[b]++; nz++;
+  }
+  if (nz === 0) return lm;
+  const want = nz - Math.floor(nz * st.satQ);
+  let acc = 0, b = SAT_BINS - 1;
+  for (; b > 0; b--) { acc += hist[b]; if (acc >= want) break; }
+  return (b + 1) / SAT_BINS * lm;
+}
+
 function tonemapInto(st, data) {
   const d = data;
   const A = st.anchors, core = st.core, amax = st.amax;
-  const invLog = 1 / Math.log1p(st.maxT);
+  const invLog = 1 / exposureLog(st);
+  const flr = st.floor, invFlr = 1 / (1 - flr), gain = st.gain;
   const a0r=A[0][0],a0g=A[0][1],a0b=A[0][2],a1r=A[1][0],a1g=A[1][1],a1b=A[1][2],
         a2r=A[2][0],a2g=A[2][1],a2b=A[2][2],a3r=A[3][0],a3g=A[3][1],a3b=A[3][2];
   const total = st.total, c0 = st.c0, c1 = st.c1, c2 = st.c2, c3 = st.c3;
@@ -284,7 +345,10 @@ function tonemapInto(st, data) {
        for nothing: it put a typical filament at 16% alpha, so the density field was
        computed and then thrown away at the last step. At 1.0 the same filament reads
        at 29% and the cores are earned at the same 0.68 onset. */
-    const L = Math.log1p(t) * invLog;
+    const L0 = Math.min(1, Math.log1p(t) * invLog);
+    if (L0 <= flr) { d[j+3] = 0; continue; }
+    const Lf = (L0 - flr) * invFlr;
+    const L = gain === 1 ? Lf : Math.pow(Lf, gain);
     const inv = 1 / t;
     let r = (c0[i]*a0r + c1[i]*a1r + c2[i]*a2r + c3[i]*a3r) * inv;
     let g = (c0[i]*a0g + c1[i]*a1g + c2[i]*a2g + c3[i]*a3g) * inv;
@@ -383,7 +447,7 @@ if (typeof document !== "undefined") {
     for (let i = 0; i < total.length; i++) {
       if (total[i] > maxT) maxT = total[i];
     }
-    return { total, bw: fw, bh: fh,
+    return { total, bw: fw, bh: fh, satQ: st.satQ,
       scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
   }
 
@@ -511,14 +575,16 @@ if (typeof document !== "undefined") {
     let k = 0, bo = -1;
     for (let i = 0; i < 4; i++) if (cam.tiles[i].o > bo) { bo = cam.tiles[i].o; k = i; }
     const f = fields[k]; if (!f) return null;
-    const t = composeTile(cam.tiles[k], W, H, U, rasters[k]), invLog = 1 / Math.log1p(f.maxT);
+    const t = composeTile(cam.tiles[k], W, H, U, rasters[k]), invLog = 1 / exposureLog(f);
     let sum = 0, n = 0;
     for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 8; gx++) {
       const vx = rect.left + (gx + .5) / 8 * rect.width, vy = rect.top + (gy + .5) / 6 * rect.height;
       const bx = ((vx - t.tx) / t.A * f.scx) | 0, by = ((vy - t.ty) / t.A * f.scy) | 0;
       if (bx < 0 || by < 0 || bx >= f.bw || by >= f.bh) continue;
       const dep = f.total[by * f.bw + bx];
-      if (dep > 0) sum += Math.log1p(dep) * invLog;   /* the envelope reads the same tone the plate deposits */
+      /* the envelope reads the same tone the plate deposits, threshold included */
+      if (dep > 0) { const L = Math.log1p(dep) * invLog, p = PLATE[k];
+        if (L > p.floor) sum += Math.pow((L - p.floor) / (1 - p.floor), p.gain); }
       n++;
     }
     return n ? sum / n : null;
