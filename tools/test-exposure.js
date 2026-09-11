@@ -46,6 +46,17 @@ ok(String(rgb(ink, 31)) === String(INK.anchors[0]), "hue is owned by region: a c
 ok(rgb(ink, N - 1).every((v, i) => v <= INK.anchors[0][i] && v >= INK.core[i]), "the densest ink cell moves toward the core, never past it");
 ok(monotone(ink, N) && monotone(lum, N), "alpha is monotone in density on both plate kinds");
 ok(alpha(lum, N - 1) === 255, "luminous: the densest cell reaches the white core at full amax");
+/* EVIDENCE: exposure-point */
+var O = field(0, N, 1e5);
+ok(S.exposureLog(INK) === Math.log1p(N) && S.exposureLog(field(3, N, 1e5)) === Math.log1p(1e5),
+   "ink exposes at its own maximum: the exposure point is log1p(maxT) exactly, outlier or not");
+ok(S.exposureLog(O) < Math.log1p(1e5) && S.exposureLog(O) > Math.log1p(500),
+   "luminous: the exposure point sits inside the structure's range, below the outlier");
+var fs = S.frameFor(cam.bounds, 640, 400), full = S.plateState(CM.CANON, 0, cam.ANCH[0], fs);
+while (!full.done) S.developStep(full, CM.CANON);
+var summary = S.summarizeField(full);
+ok(summary.expLog === S.exposureLog(summary) && summary.total.length <= 90000,
+   "a retained field carries its own exposure point, equal to deriving it from the summary");
 /* EVIDENCE: exposure-saturation */
 var inkO = tone(field(3, N, 1e5)), lumO = tone(field(0, N, 1e5)), lumMax = field(0, N, 1e5); lumMax.satQ = 1; lumMax = tone(lumMax);
 ok(alpha(lumO, N - 2) === 255 && alpha(lumO, N - 1) === 255,

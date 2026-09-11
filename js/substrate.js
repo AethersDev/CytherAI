@@ -382,8 +382,9 @@ function summarizeField(st) {
   for (let i = 0; i < total.length; i++) {
     if (total[i] > maxT) maxT = total[i];
   }
-  return { total, bw: fw, bh: fh, satQ: st.satQ,
-    scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
+  const field = { total, bw: fw, bh: fh, satQ: st.satQ, scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
+  field.expLog = exposureLog(field);   /* the summary is immutable: its exposure point is derived once, here */
+  return field;
 }
 
 /* ================= the development server — one job, one world =================
@@ -414,7 +415,7 @@ function developServer() {
 
 const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, composeTile,
   ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
-  DEV_BATCH, frameFor, plateState, developStep, stateHash, tonemapInto, summarizeField, developServer };
+  DEV_BATCH, frameFor, plateState, developStep, stateHash, exposureLog, tonemapInto, summarizeField, developServer };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -623,7 +624,7 @@ if (typeof document !== "undefined") {
     let k = 0, bo = -1;
     for (let i = 0; i < 4; i++) if (cam.tiles[i].o > bo) { bo = cam.tiles[i].o; k = i; }
     const f = fields[k]; if (!f) return null;
-    const t = composeTile(cam.tiles[k], W, H, U, rasters[k]), invLog = 1 / exposureLog(f);
+    const t = composeTile(cam.tiles[k], W, H, U, rasters[k]), invLog = 1 / f.expLog;
     let sum = 0, n = 0;
     for (let gy = 0; gy < 6; gy++) for (let gx = 0; gx < 8; gx++) {
       const vx = rect.left + (gx + .5) / 8 * rect.width, vy = rect.top + (gy + .5) / 6 * rect.height;

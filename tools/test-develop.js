@@ -104,7 +104,7 @@ function viaServer(params, i, schedule) {
       if (r.rgba.length !== mine.length || fnvBytes(r.rgba) !== fnvBytes(mine)) agree = false; }
     if (n > 10000) break;
   }
-  var field = S.summarizeField(direct), sameField = r.field && r.field.total.length === field.total.length && r.field.maxT === field.maxT;
+  var field = S.summarizeField(direct), sameField = r.field && r.field.total.length === field.total.length && r.field.maxT === field.maxT && r.field.expLog === field.expLog;
   for (var j = 0; sameField && j < field.total.length; j++) if (r.field.total[j] !== field.total[j]) sameField = false;
   return { agree: agree, replies: replies, rasters: rasters, sameField: sameField, stale: serve({ type: "advance", gen: 6, goal: Infinity, budgetMs: 1, present: true }) };
 }
