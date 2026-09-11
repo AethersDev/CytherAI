@@ -205,6 +205,8 @@ check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("functio
 check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
       and "if (job.done) r.field = summarizeField(job);" in sub and "fields[i] = r.field;" in sub,
       "B7 completed plates retain bounded density summaries, not full grids")
+check("field.expLog = exposureLog(field);" in sub and "invLog = 1 / f.expLog" in sub and "exposureLog(f)" not in sub,
+      "B7b the envelope reads the retained field's exposure point; it never re-derives one per call")
 check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
       "B8 progressive tonemapping is cadence-bounded and completion-forced")
 # EVIDENCE: poster-swaps-at-equivalence
