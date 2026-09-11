@@ -745,23 +745,27 @@ if (typeof document !== "undefined") {
     hooks.onChange();
   }
 
-  let rzT = null;
+  let settleT = null, backingStale = false;
   addEventListener("resize", () => {
     if (!bounds) return;                 /* no camera yet — boot installs one */
     /* Camera geometry follows the viewport on the event itself, and every tile is
        composed against the frame its own backing was rasterized in, so there is no
-       interval in which the page displays a geometrically false world. A redevelop
-       is scheduled only when the BACKING is wrong — width, device pixel ratio, or
-       world scale — so the height-only changes browser chrome produces re-expose
-       nothing, and what they do lose (coverage past the old edge) is a plate that
-       is transparent there. */
+       interval in which the page displays a geometrically false world. Everything
+       else waits for the viewport to settle: the minimap is a 20k-point measurement
+       view, drawn once per resize rather than once per event, and a redevelop is
+       owed only when the BACKING is wrong — width, device pixel ratio, or world
+       scale — so the height-only changes browser chrome produces re-expose nothing,
+       and what they do lose (coverage past the old edge) is a plate that is
+       transparent there. */
     const pw = W, pu = U, pd = DPR;
     layout();
-    if (W !== pw || U !== pu || DPR !== pd) {
-      clearTimeout(rzT);
-      rzT = setTimeout(() => { developAll(near(P, CM.CANON) ? canonCam : null); renderCore(); observe(lastP); }, 160);
-    }
-    renderCore(); observe(lastP);
+    observe(lastP);
+    backingStale = backingStale || W !== pw || U !== pu || DPR !== pd;
+    clearTimeout(settleT);
+    settleT = setTimeout(() => {
+      if (backingStale) { backingStale = false; developAll(near(P, CM.CANON) ? canonCam : null); }
+      renderCore(); observe(lastP);
+    }, 160);
   }, { passive: true });
 
   /* DOM-facing API */
