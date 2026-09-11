@@ -186,6 +186,11 @@ substantiate. Boundaries govern. The reader is a record. Nothing is stated that 
 | `js/instrument.js` | `CytherInstrument` | hostile-proposer boundary instrument (feeds CL-05) |
 | `js/site.js` | *(none)* | glue: one sleeping rAF loop, weight-field/waves, scroll→observe, hold-to-cross, floor renders, CL-03 verifier |
 
+`js/develop-worker.js` is not a page module: a dedicated Worker (transport only) that
+runs `CytherSubstrate.developServer` — the kernel's protocol — off the main thread;
+`substrate.js` keeps the presentation law and runs the same server inline where a
+Worker cannot be constructed. Execution location changes, the trajectory does not.
+
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 

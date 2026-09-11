@@ -98,6 +98,7 @@ const mixRgb = (a,b,t) => { const A=hex2rgb(a), B=hex2rgb(b); return A.map((v,i)
 const mixHex = (a,b,t) => `rgb(${mixRgb(a,b,t).map(Math.round).join(",")})`;
 const dprCapFor = w => w <= 640 ? 1.25 : w <= 800 ? 1.5 : 2;
 const binTargetFor = w => w <= 640 ? 360000 : w <= 900 ? 520000 : BIN_TGT;
+const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
 
 /* ================= the development law — one trajectory per world =================
    Development is a SEQUENCE, not a schedule: fixed batches of DEV_BATCH iterations,
@@ -360,9 +361,60 @@ function tonemapInto(st, data) {
   }
 }
 
+/* Reading envelopes need representative density and the quietest third, not
+   a second full-resolution render. Retain a bounded stratified summary so
+   the four completed plates occupy <= FIELD_TGT Float32 cells each instead
+   of four more BIN_TGT-sized grids. */
+function summarizeField(st) {
+  const fs = Math.min(1, Math.sqrt(FIELD_TGT / (st.bw * st.bh)));
+  const fw = Math.max(96, Math.round(st.bw * fs)), fh = Math.max(72, Math.round(st.bh * fs));
+  const total = new Float32Array(fw * fh);
+  /* A stratified centre sample preserves the spatial field needed by the 8×6
+     envelope probe and quiet-third atlas without another full-grid scan. */
+  for (let gy = 0; gy < fh; gy++) {
+    const sy = Math.min(st.bh - 1, (((gy + 0.5) * st.bh / fh) | 0)), src = sy * st.bw;
+    for (let gx = 0; gx < fw; gx++) {
+      const sx = Math.min(st.bw - 1, (((gx + 0.5) * st.bw / fw) | 0));
+      total[gy * fw + gx] = st.total[src + sx];
+    }
+  }
+  let maxT = 1e-6;
+  for (let i = 0; i < total.length; i++) {
+    if (total[i] > maxT) maxT = total[i];
+  }
+  return { total, bw: fw, bh: fh, satQ: st.satQ,
+    scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
+}
+
+/* ================= the development server — one job, one world =================
+   The kernel's protocol, engine- and thread-agnostic. `plate` opens a job: the
+   deterministic state, its params COPIED at open, so a fork nudged mid-develop
+   cannot bend a trajectory already running. `advance` runs the fixed-step sequence
+   toward a deposit goal under a time budget and reports the prefix reached — with
+   the raster when asked and always at the terminal state, where the bounded density
+   summary comes with it. `hash` names the checkpoint. The Worker and the inline
+   fallback run this same closure; the main thread's presentation law owns goal,
+   cadence and budget, so execution location changes and the trajectory does not
+   (tools/test-develop.js drives both against each other). A superseded generation
+   is answered with nothing. */
+function developServer() {
+  let job = null, params = null;
+  return function serve(m) {
+    if (m.type === "plate") { params = m.params.slice(); job = plateState(params, m.plate, m.anchor, m.frame); job.gen = m.gen; return null; }
+    if (!job || m.gen !== job.gen) return null;
+    if (m.type === "hash") return stateHash(job);
+    const end = nowMs() + m.budgetMs;
+    while (!job.done && job.dep < m.goal && nowMs() < end) developStep(job, params);
+    const r = { type: "frame", gen: job.gen, plate: job.i, k: job.k, dep: job.dep, it: job.it, done: job.done };
+    if (m.present || job.done) { r.rgba = new Uint8ClampedArray(job.total.length * 4); tonemapInto(job, r.rgba); }
+    if (job.done) r.field = summarizeField(job);
+    return r;
+  };
+}
+
 const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, composeTile,
   ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
-  DEV_BATCH, frameFor, plateState, developStep, stateHash, tonemapInto };
+  DEV_BATCH, frameFor, plateState, developStep, stateHash, tonemapInto, summarizeField, developServer };
 
 /* ============================================================================
    DOM wiring — canvases, gestures, boot. Guarded so jsc loads the pure surface.
@@ -405,50 +457,23 @@ if (typeof document !== "undefined") {
     rasters[i] = { W, H, U };
     const g = cv.getContext("2d");
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    /* the deterministic state; the canvas backing is presentation, bolted on.
+    /* the deterministic state opens in the server; this is the presentation record.
        The drawImage upscale from the capped bin resolution is the plate grain. */
-    const st = plateState(P, i, ANCH[i], frameFor(bounds, W, H));
-    const off = document.createElement("canvas"); off.width = st.bw; off.height = st.bh;
-    st.g = g; st.off = off; st.octx = off.getContext("2d"); st.img = st.octx.createImageData(st.bw, st.bh);
-    st.lastTone = 0; st.tones = 0; st.t0 = nowMs();
-    return st;
+    const frame = frameFor(bounds, W, H), open = { type: "plate", gen, params: P.slice(), plate: i, anchor: ANCH[i], frame };
+    const off = document.createElement("canvas"); off.width = frame.bw; off.height = frame.bh;
+    channel.post(open);
+    return { i, open, g, off, octx: off.getContext("2d"), bw: frame.bw, bh: frame.bh, rw: W, rh: H,
+      dep: 0, target: PLATE_DEP[i], tones: 0, lastTone: 0, t0: nowMs() };
   }
 
-  /* v2 tone map: log density → luminance (γ1.5 on log), quadratic core (onset .68).
-     v2 bakes an opaque ground; here the ambient is the page, so luminance drives alpha. */
-  function tonemapPlate(st) {
-    tonemapInto(st, st.img.data);
-    st.octx.putImageData(st.img, 0, 0);
+  /* a raster from the server onto the plate's backing */
+  function presentPlate(pd, rgba) {
+    pd.octx.putImageData(new ImageData(rgba, pd.bw, pd.bh), 0, 0);
     /* the plate's own raster frame, not the live viewport: a resize mid-develop
        must not clip or stretch the exposure already committed to this backing */
-    st.g.clearRect(0, 0, st.rw, st.rh);
-    st.g.imageSmoothingEnabled = true; st.g.imageSmoothingQuality = "high";
-    st.g.drawImage(st.off, 0, 0, st.bw, st.bh, 0, 0, st.rw, st.rh);
-  }
-
-  /* Reading envelopes need representative density and the quietest third, not
-     a second full-resolution render. Retain a bounded stratified summary so
-     the four completed plates occupy <= FIELD_TGT Float32 cells each instead
-     of four more BIN_TGT-sized grids. */
-  function summarizeField(st) {
-    const fs = Math.min(1, Math.sqrt(FIELD_TGT / (st.bw * st.bh)));
-    const fw = Math.max(96, Math.round(st.bw * fs)), fh = Math.max(72, Math.round(st.bh * fs));
-    const total = new Float32Array(fw * fh);
-    /* A stratified centre sample preserves the spatial field needed by the 8×6
-       envelope probe and quiet-third atlas without another full-grid scan. */
-    for (let gy = 0; gy < fh; gy++) {
-      const sy = Math.min(st.bh - 1, (((gy + 0.5) * st.bh / fh) | 0)), src = sy * st.bw;
-      for (let gx = 0; gx < fw; gx++) {
-        const sx = Math.min(st.bw - 1, (((gx + 0.5) * st.bw / fw) | 0));
-        total[gy * fw + gx] = st.total[src + sx];
-      }
-    }
-    let maxT = 1e-6;
-    for (let i = 0; i < total.length; i++) {
-      if (total[i] > maxT) maxT = total[i];
-    }
-    return { total, bw: fw, bh: fh, satQ: st.satQ,
-      scx: st.sc * fw / st.bw, scy: st.sc * fh / st.bh, maxT };
+    pd.g.clearRect(0, 0, pd.rw, pd.rh);
+    pd.g.imageSmoothingEnabled = true; pd.g.imageSmoothingQuality = "high";
+    pd.g.drawImage(pd.off, 0, 0, pd.bw, pd.bh, 0, 0, pd.rw, pd.rh);
   }
 
   function renderCore() {
@@ -509,10 +534,9 @@ if (typeof document !== "undefined") {
   }
 
   /* ================= develop the exposures (boot + fork) ================= */
-  let plateQueue = [], plateDev = null;
+  let plateQueue = [], plateDev = null, gen = 0, inFlight = false;
   const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
   let devSum = 0, devPlateN = 0;
-  const nowMs = () => (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
   function developAll(preparedCam) {
     const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
     const cam = preparedCam || deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;  /* dsin — camera */
@@ -520,18 +544,37 @@ if (typeof document !== "undefined") {
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
     fields[0] = fields[1] = fields[2] = fields[3] = null;
-    plateDev = null; devSum = 0; devPlateN = 0;
+    plateDev = null; inFlight = false; gen++; devSum = 0; devPlateN = 0;   /* a new generation supersedes any job in flight */
     developing = true;
     hooks.wake();
   }
+  /* The kernel runs in a Worker: execution location, never trajectory. Where one
+     cannot be constructed — Chromium refuses a Worker under file:// — the same
+     server runs inline under the per-frame budget; a worker that fails to load
+     hands its current plate to the inline server rather than leaving the world
+     undeveloped. Replies arrive at onFrame either way. */
+  const DEV_MS = 2600, FRAME_BUDGET_MS = 12, WORKER_BUDGET_MS = 50;
+  let channel = null;
+  function inlineChannel() {
+    const serve = developServer();
+    return { post: m => { const r = serve(m); if (r) onFrame(r); }, budgetMs: FRAME_BUDGET_MS };
+  }
+  function openChannel() {
+    if (typeof Worker === "undefined") return inlineChannel();
+    let w;
+    try { w = new Worker("js/develop-worker.js"); }
+    catch (e) { if (e.name !== "SecurityError") throw e; return inlineChannel(); }
+    w.onmessage = e => onFrame(e.data);
+    w.onerror = () => { w.terminate(); channel = inlineChannel(); inFlight = false; if (plateDev) channel.post(plateDev.open); };
+    return { post: m => w.postMessage(m), budgetMs: WORKER_BUDGET_MS };
+  }
   /* step() — registered with site's shared rAF loop. The development law fixes the
      sequence D_0..D_N; this is the PRESENTATION law: for the plate on screen, elapsed
-     time chooses the target deposit (DEV_MS, ease-out) and a per-frame budget bounds
-     how many fixed steps run — a slow machine shows fewer prefixes of the same
-     sequence, never a different one. Off-screen plates run to the terminal state under
-     the budget alone. Reduced motion: whole-plate development, tonemap only at
-     completion; the terminal state is identical by construction. */
-  const DEV_MS = 2600, FRAME_BUDGET_MS = 12;
+     time chooses the target deposit (DEV_MS, ease-out) and the server is asked for
+     that prefix, one request in flight at a time — a slow machine shows fewer prefixes
+     of the same sequence, never a different one. Off-screen plates run to the terminal
+     state under the server's budget alone. Reduced motion: whole-plate development,
+     the raster only at completion; the terminal state is identical by construction. */
   function depositGoal(st, t) {
     if (!streaming || devPlateN !== 1) return Infinity;
     const u = Math.min(1, (t - st.t0) / DEV_MS);
@@ -543,29 +586,34 @@ if (typeof document !== "undefined") {
       plateDev = beginPlate(plateQueue.shift());
       devPlateN++;
     }
-    const t = nowMs(), goal = reduced ? Infinity : depositGoal(plateDev, t), budgetEnd = t + FRAME_BUDGET_MS;
-    while (!plateDev.done && plateDev.dep < goal && nowMs() < budgetEnd) developStep(plateDev, P);
-    const done = plateDev.done;
-    /* The density arrays change every frame; the 720k-pixel tone map does not
-       need to. Preserve progressive exposure at a bounded 12.5 Hz and always
-       render the completed state. Reduced motion still renders once, at done. */
-    const toneNow = done || (streaming && !reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS));
-    if (toneNow) { tonemapPlate(plateDev); plateDev.lastTone = t; plateDev.tones++; }
-    if (done) {
-      const i = plateDev.i;
-      fields[i] = summarizeField(plateDev);   /* compact density outlives the develop; full grids are freed */
-      devSum += plateDev.dep;
-      plateDev = null;
-      /* the same image, now the reader's own: swap at equivalence, never restore.
-         A fork or a redevelopment is a different world and the poster cannot speak
-         for it, so removal is permanent. */
-      if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }
-      if (!plateQueue.length) {
-        streaming = true;
-        renderCore(); observe(lastP); developing = false; hooks.onChange();
-      }
-    }
+    if (inFlight) return true;
+    const t = nowMs(), goal = reduced ? Infinity : depositGoal(plateDev, t);
+    if (goal <= plateDev.dep) return true;                   /* the prefix on screen is the one asked for */
+    /* The density changes with every advance; the 720k-pixel raster does not need to.
+       Progressive exposure at a bounded 12.5 Hz; the completed state always arrives. */
+    const present = streaming && !reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS);
+    inFlight = true;
+    channel.post({ type: "advance", gen, goal, budgetMs: channel.budgetMs, present });
     return true;
+  }
+  function onFrame(r) {
+    if (r.gen !== gen || !plateDev) return;                  /* a superseded generation */
+    inFlight = false;
+    plateDev.dep = r.dep;
+    if (r.rgba) { presentPlate(plateDev, r.rgba); plateDev.lastTone = nowMs(); plateDev.tones++; }
+    if (!r.done) return;
+    const i = plateDev.i;
+    fields[i] = r.field;                    /* compact density outlives the develop; the full grid stays in the server */
+    devSum += r.dep;
+    plateDev = null;
+    /* the same image, now the reader's own: swap at equivalence, never restore.
+       A fork or a redevelopment is a different world and the poster cannot speak
+       for it, so removal is permanent. */
+    if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }
+    if (!plateQueue.length) {
+      streaming = true;
+      renderCore(); observe(lastP); developing = false; hooks.onChange();
+    }
   }
 
   /* ================= the density field, read back (P9 reading exposure) ================= */
@@ -684,6 +732,7 @@ if (typeof document !== "undefined") {
     }
     canonCam = deriveAnchors(CM.CANON);         /* one canonical derivation, reused by the initial canonical develop */
     canonAnch = canonCam.ANCH;                   /* canonical camera — the derivation CL-08 re-checks */
+    channel = openChannel();
     developAll(near(P, CM.CANON) ? canonCam : null); /* the site loop streams the exposure */
     renderCore();
     wireGestures();

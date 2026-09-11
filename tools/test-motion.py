@@ -188,7 +188,7 @@ sub = open(os.path.join(ROOT, "js/substrate.js")).read()
 # docs/audit/07's result — no gamma on a printed plate — a law and not a memory.
 plate_rows = re.findall(r"\{ anchors:.*?\}", sub, re.S)
 declared = [dict(re.findall(r"(floor|gain|satQ):([\d.]+)", row)) for row in plate_rows]
-tone = sub[sub.index("function tonemapInto"):sub.index("const API =")]
+t0 = sub.index("function tonemapInto"); tone = sub[t0:sub.index("\n}\n", t0)]   # the function's own body
 check("Math.sqrt(" not in tone and tone.count("Math.pow(") == 1
       and "const L = gain === 1 ? Lf : Math.pow(Lf, gain);" in tone
       and len(declared) == 4 and all(set(d) == {"floor", "gain", "satQ"} for d in declared)
@@ -196,14 +196,14 @@ check("Math.sqrt(" not in tone and tone.count("Math.pow(") == 1
               and float(declared[i]["satQ"]) == 1 for i in (2, 3)),
       "B1b the only transformation beyond the log is the declared exposure; the ink plates declare the identity")
 check("reduced ? Infinity" in sub
-      and "const toneNow = done || (streaming && !reduced" in sub
-      and "if (toneNow)" in sub,
-      "B5 reduced motion: whole-plate development, tonemap only at completion")
+      and "const present = streaming && !reduced" in sub
+      and "if (m.present || job.done)" in sub,
+      "B5 reduced motion: whole-plate development, the raster only at completion")
 check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
       "B6 development never touches the camera anchors")
 # EVIDENCE: retained-field-and-tonemap-bounds
 check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
-      and "fields[i] = summarizeField(plateDev)" in sub,
+      and "if (job.done) r.field = summarizeField(job);" in sub and "fields[i] = r.field;" in sub,
       "B7 completed plates retain bounded density summaries, not full grids")
 check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
       "B8 progressive tonemapping is cadence-bounded and completion-forced")
@@ -220,8 +220,12 @@ check(not re.search(r"Math\.(sin|cos|atan2)\b", kernel) and "CM.datan2" in sub a
       "B10 the world's recurrence uses no engine-defined transcendental")
 check("datan2" in open(os.path.join(ROOT, "js/manifest.js")).read(),
       "B10 the derivation core exports the deterministic angle")
+# EVIDENCE: server-owns-the-kernel
+check(sub.count("developStep(") == 2 and "params = m.params.slice();" in sub
+      and "importScripts(\"manifest.js\", \"substrate.js\")" in open(os.path.join(ROOT, "js/develop-worker.js")).read(),
+      "B12 the runtime advances the kernel only through the development server, whose job copies its params at open")
 # EVIDENCE: fixed-step-development
-check("const DEV_BATCH = 60000" in sub and "developStep(plateDev, P)" in sub
+check("const DEV_BATCH = 60000" in sub and "developStep(job, params)" in sub
       and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
       "B9 development is a fixed-step sequence; cadence never sizes a batch")
 
