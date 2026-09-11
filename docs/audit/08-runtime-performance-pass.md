@@ -136,9 +136,10 @@ on both landscape frames. Cost: plate 3 ≈ 1.0 s of worker CPU here; `verify.sh
 | `b5a72cd` | perf: development in a Worker | yes | unchanged |
 | `430f29a` | perf: field exposure point derived once | yes | unchanged |
 | `7efaa2e` | perf: contribution-gated presentation | yes | unchanged |
-| `391fd22` | perf: resize settles once — **frozen for browser qualification** | yes | unchanged |
-| `74b5cc9` | fix: plate 3 target-terminated (`plate3-target`, applies after qualification) | yes | unchanged |
-| `9dfe9f4` | chore: Observable-era modules and engine dev source retired into `backup/` | **no** | unchanged |
+| `391fd22` | perf: resize settles once — the candidate the browser pass qualified | yes | unchanged |
+| `1585a02` | fix: the reading law's stylesheet turned over with the ladder — the pass's one defect | yes | unchanged |
+| `a5554aa` | fix: plate 3 target-terminated (`plate3-target`) | yes | unchanged |
+| `601cf28` | chore: Observable-era modules and engine dev source retired into `backup/` (`repo-hygiene`) | **no** | unchanged |
 
 Every commit carries its five automated receipts; the poster is byte-unchanged throughout.
 
@@ -152,13 +153,39 @@ Every commit carries its five automated receipts; the poster is byte-unchanged t
 | `test-motion.py` B10 against a `Math.sin` deposition mutant | FAIL (was PASS before the repair) |
 | `./verify.sh` at `74b5cc9` | PASS, 14.2 s; reference-frame verifier FAILs on the 34 M kernel at both landscape frames |
 | console anchor for the browser pass | `developServer` at 1200×600 prints density FNV `ef4bf18f` = the promotion log |
-| browser qualification (Worker thread, poster swap, REDEVELOP streaming, queued-generation supersession, `file://` fallback, offline, resize, compositor cost) | **pending — owner** |
+| browser qualification | see below — Chrome 151; Safari formal observations remain the owner's |
+
+## Browser qualification — Chrome 151.0.7922.173, macOS on M4, 2026-09-11
+
+Driven over the DevTools protocol (headless for rows 1–9, headed with the GPU for row
+10) with a preload that records every `putImageData` (sampled raster hash),
+`drawImage` onto a tile, poster removal and Worker `postMessage`, so the swap, the
+stream and the race are judged by recorded events. Scripts under `scratchpad/q*.py`
+of the session; the console anchor is `tools`-free and reproducible from
+`developServer` alone.
+
+| row | observed |
+|---|---|
+| first load | one worker target; plate jobs `[0,1,2,3]`; **one** present per tile; `#poster` removed **1.2 ms after** plate 0's terminal present, in the same task — no intermediate raster |
+| kernel anchors | page context **and** the worker's own context print `density fnv1a ef4bf18f` (worker globals: `CytherSubstrate`, `CytherManifest`, no `document`, `importScripts`) |
+| REDEVELOP | 13 distinct rasters on `t0` over 1.95 s, minimum gap 101 ms; off-screen tiles presented once each; terminal canvas byte-identical to the first load's |
+| supersession race | REDEVELOP A → FORK (three keyboard nudges, toggled off = redevelop B) → REDEVELOP C, with A replies in flight: generations 3→4→5; **0 rasters of the superseded world painted after `gen` advanced, 4 of 4 runs**; final `LOCAL FORK` serial exactly three nudges from canonical |
+| inline fallback | `Worker` faulted to throw `SecurityError`: no worker target, development completes inline, terminal identical to the Worker path, no exception |
+| `file://` | Chrome loads **no script at all**: the SRI'd `crossorigin` modules are refused by CORS on `file://` (pre-existing; the poster still paints). Safari runs scripts and constructs Workers under `file://`, so the fallback's real trigger is a worker that fails to load, not `file://` |
+| offline | SW `activated`, cache `cytherai-substrate-<build>` with 20 entries; server process killed; reload: worker script served from the cache, development completes, `CLAIMS 10/10 HOLDING`, zero network errors |
+| reduced motion | on REDEVELOP each tile presented exactly once (the terminal); terminal identical to the non-reduced raster |
+| resize | camera transform follows every event; events > 160 ms apart each redevelop once; two events 8 ms apart produce one redevelop 204 ms after the last |
+| scroll cost (headed, 60 Hz display) | full descent, 541 frames: median 16.7 ms, p95 17.9, p99 18.4, **0 frames over 20 ms, 0 long tasks** — and identical with `backdrop-filter` disabled, with the colour transitions disabled, and with the tiles composited `normal`. Findings 4 and 5 stay closed on this display; 120 Hz and a phone are unmeasured |
+| defect found | light ink on paper from d = 2.15 to the floor and the law at 1.3:1 through the flip band — the stylesheet had not turned over with the ladder; fixed in `1585a02` with verifiers A7/A8 |
+
+The owner's Safari observations and the CY-SEM-001/002 binding remain to be made on the
+build that ships, after `plate3-target` and `repo-hygiene` merge.
 
 ## Open
 
-1. Browser qualification on `391fd22`; then `git merge --ff-only plate3-target`; then a
-   targeted plate-3 regression on the merged build, and CY-SEM-001/002 bound to *that* build.
-2. Findings 4 and 5 — decide from browser frame times, one mechanism at a time.
+1. `git merge --ff-only plate3-target`, then `repo-hygiene`; a targeted plate-3 browser
+   regression on the merged build; the owner's Safari pass; CY-SEM-001/002 bound to *that* build.
+2. Findings 4 and 5 — measured flat at 60 Hz on the M4; re-measure on a 120 Hz display and a phone.
 3. Fuse exhaustion outside the reference envelope is not yet observable at runtime:
    `onFrame` could name `done && dep < target`.
 4. `js/manifest.js` still cites `content/record.js` (now `backup/graphite-v2/content/`) as
