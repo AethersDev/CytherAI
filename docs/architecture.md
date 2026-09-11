@@ -50,7 +50,7 @@ HTML detail.
 | Path | Role | Public artifact? | Change rule |
 |---|---|---:|---|
 | `index.html` | Homepage structure and its inline visual system | Yes | Does not move SRI, but every HTML byte moves the build identity (served-artifact manifest): re-stamp after any edit |
-| `js/` | Homepage runtime; `console.js` is retained engine-project code and is not loaded | Six modules only | A hashed module change requires `./generate-integrity.sh` |
+| `js/` | Homepage runtime: six page modules and the development worker | All seven | A hashed module change requires `./generate-integrity.sh`; the worker is in the build identity via `deploy.paths` |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; regenerate integrity after edits |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
 | `pages/` | Brief, legal pages, and the isolated engine runner | Yes | Content pages share navigation and CSS; runner has a separate module-test CSP |
@@ -59,9 +59,7 @@ HTML detail.
 | `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero |
 | `docs/` | Deployment contract, audit record, asset provenance, architecture | No | Evidence and operational instructions, never origin content |
 | `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
-| `backup/` | Retired surfaces and branding | No | Historical record only; never deploy |
-| `trajectory-engine/` | Separate v2 engine sandbox/design record | No | Not part of the public runner or homepage |
-| `content/`, `profiles/`, `js/console.js` | Retained files from the separate engine project | No | No current HTML caller |
+| `backup/` | Retired surfaces and branding: `graphite-v2/` with the three modules only it loaded, `dossier-v3/`, `trajectory-engine/` (v2 engine dev source and prototypes) | No | Historical record only; retire here, never delete, never deploy |
 | `awc-os/` | Gitignored AWC-OS evaluation microsite and media | No | Separate artifact with separate network/product assumptions |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 

@@ -265,7 +265,7 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(len(DEPLOY_FILES), len(set(DEPLOY_FILES)), "deploy allowlist contains duplicates")
         for relative in DEPLOY_FILES:
             self.assertTrue((ROOT / relative).is_file(), f"allowlisted file missing: {relative}")
-        for forbidden in ("backup/", "newC3/", "trajectory-engine/", "docs/", "awc-os/"):
+        for forbidden in ("backup/", "newC3/", "docs/", "awc-os/"):
             self.assertFalse(any(path.startswith(forbidden) for path in DEPLOY_FILES), forbidden)
 
         assets_block = re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL)
