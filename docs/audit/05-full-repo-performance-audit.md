@@ -2,7 +2,8 @@
 
 **Date:** 2026-08-13; remediated and reverified 2026-08-14  
 **Baseline:** `a641406` on `master`; clean worktree before this audit  
-**Mode:** full audit followed by user-authorized remediation of every actionable finding
+**Mode:** full audit followed by user-authorized remediation of every actionable finding  
+**Continued by:** `docs/audit/08-runtime-performance-pass.md` (2026-09-11) — findings 1, 3 and 6 re-measured and taken further; 4 and 5 re-measured and deliberately not taken  
 
 ## Verdict
 
