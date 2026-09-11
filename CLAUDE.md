@@ -206,9 +206,10 @@ a fork or a redevelopment is a different world and the poster cannot speak for i
 `generate-integrity.sh` (SRI + build-hash), `deploy.sh` (publish allowlist → `dist/`;
 headers contract in `docs/deploy.md`). **Engine stack:** `engine/trajectory-engine.js`
 and its `.test.js` are served only by `pages/runner.html` — the homepage does not load
-them. `content/record.js`, `profiles/disclosure.js` and `js/console.js` belong to the
-same separate project but are served by **no page**: they are retained on disk, and are
-in neither the precache, the SRI fingerprint, nor the deploy allowlist.
+them. The three modules only the retired graphite homepage loaded (`content/record.js`,
+`profiles/disclosure.js`, `js/console.js`) are archived beside it under
+`backup/graphite-v2/`, and the engine's `-v2.js` dev source, prototypes and v-next design
+map under `backup/trajectory-engine/` — none is served, precached, or fingerprinted.
 
 ## Register rules (grep-enforced)
 
@@ -230,5 +231,7 @@ because `newC3/epoch04-preimage.txt` hashes to the published digest.
   spec). Phases P1–P7, verification checklist §9.
 - **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
   Do not modify it — supersede, never erase.
-- **`backup/`** holds the retired surfaces: `graphite-v2/` (old engine-backed homepage),
-  `dossier-v3/` (old shared CSS + the dossier IIFE modules).
+- **`backup/`** holds the retired surfaces: `graphite-v2/` (old engine-backed homepage,
+  with the three modules only it loaded), `dossier-v3/` (old shared CSS + the dossier IIFE
+  modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
+  v-next design map). Supersede, never erase: retire into `backup/`, do not delete.

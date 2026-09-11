@@ -1,12 +1,12 @@
 #!/bin/sh
 # Build the published artifact: dist/ contains the site and nothing else.
 #
-# The repo doctrine is "supersede, never erase" — backup/, newC3/ and
-# trajectory-engine/ are the design record and stay tracked. They must not
-# reach the public origin: they carry superseded claims, the retired warm/gold
-# register, an older homepage, and newC3/epoch04-preimage.txt, whose sha256 is
-# the digest the floor prints as PREIMAGE SEALED. Publishing is therefore an
-# explicit allowlist, never "upload the tree".
+# The repo doctrine is "supersede, never erase" — backup/ and newC3/ are the
+# design record and stay tracked. They must not reach the public origin: they
+# carry superseded claims, the retired warm/gold register, older homepages and
+# their modules, the engine's dev source, and newC3/epoch04-preimage.txt, whose
+# sha256 is the digest the floor prints as PREIMAGE SEALED. Publishing is
+# therefore an explicit allowlist, never "upload the tree".
 #
 # POSIX/BSD. Run from anywhere: ./deploy.sh
 
@@ -21,9 +21,6 @@ DIST="${DIST:-$ROOT/dist}"
 # One declaration means the shipped set and the hashed set cannot drift apart.
 # EVIDENCE: artifact-source-allowlist
 FILES=$(cat "$ROOT/deploy.paths")
-
-# content/record.js, profiles/disclosure.js and js/console.js are deliberately
-# absent: no page loads them. They stay on disk for the separate engine project.
 
 echo "[deploy] Building $DIST"
 rm -rf "$DIST"
@@ -42,7 +39,7 @@ done
 [ "$MISSING" -eq 0 ] || { echo "  ERROR: allowlist and sw.js ASSETS have drifted" >&2; exit 1; }
 
 # The record must never be in the artifact.
-for d in backup newC3 trajectory-engine docs awc-os; do
+for d in backup newC3 docs awc-os; do
     [ ! -e "$DIST/$d" ] || { echo "  ERROR: $d reached the artifact" >&2; exit 1; }
 done
 

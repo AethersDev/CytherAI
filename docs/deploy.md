@@ -63,7 +63,7 @@ must hold before the site is public.
 
 **Artifact:** `./deploy.sh` → `dist/`. Publish the *contents* of `dist/` as the
 origin root. `dist/` is gitignored and rebuilt from scratch on every run.
-Never publish the working tree: `backup/`, `newC3/`, `trajectory-engine/`,
+Never publish the working tree: `backup/`, `newC3/`,
 `docs/`, `PRODUCTION_PLAN.md`, `CLAUDE.md`, `generate-integrity.sh` and
 `deploy.sh` itself are excluded by construction (allowlist, not denylist).
 
