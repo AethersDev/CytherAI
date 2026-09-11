@@ -212,8 +212,11 @@ check("let streaming = false;" in sub and "if (i === 0 && posterEl) { posterEl.r
       and "if (!streaming || devPlateN !== 1) return Infinity;" in sub,
       "B11 the promoted exposure is replaced at the terminal state and never restored")
 # EVIDENCE: engine-invariant-world
-kernel = sub[sub.index("function computeOrbit"):sub.index("function tonemapInto")]
-check(not re.search(r"Math\.(sin|cos|atan2)\(", kernel) and "CM.datan2" in sub and "CM.dsin" in sub,
+# The slice starts at the deposition kernel (plateState / depositBatch), not at
+# computeOrbit below it: sliced from computeOrbit this check passed a plate whose
+# recurrence ran on Math.sin. The pattern also catches an alias (`const sin = Math.sin`).
+kernel = sub[sub.index("function plateState"):sub.index("function tonemapInto")]
+check(not re.search(r"Math\.(sin|cos|atan2)\b", kernel) and "CM.datan2" in sub and "CM.dsin" in sub,
       "B10 the world's recurrence uses no engine-defined transcendental")
 check("datan2" in open(os.path.join(ROOT, "js/manifest.js")).read(),
       "B10 the derivation core exports the deterministic angle")

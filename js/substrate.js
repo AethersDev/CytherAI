@@ -270,21 +270,21 @@ function ambientAt(p) {
 
 /* ================= reading exposure — the record's own law (P9) =================
    Physics may be continuous; legibility is admitted or refused. Reading ink is
-   bistable with hysteresis. Constants calibrated against the ambient keyframes
-   (WCAG): dark ink holds on raw ambient up to SW_DOWN; past the switch, light
-   ink grounds on the absorptive membrane (≥9:1 at any depth) until the raw
-   ambient alone carries ≥8:1. CL-06 and CL-06c re-derive this.
+   bistable with hysteresis. On the turned ladder the ambient BRIGHTENS
+   monotonically with depth: light ink holds on the raw ambient while the field
+   is unexposed, grounds on the absorptive membrane from FLIP_START through the
+   flip phase, and dark ink is admitted at the switch, on the raw ambient, once
+   the ground is genuinely paper. SW_DOWN/SW_UP are the two edges of one
+   hysteresis band (gap 0.09).
 
    The switch is derived from the QUIETEST meaningful layer, not the loudest —
-   calibrating on alpha 1.0 is what once let a 55% label sit at 2.58:1. On the
-   turned ladder the ambient BRIGHTENS monotonically, so light ink holds while
-   the field is unexposed and dark ink is admissible only once the ground is
-   genuinely paper: at d=2.15 the ambient is rgb(193,202,215), where 66% dark
-   ink reads 4.60:1 — and at 2.00 it reads 4.44:1, so the switch cannot come
-   earlier. 66% is the stylesheet's ink floor. The membrane opens at 0.90, the
-   last depth at which 66% LIGHT ink still holds on the raw ambient alone
-   (4.63:1 there, 4.49:1 one hundredth deeper). The 0.09 hysteresis gap is
-   unchanged. */
+   calibrating on alpha 1.0 is what once let a 55% label sit at 2.58:1. 66% is
+   the stylesheet's ink floor, and the law is that 66% ink holds AA on its
+   phase-locked ground at every depth. The constants sit inside that admissible
+   range with margin (measured 2026-09-11: 66% dark ink first holds on the raw
+   ambient at d=2.00, below SW_UP; 66% light ink last holds on the raw ambient
+   at d=0.94, past FLIP_START). Exact ratios are verifier-derived — CL-06,
+   CL-06c, tools/test-exposure.js — not normative constants. */
 const READING = {
   SW_DOWN: 2.15, SW_UP: 2.06, FLIP_START: 0.90,
   DARK: "#101620", LIGHT: "#DCE6F5",
