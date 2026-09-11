@@ -350,8 +350,12 @@ class VaicCorpusTests(unittest.TestCase):
     def test_a_new_receipt_must_record_which_verifier_produced_it(self) -> None:
         corpus = copy.deepcopy(self.corpus)
         row = next(r for r in corpus["obligations"] if r["id"] == "CY-ART-001")
-        for receipt in row["evaluation"]["receipts"]:
-            receipt["verification_identity"] = "UNRECORDED"
+        # only the current binding: a verifier-only re-stamp leaves several receipts on
+        # one build, and blanking every verifier would collide their (build, verifier)
+        # identities — a defect of the mutation, not of the corpus
+        current = next(receipt for receipt in row["evaluation"]["receipts"]
+                       if self.is_current(receipt, corpus["candidate"]))
+        current["verification_identity"] = "UNRECORDED"
         result = self.validate(corpus)
         self.assertEqual(result["structure"], "VALID")
         self.assertIn("CY-ART-001", result["expired_bindings"])

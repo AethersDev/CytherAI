@@ -24,6 +24,9 @@ echo "[verify] ledger regression"
 echo "[verify] development trajectory law"
 "$JSC" js/manifest.js js/substrate.js tools/test-develop.js
 
+echo "[verify] exposure and reading laws"
+"$JSC" js/manifest.js js/substrate.js js/claims.js tools/test-exposure.js
+
 echo "[verify] site/release integration"
 python3 tools/test-site.py
 

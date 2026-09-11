@@ -4,8 +4,8 @@
    the footer reads CLAIMS n/10 HOLDING and any failure prints ✕ INVALID in place.
 
    Ported from newC3/synthesis-rev5.html. Amendments:
-     · CL-06 flip band recomputed for the shipped BGS keyframes → 40–62%
-       (contrast is measured against CytherSubstrate.ambientAt — the actual model).
+     · CL-06 — reading ink holds AA at every depth on its phase-locked ambient
+       ground (the flip-band exemption is retired; the model is CytherSubstrate's).
      · CL-06b — text-lane legibility ≤ cap (§5.3).
      · CL-06c — the quietest ink layer, not only the primary reading ink, holds
        AA at every depth; CL-06's primary-ink-only scope is what allowed the
@@ -30,12 +30,9 @@ function wcagRatio(a, b) {
 }
 const parseRGB = s => { const m = s.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/); return [+m[1], +m[2], +m[3]]; };
 
-/* CL-06: heading (--ink) vs background (--bg) across the shipped ambient model.
-   The 40–62% flip band is where the mid exposure carries ink and bg through each
-   other — the crossover is inherent (light falls continuously); contrast is asserted
-   only outside it. Measured against CytherSubstrate.ambientAt, the same function
-   observe() writes to the page. */
-/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band).
+/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band;
+   the earlier 40–62% flip-band exemption is retired). Measured against
+   CytherSubstrate's ambient model, the same functions observe() writes to the page.
    Light ink is valid up to READING.SW_DOWN — on the raw ambient while the field
    is unexposed, then on the absorptive membrane through the flip phase (every
    flip-phase reading block carries it); dark ink from READING.SW_UP, on the raw

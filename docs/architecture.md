@@ -187,5 +187,6 @@ Browser-only validation remains required for:
   because `js/manifest.js` is hashed, rerun admissions/claims, and treat a genuine
   commitment as an owner-custody decision rather than a source-code assertion.
 - Change plate or reading behavior: update the implementation and extend
-  `tools/test-motion.py`; browser-test memory, scroll smoothness, contrast, and
-  reduced motion at desktop and mobile widths.
+  `tools/test-exposure.js` (the executed tone-map and reading laws) or
+  `tools/test-motion.py` (the source-form laws); browser-test memory, scroll
+  smoothness, contrast, and reduced motion at desktop and mobile widths.
