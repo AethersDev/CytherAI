@@ -80,5 +80,41 @@ ok(ref.sc === 1 && ref.bw === 1200 && ref.bh === 600, "the promotion frame 1200x
 ok(wide.bw * wide.bh <= S.binTargetFor(2560) && wide.bw * wide.bh > 0.99 * S.binTargetFor(2560), "a large viewport is capped at the bin target, not resolved at full size");
 ok(tiny.bw === 320 && tiny.bh === 240, "a tiny viewport keeps the 320x240 raster floor");
 
+/* ---- the development server: execution location, never trajectory ----
+   The Worker and the inline fallback both run developServer; here it is driven
+   under jsc against the direct kernel in lockstep. Every reply names a prefix k;
+   the direct state is advanced to that k and must hash identically, and every
+   raster the server presents must equal tonemapInto of that same state, byte for
+   byte. Goals and budgets vary so the chunking differs from any cadence above. */
+/* EVIDENCE: server-equals-kernel */
+function fnvBytes(u8) { var h = 0x811c9dc5; for (var i = 0; i < u8.length; i++) { h ^= u8[i]; h = Math.imul(h, 0x01000193) >>> 0; } return h; }
+function viaServer(params, i, schedule) {
+  var serve = S.developServer(), direct = S.plateState(params, i, cam.ANCH[i], frame);
+  var sent = params.slice();
+  serve({ type: "plate", gen: 7, params: sent, plate: i, anchor: cam.ANCH[i], frame: frame });
+  sent[0] += 1;                                          /* a nudge after open must not reach the job */
+  var replies = 0, agree = true, rasters = 0, r = null, n = 0;
+  while (!r || !r.done) {
+    var g = schedule[n % schedule.length]; n++;
+    r = serve({ type: "advance", gen: 7, goal: g.goal(direct.target), budgetMs: g.budgetMs, present: g.present });
+    replies++;
+    while (direct.k < r.k) S.developStep(direct, params);
+    if (r.k !== direct.k || r.dep !== direct.dep || r.it !== direct.it || serve({ type: "hash", gen: 7 }) !== S.stateHash(direct)) agree = false;
+    if (r.rgba) { var mine = new Uint8ClampedArray(direct.total.length * 4); S.tonemapInto(direct, mine); rasters++;
+      if (r.rgba.length !== mine.length || fnvBytes(r.rgba) !== fnvBytes(mine)) agree = false; }
+    if (n > 10000) break;
+  }
+  var field = S.summarizeField(direct), sameField = r.field && r.field.total.length === field.total.length && r.field.maxT === field.maxT;
+  for (var j = 0; sameField && j < field.total.length; j++) if (r.field.total[j] !== field.total[j]) sameField = false;
+  return { agree: agree, replies: replies, rasters: rasters, sameField: sameField, stale: serve({ type: "advance", gen: 6, goal: Infinity, budgetMs: 1, present: true }) };
+}
+var eased = [{ goal: T => T * 0.05, budgetMs: 1000, present: true }, { goal: T => T * 0.3, budgetMs: 1000, present: false },
+             { goal: T => T * 0.31, budgetMs: 1000, present: true }, { goal: T => Infinity, budgetMs: 2, present: true }];
+var s0 = viaServer(CM.CANON, 0, eased), s1 = viaServer(forked, 1, [{ goal: T => Infinity, budgetMs: 3, present: false }]);
+ok(s0.agree && s0.replies > 3 && s0.rasters > 1, "plate 0 via the server: every reported prefix hashes as the direct kernel's D_k and every presented raster is byte-identical (" + s0.replies + " replies, " + s0.rasters + " rasters)");
+ok(s0.sameField, "plate 0 via the server: the terminal density summary equals the kernel's");
+ok(s1.agree && s1.replies > 3 && s1.rasters === 1, "forked plate 1 via the server, budget-chunked: same checkpoints; the raster arrives once, at the terminal state");
+ok(s0.stale === null && s1.stale === null, "a superseded generation is answered with nothing");
+
 if (fails > 0) throw new Error(fails + " development-law regression(s) failed");
 print("development trajectory law: all pass");

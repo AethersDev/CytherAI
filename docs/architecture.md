@@ -71,9 +71,15 @@ HTML detail.
 
 1. It parses optional captured state from the URL hash.
 2. `CytherSubstrate.boot()` derives the canonical camera once and queues all four
-   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence;
-   responsive DPR/bin policies bound mobile allocation and tonemapping is cadence
-   limited rather than repeated after every deposit batch.
+   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence.
+   The kernel runs in a dedicated Worker (`js/develop-worker.js`, transport only,
+   around `CytherSubstrate.developServer`); the main thread keeps the presentation
+   law — which prefix is asked for and when its raster is shown — and falls back
+   to running the same server inline where a Worker cannot be constructed
+   (`file://`). `tools/test-develop.js` drives the server against the direct
+   kernel: execution location changes, the trajectory does not. Responsive
+   DPR/bin policies bound mobile allocation and rasters are cadence limited
+   rather than produced after every deposit batch.
 3. The instrument and ledger attach their DOM behavior; controls, mobile docking,
    hold-to-cross, optics, title glyphs, and wave interactions are wired.
 4. Manifest, provenance, epoch, commitment, and anti-manifest rows are rendered

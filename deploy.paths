@@ -12,6 +12,7 @@ js/claims.js
 js/ledger.js
 js/instrument.js
 js/site.js
+js/develop-worker.js
 css/cytherai.css
 engine/trajectory-engine.js
 engine/trajectory-engine.test.js

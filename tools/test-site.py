@@ -306,8 +306,8 @@ class SiteContractTests(unittest.TestCase):
         self.assertIn("function admissionMetrics", manifest)
         self.assertIn("return admissionMetrics(p).richness", manifest)
         self.assertIn("return admissionMetrics(p).legibility", manifest)
-        self.assertIn("fields[i] = summarizeField(plateDev)", substrate)
-        self.assertIn("const toneNow = done || (streaming && !reduced", substrate)
+        self.assertIn("fields[i] = r.field;", substrate)
+        self.assertIn("const present = streaming && !reduced", substrate)
         self.assertIn('style.setProperty("--stripH"', site)
         self.assertIn("footer{padding-bottom:calc(var(--stripH", index)
 
