@@ -207,8 +207,9 @@ check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
       "B7 completed plates retain bounded density summaries, not full grids")
 check("field.expLog = exposureLog(field);" in sub and "invLog = 1 / f.expLog" in sub and "exposureLog(f)" not in sub,
       "B7b the envelope reads the retained field's exposure point; it never re-derives one per call")
-check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub,
-      "B8 progressive tonemapping is cadence-bounded and completion-forced")
+check("const TONEMAP_MS = 80" in sub and "t - plateDev.lastTone >= TONEMAP_MS" in sub
+      and 'tilePaint[plateDev.i].visibility === "visible"' in sub and "if (m.present || job.done)" in sub,
+      "B8 progressive rasters are cadence-bounded and contribution-gated; the terminal raster is forced")
 # EVIDENCE: poster-swaps-at-equivalence
 check("let streaming = false;" in sub and "if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }" in sub
       and "if (!streaming || devPlateN !== 1) return Infinity;" in sub,

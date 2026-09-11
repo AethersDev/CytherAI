@@ -591,8 +591,12 @@ if (typeof document !== "undefined") {
     const t = nowMs(), goal = reduced ? Infinity : depositGoal(plateDev, t);
     if (goal <= plateDev.dep) return true;                   /* the prefix on screen is the one asked for */
     /* The density changes with every advance; the 720k-pixel raster does not need to.
-       Progressive exposure at a bounded 12.5 Hz; the completed state always arrives. */
-    const present = streaming && !reduced && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS);
+       Progressive exposure at a bounded 12.5 Hz, and only while the tile contributes
+       pixels (observe() keeps its visibility): a plate developing off-screen advances
+       without a raster and is rasterized once when it comes into view. The completed
+       state always arrives — the server sends it with `done`, gated by nothing. */
+    const present = streaming && !reduced && tilePaint[plateDev.i].visibility === "visible"
+      && (plateDev.tones === 0 || t - plateDev.lastTone >= TONEMAP_MS);
     inFlight = true;
     channel.post({ type: "advance", gen, goal, budgetMs: channel.budgetMs, present });
     return true;
