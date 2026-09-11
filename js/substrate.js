@@ -82,8 +82,19 @@ const PLATE = [
   { anchors:[[36,52,110],[22,32,72],[42,72,214],[16,22,48]],          rot:0.62, core:[8,12,32],     amax:0.95, floor:0,    gain:1.00, satQ:1     },
   { anchors:[[16,22,32],[30,44,96],[10,13,20],[32,54,199]],           rot:0.85, core:[6,9,18],      amax:0.95, floor:0,    gain:1.00, satQ:1     }
 ];
-const PLATE_DEP = [900000, 1200000, 1800000, 2400000];   /* in-view deposit targets */
-const PLATE_CAP = [6e6, 9e6, 22e6, 34e6];                /* recurrence iteration ceilings */
+/* PLATE_DEP is the TERMINAL condition: a plate is finished at the first batch boundary
+   at which its in-view deposits reach the target. PLATE_CAP is a fuse — a ceiling on
+   the recurrence against abnormal computation (a collapsed fork whose orbit never
+   enters the view) — and never the terminal condition at a reference frame:
+   tools/test-develop.js develops every plate at the frames the record names and fails
+   if any reaches its fuse first. The fuses were sized at P8 (2026-07-18) with ~1.3×
+   headroom over the iterations plate 3 needed under ZOOMS[3] = 6.8; the ×1.44 ladder
+   rescale of 2026-09-09 (docs/audit/07) halved plate 3's in-view fraction, and the
+   34e6 fuse then terminated it on every landscape frame — the safeguard had become
+   the picture. Re-sized 2026-09-11 to the same headroom over the measured 41.3e6 at
+   1440×900. A zoom change re-sizes the fuses deliberately, or fails the verifier. */
+const PLATE_DEP = [900000, 1200000, 1800000, 2400000];   /* in-view deposit targets — terminal */
+const PLATE_CAP = [6e6, 9e6, 22e6, 54e6];                /* recurrence iteration ceilings — fuses */
 const BIN_TGT   = 720000;                                /* accumulation cells — v2's cap */
 const FIELD_TGT = 90000;                                 /* retained reading-field summary cells */
 const TONEMAP_MS = 80;                                   /* progressive exposure cadence */
@@ -103,7 +114,8 @@ const nowMs = () => (typeof performance !== "undefined" && performance.now) ? pe
 /* ================= the development law — one trajectory per world =================
    Development is a SEQUENCE, not a schedule: fixed batches of DEV_BATCH iterations,
    the terminal step the first batch boundary at which the plate meets its deposit
-   target (or its iteration cap). For one manifest state, plate, and raster frame
+   target (the iteration cap is a fuse, not a second terminal condition — see
+   PLATE_CAP). For one manifest state, plate, and raster frame
    there is exactly one ordered sequence D_0..D_N, and D_N is the finished plate.
    Wall time, frame cadence, and CPU load choose which D_k is on screen; they never
    choose what D_k contains. Every streamed tonemap is a genuine prefix of the same
