@@ -80,6 +80,24 @@ ok(ref.sc === 1 && ref.bw === 1200 && ref.bh === 600, "the promotion frame 1200x
 ok(wide.bw * wide.bh <= S.binTargetFor(2560) && wide.bw * wide.bh > 0.99 * S.binTargetFor(2560), "a large viewport is capped at the bin target, not resolved at full size");
 ok(tiny.bw === 320 && tiny.bh === 240, "a tiny viewport keeps the 320x240 raster floor");
 
+/* ---- the fuse is not the terminal condition ----
+   PLATE_DEP terminates a plate; PLATE_CAP only bounds abnormal computation. At the
+   frames the record names — the legibility sweep's desktop (docs/audit/07), the
+   promotion frame, the browser matrix's phone — every plate must reach its target
+   with a fifth of its ceiling to spare, or a ladder change has silently made the
+   safeguard the picture, as the ×1.44 rescale did to plate 3 until 2026-09-11. */
+/* EVIDENCE: target-before-cap */
+[[1440, 900], [1200, 600], [390, 844]].forEach(function (wh) {
+  var fr = S.frameFor(cam.bounds, wh[0], wh[1]), all = true, report = [];
+  for (var i = 0; i < 4; i++) {
+    var st = S.plateState(CM.CANON, i, cam.ANCH[i], fr);
+    while (!st.done) S.developStep(st, CM.CANON);
+    all = all && st.dep >= st.target && st.it <= 0.8 * st.cap;
+    report.push("p" + i + " " + (st.it / 1e6).toFixed(1) + "M/" + (st.cap / 1e6) + "M" + (st.dep < st.target ? " FUSED" : ""));
+  }
+  ok(all, wh.join("x") + ": every plate reaches its target before its fuse, with headroom (" + report.join(" · ") + ")");
+});
+
 /* ---- the development server: execution location, never trajectory ----
    The Worker and the inline fallback both run developServer; here it is driven
    under jsc against the direct kernel in lockstep. Every reply names a prefix k;
