@@ -45,7 +45,7 @@ def lum(r, g, b): return 0.2126*r + 0.7152*g + 0.0722*b
 # ---------------- MOT-001 ----------------
 drv = os.path.join(ROOT, "tools", ".reading-driver.js")
 with open(drv, "w") as f:
-    f.write('print(JSON.stringify(CytherSubstrate.READING))')
+    f.write('var S=CytherSubstrate,R=S.READING;R.grounds={switch:S.bgRgbAt(R.SW_DOWN),core:S.bgRgbAt(2.7)};print(JSON.stringify(R))')
 try:
     out = subprocess.run([JSC, os.path.join(ROOT, "js/manifest.js"),
                           os.path.join(ROOT, "js/substrate.js"), drv],
@@ -75,6 +75,37 @@ check(not moving, "A5 no data-ink/data-phase rule moves layout (%d rules scanned
       % len(re.findall(r'body\[data-(?:ink|phase)', html)))
 check(re.search(r'body\{transition:color \.25s', html) is not None,
       "A6 flip is a 0.25s controlled crossfade")
+# The claims prove the MODEL; this holds the stylesheet to it. Exactly two ink literals:
+# the :root default (light — the surface is an unexposed field) and the dark rule the
+# state machine admits at the switch. A third assignment could shadow either.
+inks = re.findall(r'--ink:(#[0-9A-Fa-f]{6})', html)
+dark_rule = re.search(r'body\[data-ink="dark"\]\{--ink:(#[0-9A-Fa-f]{6})\}', html)
+check(len(inks) == 2 and inks[0].upper() == R["LIGHT"].upper()
+      and dark_rule is not None and dark_rule.group(1).upper() == R["DARK"].upper(),
+      "A7 the stylesheet's inks are READING.LIGHT (root default) and READING.DARK (data-ink=dark) and nothing else")
+
+# A8 — panel materials follow the INK. Each phase's material, composited over the
+# darkest ambient of that phase, must carry that phase's ink at the 66% floor with AA.
+# The claims cannot see this: they measure the model, and these are rules. The rules
+# kept their depth names when the ladder turned, and the chrome printed dark ink on
+# dark panels at the floor.
+def hexrgb(h): return tuple(int(h[i:i+2], 16) for i in (1, 3, 5))
+def rel(c):
+    f = [(v/255)/12.92 if v/255 <= 0.03928 else ((v/255 + 0.055)/1.055) ** 2.4 for v in c]
+    return 0.2126*f[0] + 0.7152*f[1] + 0.0722*f[2]
+def wcag(a, b): la, lb = rel(a), rel(b); return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+def over(top, alpha, ground): return tuple(t*alpha + g*(1 - alpha) for t, g in zip(top, ground))
+materials = {m.group(1): tuple(float(v) for v in m.groups()[1:])
+             for m in re.finditer(r'body\[data-phase="(flip|depth|core)"\] :is\([^)]*\)\{background:rgba\((\d+),(\d+),(\d+),([.\d]+)\)\}', html)}
+phase_ink = {"flip": (R["LIGHT"], R["grounds"]["switch"]), "depth": (R["DARK"], R["grounds"]["switch"]), "core": (R["DARK"], R["grounds"]["core"])}
+a8 = set(materials) == set(phase_ink)
+for phase, (ink, ground) in phase_ink.items():
+    if phase not in materials: continue
+    panel = over(materials[phase][:3], materials[phase][3], ground)
+    text = over(hexrgb(ink), 0.66, panel)
+    if wcag(text, panel) < 4.5: a8 = False
+check(a8 and materials["flip"] == (*R["MEMBRANE"], R["MEMBRANE_A"]),
+      "A8 each phase material carries its phase's ink at the 66% floor with AA; the flip material is the membrane")
 
 # ---------------- MOT-002 ----------------
 # Two kinds of exposure, two directions, and they are laws in OPPOSITE senses.

@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="F9DE75A723AC348E">
+<meta name="build-hash" content="BFF6A516BD0D4016">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -400,7 +400,11 @@ footer a:hover{color:var(--accent);border-color:var(--accent)}
    density-conditioned envelopes, rest-state amplitude. No component exercises
    more attentional authority than its semantic role grants. */
 body{transition:color .25s ease}
-body[data-ink="light"]{--ink:#E3EAF4}
+/* the two inks ARE the model's (CytherSubstrate.READING): light is the :root default —
+   the surface is an unexposed field — and dark is admitted by the state machine at the
+   switch. test-motion A7 holds both literals to READING; a rule that names another ink
+   is how the floor once printed light ink on paper. */
+body[data-ink="dark"]{--ink:#101620}
 /* the ink switch is a controlled crossfade, not a page flash; the weight-field
    and wave glyphs (.g) keep their per-frame inline colors untransitioned */
 main *:not(.g),header *,footer *,aside *,.strip *,.optics *{transition-property:color;transition-duration:.25s}
@@ -449,16 +453,23 @@ body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
 body[data-optics="read"] .env::before{inset:-1em -1.4em;mask-image:none;-webkit-mask-image:none;
   backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
 body[data-optics="read"][data-phase="flip"] .env::before{background:color-mix(in srgb,rgb(16,22,31) 82%,var(--bg))}
+/* Materials follow the INK, not the depth name. flip is a light-ink phase on the
+   brightening field: the absorptive membrane (READING.MEMBRANE). depth and core are
+   the dark-ink phases on paper: the paper end's own tones — PANELS[3] and the floor
+   ground — at the opacities the record needs against the densest plate. Turning the
+   ladder over moved the ink under these rules while they kept their depth names, and
+   the chrome printed dark ink on dark panels at the floor; test-motion A8 composites
+   each material over its phase's ambient and holds its ink to AA at the 66% floor. */
 body[data-phase="flip"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(16,22,31,.82)}
-body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(10,15,23,.72)}
-body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(7,10,16,.93)}
+body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(255,255,255,.72)}
+body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(236,240,244,.93)}
 
 /* secondary text does not dim merely for being secondary: on the dark phases the
    low-alpha greys tuned for paper get swallowed — lift the mixes under light ink.
 
    Ink floor: 66%. No text carries less, because 66% is what reads 4.5:1 against
-   the ambient at the switch depth (READING.SW_DOWN = 1.00, rgb(185,195,210)) —
-   the derivation is in js/substrate.js and CL-06c re-checks it live. The five
+   the ambient at the switch depth (READING.SW_DOWN) — the derivation is in
+   js/substrate.js and CL-06c re-checks it live. The five
    quietest layers the paper phase used to distinguish (45 · 48 · 55 · 58 · 62%)
    now share that floor; they stay distinct through size, tracking and weight —
    7.5–10.5px tracked mono against 14–15.5px body — rather than through a tonal
@@ -737,7 +748,7 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
     </div>
     <div class="locked-note env">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
     <div class="depth-line env">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
-    <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
+    <a class="btn btn-primary env" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
   </section>
 
   <!-- ════════════ access ════════════ -->
@@ -773,10 +784,12 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
 
   <!-- ════════════ the floor ════════════ -->
   <section id="floor" aria-label="The floor — governing law and public record">
+    <div class="env">
     <h2 class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></h2>
     <div class="law">The surface states.<br>Depth conditions.<br>Records substantiate.<br>Boundaries govern.<br>The reader is a record.<br>Nothing is stated that is not checked.</div>
+    </div>
 
-    <div class="epochs" aria-label="Epochal record — superseded disclosure states">
+    <div class="epochs env" aria-label="Epochal record — superseded disclosure states">
       <div class="ep-title">EPOCHAL RECORD — SUPERSEDED, NEVER ERASED</div>
       <div class="ep-row" id="epochRow"></div>
       <div class="ep-note">Each prior mark remains derivable from its manifest. The record supersedes; it does not delete. Identity is the chain, not the tip. A commitment's precedence is provable only against an external anchor — repository history, a transparency log. The page renders the commitment; it does not notarize it.</div>
