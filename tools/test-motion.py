@@ -227,6 +227,11 @@ check("datan2" in open(os.path.join(ROOT, "js/manifest.js")).read(),
 check(sub.count("developStep(") == 2 and "params = m.params.slice();" in sub
       and "importScripts(\"manifest.js\", \"substrate.js\")" in open(os.path.join(ROOT, "js/develop-worker.js")).read(),
       "B12 the runtime advances the kernel only through the development server, whose job copies its params at open")
+# EVIDENCE: resize-settles-once
+rz = sub[sub.index('addEventListener("resize"'):]; rz = rz[:rz.index("}, { passive: true });")]
+check(rz.count("renderCore()") == 1 and rz.index("observe(lastP)") < rz.index("setTimeout(") < rz.index("renderCore()")
+      and rz.count("developAll(") == 1 and rz.index("setTimeout(") < rz.index("developAll("),
+      "B13 on resize the camera follows every event; the minimap and any redevelop wait for the viewport to settle")
 # EVIDENCE: fixed-step-development
 check("const DEV_BATCH = 60000" in sub and "developStep(job, params)" in sub
       and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
