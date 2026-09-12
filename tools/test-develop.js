@@ -101,9 +101,11 @@ ok(tiny.bw === 320 && tiny.bh === 240, "a tiny viewport keeps the 320x240 raster
 /* ---- the development server: execution location, never trajectory ----
    The Worker and the inline fallback both run developServer; here it is driven
    under jsc against the direct kernel in lockstep. Every reply names a prefix k;
-   the direct state is advanced to that k and must hash identically, and every
+   the direct state is advanced to that k and its counters must agree, every
    raster the server presents must equal tonemapInto of that same state, byte for
-   byte. Goals and budgets vary so the chunking differs from any cadence above. */
+   byte, and the terminal reply carries the checkpoint hash — the name the page
+   prints in its development receipt — which must equal stateHash of the direct
+   terminal state. Goals and budgets vary so the chunking differs from any cadence above. */
 /* EVIDENCE: server-equals-kernel */
 function fnvBytes(u8) { var h = 0x811c9dc5; for (var i = 0; i < u8.length; i++) { h ^= u8[i]; h = Math.imul(h, 0x01000193) >>> 0; } return h; }
 function viaServer(params, i, schedule) {
@@ -117,20 +119,26 @@ function viaServer(params, i, schedule) {
     r = serve({ type: "advance", gen: 7, goal: g.goal(direct.target), budgetMs: g.budgetMs, present: g.present });
     replies++;
     while (direct.k < r.k) S.developStep(direct, params);
-    if (r.k !== direct.k || r.dep !== direct.dep || r.it !== direct.it || serve({ type: "hash", gen: 7 }) !== S.stateHash(direct)) agree = false;
+    if (r.k !== direct.k || r.dep !== direct.dep || r.it !== direct.it) agree = false;
+    if (!r.done && "hash" in r) agree = false;             /* the name is given once, to the terminal state */
     if (r.rgba) { var mine = new Uint8ClampedArray(direct.total.length * 4); S.tonemapInto(direct, mine); rasters++;
       if (r.rgba.length !== mine.length || fnvBytes(r.rgba) !== fnvBytes(mine)) agree = false; }
     if (n > 10000) break;
   }
   var field = S.summarizeField(direct), sameField = r.field && r.field.total.length === field.total.length && r.field.maxT === field.maxT && r.field.expLog === field.expLog;
+  var sameHash = r.hash === S.stateHash(direct) && /^[0-9a-f]{8}$/.test(r.hash);
   for (var j = 0; sameField && j < field.total.length; j++) if (r.field.total[j] !== field.total[j]) sameField = false;
-  return { agree: agree, replies: replies, rasters: rasters, sameField: sameField, stale: serve({ type: "advance", gen: 6, goal: Infinity, budgetMs: 1, present: true }) };
+  return { agree: agree, replies: replies, rasters: rasters, sameField: sameField, sameHash: sameHash, stale: serve({ type: "advance", gen: 6, goal: Infinity, budgetMs: 1, present: true }) };
 }
 var eased = [{ goal: T => T * 0.05, budgetMs: 1000, present: true }, { goal: T => T * 0.3, budgetMs: 1000, present: false },
              { goal: T => T * 0.31, budgetMs: 1000, present: true }, { goal: T => Infinity, budgetMs: 2, present: true }];
 var s0 = viaServer(CM.CANON, 0, eased), s1 = viaServer(forked, 1, [{ goal: T => Infinity, budgetMs: 3, present: false }]);
-ok(s0.agree && s0.replies > 3 && s0.rasters > 1, "plate 0 via the server: every reported prefix hashes as the direct kernel's D_k and every presented raster is byte-identical (" + s0.replies + " replies, " + s0.rasters + " rasters)");
+ok(s0.agree && s0.replies > 3 && s0.rasters > 1, "plate 0 via the server: every reported prefix is the direct kernel's D_k (k, dep, it agree) and every presented raster is byte-identical (" + s0.replies + " replies, " + s0.rasters + " rasters)");
 ok(s0.sameField, "plate 0 via the server: the terminal density summary equals the kernel's");
+ok(s0.sameHash && s1.sameHash, "the terminal reply names the checkpoint: its hash equals stateHash of the direct terminal state (plate 0 and forked plate 1)");
+/* the receipt's comparison law: the same world in the same frame reproduces the name; a different world does not */
+ok(s0.sameHash && viaServer(CM.CANON, 0, eased).sameHash && a0.hashes[a0.hashes.length - 1] !== f0.hashes[f0.hashes.length - 1],
+   "two developments of one world and frame print one terminal name; a fork prints another");
 ok(s1.agree && s1.replies > 3 && s1.rasters === 1, "forked plate 1 via the server, budget-chunked: same checkpoints; the raster arrives once, at the terminal state");
 ok(s0.stale === null && s1.stale === null, "a superseded generation is answered with nothing");
 

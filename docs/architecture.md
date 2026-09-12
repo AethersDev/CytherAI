@@ -69,7 +69,7 @@ HTML detail.
 
 1. It parses optional captured state from the URL hash.
 2. `CytherSubstrate.boot()` derives the canonical camera once and queues all four
-   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence.
+   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence. Every terminal reply names its checkpoint (`stateHash`); the floor prints the four names as the development receipt and compares a redevelopment of the same world and frame against the last one (`IDENTICAL` / `MISMATCH`), and a plate that stopped at its iteration ceiling instead of its target is printed as a fuse.
    The kernel runs in a dedicated Worker (`js/develop-worker.js`, transport only,
    around `CytherSubstrate.developServer`); the main thread keeps the presentation
    law — which prefix is asked for and when its raster is shown — and falls back

@@ -234,7 +234,7 @@ check(sub.count("ANCH = cam.ANCH") == 1 and "ANCH" not in sub[sub.index("functio
       "B6 development never touches the camera anchors")
 # EVIDENCE: retained-field-and-tonemap-bounds
 check("const FIELD_TGT = 90000" in sub and "function summarizeField" in sub
-      and "if (job.done) r.field = summarizeField(job);" in sub and "fields[i] = r.field;" in sub,
+      and "if (job.done) { r.field = summarizeField(job); r.hash = stateHash(job); }" in sub and "fields[i] = r.field;" in sub,
       "B7 completed plates retain bounded density summaries, not full grids")
 check("field.expLog = exposureLog(field);" in sub and "invLog = 1 / f.expLog" in sub and "exposureLog(f)" not in sub,
       "B7b the envelope reads the retained field's exposure point; it never re-derives one per call")
@@ -280,6 +280,25 @@ rz = sub[sub.index('addEventListener("resize"'):]; rz = rz[:rz.index("}, { passi
 check(rz.count("renderCore()") == 1 and rz.index("observe(lastP)") < rz.index("setTimeout(") < rz.index("renderCore()")
       and rz.count("developAll(") == 1 and rz.index("setTimeout(") < rz.index("developAll("),
       "B13 on resize the camera follows every event; the minimap and any redevelop wait for the viewport to settle")
+# EVIDENCE: terminal-state-receipt
+# The terminal reply names the checkpoint (hash with `done`, no separate request);
+# the receipt opens with the generation, closes with a digest, compares to the prior
+# receipt only for the same world AND frame, and prints a cap-terminated plate as a fuse.
+srv = sub[sub.index("function developServer"):sub.index("const API")]
+check('r.hash = stateHash(job)' in srv and 'm.type === "hash"' not in srv and srv.index("if (job.done) {") < srv.index("r.hash"),
+      "B14 the server names the terminal state in the terminal reply and answers no separate hash request")
+dom = sub[sub.index("function openReceipt"):sub.index("function developAll")]
+check("prior.world !== r.world" in dom and "prior.frame !== r.frame" in dom
+      and dom.index("prior.world !== r.world") < dom.index('"IDENTICAL" : "MISMATCH"') and "p.dep < p.target" in dom,
+      "B14 a receipt is compared only against the prior receipt of the same world and frame; a fused plate is abnormal")
+dev = sub[sub.index("function developAll"):sub.index("const DEV_MS")]
+check(dev.index("openReceipt()") < dev.index("gen++"), "B14 a new generation opens a new receipt before it supersedes the old one")
+check('receipt.plates[i] = { hash: r.hash' in sub and "closeReceipt();" in sub[sub.index("if (!plateQueue.length)"):],
+      "B14 every terminal frame is recorded and the receipt closes when the last plate lands")
+check('" · TERMINAL " + rc.digest' in site and '"FUSE · "' in site and 'p.dep < p.target' in site,
+      "B14 the strip prints the terminal digest and the floor prints a fused plate as FUSE")
+check('id="receiptRows"' in html and "DEVELOPMENT RECEIPT" in html, "B14 the floor carries the development receipt block")
+
 # EVIDENCE: fixed-step-development
 check("const DEV_BATCH = 60000" in sub and "developStep(job, params)" in sub
       and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
