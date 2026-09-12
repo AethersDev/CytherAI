@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="B9AC49128D131519">
+<meta name="build-hash" content="E37A1036FEBCA44B">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -521,6 +521,11 @@ body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
    focus inside one restores it immediately. */
 body.at-surface :is(.core,.rledger,.optics){opacity:0;pointer-events:none}
 body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-events:auto}
+/* the map arrives with the fork: while one is being formed it is the preview of the
+   requested orbit, at any depth, and the reticle — the camera's place in the PRIOR
+   world — is withdrawn until the new world's terminal state installs a camera */
+body.forking .core{opacity:1}
+body.forking #coreRect{visibility:hidden}
 :is(.core,.rledger,.optics){transition:opacity .45s ease}
 @media(max-width:900px){.optics{right:12px;bottom:104px}}
 
@@ -864,7 +869,7 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-0nnIXAB7AXMDvcG+/03F5eZHr+CHWj/PUkM0v/FYXLMCJH2XaYL6Fa57YTCT/tmh" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-UjPKbjqa3cDB6yPyeZU8qrV54eKwqCuWYZVMov/MRJEmvfUHShN6N1CXDjWEFzRc" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-ue/V4nS2twMnJcz/vHZznenbuzE7Ue0eli1OvGtRspbASXJP/x3I+Ag9kKR8/dD2" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-iTvS/uGAZgZCRtIqXZGBDIz7gcopTcbi72S1vGo9/NHJnVGABqDrBsSkNQqcgsZ5" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
