@@ -102,6 +102,28 @@ function applyCorridors() {
     el.classList.add("corridor-" + c[plate]);
   });
 }
+/* the map as an observation control. A pointer names a point in the form; the
+   keyboard walks the descent (arrows 2%, Page 10%, Home/End the surface and the
+   floor). Both resolve to a document scroll position and nothing else — the scroll
+   pipeline stays the one camera authority — and the slider's value is written by
+   envUpdate from the same progress every other readout uses. */
+function wireMap() {
+  const core = $("core"), wrap = core && core.querySelector(".core-wrap"); if (!core || !wrap) return;
+  const go = p => {
+    const max = document.documentElement.scrollHeight - innerHeight;
+    scrollTo({ top: Math.min(1, Math.max(0, p)) * max, behavior: reduced ? "auto" : "smooth" });
+  };
+  wrap.addEventListener("pointerdown", e => {
+    if (S.isDeveloping() || S.isForking()) return;
+    const r = wrap.getBoundingClientRect(); go(S.depthAtMap(e.clientX - r.left, e.clientY - r.top)); core.focus();
+  });
+  core.addEventListener("keydown", e => {
+    const step = { ArrowDown: .02, ArrowRight: .02, ArrowUp: -.02, ArrowLeft: -.02, PageDown: .1, PageUp: -.1 }[e.key];
+    if (step !== undefined) { e.preventDefault(); go(progress() + step); }
+    else if (e.key === "Home") { e.preventDefault(); go(0); }
+    else if (e.key === "End") { e.preventDefault(); go(1); }
+  });
+}
 function wireOptics() {
   const box = $("optics"); if (!box) return;
   const apply = m => {
@@ -149,6 +171,8 @@ function envUpdate() {
   const pct = String(Math.round(p * 100)).padStart(2, "0");
   const gaugeHtml = `OBS <b>${mode}</b> · ×${zoom.toFixed(2)}<br>DEPTH ${pct}% · ${zoneName}`;
   if (gauge && gauge.innerHTML !== gaugeHtml) gauge.innerHTML = gaugeHtml;
+  const core = $("core"), valueText = pct + "% · " + zoneName;
+  if (core && core.getAttribute("aria-valuetext") !== valueText) { core.setAttribute("aria-valuenow", String(Math.round(p * 100))); core.setAttribute("aria-valuetext", valueText); }
   const oz = $("obsZoom"), zoomText = "×" + zoom.toFixed(2);
   if (oz && oz.textContent !== zoomText) oz.textContent = zoomText;
 }
@@ -459,6 +483,7 @@ function verifyAdmissions() {
   wireStrip();
   wireHold();
   wireOptics();
+  wireMap();
   dockChrome();
   wireStripClearance();
   restArm();   /* the page opens navigating; rest (and the reading exposure) follows */

@@ -228,13 +228,39 @@ function deriveAnchors(params) {
 }
 
 /* ================= the observation transform — pure, testable ================= */
+/* the camera's centre path — where the observation looks at depth p — and its
+   inverse: the depth at which the camera comes nearest a world point. The minimap
+   is a slider over the descent: a point in the form names the observation closest
+   to it. The path is not injective — the canonical descent ends where it began,
+   at the orbit's centre, its densest cell — so the inverse is CONTINUOUS from the
+   current depth: among the path's nearest approaches within `tol` of the closest,
+   the one nearest pNow. A bounded search (PATH_N samples, a ternary refinement
+   between the neighbours), never a solver that could fail to terminate on a
+   collapsed fork; tools/test-develop.js round-trips it over the canonical path. */
+function pathPoint(p, ANCH) {
+  const d = p * 3, i = clamp(d | 0, 0, 2), sf = smooth(d - i);
+  return [lerp(ANCH[i][0], ANCH[i+1][0], sf), lerp(ANCH[i][1], ANCH[i+1][1], sf)];
+}
+const PATH_N = 600;
+function depthFor(ANCH, wx, wy, pNow, tol) {
+  const d2 = p => { const q = pathPoint(p, ANCH), ex = q[0] - wx, ey = q[1] - wy; return ex * ex + ey * ey; };
+  const e = new Float64Array(PATH_N + 1); let bd = Infinity;
+  for (let k = 0; k <= PATH_N; k++) { e[k] = d2(k / PATH_N); if (e[k] < bd) bd = e[k]; }
+  const admit = (Math.sqrt(bd) + tol) * (Math.sqrt(bd) + tol);
+  let best = 0, bp = Infinity;
+  for (let k = 0; k <= PATH_N; k++) {
+    if (e[k] > admit || (k > 0 && e[k] > e[k-1]) || (k < PATH_N && e[k] > e[k+1])) continue;   /* a nearest approach */
+    const dp = Math.abs(k / PATH_N - pNow); if (dp < bp) { bp = dp; best = k; }
+  }
+  let lo = Math.max(0, (best - 1) / PATH_N), hi = Math.min(1, (best + 1) / PATH_N);
+  for (let it = 0; it < 24; it++) { const m1 = lo + (hi - lo) / 3, m2 = hi - (hi - lo) / 3; if (d2(m1) < d2(m2)) hi = m2; else lo = m1; }
+  return (lo + hi) / 2;
+}
 function cameraAt(p, ANCH, U, W, H) {
   const d = p * 3;
   const i = clamp(d | 0, 0, 2), f = d - i;
   const z = ZOOMS[i] * Math.pow(ZOOMS[i+1] / ZOOMS[i], f);   /* log-space zoom */
-  const sf = smooth(f);
-  const cx = lerp(ANCH[i][0], ANCH[i+1][0], sf);
-  const cy = lerp(ANCH[i][1], ANCH[i+1][1], sf);
+  const [cx, cy] = pathPoint(p, ANCH);
   const tiles = [];
   for (let k = 0; k < 4; k++) {
     const o = clamp(1 - Math.abs(d - k), 0, 1);
@@ -415,7 +441,7 @@ function developServer() {
   };
 }
 
-const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, cameraAt, composeTile,
+const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, pathPoint, depthFor, cameraAt, composeTile,
   ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
   DEV_BATCH, frameFor, plateState, developStep, stateHash, exposureLog, tonemapInto, summarizeField, developServer };
 
@@ -828,6 +854,8 @@ if (typeof document !== "undefined") {
   API.receipt = () => receipt;
   API.fieldCells = () => fields.reduce((n, f) => n + (f ? f.total.length : 0), 0);
   API.fieldEnergy = fieldEnergy;
+  /* a point on the minimap, in its CSS pixels, to the depth whose observation is nearest it */
+  API.depthAtMap = (mx, my) => { const s = +coreCv.dataset.s, ox = +coreCv.dataset.ox, oy = +coreCv.dataset.oy; return depthFor(ANCH, (mx - ox) / s, (my - oy) / s, lastP, 0.03 * bounds.span); };
   API.corridors = corridorsFor;
 }
 
