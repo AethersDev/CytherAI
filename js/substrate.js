@@ -181,21 +181,18 @@ function stateHash(st) {
   return h.toString(16).padStart(8, "0");
 }
 
-/* ================= the derived object — native orbit for the tiles ================= */
-function computeOrbit(params) {
-  const [a,b,c,d] = params;
-  const dsin = CM.dsin, dcos = CM.dcos;   /* the engine-invariant core — the whole world runs on it */
-  let x = 0.08, y = 0.12;
-  for (let i = 0; i < 40; i++) { const nx = dsin(a*y)+c*dcos(a*x), ny = dsin(b*x)+d*dcos(b*y); x=nx; y=ny; }
-  const pts = new Float32Array(ORBIT_N * 2);
+/* ================= the derived object — one orbit, the kernel's =================
+   The minimap's point cloud IS CM.dsinOrbit: the orbit the camera derives from and
+   the plates deposit. There is no second recurrence to keep in agreement. */
+function computeOrbit(params) { return { pts: CM.dsinOrbit(params, ORBIT_N) }; }
+/* the bounding frame of a Float32 orbit; the floor keeps a collapsed fork from dividing by zero */
+function orbitBounds(orbit) {
   let minx=1e9, maxx=-1e9, miny=1e9, maxy=-1e9;
-  for (let i = 0; i < ORBIT_N; i++) {
-    const nx = dsin(a*y)+c*dcos(a*x), ny = dsin(b*x)+d*dcos(b*y);
-    x = nx; y = ny; pts[i*2] = x; pts[i*2+1] = y;
+  for (let i = 0; i < orbit.length; i += 2) {
+    const x = orbit[i], y = orbit[i+1];
     if (x<minx) minx=x; if (x>maxx) maxx=x; if (y<miny) miny=y; if (y>maxy) maxy=y;
   }
-  return { pts, bounds: { minx, maxx, miny, maxy, cx:(minx+maxx)/2, cy:(miny+maxy)/2,
-    span: Math.max(maxx-minx, maxy-miny, 1e-3) } };
+  return { minx, maxx, miny, maxy, cx: (minx+maxx)/2, cy: (miny+maxy)/2, span: Math.max(maxx-minx, maxy-miny, 1e-3) };
 }
 
 /* ================= the derived camera — anchors from the dsin orbit (§5.2) =================
@@ -205,13 +202,7 @@ function computeOrbit(params) {
 function deriveAnchors(params) {
   const N = ORBIT_N, G = 96;
   const orbit = CM.dsinOrbit(params, N);          /* Float32Array(N*2), bit-identical across engines */
-  let minx=1e9, maxx=-1e9, miny=1e9, maxy=-1e9;
-  for (let i = 0; i < N; i++) {
-    const x = orbit[i*2], y = orbit[i*2+1];
-    if (x<minx) minx=x; if (x>maxx) maxx=x; if (y<miny) miny=y; if (y>maxy) maxy=y;
-  }
-  const span = Math.max(maxx-minx, maxy-miny, 1e-3);   /* floor: a collapsed fork must not divide by zero */
-  const cx = (minx+maxx)/2, cy = (miny+maxy)/2;
+  const bounds = orbitBounds(orbit), { minx, miny, span, cx, cy } = bounds;
   const grid = new Float32Array(G * G);
   for (let i = 0; i < N; i++) {
     const gx = clamp(((orbit[i*2]-minx)/span*G)|0, 0, G-1);
@@ -233,7 +224,7 @@ function deriveAnchors(params) {
     k = (k * 31 + 7) % 9973;
   }
   while (chosen.length < 3) chosen.push([cx, cy]);
-  return { ANCH: [[cx, cy], ...chosen], bounds: { minx, maxx, miny, maxy, cx, cy, span } };
+  return { ANCH: [[cx, cy], ...chosen], bounds };
 }
 
 /* ================= the observation transform — pure, testable ================= */
@@ -488,18 +479,31 @@ if (typeof document !== "undefined") {
     pd.g.drawImage(pd.off, 0, 0, pd.bw, pd.bh, 0, 0, pd.rw, pd.rh);
   }
 
-  function renderCore() {
+  /* the minimap draws an orbit into its frame: the world's (every 11th of the 220k
+     points, the camera's bounds) or, while a fork is being formed, the requested one */
+  const coreLbl = document.querySelector(".core .lbl");
+  function drawCore(orbit, stride, b, label) {
     if (!coreCv) return;
     const cw = 56, ch = Math.round(56 * (H / W) * 1.4);
     coreCv.width = cw*2; coreCv.height = ch*2; coreCv.style.height = ch + "px";
     const g = coreCv.getContext("2d"); g.setTransform(2,0,0,2,0,0);
     g.clearRect(0, 0, cw, ch);
-    const s = Math.min(cw, ch) * 0.86 / bounds.span;
-    const ox = cw/2 - bounds.cx*s, oy = ch/2 - bounds.cy*s;
+    const s = Math.min(cw, ch) * 0.86 / b.span;
+    const ox = cw/2 - b.cx*s, oy = ch/2 - b.cy*s;
     g.fillStyle = "rgba(120,135,160,.5)";
-    for (let k = 0; k < ORBIT_N; k += 11) g.fillRect(pts[k*2]*s + ox, pts[k*2+1]*s + oy, .7, .7);
+    for (let k = 0; k < orbit.length; k += 2 * stride) g.fillRect(orbit[k]*s + ox, orbit[k+1]*s + oy, .7, .7);
     coreCv.dataset.s = s; coreCv.dataset.ox = ox; coreCv.dataset.oy = oy;
+    if (coreLbl && coreLbl.innerHTML !== label) coreLbl.innerHTML = label;
   }
+  function renderCore() { drawCore(pts, 11, bounds, "POSITION<br>IN FORM"); }
+  /* The fork, while it is being formed. A nudge marks the preview dirty and wakes
+     the loop; step() draws it at most once per shared frame — the requested orbit,
+     bounded to PREVIEW_N points of CM.dsinOrbit, on the minimap alone. The plates
+     stay the prior world and no receipt, status or claim describes the preview as
+     developed: only the terminal state establishes the new world. */
+  const PREVIEW_N = 20000;
+  let previewDirty = false;
+  function previewCore() { const o = CM.dsinOrbit(P, PREVIEW_N); drawCore(o, 1, orbitBounds(o), "FORK<br>PREVIEW"); }
   function drawCoreRect(cx, cy, z) {
     /* the reticle is a styled overlay — the minimap canvas never re-rasters on scroll */
     const r = $("coreRect"); if (!r || !coreCv) return;
@@ -616,6 +620,7 @@ if (typeof document !== "undefined") {
     return st.target * (1 - (1 - u) * (1 - u));
   }
   function step() {
+    if (previewDirty) { previewDirty = false; previewCore(); return true; }
     if (!plateDev) {
       if (!plateQueue.length) return false;
       plateDev = beginPlate(plateQueue.shift());
@@ -726,6 +731,7 @@ if (typeof document !== "undefined") {
     P[1] = clamp(P[1] + dy * 0.0014, -2.2, 2.2);
     P[2] = clamp(P[2] + dx * 0.0005, -2.2, 2.2);
     P[3] = clamp(P[3] - dy * 0.0005, -2.2, 2.2);
+    previewDirty = true; hooks.wake();
     hooks.onChange();
   }
 

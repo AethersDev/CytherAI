@@ -299,6 +299,22 @@ check('" · TERMINAL " + rc.digest' in site and '"FUSE · "' in site and 'p.dep 
       "B14 the strip prints the terminal digest and the floor prints a fused plate as FUSE")
 check('id="receiptRows"' in html and "DEVELOPMENT RECEIPT" in html, "B14 the floor carries the development receipt block")
 
+# EVIDENCE: fork-preview-is-not-the-world
+# While a fork is being formed the minimap previews the requested orbit — a nudge
+# marks it dirty and wakes the loop, step() draws it at most once per frame from
+# CM.dsinOrbit bounded to PREVIEW_N — and nothing else moves: plates, fields, the
+# receipt and the server are untouched until the terminal state establishes the world.
+nud = sub[sub.index("function nudge"):sub.index("function wireGestures")]
+stp = sub[sub.index("function step()"):sub.index("function onFrame")]
+pre = sub[sub.index("function previewCore"):sub.index("/* observe —")]
+check("previewDirty = true; hooks.wake();" in nud and stp.index("if (previewDirty) { previewDirty = false; previewCore(); return true; }") < stp.index("if (!plateDev)"),
+      "B15 a nudge marks the preview dirty and wakes the loop; step() draws it once per frame before any development work")
+check("const PREVIEW_N = 20000" in sub and "CM.dsinOrbit(P, PREVIEW_N)" in pre and '"FORK<br>PREVIEW"' in pre
+      and not re.search(r"tiles|presentPlate|fields|receipt|channel\.post|observe\(", pre),
+      "B15 the preview is the bounded dsin orbit on the minimap alone, labelled as a preview")
+check("body.forking .core{opacity:1}" in html and "body.forking #coreRect{visibility:hidden}" in html,
+      "B15 the map is visible while forking at any depth and the prior world's reticle is withdrawn")
+
 # EVIDENCE: fixed-step-development
 check("const DEV_BATCH = 60000" in sub and "developStep(job, params)" in sub
       and "batch * 0.88" not in sub and "performance.now" not in sub[sub.index("function depositBatch"):sub.index("function stateHash")],
