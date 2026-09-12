@@ -31,7 +31,6 @@ const CM = root.CytherManifest;
    (2.11, 1.89, 1.89) exactly. Measured sweep: docs/audit/07. */
 const ZOOMS   = [1.3, 2.75, 5.2, 9.8];
 const BGS     = [["#070A10","#C7D2E4"],["#3A4658","#DDE6F2"],["#B9C3D2","#131A26"],["#ECF0F4","#101620"]];
-const PANELS  = [[10,15,23,.55],[14,20,29,.50],[240,245,251,.55],[255,255,255,.60]];
 const ACCENTS = ["#7FA0FF","#5F7BFF","#2A48D6","#2036C7"];
 const ORBIT_N = 220000;
 /* ================= the plate grammar (P8 — plate replaces scatter) =================
@@ -285,15 +284,17 @@ function composeTile(t, W, H, U, r) {
   return { o: t.o, A, tx: t.tx + t.A * W / 2 - A * r.W / 2, ty: t.ty + t.A * H / 2 - A * r.H / 2 };
 }
 
-/* ================= ambient — bg / ink / panel / accent interpolate with depth ================= */
+/* ================= ambient — bg / ink / accent interpolate with depth =================
+   Panel material is not interpolated: it is PHASE-OWNED (index.html — the surface
+   material at :root, the flip membrane, the depth and core materials), because a
+   material follows the ink, and the ink is bistable. The four-keyframe ramp that
+   once wrote --panel per frame survived only as an imperceptible drift inside the
+   surface phase, overridden everywhere else. */
 function ambientAt(p) {
   const d = p * 3, bi = clamp(d | 0, 0, 2), bf = d - bi;
-  const PA = PANELS[bi], PB = PANELS[bi+1];
-  const pn = PA.map((v,j) => v + (PB[j]-v) * bf);
   return {
     bg:     mixHex(BGS[bi][0], BGS[bi+1][0], bf),
     ink:    mixHex(BGS[bi][1], BGS[bi+1][1], bf),
-    panel:  `rgba(${pn[0]|0},${pn[1]|0},${pn[2]|0},${pn[3].toFixed(2)})`,
     accent: mixHex(ACCENTS[bi], ACCENTS[bi+1], bf)
   };
 }
@@ -441,7 +442,7 @@ function developServer() {
   };
 }
 
-const API = { ZOOMS, BGS, PANELS, ACCENTS, READING, computeOrbit, deriveAnchors, pathPoint, depthFor, cameraAt, composeTile,
+const API = { ZOOMS, BGS, ACCENTS, READING, computeOrbit, deriveAnchors, pathPoint, depthFor, cameraAt, composeTile,
   ambientAt, bgRgbAt, readingGroundAt, dprCapFor, binTargetFor,
   DEV_BATCH, frameFor, plateState, developStep, stateHash, exposureLog, tonemapInto, summarizeField, developServer };
 
@@ -560,7 +561,7 @@ if (typeof document !== "undefined") {
       if (paint.transform !== transform) { cv.style.transform = transform; paint.transform = transform; }
     }
     const amb = ambientAt(p);
-    const props = { "--bg": amb.bg, "--inkA": amb.ink, "--panel": amb.panel, "--accent": amb.accent };
+    const props = { "--bg": amb.bg, "--inkA": amb.ink, "--accent": amb.accent };
     Object.keys(props).forEach(name => {
       if (ambientPaint[name] !== props[name]) { root_el.style.setProperty(name, props[name]); ambientPaint[name] = props[name]; }
     });
