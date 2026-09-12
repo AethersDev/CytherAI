@@ -9,11 +9,13 @@ P5  an unknown projection name is refused, never written;
 P6  a manifest edit moves every visible count it owns AND the canonical derivation —
     systems_indexed 6 → 7 changes 06 → 07 at every site and changes the checksum;
 P7  no retired literal survives outside a marked element;
-P8  CL-02 reads the same elements back at runtime (tools/test-projection.js under jsc).
+P8  CL-02 reads the same elements back at runtime (tools/test-projection.js under jsc);
+P9  the floor's obligations block is the corpus's obligations — current, complete, citing
+    every id a served module names, and carrying no verdict, receipt, digest or build.
 
 Run: python3 tools/test-projection.py   ·   exit nonzero on any failure.
 """
-import os, re, subprocess, sys, tempfile
+import json, os, re, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "tools"))
@@ -73,6 +75,18 @@ check("06 INDEXED" not in stripped and "02 DISCLOSED" not in stripped and ">03 �
       "P7 no retired count or figure literal survives outside a marked element")
 stripped_b = PM.MARK.sub(lambda m: m.group(1) + m.group(5), pages["pages/brief.html"])
 check("IR 0.00% vs" not in stripped_b and not re.search(r">(100|99|97|91)%<", stripped_b), "P7 brief.html likewise")
+# P9 — the obligations block: current, complete, and carrying no verdict, receipt, digest or build
+PO = importlib.import_module("project-obligations")
+corpus = json.load(open(PO.CORPUS, encoding="utf-8"))
+blk = idx[idx.index(PO.BEGIN):idx.index(PO.END)]; blk = blk[blk.index("-->") + 3:]   # the rows, past the marker's own comment
+cited = sorted({c for f in ("js/claims.js", "js/site.js", "js/substrate.js") for c in re.findall(r"CY-[A-Z]+-\d{3}", open(os.path.join(ROOT, f), encoding="utf-8").read())})
+check(PO.project(idx, corpus) == idx and blk.count('<details class="ob">') == len(corpus["obligations"]) >= 19,
+      "P9 the floor's obligations block is the corpus's %d obligations, current" % len(corpus["obligations"]))
+check(not re.search(r"\b[0-9a-f]{64}\b|\b[0-9A-F]{16}\b|\b(PASS|FAIL|NOT_EVALUATED)\b|receipt", blk),
+      "P9 the block carries no digest, build identity, result or receipt — only what is owed")
+check(all(c in blk for c in cited) and cited, "P9 every obligation a served module cites is disclosed: %s" % ", ".join(cited))
+mut = json.loads(json.dumps(corpus)); mut["obligations"][2]["quantifier"] += " (mutated)"
+check(PO.project(idx, mut) != idx, "P9 a changed obligation makes the block stale")
 # P8
 r = subprocess.run([JSC, "js/manifest.js", "tools/test-projection.js"], cwd=ROOT, capture_output=True, text=True)
 print(r.stdout.rstrip())

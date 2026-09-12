@@ -159,7 +159,11 @@ The facts the pages print — the strata's counts and the validation figures on
 elements (`data-m="name"`) that `python3 tools/project-manifest.py` rewrites from
 `CytherManifest.project`, and that CL-02 reads back at runtime. After a manifest edit,
 run the projector before the integrity step; `tools/test-projection.py` fails on a
-stale page, an unknown name, or an identifier that is not printed.
+stale page, an unknown name, or an identifier that is not printed. The floor also
+discloses every VAIC obligation — what the page owes and who may establish it, never a
+receipt or verdict, because a receipt for a build cannot be inside that build —
+projected from `vaic/cytherai-obligations.v0.json` by `python3 tools/project-obligations.py`
+after any obligation edit.
 
 The architecture and change-impact guide is `docs/architecture.md`.
 
