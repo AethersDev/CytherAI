@@ -85,6 +85,35 @@
               "vaic/evidence/current-browser-observations.v0.json#canonical_settle"
             ],
             "observed_at": "2026-08-14"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "BE40E75378CB587A",
+            "artifact_manifest_hash": "0882b155d2e36616e52e79ff04c79735b47ba324f7d195973ad6e2eceff01bcf",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "517a40c7ca14008d17f9bd60d033f77dd2dc4585119056241aa3c68cb40e34d1",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q16-plate3-merged.py, q17-cysem-observe.py)",
+            "harness_version": "2026-09-12",
+            "method": {
+              "measurement": "three consecutive settled samples with four initialized canvases after development, on the merged candidate",
+              "threshold": "checksum printed equals checksum re-derived in page; CLAIMS 10/10 HOLDING; strip status canonical",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#canonical_settle_BE40E75378CB587A"
+            ],
+            "observed_at": "2026-09-12"
           }
         ]
       }
@@ -141,6 +170,36 @@
               "js/site.js#verifyAdmissions"
             ],
             "observed_at": "2026-08-14"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "BE40E75378CB587A",
+            "artifact_manifest_hash": "0882b155d2e36616e52e79ff04c79735b47ba324f7d195973ad6e2eceff01bcf",
+            "record_hash": "df0ad2da86d3011a4e86dcf7c5b42498acdfb67cc084e27d3abeb286bef6e20b",
+            "grammar_hash": "517a40c7ca14008d17f9bd60d033f77dd2dc4585119056241aa3c68cb40e34d1",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q16-plate3-merged.py, q17-cysem-observe.py)",
+            "harness_version": "2026-09-12",
+            "method": {
+              "measurement": "CL-03 async verifier result read from the rendered claims table; admissions and state checksums re-derived in page for epochs 01, 02, 03 and compared to the published nonces and rendered chips",
+              "threshold": "re-derived nonce equals published nonce and re-derived checksum equals the rendered chip for every published epoch",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#epoch_reproduction_BE40E75378CB587A",
+              "js/site.js#verifyAdmissions"
+            ],
+            "observed_at": "2026-09-12"
           }
         ]
       }

@@ -2,7 +2,7 @@
   "specification": "VAIC-0",
   "receipt_type": "bounded-browser-observation-ledger",
   "artifact_build": null,
-  "artifact_builds": ["F1FF314DEC2C4717", "661AFC4C3C67BFD1"],
+  "artifact_builds": ["F1FF314DEC2C4717", "661AFC4C3C67BFD1", "BE40E75378CB587A"],
   "observed_at": "2026-08-14",
   "evaluator": {
     "class": "BROWSER_HARNESS",
@@ -98,6 +98,71 @@
       "action_depth": 1,
       "each_row_exposes": ["METHOD", "VALUE", "COMPUTED"],
       "all_rows_checked": true
+    },
+    "canonical_settle_BE40E75378CB587A": {
+      "artifact_build": "BE40E75378CB587A",
+      "build_identity": "BE40E75378CB587A",
+      "observed_at": "2026-09-12",
+      "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q16-plate3-merged.py, q17-cysem-observe.py)",
+      "viewport": "1440x900",
+      "device_pixel_ratio": 1,
+      "settle_ms": 414,
+      "three_consecutive_valid_samples": true,
+      "all_four_canvases_initialized": true,
+      "status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED",
+      "claims": "CLAIMS 10/10 HOLDING",
+      "serial": "−1.752 +1.859 −0.983 −0.607",
+      "checksum_printed": "75D1:89D1",
+      "checksum_rederived_in_page": "75D1:89D1",
+      "cl02": "CL-02 · RENDER ≡ MANIFEST ● HOLDING · 75D1:89D1 printed twice · derived once",
+      "cl08": "CL-08 · CAMERA ≡ DERIVATION ● HOLDING · 4 anchors re-derived · match canonical camera",
+      "plate_terminal_states": {
+        "1440x900": "p0 0.90M/0.9M it 0.9M · p1 1.21M/1.2M it 4.5M · p2 1.80M/1.8M it 12.1M · p3 2.40M/2.4M it 41.3M of cap 54M · all target-terminated",
+        "1200x600": "p3 2.40M/2.4M it 39.4M of cap 54M · all target-terminated",
+        "390x844": "p3 2.40M/2.4M it 23.0M of cap 54M · all target-terminated"
+      },
+      "redevelop_plate3_terminal_identical": true,
+      "developServer_anchor_page_and_worker": "density fnv1a ef4bf18f",
+      "console_errors": 0
+    },
+    "epoch_reproduction_BE40E75378CB587A": {
+      "artifact_build": "BE40E75378CB587A",
+      "observed_at": "2026-09-12",
+      "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q16-plate3-merged.py, q17-cysem-observe.py)",
+      "viewport": "1440x900",
+      "cl03": "CL-03 · PUBLISHED ADMISSION ≡ DERIVATION ● HOLDING · 3 admissions re-derived · published nonces match",
+      "strip_status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED",
+      "epoch_chips_rendered": [
+        "EPOCH 01 · SUPERSEDED · E141:9D7A · 2026-02-09 · N00",
+        "EPOCH 02 · SUPERSEDED · 2BF8:2477 · 2026-05-02 · N00",
+        "EPOCH 03 · CANONICAL · 75D1:89D1 · 2026-07-16 · N00",
+        "EPOCH 04 · COMMITTED · sha256 c763fcd5faecb8c5… · 2026-07-17 · PREIMAGE PUBLIC · DEMONSTRATION"
+      ],
+      "epoch_checksums_rederived_in_page": [
+        "E141:9D7A",
+        "2BF8:2477",
+        "75D1:89D1"
+      ],
+      "admissions_rederived_in_page": [
+        {
+          "epoch": 1,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 2,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 3,
+          "nonce": 0,
+          "published": 0
+        }
+      ],
+      "note": "the CL-03 verifier and the in-page re-derivation agree with the published nonces for all three epochs; the mini-marks are rendered from paramsFor(epoch, nonce)"
     }
   }
 }
