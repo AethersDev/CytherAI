@@ -5,7 +5,6 @@ pages/brief.html
 pages/privacy.html
 pages/security.html
 pages/terms.html
-pages/runner.html
 js/manifest.js
 js/substrate.js
 js/claims.js
@@ -14,8 +13,6 @@ js/instrument.js
 js/site.js
 js/develop-worker.js
 css/cytherai.css
-engine/trajectory-engine.js
-engine/trajectory-engine.test.js
 sw.js
 manifest.webmanifest
 icon.svg

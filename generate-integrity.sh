@@ -11,13 +11,15 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-# substrate homepage modules + subpage stylesheet + the two files runner.html loads.
-# The fingerprint must describe what is SERVED: a file no page requests cannot
-# change what a reader receives, so it has no business moving the build hash.
-RESOURCES="css/cytherai.css js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js engine/trajectory-engine.js engine/trajectory-engine.test.js"
+# substrate homepage modules + subpage stylesheet. The fingerprint must describe
+# what is SERVED: a file no page requests cannot change what a reader receives, so
+# it has no business moving the build hash. pages/runner.html and the engine it
+# loads are a developer page — linked from nowhere, not in deploy.paths, not
+# precached — and carry no SRI or build stamp.
+RESOURCES="css/cytherai.css js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js"
 
-# HTML files to patch
-HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html pages/runner.html"
+# HTML files to patch (every served page)
+HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html"
 
 echo "[integrity] Computing SRI hashes..."
 

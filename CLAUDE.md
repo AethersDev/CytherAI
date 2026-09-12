@@ -216,8 +216,9 @@ a fork or a redevelopment is a different world and the poster cannot speak for i
 `generate-integrity.sh`, so each build installs atomically), `manifest.webmanifest`,
 `generate-integrity.sh` (SRI + build-hash), `deploy.sh` (publish allowlist → `dist/`;
 headers contract in `docs/deploy.md`). **Engine stack:** `engine/trajectory-engine.js`
-and its `.test.js` are served only by `pages/runner.html` — the homepage does not load
-them. The three modules only the retired graphite homepage loaded (`content/record.js`,
+and its `.test.js` are loaded only by `pages/runner.html`, a developer page: linked
+from no page, not in `deploy.paths`, not precached, unstamped — run it from the local
+static server. The homepage does not load them. The three modules only the retired graphite homepage loaded (`content/record.js`,
 `profiles/disclosure.js`, `js/console.js`) are archived beside it under
 `backup/graphite-v2/`, and the engine's `-v2.js` dev source, prototypes and v-next design
 map under `backup/trajectory-engine/` — none is served, precached, or fingerprinted.
