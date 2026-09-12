@@ -56,15 +56,19 @@ function progress() {
 /* ================= reading exposure — phase machine + rest state (P9) ================= */
 /* Ink is bistable with hysteresis; panels phase-change with it. The world holds full
    amplitude while the reader navigates and yields when they stop to read. */
-let inkState = "dark";
+let inkState = "light";
 function readingUpdate(d) {
   const R = S.READING;
-  if (inkState === "dark" && d >= R.SW_DOWN) inkState = "light";
-  else if (inkState === "light" && d <= R.SW_UP) inkState = "dark";
-  const phase = inkState === "dark" ? "surface" : d < R.FLIP_END ? "flip" : d < 2.7 ? "depth" : "core";
+  if (inkState === "light" && d >= R.SW_DOWN) inkState = "dark";
+  else if (inkState === "dark" && d <= R.SW_UP) inkState = "light";
+  const phase = inkState === "light" ? (d > R.FLIP_START ? "flip" : "surface") : d < 2.7 ? "depth" : "core";
   const b = document.body;
   if (b.dataset.ink !== inkState) b.dataset.ink = inkState;
   if (b.dataset.phase !== phase) b.dataset.phase = phase;
+  /* the surface is the instrument's own state: one object, one statement, no
+     apparatus. Every fixed control that reads the RECORD is withdrawn until the
+     reader leaves depth zero. */
+  b.classList.toggle("at-surface", d < 0.05);
 }
 let restT = null;
 function restArm() {
@@ -157,24 +161,27 @@ addEventListener("scroll", () => {
 /* ================= thesis under tension (Filament) ================= */
 const thesis = $("thesis");
 const glyphs = [];
+/* Split a heading into word wrappers (.wd) of glyph spans (.g) with real text-node
+   spaces between words. A space inside an inline-block span collapses and gives no
+   break opportunity, and adjacent inline-block glyphs break mid-word — the system
+   titles rendered "ControlledGen / erativeCAD" that way. Returns the glyph spans. */
+function splitGlyphs(el) {
+  const text = el.textContent.trim(); el.textContent = "";
+  el.setAttribute("aria-label", text);
+  const wrap = document.createElement("span"); wrap.setAttribute("aria-hidden", "true");
+  const out = [];
+  text.split(" ").forEach((word, i) => {
+    if (i) wrap.appendChild(document.createTextNode(" "));
+    const w = document.createElement("span"); w.className = "wd";
+    for (const ch of word) { const s = document.createElement("span"); s.className = "g"; s.textContent = ch; w.appendChild(s); out.push(s); }
+    wrap.appendChild(w);
+  });
+  el.appendChild(wrap);
+  return out;
+}
 function splitThesis() {
   if (!thesis) return;
-  const words = thesis.textContent.split(" ");
-  thesis.textContent = "";
-  thesis.setAttribute("aria-label", "Built for environments where failure has consequence.");
-  const wrap = document.createElement("span");
-  wrap.setAttribute("aria-hidden", "true");
-  words.forEach((word, i) => {
-    const w = document.createElement("span"); w.className = "wd";
-    [...word].forEach(ch => {
-      const s = document.createElement("span"); s.className = "g"; s.textContent = ch;
-      w.appendChild(s);
-      glyphs.push({ el: s, x: 0, y: 0, w: 250, tw: 250, c: 0, tc: 0 });
-    });
-    wrap.appendChild(w);
-    if (i < words.length - 1) wrap.appendChild(document.createTextNode(" "));
-  });
-  thesis.appendChild(wrap);
+  for (const el of splitGlyphs(thesis)) glyphs.push({ el, x: 0, y: 0, w: 250, tw: 250, c: 0, tc: 0 });
 }
 function cachePositions() {
   glyphs.forEach(g => { const r = g.el.getBoundingClientRect(); g.x = r.left + r.width/2 + scrollX; g.y = r.top + r.height/2 + scrollY; });
@@ -204,14 +211,7 @@ function fieldStep() {
 const waves = [];
 function wireWaves() {
   document.querySelectorAll("[data-wave]").forEach(h => {
-    const text = h.textContent; h.textContent = "";
-    h.setAttribute("aria-label", text);
-    const spans = [...text].map(ch => {
-      const s = document.createElement("span"); s.className = "g";
-      s.textContent = ch === " " ? " " : ch;
-      s.setAttribute("aria-hidden", "true");
-      h.appendChild(s); return s;
-    });
+    const spans = splitGlyphs(h);
     const send = () => { if (!reduced && document.body.dataset.optics !== "read") { waves.push({ spans, t: 0 }); wake(); } };
     h.addEventListener("pointerenter", send);
     h.addEventListener("click", send);
@@ -240,7 +240,7 @@ function stripUpdate() {
   if (st) { let s = S.status(); if (canonical) s += " · ADMISSION " + admissionState; st.textContent = s; }
   const rb = $("resetBtn"); if (rb) rb.hidden = canonical;
   const fb = $("forkBtn");
-  if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG" : "FORK"; }
+  if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG · ARROWS" : "FORK"; }
   if (!canonical) Ledger.recordAct("MARK_FORKED");
   applyCorridors();   /* the atlas settles with the exposure */
   if (document.body.classList.contains("at-rest")) conditionEnvelopes();
@@ -266,6 +266,8 @@ async function copyState(hash, msg) {
 function wireStrip() {
   const fb = $("forkBtn"); if (fb) fb.addEventListener("click", () => S.setFork(!S.isForking()));
   const rb = $("resetBtn"); if (rb) rb.addEventListener("click", () => S.resetToCanonical());
+  /* an instrument command: replay the current world's own development sequence — a fork stays forked */
+  const rd = $("redevelopBtn"); if (rd) rd.addEventListener("click", () => S.redevelop());
   const cap = $("captureBtn"); if (cap) cap.addEventListener("click", () => { copyState(buildHash(true), "✓ briefing state captured to link"); Ledger.recordAct("STATE_CAPTURED"); });
   const cr = $("claimsRecompute"); if (cr) cr.addEventListener("click", () => {
     Claims.recomputeClaims(); Ledger.recordAct("CLAIMS_RECOMPUTED");

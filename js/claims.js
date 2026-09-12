@@ -4,8 +4,8 @@
    the footer reads CLAIMS n/10 HOLDING and any failure prints ✕ INVALID in place.
 
    Ported from newC3/synthesis-rev5.html. Amendments:
-     · CL-06 flip band recomputed for the shipped BGS keyframes → 40–62%
-       (contrast is measured against CytherSubstrate.ambientAt — the actual model).
+     · CL-06 — reading ink holds AA at every depth on its phase-locked ambient
+       ground (the flip-band exemption is retired; the model is CytherSubstrate's).
      · CL-06b — text-lane legibility ≤ cap (§5.3).
      · CL-06c — the quietest ink layer, not only the primary reading ink, holds
        AA at every depth; CL-06's primary-ink-only scope is what allowed the
@@ -30,28 +30,26 @@ function wcagRatio(a, b) {
 }
 const parseRGB = s => { const m = s.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/); return [+m[1], +m[2], +m[3]]; };
 
-/* CL-06: heading (--ink) vs background (--bg) across the shipped ambient model.
-   The 40–62% flip band is where the mid exposure carries ink and bg through each
-   other — the crossover is inherent (light falls continuously); contrast is asserted
-   only outside it. Measured against CytherSubstrate.ambientAt, the same function
-   observe() writes to the page. */
-/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band).
-   Dark ink is valid up to READING.SW_DOWN on the raw ambient; light ink from
-   READING.SW_UP, grounded on the absorptive membrane through the flip phase
-   (every flip-phase reading block carries it), then on the raw ambient. */
+/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band;
+   the earlier 40–62% flip-band exemption is retired). Measured against
+   CytherSubstrate's ambient model, the same functions observe() writes to the page.
+   Light ink is valid up to READING.SW_DOWN — on the raw ambient while the field
+   is unexposed, then on the absorptive membrane through the flip phase (every
+   flip-phase reading block carries it); dark ink from READING.SW_UP, on the raw
+   ambient, which by then is paper. */
 const hexRgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
 function contrastClaim() {
   const R = S.READING;
-  let worst = 99, at = 0, ws = "dark";
+  let worst = 99, at = 0, ws = "light";
   for (let i = 0; i <= 300; i++) {
     const d = i / 100;
     if (d <= R.SW_DOWN) {
-      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
-      if (r < worst) { worst = r; at = d; ws = "dark"; }
-    }
-    if (d >= R.SW_UP) {
       const r = wcagRatio(hexRgb(R.LIGHT), S.readingGroundAt(d, "light"));
       if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
     }
   }
   return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + ws + " ink at depth " + Math.round(at/3*100) + "% · phase-locked" };
@@ -68,16 +66,16 @@ const INK_FLOOR = 0.66;
 function secondaryContrastClaim() {
   const R = S.READING, dark = hexRgb(R.DARK), light = hexRgb(R.LIGHT);
   const lay = (ink, g) => ink.map((v, i) => v * INK_FLOOR + g[i] * (1 - INK_FLOOR));
-  let worst = 99, at = 0, ws = "dark";
+  let worst = 99, at = 0, ws = "light";
   for (let i = 0; i <= 300; i++) {
     const d = i / 100;
     if (d <= R.SW_DOWN) {
-      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
-      if (r < worst) { worst = r; at = d; ws = "dark"; }
-    }
-    if (d >= R.SW_UP) {
       const g = S.readingGroundAt(d, "light"), r = wcagRatio(lay(light, g), g);
       if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
     }
   }
   return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + Math.round(INK_FLOOR * 100) +
@@ -150,11 +148,11 @@ const CLAIMS = [
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
              : { ok: false, detail: "not yet run" }; } },
-  { id: "CL-06", text: "READING INK ≥4.5:1 AT EVERY DEPTH",
-    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked ground (the membrane through the flip) must hold 4.5:1.",
+  { id: "CL-06", text: "READING INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked AMBIENT ground (the membrane through the flip) must hold 4.5:1. It is a proposition about the colour model, complete over the declared depth domain. It does not see the plate: the composited ground is CY-SEM-003, a browser obligation, because the page cannot read its own composited pixels.",
     run: contrastClaim },
-  { id: "CL-06c", text: "QUIETEST INK LAYER ≥4.5:1 AT EVERY DEPTH",
-    m: "The same sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
+  { id: "CL-06c", text: "QUIETEST INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "The same ambient-ground sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
     run: secondaryContrastClaim },
   { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE",
     m: "Recomputes the canonical mark's text-lane density metric and compares it against the admission cap.",
