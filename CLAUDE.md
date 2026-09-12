@@ -154,6 +154,13 @@ identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI
 `build-hash` meta + the worker cache name), then `python3 tools/vaic_restamp.py` (re-stamps
 the VAIC candidate, appends the automated-set receipts; existing receipts are never edited).
 
+The facts the pages print — the strata's counts and the validation figures on
+`index.html` and `pages/brief.html` — are projections of `js/manifest.js`: marked
+elements (`data-m="name"`) that `python3 tools/project-manifest.py` rewrites from
+`CytherManifest.project`, and that CL-02 reads back at runtime. After a manifest edit,
+run the projector before the integrity step; `tools/test-projection.py` fails on a
+stale page, an unknown name, or an identifier that is not printed.
+
 The architecture and change-impact guide is `docs/architecture.md`.
 
 ## Architecture — the substrate / disclosure engine

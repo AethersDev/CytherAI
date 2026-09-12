@@ -81,7 +81,10 @@ HTML detail.
 3. The instrument and ledger attach their DOM behavior; controls, mobile docking,
    hold-to-cross, optics, title glyphs, and wave interactions are wired.
 4. Manifest, provenance, epoch, commitment, and anti-manifest rows are rendered
-   from `CytherManifest`; duplicated fact literals should not be introduced.
+   from `CytherManifest`. The facts the strata print as bytes (counts, validation
+   figures) are projections written by `tools/project-manifest.py` into `data-m`
+   elements and read back by CL-02 — a literal that is not a projection is a
+   second authority and must not be introduced.
 5. Claims render pending, then executable predicates recompute after load.
    Published admission nonces are independently re-derived in yielded steps.
 6. The service worker registers from the root. Its cache name carries the same
@@ -187,9 +190,12 @@ Browser-only validation remains required for:
   decide whether it belongs in `sw.js`.
 - Promote an asset: record provenance in `docs/asset-promotion-log.md`, add it to
   `deploy.sh`, and add it to `sw.js` only when eager offline cost is justified.
-- Change manifest facts: review every `PROVISIONAL` marker, regenerate integrity
-  because `js/manifest.js` is hashed, rerun admissions/claims, and treat a genuine
-  commitment as an owner-custody decision rather than a source-code assertion.
+- Change manifest facts: review every `PROVISIONAL` marker, run
+  `python3 tools/project-manifest.py` (the strata's counts and validation figures on
+  `index.html` and `pages/brief.html` are marked projections of the manifest, and
+  `tools/test-projection.py` fails on a stale page), regenerate integrity because
+  `js/manifest.js` and the pages are hashed, rerun admissions/claims, and treat a
+  genuine commitment as an owner-custody decision rather than a source-code assertion.
 - Change plate or reading behavior: update the implementation and extend
   `tools/test-exposure.js` (the executed tone-map and reading laws) or
   `tools/test-motion.py` (the source-form laws); browser-test memory, scroll

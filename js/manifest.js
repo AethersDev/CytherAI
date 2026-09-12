@@ -50,6 +50,46 @@ const MANIFEST = {
   patent: "US PROVISIONAL · FILED 2025.Q1"    /* REAL — footer reads US PATENT PENDING */
 };
 
+/* ================= the validation record, as display data =================
+   validation_index above carries the checksum-bearing identifiers and stays exactly
+   as it is — a display change must never re-derive the mark. VALIDATION is the same
+   record in its printed form, one row per identifier in table order; the projection
+   test holds the two identifier sets equal. `mark` is the evidence class the table's
+   legend declares: log-verified (●) or externally validated (◌). */
+const VALIDATION = [
+  { id: "T2C192-IR-0.00", mark: "ext", metric: "Invalid Rate (↓ better)", cyther: "0.00%", deepcad: "10.00%", t2cad: "0.93%" },
+  { id: "GVR-BEAM-100",   mark: "log", metric: "GVR · Constrained Beam (n=100)", cyther: "100%" },
+  { id: "GVR-COMP-100",   mark: "log", metric: "GVR · Completion (n=100)", cyther: "100%" },
+  { id: "DIM3-99",        mark: "log", metric: "Dimensional Accuracy ±3mm (n=35)", cyther: "99%" },
+  { id: "DIM5-97",        mark: "log", metric: "Dimensional Accuracy ±5mm (n=35)", cyther: "97%" },
+  { id: "MOP-91",         mark: "log", metric: "Multi-Op Accuracy · Encoder (n=35)", cyther: "91%" }
+];
+
+/* ================= projections — every manifest fact the pages print =================
+   One function, two consumers. tools/project-manifest.py writes these strings into
+   the marked elements of index.html and pages/brief.html (data-m="name"), so the
+   documents keep their facts as bytes and a reader without scripts still has them;
+   CL-02 reads the same elements back at runtime and compares them to this function.
+   A printed count or figure that is not a projection is a second authority — which
+   is how the strata once stated 06 INDEXED while only the floor derived the count.
+   An unknown name is INVALID, first-class: null, and both consumers refuse it. */
+const pad2 = n => String(n).padStart(2, "0");
+function project(name) {
+  const [kind, key, field] = name.split(":");
+  if (kind === "count") {
+    if (key === "systems_indexed") return pad2(MANIFEST.systems_indexed);
+    if (key === "systems_disclosed") return pad2(MANIFEST.systems_disclosed.length);
+    if (key === "controlled_references") return pad2(MANIFEST.controlled_references);
+    return null;
+  }
+  if (kind === "validation") {
+    const row = VALIDATION.find(r => r.id === key);
+    return row && typeof row[field] === "string" && field !== "id" && field !== "mark" ? row[field] : null;
+  }
+  if (name === "outcome:cad") { const r = VALIDATION[0]; return "IR " + r.cyther + " vs " + r.deepcad + " (DeepCAD) · Text2CAD-192"; }
+  return null;
+}
+
 /* ================= prior + committed disclosure states ================= */
 /* Epochs 01/02 are PROVISIONAL (dates fabricated); revision numbers are REAL
    (content/record.js revision history: 1.0, 1.4, 2.0). The async verifier
@@ -257,8 +297,8 @@ const CANON = paramsFor(NORM, ADMISSION_NONCE);
 const CHECKSUM = stateChecksum(NORM);
 
 const API = {
-  MANIFEST, EPOCHS, COMMITMENTS, PUBLISHED_NONCES, NORM, CANON, ADMISSION_NONCE, CHECKSUM,
-  LEGIBILITY_CAP,
+  MANIFEST, VALIDATION, EPOCHS, COMMITMENTS, PUBLISHED_NONCES, NORM, CANON, ADMISSION_NONCE, CHECKSUM,
+  LEGIBILITY_CAP, project,
   fnv, dsin, dcos, datan2, dsinOrbit, derive, renderedRichness, legibility,
   seedsFor, paramsFor, admit, normalizeManifest, stateChecksum
 };

@@ -107,15 +107,23 @@ function cameraClaim() {
   return { ok, detail: ok ? re.length + " anchors re-derived · match canonical camera" : "camera ≠ derivation" };
 }
 
-/* CL-02: what is RENDERED equals what the manifest derives (checksum printed twice,
-   derived once). DOM read — verified live and by the ledger's VERIFY button. */
+/* CL-02: what is RENDERED equals what the manifest derives — the checksum printed
+   twice and derived once, AND every projected fact the strata print (the counts and
+   the validation figures carry data-m; tools/project-manifest.py wrote them from
+   CytherManifest.project, and this reads them back against the same function). A
+   page with no projected facts does not pass vacuously. DOM read — verified live
+   and by the ledger's VERIFY button. */
 function checkRenderManifest() {
   const recomputed = CM.stateChecksum(CM.normalizeManifest(CM.MANIFEST));
   if (!hasDoc) return { ok: true, detail: recomputed + " (no DOM · derivation only)" };
   const shown = (document.querySelector("#manifestRows .m-v.acc") || { textContent: "" }).textContent.trim();
   const chip = document.querySelector(".ep.current");
-  const ok = (shown === recomputed) && !!chip && chip.textContent.indexOf(recomputed) >= 0;
-  return { ok, detail: ok ? recomputed + " printed twice · derived once" : "render ≠ manifest" };
+  const marks = Array.from(document.querySelectorAll("[data-m]"));
+  const wrong = marks.filter(el => el.textContent.trim() !== CM.project(el.dataset.m)).map(el => el.dataset.m);
+  const checksumOk = (shown === recomputed) && !!chip && chip.textContent.indexOf(recomputed) >= 0;
+  const ok = checksumOk && marks.length > 0 && wrong.length === 0;
+  return { ok, detail: ok ? recomputed + " printed twice · derived once · " + marks.length + " projected facts equal the manifest"
+    : !checksumOk ? "render ≠ manifest" : !marks.length ? "no projected facts on the page" : wrong.length + " projected fact(s) ≠ manifest: " + wrong.slice(0, 3).join(", ") };
 }
 
 /* ================= the registry =================
@@ -130,7 +138,7 @@ const CLAIMS = [
     const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length : -1;
     return { ok: n === 0, detail: n === 0 ? "0 external requests" : (n < 0 ? "no timing api" : n + " external requests") }; } },
   { id: "CL-02", text: "RENDER ≡ MANIFEST",
-    m: "Re-derives the state checksum from the manifest tuple and compares it to both places the page prints it.",
+    m: "Re-derives the state checksum from the manifest tuple and compares it to both places the page prints it; then reads every projected fact (data-m — the strata's counts and the validation figures) back against CytherManifest.project. Any printed fact that is not the manifest's fails it.",
     run: checkRenderManifest },
   { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION",
     m: "The async verifier re-runs the published admission — nonce, richness and legibility screens — from the manifest, off the boot path.",
