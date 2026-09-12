@@ -3,15 +3,15 @@
   "corpus": "cytherai-current-artifact",
   "version": 1,
   "candidate": {
-    "build_identity": "4EA6477A3A873CBD",
+    "build_identity": "3A75D2899970BB1C",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
     "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
     "kernel_hash": "0f755ff5598ca808521e739c068db32925ae691baf03ce6f1f5200c33a505fca",
-    "grammar_hash": "2f0c17f8b85c5b51e630fa5b486df498663269b2fd2aca5627798778e7416605",
+    "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "0ad34e7b1de842f2e8a489f8eed710965524371f9b9ac9a4f6a224b3356fbc4a",
-    "verification_identity": "27b58fc12ac9519f5888fb9c56ddc20ae641fdae06dac0355315dcb7d5124eaf"
+    "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+    "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a"
   },
   "semantics": {
     "result_values": ["PASS", "FAIL", "NOT_EVALUATED"],
@@ -1081,6 +1081,36 @@
               "js/ledger.js#mailtoBody"
             ],
             "observed_at": "2026-09-12"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "3A75D2899970BB1C",
+            "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+            "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
+            "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-ledger.js",
+            "harness_version": "3A75D2899970BB1C",
+            "method": {
+              "measurement": "decoded ledger mail payload prefix",
+              "threshold": "READING SELF-REPORT",
+              "units": "exact string"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-ledger.js#ledger-selfreport-prefix",
+              "js/ledger.js#mailtoBody"
+            ],
+            "observed_at": "2026-09-12"
           }
         ]
       }
@@ -1906,6 +1936,36 @@
             },
             "harness_identity": "tools/test-ledger.js",
             "harness_version": "4EA6477A3A873CBD",
+            "method": {
+              "measurement": "decoded ledger epistemic limitation",
+              "threshold": "NOT INDEPENDENTLY VERIFIABLE",
+              "units": "exact string"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-ledger.js#ledger-authority-not-elevated",
+              "js/ledger.js#mailtoBody"
+            ],
+            "observed_at": "2026-09-12"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "3A75D2899970BB1C",
+            "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+            "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
+            "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-ledger.js",
+            "harness_version": "3A75D2899970BB1C",
             "method": {
               "measurement": "decoded ledger epistemic limitation",
               "threshold": "NOT INDEPENDENTLY VERIFIABLE",
@@ -2753,6 +2813,36 @@
               "js/claims.js#renderClaims"
             ],
             "observed_at": "2026-09-12"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "3A75D2899970BB1C",
+            "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+            "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
+            "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "3A75D2899970BB1C",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-12"
           }
         ]
       }
@@ -3578,6 +3668,36 @@
             },
             "harness_identity": "deploy.sh plus tools/test-site.py",
             "harness_version": "4EA6477A3A873CBD",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-12"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "3A75D2899970BB1C",
+            "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+            "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
+            "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "3A75D2899970BB1C",
             "method": {
               "measurement": "complete allowlist and dist closure",
               "threshold": "27 files, no forbidden trees, exact integrity identity",
@@ -4678,6 +4798,36 @@
             },
             "harness_identity": "tools/test-site.py plus tools/test-motion.py",
             "harness_version": "4EA6477A3A873CBD",
+            "method": {
+              "measurement": "DPR, bin, retained-field, and tonemap policy probes",
+              "threshold": "exact beta profile bounds",
+              "units": "DPR, cells, milliseconds"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_performance_and_mobile_clearance_contract",
+              "tools/test-motion.py#retained-field-and-tonemap-bounds"
+            ],
+            "observed_at": "2026-09-12"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "3A75D2899970BB1C",
+            "artifact_manifest_hash": "6db2dc90222211632e94ed0319ff75508f3273c9eb84f9a33a5492c99336ade0",
+            "record_hash": "e97257d2a419bf4e22b52c7c63dee7a6f052da4002e736bb73b600f226061fe0",
+            "grammar_hash": "e42b541726eccac0e5cc20761c704e0645ac91c84f41cec48cb562eafe0254ab",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "378ce8c0bf8d487ce97245be60d65365e216de996e12ee4c38bcc194c71a8f8a",
+            "environment": {
+              "capability_profile": "three_declared_width_profiles",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc plus source contract",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-site.py plus tools/test-motion.py",
+            "harness_version": "3A75D2899970BB1C",
             "method": {
               "measurement": "DPR, bin, retained-field, and tonemap policy probes",
               "threshold": "exact beta profile bounds",

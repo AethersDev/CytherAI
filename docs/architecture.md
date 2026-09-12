@@ -91,8 +91,9 @@ HTML detail.
    build hash stamped into every shipped HTML file.
 
 At steady state, scroll work is deliberately narrow: one requestAnimationFrame
-updates only changed plate transforms/opacity, ambient CSS variables, the reading
-phase, the minimap reticle, and the gauge. Hidden plates release compositor
+updates only changed plate transforms/opacity, the ambient CSS variables (`--bg`,
+`--inkA`, `--accent` — panel material is phase-owned and never interpolated), the
+reading phase, the minimap reticle and slider value, and the gauge. Hidden plates release compositor
 `will-change`; envelope blur is disabled while moving. Reading samples bounded
 90k-cell stratified summaries rather than full plate density fields. A height-only
 viewport resize stretches existing plate coverage without replaying development;

@@ -45,7 +45,7 @@ def lum(r, g, b): return 0.2126*r + 0.7152*g + 0.0722*b
 # ---------------- MOT-001 ----------------
 drv = os.path.join(ROOT, "tools", ".reading-driver.js")
 with open(drv, "w") as f:
-    f.write('var S=CytherSubstrate,R=S.READING;R.grounds={switch:S.bgRgbAt(R.SW_DOWN),core:S.bgRgbAt(2.7)};print(JSON.stringify(R))')
+    f.write('var S=CytherSubstrate,R=S.READING;R.grounds={surface:S.bgRgbAt(R.FLIP_START),switch:S.bgRgbAt(R.SW_DOWN),core:S.bgRgbAt(2.7)};print(JSON.stringify(R))')
 try:
     out = subprocess.run([JSC, os.path.join(ROOT, "js/manifest.js"),
                           os.path.join(ROOT, "js/substrate.js"), drv],
@@ -97,15 +97,19 @@ def wcag(a, b): la, lb = rel(a), rel(b); return (max(la, lb) + 0.05) / (min(la, 
 def over(top, alpha, ground): return tuple(t*alpha + g*(1 - alpha) for t, g in zip(top, ground))
 materials = {m.group(1): tuple(float(v) for v in m.groups()[1:])
              for m in re.finditer(r'body\[data-phase="(flip|depth|core)"\] :is\([^)]*\)\{background:rgba\((\d+),(\d+),(\d+),([.\d]+)\)\}', html)}
-phase_ink = {"flip": (R["LIGHT"], R["grounds"]["switch"]), "depth": (R["DARK"], R["grounds"]["switch"]), "core": (R["DARK"], R["grounds"]["core"])}
-a8 = set(materials) == set(phase_ink)
+# the surface material is the :root --panel — fixed, not interpolated (B16); its worst
+# ground for light ink is the brightest ambient of the phase, at FLIP_START
+root_panel = re.findall(r'--panel:rgba\((\d+),(\d+),(\d+),([.\d]+)\)', html)
+materials["surface"] = tuple(float(v) for v in root_panel[0]) if len(root_panel) == 1 else None
+phase_ink = {"surface": (R["LIGHT"], R["grounds"]["surface"]), "flip": (R["LIGHT"], R["grounds"]["switch"]), "depth": (R["DARK"], R["grounds"]["switch"]), "core": (R["DARK"], R["grounds"]["core"])}
+a8 = set(materials) == set(phase_ink) and all(materials.values())
 for phase, (ink, ground) in phase_ink.items():
-    if phase not in materials: continue
+    if not materials.get(phase): continue
     panel = over(materials[phase][:3], materials[phase][3], ground)
     text = over(hexrgb(ink), 0.66, panel)
     if wcag(text, panel) < 4.5: a8 = False
 check(a8 and materials["flip"] == (*R["MEMBRANE"], R["MEMBRANE_A"]),
-      "A8 each phase material carries its phase's ink at the 66% floor with AA; the flip material is the membrane")
+      "A8 each of the four phase materials carries its phase's ink at the 66% floor with AA; the flip material is the membrane")
 
 # A9 — the measurement map is an observation control, not a decoration: a slider in
 # the accessibility tree whose value is the same progress every readout uses, driven
@@ -327,6 +331,11 @@ check("const PREVIEW_N = 20000" in sub and "CM.dsinOrbit(P, PREVIEW_N)" in pre a
       "B15 the preview is the bounded dsin orbit on the minimap alone, labelled as a preview")
 check("body.forking .core{opacity:1}" in html and "body.forking #coreRect{visibility:hidden}" in html,
       "B15 the map is visible while forking at any depth and the prior world's reticle is withdrawn")
+
+# EVIDENCE: panel-material-is-phase-owned
+obs = sub[sub.index("function observe(p)"):sub.index("/* ================= develop the exposures")]
+check("--panel" not in obs and "PANELS" not in sub and "panel:" not in sub[sub.index("function ambientAt"):sub.index("/* ================= reading exposure")],
+      "B16 the observation loop writes no --panel and no panel ramp exists: material is phase-owned")
 
 # EVIDENCE: fixed-step-development
 check("const DEV_BATCH = 60000" in sub and "developStep(job, params)" in sub

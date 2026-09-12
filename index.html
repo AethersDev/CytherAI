@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="4EA6477A3A873CBD">
+<meta name="build-hash" content="3A75D2899970BB1C">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -28,12 +28,14 @@
 <style>
 /* ════════════ tokens — the world writes the ambient (§4.1) ════════════
    Four exposures of one derived object are the background; scroll moves a
-   derived camera into the filament core. --bg/--ink/--panel/--accent are
-   written by CytherSubstrate.observe() across four keyframes. No dark mode
-   toggle — the light RISES continuously: the surface is an unexposed field on
-   which the mark is a live accumulation, and the floor is dry ink on paper,
-   because observation is luminous and a record is printed. No webfonts, no
-   images, no CDNs. */
+   derived camera into the filament core. --bg/--inkA/--accent are written by
+   CytherSubstrate.observe() across four keyframes; --panel is NOT — material is
+   phase-owned (this root value is the surface material; the flip, depth and core
+   materials are the body[data-phase] rules in the reading-exposure block), because
+   a material follows the ink and the ink is bistable. No dark mode toggle — the
+   light RISES continuously: the surface is an unexposed field on which the mark
+   is a live accumulation, and the floor is dry ink on paper, because observation
+   is luminous and a record is printed. No webfonts, no images, no CDNs. */
 :root{
   --bg:#070A10; --ink:#DCE6F5; --inkA:#DCE6F5; --accent:#7FA0FF;
   --panel:rgba(10,15,23,.55);
@@ -905,7 +907,7 @@ body.forking #coreRect{visibility:hidden}
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-0nnIXAB7AXMDvcG+/03F5eZHr+CHWj/PUkM0v/FYXLMCJH2XaYL6Fa57YTCT/tmh" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-qkdxSgSW+Y3R7DlFGkDyrVKeDIEVe842prSoJGFBERe4h/NgXCyZs0fMsd4c9P6c" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-YJxZshZhSMM3/ZN9b8oZ0U2lH3ztHuGuz5BVGRtmd1m0yYVW3sAdcty2ttvilWHh" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-iTvS/uGAZgZCRtIqXZGBDIz7gcopTcbi72S1vGo9/NHJnVGABqDrBsSkNQqcgsZ5" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
