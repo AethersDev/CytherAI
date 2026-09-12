@@ -71,7 +71,8 @@ function wcag(a, b) { var la = lumin(a), lb = lumin(b); return (Math.max(la, lb)
 var R = S.READING, hex = h => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
 var lay = (inkRgb, g) => inkRgb.map((v, i) => v * 0.66 + g[i] * 0.34);
 /* EVIDENCE: reading-claims-hold */
-var cl6 = C.contrastClaim(), cl6c = C.secondaryContrastClaim();
+var claim = id => C.CLAIMS.find(c => c.id === id).run();       /* the registry is the public boundary */
+var cl6 = claim("CL-06"), cl6c = claim("CL-06c");
 ok(cl6.ok, "CL-06 holds when executed: " + cl6.detail);
 ok(cl6c.ok, "CL-06c holds when executed: " + cl6c.detail);
 ok(0 < R.FLIP_START && R.FLIP_START < R.SW_UP && R.SW_UP < R.SW_DOWN && R.SW_DOWN <= 3, "phases are ordered: surface, flip, switch band, depth");

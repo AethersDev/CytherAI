@@ -15,6 +15,9 @@ for file in js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrume
     "$JSC" "$file"
 done
 
+echo "[verify] public API inventory"
+python3 tools/test-api.py
+
 echo "[verify] claims regression"
 "$JSC" js/manifest.js js/substrate.js js/claims.js tools/test-claims.js
 

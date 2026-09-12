@@ -81,6 +81,7 @@ IDENTITY_COVERAGE = {
         "tools/test-develop.js", "tools/test-poster.py", "tools/vaic_restamp.py",
         "tools/test-exposure.js", "tools/test-projection.py", "tools/test-projection.js",
         "tools/project-manifest.py", "tools/test-assets.py", "tools/project-obligations.py",
+        "tools/test-api.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }

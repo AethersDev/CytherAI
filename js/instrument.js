@@ -95,7 +95,7 @@ function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < coun
 let last = audit(1500, 2);   /* quick seeded audit so CL-05 has evidence at boot (no DOM) */
 function lastAudit() { return last; }
 
-const API = { audit, lastAudit, biEngine };
+const API = { audit, lastAudit };
 
 /* ============================================================================
    DOM wiring — canvas, streaming log, RUN / AUDIT. Guarded.
