@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-BCB3F4FA7CF7B9EC';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-FBFD61DE80C7C5AF';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -29,11 +29,30 @@ var ASSETS = [
   'icon.svg'
 ];
 
-// Pre-cache all assets on install
+// Install is ONE build, or nothing. Every asset is fetched past the HTTP cache
+// (`cache: 'reload'`): a returning reader's browser holds the previous build's
+// modules as fresh for as long as their Cache-Control allows, and addAll's default
+// fetch would precache those old bytes under the new cache name beside a new
+// index.html whose SRI names the new module — the page then fails its own integrity
+// check on every load until the HTTP cache expires (reproduced in Chrome 151 under
+// docs/deploy.md's own headers: index.html/sw.js no-cache, modules max-age). The
+// set is committed only after every fetch succeeded and index.html's build stamp
+// is this cache's own; otherwise install fails and the previous build keeps serving.
 self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.open(CACHE).then(function (cache) {
-      return cache.addAll(ASSETS);
+    Promise.all(ASSETS.map(function (a) {
+      return fetch(new Request(a, { cache: 'reload' })).then(function (r) {
+        if (!r.ok) throw new Error('precache ' + a + ': ' + r.status);
+        return r;
+      });
+    })).then(function (responses) {
+      return responses[0].clone().text().then(function (html) {          // ASSETS[0] is index.html
+        var m = /<meta name="build-hash" content="([0-9A-F]+)">/.exec(html);
+        if (!m || CACHE.indexOf(m[1]) < 0) throw new Error('index.html is build ' + (m && m[1]) + ', this worker is ' + CACHE);
+        return caches.open(CACHE).then(function (cache) {
+          return Promise.all(responses.map(function (r, i) { return cache.put(ASSETS[i], r); }));
+        });
+      });
     }).then(function () {
       return self.skipWaiting();
     })
@@ -54,9 +73,12 @@ self.addEventListener('activate', function (e) {
   );
 });
 
-// Cache-first. A build's cache is immutable — refreshing entries one by one could
-// pair an old index.html with a new module and fail its SRI check. Updates ship as
-// a new build hash ⇒ new CACHE name ⇒ atomic re-install, old cache deleted on activate.
+// Cache-first, from THIS build's cache only. A build's cache is immutable —
+// refreshing entries one by one could pair an old index.html with a new module and
+// fail its SRI check — and a worker must not read a sibling cache either: while a
+// new build installs, its half-filled cache would otherwise be visible to the old
+// worker's caches.match(). Updates ship as a new build hash ⇒ new CACHE name ⇒
+// atomic re-install, old cache deleted on activate.
 self.addEventListener('fetch', function (e) {
   // Only handle same-origin GET requests
   if (e.request.method !== 'GET') return;
@@ -71,17 +93,14 @@ self.addEventListener('fetch', function (e) {
     : e.request;
 
   e.respondWith(
-    caches.match(key).then(function (cached) {
-      if (cached) return cached;
-      // Not cached — go to network, cache the response
-      return fetch(e.request).then(function (response) {
-        if (response.ok) {
-          var clone = response.clone();
-          caches.open(CACHE).then(function (cache) {
-            cache.put(e.request, clone);
-          });
-        }
-        return response;
+    caches.open(CACHE).then(function (cache) {
+      return cache.match(key).then(function (cached) {
+        if (cached) return cached;
+        // Not cached — go to network, cache the response
+        return fetch(e.request).then(function (response) {
+          if (response.ok) cache.put(e.request, response.clone());
+          return response;
+        });
       });
     }).catch(function () {
       // Offline with no cached copy: fail deliberately, not as an unhandled rejection.

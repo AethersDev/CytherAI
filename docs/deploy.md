@@ -97,8 +97,14 @@ contributes exactly the directive the meta cannot carry.
 `Service-Worker-Allowed` header is needed. It must **not** be served with a
 long `Cache-Control` max-age: the worker is the mechanism by which a new build
 reaches returning readers. Serve `sw.js` and `index.html` with
-`Cache-Control: no-cache`; everything else may be cached (the cache name and
-the SRI hashes both carry the build hash, so a build is atomic).
+`Cache-Control: no-cache`; everything else may be cached. A build is atomic
+because the worker makes it so, not because of the headers: install fetches every
+asset past the HTTP cache (`cache: 'reload'`) and commits the set only if
+`index.html`'s build stamp is the cache's own — otherwise install fails and the
+previous build keeps serving — and the fetch handler reads this build's cache alone.
+Without that, a returning reader's browser hands the new worker the previous build's
+modules as fresh, and the new `index.html`'s SRI refuses them on every load until
+the HTTP cache expires (reproduced in Chrome 151 before the fix).
 
 ## 3. Redirects and error pages
 

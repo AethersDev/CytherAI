@@ -275,6 +275,29 @@ class SiteContractTests(unittest.TestCase):
         self.assertTrue(set(sw_assets).issubset(DEPLOY_FILES))
         self.assertTrue(set(HTML_FILES).issubset(DEPLOY_FILES))
 
+    def test_service_worker_installs_one_build_or_nothing(self) -> None:
+        """A build is atomic only if install cannot precache the previous build's bytes.
+
+        Reproduced in Chrome 151 under docs/deploy.md's headers (index.html and sw.js
+        no-cache, modules max-age): addAll's default fetch took the old module from
+        the HTTP cache, paired it with the new index.html whose SRI names the new
+        one, and every load failed until the HTTP cache expired. Install therefore
+        fetches past the HTTP cache, commits only when index.html's build stamp is
+        this cache's own, and the fetch handler reads this build's cache alone.
+        """
+        install = SW_SOURCE[SW_SOURCE.index("addEventListener('install'"):SW_SOURCE.index("addEventListener('activate'")]
+        self.assertIn("new Request(a, { cache: 'reload' })", install, "install must bypass the HTTP cache")
+        self.assertNotIn("addAll", install, "addAll consults the HTTP cache")
+        self.assertIn('/<meta name="build-hash" content="([0-9A-F]+)">/', install)
+        self.assertLess(install.index("CACHE.indexOf(m[1]) < 0"), install.index("caches.open(CACHE)"),
+                        "the stamp is checked before any byte is committed to the cache")
+        self.assertEqual(re.findall(r"'([^']+)'", re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL).group(1))[0],
+                         "index.html", "the stamp is read from ASSETS[0]")
+        fetch_handler = SW_SOURCE[SW_SOURCE.index("addEventListener('fetch'"):]
+        self.assertIn("caches.open(CACHE).then(function (cache) {\n      return cache.match(key)", fetch_handler,
+                      "the handler reads this build's cache only, never a sibling's")
+        self.assertNotIn("caches.match(", fetch_handler)
+
     def test_manifest_icons_are_valid_and_deployed(self) -> None:
         manifest = json.loads((ROOT / "manifest.webmanifest").read_text(encoding="utf-8"))
         for icon in manifest["icons"]:
