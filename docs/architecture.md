@@ -167,9 +167,11 @@ Run the non-browser battery:
 ./verify.sh
 ```
 
-It covers module parsing, claims-state isolation, ledger semantics, page/resource
-integration, SRI/build/cache identity, deployment closure, motion/plate laws, and
-the source contracts for responsive plate policy and mobile footer clearance. It
+It covers module parsing, claims-state isolation, ledger semantics, manifest
+projection, page/resource integration, SRI/build/cache identity, deployment closure,
+motion/plate laws, the source contracts for responsive plate policy and mobile
+footer clearance, the promoted poster, and the derived-asset receipts (OG card and
+icon family bound to the current canonical state). It
 also validates the VAIC-0 obligation corpus and its fail-closed evaluator/coverage
 rules after rebuilding the exact artifact to which its receipts are bound.
 

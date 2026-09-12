@@ -39,6 +39,9 @@ python3 tools/test-motion.py
 echo "[verify] promoted terminal exposure"
 python3 tools/test-poster.py
 
+echo "[verify] derived asset receipts"
+python3 tools/test-assets.py
+
 echo "[verify] VAIC-0 corpus structure and fail-closed controls"
 python3 tools/vaic_validate.py
 python3 tools/test-vaic.py

@@ -5,6 +5,11 @@ every shipped asset is either **DERIVED** (deterministically produced from
 canonical repository state) or **ILLUSTRATIVE** (claim-free imagery whose
 status is stated in adjacent HTML). Every entry records the reproduction
 command and the output digest; a promoted asset with no receipt is a defect.
+`tools/test-assets.py` (a `./verify.sh` stage) re-reads these receipts: every output's
+bytes must match its digest and size, every DERIVED entry's state checksum and
+canonical parameters must equal the current manifest's, and every icon and plate the
+web manifest and the pages name must have an entry — so a manifest edit stales the OG
+card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 
 ---
 
