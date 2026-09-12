@@ -252,6 +252,23 @@ check("let streaming = false;" in sub and "if (i === 0 && posterEl) { posterEl.r
 kernel = sub[sub.index("function plateState"):sub.index("function tonemapInto")]
 check(not re.search(r"Math\.(sin|cos|atan2)\b", kernel) and "CM.datan2" in sub and "CM.dsin" in sub,
       "B10 the world's recurrence uses no engine-defined transcendental")
+# Every served module, not only the kernel slice: the epochal chips once ran the
+# Clifford recurrence on Math.sin — "derivable from its manifest" printed by a
+# native-sine approximation. CLIFFORD matches the recurrence FORM (sin/cos of a
+# parameter times a coordinate), so CL-07's reference comparison against Math.sin(v)
+# and the weight-field's cosine falloff stay legal while any re-implemented orbit fails.
+CLIFFORD = re.compile(r"Math\.(sin|cos)\(\s*[a-d]\s*\*\s*[xy]\s*\)")
+def strip_comments(src): return re.sub(r"/\*.*?\*/", "", src, flags=re.S)
+SERVED = ["js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js"]
+def native_orbits(sources): return [name for name, src in sources.items() if CLIFFORD.search(strip_comments(src))]
+served = {name: open(os.path.join(ROOT, name)).read() for name in SERVED}
+mini = site[site.index("function miniMark"):site.index("function renderEpochs")]
+check(native_orbits(served) == [] and "CM.dsinOrbit(p, 16000)" in mini and "fillRect" in mini,
+      "B10b no served module runs the orbit on a native transcendental; the epoch chips consume CM.dsinOrbit")
+# hostile mutation: the retired native recurrence put back into miniMark must be caught
+hostile = dict(served); hostile["js/site.js"] = site.replace("CM.dsinOrbit(p, 16000)",
+    "(()=>{let a=p[0],b=p[1],c=p[2],d=p[3],x=0.08,y=0.12,o=[];for(let i=0;i<16000;i++){const nx=Math.sin(a*y)+c*Math.cos(a*x),ny=Math.sin(b*x)+d*Math.cos(b*y);x=nx;y=ny;o.push(x,y);}return o})()")
+check(native_orbits(hostile) == ["js/site.js"], "B10b (mutation) a native-sine orbit reintroduced in miniMark is detected")
 check("datan2" in open(os.path.join(ROOT, "js/manifest.js")).read(),
       "B10 the derivation core exports the deterministic angle")
 # EVIDENCE: server-owns-the-kernel
