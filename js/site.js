@@ -345,8 +345,8 @@ function renderManifest() {
   const rows = [
     ["PUBLIC DISCLOSURE EPOCH", "0" + M.epoch], ["DERIVED", M.derived],
     ["REVISION", M.revision], ["PATENT", M.patent],
-    ["SYSTEMS INDEXED", "0" + M.systems_indexed], ["SYSTEMS DISCLOSED", "0" + M.systems_disclosed.length],
-    ["PUBLIC RECORDS", "" + M.public_records], ["CONTROLLED REFERENCES", "0" + M.controlled_references],
+    ["SYSTEMS INDEXED", CM.project("count:systems_indexed")], ["SYSTEMS DISCLOSED", CM.project("count:systems_disclosed")],
+    ["PUBLIC RECORDS", "" + M.public_records], ["CONTROLLED REFERENCES", CM.project("count:controlled_references")],
     ["EXTERNAL RUNTIME CALLS", extStr], ["NOT CLAIMED ENTRIES", "0" + M.not_claimed.length],
     ["ADMISSION NONCE", "0" + CM.ADMISSION_NONCE], ["CANONICAL STATE", CM.CHECKSUM]
   ];

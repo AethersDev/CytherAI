@@ -27,6 +27,9 @@ echo "[verify] development trajectory law"
 echo "[verify] exposure and reading laws"
 "$JSC" js/manifest.js js/substrate.js js/claims.js tools/test-exposure.js
 
+echo "[verify] manifest projection"
+python3 tools/test-projection.py
+
 echo "[verify] site/release integration"
 python3 tools/test-site.py
 

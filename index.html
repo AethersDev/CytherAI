@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="168F323BE4D854A2">
+<meta name="build-hash" content="B9AC49128D131519">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -636,7 +636,7 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
   <!-- ════════════ architecture ════════════ -->
   <section id="architecture" aria-label="Architecture">
     <div class="env">
-    <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS 06 INDEXED · 02 DISCLOSED</div>
+    <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS <span data-m="count:systems_indexed">06</span> INDEXED · <span data-m="count:systems_disclosed">02</span> DISCLOSED</div>
     <h2 class="sec-h">Each failure mode acquires a governing mechanism.</h2>
     </div>
 
@@ -654,7 +654,7 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
         <h3 data-wave>CytherCAD — Controlled Generative CAD</h3>
         <div class="facts">Production-validated · Log + external benchmark · On-prem · Private</div>
         <span class="o-label">KEY OUTCOME</span>
-        <span class="o-val">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span>
+        <span class="o-val" data-m="outcome:cad">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span>
       </div>
       <div class="sys glass">
         <span class="s-id">SIJ-2025-001 · DEPLOYMENT OPERATIONAL</span>
@@ -707,13 +707,16 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
         <thead>
           <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD<a class="fnref" id="fnref-t2cad" href="#fn-t2cad" aria-label="Footnote: Text2CAD-192 source">†</a></th></tr>
         </thead>
+        <!-- every figure is a projection of CytherManifest.VALIDATION (data-m): written
+             by tools/project-manifest.py, read back by CL-02. The em-dashes are the
+             legend's NOT DISCLOSED, not values. -->
         <tbody>
-          <tr><td><span class="mk ext">◌</span>Invalid Rate (↓ better)</td><td class="cy">0.00%</td><td>10.00%</td><td class="t2">0.93%</td></tr>
-          <tr><td><span class="mk">●</span>GVR · Constrained Beam (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span>GVR · Completion (n=100)</td><td class="cy">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span>Dimensional Accuracy ±3mm (n=35)</td><td class="cy">99%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span>Dimensional Accuracy ±5mm (n=35)</td><td class="cy">97%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span>Multi-Op Accuracy · Encoder (n=35)</td><td class="cy">91%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk ext">◌</span><span data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</span></td><td class="cy" data-m="validation:T2C192-IR-0.00:cyther">0.00%</td><td data-m="validation:T2C192-IR-0.00:deepcad">10.00%</td><td class="t2" data-m="validation:T2C192-IR-0.00:t2cad">0.93%</td></tr>
+          <tr><td><span class="mk">●</span><span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span></td><td class="cy" data-m="validation:GVR-BEAM-100:cyther">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span><span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span></td><td class="cy" data-m="validation:GVR-COMP-100:cyther">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span><span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span></td><td class="cy" data-m="validation:DIM3-99:cyther">99%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span><span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span></td><td class="cy" data-m="validation:DIM5-97:cyther">97%</td><td class="na">—</td><td class="na t2">—</td></tr>
+          <tr><td><span class="mk">●</span><span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span></td><td class="cy" data-m="validation:MOP-91:cyther">91%</td><td class="na">—</td><td class="na t2">—</td></tr>
         </tbody>
       </table>
       <div class="meth">
@@ -721,7 +724,7 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
         <span class="k">TEST ENVIRONMENT</span><span class="v">Air-gapped · No external calls · Apple Silicon M4 · Local inference only</span>
         <span class="k">BENCHMARK SOURCE</span><span class="v">Text2CAD-192 · External · Published · Not operated by CytherAI</span>
         <span class="k">EVALUATED BY</span><span class="v">CytherAI internal evaluation · April 2026 · Log-verified</span>
-        <span class="k">CONTROLLED RECORDS</span><span class="v">03 · structure indexed · values sealed</span>
+        <span class="k">CONTROLLED RECORDS</span><span class="v"><span data-m="count:controlled_references">03</span> · structure indexed · values sealed</span>
       </div>
       <div class="footnote">
         <span class="dagger" id="fn-t2cad">† Text2CAD-192 (T2CAD): 0.93% invalid rate. <a class="fnback" href="#fnref-t2cad" aria-label="Back to the table">↩</a></span>
@@ -860,11 +863,11 @@ body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-event
   <span class="right"><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a></span>
 </footer>
 
-<script src="js/manifest.js" defer integrity="sha384-6evoQ4Qm1ahfUr4ql1gfXyTxakzaNstVRMVPvKR1GBgC3nLqr+y/V8m7KKClqNFp" crossorigin="anonymous"></script>
+<script src="js/manifest.js" defer integrity="sha384-0nnIXAB7AXMDvcG+/03F5eZHr+CHWj/PUkM0v/FYXLMCJH2XaYL6Fa57YTCT/tmh" crossorigin="anonymous"></script>
 <script src="js/substrate.js" defer integrity="sha384-UjPKbjqa3cDB6yPyeZU8qrV54eKwqCuWYZVMov/MRJEmvfUHShN6N1CXDjWEFzRc" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-o7ncDwLjyJRps7oUUU6IcnC7+4NqznXKkpAVxKkEQmw+GfwP8ka9zNBTFfSYEPO6" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-iTvS/uGAZgZCRtIqXZGBDIz7gcopTcbi72S1vGo9/NHJnVGABqDrBsSkNQqcgsZ5" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-ojzmbKcmGyBP8wkEhgpfeOIrP/jEzUo+7QJm7VSzl3UrC1g/zTXr0KOa+us9bq75" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-2+BTrzhu3kWNy4SaxCd//2Zq6ZAFlagCNPmBAilJISROfEBWTD+L2bs0+zCBo6BT" crossorigin="anonymous"></script>
 </body>
 </html>

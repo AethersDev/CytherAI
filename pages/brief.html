@@ -15,7 +15,7 @@
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
     <meta name="theme-color" content="#ECF0F4">
-    <meta name="build-hash" content="168F323BE4D854A2">
+    <meta name="build-hash" content="B9AC49128D131519">
     <link rel="manifest" href="../manifest.webmanifest">
     <link rel="icon" href="../icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
@@ -93,17 +93,19 @@
                 </table>
                 <div class="doc-exhibit-outcome">
                     <div class="doc-exhibit-outcome-label">Key Outcome</div>
-                    <div class="doc-exhibit-outcome-value">IR 0.00% vs 10.00% (DeepCAD) &middot; Text2CAD-192</div>
+                    <div class="doc-exhibit-outcome-value" data-m="outcome:cad">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</div>
                 </div>
                 <div style="margin-bottom:12px;">
                     <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;color:var(--ink-quiet);text-transform:uppercase;margin-bottom:10px;">VALIDATION SUMMARY &middot; v1.1</div>
                     <table>
+                        <!-- projections of CytherManifest.VALIDATION (data-m), written by tools/project-manifest.py -->
                         <tbody>
-                        <tr><td>GVR &middot; Constrained Beam (n=100)</td><td style="color:var(--accent);font-weight:500;">100%</td></tr>
-                        <tr><td>GVR &middot; Completion (n=100)</td><td style="color:var(--accent);font-weight:500;">100%</td></tr>
-                        <tr><td>Dimensional Accuracy &plusmn;3mm (n=35)</td><td style="color:var(--accent);font-weight:500;">99%</td></tr>
-                        <tr><td>Dimensional Accuracy &plusmn;5mm (n=35)</td><td style="color:var(--accent);font-weight:500;">97%</td></tr>
-                        <tr><td>Multi-Op Accuracy &middot; Encoder (n=35)</td><td style="color:var(--accent);font-weight:500;">91%</td></tr>
+                        <tr><td data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:T2C192-IR-0.00:cyther">0.00%</td></tr>
+                        <tr><td data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:GVR-BEAM-100:cyther">100%</td></tr>
+                        <tr><td data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:GVR-COMP-100:cyther">100%</td></tr>
+                        <tr><td data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:DIM3-99:cyther">99%</td></tr>
+                        <tr><td data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:DIM5-97:cyther">97%</td></tr>
+                        <tr><td data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</td><td style="color:var(--accent);font-weight:500;" data-m="validation:MOP-91:cyther">91%</td></tr>
                         </tbody>
                     </table>
                 </div>
