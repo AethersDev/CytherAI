@@ -107,6 +107,19 @@ for phase, (ink, ground) in phase_ink.items():
 check(a8 and materials["flip"] == (*R["MEMBRANE"], R["MEMBRANE_A"]),
       "A8 each phase material carries its phase's ink at the 66% floor with AA; the flip material is the membrane")
 
+# A9 — the measurement map is an observation control, not a decoration: a slider in
+# the accessibility tree whose value is the same progress every readout uses, driven
+# by pointer (a point in the form -> depthFor) and keyboard, resolving to document
+# scroll only — the scroll pipeline stays the one camera authority.
+core_el = re.search(r'<div class="core"[^>]*>', html).group(0)
+check('role="slider"' in core_el and 'tabindex="0"' in core_el and 'aria-valuemin="0"' in core_el and 'aria-valuemax="100"' in core_el
+      and 'aria-label=' in core_el and "aria-hidden" not in core_el, "A9 the map is a focusable slider with a label and a value range")
+wm = site[site.index("function wireMap"):site.index("function wireOptics")]
+check("S.depthAtMap(" in wm and wm.count("scrollTo(") == 1 and "S.observe(" not in wm and "Home" in wm and "End" in wm and "PageDown" in wm and "ArrowDown" in wm,
+      "A9 pointer and keyboard both resolve to one scrollTo; the map never drives the camera directly")
+check('core.setAttribute("aria-valuenow"' in site[site.index("function envUpdate"):site.index("let envTick")],
+      "A9 the slider's value is written from the same progress as the gauge")
+
 # ---------------- MOT-002 ----------------
 # Two kinds of exposure, two directions, and they are laws in OPPOSITE senses.
 # The mirror must name the plates by what they are, not by index: an index pinned

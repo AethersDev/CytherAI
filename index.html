@@ -20,7 +20,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#101620">
-<meta name="build-hash" content="0BD873447E1DF47D">
+<meta name="build-hash" content="4EA6477A3A873CBD">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -118,7 +118,7 @@ body.forking #substrate{cursor:grabbing}
 
 /* ════════════ core sample — position in the form ════════════ */
 .core{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:20;width:56px}
-.core canvas{display:block;width:56px;border:1px solid var(--hair);
+.core canvas{display:block;width:56px;border:1px solid var(--hair);cursor:pointer;
   background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(8px)}
 .core .core-wrap{position:relative}
 #coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);pointer-events:none;will-change:transform}
@@ -597,7 +597,10 @@ body.forking #coreRect{visibility:hidden}
   <span class="gauge" id="gauge">OBS <b>FAR-FIELD</b> · ×1.30<br>DEPTH 00% · CLAIM · PUBLIC SURFACE</span>
 </header>
 
-<div class="core" aria-hidden="true">
+<!-- the measurement map is an observation control: a point in the form names the
+     depth whose camera comes nearest it (CytherSubstrate.depthFor), and the keyboard
+     walks the descent. It drives document scroll — the one camera authority. -->
+<div class="core" id="core" role="slider" tabindex="0" aria-label="Choose observation depth" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0% · CLAIM · PUBLIC SURFACE">
   <div class="core-wrap"><canvas id="coreMap"></canvas><i id="coreRect"></i></div>
   <div class="lbl">POSITION<br>IN FORM</div>
 </div>
@@ -902,10 +905,10 @@ body.forking #coreRect{visibility:hidden}
 </footer>
 
 <script src="js/manifest.js" defer integrity="sha384-0nnIXAB7AXMDvcG+/03F5eZHr+CHWj/PUkM0v/FYXLMCJH2XaYL6Fa57YTCT/tmh" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-ue/V4nS2twMnJcz/vHZznenbuzE7Ue0eli1OvGtRspbASXJP/x3I+Ag9kKR8/dD2" crossorigin="anonymous"></script>
+<script src="js/substrate.js" defer integrity="sha384-qkdxSgSW+Y3R7DlFGkDyrVKeDIEVe842prSoJGFBERe4h/NgXCyZs0fMsd4c9P6c" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-iTvS/uGAZgZCRtIqXZGBDIz7gcopTcbi72S1vGo9/NHJnVGABqDrBsSkNQqcgsZ5" crossorigin="anonymous"></script>
 <script src="js/ledger.js" defer integrity="sha384-+YPD2oF8hVho8DCT9ck5rkyeQcIGDPKRN4iGqU0WpQ7eHIy8s3eZers0nDUdXuoz" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-LTglMig1KdJf03unQEV0IrgqTubaW32hx8EawMe4Gggh+5pEISPBZSgYYq7/bUus" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-2+BTrzhu3kWNy4SaxCd//2Zq6ZAFlagCNPmBAilJISROfEBWTD+L2bs0+zCBo6BT" crossorigin="anonymous"></script>
+<script src="js/site.js" defer integrity="sha384-R5uxyFhHyEuyjit8J1TmeHWVnGQI2m39UenJxwYx1/HqnxABmkr7u8dd5UvB7Gfr" crossorigin="anonymous"></script>
 </body>
 </html>

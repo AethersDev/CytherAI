@@ -142,5 +142,23 @@ ok(s0.sameHash && viaServer(CM.CANON, 0, eased).sameHash && a0.hashes[a0.hashes.
 ok(s1.agree && s1.replies > 3 && s1.rasters === 1, "forked plate 1 via the server, budget-chunked: same checkpoints; the raster arrives once, at the terminal state");
 ok(s0.stale === null && s1.stale === null, "a superseded generation is answered with nothing");
 
+/* ---- the map is a slider over the descent: the camera path and its inverse ----
+   EVIDENCE: camera-path-inverse */
+(function () {
+  var A = cam.ANCH, tol = 0.03 * cam.bounds.span, worst = 0, one = true;
+  for (var k = 0; k <= 1000; k++) {
+    var p = k / 1000, q = S.pathPoint(p, A), c = S.cameraAt(p, A, 1, 100, 100);
+    if (c.cx !== q[0] || c.cy !== q[1]) one = false;                       /* one definition of where the camera looks */
+    var e = Math.abs(S.depthFor(A, q[0], q[1], p, tol) - p); if (e > worst) worst = e;
+  }
+  ok(one, "cameraAt looks where pathPoint says, bit for bit");
+  ok(worst <= 2e-3, "round trip p -> pathPoint -> depthFor -> p' from the current depth: worst |p-p'| " + worst.toExponential(1) + " <= 2e-3 over 1001 depths");
+  var c0 = S.pathPoint(0.95, A), fromSurface = S.depthFor(A, c0[0], c0[1], 0, tol), fromFloor = S.depthFor(A, c0[0], c0[1], 1, tol);
+  var folded = Math.hypot(S.pathPoint(fromSurface, A)[0] - c0[0], S.pathPoint(fromSurface, A)[1] - c0[1]) <= tol;
+  ok(folded && fromSurface < 0.2 && fromFloor > 0.8, "the canonical path folds back to its start; the inverse is continuous from the current depth (centre from the surface -> " + fromSurface.toFixed(2) + ", from the floor -> " + fromFloor.toFixed(2) + ")");
+  var Z = [[0, 0], [0, 0], [0, 0], [0, 0]], z = S.depthFor(Z, 0.3, 0.3, 0.4, tol);
+  ok(isFinite(z) && z >= 0 && z <= 1 && Math.abs(z - 0.4) < 0.01, "a collapsed fork terminates at the current depth, no NaN, no hang");
+})();
+
 if (fails > 0) throw new Error(fails + " development-law regression(s) failed");
 print("development trajectory law: all pass");
