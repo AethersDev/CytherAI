@@ -845,7 +845,6 @@ if (typeof document !== "undefined") {
   API.resetToCanonical = resetToCanonical;
   API.isForking = () => forking;
   API.isCanonical = isCanonical;
-  API.anchors = () => ANCH;
   API.canonicalAnchors = () => canonAnch;
   API.params = () => P.slice();
   API.serial = serial;
@@ -853,7 +852,6 @@ if (typeof document !== "undefined") {
   API.isDeveloping = () => developing;
   API.exposure = () => developing ? { plate: devPlateN, n: devSum + (plateDev ? plateDev.dep : 0) } : null;
   API.receipt = () => receipt;
-  API.fieldCells = () => fields.reduce((n, f) => n + (f ? f.total.length : 0), 0);
   API.fieldEnergy = fieldEnergy;
   /* a point on the minimap, in its CSS pixels, to the depth whose observation is nearest it */
   API.depthAtMap = (mx, my) => { const s = +coreCv.dataset.s, ox = +coreCv.dataset.ox, oy = +coreCv.dataset.oy; return depthFor(ANCH, (mx - ox) / s, (my - oy) / s, lastP, 0.03 * bounds.span); };

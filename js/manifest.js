@@ -296,11 +296,14 @@ const ADMISSION_NONCE = PUBLISHED_NONCES.current;
 const CANON = paramsFor(NORM, ADMISSION_NONCE);
 const CHECKSUM = stateChecksum(NORM);
 
+/* the public surface — every symbol has a caller in a served module or a verifier
+   (tools/test-api.py holds the inventory). derive, seedsFor and renderedRichness
+   are admission's internals, reached through paramsFor and admit. */
 const API = {
   MANIFEST, VALIDATION, EPOCHS, COMMITMENTS, PUBLISHED_NONCES, NORM, CANON, ADMISSION_NONCE, CHECKSUM,
   LEGIBILITY_CAP, project,
-  fnv, dsin, dcos, datan2, dsinOrbit, derive, renderedRichness, legibility,
-  seedsFor, paramsFor, admit, normalizeManifest, stateChecksum
+  fnv, dsin, dcos, datan2, dsinOrbit, legibility,
+  paramsFor, admit, normalizeManifest, stateChecksum
 };
 root.CytherManifest = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;

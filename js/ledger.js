@@ -45,7 +45,7 @@ function mailtoBody() {
 }
 function clear() { ACTS.length = 0; conduct = "00000000"; recordAct("LEDGER_CLEARED"); }   /* erasure is itself recorded */
 
-const API = { recordAct, ACTS, ACT_LABEL, diligenceCount, mailtoBody, clear, conduct: () => conduct };
+const API = { recordAct, ACTS, diligenceCount, mailtoBody, clear, conduct: () => conduct };
 
 /* ============================================================================
    DOM wiring — ledger panel, intent-adaptive CTA, dwell sensors. Guarded.
@@ -119,7 +119,6 @@ if (typeof document !== "undefined") {
   }
 
   API.wire = wire;
-  API.renderLedger = renderLedger;
   API.upgradeCta = upgradeCta;
 }
 

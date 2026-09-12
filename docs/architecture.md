@@ -34,7 +34,9 @@ flowchart TD
 
 The homepage modules are classic deferred scripts and communicate through five
 explicit `globalThis`/`window` APIs. Load order is a contract, not an incidental
-HTML detail.
+HTML detail. The public surface is an inventory (`tools/test-api.py`): every symbol
+is declared as production (called by another served module) or verifier (used by a
+tool), and a symbol with no caller fails verification.
 
 | Order | Module | Public API | Responsibility |
 |---:|---|---|---|

@@ -246,10 +246,9 @@ function recomputeOne(id) {
   renderClaims();
 }
 
-const API = {
-  CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest,
-  contrastClaim, secondaryContrastClaim, legibilityClaim, dsinClaim, cameraClaim
-};
+/* predicates are reached through the registry (CLAIMS[i].run); checkRenderManifest
+   alone is also called directly, by the ledger's VERIFY button */
+const API = { CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest };
 root.CytherClaims = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;
 
