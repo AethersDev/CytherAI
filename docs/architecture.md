@@ -22,7 +22,7 @@ flowchart TD
   G --> SW["sw.js registration"]
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
-  R["pages/runner.html"] --> E["engine/trajectory-engine.js"]
+  R["pages/runner.html — developer page, not deployed"] --> E["engine/trajectory-engine.js"]
   R --> ET["engine/trajectory-engine.test.js"]
 
   SRC["Tracked source"] --> SRI["generate-integrity.sh"]
@@ -53,8 +53,8 @@ HTML detail.
 | `js/` | Homepage runtime: six page modules and the development worker | All seven | A hashed module change requires `./generate-integrity.sh`; the worker is in the build identity via `deploy.paths` |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; regenerate integrity after edits |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
-| `pages/` | Brief, legal pages, and the isolated engine runner | Yes | Content pages share navigation and CSS; runner has a separate module-test CSP |
-| `engine/` | Trajectory engine and 33-test browser suite | Yes, runner only | It is not part of the homepage dependency graph |
+| `pages/` | Brief and legal pages; `runner.html` is a developer page | Content pages only | Content pages share navigation and CSS; `runner.html` is linked from no page, not in `deploy.paths`, not precached, unstamped |
+| `engine/` | Trajectory engine and 33-test browser suite | No | Run locally through `pages/runner.html` (`python3 -m http.server 8000`); not part of the homepage dependency graph or the artifact |
 | `assets/` | Promoted deterministic images and icons | Selected files | Add each promoted file to `deploy.sh`; precache only if offline-critical |
 | `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero |
 | `docs/` | Deployment contract, audit record, asset provenance, architecture | No | Evidence and operational instructions, never origin content |
@@ -128,7 +128,6 @@ fed into the claims store when complete.
 | `/pages/privacy.html` | Static privacy record |
 | `/pages/security.html` | Static disclosure policy |
 | `/pages/terms.html` | Static terms |
-| `/pages/runner.html` | Isolated trajectory-engine browser test runner |
 | `/404.html` | Host-configured styled error body; the host must still return status 404 |
 
 The five public content pages carry a complete sibling navigation set and mark
@@ -178,7 +177,7 @@ rules after rebuilding the exact artifact to which its receipts are bound.
 
 Browser-only validation remains required for:
 
-- `pages/runner.html` reporting 33/33 and rejecting a zero-test load;
+- `pages/runner.html` (developer page, local server only) reporting 33/33 and rejecting a zero-test load;
 - homepage `CLAIMS 10/10 HOLDING` after initialization;
 - layout and hit targets across breakpoints, reduced motion, and 200% zoom;
 - service-worker install/update/offline behavior;
