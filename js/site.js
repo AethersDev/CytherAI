@@ -237,7 +237,14 @@ function stripUpdate() {
   const ms = $("markSerial"); if (ms) ms.textContent = S.serial();
   const canonical = S.isCanonical();
   const st = $("forkStatus");
-  if (st) { let s = S.status(); if (canonical) s += " · ADMISSION " + admissionState; st.textContent = s; }
+  const rc = S.receipt(), complete = !!(rc && rc.digest);
+  if (st) {
+    let s = S.status(); if (canonical) s += " · ADMISSION " + admissionState;
+    /* the terminal digest is the observable: the same world redeveloped prints the same eight hex */
+    if (complete) s += " · TERMINAL " + rc.digest + (rc.comparison === "IDENTICAL" || rc.comparison === "MISMATCH" ? " · " + rc.comparison : "");
+    st.textContent = s;
+  }
+  renderReceipt(rc);
   const rb = $("resetBtn"); if (rb) rb.hidden = canonical;
   const fb = $("forkBtn");
   if (fb) { fb.classList.toggle("on", S.isForking()); fb.textContent = S.isForking() ? "FORKING — DRAG · ARROWS" : "FORK"; }
@@ -389,6 +396,30 @@ function renderEpochs() {
      about the owner's custody of the preimage, which only the manifest can know. */
   cd.innerHTML = "EPOCH 0" + cm.epoch + " · <span class=\"st\">COMMITTED</span><br>sha256 " + cm.digest.slice(0, 16) + "…<br>" + cm.committed + " · " + cm.status;
   rowEl.appendChild(cd);
+}
+
+/* the development receipt — this reader's terminal states, and the comparison a
+   redevelopment earns. Rows are true observables: names of checkpoints the page
+   itself reached, counts the kernel reported, and a comparison made here. */
+function renderReceipt(rc) {
+  const el = $("receiptRows"); if (!el || !rc) return;
+  el.textContent = "";
+  const M = v => (v / 1e6).toFixed(2) + "M";
+  el.appendChild(row("WORLD", rc.canonical ? "CANONICAL · " + CM.CHECKSUM : "LOCAL FORK · " + rc.world, rc.canonical ? "acc" : ""));
+  el.appendChild(row("FRAME", rc.frame));
+  rc.plates.forEach((p, i) => {
+    if (!p) { el.appendChild(row("PLATE " + i, "DEVELOPING", "wait")); return; }
+    const fused = p.dep < p.target;
+    el.appendChild(row("PLATE " + i + " · D_N", fused
+      ? "FUSE · " + M(p.dep) + " OF " + M(p.target) + " · STOPPED AT " + M(p.it) + " ITERATIONS · " + p.hash
+      : p.hash + " · " + M(p.dep) + " DEPOSITED · " + M(p.it) + " ITERATIONS", fused ? "bad" : ""));
+  });
+  el.appendChild(row("TERMINAL DIGEST", rc.digest || "DEVELOPING", rc.digest ? "" : "wait"));
+  const cmp = rc.comparison;
+  el.appendChild(row("REDEVELOPMENT", !rc.digest ? "DEVELOPING" : cmp === null ? "NOT YET REPLAYED — REDEVELOP TO COMPARE"
+    : cmp === "IDENTICAL" ? "IDENTICAL · FOUR TERMINAL STATES REPRODUCED" : cmp === "MISMATCH" ? "MISMATCH — THE TRAJECTORY DIVERGED"
+    : cmp + " — NO PRIOR RECEIPT TO COMPARE", cmp === "IDENTICAL" ? "ok" : cmp === "MISMATCH" ? "bad" : "wait"));
+  if (rc.abnormal) el.appendChild(row("ABNORMAL", "A PLATE STOPPED AT ITS ITERATION CEILING, NOT ITS TARGET", "bad"));
 }
 
 /* ================= CL-03 async admission verifier ================= */

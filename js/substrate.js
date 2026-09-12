@@ -405,7 +405,7 @@ function summarizeField(st) {
    cannot bend a trajectory already running. `advance` runs the fixed-step sequence
    toward a deposit goal under a time budget and reports the prefix reached — with
    the raster when asked and always at the terminal state, where the bounded density
-   summary comes with it. `hash` names the checkpoint. The Worker and the inline
+   summary and the checkpoint hash — the terminal state's name — come with it. The Worker and the inline
    fallback run this same closure; the main thread's presentation law owns goal,
    cadence and budget, so execution location changes and the trajectory does not
    (tools/test-develop.js drives both against each other). A superseded generation
@@ -415,12 +415,11 @@ function developServer() {
   return function serve(m) {
     if (m.type === "plate") { params = m.params.slice(); job = plateState(params, m.plate, m.anchor, m.frame); job.gen = m.gen; return null; }
     if (!job || m.gen !== job.gen) return null;
-    if (m.type === "hash") return stateHash(job);
     const end = nowMs() + m.budgetMs;
     while (!job.done && job.dep < m.goal && nowMs() < end) developStep(job, params);
     const r = { type: "frame", gen: job.gen, plate: job.i, k: job.k, dep: job.dep, it: job.it, done: job.done };
     if (m.present || job.done) { r.rgba = new Uint8ClampedArray(job.total.length * 4); tonemapInto(job, r.rgba); }
-    if (job.done) r.field = summarizeField(job);
+    if (job.done) { r.field = summarizeField(job); r.hash = stateHash(job); }
     return r;
   };
 }
@@ -550,10 +549,33 @@ if (typeof document !== "undefined") {
   let plateQueue = [], plateDev = null, gen = 0, inFlight = false;
   const fields = [null, null, null, null];   /* retained density per plate — envelopes + corridors read it */
   let devSum = 0, devPlateN = 0;
+  /* ---- the development receipt: the terminal states, printed ----
+     Each plate's terminal checkpoint D_N is named by stateHash, the identity
+     tools/test-develop.js proves is one per world and frame. The page prints the
+     four it developed, so REDEVELOP is not a promise of replay: the next receipt
+     for the same world and frame is compared to the last and the comparison is
+     printed. A plate that terminated at its iteration ceiling instead of its
+     deposit target is ABNORMAL and says so — the cap is a fuse, not physics. */
+  let receipt = null, prior = null;
+  function openReceipt() {
+    if (receipt && receipt.plates.every(Boolean)) prior = receipt;
+    receipt = { world: serial(), canonical: near(P, CM.CANON), frame: W + "×" + H,
+      plates: [null, null, null, null], digest: null, comparison: null, abnormal: false };
+  }
+  function closeReceipt() {
+    const r = receipt;
+    r.digest = (CM.fnv(r.plates.map(p => p.hash).join(":")) >>> 0).toString(16).padStart(8, "0");
+    r.abnormal = r.plates.some(p => p.dep < p.target);
+    if (!prior) r.comparison = null;
+    else if (prior.world !== r.world) r.comparison = "NEW WORLD";
+    else if (prior.frame !== r.frame) r.comparison = "NEW FRAME";
+    else r.comparison = r.plates.every((p, k) => p.hash === prior.plates[k].hash) ? "IDENTICAL" : "MISMATCH";
+  }
   function developAll(preparedCam) {
     const g = computeOrbit(P); pts = g.pts;                  /* native — minimap, the measurement view */
     const cam = preparedCam || deriveAnchors(P); ANCH = cam.ANCH; bounds = cam.bounds;  /* dsin — camera */
     layout();
+    openReceipt();
     const d = lastP * 3;
     plateQueue = [0,1,2,3].sort((a,b) => Math.abs(d-a) - Math.abs(d-b));  /* most-visible plate first */
     fields[0] = fields[1] = fields[2] = fields[3] = null;
@@ -621,6 +643,7 @@ if (typeof document !== "undefined") {
     if (!r.done) return;
     const i = plateDev.i;
     fields[i] = r.field;                    /* compact density outlives the develop; the full grid stays in the server */
+    receipt.plates[i] = { hash: r.hash, dep: r.dep, it: r.it, target: plateDev.target, cap: PLATE_CAP[i] };
     devSum += r.dep;
     plateDev = null;
     /* the same image, now the reader's own: swap at equivalence, never restore.
@@ -628,7 +651,7 @@ if (typeof document !== "undefined") {
        for it, so removal is permanent. */
     if (i === 0 && posterEl) { posterEl.remove(); posterEl = null; }
     if (!plateQueue.length) {
-      streaming = true;
+      streaming = true; closeReceipt();
       renderCore(); observe(lastP); developing = false; hooks.onChange();
     }
   }
@@ -796,6 +819,7 @@ if (typeof document !== "undefined") {
   API.status = status;
   API.isDeveloping = () => developing;
   API.exposure = () => developing ? { plate: devPlateN, n: devSum + (plateDev ? plateDev.dep : 0) } : null;
+  API.receipt = () => receipt;
   API.fieldCells = () => fields.reduce((n, f) => n + (f ? f.total.length : 0), 0);
   API.fieldEnergy = fieldEnergy;
   API.corridors = corridorsFor;
