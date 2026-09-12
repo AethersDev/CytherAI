@@ -2,7 +2,7 @@
   "specification": "VAIC-0",
   "receipt_type": "bounded-browser-observation-ledger",
   "artifact_build": null,
-  "artifact_builds": ["F1FF314DEC2C4717", "661AFC4C3C67BFD1", "BE40E75378CB587A"],
+  "artifact_builds": ["F1FF314DEC2C4717", "661AFC4C3C67BFD1", "BE40E75378CB587A", "BCB3F4FA7CF7B9EC"],
   "observed_at": "2026-08-14",
   "evaluator": {
     "class": "BROWSER_HARNESS",
@@ -163,6 +163,63 @@
         }
       ],
       "note": "the CL-03 verifier and the in-page re-derivation agree with the published nonces for all three epochs; the mini-marks are rendered from paramsFor(epoch, nonce)"
+    },
+    "canonical_settle_BCB3F4FA7CF7B9EC": {
+      "artifact_build": "BCB3F4FA7CF7B9EC",
+      "build_identity": "BCB3F4FA7CF7B9EC",
+      "observed_at": "2026-09-12",
+      "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q17-cysem-observe.py)",
+      "viewport": "1440x900",
+      "device_pixel_ratio": 1,
+      "settle_ms": 406,
+      "three_consecutive_valid_samples": true,
+      "all_four_canvases_initialized": true,
+      "status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED · TERMINAL a688313d",
+      "claims": "CLAIMS 10/10 HOLDING",
+      "serial": "−1.752 +1.859 −0.983 −0.607",
+      "checksum_printed": "75D1:89D1",
+      "checksum_rederived_in_page": "75D1:89D1",
+      "cl02": "CL-02 · RENDER ≡ MANIFEST● HOLDING · 75D1:89D1 printed twice · derived once · 18 projected facts equal the manifest",
+      "cl08": "CL-08 · CAMERA ≡ DERIVATION● HOLDING · 4 anchors re-derived · match canonical camera",
+      "console_errors": 0
+    },
+    "epoch_reproduction_BCB3F4FA7CF7B9EC": {
+      "artifact_build": "BCB3F4FA7CF7B9EC",
+      "observed_at": "2026-09-12",
+      "runtime": "HeadlessChrome/151.0.7922.173 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q17-cysem-observe.py)",
+      "viewport": "1440x900",
+      "cl03": "CL-03 · PUBLISHED ADMISSION ≡ DERIVATION● HOLDING · 3 admissions re-derived · published nonces match",
+      "strip_status": "CANONICAL STATE · EPOCH 03 · 75D1:89D1 · ADMISSION VERIFIED · TERMINAL a688313d",
+      "epoch_chips_rendered": [
+        "EPOCH 01 · SUPERSEDEDE141:9D7A2026-02-09 · N00",
+        "EPOCH 02 · SUPERSEDED2BF8:24772026-05-02 · N00",
+        "EPOCH 03 · CANONICAL75D1:89D12026-07-16 · N00",
+        "EPOCH 04 · COMMITTEDsha256 c763fcd5faecb8c5…2026-07-17 · PREIMAGE PUBLIC · DEMONSTRATION"
+      ],
+      "epoch_checksums_rederived_in_page": [
+        "E141:9D7A",
+        "2BF8:2477",
+        "75D1:89D1"
+      ],
+      "admissions_rederived_in_page": [
+        {
+          "epoch": 1,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 2,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 3,
+          "nonce": 0,
+          "published": 0
+        }
+      ]
     }
   }
 }
