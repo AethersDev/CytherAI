@@ -353,15 +353,16 @@ function renderAnti() {
   const el = $("antiRows"); if (!el) return;
   CM.MANIFEST.not_claimed.forEach(x => el.appendChild(row(x, "NOT CLAIMED", "anti-v")));
 }
+/* an epoch chip IS a derivation of its manifest: the same dsin orbit the camera and
+   the plates run on, not a native-sine approximation of it. This was the one served
+   recurrence outside the kernel; test-motion B10 now scans every served module. */
 function miniMark(canvas, p, curr) {
   const s = 76, DPR = Math.min(devicePixelRatio || 1, 2);
   canvas.width = s*DPR; canvas.height = s*DPR; canvas.style.width = s + "px"; canvas.style.height = s + "px";
   const g = canvas.getContext("2d"); g.setTransform(DPR,0,0,DPR,0,0);
-  let a = p[0], b = p[1], c = p[2], d = p[3], x = 0.08, y = 0.12;
-  for (let i = 0; i < 40; i++) { const nx = Math.sin(a*y)+c*Math.cos(a*x), ny = Math.sin(b*x)+d*Math.cos(b*y); x=nx; y=ny; }
   g.fillStyle = curr ? "rgba(127,160,255,.5)" : "rgba(120,135,160,.4)";
-  const cx = s/2, cy = s/2, sc = s*0.2;
-  for (let i = 0; i < 16000; i++) { const nx = Math.sin(a*y)+c*Math.cos(a*x), ny = Math.sin(b*x)+d*Math.cos(b*y); x=nx; y=ny; g.fillRect(cx+x*sc, cy+y*sc, 1, 1); }
+  const cx = s/2, cy = s/2, sc = s*0.2, pts = CM.dsinOrbit(p, 16000);
+  for (let i = 0; i < pts.length; i += 2) g.fillRect(cx + pts[i]*sc, cy + pts[i+1]*sc, 1, 1);
 }
 function renderEpochs() {
   const rowEl = $("epochRow"); if (!rowEl) return;
