@@ -213,6 +213,37 @@
               "vaic/evidence/current-browser-observations.v0.json#canonical_settle_E7FD12A8025BCD99"
             ],
             "observed_at": "2026-09-16"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "EF57500CC99E3711",
+            "artifact_manifest_hash": "70ec19674fab6a62921f43353017e8ed49e51d7391dcdbbd10426e48c3e02b0d",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "9f46397a63740639093e31b99672d4fe3c2a25206e1955012f17fa4f38116006",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+            "harness_version": "2026-09-16",
+            "method": {
+              "measurement": "three consecutive settled samples after FIG. 1 settled, at 1440x900, 390x844 and 320x844 and under reduced motion; the checksum read from every [data-checksum] site (seven title blocks, the sheet-6 seal box, the canonical revision) against the checksum re-derived in page; DS-04's pixel comparison of a stamped seal with a seal redrawn from parameters re-derived in page; DS-01's serial",
+              "threshold": "every printed checksum equals the derivation; the redrawn seal is pixel-identical to the stamped one on every title block; CLAIMS 11/11 HOLDING in all three samples at every viewport; document build equals the worker cache identity; zero external requests on the Network domain; zero console errors",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#canonical_settle_EF57500CC99E3711",
+              "js/claims.js#checkRenderManifest",
+              "js/drawing-set.js#sealClaim"
+            ],
+            "observed_at": "2026-09-16"
           }
         ]
       },
@@ -387,6 +418,36 @@
             "evidence": [
               "vaic/evidence/current-browser-observations.v0.json#epoch_reproduction_E7FD12A8025BCD99",
               "js/site.js#verifyAdmissions"
+            ],
+            "observed_at": "2026-09-16"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "EF57500CC99E3711",
+            "artifact_manifest_hash": "70ec19674fab6a62921f43353017e8ed49e51d7391dcdbbd10426e48c3e02b0d",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "9f46397a63740639093e31b99672d4fe3c2a25206e1955012f17fa4f38116006",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+            "harness_version": "2026-09-16",
+            "method": {
+              "measurement": "CL-03 read from the rendered claims list; admissions and state checksums re-derived in page for epochs 01, 02, 03 against the published nonces and the revisions rendered on sheet 6",
+              "threshold": "re-derived nonce equals published nonce and re-derived checksum equals the rendered revision for every published epoch",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#epoch_reproduction_EF57500CC99E3711",
+              "js/manifest.js#admit"
             ],
             "observed_at": "2026-09-16"
           }
