@@ -1,7 +1,15 @@
 /* ============================================================================
    js/claims.js  →  window.CytherClaims
-   Standing claims as predicates the page executes against itself. Ten claims;
-   the footer reads CLAIMS n/10 HOLDING and any failure prints ✕ INVALID in place.
+   Standing claims as predicates the page executes against itself. The footer
+   reads CLAIMS n/N HOLDING and any failure prints ✕ INVALID in place.
+
+   Two registers, one identifier space. The CANONICAL predicates (CL-01, CL-02,
+   CL-03, CL-05, CL-06b, CL-07) are claims of the record and bind on any page that
+   prints it. The WORLD predicates (CL-04, CL-06, CL-06c, CL-08) are propositions
+   about CytherSubstrate's colour model, serial and camera, and register only where
+   that world is loaded — an identifier is part of a claim, so a page without the
+   world carries no row claiming to have checked it. A page adds its own predicates
+   by pushing onto CLAIMS before the first render (js/drawing-set.js adds DS-01..05).
 
    Ported from newC3/synthesis-rev5.html. Amendments:
      · CL-06 — reading ink holds AA at every depth on its phase-locked ambient
@@ -107,23 +115,22 @@ function cameraClaim() {
   return { ok, detail: ok ? re.length + " anchors re-derived · match canonical camera" : "camera ≠ derivation" };
 }
 
-/* CL-02: what is RENDERED equals what the manifest derives — the checksum printed
-   twice and derived once, AND every projected fact the strata print (the counts and
-   the validation figures carry data-m; tools/project-manifest.py wrote them from
-   CytherManifest.project, and this reads them back against the same function). A
-   page with no projected facts does not pass vacuously. DOM read — verified live
-   and by the ledger's VERIFY button. */
+/* CL-02: what is RENDERED equals what the manifest derives — the checksum at every
+   site that prints it ([data-checksum]) equals the one derived here, AND every
+   projected fact the page prints (data-m; tools/project-manifest.py wrote the static
+   ones from CytherManifest.project, and this reads them back against the same
+   function). A page with no checksum site or no projected facts does not pass
+   vacuously. DOM read — verified live and by the ledger's VERIFY button. */
 function checkRenderManifest() {
   const recomputed = CM.stateChecksum(CM.normalizeManifest(CM.MANIFEST));
   if (!hasDoc) return { ok: true, detail: recomputed + " (no DOM · derivation only)" };
-  const shown = (document.querySelector("#manifestRows .m-v.acc") || { textContent: "" }).textContent.trim();
-  const chip = document.querySelector(".ep.current");
+  const sites = Array.from(document.querySelectorAll("[data-checksum]"));
   const marks = Array.from(document.querySelectorAll("[data-m]"));
   const wrong = marks.filter(el => el.textContent.trim() !== CM.project(el.dataset.m)).map(el => el.dataset.m);
-  const checksumOk = (shown === recomputed) && !!chip && chip.textContent.indexOf(recomputed) >= 0;
+  const checksumOk = sites.length > 0 && sites.every(el => el.textContent.trim() === recomputed);
   const ok = checksumOk && marks.length > 0 && wrong.length === 0;
-  return { ok, detail: ok ? recomputed + " printed twice · derived once · " + marks.length + " projected facts equal the manifest"
-    : !checksumOk ? "render ≠ manifest" : !marks.length ? "no projected facts on the page" : wrong.length + " projected fact(s) ≠ manifest: " + wrong.slice(0, 3).join(", ") };
+  return { ok, detail: ok ? recomputed + " printed at " + sites.length + " sites · derived once · " + marks.length + " projected facts equal the manifest"
+    : !sites.length ? "no checksum printed on the page" : !checksumOk ? "render ≠ manifest" : !marks.length ? "no projected facts on the page" : wrong.length + " projected fact(s) ≠ manifest: " + wrong.slice(0, 3).join(", ") };
 }
 
 /* ================= the registry =================
@@ -138,40 +145,43 @@ const CLAIMS = [
     const n = (typeof performance !== "undefined" && performance.getEntriesByType) ? performance.getEntriesByType("resource").filter(r => r.name.indexOf(location.origin + "/") !== 0).length : -1;
     return { ok: n === 0, detail: n === 0 ? "0 external requests" : (n < 0 ? "no timing api" : n + " external requests") }; } },
   { id: "CL-02", text: "RENDER ≡ MANIFEST",
-    m: "Re-derives the state checksum from the manifest tuple and compares it to both places the page prints it; then reads every projected fact (data-m — the strata's counts and the validation figures) back against CytherManifest.project. Any printed fact that is not the manifest's fails it.",
+    m: "Re-derives the state checksum from the manifest tuple and compares it to every site the page prints it at; then reads every projected fact (data-m — counts and validation figures) back against CytherManifest.project. Any printed fact that is not the manifest's fails it.",
     run: checkRenderManifest },
   { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION",
     m: "The async verifier re-runs the published admission — nonce, richness and legibility screens — from the manifest, off the boot path.",
     run: null },   /* set by site.js async verifier */
-  { id: "CL-04", text: "SERIAL ≡ STATE",
-    m: "Compares the serial printed in the strip to the live substrate parameters, formatted by the same function.",
-    run: () => {
-    if (!hasDoc || !S.serial) return { ok: true, detail: "no DOM" };
-    const got = (document.getElementById("markSerial") || { textContent: "" }).textContent.trim();
-    const want = S.serial().trim();
-    return { ok: got === want, detail: got === want ? "displayed serial equals live parameters" : "serial ≠ state" }; } },
   { id: "CL-05", text: "BOUNDARY EMITS NO INVALID PROGRAM",
     m: "Reads the boundary instrument's last audit; admitted must be positive and the invalid count exactly zero.",
     run: () => {
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
              : { ok: false, detail: "not yet run" }; } },
-  { id: "CL-06", text: "READING INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
-    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked AMBIENT ground (the membrane through the flip) must hold 4.5:1. It is a proposition about the colour model, complete over the declared depth domain. It does not see the plate: the composited ground is CY-SEM-003, a browser obligation, because the page cannot read its own composited pixels.",
-    run: contrastClaim },
-  { id: "CL-06c", text: "QUIETEST INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
-    m: "The same ambient-ground sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
-    run: secondaryContrastClaim },
   { id: "CL-06b", text: "MARK DOES NOT FLOOD THE READING LANE",
     m: "Recomputes the canonical mark's text-lane density metric and compares it against the admission cap.",
     run: legibilityClaim },
   { id: "CL-07", text: "DETERMINISTIC ADMISSION CORE",
     m: "Compares dsin to native sine at 1001 points across ±5; the admission core must agree within 1e-6.",
-    run: dsinClaim },
-  { id: "CL-08", text: "CAMERA ≡ DERIVATION",
-    m: "Re-derives the canonical camera anchors from the manifest and compares them to the anchors installed at boot.",
-    run: cameraClaim }
+    run: dsinClaim }
 ];
+/* the world's predicates, where the world is loaded */
+if (S) {
+  CLAIMS.splice(3, 0, { id: "CL-04", text: "SERIAL ≡ STATE",
+    m: "Compares the serial printed in the strip to the live substrate parameters, formatted by the same function.",
+    run: () => {
+    if (!hasDoc || !S.serial) return { ok: true, detail: "no DOM" };
+    const got = (document.getElementById("markSerial") || { textContent: "" }).textContent.trim();
+    const want = S.serial().trim();
+    return { ok: got === want, detail: got === want ? "displayed serial equals live parameters" : "serial ≠ state" }; } });
+  CLAIMS.splice(5, 0, { id: "CL-06", text: "READING INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked AMBIENT ground (the membrane through the flip) must hold 4.5:1. It is a proposition about the colour model, complete over the declared depth domain. It does not see the plate: the composited ground is CY-SEM-003, a browser obligation, because the page cannot read its own composited pixels.",
+    run: contrastClaim },
+  { id: "CL-06c", text: "QUIETEST INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "The same ambient-ground sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
+    run: secondaryContrastClaim });
+  CLAIMS.push({ id: "CL-08", text: "CAMERA ≡ DERIVATION",
+    m: "Re-derives the canonical camera anchors from the manifest and compares them to the anchors installed at boot.",
+    run: cameraClaim });
+}
 
 const CLAIMSTATE = {};
 const OPEN = {};                       /* per-claim evidence expansion, survives re-render */
@@ -231,6 +241,7 @@ function renderClaims() {
   const sm = summary();
   const f = document.getElementById("claimsFooter");
   if (f) f.textContent = "CLAIMS " + sm.hold + "/" + sm.total + " HOLDING" + (sm.bad ? " · INVALID PRESENT" : "");
+  document.querySelectorAll("[data-claims-count]").forEach(c => { c.textContent = sm.hold + "/" + sm.total; });
 }
 function setClaim(id, ok, detail) { CLAIMSTATE[id] = { ok, detail, t: stamp() }; renderClaims(); }
 function recomputeClaims() {
@@ -247,8 +258,9 @@ function recomputeOne(id) {
 }
 
 /* predicates are reached through the registry (CLAIMS[i].run); checkRenderManifest
-   alone is also called directly, by the ledger's VERIFY button */
-const API = { CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest };
+   alone is also called directly, by the ledger's VERIFY button; wcagRatio is the one
+   contrast function, shared with the drawing-set predicates */
+const API = { CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest, wcagRatio };
 root.CytherClaims = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;
 

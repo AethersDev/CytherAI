@@ -374,7 +374,7 @@ function renderManifest() {
     ["EXTERNAL RUNTIME CALLS", extStr], ["NOT CLAIMED ENTRIES", "0" + M.not_claimed.length],
     ["ADMISSION NONCE", "0" + CM.ADMISSION_NONCE], ["CANONICAL STATE", CM.CHECKSUM]
   ];
-  rows.forEach(([k, v]) => el.appendChild(row(k, v, k === "CANONICAL STATE" ? "acc" : "")));
+  rows.forEach(([k, v]) => { const r = row(k, v, k === "CANONICAL STATE" ? "acc" : ""); if (k === "CANONICAL STATE") r.lastChild.dataset.checksum = ""; el.appendChild(r); });   /* a [data-checksum] site: CL-02 reads it back */
 }
 function renderProvenance() {
   const el = $("provenanceRows"); if (!el) return;
@@ -406,7 +406,7 @@ function renderEpochs() {
     const div = document.createElement("div"); div.className = "ep" + (m.current ? " current" : "");
     const cnv = document.createElement("canvas"); div.appendChild(cnv);
     div.insertAdjacentHTML("beforeend",
-      "EPOCH 0" + m.epoch + " · " + (m.current ? '<span class="st">CANONICAL</span>' : "SUPERSEDED") + "<br>" + ck + "<br>" + m.derived + " · N0" + n);
+      "EPOCH 0" + m.epoch + " · " + (m.current ? '<span class="st">CANONICAL</span><br><span data-checksum>' + ck + "</span>" : "SUPERSEDED<br>" + ck) + "<br>" + m.derived + " · N0" + n);
     rowEl.appendChild(div);
     miniMark(cnv, p, m.current);
     if (i < eps.length - 1) { const ar = document.createElement("span"); ar.className = "ep-arrow"; ar.textContent = "→"; rowEl.appendChild(ar); }
