@@ -238,8 +238,9 @@ Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 **Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
 or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`),
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
-build-hash over every `deploy.paths` byte), `deploy.sh` (publish allowlist → `dist/`;
-headers contract in `docs/deploy.md`). **Developer page:** `pages/runner.html` loads
+build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
+`publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
+admitted states only; headers contract and Pages' limits in `docs/deploy.md` §7). **Developer page:** `pages/runner.html` loads
 `engine/trajectory-engine.js` and its `.test.js` — linked from no page, not in
 `deploy.paths`, not precached, unstamped.
 

@@ -478,6 +478,28 @@ decisions, not engineering steps.
 
 ---
 
+## 7. Publishing — GitHub Pages
+
+The origin is GitHub Pages serving the `gh-pages` branch of `origin`, with `CNAME`
+(`cytherai.com`) and `.nojekyll` shipped in the artifact — both are in `deploy.paths`, so
+they are in the build identity and `deploy.sh` ships them. `./publish.sh` builds `dist/`
+and force-pushes its contents as a single-commit `gh-pages`; it refuses a served file
+with uncommitted changes, a HEAD not reachable from `master` (publishing is for admitted
+states), and a failing `./verify.sh`. The branch is an artifact, not a record: the record
+is this repository, and each publish commit names the build and the source commit.
+
+**Disposition — headers.** Pages cannot send the §1 headers (`frame-ancestors`, `nosniff`,
+`Referrer-Policy`, `Permissions-Policy`, HSTS is Pages' own) and sets
+`Cache-Control: max-age=600` on every response, so the §2 `no-cache` for `sw.js` and
+`index.html` is not achievable there. Recorded, not hidden: the per-page meta CSP stands
+(minus `frame-ancestors`, which a meta cannot carry); the atomic-install worker means a
+stale HTTP cache costs a returning reader at most ten minutes of the previous build and
+never a half-installed one. CY-ORIGIN-001 (`ORIGIN_MATCHES` the certified artifact and
+origin contract) therefore cannot PASS on Pages as the contract is written; it stays
+NOT_EVALUATED until either the origin can send the headers or the contract records Pages'
+limits as accepted. That decision is the owner's, and it is a release-disposition entry,
+not an edit to the obligation.
+
 ## Next work — external certification and owner attestation
 
 Construction is finished; nothing below is a repository change.
