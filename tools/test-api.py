@@ -25,16 +25,16 @@ def check(cond, name):
 
 MODULES = {
     "CytherManifest": "js/manifest.js", "CytherSubstrate": "js/substrate.js", "CytherClaims": "js/claims.js",
-    "CytherLedger": "js/ledger.js", "CytherInstrument": "js/instrument.js",
+    "CytherLedger": "js/ledger.js", "CytherInstrument": "js/instrument.js", "CytherDrawingSet": "js/drawing-set.js",
 }
 # the local names served modules bind each global to
-ALIASES = {"CytherManifest": ["CM"], "CytherSubstrate": ["S"], "CytherClaims": ["Claims", "C"], "CytherLedger": ["Ledger"], "CytherInstrument": ["Inst"]}
+ALIASES = {"CytherManifest": ["CM"], "CytherSubstrate": ["S"], "CytherClaims": ["Claims", "C"], "CytherLedger": ["Ledger"], "CytherInstrument": ["Inst"], "CytherDrawingSet": ["D"]}
 INVENTORY = {
     "CytherManifest": {
         "production": ["MANIFEST", "EPOCHS", "COMMITMENTS", "PUBLISHED_NONCES", "NORM", "CANON", "ADMISSION_NONCE", "CHECKSUM",
                        "LEGIBILITY_CAP", "project", "fnv", "dsin", "dcos", "datan2", "dsinOrbit", "legibility", "paramsFor", "admit",
-                       "normalizeManifest", "stateChecksum"],
-        "verifier": ["VALIDATION"],
+                       "normalizeManifest", "stateChecksum", "VALIDATION"],
+        "verifier": [],
     },
     "CytherSubstrate": {
         "production": ["READING", "deriveAnchors", "readingGroundAt", "developServer", "boot", "observe", "redevelop", "step", "setFork",
@@ -45,19 +45,24 @@ INVENTORY = {
                      "tonemapInto", "summarizeField"],
     },
     "CytherClaims": {
-        "production": ["setClaim", "recomputeClaims", "renderClaims", "checkRenderManifest"],
-        "verifier": ["CLAIMS", "CLAIMSTATE", "recomputeOne", "summary"],
+        "production": ["CLAIMS", "CLAIMSTATE", "setClaim", "recomputeClaims", "renderClaims", "checkRenderManifest", "wcagRatio"],
+        "verifier": ["recomputeOne", "summary"],
     },
     "CytherLedger": {
         "production": ["recordAct", "wire", "upgradeCta"],
         "verifier": ["ACTS", "diligenceCount", "mailtoBody", "clear", "conduct"],
     },
     "CytherInstrument": {
-        "production": ["lastAudit", "step", "wire"],
-        "verifier": ["audit", "biEngine", "judge"],
+        "production": ["lastAudit", "step", "wire", "audit", "biEngine", "judge"],
+        "verifier": [],
+    },
+    "CytherDrawingSet": {
+        "production": [],
+        "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor"],
     },
 }
-SERVED = ["index.html", "js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js"]
+# the page modules: served by the front door, or promoted and awaiting it (js/drawing-set.js)
+SERVED = ["index.html", "js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js", "js/drawing-set.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)

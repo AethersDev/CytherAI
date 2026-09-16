@@ -11,7 +11,7 @@ cd "$ROOT"
 JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc
 
 echo "[verify] homepage modules parse"
-for file in js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js; do
+for file in js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js js/drawing-set.js; do
     "$JSC" "$file"
 done
 
@@ -23,6 +23,9 @@ echo "[verify] claims regression"
 
 echo "[verify] boundary engine"
 "$JSC" js/manifest.js js/instrument.js tools/test-boundary.js
+
+echo "[verify] drawing set — the object, its edge, the claims split"
+"$JSC" js/manifest.js js/instrument.js js/claims.js js/drawing-set.js tools/test-drawing-set.js
 
 echo "[verify] ledger regression"
 "$JSC" js/manifest.js js/ledger.js tools/test-ledger.js

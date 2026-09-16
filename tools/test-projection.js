@@ -1,7 +1,7 @@
 /* tools/test-projection.js — CL-02 over a page's projected facts, under jsc.
    A minimal document stands in for the browser: its [data-m] elements are the
-   ones PARSED FROM THE SHIPPED index.html (never invented), plus the two places
-   the checksum prints. The claim must hold on the shipped page, fail when one
+   ones PARSED FROM THE SHIPPED index.html (never invented), plus two sites that
+   print the checksum ([data-checksum]). The claim must hold on the shipped page, fail when one
    projected fact is corrupted, and fail when the facts are absent — a page that
    prints nothing must not pass vacuously.
 
@@ -12,9 +12,8 @@ var CM = globalThis.CytherManifest, fails = 0;
 function ok(cond, name) { if (cond) print("PASS  " + name); else { fails++; print("FAIL  " + name); } }
 var html = readFile("index.html"), marks = [], re = /<(span|td|div)\b[^>]*\bdata-m="([^"]+)"[^>]*>([^<]*)<\/\1>/g, m;
 while ((m = re.exec(html))) marks.push({ dataset: { m: m[2] }, textContent: m[3] });
-var doc = { marks: marks, acc: { textContent: CM.CHECKSUM }, chip: { textContent: "EPOCH 03 · CANONICAL · " + CM.CHECKSUM },
-  querySelector: function (sel) { return sel === "#manifestRows .m-v.acc" ? this.acc : sel === ".ep.current" ? this.chip : null; },
-  querySelectorAll: function (sel) { return sel === "[data-m]" ? this.marks.slice() : []; },
+var doc = { marks: marks, sites: [{ textContent: CM.CHECKSUM }, { textContent: CM.CHECKSUM }],
+  querySelectorAll: function (sel) { return sel === "[data-m]" ? this.marks.slice() : sel === "[data-checksum]" ? this.sites.slice() : []; },
   getElementById: function () { return null; } };
 globalThis.document = doc;
 load("js/claims.js");
@@ -34,7 +33,9 @@ doc.marks.pop();
 doc.marks = [];
 r = C.checkRenderManifest();
 ok(!r.ok && r.detail === "no projected facts on the page", "CL-02 does not pass vacuously on a page with no projected facts");
-doc.marks = marks; doc.acc.textContent = "0000:0000";
-ok(!C.checkRenderManifest().ok, "CL-02 still fails when the printed checksum is not the derived one");
+doc.marks = marks; doc.sites[1].textContent = "0000:0000";
+ok(!C.checkRenderManifest().ok, "CL-02 still fails when one printed checksum is not the derived one");
+doc.sites = [];
+ok(C.checkRenderManifest().detail === "no checksum printed on the page", "CL-02 does not pass vacuously on a page that prints no checksum");
 if (fails) throw new Error(fails + " projection claim regression(s) failed");
 print("projection claim: all pass");
