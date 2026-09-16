@@ -15,7 +15,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = "vaic/cytherai-obligations.v0.json"
+CORPUS = "vaic/cytherai-obligations.v1.json"
+# The admission lineage of the corpus is every file it has ever lived in. v1 supersedes v0
+# and carries every receipt of v0 verbatim; the guards walk both paths, so a receipt
+# admitted into v0 on the canonical ref must still be present, unchanged, in the live v1.
+LINEAGE = ("vaic/cytherai-obligations.v0.json", CORPUS)
 # A commit records a state; canonical reachability ADMITS it. Without a designated
 # lineage, a receipt on any throwaway branch would become institutional history, and
 # deleting that branch would make admitted history vanish. Both cannot be acceptable.
@@ -68,16 +72,19 @@ class VaicCorpusTests(unittest.TestCase):
         raise AssertionError("corpus carries no receipt bound to the current candidate")
 
     @staticmethod
-    def admitted_corpus(root: Path = ROOT, ref: str = CANONICAL_REF):
-        """The corpus at the tip of the admission lineage, or None if it carries none.
+    def admitted_corpora(root: Path = ROOT, ref: str = CANONICAL_REF, lineage=LINEAGE):
+        """The corpus files at the tip of the admission lineage (any version present).
 
         Admission is where immutability begins, and it is reachability from the
         canonical ref that admits — not the mere existence of a commit. A corpus on a
         development branch is a CANDIDATE state: still provisional, still replaceable.
         """
-        run = subprocess.run(["git", "show", f"{ref}:{CORPUS}"], cwd=root,
-                             capture_output=True, text=True)
-        return json.loads(run.stdout) if run.returncode == 0 else None
+        found = []
+        for path in lineage:
+            run = subprocess.run(["git", "show", f"{ref}:{path}"], cwd=root, capture_output=True, text=True)
+            if run.returncode == 0:
+                found.append(json.loads(run.stdout))
+        return found
 
     @staticmethod
     def receipts_by_key(corpus) -> dict[tuple[str, str, str], dict]:
@@ -91,7 +98,7 @@ class VaicCorpusTests(unittest.TestCase):
         return set(cls.receipts_by_key(corpus))
 
     @staticmethod
-    def admitted_states(root: Path, ref: str = CANONICAL_REF):
+    def admitted_states(root: Path, ref: str = CANONICAL_REF, lineage=LINEAGE):
         """Every corpus state reachable from the admission lineage, oldest first.
 
         The tip guard asks "am I about to delete or mutate admitted history?". This
@@ -100,20 +107,21 @@ class VaicCorpusTests(unittest.TestCase):
         canonical ref rather than HEAD also means a bogus receipt committed on a branch
         that is never merged creates no institutional history at all.
         """
-        listing = subprocess.run(["git", "log", "--format=%H", ref, "--", CORPUS],
-                                 cwd=root, capture_output=True, text=True)
-        if listing.returncode != 0:
-            return []
         states = []
-        for commit in reversed(listing.stdout.split()):
-            blob = subprocess.run(["git", "show", f"{commit}:{CORPUS}"],
-                                  cwd=root, capture_output=True, text=True)
-            if blob.returncode == 0:
-                states.append((commit, json.loads(blob.stdout)))
+        for path in lineage:
+            listing = subprocess.run(["git", "log", "--format=%H", ref, "--", path],
+                                     cwd=root, capture_output=True, text=True)
+            if listing.returncode != 0:
+                continue
+            for commit in reversed(listing.stdout.split()):
+                blob = subprocess.run(["git", "show", f"{commit}:{path}"],
+                                      cwd=root, capture_output=True, text=True)
+                if blob.returncode == 0:
+                    states.append((commit, json.loads(blob.stdout)))
         return states
 
     @classmethod
-    def history_violations(cls, root: Path, current, ref: str = CANONICAL_REF) -> list[str]:
+    def history_violations(cls, root: Path, current, ref: str = CANONICAL_REF, lineage=LINEAGE) -> list[str]:
         """Receipts admitted at any retained point that are now gone or rewritten.
 
         Admission freezes MEANING. Exact equality is today's implementation of that
@@ -123,7 +131,7 @@ class VaicCorpusTests(unittest.TestCase):
         """
         live = cls.receipts_by_key(current)
         violations = []
-        for commit, corpus in cls.admitted_states(root, ref):
+        for commit, corpus in cls.admitted_states(root, ref, lineage):
             for key, receipt in cls.receipts_by_key(corpus).items():
                 if key not in live:
                     violations.append(f"{key[0]} receipt admitted in {commit[:9]} has disappeared")
@@ -174,7 +182,7 @@ class VaicCorpusTests(unittest.TestCase):
                 ("alter evidence", corpus([receipt("AAAA", "V1", evidence=["y"])]), ["rewritten"]),
             ):
                 with self.subTest(label):
-                    found = self.history_violations(root, state, ref="HEAD")
+                    found = self.history_violations(root, state, ref="HEAD", lineage=(CORPUS,))
                     self.assertEqual(len(found), len(expect), f"{label}: {found}")
                     for fragment, message in zip(expect, found):
                         self.assertIn(fragment, message)
@@ -182,12 +190,12 @@ class VaicCorpusTests(unittest.TestCase):
             # a later transition cannot hide an earlier deletion
             commit(corpus([r1, r2]), "admit r2")
             commit(corpus([r1, r3]), "drop r2, admit r3")
-            self.assertEqual(len(self.history_violations(root, corpus([r1, r3]), ref="HEAD")), 1)
+            self.assertEqual(len(self.history_violations(root, corpus([r1, r3]), ref="HEAD", lineage=(CORPUS,))), 1)
 
     def test_an_admitted_receipt_can_never_be_reclassified_as_a_draft(self) -> None:
         """"It was only intermediate" must be knowable at the time, not asserted later."""
-        admitted = self.admitted_corpus()
-        if admitted is None:
+        admitted = self.admitted_corpora()
+        if not admitted:
             # A stated fact rather than a silently skipped assertion: the admission
             # lineage carries no corpus yet, so nothing is admitted and every receipt
             # is provisional — including any committed on a development branch, which
@@ -198,9 +206,80 @@ class VaicCorpusTests(unittest.TestCase):
             self.assertEqual(exists.returncode, 0,
                              f"{CANONICAL_REF} must exist to serve as the admission lineage")
             return
-        lost = self.receipt_keys(admitted) - self.receipt_keys(self.corpus)
-        self.assertEqual(sorted(lost), [],
-                         "an admitted receipt was dropped; admitted history is append-only")
+        for corpus in admitted:
+            lost = self.receipt_keys(corpus) - self.receipt_keys(self.corpus)
+            self.assertEqual(sorted(lost), [],
+                             "an admitted receipt was dropped; admitted history is append-only")
+
+    def test_v1_carries_every_v0_receipt_verbatim_and_records_every_transition(self) -> None:
+        """v1 = surviving obligations + successor bindings + supersession records — never
+        v0 minus inconvenient rows. Admission freezes meaning: every receipt of v0 is in v1
+        unchanged, every row has exactly one transition, and only the fields a carried-forward
+        row declares as rebound differ from v0."""
+        v0 = VAIC.load_json(ROOT / LINEAGE[0])
+        self.assertEqual(self.corpus.get("supersedes"), LINEAGE[0])
+        live = self.receipts_by_key(self.corpus)
+        for key, receipt in self.receipts_by_key(v0).items():
+            self.assertEqual(live.get(key), receipt, key)
+        rows0 = {row["id"]: row for row in v0["obligations"]}
+        dispositions = Counter()
+        for row in self.corpus["obligations"]:
+            transition = row["transition"]
+            dispositions[transition["disposition"]] += 1
+            self.assertEqual(transition["statement"], self.corpus["transition"][transition["disposition"]])
+            before = rows0[row["id"]]
+            # v0's receipts are a verbatim prefix: re-evaluation appends, never edits
+            old = before["evaluation"]["receipts"]
+            self.assertEqual(row["evaluation"]["receipts"][:len(old)], old, row["id"])
+            changed = {k for k in before if k not in ("version", "evaluation") and before[k] != row.get(k)}
+            if transition["disposition"] == "SUPERSEDED":
+                self.assertEqual(changed, set(), f"{row['id']}: a superseded row is preserved as written")
+                self.assertEqual(row["evaluation"], before["evaluation"], f"{row['id']}: a superseded row gains nothing")
+                self.assertTrue(transition["retired_mechanism"])
+            else:
+                self.assertEqual(changed, set(transition["rebound_fields"]), row["id"])
+                self.assertEqual(row["version"], 2 if changed else before["version"], row["id"])
+        self.assertEqual(dispositions, Counter({"CARRIED_FORWARD": 9, "SUPERSEDED": 10}))
+        self.assertEqual(len(self.corpus["obligations"]), len(v0["obligations"]))
+
+    def test_a_superseded_obligation_is_neither_owed_nor_forgotten(self) -> None:
+        result = self.validate()
+        self.assertEqual(result["structure"], "VALID")
+        superseded = {row["id"] for row in self.corpus["obligations"] if row["transition"]["disposition"] == "SUPERSEDED"}
+        self.assertEqual(set(result["superseded"]), superseded)
+        self.assertEqual(self.counts(result)["SUPERSEDED"], len(superseded))
+        # its recorded observations stand: the observed distribution still counts them
+        self.assertEqual(sum(self.observed(result).values()), len(self.corpus["obligations"]))
+        # it is not expired evidence — it is history that no longer binds
+        self.assertTrue(superseded.isdisjoint(result["expired_bindings"]))
+        # a receipt bound to the current build on a superseded row is contradictory data
+        corpus = copy.deepcopy(self.corpus)
+        row = next(r for r in corpus["obligations"] if r["id"] == "CY-EPI-001")
+        receipt = self.current_receipt(corpus)
+        receipt.update({"evaluator": row["authorized_evaluators"][0], "coverage": row["required_coverage"]["classes"][0],
+                        "evidence": ["js/claims.js#renderClaims"], "result": row["evaluation"]["result"]})
+        row["evaluation"]["receipts"].append(receipt)
+        bad = self.validate(corpus)
+        self.assertEqual(bad["structure"], "INVALID")
+        self.assertTrue(any("superseded obligation cannot be observed" in e for e in bad["errors"]))
+        # a successor corpus without a transition on some row, or with an unknown one, is malformed
+        for label, mutate in {
+            "missing transition": lambda c: c["obligations"][0].pop("transition"),
+            "unknown disposition": lambda c: c["obligations"][0]["transition"].update(disposition="RETIRED"),
+            "superseded without its mechanism": lambda c: next(r for r in c["obligations"] if r["id"] == "CY-RES-001")["transition"].pop("retired_mechanism"),
+            "carried without its surface": lambda c: c["obligations"][0]["transition"].pop("successor_surface"),
+        }.items():
+            with self.subTest(label):
+                corpus = copy.deepcopy(self.corpus)
+                mutate(corpus)
+                self.assertEqual(self.validate(corpus)["structure"], "INVALID", label)
+        # the restamp tool appends nothing to a superseded row even when its harness is known
+        with tempfile.TemporaryDirectory() as tmp:
+            path, _ = self.scrambled(tmp)
+            RESTAMP.stamp(ROOT, path)
+            harness = dict(RESTAMP.HARNESS, **{"tools/test-ledger.js": ["true"], "tools/test-site.py plus tools/test-motion.py": ["true"]})
+            added = dict(RESTAMP.append(ROOT, path, harness=harness, today="2099-01-01"))
+        self.assertTrue(superseded.isdisjoint(added), added)
 
     def test_current_corpus_is_structurally_valid_but_not_projection_valid(self) -> None:
         result = self.validate()
@@ -221,13 +300,16 @@ class VaicCorpusTests(unittest.TestCase):
         expected: Counter[str] = Counter()
         expired = []
         for row in self.corpus["obligations"]:
+            if row["transition"]["disposition"] == "SUPERSEDED":
+                expected["SUPERSEDED"] += 1
+                continue
             receipts = row["evaluation"].get("receipts") or []
             current = any(receipt.get("artifact_build") == build for receipt in receipts)
             expected[row["evaluation"]["result"] if current else "NOT_EVALUATED"] += 1
             if receipts and not current:
                 expired.append(row["id"])
         self.assertEqual(self.counts(result),
-                         {key: expected.get(key, 0) for key in ("PASS", "FAIL", "NOT_EVALUATED")})
+                         {key: expected.get(key, 0) for key in VAIC.EFFECTIVE})
         self.assertEqual(result["expired_bindings"], sorted(expired))
         self.assertEqual(result["current_evidence"], "INCOMPLETE" if expired else "COMPLETE")
 

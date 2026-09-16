@@ -10,8 +10,9 @@ P6  a manifest edit moves every visible count it owns AND the canonical derivati
     systems_indexed 6 → 7 changes 06 → 07 at every site and changes the checksum;
 P7  no retired literal survives outside a marked element;
 P8  CL-02 reads the same elements back at runtime (tools/test-projection.js under jsc);
-P9  the floor's obligations block is the corpus's obligations — current, complete, citing
-    every id a served module names, and carrying no verdict, receipt, digest or build.
+P9  Sheet 7's obligations block is the corpus's obligations — current, complete, the owed
+    rows before the superseded, citing every id a served module names, and carrying no
+    verdict, receipt, digest or build.
 
 Run: python3 tools/test-projection.py   ·   exit nonzero on any failure.
 """
@@ -81,8 +82,10 @@ PO = importlib.import_module("project-obligations")
 corpus = json.load(open(PO.CORPUS, encoding="utf-8"))
 blk = idx[idx.index(PO.BEGIN):idx.index(PO.END)]; blk = blk[blk.index("-->") + 3:]   # the rows, past the marker's own comment
 cited = sorted({c for f in ("js/claims.js", "js/drawing-set.js", "js/instrument.js") for c in re.findall(r"CY-[A-Z]+-\d{3}", open(os.path.join(ROOT, f), encoding="utf-8").read())})
-check(PO.project(idx, corpus) == idx and blk.count('<details class="ob">') == len(corpus["obligations"]) >= 19,
-      "P9 the floor's obligations block is the corpus's %d obligations, current" % len(corpus["obligations"]))
+owed = sum(o["transition"]["disposition"] == "CARRIED_FORWARD" for o in corpus["obligations"])
+check(PO.project(idx, corpus) == idx and blk.count('<details class="ob">') == owed and blk.count('<details class="ob sup">') == len(corpus["obligations"]) - owed
+      and blk.index('<details class="ob sup">') > blk.rindex('<details class="ob">'),
+      "P9 Sheet 7's obligations block is the corpus's %d obligations, current — %d owed first, %d superseded after" % (len(corpus["obligations"]), owed, len(corpus["obligations"]) - owed))
 check(not re.search(r"\b[0-9a-f]{64}\b|\b[0-9A-F]{16}\b|\b(PASS|FAIL|NOT_EVALUATED)\b|receipt", blk),
       "P9 the block carries no digest, build identity, result or receipt — only what is owed")
 check(all(c in blk for c in cited), "P9 every obligation a served module cites is disclosed (%s)" % (", ".join(cited) or "the modules cite none by id"))

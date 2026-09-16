@@ -32,7 +32,7 @@ flowchart TD
   DEP --> DIST["dist/ public artifact"]
   DIST --> SW
 
-  V["vaic/cytherai-obligations.v0.json"] --> PO["tools/project-obligations.py"] --> S7["Sheet 7"]
+  V["vaic/cytherai-obligations.v1.json"] --> PO["tools/project-obligations.py"] --> S7["Sheet 7"]
   M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
 ```
 
@@ -63,7 +63,7 @@ caller fails verification.
 | `engine/` | Trajectory engine and its browser suite | No | Run locally through `pages/runner.html`; not part of the homepage dependency graph or the artifact |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
-| `vaic/` | The VAIC-0 obligation corpus, evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable (`tools/test-vaic.py`) |
+| `vaic/` | The VAIC-0 obligation corpus (`v1`, superseding `v0`, which stays as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across both lineages (`tools/test-vaic.py`) |
 | `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
 | `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
 | `backup/` | Retired surfaces: `instrument-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html` | No | Historical record only; retire here, never delete, never deploy |
