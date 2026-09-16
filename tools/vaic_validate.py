@@ -84,7 +84,7 @@ IDENTITY_COVERAGE = {
     "grammar_hash": ("index.html", "js/drawing-set.js"),
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
-        "verify.sh", "deploy.sh", "generate-integrity.sh",
+        "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py",
         "tools/test-claims.js", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/test-projection.js",

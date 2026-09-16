@@ -137,7 +137,10 @@ The release flow is fail-closed:
 3. Run `./verify.sh`.
 4. `./deploy.sh` deletes and rebuilds `dist/` from `deploy.paths`; it rejects a precached
    asset missing from the artifact and rejects the historical directories.
-5. Publish the contents of `dist/`. Apply and verify the origin headers in `docs/deploy.md`.
+5. `./publish.sh` pushes the contents of `dist/` as the single-commit `gh-pages` branch
+   GitHub Pages serves at `cytherai.com` (`CNAME`, `.nojekyll` are in the artifact). It
+   refuses uncommitted served files, a HEAD not on `master`, and a failing `./verify.sh`.
+   The origin contract and Pages' recorded limits are `docs/deploy.md` §1–§4, §7.
 
 The service worker precaches the pages and the four modules, installs one build or
 nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
