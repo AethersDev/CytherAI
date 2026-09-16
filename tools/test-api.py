@@ -54,7 +54,7 @@ INVENTORY = {
     },
     "CytherInstrument": {
         "production": ["lastAudit", "step", "wire"],
-        "verifier": ["audit"],
+        "verifier": ["audit", "biEngine"],
     },
 }
 SERVED = ["index.html", "js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js"]

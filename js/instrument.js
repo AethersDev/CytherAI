@@ -75,17 +75,21 @@ function biEngine(seed) {
     st.prop++;
     const tk = tok();
     const r = biAdmit(at, tk);
-    if (!r.ok) { st.rej++; if (--at.budget <= 0) { st.disc++; at = fresh(); } return { e: "rej", tk, why: r.why }; }
+    /* every event names the position it was judged from, so a second consumer of this
+       engine can draw what happened without reaching into the state (demo/ draws the
+       refusals as struck strokes; the log here prints them) */
+    const from = { x: at.x, y: at.y };
+    if (!r.ok) { st.rej++; const discarded = --at.budget <= 0; if (discarded) { st.disc++; at = fresh(); } return { e: "rej", tk, why: r.why, from, discarded }; }
     if (r.close) {
       at.toks.push(tk);
       const okK = biKernel(at.toks);
       if (okK) st.adm++; else st.inv++;
       const prog = at.toks; at = fresh();
-      return { e: okK ? "adm" : "inv", tk, prog };
+      return { e: okK ? "adm" : "inv", tk, prog, from };
     }
     r.pts.forEach(p => at.cov.add(p));
     at.x = r.nx; at.y = r.ny; at.axis = at.axis === "H" ? "V" : "H"; at.nseg++; at.toks.push(tk);
-    return { e: "ok", tk };
+    return { e: "ok", tk, from, to: { x: r.nx, y: r.ny }, toks: at.toks };
   }
   return { step, st };
 }
@@ -95,7 +99,11 @@ function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < coun
 let last = audit(1500, 2);   /* quick seeded audit so CL-05 has evidence at boot (no DOM) */
 function lastAudit() { return last; }
 
-const API = { audit, lastAudit };
+/* biEngine is the one boundary engine: the instrument on the homepage streams it, the
+   audit runs it, and any other surface that demonstrates the boundary (demo/) consumes
+   this export rather than a copy — a copy is a silent drift path from the mechanism it
+   claims to show. tools/test-boundary.js pins the stream. */
+const API = { audit, lastAudit, biEngine };
 
 /* ============================================================================
    DOM wiring — canvas, streaming log, RUN / AUDIT. Guarded.
