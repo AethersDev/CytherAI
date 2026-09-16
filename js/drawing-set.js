@@ -86,7 +86,8 @@ $("#revs").innerHTML = eps.map(e => `<div class="row rev"><div>0${e.n}</div><div
   CM.COMMITMENTS.map(c => `<div class="row rev"><div>0${c.epoch}</div><div class="d">${c.committed}</div><div>committed · sha256 ${c.digest.slice(0, 8)}… · ${c.status}</div></div>`).join("");   /* the status the manifest DECLARES, verbatim — the page asserts none */
 $("#nc").innerHTML = CM.MANIFEST.not_claimed.map((t, i) => `<div class="row nc"><div>${i + 1}. ${t}</div><span>NOT CLAIMED</span></div>`).join("");
 $("#prov").innerHTML = CM.MANIFEST.provenance.map(r => `<div class="row rev"><div>${r.date.replace(".", "·")}</div><div class="d">${r.event}</div><div>${r.desc}</div></div>`).join("");
-$("#patent2").textContent = CM.MANIFEST.patent; $("#oblCount").textContent = document.querySelectorAll("details.ob").length + " OBLIGATIONS";
+$("#patent2").textContent = CM.MANIFEST.patent;
+$("#oblCount").textContent = document.querySelectorAll("details.ob:not(.sup)").length + " OWED · " + document.querySelectorAll("details.ob.sup").length + " SUPERSEDED";
 
 /* ── FIG. 1 — a drawing that earns its ink ──
    Two realities in one figure: a faint field of proposals — each construction stroke

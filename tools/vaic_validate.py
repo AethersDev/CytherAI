@@ -59,10 +59,19 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v0.json"
+DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v1.json"
 DEFAULT_MATRIX = ROOT / "vaic/evaluator-matrix.v0.json"
 
 RESULTS = {"PASS", "FAIL", "NOT_EVALUATED"}
+# A successor corpus (one that names what it `supersedes`) carries a transition record on
+# every row: CARRIED_FORWARD — the requirement is unchanged and re-bound to the successor
+# surface — or SUPERSEDED — the mechanism it governed retired. A superseded obligation is
+# not owed by the candidate: its effective verdict is SUPERSEDED, neither PASS, FAIL nor
+# NOT_EVALUATED; it enters no projection or release judgment; it may carry no receipt bound
+# to the current build (the build does not ship its mechanism); its recorded observations
+# stand exactly as history. Supersession is not satisfaction, failure, or revocation.
+DISPOSITIONS = {"CARRIED_FORWARD", "SUPERSEDED"}
+EFFECTIVE = ("PASS", "FAIL", "NOT_EVALUATED", "SUPERSEDED")
 IDENTITY_FIELDS = ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash")
 DIGEST = re.compile(r"[0-9a-f]{64}")
 
@@ -336,7 +345,7 @@ def distribution(counts: Counter, licensed: bool) -> dict[str, Any]:
     corpus. Publishing them as the corpus's verdict is how an eighteenth obligation
     disappears silently, so an invalid corpus reports them as diagnostic only.
     """
-    tally = {name: counts.get(name, 0) for name in ("PASS", "FAIL", "NOT_EVALUATED")}
+    tally = {name: counts.get(name, 0) for name in EFFECTIVE}
     return {"status": "LICENSED", "counts": tally} if licensed else \
            {"status": "NOT_LICENSED", "diagnostic_partial": tally}
 
@@ -455,6 +464,28 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
     if len(ids) != len(set(ids)):
         errors.append("obligation ids must be unique")
     by_id = {row["id"]: row for row in shaped}
+
+    # ---- TRANSITION ---------------------------------------------------------
+    successor = isinstance(corpus.get("supersedes"), str)
+    superseded: set[str] = set()
+    for row in shaped:
+        transition = row.get("transition")
+        if transition is None:
+            if successor:
+                errors.append(f"{row['id']}: a successor corpus must record every row's transition")
+            continue
+        defects = shape_defects(transition, {"disposition": str, "statement": str, "from": str}, f"{row['id']} transition")
+        if defects:
+            errors.extend(defects)
+            continue
+        if transition["disposition"] not in DISPOSITIONS:
+            errors.append(f"{row['id']}: unknown transition disposition {transition['disposition']!r}")
+        elif transition["disposition"] == "SUPERSEDED":
+            if not isinstance(transition.get("retired_mechanism"), str) or not transition.get("retired_mechanism"):
+                errors.append(f"{row['id']}: a superseded obligation must name the mechanism that retired")
+            superseded.add(row["id"])
+        elif not isinstance(transition.get("successor_surface"), str) or not transition.get("successor_surface"):
+            errors.append(f"{row['id']}: a carried-forward obligation must name its successor surface")
 
     # ---- ADMISSIBILITY, REFERENCE and BINDING ------------------------------
     effective: dict[str, str] = {}
@@ -576,11 +607,18 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
                     resolved = False
             if not resolved:
                 continue                # unresolved evidence cannot license anything
-            bindings.append("CURRENT" if observed_build == build and verifier_current else "STALE")
+            current_binding = observed_build == build and verifier_current
+            if current_binding and oid in superseded:
+                errors.append(f"{label}: a superseded obligation cannot be observed on build {build}, "
+                              f"which does not ship its mechanism")
+                continue
+            bindings.append("CURRENT" if current_binding else "STALE")
 
         # the observation stands as recorded; only a receipt bound to this candidate
-        # licenses that observation to speak for it
-        effective[oid] = result if "CURRENT" in bindings else "NOT_EVALUATED"
+        # licenses that observation to speak for it — and a superseded obligation is not
+        # owed by it at all
+        effective[oid] = "SUPERSEDED" if oid in superseded else \
+            result if "CURRENT" in bindings else "NOT_EVALUATED"
 
     # ---- GRAPH -------------------------------------------------------------
     edges = {row["id"]: [link for link in row["depends_on"] if isinstance(link, str)]
@@ -602,9 +640,10 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
     licensed = not errors
     observed = Counter(row["evaluation"]["result"] for row in shaped)
     counts = Counter(effective.values())
-    projection_rows = [row for row in shaped
+    binding = [row for row in shaped if row["id"] not in superseded]
+    projection_rows = [row for row in binding
                        if row["scope"] == "projection" and row["severity"] in PROJECTION_MANDATORY]
-    origin_rows = [row for row in shaped
+    origin_rows = [row for row in binding
                    if row["scope"] == "origin" and row["severity"] == "release_mandatory"]
     projection_valid = licensed and bool(projection_rows) and \
         all(effective.get(row["id"]) == "PASS" for row in projection_rows)
@@ -624,6 +663,7 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         "projection": "VALID" if projection_valid else "INVALID",
         "origin": "VALID" if origin_valid else "NOT_CERTIFIED",
         "release": "CERTIFIED" if projection_valid and origin_valid else "NOT_CERTIFIED",
+        "superseded": sorted(superseded),
         "bespoke_relation_ratio": ratio,
         "errors": errors,
     }
@@ -657,7 +697,7 @@ def main() -> int:
             counts, seen = effective["counts"], observed["counts"]
             print(f"VAIC-0 corpus: {summary['obligations']} obligations · "
                   f"{counts['PASS']} PASS · {counts['FAIL']} FAIL · "
-                  f"{counts['NOT_EVALUATED']} NOT_EVALUATED  (verdict for this candidate)")
+                  f"{counts['NOT_EVALUATED']} NOT_EVALUATED · {counts['SUPERSEDED']} SUPERSEDED  (verdict for this candidate)")
             print(f"VAIC-0 observed: {seen['PASS']} PASS · {seen['FAIL']} FAIL · "
                   f"{seen['NOT_EVALUATED']} NOT_EVALUATED  (as recorded, any build)")
         else:
@@ -665,7 +705,7 @@ def main() -> int:
             print(f"VAIC-0 corpus: {summary['obligations']} obligations · "
                   f"verdict distribution NOT LICENSED by an invalid corpus")
             print(f"VAIC-0 diagnostic only, over parsed survivors: {partial['PASS']} PASS · "
-                  f"{partial['FAIL']} FAIL · {partial['NOT_EVALUATED']} NOT_EVALUATED")
+                  f"{partial['FAIL']} FAIL · {partial['NOT_EVALUATED']} NOT_EVALUATED · {partial['SUPERSEDED']} SUPERSEDED")
         print(f"VAIC-0 current evidence: {summary['current_evidence']}"
               + (" · expired bindings: " + ", ".join(summary["expired_bindings"])
                  if summary["expired_bindings"] else ""))

@@ -413,7 +413,7 @@ class SiteContractTests(unittest.TestCase):
         """
         register = json.loads((ROOT / "vaic/release-dispositions.v0.json").read_text(encoding="utf-8"))
         disposed = {entry["subject"] for entry in register["dispositions"]}
-        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v0.json")
+        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v1.json")
         matrix = VAIC.load_json(ROOT / "vaic/evaluator-matrix.v0.json")
         summary = VAIC.validate(corpus, matrix, ROOT)
         self.assertEqual(summary["structure"], "VALID")

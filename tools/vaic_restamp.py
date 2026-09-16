@@ -31,7 +31,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = ROOT / "vaic/cytherai-obligations.v0.json"
+CORPUS = ROOT / "vaic/cytherai-obligations.v1.json"
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 # harness_identity, as receipts name it -> the command whose exit status IS the observation
 # The world's harnesses (tools/test-ledger.js; tools/test-site.py plus tools/test-motion.py)
@@ -128,6 +128,8 @@ def append(root: Path = ROOT, corpus: Path = CORPUS, harness=HARNESS, today: str
     today = today or datetime.date.today().isoformat()
     expected, added = copy.deepcopy(parsed), []
     for row, erow in zip(parsed["obligations"], expected["obligations"]):
+        if (row.get("transition") or {}).get("disposition") == "SUPERSEDED":
+            continue                            # not owed by this build; its history stands
         receipts = row["evaluation"].get("receipts") or []
         if any(r.get("artifact_build") == cand["build_identity"]
                and r.get("verification_identity") == cand["verification_identity"] for r in receipts):

@@ -26,9 +26,14 @@ remain separate.
 
 ## Artifacts
 
-- `cytherai-obligations.v0.json` — 18 typed obligations, their quantified
-  contexts, dependencies, required evaluator authority/coverage, current results,
-  and build-bound receipts.
+- `cytherai-obligations.v1.json` — the current corpus: 19 typed obligations with their
+  quantified contexts, dependencies, required evaluator authority/coverage, results,
+  build-bound receipts, and — because it supersedes `v0` — a `transition` on every row:
+  9 CARRIED_FORWARD to the drawing set (successor surface named, rebound fields listed),
+  10 SUPERSEDED with instrument-v1 (retired mechanism named, preserved with their
+  evidence, not owed). Every receipt of `v0` is in it verbatim.
+- `cytherai-obligations.v0.json` — the corpus as written against instrument-v1, kept as
+  history; the guards walk its admitted states too.
 - `evaluator-matrix.v0.json` — evaluator classes, reusable relation authority,
   coverage semantics, and explicit non-authority.
 - `evidence/current-browser-observations.v0.json` — bounded observation ledger.
@@ -51,10 +56,11 @@ python3 tools/test-vaic.py
 `./verify.sh` runs both; the artifact identity is a projection of tracked source, so
 nothing is built.
 
-The corpus was written against instrument-v1, the homepage retired on 2026-09-16. Its
-receipts are immutable history; the transition to the drawing set — which obligations
-carry forward with a successor binding and which are superseded because the mechanism
-they governed retired — is the corpus's next version, not an edit of this one.
+`v0` was written against instrument-v1, the homepage retired on 2026-09-16; `v1` is the
+transition to the drawing set — surviving obligations, explicit successor bindings, and
+supersession records — never `v0` minus inconvenient rows. A superseded obligation's
+effective verdict is `SUPERSEDED`: not owed by the candidate, not counted for or against
+its projection, its observations preserved.
 
 ## Initial corpus result
 

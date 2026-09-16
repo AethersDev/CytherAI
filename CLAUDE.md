@@ -71,6 +71,17 @@ It follows that **an epoch is an admitted institutional state on the canonical l
 not every transient or merely committed computational state.** Three verifier edits
 inside one development transaction are one epoch, not three.
 
+**A corpus transition is a successor, never a subtraction.** `v1` supersedes `v0`
+(`supersedes`), carries every receipt of `v0` verbatim, and records on every row a
+`transition`: **CARRIED_FORWARD** — the requirement is unchanged, its surface and verifier
+re-bound to the drawing set (`successor_surface`, `rebound_fields`) — or **SUPERSEDED** —
+the mechanism it governed retired (`retired_mechanism`, `preserved_in`). A superseded
+obligation's effective verdict is `SUPERSEDED`: neither PASS, FAIL nor NOT_EVALUATED; it
+enters no projection or release judgment; a receipt bound to the current build on it is
+`INVALID` (the build does not ship its mechanism); its observations stand. Supersession
+is not satisfaction, failure, or revocation. The guards walk both lineages (`LINEAGE`),
+so a receipt admitted into `v0` on master must remain, unchanged, in the live `v1`.
+
 **Admission freezes meaning, not incidental serialization.** What is immutable is the
 observation — obligation, observed candidate, verdict, method, environment, evidence,
 and verifier provenance as recorded. Exact equality is today's *implementation* of that
@@ -169,8 +180,9 @@ every `[data-checksum]` site. After a manifest edit, run the projector before th
 integrity step; `tools/test-projection.py` fails on a stale page, an unknown name, or an
 identifier that is not printed. Sheet 7 discloses every VAIC obligation — what the set
 owes and who may establish it, never a receipt or verdict, because a receipt for a build
-cannot be inside that build — projected from `vaic/cytherai-obligations.v0.json` by
-`python3 tools/project-obligations.py` after any obligation edit.
+cannot be inside that build — projected from `vaic/cytherai-obligations.v1.json` by
+`python3 tools/project-obligations.py` after any obligation edit: the obligations the set
+owes first, then those superseded with instrument-v1, preserved and named, never dropped.
 
 The architecture and change-impact guide is `docs/architecture.md`.
 
