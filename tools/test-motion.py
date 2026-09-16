@@ -111,6 +111,18 @@ for phase, (ink, ground) in phase_ink.items():
 check(a8 and materials["flip"] == (*R["MEMBRANE"], R["MEMBRANE_A"]),
       "A8 each of the four phase materials carries its phase's ink at the 66% floor with AA; the flip material is the membrane")
 
+# A10 — the subpages' inks hold AA on every subpage ground. The homepage proves its
+# model (CL-06/06c) and holds its stylesheet to it (A7/A8); css/cytherai.css had no
+# such law, and its quiet ink shipped at 4.01:1 on paper and 3.66:1 on the brief's
+# dense control band. Tokens are read from the stylesheet, never restated here.
+css = open(os.path.join(ROOT, "css/cytherai.css")).read()
+tok = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", css))
+grounds = {k: tok[k] for k in ("paper", "paper-lifted", "paper-dense", "panel")}
+inks = {k: tok[k] for k in ("ink", "ink-mid", "ink-quiet", "accent", "refuse")}
+worst = min((wcag(hexrgb(i), hexrgb(g)), ik, gk) for ik, i in inks.items() for gk, g in grounds.items())
+check(worst[0] >= 4.5 and tok["quiet"] == tok["ink-quiet"] and tok["label"] == tok["ink-mid"],
+      "A10 every subpage ink holds AA on every subpage ground (worst %.2f:1, %s on %s); the two quiet aliases agree" % worst)
+
 # A9 — the measurement map is an observation control, not a decoration: a slider in
 # the accessibility tree whose value is the same progress every readout uses, driven
 # by pointer (a point in the form -> depthFor) and keyboard, resolving to document
