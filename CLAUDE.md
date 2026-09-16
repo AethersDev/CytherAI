@@ -5,9 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Development
 
 Pure static site — no framework, package manager, bundler, or linter. The
-zero-dependency verification entrypoint is `./verify.sh`; it runs jsc module and
-logic regressions, Python integration/motion tests, and the deployment build.
-Browser-only engine, layout, and service-worker checks remain in `docs/deploy.md`.
+zero-dependency verification entrypoint is `./verify.sh`; it runs the jsc module and
+logic regressions, the Python projection/integration tests, and the corpus validator.
+Browser-only checks (layout, service worker, the seal and FIG. 1 as rendered) remain in
+`docs/deploy.md`; the retired world's laws run with `backup/instrument-v1/verify.sh`.
 Serve with any static file server: `python3 -m http.server 8000` from the repo root.
 
 The first VAIC-0 research corpus lives under `vaic/`. `./verify.sh` validates its
@@ -106,9 +107,13 @@ cited file. Line numbers may drift without invalidating evidence; a deleted, ren
 or duplicated anchor is `INVALID`, because the historical record has stopped resolving.
 A receipt may only cite a file that `IDENTITY_COVERAGE` in `tools/vaic_validate.py`
 declares, so **adding a harness file means adding it there** — otherwise receipts
-cannot cite it. Identities stay separated by role (record, kernel, grammar, policy,
-artifact, verification) and are never collapsed into one digest, so a receipt states
-exactly what moved. An observation binds both the candidate and the verifier that
+cannot cite it. **Retirement is a move, not a deletion:** a retired file (`RETIRED`)
+lives whole in a declared snapshot (`ARCHIVES`, today `backup/instrument-v1/`), a
+receipt observed on an earlier build resolves it there by the path it had then, and a
+receipt bound to the current build may not cite it at all — the build does not ship it.
+Identities stay separated by role (record, kernel, grammar, policy, artifact,
+verification) and are never collapsed into one digest, so a receipt states exactly
+what moved. An observation binds both the candidate and the verifier that
 produced it: editing any file in the verification set expires the receipts that set
 produced, and re-running the harness re-stamps them.
 
@@ -143,107 +148,118 @@ documentation may explain a failure differently, but may not make it disappear. 
 may both block release, but under different clauses.
 
 Zero external requests, ever. The homepage CSP forbids inline `<script>`
-(`script-src 'self'`); all homepage JS is in external modules. No node, no Chrome on
-this machine — verify JS with `jsc`:
-`/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc`.
+(`script-src 'self'`); all homepage JS is in external modules. No node — verify JS with
+`jsc`: `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc`.
 A ReferenceError on a browser global is a PASS for a parse check; SyntaxError is a fail.
 Pure logic is guarded so it loads under jsc; DOM wiring is behind `typeof document`.
+Chrome 151 is installed; browser observations are driven over CDP (headless, an
+`Emulation.setDeviceMetricsOverride` viewport, `./generate-integrity.sh` first or SRI
+blocks every module).
 
 After changing any served file (anything in `deploy.paths`, HTML included — the build
 identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI + the
 `build-hash` meta + the worker cache name), then `python3 tools/vaic_restamp.py` (re-stamps
 the VAIC candidate, appends the automated-set receipts; existing receipts are never edited).
 
-The facts the pages print — the strata's counts and the validation figures on
-`index.html` and `pages/brief.html` — are projections of `js/manifest.js`: marked
-elements (`data-m="name"`) that `python3 tools/project-manifest.py` rewrites from
-`CytherManifest.project`, and that CL-02 reads back at runtime. After a manifest edit,
-run the projector before the integrity step; `tools/test-projection.py` fails on a
-stale page, an unknown name, or an identifier that is not printed. The floor also
-discloses every VAIC obligation — what the page owes and who may establish it, never a
-receipt or verdict, because a receipt for a build cannot be inside that build —
-projected from `vaic/cytherai-obligations.v0.json` by `python3 tools/project-obligations.py`
-after any obligation edit.
+The facts the pages print — the sealed-records count, SCHEDULE 1 and the sheet-1 figures
+on `index.html`, the validation figures on `pages/brief.html` — are projections of
+`js/manifest.js`: marked elements (`data-m="name"`) that `python3 tools/project-manifest.py`
+rewrites from `CytherManifest.project`, and that CL-02 reads back at runtime together with
+every `[data-checksum]` site. After a manifest edit, run the projector before the
+integrity step; `tools/test-projection.py` fails on a stale page, an unknown name, or an
+identifier that is not printed. Sheet 7 discloses every VAIC obligation — what the set
+owes and who may establish it, never a receipt or verdict, because a receipt for a build
+cannot be inside that build — projected from `vaic/cytherai-obligations.v0.json` by
+`python3 tools/project-obligations.py` after any obligation edit.
 
 The architecture and change-impact guide is `docs/architecture.md`.
 
-## Architecture — the substrate / disclosure engine
+## Architecture — the drawing set
 
-The homepage is a disclosure engine. One derived object — the canonical mark, a Clifford
-orbit whose four parameters are digests of the public manifest — **is the world**: four
-pre-rendered exposure tiles form the background, and scroll moves a derived camera from
-far-field into the filament core (transform + opacity only; zero substrate rasters per
-frame). Content descends by epistemic distance. Standing claims execute as predicates
-against the page itself; the reader keeps a local, owner-erasable self-report ledger.
-A separate **reading exposure** governs the record (P9): bistable reading ink with
-hysteresis (`CytherSubstrate.READING`, CL-06/CL-06c check it against the AMBIENT ground at
-every depth — the plate is not in that model; the composited ground is CY-SEM-003, a
-browser obligation, because the page cannot read its own composited pixels), phase-changed
-panel materials, density-conditioned legibility envelopes (`.env`, fed by the retained
-plate fields), corridor placement from the density atlas, rest-state world amplitude,
-and a reader optics control (WORLD · BALANCED · READ, session-local).
+The homepage is an engineering drawing set: seven sheets inside one border — the border
+is the deployment boundary; nothing drawn crosses it — each carrying zone strips, a notes
+block, and a title block: **DRAWN FROM** the public manifest (the state checksum, a
+`[data-checksum]` site), **CHECKED BY** the standing claims (`6 CL · 5 DS · n/11`),
+**REV · EPOCH · DATE**, **SHEET n / 7**, and **APPROVED** — a seal derived from the
+disclosed state (`dsinOrbit(CANON)`), not a logo. Sheets: 1 THE STATEMENT (the plain
+sentence, the 0.00% beside its conditions, FIG. 1) · 2 THE SYSTEM (section through the
+boundary, refusals by class) · 3 MEASUREMENT (SCHEDULE 1, projected) · 4 WHAT RUNS WHERE
+(the wall section, CL-01 live) · 5 ACCESS (three paths) · 6 THE RECORD (seal, claims,
+revisions, not claimed) · 7 OBLIGATIONS · GENERAL NOTES — the authority layer: obligations
+first, chain of record second, normative general notes last; it is allowed to be denser
+and longer than the other sheets because its function is different.
 
-**The law, printed at the floor:** *The surface states. Depth conditions. Records
-substantiate. Boundaries govern. The reader is a record. Nothing is stated that is not checked.*
+**FIG. 1** streams `CytherInstrument.biEngine(2)` — the boundary engine of the record, no
+copy — at 5 proposals per frame: a faint construction field where each refused proposal
+appears at the position it was judged from with a witness at the offending relation, and
+one inked object, the LARGEST program the run admits (`PRG-446DF7E6`), stated by identity
+the instant the kernel speaks and drawn in over a ~500 ms resolution. After the run
+settles, one edge (the longest with explicit neighbours) becomes adjustable; every
+position is a proposal judged by `CytherInstrument.judge`, the receipt names the first
+refused relation, only an admitted candidate can be accepted, and the accepted program
+is carried through sheets 2–6 as *this browser's demonstration*, never a manifest fact.
+Visual language, fixed: cool blue-grey = proposal, blue = candidate, dotted/marked =
+refused, black = admitted, ghost = superseded. `tools/test-drawing-set.js` pins the
+object, the edge and its limits (−3 admitted · −4 ARG RANGE · +2 CROSSES).
 
-**`index.html`** — inline `<style>` only; loads six modules `defer` with SRI, in order:
+**General Note 1, printed on Sheet 7:** *The surface states only what the record can
+support. Conditions and sources travel with every claim. Nothing is stated as established
+that has not been checked.*
+
+**`index.html`** — inline `<style>` only; loads four modules `defer` with SRI, in order:
 
 | Module | `window.*` | Role |
 |---|---|---|
-| `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin/dcos/datan2, admit, dsinOrbit, legibility, checksum) — the whole world runs on these, not on native transcendentals |
-| `js/substrate.js` | `CytherSubstrate` | the world: plate-developed exposure tiles (angular-lobe density, log tonemap; development is a deterministic fixed-step sequence streamed as genuine prefixes — cadence chooses the prefix shown, never its content; REDEVELOP replays the current world and the floor's development receipt prints the four terminal checkpoint names and the comparison), dsin-orbit camera anchors, `observe`, fork; minimap keeps the point-cloud measurement view, is an observation control (a slider: a point in the form names the depth whose camera comes nearest it — `depthFor`, continuous from the current depth — and the keyboard walks the descent; both resolve to document scroll only) and previews the requested orbit while a fork is being formed (`FORK PREVIEW`; the plates stay the prior world until the terminal state) |
-| `js/claims.js` | `CytherClaims` | CL-01…CL-08 + CL-06b/CL-06c predicates; `CLAIMS n/10 HOLDING` |
-| `js/ledger.js` | `CytherLedger` | reader self-report ledger, intent-adaptive CTA |
-| `js/instrument.js` | `CytherInstrument` | hostile-proposer boundary instrument (feeds CL-05) |
-| `js/site.js` | *(none)* | glue: one sleeping rAF loop, weight-field/waves, scroll→observe, hold-to-cross, floor renders, CL-03 verifier |
+| `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin, admit, dsinOrbit, legibility, checksum, project) |
+| `js/instrument.js` | `CytherInstrument` | the boundary: `biEngine` (seeded stream, positioned events), `judge` (a proposed program against boundary then kernel), `audit`, `lastAudit`; pure, DOM-free |
+| `js/claims.js` | `CytherClaims` | the six canonical predicates CL-01 · 02 · 03 · 05 · 06b · 07 and the registry (`CLAIMS`, `setClaim`, `recomputeClaims`, `renderClaims` → `#claimRows`, `#claimsFooter`, `[data-claims-count]`); a page pushes its own predicates before the first render |
+| `js/drawing-set.js` | `CytherDrawingSet` | the set: frame/title block/seal on every sheet, projections of the manifest, FIG. 1, the adjustable edge, the carried object, DS-01..05 (seal serial ≡ state, ink and quietest ink ≥ 4.5:1 on paper read from the tokens, seal ≡ derivation pixel for pixel, the drawing is an admitted program), CL-03/CL-05 setting, `sw.js` registration; pure geometry (`walk`, `extent`, `progId`, `pickEdge`, `candidateFor`) exported for the verifier |
 
-`js/develop-worker.js` is not a page module: a dedicated Worker (transport only) that
-runs `CytherSubstrate.developServer` — the kernel's protocol — off the main thread;
-`substrate.js` keeps the presentation law and runs the same server inline where a
-Worker cannot be constructed. Execution location changes, the trajectory does not.
+Claim identifiers are part of the claim: a canonical `CL` number is used only where the
+predicate is the canonical one; a predicate over this set is a `DS`. The world predicates
+CL-04, CL-06, CL-06c, CL-08 left with the world and no page carries a row for them.
 
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
+Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 
-The promoted terminal exposure `assets/plate/surface-terminal.png` IS plate 0's terminal
-raster at a 1200×600 frame, produced offline by the same kernel
-(`tools/promote-poster.js` → `tools/promote-poster.py`, verified by `tools/test-poster.py`:
-`decode(P) == R_N` pixel for pixel). It is the first paint inside the aspect window
-[1, 2] and `noscript`'s only mark, and it is removed for good when plate 0 reaches D_N —
-a fork or a redevelopment is a different world and the poster cannot speak for it.
+**Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
+or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`),
+`manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
+build-hash over every `deploy.paths` byte), `deploy.sh` (publish allowlist → `dist/`;
+headers contract in `docs/deploy.md`). **Developer page:** `pages/runner.html` loads
+`engine/trajectory-engine.js` and its `.test.js` — linked from no page, not in
+`deploy.paths`, not precached, unstamped.
 
-**Infra:** `sw.js` (cache-first; `CACHE` name carries the build hash, stamped by
-`generate-integrity.sh`, so each build installs atomically), `manifest.webmanifest`,
-`generate-integrity.sh` (SRI + build-hash), `deploy.sh` (publish allowlist → `dist/`;
-headers contract in `docs/deploy.md`). **Engine stack:** `engine/trajectory-engine.js`
-and its `.test.js` are loaded only by `pages/runner.html`, a developer page: linked
-from no page, not in `deploy.paths`, not precached, unstamped — run it from the local
-static server. The homepage does not load them. The three modules only the retired graphite homepage loaded (`content/record.js`,
-`profiles/disclosure.js`, `js/console.js`) are archived beside it under
-`backup/graphite-v2/`, and the engine's `-v2.js` dev source, prototypes and v-next design
-map under `backup/trajectory-engine/` — none is served, precached, or fingerprinted.
+**instrument-v1** — the substrate / disclosure-engine homepage (four plate-developed
+exposure tiles, derived camera, descent strata, reader ledger, reading law, fork, minimap,
+poster, Worker) is retired whole to `backup/instrument-v1/`: a verbatim snapshot of
+commit `bf82377` with every verifier that established its laws and its own `verify.sh`.
+Its README indexes it. The receipts that cite its files resolve through it.
 
 ## Register rules (grep-enforced)
 
 `var(--brass)`/gold/warm-paper tokens and the document register (`DOC-2026-001`) are retired.
 Accent `#2036C7` marks state only. BANNED in shipped files: fake meters (`−540 M` style),
-`CONDUCT RECEIPT` (it is a `READING SELF-REPORT`), `Append-only` (the ledger is
-owner-erasable), `1e-12` (the compositing bound is `< 0.05 px · transform quantization`).
-The commitment chip must keep: *"The page renders the commitment; it does not notarize it."*
-PROVISIONAL manifest values (epoch history, counts, commitment preimage) live only in
-`js/manifest.js`; replacing them is a data-only edit. The floor's commitment chip prints
-`COMMITMENTS[0].status` verbatim — it never asserts a status of its own. `PREIMAGE SEALED`
+`CONDUCT RECEIPT` (the retired ledger was a `READING SELF-REPORT`), `Append-only`,
+`1e-12`. Sheet 6's notes must keep: *"The page renders the commitment; it does not
+notarize it."* PROVISIONAL manifest values (epoch history, counts, commitment preimage)
+live only in `js/manifest.js`; replacing them is a data-only edit. The revisions list
+prints `COMMITMENTS[0].status` verbatim — the page never asserts a status of its own. `PREIMAGE SEALED`
 may be set only when the preimage is in the owner's custody alone and appears in no
 history intended for public release; the shipped value is `PREIMAGE PUBLIC · DEMONSTRATION`
 because `newC3/epoch04-preimage.txt` hashes to the published digest.
 
 ## Provenance
 
-- **`PRODUCTION_PLAN.md`** is the authoritative build spec (supersedes any older design
-  spec). Phases P1–P7, verification checklist §9.
+- **`PRODUCTION_PLAN.md`** is the build spec of instrument-v1 (phases P1–P9), superseded
+  by the drawing set on 2026-09-16 and kept as its record; the drawing set's design record
+  is `backup/drawing-set-demo.html` (the approved demo) and this file.
 - **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
   Do not modify it — supersede, never erase.
-- **`backup/`** holds the retired surfaces: `graphite-v2/` (old engine-backed homepage,
+- **`backup/`** holds the retired surfaces: `instrument-v1/` (the substrate homepage,
+  whole, with its verifiers — see its README), `graphite-v2/` (old engine-backed homepage,
   with the three modules only it loaded), `dossier-v3/` (old shared CSS + the dossier IIFE
   modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
-  v-next design map). Supersede, never erase: retire into `backup/`, do not delete.
+  v-next design map), `drawing-set-demo.html` (the demo the drawing set was approved from).
+  Supersede, never erase: retire into `backup/`, do not delete.

@@ -71,14 +71,15 @@ DIGEST = re.compile(r"[0-9a-f]{64}")
 # product grammar changed, and a substrate change must not inherit an old verifier.
 IDENTITY_COVERAGE = {
     "record_hash": ("js/manifest.js",),
-    "kernel_hash": ("js/manifest.js", "js/claims.js", "js/instrument.js"),
-    "grammar_hash": ("index.html", "js/drawing-set.js"),
+    "kernel_hash": ("js/manifest.js", "js/claims.js", "js/ledger.js"),
+    "grammar_hash": ("index.html", "js/substrate.js", "js/site.js", "js/develop-worker.js"),
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py",
-        "tools/test-claims.js", "tools/vaic_restamp.py",
-        "tools/test-projection.py", "tools/test-projection.js",
+        "tools/test-motion.py", "tools/test-claims.js", "tools/test-ledger.js",
+        "tools/test-develop.js", "tools/test-poster.py", "tools/vaic_restamp.py",
+        "tools/test-exposure.js", "tools/test-projection.py", "tools/test-projection.js",
         "tools/project-manifest.py", "tools/test-assets.py", "tools/project-obligations.py",
         "tools/test-api.py", "tools/test-boundary.js", "tools/test-drawing-set.js",
     ),
@@ -87,21 +88,6 @@ IDENTITY_COVERAGE = {
 # A receipt may only cite a file some identity set covers. Without this a future
 # receipt could point into a new helper nobody remembered to bind.
 COVERED = frozenset(path for paths in IDENTITY_COVERAGE.values() for path in paths)
-# A location is not an identity, and retirement is a move, not a deletion. The world the
-# instrument-v1 receipts observed left the served tree whole — its page, modules, poster
-# and the verifiers that produced those receipts — into a snapshot of the last build that
-# served it. A receipt observed on an earlier build cites those files by the path they had
-# then and resolves through the snapshot; a receipt bound to the CURRENT build may not
-# cite a retired file, because the current build does not ship it. A file that is still
-# live but has lost a cited anchor to the snapshot (tools/test-site.py) resolves the same
-# way: the live file first, then the snapshot, and the first file that defines the anchor
-# must define it exactly once.
-ARCHIVES = ("backup/instrument-v1",)
-RETIRED = frozenset((
-    "js/substrate.js", "js/ledger.js", "js/site.js", "js/develop-worker.js",
-    "tools/test-motion.py", "tools/test-ledger.js", "tools/test-develop.js",
-    "tools/test-poster.py", "tools/test-exposure.js",
-))
 # a verifier that is not the declared set, and a receipt issued before verifiers were
 # recorded; UNRECORDED can never speak for the current candidate
 EXTERNAL, UNRECORDED = "EXTERNAL", "UNRECORDED"
@@ -233,31 +219,26 @@ def anchor_sites(source: str, anchor: str) -> list[int]:
     return [source.count("\n", 0, match.start()) + 1 for match in pattern.finditer(source)]
 
 
-def evidence_defect(root: Path, reference: str, observed_build: str, historical: bool = False) -> str | None:
+def evidence_defect(root: Path, reference: str, observed_build: str) -> str | None:
     """Why this evidence reference does not resolve, or None when it does.
 
     A location is not an identity. A citation resolves through the identity that
     covers the file and then through a semantic anchor inside it, so inserting
     lines above the cited code cannot invalidate a receipt and deleting the cited
-    object cannot silently keep one alive. A HISTORICAL receipt (one observed on an
-    earlier build) may also resolve through the declared archive snapshots, which is
-    how a retired file keeps resolving the evidence that cited it.
+    object cannot silently keep one alive.
     """
     path_text, separator, anchor = reference.partition("#")
-    if path_text in RETIRED and not historical:
-        return f"cites {path_text}, which is retired and not in this build"
-    if path_text not in COVERED and path_text not in RETIRED:
+    if path_text not in COVERED:
         return f"cites {path_text}, which no identity set covers"
-    candidates = [root / path_text] + ([root / archive / path_text for archive in ARCHIVES] if historical else [])
-    present = [path for path in candidates if path.is_file()]
-    if not present:
+    path = root / path_text
+    if not path.is_file():
         return f"cites missing file {path_text}"
-    path = present[0]
+    source = path.read_text(encoding="utf-8")
     if not separator:
         return None
     if path.suffix == ".json":
         try:
-            document = json.loads(path.read_text(encoding="utf-8"))
+            document = json.loads(source)
         except json.JSONDecodeError:
             return f"cites unparseable {path_text}"
         observation = document.get("observations", {}).get(anchor)
@@ -266,11 +247,12 @@ def evidence_defect(root: Path, reference: str, observed_build: str, historical:
         if observation.get("artifact_build") != observed_build:
             return f"cites observation {anchor!r}, which was not made on build {observed_build}"
         return None
-    for path in present:
-        sites = anchor_sites(path.read_text(encoding="utf-8"), anchor)
-        if sites:
-            return None if len(sites) == 1 else f"cites anchor {anchor!r}, which {path_text} defines {len(sites)} times"
-    return f"cites anchor {anchor!r}, which {path_text} does not define"
+    sites = anchor_sites(source, anchor)
+    if not sites:
+        return f"cites anchor {anchor!r}, which {path_text} does not define"
+    if len(sites) > 1:
+        return f"cites anchor {anchor!r}, which {path_text} defines {len(sites)} times"
+    return None
 
 
 def dependency_cycle(edges: dict[str, list[str]]) -> list[str] | None:
@@ -570,7 +552,7 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
                     continue
                 # evidence resolves against the build the observation names, so a
                 # historical receipt keeps pointing at the record it was drawn from
-                defect = evidence_defect(root, reference, observed_build, historical=observed_build != build)
+                defect = evidence_defect(root, reference, observed_build)
                 if defect:
                     errors.append(f"{label}: {defect}")
                     resolved = False

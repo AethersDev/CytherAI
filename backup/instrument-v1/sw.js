@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-4DBD6BF6ACA106E1';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-3DA77CF13D3C7E51';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -15,11 +15,14 @@ var ASSETS = [
   'pages/privacy.html',
   'pages/security.html',
   'pages/terms.html',
-  // the drawing-set homepage modules
+  // the substrate homepage modules
   'js/manifest.js',
-  'js/instrument.js',
+  'js/substrate.js',
   'js/claims.js',
-  'js/drawing-set.js',
+  'js/ledger.js',
+  'js/instrument.js',
+  'js/site.js',
+  'js/develop-worker.js',
   // subpage stylesheet
   'css/cytherai.css',
   'manifest.webmanifest',

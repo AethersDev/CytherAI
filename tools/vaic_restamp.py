@@ -34,16 +34,14 @@ ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "vaic/cytherai-obligations.v0.json"
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 # harness_identity, as receipts name it -> the command whose exit status IS the observation
+# The world's harnesses (tools/test-ledger.js; tools/test-site.py plus tools/test-motion.py)
+# retired with it to backup/instrument-v1/: their obligations gain no receipt on a build
+# that does not ship the mechanism they observed.
 HARNESS = {
-    "tools/test-ledger.js": [JSC, "js/manifest.js", "js/ledger.js", "tools/test-ledger.js"],
-    "tools/test-claims.js": [JSC, "js/manifest.js", "js/substrate.js", "js/claims.js", "tools/test-claims.js"],
+    "tools/test-claims.js": [JSC, "js/manifest.js", "js/claims.js", "tools/test-claims.js"],
     "deploy.sh plus tools/test-site.py": [
         "python3", "tools/test-site.py",
         "SiteContractTests.test_deploy_allowlist_and_service_worker_cannot_drift"],
-    "tools/test-site.py plus tools/test-motion.py": [
-        "sh", "-c",
-        "python3 tools/test-site.py SiteContractTests.test_performance_and_mobile_clearance_contract"
-        " && python3 tools/test-motion.py"],
 }
 RECEIPT_BINDING = ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash", "verification_identity")
 

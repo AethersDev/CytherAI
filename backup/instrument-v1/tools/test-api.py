@@ -24,24 +24,36 @@ def check(cond, name):
     if not cond: fails.append(name)
 
 MODULES = {
-    "CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js", "CytherClaims": "js/claims.js",
-    "CytherDrawingSet": "js/drawing-set.js",
+    "CytherManifest": "js/manifest.js", "CytherSubstrate": "js/substrate.js", "CytherClaims": "js/claims.js",
+    "CytherLedger": "js/ledger.js", "CytherInstrument": "js/instrument.js", "CytherDrawingSet": "js/drawing-set.js",
 }
 # the local names served modules bind each global to
-ALIASES = {"CytherManifest": ["CM"], "CytherClaims": ["Claims", "C"], "CytherInstrument": ["Inst"], "CytherDrawingSet": ["D"]}
+ALIASES = {"CytherManifest": ["CM"], "CytherSubstrate": ["S"], "CytherClaims": ["Claims", "C"], "CytherLedger": ["Ledger"], "CytherInstrument": ["Inst"], "CytherDrawingSet": ["D"]}
 INVENTORY = {
     "CytherManifest": {
         "production": ["MANIFEST", "EPOCHS", "COMMITMENTS", "PUBLISHED_NONCES", "NORM", "CANON", "ADMISSION_NONCE", "CHECKSUM",
-                       "LEGIBILITY_CAP", "project", "fnv", "dsin", "dsinOrbit", "legibility", "paramsFor", "admit",
+                       "LEGIBILITY_CAP", "project", "fnv", "dsin", "dcos", "datan2", "dsinOrbit", "legibility", "paramsFor", "admit",
                        "normalizeManifest", "stateChecksum", "VALIDATION"],
         "verifier": [],
     },
+    "CytherSubstrate": {
+        "production": ["READING", "deriveAnchors", "readingGroundAt", "developServer", "boot", "observe", "redevelop", "step", "setFork",
+                       "resetToCanonical", "isForking", "isCanonical", "canonicalAnchors", "params", "serial", "status", "isDeveloping",
+                       "exposure", "receipt", "fieldEnergy", "corridors", "depthAtMap"],
+        "verifier": ["ZOOMS", "BGS", "ACCENTS", "computeOrbit", "pathPoint", "depthFor", "cameraAt", "composeTile", "ambientAt", "bgRgbAt",
+                     "dprCapFor", "binTargetFor", "DEV_BATCH", "frameFor", "plateState", "developStep", "stateHash", "exposureLog",
+                     "tonemapInto", "summarizeField"],
+    },
     "CytherClaims": {
-        "production": ["CLAIMS", "CLAIMSTATE", "setClaim", "recomputeClaims", "renderClaims", "wcagRatio"],
-        "verifier": ["checkRenderManifest", "recomputeOne", "summary"],
+        "production": ["CLAIMS", "CLAIMSTATE", "setClaim", "recomputeClaims", "renderClaims", "checkRenderManifest", "wcagRatio"],
+        "verifier": ["recomputeOne", "summary"],
+    },
+    "CytherLedger": {
+        "production": ["recordAct", "wire", "upgradeCta"],
+        "verifier": ["ACTS", "diligenceCount", "mailtoBody", "clear", "conduct"],
     },
     "CytherInstrument": {
-        "production": ["lastAudit", "audit", "biEngine", "judge"],
+        "production": ["lastAudit", "step", "wire", "audit", "biEngine", "judge"],
         "verifier": [],
     },
     "CytherDrawingSet": {
@@ -49,7 +61,8 @@ INVENTORY = {
         "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor"],
     },
 }
-SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"]
+# the page modules: served by the front door, or promoted and awaiting it (js/drawing-set.js)
+SERVED = ["index.html", "js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js", "js/drawing-set.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)

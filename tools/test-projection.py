@@ -85,7 +85,7 @@ check(PO.project(idx, corpus) == idx and blk.count('<details class="ob">') == le
       "P9 the floor's obligations block is the corpus's %d obligations, current" % len(corpus["obligations"]))
 check(not re.search(r"\b[0-9a-f]{64}\b|\b[0-9A-F]{16}\b|\b(PASS|FAIL|NOT_EVALUATED)\b|receipt", blk),
       "P9 the block carries no digest, build identity, result or receipt — only what is owed")
-check(all(c in blk for c in cited) and cited, "P9 every obligation a served module cites is disclosed: %s" % ", ".join(cited))
+check(all(c in blk for c in cited), "P9 every obligation a served module cites is disclosed (%s)" % (", ".join(cited) or "the modules cite none by id"))
 mut = json.loads(json.dumps(corpus)); mut["obligations"][2]["quantifier"] += " (mutated)"
 check(PO.project(idx, mut) != idx, "P9 a changed obligation makes the block stale")
 # P8

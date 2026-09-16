@@ -3,21 +3,31 @@
    Standing claims as predicates the page executes against itself. The footer
    reads CLAIMS n/N HOLDING and any failure prints ✕ INVALID in place.
 
-   The CANONICAL predicates — CL-01, CL-02, CL-03, CL-05, CL-06b, CL-07 — are claims
-   of the record and bind on any page that prints it. An identifier is part of a
-   claim: the world predicates CL-04, CL-06, CL-06c and CL-08 (serial, colour model,
-   camera) left with the world they were propositions about (backup/instrument-v1/
-   js/claims.js), and no page carries a row claiming to have checked them. A page
-   adds its own predicates by pushing onto CLAIMS before the first render
-   (js/drawing-set.js adds DS-01..05).
+   Two registers, one identifier space. The CANONICAL predicates (CL-01, CL-02,
+   CL-03, CL-05, CL-06b, CL-07) are claims of the record and bind on any page that
+   prints it. The WORLD predicates (CL-04, CL-06, CL-06c, CL-08) are propositions
+   about CytherSubstrate's colour model, serial and camera, and register only where
+   that world is loaded — an identifier is part of a claim, so a page without the
+   world carries no row claiming to have checked it. A page adds its own predicates
+   by pushing onto CLAIMS before the first render (js/drawing-set.js adds DS-01..05).
 
-   Ported from newC3/synthesis-rev5.html; CL-06b — text-lane legibility ≤ cap (§5.3).
+   Ported from newC3/synthesis-rev5.html. Amendments:
+     · CL-06 — reading ink holds AA at every depth on its phase-locked ambient
+       ground (the flip-band exemption is retired; the model is CytherSubstrate's).
+     · CL-06b — text-lane legibility ≤ cap (§5.3).
+     · CL-06c — the quietest ink layer, not only the primary reading ink, holds
+       AA at every depth; CL-06's primary-ink-only scope is what allowed the
+       switch depth to be tuned past the point where labels stayed legible.
+     · CL-08 — CAMERA ≡ DERIVATION: canonical anchors re-derived from the manifest
+       equal the camera the page installed (§5.2).
+
    Predicates are pure/logic; renderClaims + DOM reads are guarded.
-   CL-03 and CL-05 are set by the page module (the async admissions verifier, the run).
+   CL-03 is set by site.js's async verifier; CL-05 by instrument.js's audit.
    ============================================================================ */
 (function (root) {
 "use strict";
 const CM = root.CytherManifest;
+const S  = root.CytherSubstrate;
 const hasDoc = typeof document !== "undefined";
 
 /* ================= pure predicates ================= */
@@ -26,6 +36,60 @@ function wcagRatio(a, b) {
     return 0.2126*c[0] + 0.7152*c[1] + 0.0722*c[2]; };
   const la = lum(a), lb = lum(b); return (Math.max(la,lb) + 0.05) / (Math.min(la,lb) + 0.05);
 }
+const parseRGB = s => { const m = s.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/); return [+m[1], +m[2], +m[3]]; };
+
+/* CL-06 — reading ink ≥4.5:1 at EVERY depth (P9 phase-locked model, no exempt band;
+   the earlier 40–62% flip-band exemption is retired). Measured against
+   CytherSubstrate's ambient model, the same functions observe() writes to the page.
+   Light ink is valid up to READING.SW_DOWN — on the raw ambient while the field
+   is unexposed, then on the absorptive membrane through the flip phase (every
+   flip-phase reading block carries it); dark ink from READING.SW_UP, on the raw
+   ambient, which by then is paper. */
+const hexRgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+function contrastClaim() {
+  const R = S.READING;
+  let worst = 99, at = 0, ws = "light";
+  for (let i = 0; i <= 300; i++) {
+    const d = i / 100;
+    if (d <= R.SW_DOWN) {
+      const r = wcagRatio(hexRgb(R.LIGHT), S.readingGroundAt(d, "light"));
+      if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const r = wcagRatio(hexRgb(R.DARK), S.readingGroundAt(d, "dark"));
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
+    }
+  }
+  return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + ws + " ink at depth " + Math.round(at/3*100) + "% · phase-locked" };
+}
+
+/* CL-06c: the QUIETEST meaningful ink layer, not just the primary reading ink,
+   holds AA at every depth in its phase. CL-06 alone is what let the switch depth
+   be calibrated against alpha 1.0 while a 55% label sat at 2.58:1 — this closes
+   that gap. INK_FLOOR mirrors the stylesheet's stated floor (index.html reading-
+   law block); it is a declared constant exactly as READING.DARK/LIGHT are, so
+   this predicate proves the floor is sufficient at every depth, not that every
+   rule respects it. Re-tuning SW_DOWN or the BGS keyframes fails it immediately. */
+const INK_FLOOR = 0.66;
+function secondaryContrastClaim() {
+  const R = S.READING, dark = hexRgb(R.DARK), light = hexRgb(R.LIGHT);
+  const lay = (ink, g) => ink.map((v, i) => v * INK_FLOOR + g[i] * (1 - INK_FLOOR));
+  let worst = 99, at = 0, ws = "light";
+  for (let i = 0; i <= 300; i++) {
+    const d = i / 100;
+    if (d <= R.SW_DOWN) {
+      const g = S.readingGroundAt(d, "light"), r = wcagRatio(lay(light, g), g);
+      if (r < worst) { worst = r; at = d; ws = "light"; }
+    }
+    if (d >= R.SW_UP) {
+      const g = S.readingGroundAt(d, "dark"), r = wcagRatio(lay(dark, g), g);
+      if (r < worst) { worst = r; at = d; ws = "dark"; }
+    }
+  }
+  return { ok: worst >= 4.5, detail: "worst " + worst.toFixed(2) + ":1 · " + Math.round(INK_FLOOR * 100) +
+    "% ink · " + ws + " at depth " + Math.round(at / 3 * 100) + "%" };
+}
+
 /* CL-06b: the canonical mark does not flood the reading column — its text-lane
    metric stays under the admission cap (3× headroom). */
 function legibilityClaim() {
@@ -40,12 +104,23 @@ function dsinClaim() {
   return { ok: m < 1e-6, detail: "max |dsin−sin| " + m.toExponential(1) };
 }
 
+/* CL-08: the canonical camera IS the manifest derivation. Re-derive the anchors
+   from CANON and confirm they equal the anchors the page installed at boot —
+   fork-independent (checks the canonical derivation, not the live fork). */
+function cameraClaim() {
+  const re = S.deriveAnchors(CM.CANON).ANCH;
+  const live = (hasDoc && S.canonicalAnchors) ? S.canonicalAnchors() : re;
+  const ok = !!live && re.length === live.length &&
+    re.every((p, i) => Math.abs(p[0]-live[i][0]) < 1e-9 && Math.abs(p[1]-live[i][1]) < 1e-9);
+  return { ok, detail: ok ? re.length + " anchors re-derived · match canonical camera" : "camera ≠ derivation" };
+}
+
 /* CL-02: what is RENDERED equals what the manifest derives — the checksum at every
    site that prints it ([data-checksum]) equals the one derived here, AND every
    projected fact the page prints (data-m; tools/project-manifest.py wrote the static
    ones from CytherManifest.project, and this reads them back against the same
    function). A page with no checksum site or no projected facts does not pass
-   vacuously. DOM read. */
+   vacuously. DOM read — verified live and by the ledger's VERIFY button. */
 function checkRenderManifest() {
   const recomputed = CM.stateChecksum(CM.normalizeManifest(CM.MANIFEST));
   if (!hasDoc) return { ok: true, detail: recomputed + " (no DOM · derivation only)" };
@@ -74,9 +149,9 @@ const CLAIMS = [
     run: checkRenderManifest },
   { id: "CL-03", text: "PUBLISHED ADMISSION ≡ DERIVATION",
     m: "The async verifier re-runs the published admission — nonce, richness and legibility screens — from the manifest, off the boot path.",
-    run: null },   /* set by the page module's async verifier */
+    run: null },   /* set by site.js async verifier */
   { id: "CL-05", text: "BOUNDARY EMITS NO INVALID PROGRAM",
-    m: "Reads the boundary engine's last audit — the seed-02 run at boot, AUDIT 10,000 on request; admitted must be positive and the invalid count exactly zero.",
+    m: "Reads the boundary instrument's last audit; admitted must be positive and the invalid count exactly zero.",
     run: () => {
     const a = root.CytherInstrument && root.CytherInstrument.lastAudit();
     return a ? { ok: a.inv === 0 && a.adm > 0, detail: a.prop + " proposals · " + a.adm + " admitted · " + a.inv + " invalid" }
@@ -88,6 +163,26 @@ const CLAIMS = [
     m: "Compares dsin to native sine at 1001 points across ±5; the admission core must agree within 1e-6.",
     run: dsinClaim }
 ];
+/* the world's predicates, where the world is loaded */
+if (S) {
+  CLAIMS.splice(3, 0, { id: "CL-04", text: "SERIAL ≡ STATE",
+    m: "Compares the serial printed in the strip to the live substrate parameters, formatted by the same function.",
+    run: () => {
+    if (!hasDoc || !S.serial) return { ok: true, detail: "no DOM" };
+    const got = (document.getElementById("markSerial") || { textContent: "" }).textContent.trim();
+    const want = S.serial().trim();
+    return { ok: got === want, detail: got === want ? "displayed serial equals live parameters" : "serial ≠ state" }; } });
+  CLAIMS.splice(5, 0, { id: "CL-06", text: "READING INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "Sweeps depth 0–3 in 0.01 steps; each ink phase against its phase-locked AMBIENT ground (the membrane through the flip) must hold 4.5:1. It is a proposition about the colour model, complete over the declared depth domain. It does not see the plate: the composited ground is CY-SEM-003, a browser obligation, because the page cannot read its own composited pixels.",
+    run: contrastClaim },
+  { id: "CL-06c", text: "QUIETEST INK ≥4.5:1 ON THE AMBIENT GROUND, EVERY DEPTH",
+    m: "The same ambient-ground sweep at the 66% ink floor — the quietest text layer the stylesheet permits must itself hold AA.",
+    run: secondaryContrastClaim });
+  CLAIMS.push({ id: "CL-08", text: "CAMERA ≡ DERIVATION",
+    m: "Re-derives the canonical camera anchors from the manifest and compares them to the anchors installed at boot.",
+    run: cameraClaim });
+}
+
 const CLAIMSTATE = {};
 const OPEN = {};                       /* per-claim evidence expansion, survives re-render */
 const stamp = () => (typeof performance !== "undefined" && performance.now)
@@ -162,8 +257,8 @@ function recomputeOne(id) {
   renderClaims();
 }
 
-/* predicates are reached through the registry (CLAIMS[i].run); checkRenderManifest is
-   also the projection verifier's entry (tools/test-projection.js); wcagRatio is the one
+/* predicates are reached through the registry (CLAIMS[i].run); checkRenderManifest
+   alone is also called directly, by the ledger's VERIFY button; wcagRatio is the one
    contrast function, shared with the drawing-set predicates */
 const API = { CLAIMS, CLAIMSTATE, setClaim, recomputeClaims, recomputeOne, summary, renderClaims, checkRenderManifest, wcagRatio };
 root.CytherClaims = API;

@@ -1,14 +1,15 @@
 /* ============================================================================
    js/instrument.js  →  window.CytherInstrument
-   The boundary, working, in the visitor's hands. A hostile proposer streams
-   arbitrary tokens at a constraint boundary over a toy rectilinear-profile DSL;
-   admission is incremental (grammar, then geometry) and an INDEPENDENT kernel
-   re-verifies every program before emission. Demonstrated invariant: nothing
-   inadmissible is ever emitted. Deterministic: seeded LCG, high bits only (low
-   LCG bits are correlated) — same seed, same stream, on every machine.
+   The boundary, working. A hostile proposer streams arbitrary tokens at a
+   constraint boundary over a toy rectilinear-profile DSL; admission is incremental
+   (grammar, then geometry) and an INDEPENDENT kernel re-verifies every program
+   before emission. Demonstrated invariant: nothing inadmissible is ever emitted.
+   Deterministic: seeded LCG, high bits only (low LCG bits are correlated) — same
+   seed, same stream, on every machine.
 
-   Ported from newC3/synthesis-rev5.html. Pure boundary logic (audit) is DOM-free
-   and feeds CL-05; canvas/log/stream wiring is guarded behind document.
+   Ported from newC3/synthesis-rev5.html. Pure and DOM-free: FIG. 1 of the drawing
+   set (js/drawing-set.js) streams biEngine and judges proposals with judge; the
+   world's canvas/log wiring left with the world (backup/instrument-v1/js/instrument.js).
    ============================================================================ */
 (function (root) {
 "use strict";
@@ -75,9 +76,9 @@ function biEngine(seed) {
     st.prop++;
     const tk = tok();
     const r = biAdmit(at, tk);
-    /* every event names the position it was judged from, so a second consumer of this
-       engine can draw what happened without reaching into the state (demo/ draws the
-       refusals as struck strokes; the log here prints them) */
+    /* every event names the position it was judged from, so a consumer of this engine
+       can draw what happened without reaching into the state (FIG. 1 draws each refusal
+       where it was judged, with its witness) */
     const from = { x: at.x, y: at.y };
     if (!r.ok) { st.rej++; const discarded = --at.budget <= 0; if (discarded) { st.disc++; at = fresh(); } return { e: "rej", tk, why: r.why, from, discarded }; }
     if (r.close) {
@@ -95,8 +96,8 @@ function biEngine(seed) {
 }
 /* judge — the boundary and the kernel applied to a PROPOSED program, token by token:
    the same biAdmit the proposer meets and the same biKernel every closed program
-   meets, so a surface that lets a visitor propose geometry (demo/) is judged by the
-   production mechanism and nothing else. Returns the first refused relation and the
+   meets, so a surface that lets a visitor propose geometry (FIG. 1's adjustable edge)
+   is judged by the production mechanism and nothing else. Returns the first refused relation and the
    token it was refused at, or the kernel's verdict on the whole closed program. */
 function judge(toks) {
   const at = { x: BI_O, y: BI_O, axis: "H", nseg: 0, cov: new Set([BI_O+","+BI_O]) };
@@ -111,98 +112,14 @@ function judge(toks) {
 /* pure audit — runs `count` proposals at `seed`, returns the invariant stats. Feeds CL-05. */
 function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < count; i++) e.step(); return e.st; }
 
-let last = audit(1500, 2);   /* quick seeded audit so CL-05 has evidence at boot (no DOM) */
+const last = audit(1500, 2);   /* the seed-02 audit, so CL-05 has evidence at boot */
 function lastAudit() { return last; }
 
-/* biEngine is the one boundary engine: the instrument on the homepage streams it, the
-   audit runs it, and any other surface that demonstrates the boundary (demo/) consumes
-   this export rather than a copy — a copy is a silent drift path from the mechanism it
-   claims to show. tools/test-boundary.js pins the stream. */
+/* biEngine is the one boundary engine: FIG. 1 streams it, the audit runs it, and any
+   surface that demonstrates the boundary consumes this export rather than a copy — a
+   copy is a silent drift path from the mechanism it claims to show. tools/test-boundary.js
+   pins the stream. */
 const API = { audit, lastAudit, biEngine, judge };
-
-/* ============================================================================
-   DOM wiring — canvas, streaming log, RUN / AUDIT. Guarded.
-   ============================================================================ */
-if (typeof document !== "undefined") {
-  const $ = id => document.getElementById(id);
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const BI = { running: false, engine: null, log: [] };
-  let wake = () => {};
-
-  function logPush(line, adm) { BI.log.unshift(adm ? ('<span class="adm">'+line+"</span>") : line); if (BI.log.length > 8) BI.log.length = 8; }
-  function logRender() { const el = $("biLog"); if (el) el.innerHTML = BI.log.join("<br>") || "— proposer idle —"; }
-  function statsRender(st) { const el = $("biStats"); if (el) el.innerHTML =
-    "PROPOSED " + st.prop + " · REJECTED " + st.rej + " · DISCARDED " + st.disc +
-    " · <b>ADMITTED " + st.adm + "</b> · INVALID EMITTED " + st.inv; }
-  function draw(prog) {
-    const c = $("biCanvas"); if (!c) return;
-    const s = 180, DPR = Math.min(devicePixelRatio || 1, 2);
-    c.width = s*DPR; c.height = s*DPR;
-    const g = c.getContext("2d"); g.setTransform(DPR,0,0,DPR,0,0); g.clearRect(0,0,s,s);
-    const cell = s / (BI_G + 2);
-    g.fillStyle = "rgba(127,140,160,.35)";
-    for (let i = 0; i <= BI_G; i++) for (let j = 0; j <= BI_G; j++) g.fillRect((i+1)*cell-.5, (j+1)*cell-.5, 1, 1);
-    if (!prog) return;
-    const accent = getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2036C7";
-    let x = BI_O, y = BI_O;
-    g.strokeStyle = accent; g.lineWidth = 2; g.beginPath(); g.moveTo((x+1)*cell, (y+1)*cell);
-    for (const tk of prog) {
-      if (tk.k === "Z") { g.lineTo((BI_O+1)*cell, (BI_O+1)*cell); break; }
-      x = tk.k === "H" ? x + tk.sg*tk.mg : x; y = tk.k === "V" ? y + tk.sg*tk.mg : y;
-      g.lineTo((x+1)*cell, (y+1)*cell);
-    }
-    g.stroke();
-  }
-  function emit(ev) {
-    const digest = (CM.fnv(ev.prog.map(t => t.s).join("")) >>> 0).toString(16).padStart(8,"0").toUpperCase();
-    draw(ev.prog);
-    logPush("● Z · kernel ✓ · PRG-" + digest + " (" + ev.prog.length + " tokens)", true);
-    const rc = $("biReceipt"); if (rc) rc.textContent = "ADMITTED · PRG-" + digest + " · seed 01, reproducible";
-  }
-  function handle(ev) {
-    if (ev.e === "rej") { if (ev.why !== "AXIS ORDER" || BI.engine.st.rej % 7 === 0) logPush("✗ " + ev.tk.s + " · " + ev.why); }
-    else if (ev.e === "ok") { logPush("→ " + ev.tk.s); }
-    else if (ev.e === "adm") { emit(ev); }
-    else if (ev.e === "inv") { logPush("INVALID EMITTED — CL-05 FAILS", false); root.CytherClaims.setClaim("CL-05", false, "kernel rejected an emitted program"); }
-  }
-  function step() {
-    if (!BI.running) return false;
-    for (let i = 0; i < 48; i++) handle(BI.engine.step());
-    statsRender(BI.engine.st); logRender();
-    return true;
-  }
-
-  function wire(opts) {
-    wake = (opts && opts.wake) || wake;
-    draw(null);
-    const runBtn = $("biRun"), auditBtn = $("biAudit");
-    if (runBtn) runBtn.addEventListener("click", () => {
-      if (BI.running) { BI.running = false; runBtn.textContent = "RUN PROPOSER"; return; }
-      BI.engine = biEngine(1); BI.log = [];
-      root.CytherLedger && root.CytherLedger.recordAct("PROPOSER_RUN", "seed 01");
-      if (reduced) {
-        let lastEv = null;
-        for (let i = 0; i < 4000; i++) { const ev = BI.engine.step(); if (ev.e === "adm") lastEv = ev; }
-        statsRender(BI.engine.st);
-        if (lastEv) emit(lastEv);
-        logPush("— ran 4,000 proposals —"); logRender();
-        return;
-      }
-      BI.running = true; runBtn.textContent = "STOP PROPOSER"; wake();
-    });
-    if (auditBtn) auditBtn.addEventListener("click", () => {
-      last = audit(10000, 2);
-      root.CytherClaims.setClaim("CL-05", last.inv === 0 && last.adm > 0,
-        last.prop + " proposals · " + last.adm + " admitted · " + last.inv + " invalid emitted · seed 02");
-      const rc = $("biReceipt"); if (rc) rc.textContent =
-        "AUDIT · " + last.prop + " proposals · " + last.adm + " admitted · " + last.inv + " invalid — reproducible";
-      root.CytherLedger && root.CytherLedger.recordAct("BOUNDARY_AUDIT", "10000 proposals · seed 02");
-    });
-  }
-
-  API.step = step;
-  API.wire = wire;
-}
 
 root.CytherInstrument = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;

@@ -139,6 +139,25 @@ function dsin(x) {
   return x * (1 + x2 * (-1 / 6 + x2 * (1 / 120 + x2 * (-1 / 5040 + x2 * (1 / 362880 + x2 * (-1 / 39916800))))));
 }
 function dcos(x) { return dsin(x + HALF_PI); }
+/* datan2 — the engine-invariant angle the plate's hue is owned by (js/substrate.js
+   PLATE lobes). Octant reduction by exact comparison and division, then the
+   tan(pi/12) shift so the alternating Taylor series is evaluated on |t| <= 0.268,
+   where truncation after t^15/15 leaves < 1.2e-11 rad. Agreement with Math.atan2
+   over a canonical-orbit sample is pinned by tools/test-develop.js. */
+const S3 = 1.7320508075688772, PI_6 = 0.5235987755982988, TAN_PI_12 = 0.2679491924311227;
+function datan2(y, x) {
+  const ax = x < 0 ? -x : x, ay = y < 0 ? -y : y;
+  let t, r;
+  if (ay <= ax) { t = ax === 0 ? 0 : ay / ax; r = 0; }
+  else { t = ay === 0 ? 0 : ax / ay; r = -1; }          /* r = -1 marks the co-branch */
+  let a = 0;
+  if (t > TAN_PI_12) { a = PI_6; t = (t * S3 - 1) / (t + S3); }
+  const t2 = t * t;
+  let v = a + t * (1 + t2 * (-1 / 3 + t2 * (1 / 5 + t2 * (-1 / 7 + t2 * (1 / 9 + t2 * (-1 / 11 + t2 * (1 / 13 + t2 * (-1 / 15))))))));
+  if (r === -1) v = HALF_PI - v;
+  if (x < 0) v = D_PI - v;
+  return y < 0 ? -v : v;
+}
 
 /* the dsin orbit — n points, same warmup 40 and start (0.08, 0.12) as the render.
    The camera derives its anchors from THIS orbit (not the native-sin tiles), so the
@@ -283,7 +302,7 @@ const CHECKSUM = stateChecksum(NORM);
 const API = {
   MANIFEST, VALIDATION, EPOCHS, COMMITMENTS, PUBLISHED_NONCES, NORM, CANON, ADMISSION_NONCE, CHECKSUM,
   LEGIBILITY_CAP, project,
-  fnv, dsin, dsinOrbit, legibility,
+  fnv, dsin, dcos, datan2, dsinOrbit, legibility,
   paramsFor, admit, normalizeManifest, stateChecksum
 };
 root.CytherManifest = API;

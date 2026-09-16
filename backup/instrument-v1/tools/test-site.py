@@ -177,11 +177,12 @@ class SiteContractTests(unittest.TestCase):
     def test_homepage_module_order_and_script_posture(self) -> None:
         index = parse_page("index.html")
         scripts = [attrs for tag, attrs in index.tags if tag == "script"]
-        # load order is a contract: the record, the boundary engine, the claims (which read
-        # CytherSubstrate's absence at load), then the set that registers its predicates
         self.assertEqual(
             [attrs.get("src") for attrs in scripts],
-            ["js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"],
+            [
+                "js/manifest.js", "js/substrate.js", "js/claims.js",
+                "js/ledger.js", "js/instrument.js", "js/site.js",
+            ],
         )
         self.assertTrue(all(attrs.get("defer") == "" for attrs in scripts))
         self.assertFalse(any(not attrs.get("src") for attrs in scripts), "index CSP forbids inline script")
@@ -236,7 +237,7 @@ class SiteContractTests(unittest.TestCase):
         baseline = VAIC.build_identity(ROOT)
         self.assertEqual(baseline, VAIC.current_build(ROOT), "the stamp is the projection")
         mutations = {
-            "index.html": lambda b: b.replace(b'aria-label="Sheet 1 \xe2\x80\x94 the statement"', b'aria-label="Sheet 1 \xe2\x80\x94 the statement (counterfactual)"', 1),
+            "index.html": lambda b: b.replace(b'aria-label="Optical mode', b'aria-label="Optical mode (counterfactual)', 1),
             "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
             "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
         }
@@ -309,28 +310,35 @@ class SiteContractTests(unittest.TestCase):
                 declared = tuple(map(int, icon["sizes"].split("x")))
                 self.assertEqual((width, height), declared, relative)
 
-    def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
-        """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
+    def test_performance_and_mobile_clearance_contract(self) -> None:
+        jsc = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
+        probe = (
+            'load("js/manifest.js");load("js/substrate.js");'
+            'print(JSON.stringify({d:[390,720,1280].map(CytherSubstrate.dprCapFor),'
+            'b:[390,720,1280].map(CytherSubstrate.binTargetFor)}))'
+        )
+        policy = json.loads(subprocess.run(
+            [jsc, "-e", probe], cwd=ROOT, check=True, capture_output=True, text=True
+        ).stdout)
+        self.assertEqual(policy, {"d": [1.25, 1.5, 2], "b": [360000, 520000, 720000]})
 
-        Every subpage ink on every subpage ground, tokens read from the stylesheet and
-        never restated here; the two quiet aliases must agree. (Formerly MOT-001 A10 in
-        tools/test-motion.py, which retired with the world; this law is the subpages'.)
-        """
-        css = (ROOT / "css/cytherai.css").read_text(encoding="utf-8")
-        tok = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", css))
-        def rel(h):
-            f = [(v / 255) / 12.92 if v / 255 <= 0.03928 else ((v / 255 + 0.055) / 1.055) ** 2.4
-                 for v in (int(h[k:k + 2], 16) for k in (1, 3, 5))]
-            return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2]
-        def wcag(a, b):
-            la, lb = rel(a), rel(b)
-            return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
-        grounds = {k: tok[k] for k in ("paper", "paper-lifted", "paper-dense", "panel")}
-        inks = {k: tok[k] for k in ("ink", "ink-mid", "ink-quiet", "accent", "refuse")}
-        worst = min((wcag(i, g), ik, gk) for ik, i in inks.items() for gk, g in grounds.items())
-        self.assertGreaterEqual(worst[0], 4.5, f"{worst[1]} on {worst[2]} is {worst[0]:.2f}:1")
-        self.assertEqual(tok["quiet"], tok["ink-quiet"])
-        self.assertEqual(tok["label"], tok["ink-mid"])
+        substrate = (ROOT / "js/substrate.js").read_text(encoding="utf-8")
+        manifest = (ROOT / "js/manifest.js").read_text(encoding="utf-8")
+        site = (ROOT / "js/site.js").read_text(encoding="utf-8")
+        index = (ROOT / "index.html").read_text(encoding="utf-8")
+        self.assertIn("function admissionMetrics", manifest)
+        self.assertIn("return admissionMetrics(p).richness", manifest)
+        self.assertIn("return admissionMetrics(p).legibility", manifest)
+        self.assertIn("fields[i] = r.field;", substrate)
+        self.assertIn("const present = streaming && !reduced", substrate)
+        self.assertIn('style.setProperty("--stripH"', site)
+        self.assertIn("footer{padding-bottom:calc(var(--stripH", index)
+
+        awc = ROOT / "awc-os/index.html"
+        if awc.exists():
+            awc_source = awc.read_text(encoding="utf-8")
+            self.assertNotIn('fetch("media/AWC_OS_film_ar.mp4", {method:"HEAD"})', awc_source)
+            self.assertIn('addEventListener("error"', awc_source)
 
     @staticmethod
     def synthetic_tree(paths: dict[str, str]):
@@ -463,6 +471,64 @@ class SiteContractTests(unittest.TestCase):
         self.assertTrue(recorded, "the ledger records no FAIL; this gate would be vacuous")
         self.assertEqual(sorted(recorded - disposed), [],
                          "a recorded FAIL that the release register does not name")
+
+    def test_viewport_change_never_displays_a_geometrically_false_world(self) -> None:
+        """A plate may be stale in coverage; it may never be stale in geometry.
+
+        The camera centre must land at the viewport centre through every visible
+        tile immediately after a viewport change — before any redevelopment — and
+        again once a redeveloped backing matches the current frame. The previous
+        contract asserted the opposite (that the height branch must never call
+        developAll), which preserved the defect it was meant to guard.
+        """
+        jsc = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
+        probe = """
+load("js/manifest.js"); load("js/substrate.js");
+var S = CytherSubstrate, CM = CytherManifest, Z = S.ZOOMS;
+var c0 = S.deriveAnchors(CM.CANON), ANCH = c0.ANCH, span = c0.bounds.span;
+function Ufor(W, H) { return Math.min(W, H) / span * 0.92; }
+function err(rW, rH, W, H, mode) {
+  var r = { W: rW, H: rH, U: Ufor(rW, rH) }, U = Ufor(W, H), worst = 0;
+  for (var i = 1; i <= 299; i++) {
+    var p = i / 300, cam = S.cameraAt(p, ANCH, U, W, H);
+    for (var k = 0; k < 4; k++) {
+      var raw = cam.tiles[k];
+      if (raw.o <= 0) continue;
+      var t = mode === "stretched" ? raw : S.composeTile(raw, W, H, U, r);
+      var X = r.W / 2 + (cam.cx - ANCH[k][0]) * Z[k] * r.U;
+      var Y = r.H / 2 + (cam.cy - ANCH[k][1]) * Z[k] * r.U;
+      if (mode === "stretched") Y *= H / r.H;
+      worst = Math.max(worst, Math.hypot(t.tx + t.A * X - W / 2, t.ty + t.A * Y - H / 2));
+    }
+  }
+  return worst;
+}
+var settled = { W: 390, H: 664, U: Ufor(390, 664) };
+var one = S.cameraAt(0.5, ANCH, settled.U, 390, 664).tiles[1];
+print(JSON.stringify({
+  composed: [err(390, 664, 390, 750, "c"), err(1200, 1000, 1200, 600, "c")],
+  healed: err(390, 750, 390, 750, "c"),
+  stretched: [err(390, 664, 390, 750, "stretched"), err(1200, 1000, 1200, 600, "stretched")],
+  scaleMoves: [Ufor(390, 664) !== Ufor(390, 750), Ufor(1200, 1000) !== Ufor(1200, 600)],
+  uncompensated: S.composeTile(one, 390, 664, settled.U, settled) === one
+}));
+"""
+        frame = json.loads(subprocess.run(
+            [jsc, "-e", probe], cwd=ROOT, check=True, capture_output=True, text=True
+        ).stdout)
+
+        # before any redevelopment, both a chrome-height change and a scale-changing
+        # window resize compose exactly; sub-nanometre residue is float noise only
+        self.assertLess(max(frame["composed"]), 1e-9, "composition is not frame-exact")
+        # after redevelopment the backing frame is the current frame, and an
+        # identity frame returns the camera's own tile with no compensation applied
+        self.assertLess(frame["healed"], 1e-9)
+        self.assertTrue(frame["uncompensated"], "a settled frame must not be recomposed")
+        # the desktop case must remain in the fixture: it is the one where the world
+        # scale itself moves, so a mobile-only test could pass on a broken build
+        self.assertEqual(frame["scaleMoves"], [False, True])
+        # control — the discarded stretch-to-fit behaviour is caught by this test
+        self.assertGreater(min(frame["stretched"]), 60)
 
 
 if __name__ == "__main__":

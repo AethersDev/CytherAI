@@ -3,15 +3,15 @@
   "corpus": "cytherai-current-artifact",
   "version": 1,
   "candidate": {
-    "build_identity": "1E79309C2D96E17C",
+    "build_identity": "4DBD6BF6ACA106E1",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
-    "record_hash": "da34fab6a1cd4dd11841d03264c88d1db6eaafd14b2deb4e6bd5effe3f4b86f7",
-    "kernel_hash": "845a3aede2f771eb418f6008a82032ac65963599ef815dc3976b5d7e747f4abf",
-    "grammar_hash": "e6be4277bdd7b8d56ee6de33c78b8a37d5707fe61afc0a7a04c425d4283155ca",
+    "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+    "kernel_hash": "cd7792d1277e6ddaca7473050d5174bad66103082ddbe68b4ac96fa9384320ab",
+    "grammar_hash": "0cccbb7751b1df1986c292b7f1224537696a8be981355b78b6a9968617c0d573",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "d6f3feae72373f5f7af7f9966ef7c28945da9481aac82cba847c8baddf1101a8",
-    "verification_identity": "f8737b25dbb24c96d2fc1c41592790b78eb6c25bfd6548aba9e0f2ab3d09fe49"
+    "artifact_manifest_hash": "b3eb22bf05a789c1f1fcb367bd6bf91ade7015ead2b641ecf5b1afb39d5143f3",
+    "verification_identity": "1f6002f8b518513a5ad8e2200d6a15c9b3ba5ea8511e3e7361f60a148a0d9762"
   },
   "semantics": {
     "result_values": ["PASS", "FAIL", "NOT_EVALUATED"],
@@ -3771,6 +3771,36 @@
               "js/claims.js#renderClaims"
             ],
             "observed_at": "2026-09-16"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "4DBD6BF6ACA106E1",
+            "artifact_manifest_hash": "b3eb22bf05a789c1f1fcb367bd6bf91ade7015ead2b641ecf5b1afb39d5143f3",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "0cccbb7751b1df1986c292b7f1224537696a8be981355b78b6a9968617c0d573",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "1f6002f8b518513a5ad8e2200d6a15c9b3ba5ea8511e3e7361f60a148a0d9762",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "4DBD6BF6ACA106E1",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-16"
           }
         ]
       }
@@ -4896,6 +4926,36 @@
             },
             "harness_identity": "deploy.sh plus tools/test-site.py",
             "harness_version": "1E79309C2D96E17C",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-16"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "4DBD6BF6ACA106E1",
+            "artifact_manifest_hash": "b3eb22bf05a789c1f1fcb367bd6bf91ade7015ead2b641ecf5b1afb39d5143f3",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "0cccbb7751b1df1986c292b7f1224537696a8be981355b78b6a9968617c0d573",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "1f6002f8b518513a5ad8e2200d6a15c9b3ba5ea8511e3e7361f60a148a0d9762",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "4DBD6BF6ACA106E1",
             "method": {
               "measurement": "complete allowlist and dist closure",
               "threshold": "27 files, no forbidden trees, exact integrity identity",
