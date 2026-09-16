@@ -93,6 +93,21 @@ function biEngine(seed) {
   }
   return { step, st };
 }
+/* judge — the boundary and the kernel applied to a PROPOSED program, token by token:
+   the same biAdmit the proposer meets and the same biKernel every closed program
+   meets, so a surface that lets a visitor propose geometry (demo/) is judged by the
+   production mechanism and nothing else. Returns the first refused relation and the
+   token it was refused at, or the kernel's verdict on the whole closed program. */
+function judge(toks) {
+  const at = { x: BI_O, y: BI_O, axis: "H", nseg: 0, cov: new Set([BI_O+","+BI_O]) };
+  for (let i = 0; i < toks.length; i++) {
+    const tk = toks[i], r = biAdmit(at, tk);
+    if (!r.ok) return { ok: false, at: i, why: r.why, x: at.x, y: at.y };
+    if (r.close) return biKernel(toks.slice(0, i + 1)) ? { ok: true, at: i, why: null, kernel: true } : { ok: false, at: i, why: "KERNEL", x: at.x, y: at.y };
+    r.pts.forEach(p => at.cov.add(p)); at.x = r.nx; at.y = r.ny; at.axis = at.axis === "H" ? "V" : "H"; at.nseg++;
+  }
+  return { ok: false, at: toks.length, why: "CLOSURE", x: at.x, y: at.y };   /* never closed */
+}
 /* pure audit — runs `count` proposals at `seed`, returns the invariant stats. Feeds CL-05. */
 function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < count; i++) e.step(); return e.st; }
 
@@ -103,7 +118,7 @@ function lastAudit() { return last; }
    audit runs it, and any other surface that demonstrates the boundary (demo/) consumes
    this export rather than a copy — a copy is a silent drift path from the mechanism it
    claims to show. tools/test-boundary.js pins the stream. */
-const API = { audit, lastAudit, biEngine };
+const API = { audit, lastAudit, biEngine, judge };
 
 /* ============================================================================
    DOM wiring — canvas, streaming log, RUN / AUDIT. Guarded.
