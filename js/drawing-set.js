@@ -75,10 +75,9 @@ sheets.forEach((sh, i) => {
 document.querySelectorAll("canvas.seal").forEach(c => c.getContext("2d").drawImage(seal, 0, 0));
 $("#serial").textContent = serial; $("#nonce").textContent = "0" + CM.ADMISSION_NONCE; $("#ck2").textContent = CM.CHECKSUM;
 
-/* ── schedule 1, revisions, not claimed, chain of record — projections of the manifest ── */
-const cell = (id, f, cls) => { const v = CM.project(`validation:${id}:${f}`); return v ? `<div class="${cls}" data-m="validation:${id}:${f}">${v}</div>` : `<div class="na">—</div>`; };
-$("#sched").innerHTML = `<div class="tr h"><div>METRIC</div><div class="cy">CYTHER</div><div>DEEPCAD</div><div>T2CAD</div></div>` +
-  CM.VALIDATION.map(r => `<div class="tr"><div>${r.mark === "ext" ? "◌" : "●"} <span data-m="validation:${r.id}:metric">${CM.project("validation:" + r.id + ":metric")}</span></div>${cell(r.id, "cyther", "cy")}${cell(r.id, "deepcad", "")}${cell(r.id, "t2cad", "")}</div>`).join("");
+/* ── revisions, not claimed, chain of record — projections of the manifest. SCHEDULE 1 and the
+   sheet-1 figures are static marked elements written by tools/project-manifest.py; CL-02 reads
+   every one back. ── */
 const nLog = CM.VALIDATION.filter(r => r.mark === "log").length;
 $("#nLog").textContent = ["zero", "one", "two", "three", "four", "five", "six", "seven"][nLog] || nLog;
 $("#sysId").textContent = CM.MANIFEST.systems_disclosed[0]; $("#patent").textContent = CM.MANIFEST.patent;
@@ -383,6 +382,7 @@ const recompute = () => { Claims.recomputeClaims(); wall(); };
 $("#recompute").addEventListener("click", recompute);
 Claims.renderClaims();
 run();
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});   /* insecure context — run online-only */
 addEventListener("load", () => {
   setTimeout(recompute, 150);
   /* CL-03: the three published admissions, re-derived off the boot path */

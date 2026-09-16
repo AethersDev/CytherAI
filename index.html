@@ -3,845 +3,434 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
-<title>CytherAI — Sovereign Operational AI</title>
-<meta name="description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
-<meta property="og:title" content="CytherAI — Sovereign Operational AI">
-<meta property="og:description" content="Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request, and it states nothing it cannot check.">
+<meta name="color-scheme" content="light">
+<title>CytherAI — AI systems that run entirely inside your walls</title>
+<meta name="description" content="On-premises, air-gapped, log-verified AI systems for work where a wrong output has consequences. This drawing set is drawn from a public manifest, makes no external request, and states nothing it cannot check.">
+<meta property="og:title" content="CytherAI — AI systems that run entirely inside your walls">
+<meta property="og:description" content="On-premises, air-gapped, log-verified AI systems for work where a wrong output has consequences. This drawing set is drawn from a public manifest, makes no external request, and states nothing it cannot check.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/">
-<!-- og:image is metadata fetched by link scrapers, never by this page. The
-     homepage runtime makes no request for it; the colophon's "no images"
-     remains true. The plate is DERIVED: tools/render-og.py renders it from
-     CytherManifest.CANON in the substrate's plate-0 grammar. -->
+<!-- og:image is metadata fetched by link scrapers, never by this page. The page makes no
+     request for it. The card is DERIVED (tools/render-og.py, CytherManifest.CANON) and
+     predates the drawing set: docs/asset-promotion-log.md records what it depicts. -->
 <meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
-<meta name="theme-color" content="#101620">
-<meta name="build-hash" content="3DA77CF13D3C7E51">
+<meta name="theme-color" content="#ECF0F4">
+<meta name="build-hash" content="1E79309C2D96E17C">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE DRAWING SET. The homepage is an engineering drawing set: seven sheets inside one
+     border — the deployment boundary — each with a title block DRAWN FROM the public manifest,
+     CHECKED BY the standing claims, sealed with a mark derived from the disclosed state. FIG. 1
+     streams the boundary engine of the record (js/instrument.js) and lets the visitor move one
+     edge of the admitted drawing; every position is judged by the same boundary and kernel.
+     Sheet 7 is the authority layer: what this set owes, who may establish it, and the rules
+     every other sheet is drawn under. Zero external requests; no inline script (CSP); every
+     printed fact is a projection of js/manifest.js that CL-02 reads back. -->
 <style>
-/* ════════════ tokens — the world writes the ambient (§4.1) ════════════
-   Four exposures of one derived object are the background; scroll moves a
-   derived camera into the filament core. --bg/--inkA/--accent are written by
-   CytherSubstrate.observe() across four keyframes; --panel is NOT — material is
-   phase-owned (this root value is the surface material; the flip, depth and core
-   materials are the body[data-phase] rules in the reading-exposure block), because
-   a material follows the ink and the ink is bistable. No dark mode toggle — the
-   light RISES continuously: the surface is an unexposed field on which the mark
-   is a live accumulation, and the floor is dry ink on paper, because observation
-   is luminous and a record is printed. No webfonts, no images, no CDNs. */
 :root{
-  --bg:#070A10; --ink:#DCE6F5; --inkA:#DCE6F5; --accent:#7FA0FF;
-  --panel:rgba(10,15,23,.55);
-  --hair:color-mix(in srgb, var(--inkA) 16%, transparent);
-  --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
-  --display:system-ui,-apple-system,'Segoe UI Variable Display','Segoe UI',sans-serif;
+  --paper:#ECF0F4; --panel:#F6F8FB; --ink:#101620; --mid:#414A5B; --quiet:#586376; --accent:#2036C7;
+  --rule:rgba(16,22,32,.14); --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif; --m:22px; --z:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{background:var(--bg);color:var(--ink);font-family:var(--display);overflow-x:hidden}
-button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 a{color:inherit}
-p{text-wrap:pretty}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.mono{font-family:var(--mono)}
-.skip-link{position:absolute;left:-9999px}
-.skip-link:focus{left:12px;top:12px;z-index:100;background:var(--ink);color:var(--bg);
-  padding:8px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.m{font-family:var(--mono)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
-/* ════════════ the substrate — four exposures of one object ════════════ */
-#world{position:fixed;inset:0;z-index:-2;pointer-events:none;transition:opacity .5s ease}
-/* An exposure ADDS light to an unexposed field; it does not paint over one. While
-   the reading ink is light the ambient is dark, and plus-lighter is what makes an
-   accumulating plate read as accumulation — the crossfade is unaffected, because
-   the two live tiles' opacities sum to 1 and plus-lighter is linear in them. Past
-   the switch the ambient is paper and the plates deposit ink, which is source-over. */
-.tile{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;mix-blend-mode:plus-lighter}
-body[data-ink="dark"] .tile{mix-blend-mode:normal}
-/* the promoted terminal exposure: assets/plate/surface-terminal.png IS plate 0's
-   terminal raster for a 1200x600 frame, produced by this kernel offline
-   (tools/promote-poster.js, receipt in docs/asset-promotion-log.md). It stands in
-   until the reader's own plate develops, then js/substrate.js removes it for good.
-   A background-image, not an <img>: it is decorative, and a display:none element's
-   background is never fetched, so the aspect window below is also a download rule.
-   The window is where a cover-fit IS the exact crop the developed plate would show
-   — vertical world extent is constant across landscape frames and horizontal scales
-   with aspect, so any aspect in [1,2] is exact and nothing else is shown at all. */
-/* Composited exactly as the tile it stands in for: an accumulation that swapped
-   from plus-lighter to source-over at the terminal state would step in
-   brightness by the ground under it, and the swap is meant to be invisible. */
-#poster{position:absolute;inset:0;transform-origin:0 0;pointer-events:none;display:none;
-  mix-blend-mode:plus-lighter;
-  background:url(assets/plate/surface-terminal.png) center/cover no-repeat}
-@media (min-aspect-ratio:1/1) and (max-aspect-ratio:2/1){#poster{display:block}}
-#substrate{position:fixed;inset:0;z-index:0}
-body.forking #substrate{cursor:grabbing}
+/* ── the sheet ─────────────────────────────────────────────────────────── */
+.sheet{position:relative;height:100vh;min-height:720px;scroll-snap-align:start;overflow:hidden}
+.zx,.zy{position:absolute;display:flex;font-family:var(--mono);font-size:8.5px;color:var(--quiet);pointer-events:none}
+.zx{left:calc(var(--m) + var(--z));right:calc(var(--m) + var(--z));height:var(--z)}
+.zx.top{top:var(--m);border:1px solid var(--rule);border-bottom:none}
+.zx.bot{bottom:var(--m);border:1px solid var(--rule);border-top:none}
+.zx span{flex:1;text-align:center;line-height:var(--z);border-left:1px solid var(--rule)}
+.zy{top:calc(var(--m) + var(--z));bottom:calc(var(--m) + var(--z));width:var(--z);flex-direction:column}
+.zy.left{left:var(--m);border:1px solid var(--rule);border-right:none}
+.zy.right{right:var(--m);border:1px solid var(--rule);border-left:none}
+.zy span{flex:1;display:flex;align-items:center;justify-content:center;border-top:1px solid var(--rule)}
+.frame{position:absolute;left:calc(var(--m) + var(--z));top:calc(var(--m) + var(--z));right:calc(var(--m) + var(--z));bottom:calc(var(--m) + var(--z));
+  border:1.5px solid var(--ink)}
+.content{position:absolute;inset:0;padding:28px 30px 100px 30px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--mid)}
+.fig{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--quiet);display:flex;justify-content:space-between;gap:16px}
+.fig b{color:var(--ink);font-weight:500}
+h1{font-size:clamp(34px,4vw,58px);line-height:1.04;letter-spacing:-.022em;font-weight:500;text-wrap:balance}
+h2{font-size:clamp(28px,2.8vw,40px);line-height:1.08;letter-spacing:-.02em;font-weight:500;text-wrap:balance}
+p.lede{font-size:clamp(15px,1.3vw,19px);line-height:1.55;color:var(--mid);max-width:36ch;text-wrap:pretty}
+p.body{font-size:clamp(14.5px,1.2vw,17px);line-height:1.6;color:var(--mid);text-wrap:pretty}
+p.body strong{color:var(--ink);font-weight:600}
+.col{display:flex;flex-direction:column;gap:22px}
+.two{display:grid;grid-template-columns:7fr 5fr;gap:40px;height:100%}
+.two.narrow{grid-template-columns:420px 1fr}
+.btns{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.16em;padding:15px 20px;text-decoration:none;display:inline-block;border:1px solid rgba(16,22,32,.35);color:var(--mid)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.link{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;padding:10px 0 8px;border-bottom:1px solid rgba(16,22,32,.35);align-self:flex-start;text-decoration:none}
+.hair{border-top:1px solid var(--rule)}
 
-/* ════════════ chrome ════════════ */
-.chrome{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:baseline;gap:14px;
-  padding:12px 22px;background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(12px)}
-.wordmark{font-size:15px;font-weight:750;letter-spacing:.14em}
-.gauge{margin-left:auto;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-align:right;line-height:1.7}
-/* ACCENT AS A TEXT COLOUR — bounded by measurement, not by taste.
-   BGS and ACCENTS are both locked (§4.1) and their luminance ramps CROSS in the
-   mid-descent, so around d≈1.0–1.4 the accent is separable from nothing the
-   design produces: 1.9:1 against the light ambient, 2.14:1 against the flip
-   membrane. An accent RULE or BORDER does not escape it either — as a non-text
-   indicator it still fails 1.4.11's 3:1 there (1.34:1 on raw ambient at d=1.50).
-   The channel is the problem, not the role it plays.
-   So any run that can be on screen inside that band carries INK, keeping the
-   weight that already marked it. These are safe by POSITION, which reflow can
-   undo — and which turning the exposure order over also undid: the ambient and
-   the accent were reversed together, so each depth kept its (bg, accent) PAIR
-   but every rule kept its depth, and three survivors landed in the crossing
-   band that had moved underneath them. Re-derived on the turned ramp:
-     .eyebrow                 7.90:1   hero only, d=0            accent
-     .manifest .m-v.acc       5.60:1   d≈2.52–2.76               accent
-     footer a:hover           7.60:1   floor                     accent
-     .rung .r-impl.disclosed  4.37:1   d≈0.48–0.60   → INK, weight 600
-     .sys .o-val              3.23:1   d≈0.60–0.84   → INK, weight 500
-     .bi-head b               2.76:1   d≈0.72–0.96   → INK, weight 500
-   The three below AA now carry ink at the weight that already marked them;
-   the distinction they drew (disclosed vs controlled, value vs label) was
-   never carried by hue alone, so nothing legible was lost with it.
-   Selected state on the optics control is an INK rule (10.72:1 worst), not an
-   accent colour: the accent still marks state, but nothing legible depends on
-   it, and aria-pressed carries it non-visually regardless.
-*/
-.gauge b{color:var(--ink);font-weight:500}
-@media(max-width:640px){.gauge{font-size:9px}}
+/* title block + notes */
+.tb{position:absolute;right:0;bottom:0;display:flex;height:84px;border-top:1px solid var(--ink);border-left:1px solid var(--ink);background:var(--paper)}
+.tb .c{border-right:1px solid var(--ink);padding:6px 10px;display:flex;flex-direction:column;gap:3px;justify-content:center}
+.tb .c:last-child{border-right:none;align-items:center;padding:4px}
+.k{font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:var(--quiet)}
+.v{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink)}
+.v .acc{color:var(--accent)}
+.tb .brand{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.22em}
+.notes{position:absolute;left:0;bottom:0;height:84px;width:350px;border-top:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px 12px;
+  font-family:var(--mono);font-size:8.5px;line-height:1.5;color:var(--mid);letter-spacing:.02em;background:var(--paper)}
+.notes b{color:var(--quiet);font-weight:500;letter-spacing:.14em}
 
-/* ════════════ core sample — position in the form ════════════ */
-.core{position:fixed;right:10px;top:50%;transform:translateY(-50%);z-index:20;width:56px}
-.core canvas{display:block;width:56px;border:1px solid var(--hair);cursor:pointer;
-  background:color-mix(in srgb,var(--bg) 40%,transparent);backdrop-filter:blur(8px)}
-.core .core-wrap{position:relative}
-#coreRect{position:absolute;left:0;top:0;border:1px solid var(--accent);pointer-events:none;will-change:transform}
-.core .lbl{font-family:var(--mono);font-size:7.5px;letter-spacing:.14em;text-align:center;margin-top:5px;
-  color:color-mix(in srgb,var(--ink) 66%,transparent)}
-@media(max-width:900px){.core{right:6px}}
+/* sheet 1 */
+.callout{display:flex;gap:18px;align-items:flex-start;margin-top:14px}
+.balloon{width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:10px}
+.big{font-family:var(--mono);font-size:clamp(44px,4.4vw,62px);line-height:1;letter-spacing:-.03em}
+.big{font-variant-numeric:tabular-nums}
+.cond{font-family:var(--mono);font-size:10px;line-height:1.7;color:var(--mid);letter-spacing:.04em}
+.figwrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.figbox{position:relative;width:min(100%,560px);aspect-ratio:1}
+#fig1{width:100%;height:100%;display:block}
+.handle{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border:1.5px solid var(--accent);background:var(--paper);cursor:grab;padding:0;touch-action:none}
+.handle:active{cursor:grabbing;background:var(--accent)}
+.handle:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.proposal{align-self:stretch;border-top:1px solid var(--rule);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.proposal[hidden]{display:none}
+.receipt{font-size:9.5px;line-height:1.8;color:var(--mid)}
+.receipt .k{font-size:9.5px;color:var(--ink)}
+.proposal .acts{display:flex;gap:16px}
+.proposal button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:2px}
+.proposal button:disabled{color:var(--quiet);border-color:var(--rule);cursor:default}
+.proposal button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
+.counters{align-self:stretch;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mid);border-top:1px solid var(--rule);padding-top:10px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.counters b{color:var(--ink);font-weight:600}
+.counters .acts{display:flex;gap:16px}
+.counters button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:2px}
+.counters button:hover{border-color:var(--accent);color:var(--accent)}
+.figlog{align-self:stretch;font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--quiet);min-height:2.6em}
 
-/* ════════════ content scaffolding ════════════ */
-/* clip, not hidden: the legibility envelope (.env::before) bleeds 3.2em past its
-   element on each side so its mask has something to fade across. Below ~1200px the
-   sections reach the viewport edge and that bleed becomes document overflow — on a
-   390px screen it widened the layout viewport to 421px, shrinking the whole page
-   and pushing the right-aligned gauge off-screen. `clip` stops it at the source and,
-   unlike `hidden`, leaves overflow-y visible so main never becomes a scroll
-   container — the camera is driven by document scroll. */
-main{position:relative;z-index:1;pointer-events:none;overflow-x:clip}
-main a,main button,main input,main .glass,main .panel,main table{pointer-events:auto}
-section{padding:15vh 28px;max-width:1160px;margin:0 auto}
-/* font-weight/margin-top are stated because the sealed and floor labels are h2
-   elements (they are those strata's only headings); the rest are divs. Both
-   forms must render identically. */
-.zone-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;
-  color:color-mix(in srgb,var(--ink) 70%,transparent);margin-top:0;margin-bottom:4.5vh;font-weight:inherit}
-.zone-label b{color:var(--ink);font-weight:500}
-.sec-h{font-size:clamp(26px,3.6vw,46px);font-weight:300;letter-spacing:-.01em;line-height:1.1;
-  max-width:26ch;margin-bottom:5vh;color:var(--ink);text-wrap:balance}
-.glass{background:var(--panel);backdrop-filter:blur(12px);border:1px solid var(--hair)}
+/* the admitted object, carried through the set */
+.obj{border:1px solid var(--rule);background:var(--panel);padding:10px 12px;display:flex;gap:12px;align-items:center}
+.obj svg{width:88px;height:88px;flex-shrink:0;display:block}
+.obj .t{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--mid)}
+.obj .t b{color:var(--ink);font-weight:600}
+.obj .t .id{color:var(--accent)}
+.obj.frag{padding:6px 10px;gap:8px}.obj.frag svg{width:44px;height:44px}
+.obj.large svg{width:120px;height:120px}
+.obj:not(.has) .t{color:var(--quiet)}
 
-/* ════════════ hero — the claim ════════════ */
-/* The statement is set against the object, not on top of it: the column is
-   anchored to the lower band of the frame, where the far-field orbit is
-   sparsest, and the object keeps the centre. Two sizes only — one statement at
-   display scale and one rail at mono scale. Nothing sits between them, because
-   a middle size is what makes a page read as a brochure. */
-.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
-  padding:0 clamp(28px,5.2vw,76px) clamp(80px,10vh,120px);max-width:none;margin:0}
-/* The reading field is SHIELDED from the exposure rather than scrimmed by it.
-   The statement needs a ground the plate is not on; the object needs to stay
-   whole. A hard panel behind the text would give the first and destroy the
-   second, so the shield is a lateral falloff instead — full absorption at the
-   edge the column is set against, nothing at all by 58%, which is past the
-   longest line. It is the only element on the page that darkens the mark, and
-   it darkens exactly the part of the mark no one is looking at. */
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
-  background:linear-gradient(97deg,#070A10 0%,rgba(7,10,16,.94) 24%,rgba(7,10,16,.62) 41%,transparent 58%)}
-.eyebrow{font-family:var(--mono);font-size:9.5px;letter-spacing:.34em;color:var(--accent);margin-bottom:26px}
-.eyebrow::before{content:"";display:block;width:34px;height:1px;background:var(--accent);margin-bottom:15px}
-.thesis{font-size:clamp(38px,5.4vw,76px);font-weight:200;line-height:.98;letter-spacing:-.026em;
-  cursor:default;user-select:none;max-width:11ch;text-wrap:balance}
-.wd{white-space:nowrap;display:inline-block}
-.thesis .g{display:inline-block;font-weight:200;will-change:font-weight}
-.dek{font-size:13px;line-height:1.9;color:color-mix(in srgb,var(--ink) 66%,transparent);
-  max-width:40ch;margin-top:34px}
-.decomp{font-family:var(--mono);font-size:9px;letter-spacing:.2em;line-height:2;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:30px}
-.decomp b{color:var(--ink);font-weight:500}
-.ctas{display:flex;gap:36px;margin-top:26px;flex-wrap:wrap}
-/* No filled button anywhere on the page. A solid accent rectangle is the loudest
-   object a layout can contain, and here the loudest object must be the mark. The
-   primary path is marked by an accent RULE and full-strength ink; both survive
-   the accent's mid-descent luminance crossing because neither depends on hue. */
-.btn{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
-  padding:11px 0 9px;text-decoration:none;border:none;
-  border-bottom:1px solid color-mix(in srgb,var(--ink) 26%,transparent);
-  color:color-mix(in srgb,var(--ink) 72%,transparent)}
-.btn:hover{border-bottom-color:var(--ink);color:var(--ink)}
-.btn-primary{color:var(--ink);border-bottom-color:var(--accent);border-bottom-width:2px}
-.btn-primary:hover{border-bottom-color:var(--ink)}
-.coords{font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:30px}
+/* sheet 2 */
+.flow{position:relative;height:350px}
+.box{position:absolute;border:1px solid var(--ink);background:var(--panel);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.box.dash{border-style:dashed}
+.box.dark{background:var(--ink);color:var(--paper)}
+.box .k{font-size:9px}.box.dark .k{color:rgba(236,240,244,.66)}
+.box div:last-child{font-size:13.5px;line-height:1.4}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:120px 1fr 48px;gap:12px;align-items:center;font-family:var(--mono);font-size:9.5px}
+.bar .n{color:var(--mid);letter-spacing:.08em}.bar .t{height:8px;border-left:1px solid var(--ink)}
+.bar .t i{display:block;height:8px;background:repeating-linear-gradient(135deg,var(--ink) 0 1px,transparent 1px 4px);border-right:1px solid var(--ink)}
+.bar .c{text-align:right}
 
-/* ════════════ definition ladder ════════════ */
-.defs{max-width:760px}
-.def{display:grid;grid-template-columns:220px 1fr;gap:20px;padding:2.6vh 0;align-items:baseline;
-  border-top:1px solid var(--hair)}
-.def .d-mode{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink);font-weight:500}
-.def .d-body{font-size:15px;line-height:1.7;color:color-mix(in srgb,var(--ink) 78%,transparent)}
-@media(max-width:640px){.def{grid-template-columns:1fr;gap:6px}}
+/* sheet 3 */
+.sched{border:1px solid var(--ink);padding:0 18px}
+.tr{display:grid;grid-template-columns:1fr 90px 90px 90px;gap:0 12px;padding:12px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--mid)}
+.tr.h{font-size:9.5px;letter-spacing:.16em;color:var(--quiet);border-bottom:1px solid var(--ink)}
+.tr div+div{text-align:right}.tr .cy{color:var(--ink);font-weight:600}.tr .na{color:#B8C0CC}
+.tr:last-child{border-bottom:none}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px 14px;font-family:var(--mono);font-size:10.5px;line-height:1.65}
+.kv .k{font-size:10.5px;letter-spacing:.12em}.kv .vv{color:var(--mid)}
 
-/* ════════════ architecture ladder ════════════ */
-.ladder{max-width:860px}
-.rung{display:grid;grid-template-columns:200px 26px 240px 1fr;gap:14px;padding:2.4vh 0;align-items:baseline;
-  border-top:1px solid var(--hair);font-family:var(--mono)}
-.rung .r-mode{font-size:10px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.rung .r-arrow{font-size:10px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
-.rung .r-mech{font-size:11px;letter-spacing:.08em;color:var(--ink);font-weight:500}
-.rung .r-impl{font-size:9.5px;letter-spacing:.1em;text-align:right}
-.rung .r-impl.disclosed{color:var(--ink);font-weight:600}
-.rung .r-impl.controlled{color:color-mix(in srgb,var(--ink) 66%,transparent)}
-@media(max-width:760px){.rung{grid-template-columns:1fr;gap:4px}.rung .r-arrow{display:none}.rung .r-impl{text-align:left}}
+/* sheet 4 */
+.section{position:absolute;left:0;right:0;top:40px;height:min(600px,calc(100% - 40px));display:grid;grid-template-columns:1fr 64px 260px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.inside{padding:22px 26px 22px 0;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cell{border:1px solid var(--ink);background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px}
+.cell.dash{border-style:dashed;background:none}.cell.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cell .k{font-size:9px}.cell.dark .k{color:rgba(236,240,244,.66)}
+.cell .val{font-family:var(--mono);font-size:15px;font-weight:600}
+.wall{position:relative;border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink);
+  background:repeating-linear-gradient(135deg,var(--ink) 0 .7px,transparent .7px 10px)}
+.wall span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-family:var(--mono);font-size:9px;letter-spacing:.22em;background:var(--paper);padding:4px 10px}
+.outside{padding:22px 0 22px 26px;display:flex;flex-direction:column;gap:12px}
+.livebox{border:1px solid var(--ink);padding:12px 14px;font-family:var(--mono);font-size:11px;line-height:1.7}
+.livebox b{font-size:18px;font-weight:600}
 
-.sys-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6vh}
-.sys{padding:24px 24px 26px}
-.sys .s-id{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.sys h3{font-size:clamp(22px,2.6vw,34px);font-weight:300;line-height:1.12;letter-spacing:-.01em;margin-top:14px;text-wrap:balance}
-.sys h3 .g{display:inline-block;font-weight:300;will-change:font-weight}
-.sys .facts{font-family:var(--mono);font-size:10.5px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:12px}
-.sys .o-label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:18px}
-.sys .o-val{display:block;font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:500;margin-top:6px;line-height:1.7}
+/* sheet 5 */
+.paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.path{border:1px solid var(--ink);background:var(--panel);padding:22px 22px 24px;display:flex;flex-direction:column;gap:12px}
+.path.featured{border-color:var(--accent)}
+.path h3{font-size:20px;font-weight:600}
+.path p{font-size:15px;line-height:1.65;color:var(--mid);min-height:96px}
+.path .k{font-size:9.5px}
+.path .btn{padding:12px 16px;font-size:10.5px;letter-spacing:.14em}
 
-.cause{display:grid;grid-template-columns:170px 1fr;gap:0 26px;max-width:420px;margin-top:6vh;
-  font-family:var(--mono);font-size:10px;line-height:2.1}
-.cause .c-k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
-.cause .c-v{color:var(--ink);font-weight:500;letter-spacing:.12em}
-.cause .c-v.none{color:var(--ink)}
+/* sheet 6 */
+.three{display:grid;grid-template-columns:420px 1fr 1fr;gap:34px;height:100%}
+.list .hd{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--quiet);padding-bottom:8px;border-bottom:1px solid var(--ink)}
+.row{display:grid;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
+#claimRows .m-row{display:grid;grid-template-columns:1fr 150px;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
+#claimRows .m-kbtn{text-align:left;padding:0;color:var(--ink);letter-spacing:.02em}
+#claimRows .m-kbtn:hover{color:var(--accent)}
+#claimRows .m-row.open{border-bottom:none}
+#claimRows .m-v{text-align:right;color:var(--mid)}#claimRows .m-v.wait{color:var(--quiet)}#claimRows .m-v.bad{color:#B23A2E;font-weight:600}
+#claimRows .m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;line-height:1.9;color:var(--mid)}
+#claimRows .m-evidence .e-k{color:var(--quiet)}
+#claimRows .i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:1px;margin-top:4px}
+.row.rev{grid-template-columns:64px 88px 1fr}.row.rev .d{color:var(--quiet)}
+.row.nc{display:flex;justify-content:space-between}.row.nc span{color:var(--quiet)}
+.sealbox{display:flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:12px 14px}
+.sealbox .v{font-size:10px;line-height:1.7;color:var(--mid)}
+canvas.seal{display:block;width:46px;height:46px}
+canvas.seal.lg{width:60px;height:60px}
 
-/* ════════════ boundary instrument ════════════ */
-.bi{margin-top:6vh;padding:20px 22px;max-width:860px}
-.bi-head{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.bi-head b{color:var(--ink);font-weight:500}
-.bi-cap{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;max-width:62ch}
-.bi-row{display:flex;gap:18px;margin-top:16px;flex-wrap:wrap;align-items:flex-start}
-#biCanvas{width:180px;height:180px;border:1px solid var(--hair);flex-shrink:0}
-.bi-log{font-family:var(--mono);font-size:9.5px;line-height:1.9;min-width:220px;flex:1;min-height:130px;
-  color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.bi-log .adm{color:var(--ink);font-weight:500}
-.bi-stats{font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;margin-top:12px;
-  color:color-mix(in srgb,var(--ink) 74%,transparent)}
-.bi-stats b{color:var(--ink);font-weight:500}
-
-/* ════════════ measurement ════════════ */
-.val-panel{padding:22px 24px 6px;max-width:860px}
-.legend{display:flex;gap:22px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);padding-bottom:14px;border-bottom:1px solid var(--hair)}
-.legend .lv{color:var(--ink);font-weight:500}
-table{width:100%;border-collapse:collapse;font-family:var(--mono)}
-th{font-size:10px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent);
-  text-align:right;font-weight:400;padding:14px 0 8px}
-th:first-child{text-align:left}
-th.cy{color:var(--ink);font-weight:500}
-td{font-size:11px;color:color-mix(in srgb,var(--ink) 80%,transparent);padding:9px 0;
-  border-top:1px solid var(--hair);text-align:right}
-td:first-child{text-align:left}
-td .mk{color:var(--ink);margin-right:8px}
-td .mk.ext{color:color-mix(in srgb,var(--ink) 66%,transparent)}
-td.cy{color:var(--ink);font-weight:500}
-td.na{color:color-mix(in srgb,var(--ink) 28%,transparent)}
-.meth{display:grid;grid-template-columns:170px 1fr;gap:6px 18px;font-family:var(--mono);font-size:10px;
-  line-height:1.8;padding:18px 0 14px;border-top:1px solid var(--hair);margin-top:4px}
-.meth .k{color:color-mix(in srgb,var(--ink) 66%,transparent);letter-spacing:.12em}
-.meth .v{color:color-mix(in srgb,var(--ink) 80%,transparent)}
-.footnote{border-top:1px solid var(--hair);padding:12px 0 16px}
-.footnote .dagger{display:block;font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.footnote .note{font-family:var(--mono);font-size:9px;color:color-mix(in srgb,var(--ink) 66%,transparent);line-height:1.8;margin-top:4px}
-/* the dagger is a two-way anchor: mark → note → back; targets clear the fixed chrome */
-.fnref,.fnback{text-decoration:none}
-.fnref,.footnote .dagger{scroll-margin-top:72px}
-
-/* ════════════ the boundary ════════════ */
-.boundary{margin-top:10vh;max-width:860px;text-align:center;padding:5vh 24px 6vh}
-.boundary .b-line{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--ink)}
-.boundary .b-sub{font-family:var(--mono);font-size:10.5px;line-height:1.9;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin:14px auto 0;max-width:52ch}
-.b-hold{position:relative;overflow:hidden;display:inline-block;margin-top:3.4vh;
-  font-family:var(--mono);font-size:10px;letter-spacing:.18em;padding:13px 22px;
-  border:1px solid color-mix(in srgb,var(--ink) 30%,transparent);color:var(--ink)}
-.b-hold i{position:absolute;left:0;top:0;bottom:0;width:0;background:color-mix(in srgb,var(--accent) 28%,transparent)}
-.b-hold span{position:relative}
-.b-hold:hover{border-color:var(--accent)}
-.b-hold:disabled{cursor:default;border-color:var(--accent);color:var(--ink)}
-.b-state{font-family:var(--mono);font-size:9px;letter-spacing:.18em;margin-top:14px;
-  color:color-mix(in srgb,var(--ink) 66%,transparent)}
-body.crossed .b-state{color:var(--ink);font-weight:500}
-
-/* ════════════ controlled stratum ════════════ */
-.sealed{min-height:72vh;display:flex;flex-direction:column;justify-content:center}
-.ghost{font-size:clamp(34px,6.4vw,84px);font-weight:200;line-height:1.02;letter-spacing:-.015em;
-  color:color-mix(in srgb,var(--inkA) 10%,transparent);user-select:none}
-body.crossed .ghost{color:color-mix(in srgb,var(--inkA) 24%,transparent)}
-.sealed-fields{font-family:var(--mono);font-size:10.5px;line-height:2;margin-top:4vh;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);opacity:.35;transition:opacity .6s}
-body.crossed .sealed-fields{opacity:1}
-@media(prefers-reduced-motion:reduce){.sealed-fields{transition:none}}
-.sealed-fields .fv{color:color-mix(in srgb,var(--ink) 82%,transparent)}
-.locked-note{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:2.2vh}
-body.crossed .locked-note{display:none}
-.sealed .depth-line{font-family:var(--mono);font-size:10px;letter-spacing:.18em;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:5vh}
-.sealed .btn{margin-top:2.4vh;align-self:flex-start}
-
-/* ════════════ clearance ════════════ */
-.clearance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px}
-.path{padding:22px 20px 24px;position:relative}
-.path-featured{border-color:var(--accent)}
-.path .p-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-/* h3, not h4: the outline must not skip a level under the clearance h2. The
-   1.33em bottom margin is the UA h4 value the swap would otherwise drop —
-   stated here so the element change stays visually neutral. */
-.path h3{font-size:17px;font-weight:600;margin:12px 0 1.33em}
-.path p{font-size:14px;line-height:1.75;color:color-mix(in srgb,var(--ink) 76%,transparent);margin-top:10px;min-height:5.2em}
-.path .p-note{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:color-mix(in srgb,var(--ink) 66%,transparent);margin-top:14px}
-.path .btn{margin-top:16px}
-
-/* ════════════ the floor — law + records ════════════ */
-.law{font-size:clamp(22px,3vw,38px);font-weight:300;line-height:1.5;letter-spacing:.01em;max-width:22ch;color:var(--ink)}
-.manifest{margin-top:8vh;max-width:540px;font-family:var(--mono)}
-.manifest .m-title{font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
-  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
-.manifest .m-row{display:flex;justify-content:space-between;gap:18px;font-size:10.5px;letter-spacing:.08em;
-  padding:8px 0;border-bottom:1px solid color-mix(in srgb,var(--ink) 10%,transparent)}
-.manifest .m-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.manifest .m-v{color:var(--ink);font-weight:500;text-align:right}
-.manifest .m-v.acc{color:var(--accent)}
-.manifest .m-v.ok{color:var(--ink)}
-.manifest .m-v.bad{color:var(--ink);font-weight:700}
-.manifest .m-v.wait{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
-.manifest .m-v.anti-v{color:color-mix(in srgb,var(--ink) 66%,transparent);font-weight:400}
-/* claim rows are openable evidence (UI-001): the key is a button, the row
-   silhouette is unchanged, expansion pushes content — never overlays */
-.manifest .m-kbtn{text-align:left;font-size:inherit;letter-spacing:inherit;padding:0}
-.manifest .m-kbtn:hover{color:var(--ink)}
-.manifest .m-row.open{border-bottom:none}
-.m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--hair);
-  font-size:9.5px;letter-spacing:.06em;line-height:1.95;
-  color:color-mix(in srgb,var(--ink) 74%,transparent)}
-.m-evidence .e-k{color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.m-evidence .i-btn{margin-top:4px}
-/* obligations are static record, openable without script: a summary styled as a row */
-.ob summary{list-style:none;cursor:pointer}
+/* sheet 7 — the specification sheet may run longer than the viewport */
+.sheet.tall{height:auto;min-height:100vh}
+.sheet.tall .frame{position:relative;inset:auto;margin:calc(var(--m) + var(--z));min-height:calc(100vh - 2*(var(--m) + var(--z)))}
+.sheet.tall .content{position:relative;inset:auto;padding-bottom:110px}
+.sheet.tall .zx,.sheet.tall .zy{display:none}   /* a relative frame carries no zone strips; the border alone closes the set */
+.spec{display:grid;grid-template-columns:7fr 5fr;gap:40px;margin-top:22px}
+.ob summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr 150px;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
 .ob summary::-webkit-details-marker{display:none}
-.ob[open] summary{border-bottom:none}
+.ob summary .m-k{color:var(--mid)}.ob summary .m-v{text-align:right;color:var(--quiet)}
 .ob summary:hover .m-k{color:var(--ink)}
-.m-evidence b{color:var(--ink);font-weight:500}
+.ob[open] summary{border-bottom:none}
+.ob .m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;line-height:1.9;color:var(--mid)}
+.ob .m-evidence .e-k{color:var(--quiet)}.ob .m-evidence b{color:var(--ink);font-weight:500}
+.gn{font-family:var(--mono);font-size:10.5px;line-height:1.75;color:var(--mid);padding:8px 0;border-bottom:1px solid var(--rule)}
+.gn b{color:var(--ink);font-weight:600;margin-right:6px}
+.gn:first-of-type{color:var(--ink)}
 
-.epochs{margin-top:8vh;max-width:660px}
-.ep-title{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:color-mix(in srgb,var(--ink) 66%,transparent);
-  padding-bottom:12px;border-bottom:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
-.ep-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;padding:18px 0 6px}
-.ep{font-family:var(--mono);font-size:8.5px;letter-spacing:.1em;line-height:1.9;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.ep canvas{display:block;border:1px solid var(--hair);margin-bottom:6px}
-.ep.current{color:var(--ink)}
-.ep.current canvas{border-color:var(--accent)}
-.ep .st{color:var(--ink);font-weight:500}
-.ep-arrow{font-family:var(--mono);font-size:11px;color:color-mix(in srgb,var(--ink) 40%,transparent)}
-.ep-note{font-family:var(--mono);font-size:9px;line-height:1.9;margin-top:8px;max-width:56ch;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-
-.colophon-notes{margin-top:8vh}
-.colophon-notes p{font-family:var(--mono);font-size:11px;line-height:2;
-  color:color-mix(in srgb,var(--ink) 66%,transparent);max-width:74ch;margin-bottom:16px}
-.colophon-notes b{color:var(--ink);font-weight:500}
-
-footer{padding:20px 28px 88px;display:flex;gap:20px;flex-wrap:wrap;max-width:1160px;margin:0 auto;
-  font-family:var(--mono);font-size:10px;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-footer .right{margin-left:auto}
-footer a{border-bottom:1px solid var(--hair)}
-footer a:hover{color:var(--accent);border-color:var(--accent)}
-
-/* ════════════ shared action affordances ════════════ */
-.i-actions{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;align-items:center}
-.i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;padding:2px 0;
-  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ink) 28%,transparent)}
-.i-btn:hover{color:var(--ink);border-color:var(--accent)}
-.copied{font-family:var(--mono);font-size:9.5px;color:var(--ink);font-weight:500}
-
-/* ════════════ reader ledger ════════════ */
-.rledger{position:fixed;left:22px;bottom:54px;z-index:25;width:268px;font-family:var(--mono)}
-.rl-head{display:block;width:100%;text-align:left;font-size:9px;letter-spacing:.14em;padding:9px 12px;
-  background:var(--panel);backdrop-filter:blur(12px);color:var(--ink);border:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
-.rl-head:hover{border-color:var(--accent)}
-#rlDigest{color:var(--ink);font-weight:500}
-.rl-body{background:var(--panel);backdrop-filter:blur(12px);padding:12px;
-  border:1px solid color-mix(in srgb,var(--ink) 18%,transparent);border-top:none}
-.rl-note{font-size:10px;line-height:1.8;color:color-mix(in srgb,var(--ink) 66%,transparent)}
-.rl-log{margin-top:9px;font-size:9px;line-height:2;max-height:110px;overflow-y:auto;color:color-mix(in srgb,var(--ink) 78%,transparent)}
-.rl-log b{color:var(--ink);font-weight:500}
-.rl-actions{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
-
-/* ════════════ serial strip — the mark's record, always present ════════════ */
-.strip{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
-  padding:10px 18px;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;
-  background:color-mix(in srgb,var(--bg) 62%,transparent);backdrop-filter:blur(12px);
-  border-top:1px solid var(--hair);color:color-mix(in srgb,var(--ink) 72%,transparent)}
-.strip b{color:var(--ink);font-weight:500}
-.strip .st{color:var(--ink);font-weight:500}
-.strip button{font-family:var(--mono);font-size:9px;letter-spacing:.1em;padding:2px 0;
-  color:color-mix(in srgb,var(--ink) 74%,transparent);border-bottom:1px solid var(--hair)}
-.strip button:hover,.strip button.on{color:var(--ink);border-color:var(--accent)}
-.strip .grow{flex:1}
-
-/* ════════════ reading exposure — the record's own law (P9) ════════════
-   Two exposures, independently governed. WORLD: depth → camera → plate → ambient.
-   READING: bistable ink (hysteresis in site.js), phase-changed panel materials,
-   density-conditioned envelopes, rest-state amplitude. No component exercises
-   more attentional authority than its semantic role grants. */
-body{transition:color .25s ease}
-/* the two inks ARE the model's (CytherSubstrate.READING): light is the :root default —
-   the surface is an unexposed field — and dark is admitted by the state machine at the
-   switch. test-motion A7 holds both literals to READING; a rule that names another ink
-   is how the floor once printed light ink on paper. */
-body[data-ink="dark"]{--ink:#101620}
-/* the ink switch is a controlled crossfade, not a page flash; the weight-field
-   and wave glyphs (.g) keep their per-frame inline colors untransitioned */
-main *:not(.g),header *,footer *,aside *,.strip *,.optics *{transition-property:color;transition-duration:.25s}
-/* the world yields slowly and returns fast — focus pull, both directions honest */
-body.at-rest #world{opacity:.72;transition-duration:.6s}
-/* The world yields to READING. At depth zero there is nothing to yield to: the
-   object is the content of the frame, and damping it there dims the only thing
-   the surface has to show. The yield begins with the record. */
-body.at-surface.at-rest #world{opacity:1}
-body[data-optics="read"] #world{opacity:.5}
-body[data-optics="world"] #world{opacity:1}
-
-.env{position:relative;z-index:0}
-.env::before{content:"";position:absolute;inset:-2.6em -3.2em;z-index:-1;pointer-events:none;
-  backdrop-filter:blur(calc(var(--envK,.7)*10px)) saturate(calc(1 - var(--envK,.7)*.45));
-  opacity:.35;transition:opacity .35s ease,background .35s ease;
-  mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
-             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
-  mask-composite:intersect;
-  -webkit-mask-image:linear-gradient(to right,transparent,#000 3.2em,#000 calc(100% - 3.2em),transparent),
-             linear-gradient(to bottom,transparent,#000 2.4em,#000 calc(100% - 2.4em),transparent);
-  -webkit-mask-composite:source-in}
-body.at-rest .env::before,body[data-optics="read"] .env::before{opacity:1}
-body[data-optics="world"] .env::before{opacity:.18}
-/* While the reader moves, the membrane background remains authoritative but
-   its expensive live blur is unnecessary. Rest restores the density-conditioned
-   optics; the flip phase still carries its full absorptive ground. */
-body:not(.at-rest) .env::before{backdrop-filter:none;-webkit-backdrop-filter:none}
-/* the flip membrane is a reading GROUND, not attenuation — it holds at full strength
-   in every optics mode and during motion; CL-06's model depends on it */
-body[data-phase="flip"] .env::before{opacity:1}
-
-/* Panels undergo a material phase change; the flip membrane also grounds envelopes.
-   ONE list for all three phases. Previously the flip list carried .chrome, .strip
-   and .optics button but the depth and core lists did not, so those surfaces
-   reverted to their paper backgrounds while the ink stayed light — measured in
-   Chrome at 2.99:1 on the optics control at d=2.10. .core .lbl was in no list at
-   all and read 1.36:1 through the entire flip band. Any surface that carries
-   reading text must change phase with the ink; if you add one, add it here. */
-.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl{transition:background .35s ease,color .25s ease}
-.core .lbl{padding:3px 2px}
-body[data-phase="flip"] .env::before{background:rgba(16,22,31,.82)}
-/* READ optics: the envelope stops negotiating with the world. A solid lane whose
-   color IS the modeled reading ground — --bg (bgRgbAt) in surface/depth/core, the
-   .82 membrane over --bg in flip — so the ground CL-06 measures is the ground shown. */
-body[data-optics="read"] .env::before{inset:-1em -1.4em;mask-image:none;-webkit-mask-image:none;
-  backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--bg)}
-body[data-optics="read"][data-phase="flip"] .env::before{background:color-mix(in srgb,rgb(16,22,31) 82%,var(--bg))}
-/* Materials follow the INK, not the depth name. flip is a light-ink phase on the
-   brightening field: the absorptive membrane (READING.MEMBRANE). depth and core are
-   the dark-ink phases on paper: the paper end's own tones — PANELS[3] and the floor
-   ground — at the opacities the record needs against the densest plate. Turning the
-   ladder over moved the ink under these rules while they kept their depth names, and
-   the chrome printed dark ink on dark panels at the floor; test-motion A8 composites
-   each material over its phase's ambient and holds its ink to AA at the 66% floor. */
-body[data-phase="flip"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(16,22,31,.82)}
-body[data-phase="depth"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(255,255,255,.72)}
-body[data-phase="core"] :is(.glass,.rl-head,.rl-body,.chrome,.strip,.optics button,.core .lbl){background:rgba(236,240,244,.93)}
-
-/* secondary text does not dim merely for being secondary: on the dark phases the
-   low-alpha greys tuned for paper get swallowed — lift the mixes under light ink.
-
-   Ink floor: 66%. No text carries less, because 66% is what reads 4.5:1 against
-   the ambient at the switch depth (READING.SW_DOWN) — the derivation is in
-   js/substrate.js and CL-06c re-checks it live. The five
-   quietest layers the paper phase used to distinguish (45 · 48 · 55 · 58 · 62%)
-   now share that floor; they stay distinct through size, tracking and weight —
-   7.5–10.5px tracked mono against 14–15.5px body — rather than through a tonal
-   difference no low-vision reader could resolve. Only genuinely decorative
-   glyphs sit below it: td.na em-dashes (28%) and the .r-arrow / .ep-arrow
-   connectors (40%), WCAG-exempt as incidental content. */
-body[data-ink="light"] .zone-label{color:color-mix(in srgb,var(--ink) 86%,transparent)}
-body[data-ink="light"] .dek,body[data-ink="light"] .def .d-body,body[data-ink="light"] td{color:color-mix(in srgb,var(--ink) 88%,transparent)}
-body[data-ink="light"] .bi-cap,body[data-ink="light"] .path p,body[data-ink="light"] .meth .v,body[data-ink="light"] .rl-log{color:color-mix(in srgb,var(--ink) 86%,transparent)}
-body[data-ink="light"] .bi-stats,body[data-ink="light"] .i-btn{color:color-mix(in srgb,var(--ink) 85%,transparent)}
-body[data-ink="light"] .bi-log,body[data-ink="light"] .colophon-notes p{color:color-mix(in srgb,var(--ink) 80%,transparent)}
-body[data-ink="light"] .sys .facts,body[data-ink="light"] .rl-note,
-body[data-ink="light"] .m-evidence{color:color-mix(in srgb,var(--ink) 78%,transparent)}
-body[data-ink="light"] .sealed-fields,body[data-ink="light"] .b-sub,body[data-ink="light"] .ep{color:color-mix(in srgb,var(--ink) 76%,transparent)}
-body[data-ink="light"] .depth-line,body[data-ink="light"] .p-label,body[data-ink="light"] .p-note,
-body[data-ink="light"] .manifest .m-k,body[data-ink="light"] footer{color:color-mix(in srgb,var(--ink) 74%,transparent)}
-body[data-ink="light"] .locked-note,body[data-ink="light"] .legend,body[data-ink="light"] th,
-body[data-ink="light"] .meth .k,body[data-ink="light"] .m-title,body[data-ink="light"] .ep-title,
-body[data-ink="light"] .ep-note,body[data-ink="light"] .s-id,body[data-ink="light"] .cause .c-k{color:color-mix(in srgb,var(--ink) 72%,transparent)}
-body[data-ink="light"] .strip{color:color-mix(in srgb,var(--ink) 82%,transparent)}
-
-/* type weight is an optical instrument: heavier where the field is hardest, settling at rest */
-body[data-phase="surface"]{--hw:280}
-body[data-phase="flip"]{--hw:350}
-body[data-phase="depth"]{--hw:330}
-body[data-phase="core"]{--hw:310}
-.sec-h{font-weight:var(--hw,300);transition:font-weight .3s ease,color .25s ease}
-body.at-rest .sec-h{font-weight:calc(var(--hw,300) + 30)}
-.law{transition:font-weight .35s ease,color .25s ease}
-body.at-rest .law{font-weight:350}   /* the law settles as the reader arrives */
-
-/* the negative-space atlas: strata read from their plate's quiet third */
-@media(min-width:1100px){
-  .corridor-l{margin-left:max(28px,4vw);margin-right:auto;max-width:980px}
-  .corridor-r{margin-left:auto;margin-right:max(28px,4vw);max-width:980px}
-}
-
-/* reader-governed optics — the artifact does not force its aesthetic priority */
-.optics{position:fixed;right:10px;bottom:52px;z-index:25;display:flex;font-family:var(--mono)}
-.optics button{font-size:9.5px;letter-spacing:.1em;padding:6px 9px;color:color-mix(in srgb,var(--ink) 66%,transparent);
-  background:color-mix(in srgb,var(--bg) 55%,transparent);backdrop-filter:blur(10px);border:1px solid var(--hair)}
-.optics button+button{border-left:none}
-.optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
-/* Depth zero is the instrument's own state: the object, the statement, and the
-   readout that describes them. The minimap, the reader ledger and the optics
-   control all report on the RECORD, and the record has not been entered yet —
-   they arrive with it. They are not display:none: they must stay focusable in
-   document order, so the withdrawal is opacity and hit-testing only, and any
-   focus inside one restores it immediately. */
-body.at-surface :is(.core,.rledger,.optics){opacity:0;pointer-events:none}
-body.at-surface :is(.core,.rledger,.optics):focus-within{opacity:1;pointer-events:auto}
-/* the map arrives with the fork: while one is being formed it is the preview of the
-   requested orbit, at any depth, and the reticle — the camera's place in the PRIOR
-   world — is withdrawn until the new world's terminal state installs a camera */
-body.forking .core{opacity:1}
-body.forking #coreRect{visibility:hidden}
-:is(.core,.rledger,.optics){transition:opacity .45s ease}
-@media(max-width:900px){.optics{right:12px;bottom:104px}}
-
-/* ≤640 — the instrument chrome resolves to exactly TWO fixed surfaces: the top
-   gauge and this strip (UI-004). site.js docks #optics and the reader ledger
-   into the strip; the ledger body opens UPWARD from it as an absolutely
-   anchored sheet — ≤40vh, square, scrollable, no scrim, the page stays live
-   behind it. Every docked control keeps a ≥44px hit target through padding
-   (17px + the 8.5–9px mono line + 17px), never through font-size. */
-@media(max-width:640px){
-  .env::before{backdrop-filter:blur(calc(var(--envK,.7)*8px)) saturate(calc(1 - var(--envK,.7)*.45))}
-  .strip{gap:0 12px;font-size:8.5px;padding:4px 12px 0}
-  #forkStatus{display:none}
-  .strip button{padding:17px 4px}
-  .strip .rledger{position:static;width:auto}
-  .strip .rl-head{width:auto;background:none;border:none;border-bottom:1px solid var(--hair);
-    padding:17px 4px;font-size:8.5px;letter-spacing:.1em}
-  .strip .rl-long{display:none}
-  .strip .rl-body{position:absolute;left:0;right:0;bottom:100%;max-height:40vh;overflow-y:auto;
-    border:none;border-top:1px solid color-mix(in srgb,var(--ink) 18%,transparent)}
-  .strip .optics{position:static;display:flex}
-  .strip .optics button{padding:17px 6px;background:none;border:none;border-bottom:1px solid var(--hair)}
-  .strip .optics button[aria-pressed="true"]{color:var(--ink);font-weight:600;box-shadow:inset 0 -2px 0 var(--ink)}
-  /* The strip can wrap to three rows. Its measured height is written by site.js;
-     terminal content must clear the actual surface, never a guessed breakpoint. */
-  footer{padding-bottom:calc(var(--stripH,142px) + 16px)}
-}
-
-/* ════════════ responsive ════════════ */
+/* ── phone: the sheet flows ─────────────────────────────────────────────── */
 @media(max-width:900px){
-  /* The core-sample map is fixed in the right gutter and PRODUCTION_PLAN §4.3 keeps
-     it at every width ("core-sample map stays, 56px, right:6px"). Below 900px the
-     reading column reaches the viewport edge and body text runs underneath it —
-     observed at 390px, where the map covered ~38px of every line it passed. The
-     column yields the gutter; the instrument does not move. 74px = 6 right + 56
-     wide + 12 clear. */
-  section{padding:12vh 74px 12vh 20px}
-  .hero{padding:14vh 74px 12vh 20px}
-  .sys-grid{grid-template-columns:1fr}
-  .clearance-grid{grid-template-columns:1fr}
-  .chrome{padding:12px 16px}
-  th.t2,td.t2{display:none}
-  .rledger{left:12px;right:12px;bottom:60px;width:auto}
+  html{scroll-snap-type:none}
+  .sheet{height:auto;min-height:0}
+  .zx,.zy{display:none}
+  .frame{position:relative;inset:auto;margin:12px}
+  .content{position:relative;padding:22px 16px 0}
+  .two,.two.narrow,.three{grid-template-columns:1fr;height:auto;gap:28px}
+  .tb{position:static;height:auto;flex-wrap:wrap;border-left:none;margin-top:22px}
+  .tb .c{flex:1 1 40%;border-bottom:1px solid var(--rule)}
+  .notes{position:static;width:auto;height:auto;border-right:none}
+  .flow{height:auto;position:static}.box{position:static;margin-bottom:10px}
+  .section{position:static;height:auto;grid-template-columns:1fr}.wall{height:64px;border:none;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+  .wall span{transform:translate(-50%,-50%)}
+  .paths,.cells,.spec{grid-template-columns:1fr}
+  .sheet.tall .frame{margin:12px}
+  .tr{grid-template-columns:1fr 64px 64px 64px;font-size:10.5px}
 }
 </style>
 </head>
 <body>
 
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
-<!-- four plate-developed exposures of one derived object -->
-<div id="world" aria-hidden="true">
-<div id="poster"></div>
-<canvas class="tile" id="t0"></canvas>
-<canvas class="tile" id="t1"></canvas>
-<canvas class="tile" id="t2"></canvas>
-<canvas class="tile" id="t3"></canvas>
-</div>
-<div id="substrate" aria-hidden="true"></div>
-
-<header class="chrome">
-  <span class="wordmark">CYTHERAI</span>
-  <span class="gauge" id="gauge">OBS <b>FAR-FIELD</b> · ×1.30<br>DEPTH 00% · CLAIM · PUBLIC SURFACE</span>
-</header>
-
-<!-- the measurement map is an observation control: a point in the form names the
-     depth whose camera comes nearest it (CytherSubstrate.depthFor), and the keyboard
-     walks the descent. It drives document scroll — the one camera authority. -->
-<div class="core" id="core" role="slider" tabindex="0" aria-label="Choose observation depth" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0% · CLAIM · PUBLIC SURFACE">
-  <div class="core-wrap"><canvas id="coreMap"></canvas><i id="coreRect"></i></div>
-  <div class="lbl">POSITION<br>IN FORM</div>
-</div>
-
-<aside class="rledger" aria-label="Reader ledger — recorded locally, transmitted only by your explicit act">
-  <button class="rl-head" id="rlHead" aria-expanded="false"><span class="rl-long">READER </span>LEDGER · <span id="rlCount">0</span><span class="rl-long"> ACTS · <span id="rlDigest">00000000</span></span></button>
-  <div class="rl-body" id="rlBody" hidden>
-    <div class="rl-note">Your reading, recorded — locally, for this session, in full view. Owner-clearable: CLEAR LEDGER erases it. Nothing is transmitted. This is a self-report: it attests your reading to you, not to anyone else. Path 2 attaches it only when you send it.</div>
-    <div class="rl-log" id="rlLog"></div>
-    <div class="rl-actions">
-      <button class="i-btn" id="rlVerify">VERIFY CANONICAL CHECKSUM</button>
-      <button class="i-btn" id="rlClear">CLEAR LEDGER</button>
-    </div>
-  </div>
-</aside>
-
-<main id="main-content">
-
-  <!-- ════════════ the claim ════════════ -->
-  <section class="hero" id="surface" aria-label="Surface — the claim">
-    <div class="eyebrow">SOVEREIGN OPERATIONAL AI</div>
-    <h1 class="thesis" id="thesis">Built for environments where failure has consequence.</h1>
-    <p class="dek">Evaluation-first AI systems, built to run where they are deployed — on-prem, air-gapped, log-verified. This page makes no external request. The object in this frame is the canonical mark itself, accumulating live from the public manifest — not a picture of it.</p>
-    <div class="decomp">THE DESCENT — <b>CLAIM</b> → DEFINITION → ARCHITECTURE → MEASUREMENT → CONTROLLED → ACCESS → FLOOR</div>
-    <div class="ctas">
-      <a class="btn btn-primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a Conversation</a>
-      <a class="btn" href="#definition">Begin the Descent</a>
-    </div>
-    <div class="coords">24°41′N 46°43′E · UTC+3 · RIYADH, KSA</div>
-  </section>
-
-  <!-- ════════════ definition ════════════ -->
-  <section id="definition" aria-label="Definition">
-    <div class="env">
-    <div class="zone-label">STRATUM 01 · DEFINITION · MODE <b>EXPLORE</b> · AUTHORITY PUBLIC</div>
-    <h2 class="sec-h">At the surface, failure is one word. It is not one thing.</h2>
-    </div>
-    <div class="defs env">
-      <div class="def"><span class="d-mode">INVALID OUTPUT</span><span class="d-body">Output that violates the constraints of its target domain — geometry, schema, or policy.</span></div>
-      <div class="def"><span class="d-mode">UNAUTHORIZED ACTION</span><span class="d-body">An action taken without a deciding rule that admits it.</span></div>
-      <div class="def"><span class="d-mode">UNTRACEABLE DECISION</span><span class="d-body">An output whose causal path cannot be reproduced from records.</span></div>
-      <div class="def"><span class="d-mode">EXTERNAL DEPENDENCY</span><span class="d-body">Correctness contingent on infrastructure outside the deployment boundary.</span></div>
-      <div class="def"><span class="d-mode">STALE STATE</span><span class="d-body">A decision made against a state of the world that no longer holds.</span></div>
-    </div>
-  </section>
-
-  <!-- ════════════ architecture ════════════ -->
-  <section id="architecture" aria-label="Architecture">
-    <div class="env">
-    <div class="zone-label">STRATUM 02 · ARCHITECTURE · MODE <b>INSPECT</b> · SYSTEMS <span data-m="count:systems_indexed">06</span> INDEXED · <span data-m="count:systems_disclosed">02</span> DISCLOSED</div>
-    <h2 class="sec-h">Each failure mode acquires a governing mechanism.</h2>
-    </div>
-
-    <div class="ladder env">
-      <div class="rung"><span class="r-mode">INVALID OUTPUT</span><span class="r-arrow">→</span><span class="r-mech">CONSTRAINED GENERATION</span><span class="r-impl disclosed">CYTHERCAD · DISCLOSED</span></div>
-      <div class="rung"><span class="r-mode">UNAUTHORIZED ACTION</span><span class="r-arrow">→</span><span class="r-mech">DETERMINISTIC ADMISSION</span><span class="r-impl controlled">INDEXED · ENTRY 005 · NOT DISCLOSED</span></div>
-      <div class="rung"><span class="r-mode">UNTRACEABLE DECISION</span><span class="r-arrow">→</span><span class="r-mech">EXECUTION RECEIPT</span><span class="r-impl controlled">INDEXED · ENTRY 004 · NOT DISCLOSED</span></div>
-      <div class="rung"><span class="r-mode">EXTERNAL DEPENDENCY</span><span class="r-arrow">→</span><span class="r-mech">LOCAL RUNTIME BOUNDARY</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
-      <div class="rung"><span class="r-mode">STALE STATE</span><span class="r-arrow">→</span><span class="r-mech">EXPLICIT FRESHNESS STATE</span><span class="r-impl disclosed">SIJILOS · DISCLOSED</span></div>
-    </div>
-
-    <div class="sys-grid">
-      <div class="sys glass">
-        <span class="s-id">CAD-2024-001 · TECHNICAL VALIDATION</span>
-        <h3 data-wave>CytherCAD — Controlled Generative CAD</h3>
-        <div class="facts">Production-validated · Log + external benchmark · On-prem · Private</div>
-        <span class="o-label">KEY OUTCOME</span>
-        <span class="o-val" data-m="outcome:cad">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span>
+<!-- ═══════════ SHEET 1 — THE STATEMENT ═══════════ -->
+<section class="sheet" data-title="THE STATEMENT" data-notes="1. Every value on this drawing set sits beside its condition and its source.|2. ● log-verified &nbsp;◌ externally validated &nbsp;— not disclosed.|3. The border of each sheet is the deployment boundary. Nothing drawn crosses it." aria-label="Sheet 1 — the statement">
+  <div class="frame"><div class="content">
+    <div class="two">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 1 · THE STATEMENT</div>
+        <h1>AI systems that run entirely inside your walls.</h1>
+        <p class="lede">On-premises, air-gapped, log-verified — for work where a wrong output has consequences. Nothing is emitted that has not been verified. This sheet is drawing one, live, now.</p>
+        <div class="btns">
+          <a class="btn primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">REQUEST A CONVERSATION</a>
+          <a class="btn" href="#s2">NEXT SHEET ↓</a>
+        </div>
+        <div class="callout">
+          <div class="balloon">1</div>
+          <div class="col" style="gap:4px">
+            <div class="big"><span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span></div>
+            <div style="font-size:15px;font-weight:500">invalid outputs — CytherCAD on Text2CAD-192</div>
+            <div class="cond">DeepCAD <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> · T2CAD <span data-m="validation:T2C192-IR-0.00:t2cad">0.93%</span> · external benchmark, published, not operated by CytherAI · log-verified evaluation, April 2026</div>
+          </div>
+        </div>
       </div>
-      <div class="sys glass">
-        <span class="s-id">SIJ-2025-001 · DEPLOYMENT OPERATIONAL</span>
-        <h3 data-wave>SijilOS — Event-Sourced Ledger Engine</h3>
-        <div class="facts">ZATCA Phase 1 · Kingdom of Saudi Arabia · Certified compliant, April 2025 · Live beta · 2 production environments</div>
-        <span class="o-label">KEY OUTCOME</span>
-        <span class="o-val">Zero core cloud dependency · Full offline operation</span>
+      <div class="figwrap">
+        <noscript><div class="fig" style="align-self:stretch"><div>THIS SET IS DRAWN LIVE FROM ITS MANIFEST. WITH SCRIPTS OFF THE SHEETS STAND AS WRITTEN; FIG. 1, THE TITLE BLOCKS, THE REVISIONS AND THE CLAIMS ARE NOT DRAWN.</div></div></noscript>
+        <div class="fig" style="align-self:stretch"><div>FIG. 1 — CONSTRAINED GENERATION · <b id="figState">LIVE</b></div><div>SEED 02 · 1,500 PROPOSALS</div></div>
+        <div class="figbox">
+          <svg id="fig1" viewBox="0 0 560 560" aria-label="Figure 1 — a rectilinear profile being generated under constraint; refused proposals are struck, admitted strokes are inked"></svg>
+          <button id="handle" class="handle" hidden aria-label="Adjustable edge of the admitted drawing"></button>
+        </div>
+        <div class="counters">
+          <div id="ctr">PROPOSED 0 · REFUSED 0 · DISCARDED 0 · <b>ADMITTED 0</b> · INVALID EMITTED <b>0</b></div>
+          <div class="acts"><button id="runAgain">RUN AGAIN</button><button id="audit">AUDIT 10,000</button></div>
+        </div>
+        <div class="figlog" id="figlog">A hostile proposer streams tokens at the boundary; each proposal appears where it was judged, its refusal marked at the offending relation; an independent kernel re-verifies every closed profile before it is drawn in ink. Same seed, same drawing, on every machine.</div>
+        <div class="proposal" id="proposal" hidden>
+          <div class="receipt m" id="receipt"></div>
+          <div class="acts"><button id="accept" disabled>ACCEPT CHANGE</button><button id="resetEdge" disabled>RESET</button></div>
+        </div>
       </div>
     </div>
+  </div></div>
+</section>
 
-    <div class="cause env" aria-label="Causality termination">
-      <span class="c-k">MODEL</span><span class="c-v">LOCAL</span>
-      <span class="c-k">POLICY</span><span class="c-v">LOCAL</span>
-      <span class="c-k">STATE</span><span class="c-v">LOCAL</span>
-      <span class="c-k">VERIFICATION</span><span class="c-v">LOCAL</span>
-      <span class="c-k">RECORD</span><span class="c-v">LOCAL</span>
-      <span class="c-k">REQUIRED CLOUD</span><span class="c-v none">NONE</span>
-    </div>
-
-    <div class="bi glass" id="bi" aria-label="Boundary instrument — live constrained generation">
-      <div class="bi-head">BOUNDARY INSTRUMENT · <b>LIVE</b> · SEED 01 · DETERMINISTIC</div>
-      <p class="bi-cap">A deliberately hostile proposer streams arbitrary tokens at the constraint boundary — junk symbols, wrong axis, out-of-range arguments, premature closure. The boundary admits token by token; an independent kernel re-verifies every program before emission. Nothing inadmissible is ever emitted: validity is a property of the boundary, not the proposer. Same seed, same stream, same admissions — on every machine.</p>
-      <div class="bi-row">
-        <canvas id="biCanvas" aria-label="Latest admitted profile"></canvas>
-        <div class="bi-log" id="biLog">— proposer idle —</div>
+<!-- ═══════════ SHEET 2 — THE SYSTEM ═══════════ -->
+<section class="sheet" id="s2" data-title="THE SYSTEM · CYTHERCAD" data-notes="1. The grammar in FIG. 1 is a toy; the mechanism in FIG. 2 is the one in production.|2. Same seed ⇒ same admissions on every machine (AUDIT runs 10,000 proposals on request)." aria-label="Sheet 2 — the system">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 2 · THE SYSTEM</div>
+        <h2>Validity is a property of the boundary, not of the model.</h2>
+        <p class="body"><strong>CytherCAD</strong> generates CAD from text. The model only proposes. A boundary admits or refuses every token against the grammar and then the geometry; an independent kernel re-verifies the finished program. What cannot pass never becomes an output — it is refused at the boundary, not filtered afterwards.</p>
+        <p class="body">A second system is indexed and sealed: a zero-dependency neural theorem prover, reference NTP-2025-001. Its contents open under NDA.</p>
+        <div class="k" style="font-size:10px;letter-spacing:.14em"><span id="sysId">—</span> · DISCLOSED · PRODUCTION-VALIDATED · <span id="patent">—</span></div>
+        <div class="obj" data-obj="system"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">THE OBJECT FROM SHEET 1 · ITS CONSTRUCTION</span><br><span class="body"></span></div></div>
       </div>
-      <div class="bi-stats" id="biStats">PROPOSED 0 · REJECTED 0 · DISCARDED 0 · <b>ADMITTED 0</b> · INVALID EMITTED 0</div>
-      <div class="i-actions">
-        <button class="i-btn" id="biRun">RUN PROPOSER</button>
-        <button class="i-btn" id="biAudit">AUDIT 10,000 PROPOSALS</button>
-        <span class="copied" id="biReceipt"></span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════ measurement ════════════ -->
-  <section id="measurement" aria-label="Measurement">
-    <div class="env">
-    <div class="zone-label">STRATUM 03 · MEASUREMENT · MODE <b>VERIFY</b> · CYTHERCAD v1.1 · TEXT2CAD-192</div>
-    <h2 class="sec-h">Numbers with their conditions attached.</h2>
-    </div>
-
-    <div class="val-panel glass">
-      <div class="legend">
-        <span><span class="lv">●</span> LOG-VERIFIED</span>
-        <span>◌ EXT-VALIDATED</span>
-        <span>— NOT DISCLOSED</span>
-      </div>
-      <table>
-        <thead>
-          <tr><th>METRIC</th><th class="cy">CYTHER</th><th>DEEPCAD</th><th class="t2">T2CAD<a class="fnref" id="fnref-t2cad" href="#fn-t2cad" aria-label="Footnote: Text2CAD-192 source">†</a></th></tr>
-        </thead>
-        <!-- every figure is a projection of CytherManifest.VALIDATION (data-m): written
-             by tools/project-manifest.py, read back by CL-02. The em-dashes are the
-             legend's NOT DISCLOSED, not values. -->
-        <tbody>
-          <tr><td><span class="mk ext">◌</span><span data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</span></td><td class="cy" data-m="validation:T2C192-IR-0.00:cyther">0.00%</td><td data-m="validation:T2C192-IR-0.00:deepcad">10.00%</td><td class="t2" data-m="validation:T2C192-IR-0.00:t2cad">0.93%</td></tr>
-          <tr><td><span class="mk">●</span><span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span></td><td class="cy" data-m="validation:GVR-BEAM-100:cyther">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span><span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span></td><td class="cy" data-m="validation:GVR-COMP-100:cyther">100%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span><span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span></td><td class="cy" data-m="validation:DIM3-99:cyther">99%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span><span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span></td><td class="cy" data-m="validation:DIM5-97:cyther">97%</td><td class="na">—</td><td class="na t2">—</td></tr>
-          <tr><td><span class="mk">●</span><span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span></td><td class="cy" data-m="validation:MOP-91:cyther">91%</td><td class="na">—</td><td class="na t2">—</td></tr>
-        </tbody>
-      </table>
-      <div class="meth">
-        <span class="k">METHODOLOGY</span><span class="v">Autoregressive generation · constrained decoding · kernel-backed geometric verification</span>
-        <span class="k">TEST ENVIRONMENT</span><span class="v">Air-gapped · No external calls · Apple Silicon M4 · Local inference only</span>
-        <span class="k">BENCHMARK SOURCE</span><span class="v">Text2CAD-192 · External · Published · Not operated by CytherAI</span>
-        <span class="k">EVALUATED BY</span><span class="v">CytherAI internal evaluation · April 2026 · Log-verified</span>
-        <span class="k">CONTROLLED RECORDS</span><span class="v"><span data-m="count:controlled_references">03</span> · structure indexed · values sealed</span>
-      </div>
-      <div class="footnote">
-        <span class="dagger" id="fn-t2cad">† Text2CAD-192 (T2CAD): 0.93% invalid rate. <a class="fnback" href="#fnref-t2cad" aria-label="Back to the table">↩</a></span>
-        <p class="note">External benchmark; evaluation not conducted or curated by CytherAI.</p>
+      <div class="col" style="gap:14px">
+        <div class="fig"><div>FIG. 2 — SECTION A–A THROUGH THE BOUNDARY</div></div>
+        <div class="flow">
+          <div class="box" style="left:0;top:20px;width:176px;height:122px"><div class="k">PROPOSER</div><div>Autoregressive model. Proposes tokens; holds no authority.</div></div>
+          <div class="box" style="left:232px;top:0;width:214px;height:162px"><div class="k">BOUNDARY · GRAMMAR, THEN GEOMETRY</div><div>Admits or refuses each token: grammar, axis order, argument range, bounds, self-intersection, closure.</div></div>
+          <div class="box" style="left:502px;top:20px;width:176px;height:122px"><div class="k">KERNEL · INDEPENDENT</div><div>Rebuilds the whole program and re-verifies it. A second opinion, every time.</div></div>
+          <div class="box dark" style="left:734px;top:20px;width:126px;height:122px"><div class="k">EMITTED</div><div>Geometry. Only this leaves the system.</div></div>
+          <div class="box dash" style="left:232px;top:232px;width:214px;height:88px"><div class="k">REFUSED</div><div id="refusedBox">Returned to the proposer.</div></div>
+          <svg style="position:absolute;left:0;top:0;overflow:visible;pointer-events:none" width="1" height="1">
+            <g stroke="#101620" stroke-width=".9" fill="#101620" font-family="'SF Mono',Menlo,monospace" font-size="8.5">
+              <line x1="176" y1="81" x2="232" y2="81"></line><polygon points="232,81 225,77.5 225,84.5"></polygon><text x="204" y="72" text-anchor="middle" stroke="none" fill="#586376">TOKEN</text>
+              <line x1="446" y1="81" x2="502" y2="81"></line><polygon points="502,81 495,77.5 495,84.5"></polygon><text x="474" y="72" text-anchor="middle" stroke="none" fill="#586376">ADMITTED</text>
+              <line x1="678" y1="81" x2="734" y2="81"></line><polygon points="734,81 727,77.5 727,84.5"></polygon><text x="706" y="72" text-anchor="middle" stroke="none" fill="#586376">VERIFIED</text>
+              <line x1="339" y1="162" x2="339" y2="232" stroke-dasharray="4 3"></line><polygon points="339,232 335.5,225 342.5,225"></polygon>
+            </g>
+          </svg>
+        </div>
+        <div class="fig"><div>FIG. 2b — REFUSALS BY CLASS · <span id="barsHead">SEED 02 · 1,500 PROPOSALS</span></div></div>
+        <div class="bars" id="bars"></div>
+        <div class="hair m" style="padding-top:10px;font-size:10px;line-height:1.8;color:var(--mid)"><span class="k" style="font-size:9px">TEST ENVIRONMENT</span><br>Air-gapped · no external calls · Apple Silicon M4 · local inference only · evaluation log-verified, April 2026</div>
       </div>
     </div>
+  </div></div>
+</section>
 
-    <div class="boundary glass" id="boundary">
-      <div class="b-line">PUBLIC RECORD TERMINATES HERE</div>
-      <p class="b-sub">Beyond this line: the existence, reference class, and access conditions of controlled information. Nothing secret is shown by crossing — the index becomes legible, not its contents.</p>
-      <button class="b-hold" id="holdCross"><i id="holdFill"></i><span id="holdLabel">HOLD TO CROSS BOUNDARY</span></button>
-      <div class="b-state" id="bState">BOUNDARY — CLOSED · SCROLLING PAST REMAINS FREE</div>
-    </div>
-  </section>
-
-  <!-- ════════════ controlled ════════════ -->
-  <section class="sealed" id="sealed" aria-label="Controlled stratum">
-    <h2 class="zone-label env">STRATUM 04 · <b>CONTROLLED</b> · MODE REQUEST · AUTHORITY NONE GRANTED</h2>
-    <div class="ghost" aria-hidden="true">Neural Theorem Prover<br>Zero-Dependency NTP</div>
-    <div class="sealed-fields env">
-      CONTENT — <span class="fv">SEALED PENDING ACCESS GRANT</span><br>
-      REFERENCE — <span class="fv">NTP-2025-001 · APPENDIX ENTRY 003</span><br>
-      REQUIREMENT — <span class="fv">VERIFIED CONTEXT · NDA · IDENTITY CONFIRMATION</span>
-    </div>
-    <div class="locked-note env">INDEX NOT OPENED — THE BOUNDARY ABOVE IS CLOSED</div>
-    <div class="depth-line env">Visible only at depth. Legible only across the boundary. Readable only with clearance.</div>
-    <a class="btn btn-primary env" href="mailto:nda@cytherai.com?subject=Clearance%20Request%20NTP-2025-001">Request Clearance</a>
-  </section>
-
-  <!-- ════════════ access ════════════ -->
-  <section id="clearance" aria-label="Access clearance">
-    <div class="env">
-    <div class="zone-label">CLEARANCE · THREE PATHS DEEPER</div>
-    <h2 class="sec-h">Selective about what gets built. Thorough about how it gets built.</h2>
-    </div>
-
-    <div class="clearance-grid">
-      <div class="path glass">
-        <span class="p-label">PATH 1 · OPEN</span>
-        <h3>Public materials</h3>
-        <p>This page and everything visible on the way down. Disclosed without qualification.</p>
-        <div class="p-note">OPEN ACCESS · NO QUALIFICATION</div>
+<!-- ═══════════ SHEET 3 — MEASUREMENT ═══════════ -->
+<section class="sheet" data-title="MEASUREMENT · SCHEDULE 1" data-notes="1. Invalid rate is the share of generated programs the kernel refuses. CytherCAD emits none: refusal happens before emission.|2. † T2CAD figure as published by its authors." aria-label="Sheet 3 — measurement">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 3 · MEASUREMENT</div>
+        <h2>Numbers with their conditions attached.</h2>
+        <p class="body">One external benchmark we did not operate, and <span id="nLog">—</span> measurements from the evaluation log. Sample sizes print beside every figure. Controlled records — <span data-m="count:controlled_references">03</span> — are indexed by structure only; their values are sealed.</p>
+        <div class="kv">
+          <div class="k">METHOD</div><div class="vv">Autoregressive generation · constrained decoding · kernel-backed geometric verification</div>
+          <div class="k">SOURCE</div><div class="vv">Text2CAD-192 · external · published · not operated by CytherAI</div>
+          <div class="k">EVALUATED BY</div><div class="vv">CytherAI internal evaluation · April 2026 · log-verified</div>
+          <div class="k">CONTROLLED</div><div class="vv"><span data-m="count:controlled_references">03</span> · structure indexed · values sealed</div>
+        </div>
       </div>
-      <div class="path glass path-featured">
-        <span class="p-label">PATH 2 · QUALIFIED</span>
-        <h3>Capability review</h3>
-        <p>Full validation records, the controlled strata, and a working session with the systems — under NDA and identity confirmation.</p>
-        <div class="p-note" id="featNote">NDA · IDENTITY CONFIRMATION</div>
-        <a class="btn btn-primary" id="featCta" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA Briefing</a>
-      </div>
-      <div class="path glass">
-        <span class="p-label">PATH 3 · CONTROLLED</span>
-        <h3>Technical diligence</h3>
-        <p>Architecture, logs, and evaluation harnesses opened for inspection inside a controlled review window.</p>
-        <div class="p-note">SCOPED WINDOW · SUPERVISED</div>
-        <a class="btn" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request Diligence Window</a>
+      <div class="col" style="gap:14px">
+        <div class="fig"><div>SCHEDULE 1 — VALIDATION · CYTHERCAD v1.1 · <b>PROJECTED FROM THE MANIFEST</b></div></div>
+        <!-- the rows below are written by tools/project-manifest.py from CytherManifest.VALIDATION, never by hand -->
+        <div class="sched">
+          <div class="tr h"><div>METRIC</div><div class="cy">CYTHER</div><div>DEEPCAD</div><div>T2CAD</div></div>
+          <div class="tr"><div>◌ <span data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</span></div><div class="cy" data-m="validation:T2C192-IR-0.00:cyther">0.00%</div><div class="" data-m="validation:T2C192-IR-0.00:deepcad">10.00%</div><div class="" data-m="validation:T2C192-IR-0.00:t2cad">0.93%</div></div>
+          <div class="tr"><div>● <span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span></div><div class="cy" data-m="validation:GVR-BEAM-100:cyther">100%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span></div><div class="cy" data-m="validation:GVR-COMP-100:cyther">100%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span></div><div class="cy" data-m="validation:DIM3-99:cyther">99%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span></div><div class="cy" data-m="validation:DIM5-97:cyther">97%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span></div><div class="cy" data-m="validation:MOP-91:cyther">91%</div><div class="na">—</div><div class="na">—</div></div>
+        </div>
+        <div class="m" style="font-size:9.5px;line-height:1.7;color:var(--quiet)">◌ external benchmark · ● log-verified · — not disclosed. Every figure here is a projection of the public manifest (CytherManifest.VALIDATION) and CL-02 reads it back.</div>
+        <div class="obj" data-obj="measure"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">FIG. 3a — THE OBJECT, MEASURED · THIS BROWSER'S DEMONSTRATION, NOT AN EVALUATION FIGURE</span><br><span class="body"></span></div></div>
       </div>
     </div>
-  </section>
+  </div></div>
+</section>
 
-  <!-- ════════════ the floor ════════════ -->
-  <section id="floor" aria-label="The floor — governing law and public record">
-    <div class="env">
-    <h2 class="zone-label">FLOOR · THE GOVERNING LAW · MODE <b>AUDIT</b></h2>
-    <div class="law">The surface states.<br>Depth conditions.<br>Records substantiate.<br>Boundaries govern.<br>The reader is a record.<br>Nothing is stated that is not checked.</div>
-    </div>
-
-    <div class="epochs env" aria-label="Epochal record — superseded disclosure states">
-      <div class="ep-title">EPOCHAL RECORD — SUPERSEDED, NEVER ERASED</div>
-      <div class="ep-row" id="epochRow"></div>
-      <div class="ep-note">Each prior mark remains derivable from its manifest. The record supersedes; it does not delete. Identity is the chain, not the tip. A commitment's precedence is provable only against an external anchor — repository history, a transparency log. The page renders the commitment; it does not notarize it.</div>
-    </div>
-
-    <div class="manifest claims" aria-label="Standing claims — predicates the page executes">
-      <div class="m-title">STANDING CLAIMS — PREDICATES THE PAGE EXECUTES AGAINST ITSELF</div>
-      <div id="claimRows"></div>
-      <div class="i-actions">
-        <button class="i-btn" id="claimsRecompute">RECOMPUTE ALL</button>
-        <span class="copied" id="claimsStamp"></span>
+<!-- ═══════════ SHEET 4 — WHAT RUNS WHERE ═══════════ -->
+<section class="sheet" data-title="WHAT RUNS WHERE · WALL SECTION" data-notes="1. Hatching denotes the deployment boundary as installed by the customer; CytherAI holds no key to it.|2. Verification runs inside the wall — a claim the customer can check, not one they must trust." aria-label="Sheet 4 — what runs where">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 4 · WHAT RUNS WHERE</div>
+        <h2>Nothing leaves the deployment boundary.</h2>
+        <p class="body">Model, policy, state, verification and the record execute on your hardware. Correctness does not depend on a service you do not control — including ours. Air-gapped means the wall has no door.</p>
+        <p class="body">This page is built the same way. It loads no font, no script and no image from anywhere but itself, and it reports the resource requests this browser observed.</p>
+        <div class="livebox"><span class="k" style="font-size:9px">CL-01 · RESOURCE REQUESTS THIS BROWSER OBSERVED</span><br>EXTERNAL REQUESTS <b id="ext">—</b> · <span id="extState" class="acc" style="color:var(--accent)">CHECKING</span></div>
+      </div>
+      <div style="position:relative;height:100%">
+        <div class="fig"><div>FIG. 3 — WALL SECTION · SCALE NONE</div></div>
+        <div class="section">
+          <div class="inside">
+            <div class="k" style="font-size:9px">INSIDE — YOUR PREMISES · CEILING AND FLOOR ARE YOURS</div>
+            <div class="cells">
+              <div class="cell"><div class="k">MODEL</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">POLICY</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">STATE</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">VERIFICATION</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">RECORD</div><div class="val">LOCAL</div></div>
+              <div class="cell dash"><div class="k">CONTROLLED RECORDS</div><div class="val"><span data-m="count:controlled_references">03</span> · SEALED</div></div>
+            </div>
+            <div class="obj" data-obj="wall"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">THE OBJECT AND ITS VERIFICATION · INSIDE THE WALL</span><br><span class="body"></span></div></div>
+          </div>
+          <div class="wall"><span>THE WALL · NO DOOR</span></div>
+          <div class="outside">
+            <div class="k" style="font-size:9px">OUTSIDE — THE NETWORK</div>
+            <div class="cell dark"><div class="k">REQUIRED CLOUD</div><div class="val">NONE</div></div>
+            <div class="m" style="font-size:10px;line-height:1.7;color:var(--quiet)">No telemetry, no licence check, no model call. What is outside cannot affect what is decided inside.</div>
+          </div>
+        </div>
       </div>
     </div>
+  </div></div>
+</section>
 
-    <div class="manifest" aria-label="Public manifest">
-      <div class="m-title">PUBLIC MANIFEST — THE STATE THIS PAGE WAS DERIVED FROM</div>
-      <div id="manifestRows"></div>
+<!-- ═══════════ SHEET 5 — ACCESS ═══════════ -->
+<section class="sheet" data-title="ACCESS · THREE PATHS" data-notes="1. nda@cytherai.com for path 2; review@cytherai.com for path 3.|2. Selective about what gets built. Thorough about how it gets built." aria-label="Sheet 5 — access">
+  <div class="frame"><div class="content">
+    <div class="col" style="gap:26px;padding-top:10px">
+      <div class="col" style="gap:16px;max-width:760px">
+        <div class="eyebrow">SHEET 5 · ACCESS</div>
+        <h2>Three paths, each with its conditions stated.</h2>
+      </div>
+      <div class="paths">
+        <div class="path"><div class="k">PATH 1 · OPEN</div><h3>Public materials</h3><p>This drawing set, the brief, and the record — disclosed without qualification.</p><div class="k">OPEN ACCESS · NO QUALIFICATION</div><a class="link" href="pages/brief.html">READ THE BRIEF</a></div>
+        <div class="path featured"><div class="k">PATH 2 · QUALIFIED</div><h3>Capability review</h3><p>Full validation records, the sealed strata, and a working session with CytherCAD — under NDA and identity confirmation.</p><div class="k">NDA · IDENTITY CONFIRMATION</div><a class="btn primary" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">REQUEST NDA BRIEFING</a><div class="obj frag" data-obj="access"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="body"></span></div></div></div>
+        <div class="path"><div class="k">PATH 3 · CONTROLLED</div><h3>Technical diligence</h3><p>Architecture, logs and evaluation harnesses opened for inspection inside a supervised review window.</p><div class="k">SCOPED WINDOW · SUPERVISED</div><a class="link" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">REQUEST DILIGENCE WINDOW</a></div>
+      </div>
     </div>
+  </div></div>
+</section>
 
-    <div class="manifest" aria-label="Development receipt — the terminal states this page developed">
-      <div class="m-title">DEVELOPMENT RECEIPT — THE TERMINAL STATES THIS PAGE DEVELOPED</div>
-      <div id="receiptRows"></div>
-      <div class="ep-note">Each plate's terminal state is named by a checkpoint hash over its deposited field. For one world in one frame there is one development sequence and one terminal state: REDEVELOP replays it, and the next receipt is compared to this one here. A plate that stops at its iteration ceiling instead of its deposit target is printed as a fuse, not as a result.</div>
+<!-- ═══════════ SHEET 6 — THE RECORD ═══════════ -->
+<section class="sheet" data-title="THE RECORD" data-notes="1. The page renders the commitment; it does not notarize it.|2. A receipt for this build cannot be inside this build: verdicts are established outside the artifact." aria-label="Sheet 6 — the record">
+  <div class="frame"><div class="content">
+    <div class="three">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 6 · THE RECORD</div>
+        <h2>This set is drawn from a public manifest, and it checks itself.</h2>
+        <p class="body">Six standing claims of the record (CL) and five predicates of this set (DS) run in your browser against these sheets — an identifier is part of a claim, so a canonical CL number is used only where the predicate is the canonical one. The seal in every title block is not a logo: it is derived from the disclosed state, and it changes when the state does. Each prior state remains derivable — the record supersedes, it does not delete.</p>
+        <div class="sealbox"><canvas class="seal lg" width="120" height="120"></canvas><div class="v">SEAL · DERIVED<br>MARK <span id="serial">…</span><br>NONCE <span id="nonce">—</span> · STATE <span class="acc" id="ck2" data-checksum>—</span></div></div>
+        <div class="obj large" data-obj="record"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">LOCAL RECEIPT — THE OBJECT FROM SHEET 1</span><br><span class="body"></span></div></div>
+        <a class="link" href="#s7">INSPECT THE OBLIGATIONS → sheet 7, what the set itself is obligated to obey</a>
+      </div>
+      <div class="list"><div class="hd">CHECKED BY — STANDING CLAIMS (CL) · DRAWING-SET PREDICATES (DS) · <span id="claimsFooter">CLAIMS —/—</span></div><div id="claimRows"></div><button class="link" id="recompute" style="margin-top:10px">RECOMPUTE ALL</button></div>
+      <div class="col" style="gap:22px">
+        <div class="list"><div class="hd">REVISIONS — EPOCHAL RECORD</div><div id="revs"></div></div>
+        <div class="list"><div class="hd">GENERAL NOTES — NOT CLAIMED, DRAWN BY THE AUTHOR</div><div id="nc"></div></div>
+      </div>
     </div>
+  </div></div>
+</section>
 
-    <div class="manifest" data-provenance aria-label="Provenance — chain of record">
-      <div class="m-title">PROVENANCE — CHAIN OF RECORD</div>
-      <div id="provenanceRows"></div>
+<!-- ═══════════ SHEET 7 — OBLIGATIONS ═══════════ -->
+<section class="sheet tall" id="s7" data-title="OBLIGATIONS · GENERAL NOTES" data-notes="1. This sheet governs the set: it states what the set owes, who may establish it, and the rules every other sheet is drawn under.|2. Verdicts are established outside the artifact. A receipt for this build cannot be inside this build." aria-label="Sheet 7 — obligations and general notes">
+  <div class="frame"><div class="content">
+    <div class="col" style="gap:16px;padding-top:10px;max-width:760px">
+      <div class="eyebrow">SHEET 7 · WHAT THE SET ITSELF IS OBLIGATED TO OBEY</div>
+      <h2>Specification of the set.</h2>
     </div>
-
-    <div class="manifest obligations" aria-label="Obligations — what this page owes, and who may establish it">
-      <div class="m-title">OBLIGATIONS — WHAT THIS PAGE OWES · WHO MAY ESTABLISH IT · NO VERDICT ASSERTED HERE</div>
-      <!-- obligations:begin — 19 obligations projected from vaic/cytherai-obligations.v0.json by tools/project-obligations.py:
+    <div class="spec">
+      <div class="list obls">
+        <div class="hd">OBLIGATIONS — WHAT THIS SET OWES · WHO MAY ESTABLISH IT · <span id="oblCount">—</span> · NO VERDICT ASSERTED HERE</div>
+        <!-- obligations:begin — 19 obligations projected from vaic/cytherai-obligations.v0.json by tools/project-obligations.py:
            build-stable fields only; no receipt, result, digest or build identity is ever written here -->
       <details class="ob"><summary class="m-row"><span class="m-k">CY-SEM-001 · SEMANTIC · MANDATORY</span><span class="m-v anti-v">DERIVED_FROM</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for the current canonical record and rendered homepage: rendered canonical mark and printed state checksum <b>DERIVED_FROM</b> js/manifest.js canonical manifest state</div><div><span class="e-k">WHEN — </span>homepage reaches a settled canonical state</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PURE_RUNTIME_HARNESS · BROWSER_HARNESS · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
       <details class="ob"><summary class="m-row"><span class="m-k">CY-SEM-002 · SEMANTIC · MANDATORY</span><span class="m-v anti-v">REPRODUCIBLE_FROM</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every published epoch in the current manifest: current and superseded published marks <b>REPRODUCIBLE_FROM</b> their published manifests and nonces</div><div><span class="e-k">WHEN — </span>published admissions are verified</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PURE_RUNTIME_HARNESS · BROWSER_HARNESS · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
@@ -863,54 +452,25 @@ body.forking #coreRect{visibility:hidden}
       <details class="ob"><summary class="m-row"><span class="m-k">CY-RES-001 · RESOURCE · MANDATORY</span><span class="m-v anti-v">BOUNDED_BY</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for each declared capability profile: plate realization <b>BOUNDED_BY</b> selected resource profile beta</div><div><span class="e-k">WHEN — </span>plate realization policy is selected</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>STATIC_ANALYZER · PURE_RUNTIME_HARNESS · BROWSER_HARNESS · PERFORMANCE_HARNESS · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
       <details class="ob"><summary class="m-row"><span class="m-k">CY-ORIGIN-001 · ORIGIN · RELEASE MANDATORY</span><span class="m-v anti-v">ORIGIN_MATCHES</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every route, asset, redirect, protocol, and runtime obligation in the release closure at observation time: time-indexed production origin snapshot <b>ORIGIN_MATCHES</b> certified artifact and origin contract</div><div><span class="e-k">WHEN — </span>a production origin is proposed for release certification</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>ORIGIN_HARNESS · coverage EXHAUSTIVE</div><div><span class="e-k">IF UNPAID — </span>RELEASE NOT CERTIFIED</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
       <!-- obligations:end -->
-      <div class="ep-note">An obligation is what the page owes; a receipt is an observation that it paid, bound to the build observed. A receipt for this build cannot be inside this build, so none is printed here: the verdicts — PASS, FAIL, NOT_EVALUATED — are established outside the artifact by the evaluators each obligation names, and missing or stale evidence is NOT_EVALUATED, never a score. The standing claims above are the subset the page can execute against itself; CY-SEM-003 is the one CL-06 says it cannot.</div>
+        <div class="m" style="font-size:9.5px;line-height:1.7;color:var(--quiet);padding-top:8px">An obligation is what the set owes; a receipt is an observation that it paid, bound to the build observed. The verdicts PASS · FAIL · NOT_EVALUATED are established outside the artifact by the evaluators each row names; missing or stale evidence is NOT_EVALUATED, never a score. The standing claims on sheet 6 are the subset the set can execute against itself.</div>
+      </div>
+      <div class="col" style="gap:22px">
+        <div class="list"><div class="hd">CHAIN OF RECORD</div><div id="prov"></div><div class="m" style="font-size:10px;line-height:1.7;color:var(--mid);padding-top:8px"><span id="patent2">—</span> · footer reads US PATENT PENDING</div></div>
+        <div class="list notes-g">
+          <div class="hd">GENERAL NOTES — NORMATIVE</div>
+          <div class="gn"><b>1.</b> The surface states only what the record can support. Conditions and sources travel with every claim. Nothing is stated as established that has not been checked.</div>
+          <div class="gn"><b>2.</b> Evidence classes are distinct and never averaged: ● log-verified by CytherAI · ◌ externally validated, not operated by CytherAI · — not disclosed · SEALED, indexed by structure only.</div>
+          <div class="gn"><b>3.</b> A claim executed by this set (CL, DS) is a predicate over the set itself; an obligation is discharged only by the evaluator it names, outside the artifact, and its receipt binds one build.</div>
+          <div class="gn"><b>4.</b> The seal is derived from the public manifest and changes when the disclosed state changes; the object on sheet 1 is this browser's demonstration and enters no record.</div>
+        </div>
+      </div>
     </div>
-
-    <div class="manifest anti" data-provisional="true" aria-label="Not claimed — the boundary of the record">
-      <div class="m-title">NOT CLAIMED — THE BOUNDARY OF THE RECORD, DRAWN BY ITS AUTHOR</div>
-      <div id="antiRows"></div>
-      <div class="ep-note">The fastest calibration of a vendor is the boundary of its claims. Drawn here, and included in the canonical checksum.</div>
-    </div>
-
-    <div class="colophon-notes env">
-      <p><b>One object, one world.</b> The mark is not framed on this page — this page is inside it. Four pre-rendered exposures of the canonical orbit are the background; scroll is the observation function, moving a derived camera from far-field into the filament core. The camera anchors are the orbit's densest cells, chosen by digest: the journey through the mark is derivation, not decoration.</p>
-      <p><b>The mark is derived, not designed.</b> Its four parameters are digests of the public manifest below — systems, validation index, revision, and the count of sealed references. When the disclosed state changes, the canonical form changes deterministically. Your drag forks a local variant; the canonical state is always recoverable, and a link reproduces any form exactly.</p>
-      <p><b>Closed causality.</b> No webfonts, no CDNs, no images, no external calls. Everything visible was present at initialization or derived locally from your interaction. Open the network tab — the artifact is sealed, and CL-01 observes it.</p>
-      <p><b>One loop, and it sleeps.</b> The weight-field on the thesis, the weight waves on the system titles, the world's fork re-development, and the boundary proposer share a single frame loop that stops completely at rest.</p>
-      <p><b>Two records, facing each other.</b> The manifest derives; the reading self-reports. They are not the same kind of record, and the page says so: the reading attests your descent to you, not to anyone else, and travels only by your explicit act. Standing claims run as predicates against the page itself; a hostile proposer demonstrates the boundary live; the record's own boundary is drawn in NOT CLAIMED. The page states nothing it cannot check.</p>
-    </div>
-  </section>
-
-</main>
-
-<div class="optics" id="optics" role="group" aria-label="Optical mode — reader-governed exposure">
-  <button data-o="world" aria-pressed="false">WORLD</button>
-  <button data-o="balanced" aria-pressed="true">BALANCED</button>
-  <button data-o="read" aria-pressed="false">READ</button>
-</div>
-
-<div class="strip">
-  <span>MARK <b id="markSerial">…</b></span>
-  <span class="st" id="obsZoom">×1.30</span>
-  <button id="forkBtn" aria-keyshortcuts="ArrowUp ArrowDown ArrowLeft ArrowRight Escape">FORK</button>
-  <button id="redevelopBtn">REDEVELOP</button>
-  <span class="st" id="forkStatus">CANONICAL STATE</span>
-  <span class="grow"></span>
-  <button id="captureBtn">CAPTURE BRIEFING STATE</button>
-  <span class="copied" id="captured"></span>
-  <button id="resetBtn" hidden>RETURN TO CANONICAL</button>
-</div>
-
-<footer>
-  <span><span id="claimsFooter">CLAIMS —/—</span> · © 2026 CYTHERAI · RIYADH, KSA · US PATENT PENDING</span>
-  <span class="right"><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a></span>
-</footer>
+  </div></div>
+</section>
 
 <script src="js/manifest.js" defer integrity="sha384-VLmrs7lyuT7LdkvqT2jpzU3d9Wk/FsWQVdnBCX1NyVdT2FtTcKqE5xpkb8Ze23s8" crossorigin="anonymous"></script>
-<script src="js/substrate.js" defer integrity="sha384-FrtcRIyiP/CEIqo7Kw3cmQKQS5IX5SJvA2FQUDgZaop7lR34uVuw8+PBdpaxLiMw" crossorigin="anonymous"></script>
-<script src="js/claims.js" defer integrity="sha384-HzOFiL3Rd8y7orfv8MVwIuqVVtg9tSmC1Jt6+TGOuU66cDc6eF6AldfObViqji4m" crossorigin="anonymous"></script>
-<script src="js/ledger.js" defer integrity="sha384-haU/TIvpYNs7B1xM766SiETzuD3OJmeW0Z7Ta5qWAcTC8CmGO7qmLzojTysUtbd6" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-FRX7hkGVXgNXSs9yKYzApRGVRWC5B6fUhTrzHfZJyHfP3RzI8Pvx12dVePjdmcTQ" crossorigin="anonymous"></script>
-<script src="js/site.js" defer integrity="sha384-xiF5vtbGysl9qZI7BSLV1hCLM+/32Rlr2Rpk6mC0I+KmMBlYlA4xBuM9N833KHqT" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-HzOFiL3Rd8y7orfv8MVwIuqVVtg9tSmC1Jt6+TGOuU66cDc6eF6AldfObViqji4m" crossorigin="anonymous"></script>
+<script src="js/drawing-set.js" defer integrity="sha384-547NPMUYr/Ch68r77iQRxqn4hRneLnvd9t7y6xlsP148pLlWlhY6Q2P43z10nJRq" crossorigin="anonymous"></script>
 </body>
 </html>

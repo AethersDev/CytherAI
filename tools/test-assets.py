@@ -102,7 +102,6 @@ required = {i["src"] for i in json.load(open(os.path.join(ROOT, "manifest.webman
 for page in ("index.html", "contact.html", "404.html", "pages/brief.html"):
     for href in re.findall(r'<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"', open(os.path.join(ROOT, page), encoding="utf-8").read()):
         required.add(href.lstrip("/").replace("../", ""))
-required.add(re.search(r"url\((assets/plate/[\w.-]+)\)", open(os.path.join(ROOT, "index.html"), encoding="utf-8").read()).group(1))
 
 d = audit(log, files, CANON, CHECKSUM, required)
 check(not d, "D1 every promoted asset matches its receipt and every DERIVED asset is bound to %s (%d receipts, %d files)%s" % (CHECKSUM, len(receipts(log)), len(paths), "" if not d else " — " + "; ".join(d)))
@@ -119,7 +118,7 @@ bad = log.replace("bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1
 dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.png` |\n"
 check(any("not a sha256" in x for x in audit(bad, files, CANON, CHECKSUM, required)) and any("duplicated" in x for x in audit(dup, files, CANON, CHECKSUM, required)),
       "D7 a malformed digest and a duplicated receipt each fail closed")
-check(required <= set(paths), "D8 every icon and plate the manifest and pages name has a receipt: %s" % ", ".join(sorted(required)))
+check(required <= set(paths), "D8 every icon the manifest and pages name has a receipt: %s" % ", ".join(sorted(required)))
 
 print()
 if fails:

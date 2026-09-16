@@ -40,14 +40,16 @@ check(values["__ids"] == values["__index"], "P2 VALIDATION rows are validation_i
 for p in PM.PAGES:
     printed = {n.split(":")[1] for n in names[p] if n.startswith("validation:") and n.endswith(":cyther")}
     check(printed == set(values["__index"]), "P3 %s prints every validation identifier" % p)
-check(all(n in names["index.html"] for n in ("count:systems_indexed", "count:systems_disclosed", "count:controlled_references")),
-      "P3 index.html prints the three manifest counts as projections")
+# the set prints the sealed count (three sites) and leaves the indexed/disclosed counts to the
+# brief — an editorial omission (owner, 2026-09-16), never a literal: what it prints, it projects
+check(names["index.html"].count("count:controlled_references") >= 3 and not any(n.startswith("count:") and n != "count:controlled_references" for n in names["index.html"]),
+      "P3 index.html prints the controlled-records count as a projection at every site, and no other count as a literal")
 # P4
 idx = pages["index.html"]
-corrupt = idx.replace('data-m="count:systems_indexed">06<', 'data-m="count:systems_indexed">07<', 1)
+corrupt = idx.replace('data-m="count:controlled_references">03<', 'data-m="count:controlled_references">04<', 1)
 check(corrupt != idx and PM.project(corrupt, values) == idx, "P4 a corrupted projected value is restored by projection — the check would report it stale")
 # P5
-bogus = idx.replace('data-m="count:systems_indexed"', 'data-m="count:nonsense"', 1)
+bogus = idx.replace('data-m="count:controlled_references"', 'data-m="count:nonsense"', 1)
 try:
     PM.project(bogus, values); refused = False
 except ValueError:
@@ -55,31 +57,30 @@ except ValueError:
 check(refused, "P5 an unknown projection name is refused")
 # P6
 src = open(os.path.join(ROOT, "js/manifest.js"), encoding="utf-8").read()
-assert src.count("systems_indexed: 6,") == 1
+assert src.count("controlled_references: 3,") == 1
 with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, dir=os.path.join(ROOT, "tools"), prefix=".mut-") as f:
-    f.write(src.replace("systems_indexed: 6,", "systems_indexed: 7,")); mut = f.name
+    f.write(src.replace("controlled_references: 3,", "controlled_references: 4,")); mut = f.name
 try:
     mv = PM.projections(names["index.html"], mut)
 finally:
     os.remove(mut)
 projected = PM.project(idx, mv)
-sites = [m for m in PM.MARK.finditer(projected) if m.group(3) == "count:systems_indexed"]
-check(mv["__checksum"] != values["__checksum"] and sites and all(m.group(4) == "07" for m in sites)
-      and all(m.group(4) == "06" for m in PM.MARK.finditer(idx) if m.group(3) == "count:systems_indexed")
-      and mv["count:systems_disclosed"] == values["count:systems_disclosed"],
-      "P6 systems_indexed 6→7 moves the checksum (%s→%s) and every 06 site to 07, and nothing it does not own" % (values["__checksum"], mv["__checksum"]))
+sites = [m for m in PM.MARK.finditer(projected) if m.group(3) == "count:controlled_references"]
+check(mv["__checksum"] != values["__checksum"] and sites and all(m.group(4) == "04" for m in sites)
+      and all(m.group(4) == "03" for m in PM.MARK.finditer(idx) if m.group(3) == "count:controlled_references")
+      and mv["validation:T2C192-IR-0.00:cyther"] == values["validation:T2C192-IR-0.00:cyther"],
+      "P6 controlled_references 3→4 moves the checksum (%s→%s) and every 03 site to 04, and nothing it does not own" % (values["__checksum"], mv["__checksum"]))
 # P7
 stripped = PM.MARK.sub(lambda m: m.group(1) + m.group(5), idx)
-check("06 INDEXED" not in stripped and "02 DISCLOSED" not in stripped and ">03 · structure" not in stripped
-      and not re.search(r"<td class=\"cy\">\d", stripped) and "IR 0.00% vs" not in stripped,
-      "P7 no retired count or figure literal survives outside a marked element")
+check(not re.search(r">0?3 ·|>03<|>0\.00%<|>10\.00%<|>0\.93%<|>(100|99|97|91)%<", stripped) and "IR 0.00% vs" not in stripped,
+      "P7 no count or figure literal survives outside a marked element")
 stripped_b = PM.MARK.sub(lambda m: m.group(1) + m.group(5), pages["pages/brief.html"])
 check("IR 0.00% vs" not in stripped_b and not re.search(r">(100|99|97|91)%<", stripped_b), "P7 brief.html likewise")
 # P9 — the obligations block: current, complete, and carrying no verdict, receipt, digest or build
 PO = importlib.import_module("project-obligations")
 corpus = json.load(open(PO.CORPUS, encoding="utf-8"))
 blk = idx[idx.index(PO.BEGIN):idx.index(PO.END)]; blk = blk[blk.index("-->") + 3:]   # the rows, past the marker's own comment
-cited = sorted({c for f in ("js/claims.js", "js/site.js", "js/substrate.js") for c in re.findall(r"CY-[A-Z]+-\d{3}", open(os.path.join(ROOT, f), encoding="utf-8").read())})
+cited = sorted({c for f in ("js/claims.js", "js/drawing-set.js", "js/instrument.js") for c in re.findall(r"CY-[A-Z]+-\d{3}", open(os.path.join(ROOT, f), encoding="utf-8").read())})
 check(PO.project(idx, corpus) == idx and blk.count('<details class="ob">') == len(corpus["obligations"]) >= 19,
       "P9 the floor's obligations block is the corpus's %d obligations, current" % len(corpus["obligations"]))
 check(not re.search(r"\b[0-9a-f]{64}\b|\b[0-9A-F]{16}\b|\b(PASS|FAIL|NOT_EVALUATED)\b|receipt", blk),
