@@ -11,9 +11,12 @@
   /* surfaces (cold) */
   --paper:#ECF0F4; --paper-lifted:#F3F6FA; --paper-dense:#E0E6EF;
   --ground:#ECF0F4; --panel:#F6F8FB;
-  /* ink */
-  --ink:#101620; --ink-mid:#414A5B; --ink-quiet:#6B7688;
-  --label:#414A5B; --quiet:#6B7688;
+  /* ink. The quiet ink is the quietest text the subpages set, and it sits on every
+     ground here including the dense control band — it must hold 4.5:1 on all of them.
+     #6B7688 read 4.01:1 on paper and 3.66:1 on paper-dense; test-motion A10 holds the
+     tokens to the law by reading them from this file. */
+  --ink:#101620; --ink-mid:#414A5B; --ink-quiet:#586376;
+  --label:#414A5B; --quiet:#586376;
   /* structure */
   --rule:color-mix(in srgb, #101620 14%, transparent);
   --bezel:color-mix(in srgb, #101620 14%, transparent);
