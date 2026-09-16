@@ -285,7 +285,7 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("another candidate" in error for error in result["errors"]))
 
-    def anchored(self, source: str, reference: str = "js/ledger.js#mailtoBody"):
+    def anchored(self, source: str, reference: str = "js/claims.js#renderClaims"):
         """Resolve a reference against a throwaway tree holding just the cited file."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -295,26 +295,26 @@ class VaicCorpusTests(unittest.TestCase):
             return VAIC.evidence_defect(root, reference, "IRRELEVANT")
 
     def test_line_drift_cannot_invalidate_an_anchored_citation(self) -> None:
-        body = "function mailtoBody() {\n  return 'READING SELF-REPORT';\n}\n"
+        body = "function renderClaims() {\n  return 'CLAIMS 6/6 HOLDING';\n}\n"
         self.assertIsNone(self.anchored(body))
         # the headline property: 200 lines above the cited code change nothing
         self.assertIsNone(self.anchored("// pad\n" * 200 + body))
         self.assertIsNone(self.anchored("\n" * 200 + body))
 
     def test_a_deleted_or_renamed_anchor_is_corruption(self) -> None:
-        defect = self.anchored("function mailtoPayload() {\n  return 1;\n}\n")
+        defect = self.anchored("function renderRows() {\n  return 1;\n}\n")
         self.assertIsNotNone(defect)
         self.assertIn("does not define", defect)
 
     def test_a_duplicated_anchor_is_corruption(self) -> None:
-        body = "function mailtoBody() {\n  return 1;\n}\n"
+        body = "function renderClaims() {\n  return 1;\n}\n"
         defect = self.anchored(body * 2)
         self.assertIsNotNone(defect)
         self.assertIn("defines 2 times", defect)
 
     def test_a_call_site_is_not_a_definition(self) -> None:
         # a mention of the name must not satisfy a citation that means the object
-        source = "const out = mailtoBody();\nexport { mailtoBody };\n"
+        source = "const out = renderClaims();\nexport { renderClaims };\n"
         self.assertIsNotNone(self.anchored(source))
 
     def test_explicit_markers_anchor_files_without_language_symbols(self) -> None:
@@ -326,6 +326,30 @@ class VaicCorpusTests(unittest.TestCase):
         defect = self.anchored("function helper() {}\n", "tools/unbound-helper.js#helper")
         self.assertIsNotNone(defect)
         self.assertIn("no identity set covers", defect)
+
+    def test_a_retired_file_keeps_resolving_the_history_that_cited_it(self) -> None:
+        """Retirement is a move, not a deletion: a historical receipt resolves through the
+        snapshot; a receipt on the current build may not cite a file the build does not ship;
+        and a retired anchor that the snapshot no longer defines is still corruption."""
+        historical = lambda ref: VAIC.evidence_defect(ROOT, ref, "0000000000000000", historical=True)
+        current = lambda ref: VAIC.evidence_defect(ROOT, ref, VAIC.current_build(ROOT))
+        for reference in ("js/ledger.js#mailtoBody", "tools/test-ledger.js#ledger-selfreport-prefix",
+                          "tools/test-motion.py#retained-field-and-tonemap-bounds", "js/site.js#verifyAdmissions",
+                          "tools/test-site.py#test_performance_and_mobile_clearance_contract"):
+            with self.subTest(reference):
+                self.assertIsNone(historical(reference))
+                self.assertFalse((ROOT / reference.partition("#")[0]).is_file()
+                                 and VAIC.anchor_sites((ROOT / reference.partition("#")[0]).read_text(encoding="utf-8"),
+                                                       reference.partition("#")[2]),
+                                 "the live tree must not define this anchor, or the archive is not what resolved it")
+        self.assertIn("retired", current("js/ledger.js#mailtoBody"))
+        self.assertIn("does not define", historical("js/ledger.js#noSuchSymbol"))
+        # a live anchor is found in the live file first, whether or not the snapshot also has it
+        self.assertIsNone(historical("tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift"))
+        self.assertIsNone(current("tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift"))
+        # every retired path is inside the snapshot, so the rule can never resolve to nothing
+        for retired in VAIC.RETIRED:
+            self.assertTrue(any((ROOT / archive / retired).is_file() for archive in VAIC.ARCHIVES), retired)
 
     def test_corpus_evidence_cannot_escape_the_identity_sets(self) -> None:
         corpus = copy.deepcopy(self.corpus)

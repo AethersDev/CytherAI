@@ -83,7 +83,7 @@ $("#nLog").textContent = ["zero", "one", "two", "three", "four", "five", "six", 
 $("#sysId").textContent = CM.MANIFEST.systems_disclosed[0]; $("#patent").textContent = CM.MANIFEST.patent;
 const eps = CM.EPOCHS.map(m => ({ n: m.epoch, d: m.derived, ck: CM.stateChecksum(m), cur: false })).concat([{ n: CM.MANIFEST.epoch, d: CM.MANIFEST.derived, ck: CM.CHECKSUM, cur: true }]);
 $("#revs").innerHTML = eps.map(e => `<div class="row rev"><div>0${e.n}</div><div class="d">${e.d}</div><div>${e.cur ? `<span class="acc" data-checksum>${e.ck}</span> · canonical` : e.ck + " · superseded"}</div></div>`).join("") +
-  CM.COMMITMENTS.map(c => `<div class="row rev"><div>0${c.epoch}</div><div class="d">${c.committed}</div><div>committed · sha256 ${c.digest.slice(0, 8)}… · ${c.status.toLowerCase()}</div></div>`).join("");
+  CM.COMMITMENTS.map(c => `<div class="row rev"><div>0${c.epoch}</div><div class="d">${c.committed}</div><div>committed · sha256 ${c.digest.slice(0, 8)}… · ${c.status}</div></div>`).join("");   /* the status the manifest DECLARES, verbatim — the page asserts none */
 $("#nc").innerHTML = CM.MANIFEST.not_claimed.map((t, i) => `<div class="row nc"><div>${i + 1}. ${t}</div><span>NOT CLAIMED</span></div>`).join("");
 $("#prov").innerHTML = CM.MANIFEST.provenance.map(r => `<div class="row rev"><div>${r.date.replace(".", "·")}</div><div class="d">${r.event}</div><div>${r.desc}</div></div>`).join("");
 $("#patent2").textContent = CM.MANIFEST.patent; $("#oblCount").textContent = document.querySelectorAll("details.ob").length + " OBLIGATIONS";

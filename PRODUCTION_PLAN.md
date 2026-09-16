@@ -1,3 +1,9 @@
+> **Superseded 2026-09-16.** This is the build specification of instrument-v1 — the
+> substrate / disclosure-engine homepage — which the drawing set replaced as the front door.
+> The world it specifies is retired whole to `backup/instrument-v1/` (its README indexes the
+> snapshot); this document is kept as its record. The drawing set is described in
+> `docs/architecture.md` and the root `CLAUDE.md`.
+
 # PRODUCTION_PLAN.md — CytherAI Website: Substrate / Disclosure-Engine Implementation
 
 **Status:** APPROVED FOR IMPLEMENTATION · 2026-07-17

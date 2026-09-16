@@ -5,126 +5,118 @@ must move together when the site changes. The repository is a zero-dependency
 static site: source HTML, CSS, and JavaScript are served directly. There is no
 framework, package graph, bundle, or server application.
 
+The homepage is **the drawing set** (since 2026-09-16). Its predecessor, the substrate /
+disclosure-engine homepage **instrument-v1**, is retired whole to `backup/instrument-v1/`
+— a verbatim snapshot of commit `bf82377` with every verifier that established its laws;
+its README indexes it and `backup/instrument-v1/verify.sh` runs them. This guide as it
+stood for that world is `git show bf82377:docs/architecture.md`.
+
 ## System map
 
 ```mermaid
 flowchart TD
-  I["index.html"] --> M["js/manifest.js"]
-  M --> S["js/substrate.js"]
-  M --> C["js/claims.js"]
-  M --> L["js/ledger.js"]
-  M --> B["js/instrument.js"]
-  S --> G["js/site.js"]
-  C --> G
-  L --> G
-  B --> G
-  G --> DOM["Homepage DOM and canvas surfaces"]
-  G --> SW["sw.js registration"]
+  I["index.html — seven sheets"] --> M["js/manifest.js"]
+  M --> B["js/instrument.js — the boundary engine"]
+  M --> C["js/claims.js — six canonical predicates"]
+  B --> D["js/drawing-set.js — the set"]
+  C --> D
+  D --> DOM["title blocks · seal · FIG. 1 · claims · projections"]
+  D --> SW["sw.js registration"]
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
   R["pages/runner.html — developer page, not deployed"] --> E["engine/trajectory-engine.js"]
-  R --> ET["engine/trajectory-engine.test.js"]
 
   SRC["Tracked source"] --> SRI["generate-integrity.sh"]
   SRI --> ID["SRI attributes and build hash"]
-  ID --> DEP["deploy.sh allowlist"]
+  ID --> DEP["deploy.sh allowlist (deploy.paths)"]
   DEP --> DIST["dist/ public artifact"]
   DIST --> SW
+
+  V["vaic/cytherai-obligations.v0.json"] --> PO["tools/project-obligations.py"] --> S7["Sheet 7"]
+  M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
 ```
 
-The homepage modules are classic deferred scripts and communicate through five
-explicit `globalThis`/`window` APIs. Load order is a contract, not an incidental
-HTML detail. The public surface is an inventory (`tools/test-api.py`): every symbol
-is declared as production (called by another served module) or verifier (used by a
-tool), and a symbol with no caller fails verification.
+The homepage modules are classic deferred scripts and communicate through four
+explicit `window` APIs. Load order is a contract, not an incidental HTML detail: the
+claims module reads `CytherSubstrate`'s absence at load and registers the canonical
+register only; the set pushes its own predicates before the first render. The public
+surface is an inventory (`tools/test-api.py`): every symbol is declared as production
+(called by another served module) or verifier (used by a tool), and a symbol with no
+caller fails verification.
 
 | Order | Module | Public API | Responsibility |
 |---:|---|---|---|
-| 1 | `js/manifest.js` | `CytherManifest` | Public disclosure tuple, deterministic parameters, admission, checksum, epoch history |
-| 2 | `js/substrate.js` | `CytherSubstrate` | Orbit geometry, four exposure plates, camera, ambient/reading model, fork state |
-| 3 | `js/claims.js` | `CytherClaims` | Ten standing predicates, stored evidence, per-claim and all-claim recomputation |
-| 4 | `js/ledger.js` | `CytherLedger` | Session-local, owner-erasable reading self-report and adaptive CTA state |
-| 5 | `js/instrument.js` | `CytherInstrument` | Deterministic hostile proposer and independent boundary-kernel audit; `biEngine` is the one boundary engine, exported so any surface that demonstrates the boundary consumes it rather than a copy (`tools/test-boundary.js` pins its stream) |
-| 6 | `js/site.js` | none | Boot orchestration, the shared animation loop, scroll observation, controls, floor rendering |
+| 1 | `js/manifest.js` | `CytherManifest` | Public disclosure tuple, deterministic parameters (`dsin`, `dsinOrbit`), admission, checksum, epoch history, `project` |
+| 2 | `js/instrument.js` | `CytherInstrument` | The boundary engine: `biEngine` (seeded hostile proposer, incremental admission, independent kernel; every event names the position it was judged from), `judge` (a proposed program against the same boundary and kernel), `audit`, `lastAudit`. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
+| 3 | `js/claims.js` | `CytherClaims` | The six canonical predicates (CL-01 zero external requests · CL-02 render ≡ manifest over every `[data-checksum]` site and every `data-m` fact · CL-03 published admission ≡ derivation · CL-05 the boundary emits no invalid program · CL-06b the mark does not flood the reading lane · CL-07 deterministic admission core), the stored-state registry, per-claim and all-claim recomputation, the renderer (`#claimRows`, `#claimsFooter`, `[data-claims-count]`) |
+| 4 | `js/drawing-set.js` | `CytherDrawingSet` | The set: the frame on every sheet (zone strips, title block, notes, seal), projections of the manifest (revisions, not claimed, chain of record), FIG. 1 and the adjustable edge, the admitted object carried through sheets 2–6, DS-01..05, CL-03/CL-05 setting, `sw.js` registration. Pure geometry exported for `tools/test-drawing-set.js` |
 
 ## Directory and ownership map
 
 | Path | Role | Public artifact? | Change rule |
-|---|---|---:|---|
-| `index.html` | Homepage structure and its inline visual system | Yes | Does not move SRI, but every HTML byte moves the build identity (served-artifact manifest): re-stamp after any edit |
-| `js/` | Homepage runtime: six page modules and the development worker | All seven | A hashed module change requires `./generate-integrity.sh`; the worker is in the build identity via `deploy.paths` |
-| `css/cytherai.css` | Shared subpage style system | Yes | Hashed; regenerate integrity after edits |
+|---|---|---|---|
+| `index.html` | The seven sheets and their inline visual system | Yes | Every HTML byte moves the build identity: re-stamp after any edit; SCHEDULE 1, the sheet-1 figures and the sealed-records count are projector-owned (`data-m`); Sheet 7's obligations block is projector-owned |
+| `js/` | The four homepage modules | All four | A module change requires `./generate-integrity.sh` (SRI) and re-stamping |
+| `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
 | `pages/` | Brief and legal pages; `runner.html` is a developer page | Content pages only | Content pages share navigation and CSS; `runner.html` is linked from no page, not in `deploy.paths`, not precached, unstamped |
-| `engine/` | Trajectory engine and 33-test browser suite | No | Run locally through `pages/runner.html` (`python3 -m http.server 8000`); not part of the homepage dependency graph or the artifact |
-| `assets/` | Promoted deterministic images and icons | Selected files | Add each promoted file to `deploy.sh`; precache only if offline-critical |
-| `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero |
-| `docs/` | Deployment contract, audit record, asset provenance, architecture | No | Evidence and operational instructions, never origin content |
+| `engine/` | Trajectory engine and its browser suite | No | Run locally through `pages/runner.html`; not part of the homepage dependency graph or the artifact |
+| `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
+| `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
+| `vaic/` | The VAIC-0 obligation corpus, evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable (`tools/test-vaic.py`) |
+| `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
 | `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
-| `backup/` | Retired surfaces and branding: `graphite-v2/` with the three modules only it loaded, `dossier-v3/`, `trajectory-engine/` (v2 engine dev source and prototypes) | No | Historical record only; retire here, never delete, never deploy |
+| `backup/` | Retired surfaces: `instrument-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html` | No | Historical record only; retire here, never delete, never deploy |
 | `awc-os/` | Gitignored AWC-OS evaluation microsite and media | No | Separate artifact with separate network/product assumptions |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 
 ## Homepage boot and steady state
 
-`js/site.js` starts after all five APIs exist.
+`js/drawing-set.js` runs after the three APIs exist.
 
-1. It parses optional captured state from the URL hash.
-2. `CytherSubstrate.boot()` derives the canonical camera once and queues all four
-   exposure plates. Plate development is a deterministic fixed-step sequence (`DEV_BATCH`) streamed through the shared frame loop as genuine prefixes — the loop's cadence chooses which prefix is shown, never what it contains; every recurrence is `dsin`/`dcos`/`datan2`, so the plates are engine-invariant and `assets/plate/surface-terminal.png` is provably plate 0's terminal raster; first load swaps that promoted exposure for the reader's own plate at D_N and `REDEVELOP` replays the sequence. Every terminal reply names its checkpoint (`stateHash`); the floor prints the four names as the development receipt and compares a redevelopment of the same world and frame against the last one (`IDENTICAL` / `MISMATCH`), and a plate that stopped at its iteration ceiling instead of its target is printed as a fuse.
-   The kernel runs in a dedicated Worker (`js/develop-worker.js`, transport only,
-   around `CytherSubstrate.developServer`); the main thread keeps the presentation
-   law — which prefix is asked for and when its raster is shown — and falls back
-   to running the same server inline where a Worker cannot be constructed
-   (`file://`). `tools/test-develop.js` drives the server against the direct
-   kernel: execution location changes, the trajectory does not. Responsive
-   DPR/bin policies bound mobile allocation and rasters are cadence limited
-   rather than produced after every deposit batch.
-3. The instrument and ledger attach their DOM behavior; controls, mobile docking,
-   hold-to-cross, optics, title glyphs, and wave interactions are wired.
-4. Manifest, provenance, epoch, commitment, and anti-manifest rows are rendered
-   from `CytherManifest`. The facts the strata print as bytes (counts, validation
-   figures) are projections written by `tools/project-manifest.py` into `data-m`
-   elements and read back by CL-02 — a literal that is not a projection is a
-   second authority and must not be introduced.
-5. Claims render pending, then executable predicates recompute after load.
-   Published admission nonces are independently re-derived in yielded steps.
-6. The service worker registers from the root. Its cache name carries the same
-   build hash stamped into every shipped HTML file.
+1. The seal is drawn once from `CytherManifest.CANON` (`dsinOrbit`, 16,000 points) and
+   stamped onto every title block; each sheet receives zone strips, its title block
+   (title, DRAWN FROM + checksum, CHECKED BY + count, REV · EPOCH · DATE, SHEET n / 7,
+   APPROVED seal) and its notes block from `data-title` / `data-notes`.
+2. Revisions (epochs and commitments — the commitment status printed verbatim), not
+   claimed, the chain of record and the obligations count are rendered from the manifest.
+   SCHEDULE 1 and the sheet-1 figures are already bytes: `tools/project-manifest.py` wrote
+   them, so a reader without scripts has them.
+3. FIG. 1 runs `biEngine(2)` for 1,500 proposals at 5 per frame. Refusals appear in the
+   construction field where they were judged, with a witness at the offending relation,
+   and age out; the live program is drawn as it grows; on admission the LARGEST program
+   so far is stated by identity and inked over a ~500 ms resolution (smaller admissions
+   flash once). With reduced motion the run completes synchronously.
+4. On settle: counters, refusals by class (FIG. 2b), the REFUSED box, CL-05 and DS-05 are
+   set; the adjustable edge appears (pointer along its normal, or arrow keys; Enter
+   accepts an admitted candidate; Escape resets); the admitted object is rendered into
+   the five `.obj` boxes on sheets 2–6.
+5. The claims render pending, then executable predicates recompute 150 ms after load; the
+   three published admissions are re-derived in yielded steps for CL-03. RECOMPUTE ALL
+   re-runs every predicate that has a `run`.
+6. The service worker registers from the root; its cache name carries the build hash.
 
-At steady state, scroll work is deliberately narrow: one requestAnimationFrame
-updates only changed plate transforms/opacity, the ambient CSS variables (`--bg`,
-`--inkA`, `--accent` — panel material is phase-owned and never interpolated), the
-reading phase, the minimap reticle and slider value, and the gauge. Hidden plates release compositor
-`will-change`; envelope blur is disabled while moving. Reading samples bounded
-90k-cell stratified summaries rather than full plate density fields. A height-only
-viewport resize stretches existing plate coverage without replaying development;
-width or effective-DPR changes still regenerate. Pointer-driven title effects,
-plate development, and the boundary proposer share one loop that sleeps after 40
-idle frames.
+At steady state nothing runs: the field ages out, the settle loop stops, and the page is
+static until RUN AGAIN, AUDIT 10,000, the handle, or RECOMPUTE ALL.
 
 ## State and evidence boundaries
 
-There are three distinct kinds of state:
-
-- Canonical state comes from `CytherManifest.MANIFEST` and deterministic
-  derivation. Its checksum and camera can be recomputed.
-- Visitor fork and optics state are local presentation state. Fork state can be
-  encoded in a URL fragment; the optics choice alone uses `sessionStorage`.
-- The reader ledger is an in-memory self-report. It is not durable, not
-  independently verifiable, and is transmitted only when the reader invokes a
-  mail link after the diligence threshold.
-
-The claims engine stores one result per claim. Recomputing one claim changes only
-that result; a passing re-run cannot erase an unrelated invalid state. CL-03 is
-special: the expensive admissions are produced asynchronously by `site.js` and
-fed into the claims store when complete.
+- Canonical state comes from `CytherManifest.MANIFEST` and deterministic derivation. Its
+  checksum, seal and admissions can be recomputed; the page prints the checksum at every
+  title block and CL-02 reads each site back.
+- The admitted object in FIG. 1 is this browser's demonstration: it is judged by the
+  production boundary and kernel, carried through the sheets with a local derivation
+  receipt, and enters no record. It never mixes with a manifest fact.
+- The claims engine stores one result per claim. Recomputing one claim changes only that
+  result; a passing re-run cannot erase an unrelated invalid state (`tools/test-claims.js`).
+- Sheet 7 discloses what the set owes and who may establish it — never a receipt or a
+  verdict, because a receipt for a build cannot be inside that build.
 
 ## Routes
 
 | Route | Runtime |
 |---|---|
-| `/` or `/index.html` | Six-module disclosure engine |
+| `/` or `/index.html` | The drawing set, four modules |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |
@@ -132,75 +124,55 @@ fed into the claims store when complete.
 | `/pages/terms.html` | Static terms |
 | `/404.html` | Host-configured styled error body; the host must still return status 404 |
 
-The five public content pages carry a complete sibling navigation set and mark
-exactly one current page. The homepage intentionally uses its own descent model.
-
 ## Integrity, deployment, and offline behavior
 
 The release flow is fail-closed:
 
-1. Edit source.
-2. For any change to a served file (anything in `deploy.paths` — HTML, JS/CSS,
-   the worker, assets), run `./generate-integrity.sh`. It recomputes each SHA-384
-   SRI value, derives the 16-hex build identity from the canonical served-artifact
-   manifest (every `deploy.paths` file, the two stamped fields blanked), stamps
-   all eight HTML files, and updates the service worker cache name. Then run
-   `python3 tools/vaic_restamp.py`: it re-stamps the VAIC candidate and appends
-   the automated-set receipts for the new build.
-3. Run `./verify.sh`. The integration test independently recomputes the same
-   identities and checks local references, navigation, manifest icons, and the
-   deploy/service-worker relationship.
-4. `./deploy.sh` deletes and rebuilds `dist/` from an explicit 27-file allowlist.
-   It rejects a service-worker asset missing from the artifact and rejects the
-   historical/ignored directories.
-5. Publish the contents of `dist/`, not the working tree. Apply and verify the
-   origin headers and MIME behavior in `docs/deploy.md`.
+1. Edit source. After a manifest edit run `python3 tools/project-manifest.py`; after an
+   obligation edit run `python3 tools/project-obligations.py`.
+2. For any change to a served file (anything in `deploy.paths`), run
+   `./generate-integrity.sh` (SRI over the requested resources; the 16-hex build identity
+   over every `deploy.paths` byte, stamped into every HTML file and the worker cache
+   name), then `python3 tools/vaic_restamp.py` once per transaction.
+3. Run `./verify.sh`.
+4. `./deploy.sh` deletes and rebuilds `dist/` from `deploy.paths`; it rejects a precached
+   asset missing from the artifact and rejects the historical directories.
+5. Publish the contents of `dist/`. Apply and verify the origin headers in `docs/deploy.md`.
 
-The service worker precaches the core routes and runtime. It maps a navigation to
-the worker scope root back to cached `index.html`, caches other same-origin GETs
-on demand, and removes older cache generations on activation. Promoted social,
-brief, and error images are deliberately not all precached.
+The service worker precaches the pages and the four modules, installs one build or
+nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
+navigation to the scope root to cached `index.html`, and removes older caches on activate.
 
 ## Verification map
-
-Run the non-browser battery:
 
 ```sh
 ./verify.sh
 ```
 
-It covers module parsing, claims-state isolation, ledger semantics, manifest
-projection, page/resource integration, SRI/build/cache identity, deployment closure,
-motion/plate laws, the source contracts for responsive plate policy and mobile
-footer clearance, the promoted poster, and the derived-asset receipts (OG card and
-icon family bound to the current canonical state). It
-also validates the VAIC-0 obligation corpus and its fail-closed evaluator/coverage
-rules after rebuilding the exact artifact to which its receipts are bound.
+Module parsing, the public API inventory, the claims-suite law, the boundary stream, the
+drawing set's object and edge, the projection laws, page/resource integration, SRI/build/
+cache identity, deployment closure, the subpage ink law, the derived-asset receipts, and
+the VAIC-0 corpus (structure, retired-evidence resolution, fail-closed controls).
 
-Browser-only validation remains required for:
-
-- `pages/runner.html` (developer page, local server only) reporting 33/33 and rejecting a zero-test load;
-- homepage `CLAIMS 10/10 HOLDING` after initialization;
-- layout and hit targets across breakpoints, reduced motion, and 200% zoom;
-- service-worker install/update/offline behavior;
-- Safari/WebKit rendering, `mailto:` handoff, and VoiceOver behavior.
+Browser-only validation remains required for: `CLAIMS 11/11 HOLDING` after settle at
+desktop and phone widths; the seal and FIG. 1 as rendered; the adjustable edge by pointer
+and keyboard; layout at 200% zoom and reduced motion; service-worker install/update/
+offline; Safari/WebKit rendering and VoiceOver.
 
 ## Change-impact recipes
 
-- Add or remove a homepage module: update `index.html`, `generate-integrity.sh`,
-  `deploy.sh`, `sw.js`, the module-order integration test, and this guide.
-- Add a public page: add navigation links/current-page state, build-hash meta,
-  CSP, local icon/manifest references, `generate-integrity.sh`, `deploy.sh`, and
+- Add or remove a homepage module: `index.html`, `generate-integrity.sh` (RESOURCES),
+  `deploy.paths`, `sw.js`, `tools/test-api.py` (MODULES, SERVED, INVENTORY),
+  `tools/test-site.py` (module order), `IDENTITY_COVERAGE`, and this guide.
+- Add a public page: navigation links/current-page state, build-hash meta, CSP, local
+  icon/manifest references, `generate-integrity.sh` (HTML_FILES), `deploy.paths`, and
   decide whether it belongs in `sw.js`.
-- Promote an asset: record provenance in `docs/asset-promotion-log.md`, add it to
-  `deploy.sh`, and add it to `sw.js` only when eager offline cost is justified.
-- Change manifest facts: review every `PROVISIONAL` marker, run
-  `python3 tools/project-manifest.py` (the strata's counts and validation figures on
-  `index.html` and `pages/brief.html` are marked projections of the manifest, and
-  `tools/test-projection.py` fails on a stale page), regenerate integrity because
-  `js/manifest.js` and the pages are hashed, rerun admissions/claims, and treat a
-  genuine commitment as an owner-custody decision rather than a source-code assertion.
-- Change plate or reading behavior: update the implementation and extend
-  `tools/test-exposure.js` (the executed tone-map and reading laws) or
-  `tools/test-motion.py` (the source-form laws); browser-test memory, scroll
-  smoothness, contrast, and reduced motion at desktop and mobile widths.
+- Add a claim: a canonical `CL` number only where the predicate is the canonical one;
+  otherwise a `DS` pushed onto `CytherClaims.CLAIMS` in `js/drawing-set.js` with its
+  method sentence; `tools/test-claims.js` holds the canonical six.
+- Change manifest facts: review every `PROVISIONAL` marker, run the projector, regenerate
+  integrity, and treat a genuine commitment as an owner-custody decision.
+- Change an obligation: edit the corpus, run `tools/project-obligations.py` (Sheet 7),
+  regenerate integrity, re-stamp; never edit an admitted receipt.
+- Retire a served file: move it whole into the declared snapshot, add it to `RETIRED`,
+  remove it from `deploy.paths`; the receipts that cite it keep resolving.

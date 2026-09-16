@@ -34,9 +34,12 @@ remain separate.
 - `evidence/current-browser-observations.v0.json` — bounded observation ledger.
   Each observation carries its own artifact build; prior-build observations are
   retained but cannot certify the current candidate.
-- `tools/vaic_validate.py` — structural and receipt validator.
-- `tools/test-vaic.py` — nine negative controls proving the validator rejects
-  common authority and coverage laundering paths.
+- `tools/vaic_validate.py` — structural and receipt validator. Evidence resolves by
+  identity and anchor; a retired file (instrument-v1's, in `backup/instrument-v1/`)
+  keeps resolving the historical receipts that cite it, and a current receipt may not
+  cite it.
+- `tools/test-vaic.py` — the negative controls proving the validator rejects common
+  authority, coverage and history laundering paths.
 
 Run:
 
@@ -45,8 +48,13 @@ python3 tools/vaic_validate.py
 python3 tools/test-vaic.py
 ```
 
-`./verify.sh` runs both after rebuilding `dist/`, so the artifact-manifest receipt
-is checked against the exact current closure.
+`./verify.sh` runs both; the artifact identity is a projection of tracked source, so
+nothing is built.
+
+The corpus was written against instrument-v1, the homepage retired on 2026-09-16. Its
+receipts are immutable history; the transition to the drawing set — which obligations
+carry forward with a successor binding and which are superseded because the mechanism
+they governed retired — is the corpus's next version, not an edit of this one.
 
 ## Initial corpus result
 

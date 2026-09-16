@@ -1,5 +1,16 @@
 # Deployment contract
 
+> **Front door changed 2026-09-16.** The homepage is now the drawing set (`index.html`,
+> `js/drawing-set.js`; `docs/architecture.md`). Every browser observation recorded below
+> — the certification block, §5 (Chrome observed / WebKit residual), §5a (the promoted
+> terminal exposure), §5b (CY-SEM-003 on the composited plate ground) — was made against
+> instrument-v1, now retired whole to `backup/instrument-v1/`. Those records stand as
+> written: they are the history of that world, not evidence about this one. The drawing
+> set's own qualification (integrity, restamp, Chrome, Safari, mobile, zero-external) is
+> the last step of the migration and is recorded when it is made, not before. §1–§4 and
+> §6 (headers, MIME, redirects, live-origin verification, the launch gate) are the
+> contract for any front door and remain in force.
+
 ## Certification status
 
 ```
