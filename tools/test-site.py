@@ -177,12 +177,11 @@ class SiteContractTests(unittest.TestCase):
     def test_homepage_module_order_and_script_posture(self) -> None:
         index = parse_page("index.html")
         scripts = [attrs for tag, attrs in index.tags if tag == "script"]
+        # load order is a contract: the record, the boundary engine, the claims (which read
+        # CytherSubstrate's absence at load), then the set that registers its predicates
         self.assertEqual(
             [attrs.get("src") for attrs in scripts],
-            [
-                "js/manifest.js", "js/substrate.js", "js/claims.js",
-                "js/ledger.js", "js/instrument.js", "js/site.js",
-            ],
+            ["js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"],
         )
         self.assertTrue(all(attrs.get("defer") == "" for attrs in scripts))
         self.assertFalse(any(not attrs.get("src") for attrs in scripts), "index CSP forbids inline script")
@@ -237,7 +236,7 @@ class SiteContractTests(unittest.TestCase):
         baseline = VAIC.build_identity(ROOT)
         self.assertEqual(baseline, VAIC.current_build(ROOT), "the stamp is the projection")
         mutations = {
-            "index.html": lambda b: b.replace(b'aria-label="Optical mode', b'aria-label="Optical mode (counterfactual)', 1),
+            "index.html": lambda b: b.replace(b'aria-label="Sheet 1 \xe2\x80\x94 the statement"', b'aria-label="Sheet 1 \xe2\x80\x94 the statement (counterfactual)"', 1),
             "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
             "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
         }
@@ -324,15 +323,13 @@ class SiteContractTests(unittest.TestCase):
 
         substrate = (ROOT / "js/substrate.js").read_text(encoding="utf-8")
         manifest = (ROOT / "js/manifest.js").read_text(encoding="utf-8")
-        site = (ROOT / "js/site.js").read_text(encoding="utf-8")
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("function admissionMetrics", manifest)
         self.assertIn("return admissionMetrics(p).richness", manifest)
         self.assertIn("return admissionMetrics(p).legibility", manifest)
         self.assertIn("fields[i] = r.field;", substrate)
         self.assertIn("const present = streaming && !reduced", substrate)
-        self.assertIn('style.setProperty("--stripH"', site)
-        self.assertIn("footer{padding-bottom:calc(var(--stripH", index)
+        # the persistent-strip clearance (--stripH on the world's footer) left with the
+        # world's front door; the drawing set has no persistent instrument to clear
 
         awc = ROOT / "awc-os/index.html"
         if awc.exists():

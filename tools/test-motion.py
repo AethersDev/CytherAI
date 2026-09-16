@@ -61,8 +61,10 @@ check('inkState === "light" && d >= R.SW_DOWN' in site
       and 'inkState === "dark" && d <= R.SW_UP' in site,
       "A2 retained-state hysteresis machine present in site.js")
 
-html = open(os.path.join(ROOT, "index.html")).read()
-check("border-radius" not in html, "A3 zero border-radius in index.html")
+# the world's page: displaced from the front door by the drawing set and retired whole to
+# backup/instrument-v1/ (the modules and these laws follow it there); its laws keep their subject
+html = open(os.path.join(ROOT, "backup/instrument-v1/index.html")).read()
+check("border-radius" not in html, "A3 zero border-radius in the world's page")
 env = re.search(r'\.env::before\{[^}]*\}', html, re.S)
 check(env and "mask-image" in env.group(0), "A4 membrane softness is mask attenuation")
 

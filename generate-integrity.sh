@@ -11,12 +11,12 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-# substrate homepage modules + subpage stylesheet. The fingerprint must describe
-# what is SERVED: a file no page requests cannot change what a reader receives, so
-# it has no business moving the build hash. pages/runner.html and the engine it
-# loads are a developer page — linked from nowhere, not in deploy.paths, not
-# precached — and carry no SRI or build stamp.
-RESOURCES="css/cytherai.css js/manifest.js js/substrate.js js/claims.js js/ledger.js js/instrument.js js/site.js"
+# the drawing-set homepage modules + subpage stylesheet: every resource a served page
+# requests with an integrity attribute. pages/runner.html and the engine it loads are
+# a developer page — linked from nowhere, not in deploy.paths, not precached — and
+# carry no SRI or build stamp. (The build identity below is a different projection:
+# it covers every deploy.paths byte, requested or not.)
+RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/claims.js js/drawing-set.js"
 
 # HTML files to patch (every served page)
 HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html"

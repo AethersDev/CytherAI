@@ -61,7 +61,7 @@ INVENTORY = {
         "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor"],
     },
 }
-# the page modules: served by the front door, or promoted and awaiting it (js/drawing-set.js)
+# every module in deploy.paths: the front door's four, and the world's modules still shipped
 SERVED = ["index.html", "js/manifest.js", "js/substrate.js", "js/claims.js", "js/ledger.js", "js/instrument.js", "js/site.js", "js/develop-worker.js", "js/drawing-set.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""

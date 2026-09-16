@@ -12,6 +12,7 @@ js/ledger.js
 js/instrument.js
 js/site.js
 js/develop-worker.js
+js/drawing-set.js
 css/cytherai.css
 sw.js
 manifest.webmanifest

@@ -199,7 +199,8 @@ class PosterProvenanceTests(unittest.TestCase):
         # a 246 KB first-paint convenience has no place in an install-time precache:
         # absent, the page simply develops its own plate, which is the whole point
         self.assertNotIn("assets/plate/surface-terminal.png", (ROOT / "sw.js").read_text(encoding="utf-8"))
-        page = (ROOT / "index.html").read_text(encoding="utf-8")
+        # the poster is the world's first paint; the world's page is retired to backup/instrument-v1/
+        page = (ROOT / "backup/instrument-v1/index.html").read_text(encoding="utf-8")
         self.assertIn("background:url(assets/plate/surface-terminal.png) center/cover no-repeat", page)
         window = re.search(r"@media \(min-aspect-ratio:1/1\) and \(max-aspect-ratio:2/1\)\{#poster\{display:block\}\}", page)
         self.assertIsNotNone(window, "the poster must be shown only where a cover-fit is exact")

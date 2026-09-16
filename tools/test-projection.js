@@ -20,7 +20,7 @@ load("js/claims.js");
 var C = globalThis.CytherClaims;
 var r = C.checkRenderManifest();
 var declared = (html.match(/data-m="/g) || []).length;
-ok(r.ok && marks.length === declared && declared >= 18 && r.detail.indexOf(marks.length + " projected facts") > 0,
+ok(r.ok && marks.length === declared && declared >= 20 && r.detail.indexOf(marks.length + " projected facts") > 0,
    "CL-02 holds on the shipped page, every marked element parsed (" + declared + "): " + r.detail);
 doc.marks[7].textContent = "07";
 r = C.checkRenderManifest();
