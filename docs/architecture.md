@@ -44,7 +44,7 @@ tool), and a symbol with no caller fails verification.
 | 2 | `js/substrate.js` | `CytherSubstrate` | Orbit geometry, four exposure plates, camera, ambient/reading model, fork state |
 | 3 | `js/claims.js` | `CytherClaims` | Ten standing predicates, stored evidence, per-claim and all-claim recomputation |
 | 4 | `js/ledger.js` | `CytherLedger` | Session-local, owner-erasable reading self-report and adaptive CTA state |
-| 5 | `js/instrument.js` | `CytherInstrument` | Deterministic hostile proposer and independent boundary-kernel audit |
+| 5 | `js/instrument.js` | `CytherInstrument` | Deterministic hostile proposer and independent boundary-kernel audit; `biEngine` is the one boundary engine, exported so any surface that demonstrates the boundary consumes it rather than a copy (`tools/test-boundary.js` pins its stream) |
 | 6 | `js/site.js` | none | Boot orchestration, the shared animation loop, scroll observation, controls, floor rendering |
 
 ## Directory and ownership map

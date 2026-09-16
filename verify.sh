@@ -21,6 +21,9 @@ python3 tools/test-api.py
 echo "[verify] claims regression"
 "$JSC" js/manifest.js js/substrate.js js/claims.js tools/test-claims.js
 
+echo "[verify] boundary engine"
+"$JSC" js/manifest.js js/instrument.js tools/test-boundary.js
+
 echo "[verify] ledger regression"
 "$JSC" js/manifest.js js/ledger.js tools/test-ledger.js
 
