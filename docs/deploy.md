@@ -447,6 +447,40 @@ density-conditioned ground at all. Lowering the gamma again would shrink the sym
 leave the hole. Naming it is what `CY-SEM-003` is for; closing it is a change to the
 reading exposure and is the owner's to direct.
 
+## 5c. The drawing set — Chrome observed, 2026-09-16
+
+Build `EF57500CC99E3711`, the artifact `dist/` served as an origin root, HeadlessChrome 152
+over CDP (`vaic/evidence/current-browser-observations.v0.json#canonical_settle_EF57500CC99E3711`
+and `#epoch_reproduction_EF57500CC99E3711`; the receipts bind CY-SEM-001/002 in
+`vaic/cytherai-obligations.v1.json`).
+
+| Viewport | Settle | Three samples | Checksum sites | External requests | Console errors | Horizontal overflow | Offline reload through the worker |
+|---|---:|---|---|---|---:|---|---|
+| 1440×900 | 6.2 s | `CLAIMS 11/11 HOLDING` ×3 | 9 / 9 equal the derivation | 0 of 8 | 0 | none | same build, 11/11 |
+| 390×844 | 5.6 s | ×3 | 9 / 9 | 0 of 8 | 0 | none | same build, 11/11 |
+| 320×844 | 5.1 s | ×3 | 9 / 9 | 0 of 8 | 0 | none | same build, 11/11 |
+| 1440×900 · reduced motion | 1.5 s | ×3 | 9 / 9 | 0 of 8 | 0 | none | — |
+
+Also observed: the worker installs one build (`caches.keys()` is exactly
+`cytherai-substrate-EF57500CC99E3711`, the page is controlled on first load); DS-04 finds
+the redrawn seal pixel-identical to the stamped one on all seven title blocks; DS-01's
+serial equals the parameters; CL-03 re-derives the three admissions and the revisions list
+prints every epoch's checksum; FIG. 1 settles on `PRG-446DF7E6 · PROGRAM 3 OF 7 · LARGEST
+ADMITTED` (the object `tools/test-drawing-set.js` pins); the keyboard edge (ArrowUp ×3 →
+ARG RANGE, back to −3 → admitted, Enter → `PRG-F8FD3FB1` is the drawing, DS-05 restated)
+matches the pinned limits; Sheet 7 discloses `9 OWED · 10 SUPERSEDED`.
+
+**Open, named:**
+
+- Safari/WebKit, VoiceOver, a physical phone, 120 Hz scrolling — the owner's observations,
+  as before; append-only, and admission does not wait on them.
+- The FIG. 1 edge handle renders 14×14 CSS px; WCAG 2.5.8 (AA) asks 24×24 for pointer
+  targets. The owner fixed the visual language of the figure; enlarging the *hit area*
+  without changing the 14 px mark is a one-line stylesheet decision that is theirs.
+  The retired CY-GEO-003 (`MIN_TARGET`) governed the persistent instrument, not this
+  handle; a successor obligation would be new, not carried.
+- CY-ORIGIN-001 on GitHub Pages: §7.
+
 ## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
