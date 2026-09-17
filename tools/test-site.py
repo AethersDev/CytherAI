@@ -309,6 +309,24 @@ class SiteContractTests(unittest.TestCase):
                 declared = tuple(map(int, icon["sizes"].split("x")))
                 self.assertEqual((width, height), declared, relative)
 
+    def test_every_sheet_is_addressable_and_the_edge_handle_meets_its_target(self) -> None:
+        """The title block's sheet index (js/drawing-set.js) links #s1..#s7 — every sheet must
+        carry that id, in order, or a visitor landing mid-set has no way across it. The FIG. 1
+        handle draws a 14 px mark; its hit area is the ::after box, and must reach 24 px."""
+        index = (ROOT / "index.html").read_text(encoding="utf-8")
+        ids = re.findall(r'<section class="sheet[^"]*" id="(s\d)"', index)
+        self.assertEqual(ids, [f"s{n}" for n in range(1, 8)])
+        self.assertEqual(index.count('<section class="sheet'), 7)
+        mark = re.search(r"\.handle\{[^}]*width:(\d+)px;height:(\d+)px[^}]*border:([\d.]+)px", index)
+        hit = re.search(r"\.handle::after\{[^}]*inset:-(\d+)px", index)
+        self.assertIsNotNone(mark); self.assertIsNotNone(hit)
+        w, h, border, pad = int(mark.group(1)), int(mark.group(2)), float(mark.group(3)), int(hit.group(1))
+        self.assertEqual((w, h), (14, 14), "the mark is the owner's: 14 px")
+        # the pseudo-element is anchored to the padding box, inside the border
+        self.assertGreaterEqual(min(w, h) - 2 * border + 2 * pad, 24, "the hit area must meet WCAG 2.5.8")
+        for rule in (".counters button", ".proposal button", ".tb .idx a"):
+            self.assertRegex(index, re.escape(rule) + r"\{[^}]*min-height:24px", rule)
+
     def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
         """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
 

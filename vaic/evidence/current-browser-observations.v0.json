@@ -8,7 +8,8 @@
     "BE40E75378CB587A",
     "BCB3F4FA7CF7B9EC",
     "E7FD12A8025BCD99",
-    "EF57500CC99E3711"
+    "EF57500CC99E3711",
+    "9236E6A692F915D4"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -500,6 +501,141 @@
     "epoch_reproduction_EF57500CC99E3711": {
       "artifact_build": "EF57500CC99E3711",
       "observed_at": "2026-09-16",
+      "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+      "viewport": "1440x900",
+      "cl03": "CL-03 · PUBLISHED ADMISSION ≡ DERIVATION● HOLDING · 3 admissions re-derived",
+      "revisions_rendered": [
+        "012026-02-09E141:9D7A · superseded",
+        "022026-05-022BF8:2477 · superseded",
+        "032026-07-1675D1:89D1 · canonical",
+        "042026-07-17committed · sha256 c763fcd5… · PREIMAGE PUBLIC · DEMONSTRATION"
+      ],
+      "epoch_checksums_rederived_in_page": [
+        "E141:9D7A",
+        "2BF8:2477",
+        "75D1:89D1"
+      ],
+      "admissions_rederived_in_page": [
+        {
+          "epoch": 1,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 2,
+          "nonce": 0,
+          "published": 0
+        },
+        {
+          "epoch": 3,
+          "nonce": 0,
+          "published": 0
+        }
+      ]
+    },
+    "canonical_settle_9236E6A692F915D4": {
+      "artifact_build": "9236E6A692F915D4",
+      "build_identity": "9236E6A692F915D4",
+      "observed_at": "2026-09-17",
+      "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+      "surface": "the drawing set (index.html, js/drawing-set.js)",
+      "viewports": {
+        "1440x900": {
+          "settle_ms": 5131,
+          "three_consecutive_valid_samples": true,
+          "claims": "CLAIMS 11/11 HOLDING",
+          "overflow_x": false,
+          "console_errors": 0,
+          "external_requests": [],
+          "requests_observed": 8
+        },
+        "390x844": {
+          "settle_ms": 5132,
+          "three_consecutive_valid_samples": true,
+          "claims": "CLAIMS 11/11 HOLDING",
+          "overflow_x": false,
+          "console_errors": 0,
+          "external_requests": [],
+          "requests_observed": 8
+        },
+        "320x844": {
+          "settle_ms": 5123,
+          "three_consecutive_valid_samples": true,
+          "claims": "CLAIMS 11/11 HOLDING",
+          "overflow_x": false,
+          "console_errors": 0,
+          "external_requests": [],
+          "requests_observed": 8
+        },
+        "1440x900_reduced": {
+          "settle_ms": 1547,
+          "three_consecutive_valid_samples": true,
+          "claims": "CLAIMS 11/11 HOLDING",
+          "overflow_x": false,
+          "console_errors": 0,
+          "external_requests": [],
+          "requests_observed": 8
+        }
+      },
+      "worker_cache": [
+        "cytherai-substrate-9236E6A692F915D4"
+      ],
+      "worker_controlled": true,
+      "offline_reload_through_worker": {
+        "1440x900": {
+          "footer": "CLAIMS 11/11 HOLDING",
+          "build": "9236E6A692F915D4"
+        },
+        "390x844": {
+          "footer": "CLAIMS 11/11 HOLDING",
+          "build": "9236E6A692F915D4"
+        },
+        "320x844": {
+          "footer": "CLAIMS 11/11 HOLDING",
+          "build": "9236E6A692F915D4"
+        }
+      },
+      "checksum_printed_at_sites": [
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1",
+        "75D1:89D1"
+      ],
+      "checksum_rederived_in_page": "75D1:89D1",
+      "title_blocks": 7,
+      "sheets": 7,
+      "serial": "−1.752 +1.859 −0.983 −0.607",
+      "cl01": "CL-01 · ZERO EXTERNAL REQUESTS● HOLDING · 0 external requests",
+      "cl02": "CL-02 · RENDER ≡ MANIFEST● HOLDING · 75D1:89D1 printed at 9 sites · derived once · 20 projected facts equal the manifest",
+      "ds01": "DS-01 · SEAL SERIAL ≡ STATE● HOLDING · printed serial equals the canonical parameters",
+      "ds04": "DS-04 · SEAL ≡ DERIVATION● HOLDING · re-derived seal is pixel-identical to the stamped one · 7 title blocks",
+      "ds05": "DS-05 · THE DRAWING IS AN ADMITTED PROGRAM● HOLDING · drawing PRG-446DF7E6 judged admitted",
+      "drawing": "PRG-446DF7E6 · PROGRAM 3 OF 7 · LARGEST ADMITTED",
+      "obligations_disclosed": "9 OWED · 10 SUPERSEDED",
+      "handle_hit_box_css_px": [
+        14,
+        14
+      ],
+      "not_observed": [
+        "Safari/WebKit",
+        "a physical phone",
+        "120 Hz scrolling",
+        "VoiceOver"
+      ],
+      "sheet_index": "every title block carries a seven-link sheet index (#s1..#s7), the current sheet marked aria-current; clicking 5 from sheet 1 lands sheet 5 at the top",
+      "handle_hit_area_css_px": 28,
+      "handle_hit_test_at_12px": "handle in all four directions"
+    },
+    "epoch_reproduction_9236E6A692F915D4": {
+      "artifact_build": "9236E6A692F915D4",
+      "observed_at": "2026-09-17",
       "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
       "harness": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
       "viewport": "1440x900",

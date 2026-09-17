@@ -474,12 +474,21 @@ matches the pinned limits; Sheet 7 discloses `9 OWED · 10 SUPERSEDED`.
 
 - Safari/WebKit, VoiceOver, a physical phone, 120 Hz scrolling — the owner's observations,
   as before; append-only, and admission does not wait on them.
-- The FIG. 1 edge handle renders 14×14 CSS px; WCAG 2.5.8 (AA) asks 24×24 for pointer
-  targets. The owner fixed the visual language of the figure; enlarging the *hit area*
-  without changing the 14 px mark is a one-line stylesheet decision that is theirs.
-  The retired CY-GEO-003 (`MIN_TARGET`) governed the persistent instrument, not this
-  handle; a successor obligation would be new, not carried.
 - CY-ORIGIN-001 on GitHub Pages: §7.
+
+**Addendum, build `9236E6A692F915D4` (2026-09-17).** Two changes after an outside read of
+the live set: every title block carries a seven-link sheet index (`#s1`–`#s7`, the current
+sheet marked `aria-current`) so a visitor landing mid-set can cross it — drawing sets have
+one; and the FIG. 1 edge handle's hit area is a 28 px `::after` around the unchanged 14 px
+mark, with the four text controls under the figure lifted to 24 px (WCAG 2.5.8), pinned by
+`tools/test-site.py`. The same bounded observation re-ran against the artifact as an origin
+root — 1440×900 / 390×844 / 320×844 / reduced motion, three samples `CLAIMS 11/11 HOLDING`
+each, 9/9 checksum sites, 0 external requests, 0 console errors, no overflow, offline reload
+through the worker on the same build — plus: clicking `5` from sheet 1 lands sheet 5 at the
+top; `elementFromPoint` 12 px from the handle's centre hits the handle in all four
+directions. CY-SEM-001/002 re-bound (`#canonical_settle_9236E6A692F915D4`,
+`#epoch_reproduction_9236E6A692F915D4`). Safari/WebKit, VoiceOver, a physical phone and
+120 Hz remain the owner's.
 
 ## 6. Launch gate
 

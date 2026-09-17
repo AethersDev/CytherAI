@@ -67,7 +67,7 @@ sheets.forEach((sh, i) => {
       <div class="c" style="width:186px"><div class="k">DRAWN FROM</div><div class="v">PUBLIC MANIFEST <span class="acc" data-checksum>${CM.CHECKSUM}</span></div></div>
       <div class="c" style="width:176px"><div class="k">CHECKED BY</div><div class="v">6 CL · 5 DS · <span data-claims-count>—</span></div></div>
       <div class="c" style="width:142px"><div class="k">REV · EPOCH · DATE</div><div class="v">${CM.MANIFEST.revision} · 0${CM.MANIFEST.epoch} · ${CM.MANIFEST.derived}</div></div>
-      <div class="c" style="width:80px"><div class="k">SHEET</div><div class="v" style="font-size:15px">${i + 1} / ${sheets.length}</div></div>
+      <div class="c" style="width:88px"><div class="k">SHEET</div><div class="v" style="font-size:15px">${i + 1} / ${sheets.length}</div><nav class="idx" aria-label="Sheet index">${sheets.map((s, k) => `<a href="#${s.id}"${k === i ? ' aria-current="page"' : ""} aria-label="Sheet ${k + 1} — ${s.dataset.title.split(" · ")[0].toLowerCase()}">${k + 1}</a>`).join("")}</nav></div>
       <div class="c" style="width:72px"><div class="k" style="font-size:7px">APPROVED</div><canvas class="seal" width="120" height="120"></canvas></div>
     </div>
     <div class="notes"><b>${i === 0 ? "GENERAL NOTES" : "NOTES, SHEET " + (i + 1)}</b><br>${sh.dataset.notes.split("|").join("<br>")}</div>`);
