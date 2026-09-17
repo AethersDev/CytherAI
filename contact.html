@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | CytherAI</title>
+    <meta name="description" content="Request a briefing or initiate contact with CytherAI. Sovereign channel. No trackers.">
+    <meta property="og:title" content="Contact | CytherAI">
+    <meta property="og:description" content="Request a briefing or initiate contact with CytherAI. Sovereign channel. No trackers.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://cytherai.com/contact.html">
+    <meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
+    <meta name="theme-color" content="#ECF0F4">
+    <meta name="build-hash" content="9236E6A692F915D4">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+    <!-- form-action is deliberately absent: the form posts to mailto:, and browser
+         handling of a mailto: source in form-action is inconsistent enough that
+         adding it unverified could silently break the only contact path. Add
+         "form-action 'self' mailto:;" only after a Safari submit test confirms the
+         mail client still opens. Omitting it leaves form-action unrestricted —
+         it does not fall back to default-src — so this is an unclaimed hardening,
+         not a regression. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self';">
+    <link rel="stylesheet" href="css/cytherai.css" integrity="sha384-XJbPdQxy9HU4R/TdT7zPpv6BKO0WKFLzX5bE9cgUUSm/5uzwM+MZ/vg/LWdoAgIU" crossorigin="anonymous">
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+        <nav class="nav" role="navigation" aria-label="Site">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand" aria-label="CytherAI home">CYTHERAI</a>
+            <span class="nav-scope">CONTACT &middot; <b>PUBLIC SURFACE</b></span>
+            <ul class="nav-links">
+                <li><a href="pages/brief.html">Brief</a></li>
+                <li><a href="contact.html" aria-current="page">Contact</a></li>
+                <li><a href="pages/security.html">Security</a></li>
+                <li><a href="pages/privacy.html">Privacy</a></li>
+                <li><a href="pages/terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <article class="section">
+            <div style="max-width: 600px; margin: 0 auto; padding: 0 1.5rem;">
+                <div class="hero-stamp">COMMUNICATION PROTOCOL</div>
+                <h1 style="margin-bottom: 2rem;">Initiate Contact</h1>
+
+                <p style="color: var(--ink-mid); margin-bottom: 3rem; line-height: 1.7;">
+                    Leave your coordinates below. We respond to all briefing requests within
+                    24–48 hours. No tracking, no spam, plain email only.
+                </p>
+
+                <!-- The transport is mailto: BY DESIGN — zero external requests, no
+                     server storage, and the protocol block above the form states the
+                     handoff honestly before submit. Do not add a form service or
+                     server endpoint; that would trade a stated property for an
+                     unstated one. -->
+                <div style="border: 1px solid var(--rule); background: var(--paper-lifted); padding: 14px 16px; margin-bottom: 2rem;">
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.6rem;">
+                        Transmission Protocol
+                    </div>
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; line-height: 2; color: var(--ink-mid);">
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; border-bottom: 1px solid var(--rule);"><span style="color: var(--ink-quiet); white-space: nowrap;">CHANNEL</span><span style="margin-left: auto; text-align: right;">LOCAL MAIL CLIENT &middot; mailto:</span></div>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px; border-bottom: 1px solid var(--rule);"><span style="color: var(--ink-quiet); white-space: nowrap;">SERVER STORAGE</span><span style="margin-left: auto; text-align: right;">NONE &middot; NO BACKEND EXISTS</span></div>
+                        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 12px;"><span style="color: var(--ink-quiet); white-space: nowrap;">FALLBACK</span><span style="margin-left: auto; text-align: right;">COPY THE ADDRESS BELOW</span></div>
+                    </div>
+                    <p style="font-size: 0.8125rem; color: var(--ink-quiet); margin: 0.6rem 0 0; line-height: 1.6;">
+                        Transmit hands this message to your own mail client. If none is
+                        configured on this device, nothing will open &mdash; use the fallback
+                        address at the bottom of this page.
+                    </p>
+                </div>
+
+                <form
+                    id="contact-form"
+                    action="mailto:contact@cytherai.com"
+                    method="POST"
+                    enctype="text/plain"
+                    style="margin-bottom: 3rem;"
+                >
+                    <div class="form-group">
+                        <label for="contact-name" class="form-label">Name *</label>
+                        <input
+                            type="text"
+                            id="contact-name"
+                            name="name"
+                            class="form-input"
+                            required
+                            autocomplete="name"
+                            placeholder="Your name"
+                            minlength="2"
+                            maxlength="100"
+                            aria-describedby="contact-name-error"
+                        >
+                        <div class="form-error" id="contact-name-error" hidden></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-email" class="form-label">Email *</label>
+                        <input
+                            type="email"
+                            id="contact-email"
+                            name="email"
+                            class="form-input"
+                            required
+                            autocomplete="email"
+                            placeholder="your@email.com"
+                            aria-describedby="contact-email-error contact-email-hint"
+                        >
+                        <div class="form-error" id="contact-email-error" hidden></div>
+                        <div class="form-hint" id="contact-email-hint">Response channel. We will not share this.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-org" class="form-label">Organization</label>
+                        <input
+                            type="text"
+                            id="contact-org"
+                            name="organization"
+                            class="form-input"
+                            autocomplete="organization"
+                            placeholder="Your organization (optional)"
+                            maxlength="150"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contact-message" class="form-label">Message *</label>
+                        <textarea
+                            id="contact-message"
+                            name="message"
+                            class="form-textarea"
+                            required
+                            minlength="10"
+                            maxlength="2000"
+                            placeholder="What brings you to CytherAI? (e.g., 'Requesting technical briefing for financial compliance use case')"
+                            aria-describedby="contact-message-error contact-message-hint"
+                        ></textarea>
+                        <div class="form-error" id="contact-message-error" hidden></div>
+                        <div class="form-hint" id="contact-message-hint">Brief context helps us route your request.</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer;">
+                            <input
+                                id="contact-consent"
+                                type="checkbox"
+                                required
+                                name="consent"
+                                style="width: auto; flex-shrink: 0; margin-top: 3px;"
+                            >
+                            <span style="font-family: var(--font-mono); font-size: 0.875rem; color: var(--ink-mid);">
+                                I agree to the
+                                <a href="pages/privacy.html" style="color: var(--accent); text-decoration: underline;">privacy policy</a>
+                            </span>
+                        </label>
+                        <div class="form-error" id="contact-consent-error" hidden></div>
+                    </div>
+
+                    <!-- Transmission state line: refused (invalid fields) or handoff
+                         initiated. This page never claims delivery. -->
+                    <div
+                        id="form-feedback"
+                        role="alert"
+                        aria-live="polite"
+                        style="display:none; padding: 0.75rem 1rem; margin-bottom: 1rem; font-size: 0.875rem; font-family: var(--font-mono); border: 1px solid var(--rule);"
+                    ></div>
+
+                    <button
+                        type="submit"
+                        id="contact-submit"
+                        class="btn btn-primary"
+                        style="width: 100%;"
+                    >
+                        TRANSMIT MESSAGE
+                    </button>
+                </form>
+
+                <!-- Direct channels -->
+                <div style="border-top: 1px solid var(--rule); padding-top: 2rem; margin-top: 2rem;">
+                    <h2 style="font-size: 1.25rem; margin-bottom: 1rem;">Direct Channels</h2>
+
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                General Inquiries
+                            </div>
+                            <a
+                                href="mailto:contact@cytherai.com"
+                                id="general-email-link"
+                                style="color: var(--accent); font-family: var(--font-mono);"
+                            >contact@cytherai.com</a>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                Security Issues
+                            </div>
+                            <a href="mailto:security@cytherai.com" style="color: var(--accent); font-family: var(--font-mono);">security@cytherai.com</a>
+                            <div style="font-size: 0.875rem; color: var(--ink-quiet); margin-top: 0.25rem;">
+                                See <a href="pages/security.html" style="color: var(--ink-mid); text-decoration: underline;">disclosure policy</a>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.25rem;">
+                                NDA Requests
+                            </div>
+                            <a href="mailto:nda@cytherai.com" style="color: var(--accent); font-family: var(--font-mono);">nda@cytherai.com</a>
+                            <div style="font-size: 0.875rem; color: var(--ink-quiet); margin-top: 0.25rem;">
+                                For access to detailed technical documentation
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- The fallback channel the protocol block points at -->
+                <div id="fallback-channel" style="margin-top: 2rem; padding: 1rem; background: var(--paper-lifted); border: 1px solid var(--rule);">
+                    <div style="font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-quiet); margin-bottom: 0.5rem;">
+                        Transmission Fallback
+                    </div>
+                    <p style="font-size: 0.875rem; color: var(--ink-mid); margin-bottom: 0.75rem;">
+                        If no local mail client is configured, copy the address and send from
+                        any client. For encrypted communication, a PGP key is available upon
+                        request.
+                    </p>
+                    <button
+                        id="copy-email-btn"
+                        class="btn btn-secondary"
+                        style="font-size: 0.75rem; padding: 0.5rem 1rem;"
+                    >
+                        COPY EMAIL ADDRESS
+                    </button>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-text">&copy; <span class="js-year">2026</span> CytherAI</div>
+            <ul class="footer-links">
+                <li><a href="pages/security.html">Security</a></li>
+                <li><a href="pages/privacy.html">Privacy</a></li>
+                <li><a href="pages/terms.html">Terms</a></li>
+            </ul>
+        </div>
+    </footer>
+
+
+    <script>
+      /**
+       * Contact page — progressive enhancement layer
+       *
+       * Without JS: form submits via mailto: action (opens mail client).
+       * With JS: client-side validation, feedback messages, copy-email button.
+       *
+       * No external requests are made anywhere in this script.
+       */
+      (function () {
+        'use strict';
+
+        /* ── Per-field validation: refuse-red border + message, wired by
+              aria-describedby / aria-invalid. Returns the invalid count. ── */
+        function setFieldState (input, errId, msg) {
+          var err = document.getElementById(errId);
+          if (msg) {
+            input.setAttribute('aria-invalid', 'true');
+            if (err) { err.textContent = msg; err.hidden = false; }
+            return 1;
+          }
+          input.removeAttribute('aria-invalid');
+          if (err) { err.textContent = ''; err.hidden = true; }
+          return 0;
+        }
+
+        function validateForm (form) {
+          var name    = form.querySelector('#contact-name');
+          var email   = form.querySelector('#contact-email');
+          var message = form.querySelector('#contact-message');
+          var consent = form.querySelector('#contact-consent');
+          var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          var n = 0;
+          n += setFieldState(name, 'contact-name-error',
+            (!name.value.trim() || name.value.trim().length < 2) ? 'Name must be at least 2 characters.' : '');
+          n += setFieldState(email, 'contact-email-error',
+            emailRe.test(email.value.trim()) ? '' : 'Enter a valid email address.');
+          n += setFieldState(message, 'contact-message-error',
+            (!message.value.trim() || message.value.trim().length < 10) ? 'Message must be at least 10 characters.' : '');
+          n += setFieldState(consent, 'contact-consent-error',
+            consent.checked ? '' : 'The privacy policy must be accepted before transmission.');
+          return n;
+        }
+
+        /* ── Transmission state line. Two states only: NOT TRANSMITTED
+              (invalid fields) and HANDOFF INITIATED. Delivery is never
+              claimed — this page has no way to verify it. ── */
+        function showFeedback (message, isError) {
+          var el = document.getElementById('form-feedback');
+          if (!el) return;
+          el.textContent       = message;
+          el.style.display     = 'block';
+          el.style.background  = isError ? 'rgba(178,58,46,.08)' : 'var(--paper-lifted)';
+          el.style.border      = isError ? '1px solid rgba(178,58,46,.35)' : '1px solid var(--rule)';
+          el.style.color       = isError ? '#B23A2E' : 'var(--ink-mid)';
+        }
+
+        /* ── Form submit ────────────────────────────────────────── */
+        var form   = document.getElementById('contact-form');
+        var submit = document.getElementById('contact-submit');
+
+        if (form && submit) {
+          form.addEventListener('submit', function (e) {
+            var invalid = validateForm(form);
+            if (invalid) {
+              e.preventDefault();
+              showFeedback('NOT TRANSMITTED \u2014 ' + invalid + ' field' + (invalid > 1 ? 's' : '') +
+                ' marked below need' + (invalid > 1 ? '' : 's') + ' attention.', true);
+              var firstInvalid = form.querySelector('[aria-invalid="true"]');
+              if (firstInvalid) firstInvalid.focus();
+              return;
+            }
+
+            submit.disabled     = true;
+            submit.textContent  = 'OPENING MAIL CLIENT\u2026';
+            showFeedback(
+              'HANDOFF INITIATED \u2014 your mail client should now hold this message. ' +
+              'This page cannot verify delivery. If no client opened, use the fallback address below.',
+              false
+            );
+            setTimeout(function () {
+              submit.disabled    = false;
+              submit.textContent = 'TRANSMIT MESSAGE';
+            }, 4000);
+          });
+        }
+
+        /* ── Copy email ─────────────────────────────────────────── */
+        var copyBtn = document.getElementById('copy-email-btn');
+        if (copyBtn) {
+          copyBtn.addEventListener('click', function () {
+            var addr = 'contact@cytherai.com';
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(addr)
+                .then(function () { copyBtn.textContent = 'COPIED!'; })
+                .catch(function () { copyBtn.textContent = 'COPY FAILED \u2014 SEE ABOVE'; });
+            } else {
+              var ta = document.createElement('textarea');
+              ta.value = addr;
+              ta.setAttribute('readonly', '');
+              ta.style.cssText = 'position:fixed;left:-9999px';
+              document.body.appendChild(ta);
+              ta.select();
+              var ok = false;
+              try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+              document.body.removeChild(ta);
+              copyBtn.textContent = ok ? 'COPIED!' : 'COPY FAILED';
+            }
+            setTimeout(function () { copyBtn.textContent = 'COPY EMAIL ADDRESS'; }, 2000);
+          });
+        }
+
+      })();
+    </script>
+</body>
+</html>

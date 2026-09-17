@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>CytherAI — AI systems that run entirely inside your walls</title>
+<meta name="description" content="On-premises, air-gapped, log-verified AI systems for work where a wrong output has consequences. This drawing set is drawn from a public manifest, makes no external request, and states nothing it cannot check.">
+<meta property="og:title" content="CytherAI — AI systems that run entirely inside your walls">
+<meta property="og:description" content="On-premises, air-gapped, log-verified AI systems for work where a wrong output has consequences. This drawing set is drawn from a public manifest, makes no external request, and states nothing it cannot check.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/">
+<!-- og:image is metadata fetched by link scrapers, never by this page. The page makes no
+     request for it. The card is DERIVED (tools/render-og.py, CytherManifest.CANON) and
+     predates the drawing set: docs/asset-promotion-log.md records what it depicts. -->
+<meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
+<meta name="theme-color" content="#ECF0F4">
+<meta name="build-hash" content="9236E6A692F915D4">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE DRAWING SET. The homepage is an engineering drawing set: seven sheets inside one
+     border — the deployment boundary — each with a title block DRAWN FROM the public manifest,
+     CHECKED BY the standing claims, sealed with a mark derived from the disclosed state. FIG. 1
+     streams the boundary engine of the record (js/instrument.js) and lets the visitor move one
+     edge of the admitted drawing; every position is judged by the same boundary and kernel.
+     Sheet 7 is the authority layer: what this set owes, who may establish it, and the rules
+     every other sheet is drawn under. Zero external requests; no inline script (CSP); every
+     printed fact is a projection of js/manifest.js that CL-02 reads back. -->
+<style>
+:root{
+  --paper:#ECF0F4; --panel:#F6F8FB; --ink:#101620; --mid:#414A5B; --quiet:#586376; --accent:#2036C7;
+  --rule:rgba(16,22,32,.14); --mono:'SF Mono',Menlo,'Cascadia Code','Courier New',monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',sans-serif; --m:22px; --z:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-snap-type:y mandatory;scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.m{font-family:var(--mono)}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+
+/* ── the sheet ─────────────────────────────────────────────────────────── */
+.sheet{position:relative;height:100vh;min-height:720px;scroll-snap-align:start;overflow:hidden}
+.zx,.zy{position:absolute;display:flex;font-family:var(--mono);font-size:8.5px;color:var(--quiet);pointer-events:none}
+.zx{left:calc(var(--m) + var(--z));right:calc(var(--m) + var(--z));height:var(--z)}
+.zx.top{top:var(--m);border:1px solid var(--rule);border-bottom:none}
+.zx.bot{bottom:var(--m);border:1px solid var(--rule);border-top:none}
+.zx span{flex:1;text-align:center;line-height:var(--z);border-left:1px solid var(--rule)}
+.zy{top:calc(var(--m) + var(--z));bottom:calc(var(--m) + var(--z));width:var(--z);flex-direction:column}
+.zy.left{left:var(--m);border:1px solid var(--rule);border-right:none}
+.zy.right{right:var(--m);border:1px solid var(--rule);border-left:none}
+.zy span{flex:1;display:flex;align-items:center;justify-content:center;border-top:1px solid var(--rule)}
+.frame{position:absolute;left:calc(var(--m) + var(--z));top:calc(var(--m) + var(--z));right:calc(var(--m) + var(--z));bottom:calc(var(--m) + var(--z));
+  border:1.5px solid var(--ink)}
+.content{position:absolute;inset:0;padding:28px 30px 100px 30px}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--mid)}
+.fig{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--quiet);display:flex;justify-content:space-between;gap:16px}
+.fig b{color:var(--ink);font-weight:500}
+h1{font-size:clamp(34px,4vw,58px);line-height:1.04;letter-spacing:-.022em;font-weight:500;text-wrap:balance}
+h2{font-size:clamp(28px,2.8vw,40px);line-height:1.08;letter-spacing:-.02em;font-weight:500;text-wrap:balance}
+p.lede{font-size:clamp(15px,1.3vw,19px);line-height:1.55;color:var(--mid);max-width:36ch;text-wrap:pretty}
+p.body{font-size:clamp(14.5px,1.2vw,17px);line-height:1.6;color:var(--mid);text-wrap:pretty}
+p.body strong{color:var(--ink);font-weight:600}
+.col{display:flex;flex-direction:column;gap:22px}
+.two{display:grid;grid-template-columns:7fr 5fr;gap:40px;height:100%}
+.two.narrow{grid-template-columns:420px 1fr}
+.btns{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:11px;letter-spacing:.16em;padding:15px 20px;text-decoration:none;display:inline-block;border:1px solid rgba(16,22,32,.35);color:var(--mid)}
+.btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.link{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;padding:10px 0 8px;border-bottom:1px solid rgba(16,22,32,.35);align-self:flex-start;text-decoration:none}
+.hair{border-top:1px solid var(--rule)}
+
+/* title block + notes */
+.tb{position:absolute;right:0;bottom:0;display:flex;height:84px;border-top:1px solid var(--ink);border-left:1px solid var(--ink);background:var(--paper)}
+.tb .c{border-right:1px solid var(--ink);padding:6px 10px;display:flex;flex-direction:column;gap:3px;justify-content:center}
+.tb .c:last-child{border-right:none;align-items:center;padding:4px}
+.k{font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:var(--quiet)}
+.v{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink)}
+.v .acc{color:var(--accent)}
+.tb .brand{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.22em}
+.tb .idx{display:flex;gap:2px;font-family:var(--mono);font-size:9px;letter-spacing:.04em}
+.tb .idx a{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 2px;color:var(--quiet);text-decoration:none}
+.tb .idx a[aria-current]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--ink)}
+.tb .idx a:hover{color:var(--accent)}
+.notes{position:absolute;left:0;bottom:0;height:84px;width:350px;border-top:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px 12px;
+  font-family:var(--mono);font-size:8.5px;line-height:1.5;color:var(--mid);letter-spacing:.02em;background:var(--paper)}
+.notes b{color:var(--quiet);font-weight:500;letter-spacing:.14em}
+
+/* sheet 1 */
+.callout{display:flex;gap:18px;align-items:flex-start;margin-top:14px}
+.balloon{width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:10px}
+.big{font-family:var(--mono);font-size:clamp(44px,4.4vw,62px);line-height:1;letter-spacing:-.03em}
+.big{font-variant-numeric:tabular-nums}
+.cond{font-family:var(--mono);font-size:10px;line-height:1.7;color:var(--mid);letter-spacing:.04em}
+.figwrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0}
+.figbox{position:relative;width:min(100%,560px);aspect-ratio:1}
+#fig1{width:100%;height:100%;display:block}
+.handle{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border:1.5px solid var(--accent);background:var(--paper);cursor:grab;padding:0;touch-action:none}
+.handle::after{content:"";position:absolute;inset:-8px}   /* the hit area: the 11 px padding box + 16 = 27 px; the mark stays 14 */
+.handle:active{cursor:grabbing;background:var(--accent)}
+.handle:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.proposal{align-self:stretch;border-top:1px solid var(--rule);padding-top:10px;display:flex;flex-direction:column;gap:8px}
+.proposal[hidden]{display:none}
+.receipt{font-size:9.5px;line-height:1.8;color:var(--mid)}
+.receipt .k{font-size:9.5px;color:var(--ink)}
+.proposal .acts{display:flex;gap:16px}
+.proposal button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding:5px 0 2px;min-height:24px}
+.proposal button:disabled{color:var(--quiet);border-color:var(--rule);cursor:default}
+.proposal button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
+.counters{align-self:stretch;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mid);border-top:1px solid var(--rule);padding-top:10px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.counters b{color:var(--ink);font-weight:600}
+.counters .acts{display:flex;gap:16px}
+.counters button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding:5px 0 2px;min-height:24px}
+.counters button:hover{border-color:var(--accent);color:var(--accent)}
+.figlog{align-self:stretch;font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--quiet);min-height:2.6em}
+
+/* the admitted object, carried through the set */
+.obj{border:1px solid var(--rule);background:var(--panel);padding:10px 12px;display:flex;gap:12px;align-items:center}
+.obj svg{width:88px;height:88px;flex-shrink:0;display:block}
+.obj .t{font-family:var(--mono);font-size:9.5px;line-height:1.7;color:var(--mid)}
+.obj .t b{color:var(--ink);font-weight:600}
+.obj .t .id{color:var(--accent)}
+.obj.frag{padding:6px 10px;gap:8px}.obj.frag svg{width:44px;height:44px}
+.obj.large svg{width:120px;height:120px}
+.obj:not(.has) .t{color:var(--quiet)}
+
+/* sheet 2 */
+.flow{position:relative;height:350px}
+.box{position:absolute;border:1px solid var(--ink);background:var(--panel);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.box.dash{border-style:dashed}
+.box.dark{background:var(--ink);color:var(--paper)}
+.box .k{font-size:9px}.box.dark .k{color:rgba(236,240,244,.66)}
+.box div:last-child{font-size:13.5px;line-height:1.4}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:120px 1fr 48px;gap:12px;align-items:center;font-family:var(--mono);font-size:9.5px}
+.bar .n{color:var(--mid);letter-spacing:.08em}.bar .t{height:8px;border-left:1px solid var(--ink)}
+.bar .t i{display:block;height:8px;background:repeating-linear-gradient(135deg,var(--ink) 0 1px,transparent 1px 4px);border-right:1px solid var(--ink)}
+.bar .c{text-align:right}
+
+/* sheet 3 */
+.sched{border:1px solid var(--ink);padding:0 18px}
+.tr{display:grid;grid-template-columns:1fr 90px 90px 90px;gap:0 12px;padding:12px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--mid)}
+.tr.h{font-size:9.5px;letter-spacing:.16em;color:var(--quiet);border-bottom:1px solid var(--ink)}
+.tr div+div{text-align:right}.tr .cy{color:var(--ink);font-weight:600}.tr .na{color:#B8C0CC}
+.tr:last-child{border-bottom:none}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:8px 14px;font-family:var(--mono);font-size:10.5px;line-height:1.65}
+.kv .k{font-size:10.5px;letter-spacing:.12em}.kv .vv{color:var(--mid)}
+
+/* sheet 4 */
+.section{position:absolute;left:0;right:0;top:40px;height:min(600px,calc(100% - 40px));display:grid;grid-template-columns:1fr 64px 260px;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+.inside{padding:22px 26px 22px 0;display:flex;flex-direction:column;justify-content:space-between;gap:12px}
+.cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cell{border:1px solid var(--ink);background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px}
+.cell.dash{border-style:dashed;background:none}.cell.dark{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.cell .k{font-size:9px}.cell.dark .k{color:rgba(236,240,244,.66)}
+.cell .val{font-family:var(--mono);font-size:15px;font-weight:600}
+.wall{position:relative;border-left:1.5px solid var(--ink);border-right:1.5px solid var(--ink);
+  background:repeating-linear-gradient(135deg,var(--ink) 0 .7px,transparent .7px 10px)}
+.wall span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);white-space:nowrap;font-family:var(--mono);font-size:9px;letter-spacing:.22em;background:var(--paper);padding:4px 10px}
+.outside{padding:22px 0 22px 26px;display:flex;flex-direction:column;gap:12px}
+.livebox{border:1px solid var(--ink);padding:12px 14px;font-family:var(--mono);font-size:11px;line-height:1.7}
+.livebox b{font-size:18px;font-weight:600}
+
+/* sheet 5 */
+.paths{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.path{border:1px solid var(--ink);background:var(--panel);padding:22px 22px 24px;display:flex;flex-direction:column;gap:12px}
+.path.featured{border-color:var(--accent)}
+.path h3{font-size:20px;font-weight:600}
+.path p{font-size:15px;line-height:1.65;color:var(--mid);min-height:96px}
+.path .k{font-size:9.5px}
+.path .btn{padding:12px 16px;font-size:10.5px;letter-spacing:.14em}
+
+/* sheet 6 */
+.three{display:grid;grid-template-columns:420px 1fr 1fr;gap:34px;height:100%}
+.list .hd{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;color:var(--quiet);padding-bottom:8px;border-bottom:1px solid var(--ink)}
+.row{display:grid;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
+#claimRows .m-row{display:grid;grid-template-columns:1fr 150px;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
+#claimRows .m-kbtn{text-align:left;padding:0;color:var(--ink);letter-spacing:.02em}
+#claimRows .m-kbtn:hover{color:var(--accent)}
+#claimRows .m-row.open{border-bottom:none}
+#claimRows .m-v{text-align:right;color:var(--mid)}#claimRows .m-v.wait{color:var(--quiet)}#claimRows .m-v.bad{color:#B23A2E;font-weight:600}
+#claimRows .m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;line-height:1.9;color:var(--mid)}
+#claimRows .m-evidence .e-k{color:var(--quiet)}
+#claimRows .i-btn{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:1px;margin-top:4px}
+.row.rev{grid-template-columns:64px 88px 1fr}.row.rev .d{color:var(--quiet)}
+.row.nc{display:flex;justify-content:space-between}.row.nc span{color:var(--quiet)}
+.sealbox{display:flex;gap:16px;align-items:center;border:1px solid var(--ink);padding:12px 14px}
+.sealbox .v{font-size:10px;line-height:1.7;color:var(--mid)}
+canvas.seal{display:block;width:46px;height:46px}
+canvas.seal.lg{width:60px;height:60px}
+
+/* sheet 7 — the specification sheet may run longer than the viewport */
+.sheet.tall{height:auto;min-height:100vh}
+.sheet.tall .frame{position:relative;inset:auto;margin:calc(var(--m) + var(--z));min-height:calc(100vh - 2*(var(--m) + var(--z)))}
+.sheet.tall .content{position:relative;inset:auto;padding-bottom:110px}
+.sheet.tall .zx,.sheet.tall .zy{display:none}   /* a relative frame carries no zone strips; the border alone closes the set */
+.spec{display:grid;grid-template-columns:7fr 5fr;gap:40px;margin-top:22px}
+.ob summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1fr 150px;gap:10px;padding:8px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px}
+.ob summary::-webkit-details-marker{display:none}
+.ob summary .m-k{color:var(--mid)}.ob summary .m-v{text-align:right;color:var(--quiet)}
+.ob summary:hover .m-k{color:var(--ink)}
+.ob[open] summary{border-bottom:none}
+.ob .m-evidence{padding:2px 0 10px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:9.5px;line-height:1.9;color:var(--mid)}
+.ob .m-evidence .e-k{color:var(--quiet)}.ob .m-evidence b{color:var(--ink);font-weight:500}
+.gn{font-family:var(--mono);font-size:10.5px;line-height:1.75;color:var(--mid);padding:8px 0;border-bottom:1px solid var(--rule)}
+.gn b{color:var(--ink);font-weight:600;margin-right:6px}
+.gn:first-of-type{color:var(--ink)}
+.obls .hd.sup{margin-top:22px;color:var(--quiet)}
+.ob.sup summary .m-k{color:var(--quiet)}.ob.sup summary .m-v{color:#B8C0CC}
+
+/* ── phone: the sheet flows ─────────────────────────────────────────────── */
+@media(max-width:900px){
+  html{scroll-snap-type:none}
+  .sheet{height:auto;min-height:0}
+  .zx,.zy{display:none}
+  .frame{position:relative;inset:auto;margin:12px}
+  .content{position:relative;padding:22px 16px 0}
+  .two,.two.narrow,.three{grid-template-columns:1fr;height:auto;gap:28px}
+  .tb{position:static;height:auto;flex-wrap:wrap;border-left:none;margin-top:22px}
+  .tb .c{flex:1 1 40%;border-bottom:1px solid var(--rule)}
+  .tb .idx a{flex:1;min-width:24px}
+  .notes{position:static;width:auto;height:auto;border-right:none}
+  .flow{height:auto;position:static}.box{position:static;margin-bottom:10px}
+  .section{position:static;height:auto;grid-template-columns:1fr}.wall{height:64px;border:none;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+  .wall span{transform:translate(-50%,-50%)}
+  .paths,.cells,.spec{grid-template-columns:1fr}
+  .sheet.tall .frame{margin:12px}
+  .tr{grid-template-columns:1fr 64px 64px 64px;font-size:10.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ SHEET 1 — THE STATEMENT ═══════════ -->
+<section class="sheet" id="s1" data-title="THE STATEMENT" data-notes="1. Every value on this drawing set sits beside its condition and its source.|2. ● log-verified &nbsp;◌ externally validated &nbsp;— not disclosed.|3. The border of each sheet is the deployment boundary. Nothing drawn crosses it." aria-label="Sheet 1 — the statement">
+  <div class="frame"><div class="content">
+    <div class="two">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 1 · THE STATEMENT</div>
+        <h1>AI systems that run entirely inside your walls.</h1>
+        <p class="lede">On-premises, air-gapped, log-verified — for work where a wrong output has consequences. Nothing is emitted that has not been verified. This sheet is drawing one, live, now.</p>
+        <div class="btns">
+          <a class="btn primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">REQUEST A CONVERSATION</a>
+          <a class="btn" href="#s2">NEXT SHEET ↓</a>
+        </div>
+        <div class="callout">
+          <div class="balloon">1</div>
+          <div class="col" style="gap:4px">
+            <div class="big"><span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span></div>
+            <div style="font-size:15px;font-weight:500">invalid outputs — CytherCAD on Text2CAD-192</div>
+            <div class="cond">DeepCAD <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> · T2CAD <span data-m="validation:T2C192-IR-0.00:t2cad">0.93%</span> · external benchmark, published, not operated by CytherAI · log-verified evaluation, April 2026</div>
+          </div>
+        </div>
+      </div>
+      <div class="figwrap">
+        <noscript><div class="fig" style="align-self:stretch"><div>THIS SET IS DRAWN LIVE FROM ITS MANIFEST. WITH SCRIPTS OFF THE SHEETS STAND AS WRITTEN; FIG. 1, THE TITLE BLOCKS, THE REVISIONS AND THE CLAIMS ARE NOT DRAWN.</div></div></noscript>
+        <div class="fig" style="align-self:stretch"><div>FIG. 1 — CONSTRAINED GENERATION · <b id="figState">LIVE</b></div><div>SEED 02 · 1,500 PROPOSALS</div></div>
+        <div class="figbox">
+          <svg id="fig1" viewBox="0 0 560 560" aria-label="Figure 1 — a rectilinear profile being generated under constraint; refused proposals are struck, admitted strokes are inked"></svg>
+          <button id="handle" class="handle" hidden aria-label="Adjustable edge of the admitted drawing"></button>
+        </div>
+        <div class="counters">
+          <div id="ctr">PROPOSED 0 · REFUSED 0 · DISCARDED 0 · <b>ADMITTED 0</b> · INVALID EMITTED <b>0</b></div>
+          <div class="acts"><button id="runAgain">RUN AGAIN</button><button id="audit">AUDIT 10,000</button></div>
+        </div>
+        <div class="figlog" id="figlog">A hostile proposer streams tokens at the boundary; each proposal appears where it was judged, its refusal marked at the offending relation; an independent kernel re-verifies every closed profile before it is drawn in ink. Same seed, same drawing, on every machine.</div>
+        <div class="proposal" id="proposal" hidden>
+          <div class="receipt m" id="receipt"></div>
+          <div class="acts"><button id="accept" disabled>ACCEPT CHANGE</button><button id="resetEdge" disabled>RESET</button></div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 2 — THE SYSTEM ═══════════ -->
+<section class="sheet" id="s2" data-title="THE SYSTEM · CYTHERCAD" data-notes="1. The grammar in FIG. 1 is a toy; the mechanism in FIG. 2 is the one in production.|2. Same seed ⇒ same admissions on every machine (AUDIT runs 10,000 proposals on request)." aria-label="Sheet 2 — the system">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 2 · THE SYSTEM</div>
+        <h2>Validity is a property of the boundary, not of the model.</h2>
+        <p class="body"><strong>CytherCAD</strong> generates CAD from text. The model only proposes. A boundary admits or refuses every token against the grammar and then the geometry; an independent kernel re-verifies the finished program. What cannot pass never becomes an output — it is refused at the boundary, not filtered afterwards.</p>
+        <p class="body">A second system is indexed and sealed: a zero-dependency neural theorem prover, reference NTP-2025-001. Its contents open under NDA.</p>
+        <div class="k" style="font-size:10px;letter-spacing:.14em"><span id="sysId">—</span> · DISCLOSED · PRODUCTION-VALIDATED · <span id="patent">—</span></div>
+        <div class="obj" data-obj="system"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">THE OBJECT FROM SHEET 1 · ITS CONSTRUCTION</span><br><span class="body"></span></div></div>
+      </div>
+      <div class="col" style="gap:14px">
+        <div class="fig"><div>FIG. 2 — SECTION A–A THROUGH THE BOUNDARY</div></div>
+        <div class="flow">
+          <div class="box" style="left:0;top:20px;width:176px;height:122px"><div class="k">PROPOSER</div><div>Autoregressive model. Proposes tokens; holds no authority.</div></div>
+          <div class="box" style="left:232px;top:0;width:214px;height:162px"><div class="k">BOUNDARY · GRAMMAR, THEN GEOMETRY</div><div>Admits or refuses each token: grammar, axis order, argument range, bounds, self-intersection, closure.</div></div>
+          <div class="box" style="left:502px;top:20px;width:176px;height:122px"><div class="k">KERNEL · INDEPENDENT</div><div>Rebuilds the whole program and re-verifies it. A second opinion, every time.</div></div>
+          <div class="box dark" style="left:734px;top:20px;width:126px;height:122px"><div class="k">EMITTED</div><div>Geometry. Only this leaves the system.</div></div>
+          <div class="box dash" style="left:232px;top:232px;width:214px;height:88px"><div class="k">REFUSED</div><div id="refusedBox">Returned to the proposer.</div></div>
+          <svg style="position:absolute;left:0;top:0;overflow:visible;pointer-events:none" width="1" height="1">
+            <g stroke="#101620" stroke-width=".9" fill="#101620" font-family="'SF Mono',Menlo,monospace" font-size="8.5">
+              <line x1="176" y1="81" x2="232" y2="81"></line><polygon points="232,81 225,77.5 225,84.5"></polygon><text x="204" y="72" text-anchor="middle" stroke="none" fill="#586376">TOKEN</text>
+              <line x1="446" y1="81" x2="502" y2="81"></line><polygon points="502,81 495,77.5 495,84.5"></polygon><text x="474" y="72" text-anchor="middle" stroke="none" fill="#586376">ADMITTED</text>
+              <line x1="678" y1="81" x2="734" y2="81"></line><polygon points="734,81 727,77.5 727,84.5"></polygon><text x="706" y="72" text-anchor="middle" stroke="none" fill="#586376">VERIFIED</text>
+              <line x1="339" y1="162" x2="339" y2="232" stroke-dasharray="4 3"></line><polygon points="339,232 335.5,225 342.5,225"></polygon>
+            </g>
+          </svg>
+        </div>
+        <div class="fig"><div>FIG. 2b — REFUSALS BY CLASS · <span id="barsHead">SEED 02 · 1,500 PROPOSALS</span></div></div>
+        <div class="bars" id="bars"></div>
+        <div class="hair m" style="padding-top:10px;font-size:10px;line-height:1.8;color:var(--mid)"><span class="k" style="font-size:9px">TEST ENVIRONMENT</span><br>Air-gapped · no external calls · Apple Silicon M4 · local inference only · evaluation log-verified, April 2026</div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 3 — MEASUREMENT ═══════════ -->
+<section class="sheet" id="s3" data-title="MEASUREMENT · SCHEDULE 1" data-notes="1. Invalid rate is the share of generated programs the kernel refuses. CytherCAD emits none: refusal happens before emission.|2. † T2CAD figure as published by its authors." aria-label="Sheet 3 — measurement">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 3 · MEASUREMENT</div>
+        <h2>Numbers with their conditions attached.</h2>
+        <p class="body">One external benchmark we did not operate, and <span id="nLog">—</span> measurements from the evaluation log. Sample sizes print beside every figure. Controlled records — <span data-m="count:controlled_references">03</span> — are indexed by structure only; their values are sealed.</p>
+        <div class="kv">
+          <div class="k">METHOD</div><div class="vv">Autoregressive generation · constrained decoding · kernel-backed geometric verification</div>
+          <div class="k">SOURCE</div><div class="vv">Text2CAD-192 · external · published · not operated by CytherAI</div>
+          <div class="k">EVALUATED BY</div><div class="vv">CytherAI internal evaluation · April 2026 · log-verified</div>
+          <div class="k">CONTROLLED</div><div class="vv"><span data-m="count:controlled_references">03</span> · structure indexed · values sealed</div>
+        </div>
+      </div>
+      <div class="col" style="gap:14px">
+        <div class="fig"><div>SCHEDULE 1 — VALIDATION · CYTHERCAD v1.1 · <b>PROJECTED FROM THE MANIFEST</b></div></div>
+        <!-- the rows below are written by tools/project-manifest.py from CytherManifest.VALIDATION, never by hand -->
+        <div class="sched">
+          <div class="tr h"><div>METRIC</div><div class="cy">CYTHER</div><div>DEEPCAD</div><div>T2CAD</div></div>
+          <div class="tr"><div>◌ <span data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</span></div><div class="cy" data-m="validation:T2C192-IR-0.00:cyther">0.00%</div><div class="" data-m="validation:T2C192-IR-0.00:deepcad">10.00%</div><div class="" data-m="validation:T2C192-IR-0.00:t2cad">0.93%</div></div>
+          <div class="tr"><div>● <span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span></div><div class="cy" data-m="validation:GVR-BEAM-100:cyther">100%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span></div><div class="cy" data-m="validation:GVR-COMP-100:cyther">100%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span></div><div class="cy" data-m="validation:DIM3-99:cyther">99%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span></div><div class="cy" data-m="validation:DIM5-97:cyther">97%</div><div class="na">—</div><div class="na">—</div></div>
+          <div class="tr"><div>● <span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span></div><div class="cy" data-m="validation:MOP-91:cyther">91%</div><div class="na">—</div><div class="na">—</div></div>
+        </div>
+        <div class="m" style="font-size:9.5px;line-height:1.7;color:var(--quiet)">◌ external benchmark · ● log-verified · — not disclosed. Every figure here is a projection of the public manifest (CytherManifest.VALIDATION) and CL-02 reads it back.</div>
+        <div class="obj" data-obj="measure"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">FIG. 3a — THE OBJECT, MEASURED · THIS BROWSER'S DEMONSTRATION, NOT AN EVALUATION FIGURE</span><br><span class="body"></span></div></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 4 — WHAT RUNS WHERE ═══════════ -->
+<section class="sheet" id="s4" data-title="WHAT RUNS WHERE · WALL SECTION" data-notes="1. Hatching denotes the deployment boundary as installed by the customer; CytherAI holds no key to it.|2. Verification runs inside the wall — a claim the customer can check, not one they must trust." aria-label="Sheet 4 — what runs where">
+  <div class="frame"><div class="content">
+    <div class="two narrow">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 4 · WHAT RUNS WHERE</div>
+        <h2>Nothing leaves the deployment boundary.</h2>
+        <p class="body">Model, policy, state, verification and the record execute on your hardware. Correctness does not depend on a service you do not control — including ours. Air-gapped means the wall has no door.</p>
+        <p class="body">This page is built the same way. It loads no font, no script and no image from anywhere but itself, and it reports the resource requests this browser observed.</p>
+        <div class="livebox"><span class="k" style="font-size:9px">CL-01 · RESOURCE REQUESTS THIS BROWSER OBSERVED</span><br>EXTERNAL REQUESTS <b id="ext">—</b> · <span id="extState" class="acc" style="color:var(--accent)">CHECKING</span></div>
+      </div>
+      <div style="position:relative;height:100%">
+        <div class="fig"><div>FIG. 3 — WALL SECTION · SCALE NONE</div></div>
+        <div class="section">
+          <div class="inside">
+            <div class="k" style="font-size:9px">INSIDE — YOUR PREMISES · CEILING AND FLOOR ARE YOURS</div>
+            <div class="cells">
+              <div class="cell"><div class="k">MODEL</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">POLICY</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">STATE</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">VERIFICATION</div><div class="val">LOCAL</div></div>
+              <div class="cell"><div class="k">RECORD</div><div class="val">LOCAL</div></div>
+              <div class="cell dash"><div class="k">CONTROLLED RECORDS</div><div class="val"><span data-m="count:controlled_references">03</span> · SEALED</div></div>
+            </div>
+            <div class="obj" data-obj="wall"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">THE OBJECT AND ITS VERIFICATION · INSIDE THE WALL</span><br><span class="body"></span></div></div>
+          </div>
+          <div class="wall"><span>THE WALL · NO DOOR</span></div>
+          <div class="outside">
+            <div class="k" style="font-size:9px">OUTSIDE — THE NETWORK</div>
+            <div class="cell dark"><div class="k">REQUIRED CLOUD</div><div class="val">NONE</div></div>
+            <div class="m" style="font-size:10px;line-height:1.7;color:var(--quiet)">No telemetry, no licence check, no model call. What is outside cannot affect what is decided inside.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 5 — ACCESS ═══════════ -->
+<section class="sheet" id="s5" data-title="ACCESS · THREE PATHS" data-notes="1. nda@cytherai.com for path 2; review@cytherai.com for path 3.|2. Selective about what gets built. Thorough about how it gets built." aria-label="Sheet 5 — access">
+  <div class="frame"><div class="content">
+    <div class="col" style="gap:26px;padding-top:10px">
+      <div class="col" style="gap:16px;max-width:760px">
+        <div class="eyebrow">SHEET 5 · ACCESS</div>
+        <h2>Three paths, each with its conditions stated.</h2>
+      </div>
+      <div class="paths">
+        <div class="path"><div class="k">PATH 1 · OPEN</div><h3>Public materials</h3><p>This drawing set, the brief, and the record — disclosed without qualification.</p><div class="k">OPEN ACCESS · NO QUALIFICATION</div><a class="link" href="pages/brief.html">READ THE BRIEF</a></div>
+        <div class="path featured"><div class="k">PATH 2 · QUALIFIED</div><h3>Capability review</h3><p>Full validation records, the sealed strata, and a working session with CytherCAD — under NDA and identity confirmation.</p><div class="k">NDA · IDENTITY CONFIRMATION</div><a class="btn primary" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">REQUEST NDA BRIEFING</a><div class="obj frag" data-obj="access"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="body"></span></div></div></div>
+        <div class="path"><div class="k">PATH 3 · CONTROLLED</div><h3>Technical diligence</h3><p>Architecture, logs and evaluation harnesses opened for inspection inside a supervised review window.</p><div class="k">SCOPED WINDOW · SUPERVISED</div><a class="link" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">REQUEST DILIGENCE WINDOW</a></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 6 — THE RECORD ═══════════ -->
+<section class="sheet" id="s6" data-title="THE RECORD" data-notes="1. The page renders the commitment; it does not notarize it.|2. A receipt for this build cannot be inside this build: verdicts are established outside the artifact." aria-label="Sheet 6 — the record">
+  <div class="frame"><div class="content">
+    <div class="three">
+      <div class="col" style="padding-top:10px">
+        <div class="eyebrow">SHEET 6 · THE RECORD</div>
+        <h2>This set is drawn from a public manifest, and it checks itself.</h2>
+        <p class="body">Six standing claims of the record (CL) and five predicates of this set (DS) run in your browser against these sheets — an identifier is part of a claim, so a canonical CL number is used only where the predicate is the canonical one. The seal in every title block is not a logo: it is derived from the disclosed state, and it changes when the state does. Each prior state remains derivable — the record supersedes, it does not delete.</p>
+        <div class="sealbox"><canvas class="seal lg" width="120" height="120"></canvas><div class="v">SEAL · DERIVED<br>MARK <span id="serial">…</span><br>NONCE <span id="nonce">—</span> · STATE <span class="acc" id="ck2" data-checksum>—</span></div></div>
+        <div class="obj large" data-obj="record"><svg viewBox="0 0 140 140"></svg><div class="t"><span class="k" style="font-size:8.5px">LOCAL RECEIPT — THE OBJECT FROM SHEET 1</span><br><span class="body"></span></div></div>
+        <a class="link" href="#s7">INSPECT THE OBLIGATIONS → sheet 7, what the set itself is obligated to obey</a>
+      </div>
+      <div class="list"><div class="hd">CHECKED BY — STANDING CLAIMS (CL) · DRAWING-SET PREDICATES (DS) · <span id="claimsFooter">CLAIMS —/—</span></div><div id="claimRows"></div><button class="link" id="recompute" style="margin-top:10px">RECOMPUTE ALL</button></div>
+      <div class="col" style="gap:22px">
+        <div class="list"><div class="hd">REVISIONS — EPOCHAL RECORD</div><div id="revs"></div></div>
+        <div class="list"><div class="hd">GENERAL NOTES — NOT CLAIMED, DRAWN BY THE AUTHOR</div><div id="nc"></div></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ═══════════ SHEET 7 — OBLIGATIONS ═══════════ -->
+<section class="sheet tall" id="s7" data-title="OBLIGATIONS · GENERAL NOTES" data-notes="1. This sheet governs the set: it states what the set owes, who may establish it, and the rules every other sheet is drawn under.|2. Verdicts are established outside the artifact. A receipt for this build cannot be inside this build." aria-label="Sheet 7 — obligations and general notes">
+  <div class="frame"><div class="content">
+    <div class="col" style="gap:16px;padding-top:10px;max-width:760px">
+      <div class="eyebrow">SHEET 7 · WHAT THE SET ITSELF IS OBLIGATED TO OBEY</div>
+      <h2>Specification of the set.</h2>
+    </div>
+    <div class="spec">
+      <div class="list obls">
+        <div class="hd">OBLIGATIONS — WHAT THIS SET OWES · WHO MAY ESTABLISH IT · <span id="oblCount">—</span> · NO VERDICT ASSERTED HERE</div>
+        <!-- obligations:begin — 19 obligations projected from vaic/cytherai-obligations.v1.json by tools/project-obligations.py:
+           9 owed by this set, 10 superseded with instrument-v1; build-stable fields only; no receipt, result, digest
+           or build identity is ever written here -->
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-SEM-001 · SEMANTIC · MANDATORY</span><span class="m-v anti-v">DERIVED_FROM</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for the current canonical record and rendered homepage: rendered canonical mark and printed state checksum <b>DERIVED_FROM</b> js/manifest.js canonical manifest state</div><div><span class="e-k">WHEN — </span>homepage reaches a settled canonical state</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PURE_RUNTIME_HARNESS · BROWSER_HARNESS · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>the seal on every title block (CytherManifest.dsinOrbit(CANON)) and the state checksum at every [data-checksum] site; CL-02, DS-01 and DS-04 execute the page-checkable part, a browser harness observes the rendering</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-SEM-002 · SEMANTIC · MANDATORY</span><span class="m-v anti-v">REPRODUCIBLE_FROM</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every published epoch in the current manifest: current and superseded published marks <b>REPRODUCIBLE_FROM</b> their published manifests and nonces</div><div><span class="e-k">WHEN — </span>published admissions are verified</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PURE_RUNTIME_HARNESS · BROWSER_HARNESS · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>the revisions list on Sheet 6 (every epoch&#x27;s checksum, the commitment) and CL-03&#x27;s re-derivation of the three published admissions off the boot path</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-SEM-003 · SEMANTIC · MANDATORY</span><span class="m-v anti-v">DISTINGUISHABLE</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for each declared sample of reading element, sheet, ground and viewport: rendered reading ink <b>DISTINGUISHABLE</b> the ground actually composited beneath it — paper, panel and ink-box grounds included</div><div><span class="e-k">WHEN — </span>the homepage settles and FIG. 1 has settled</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>BROWSER_HARNESS · coverage SAMPLED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>reading ink on the drawing set&#x27;s declared grounds — paper (--paper), panel (--panel), and the ink boxes (paper ink on --ink); DS-02 and DS-03 execute the fixed paper ground from the stylesheet tokens, a browser harness observes the composited result on every ground</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-EPI-003 · EPISTEMIC · MANDATORY</span><span class="m-v anti-v">FAILURE_REMAINS_VISIBLE</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for the forced-invalid regression trace: standing invalid claim state <b>FAILURE_REMAINS_VISIBLE</b> claim row and aggregate footer status</div><div><span class="e-k">WHEN — </span>one standing claim is invalid and another claim is recomputed</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PURE_RUNTIME_HARNESS · MODEL_CHECKER · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>the claim rows on Sheet 6 (#claimRows), the aggregate footer (#claimsFooter) and the CHECKED BY count in every title block ([data-claims-count]); tools/test-claims.js holds the six canonical claims</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-ART-001 · ARTIFACT · MANDATORY</span><span class="m-v anti-v">DERIVED_FROM</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every file in the current release artifact: dist artifact <b>DERIVED_FROM</b> explicit tracked-source allowlist (deploy.paths) with matching integrity identities</div><div><span class="e-k">WHEN — </span>the release artifact is constructed</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>ARTIFACT_VERIFIER · coverage EXHAUSTIVE</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>deploy.paths → deploy.sh → dist/, the SRI attributes on the four modules and the stylesheet, the build identity over every served byte; tools/test-site.py</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-TOP-001 · TOPOLOGICAL · MANDATORY</span><span class="m-v anti-v">REACHABLE_WITHIN</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every one of the eleven standing claim rows (six CL, five DS): standing claim <b>REACHABLE_WITHIN</b> its governing method, value, and computation evidence</div><div><span class="e-k">WHEN — </span>a claim is visible</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>BROWSER_HARNESS · ACCESSIBILITY_HARNESS · ASSISTIVE_TECH_REVIEW · MODEL_CHECKER · coverage BOUNDED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>each claim row on Sheet 6 expands to METHOD · VALUE · COMPUTED (CytherClaims.renderClaims); RE-RUN THIS CLAIM where the predicate has a run</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-TEMP-001 · TEMPORAL · MANDATORY</span><span class="m-v anti-v">QUIESCENT_WHEN</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every settled visual subsystem in the declared runtime profile: visual and computational runtime <b>QUIESCENT_WHEN</b> state derivative equals zero</div><div><span class="e-k">WHEN — </span>observer and interaction state stop changing</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>PERFORMANCE_HARNESS · BROWSER_HARNESS · HUMAN_PERCEPTUAL_EVALUATOR · coverage BOUNDED · HUMAN_REVIEWED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>after FIG. 1 settles and its construction field ages out no frame is requested; the page is static until RUN AGAIN, AUDIT, the handle or RECOMPUTE ALL</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-TEMP-002 · TEMPORAL · MANDATORY</span><span class="m-v anti-v">TRANSITION_CORRESPONDS_TO</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for each declared semantic state transition: visual motion <b>TRANSITION_CORRESPONDS_TO</b> the governing system-state transition</div><div><span class="e-k">WHEN — </span>a system state transition produces visual motion</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>BROWSER_HARNESS · HUMAN_PERCEPTUAL_EVALUATOR · coverage HUMAN_REVIEWED</div><div><span class="e-k">IF UNPAID — </span>PROJECTION INVALID</div><div><span class="e-k">ON THIS SET — </span>FIG. 1&#x27;s three transitions: a proposal appears where it was judged and fades (proposal); the admitted object is stated by identity and inked over the ~500 ms resolution (admission); an accepted candidate becomes the drawing while the old one ghosts (acceptance)</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <details class="ob"><summary class="m-row"><span class="m-k">CY-ORIGIN-001 · ORIGIN · RELEASE MANDATORY</span><span class="m-v anti-v">ORIGIN_MATCHES</span></summary><div class="m-evidence"><div><span class="e-k">OWED — </span>for every route, asset, redirect, protocol, and runtime obligation in the release closure at observation time: time-indexed production origin snapshot <b>ORIGIN_MATCHES</b> certified artifact and origin contract</div><div><span class="e-k">WHEN — </span>a production origin is proposed for release certification</div><div><span class="e-k">MAY BE ESTABLISHED BY — </span>ORIGIN_HARNESS · coverage EXHAUSTIVE</div><div><span class="e-k">IF UNPAID — </span>RELEASE NOT CERTIFIED</div><div><span class="e-k">ON THIS SET — </span>unchanged: the production origin against the certified artifact and docs/deploy.md §1–§4</div><div><span class="e-k">THIS ARTIFACT — </span>OBLIGATION DISCLOSED · VERDICT NOT ASSERTED HERE</div></div></details>
+      <div class="hd sup">SUPERSEDED WITH INSTRUMENT-V1 — 10 OBLIGATIONS · PRESERVED WITH THEIR EVIDENCE · NOT OWED BY THIS SET · SUPERSESSION IS NOT SATISFACTION, FAILURE, OR REVOCATION</div>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-EPI-001 · EPISTEMIC · SUPERSEDED</span><span class="m-v anti-v">DISCLOSED_AS</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the tested ledger transmission state: reader ledger <b>DISCLOSED_AS</b> READING SELF-REPORT</div><div><span class="e-k">RETIRED MECHANISM — </span>the reader self-report ledger (js/ledger.js) and its mail transmission</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-EPI-002 · EPISTEMIC · SUPERSEDED</span><span class="m-v anti-v">AUTHORITY_NOT_ELEVATED</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the tested ledger transmission state: reader self-report <b>AUTHORITY_NOT_ELEVATED</b> independently verifiable evidence</div><div><span class="e-k">RETIRED MECHANISM — </span>the reader self-report ledger (js/ledger.js) and its mail transmission</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-GEO-001 · GEOMETRY · SUPERSEDED</span><span class="m-v anti-v">NON_OCCLUDING</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for every declared mobile viewport at terminal scroll: persistent bottom instrument <b>NON_OCCLUDING</b> required footer record and links</div><div><span class="e-k">RETIRED MECHANISM — </span>the persistent bottom instrument (minimap slider, optics, fork controls, hold-to-cross) on mobile viewports</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-GEO-002 · GEOMETRY · SUPERSEDED</span><span class="m-v anti-v">WITHIN_VIEWPORT</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for every required persistent-instrument control in every declared mobile viewport: required persistent-instrument controls <b>WITHIN_VIEWPORT</b> visual viewport</div><div><span class="e-k">RETIRED MECHANISM — </span>the persistent bottom instrument&#x27;s controls on mobile viewports</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-GEO-003 · GEOMETRY · SUPERSEDED</span><span class="m-v anti-v">MIN_TARGET</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for every required persistent-instrument control in every declared mobile viewport: required persistent-instrument controls <b>MIN_TARGET</b> two-dimensional rendered hit box</div><div><span class="e-k">RETIRED MECHANISM — </span>the persistent bottom instrument&#x27;s controls on mobile viewports</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-STATE-001 · STATE · SUPERSEDED</span><span class="m-v anti-v">UNCHANGED_UNDER</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the declared same-width, same-DPR height-change trace: canonical world backing state <b>UNCHANGED_UNDER</b> observer-height-only geometry change</div><div><span class="e-k">RETIRED MECHANISM — </span>the canonical world&#x27;s backing state — the plate fields — under an observer-height-only geometry change</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-STATE-002 · RELATIONAL · SUPERSEDED</span><span class="m-v anti-v">DISTINGUISHABLE</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the declared canonical-to-fork interaction trace: canonical and visitor-fork states <b>DISTINGUISHABLE</b> rendered status, controls, and canonical provenance</div><div><span class="e-k">RETIRED MECHANISM — </span>the visitor fork of the canonical world (CytherSubstrate.setFork) and its rendered distinction from the canonical state</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-STATE-003 · RELATIONAL · SUPERSEDED</span><span class="m-v anti-v">PERSISTENT</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the declared fork-and-reset interaction trace: canonical state recoverability <b>PERSISTENT</b> visitor fork and reset sequence</div><div><span class="e-k">RETIRED MECHANISM — </span>the visitor fork of the canonical world and its reset (CytherSubstrate.resetToCanonical)</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-TOP-002 · TOPOLOGICAL · SUPERSEDED</span><span class="m-v anti-v">ORDERED</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for the declared initial-to-fork trace: canonical encounter <b>ORDERED</b> visitor-fork encounter</div><div><span class="e-k">RETIRED MECHANISM — </span>the visitor fork of the canonical world and the encounter order it imposed</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <details class="ob sup"><summary class="m-row"><span class="m-k">CY-RES-001 · RESOURCE · SUPERSEDED</span><span class="m-v anti-v">BOUNDED_BY</span></summary><div class="m-evidence"><div><span class="e-k">OWED BY INSTRUMENT-V1 — </span>for each declared capability profile: plate realization <b>BOUNDED_BY</b> selected resource profile beta</div><div><span class="e-k">RETIRED MECHANISM — </span>plate realization under the selected resource profile (CytherSubstrate.dprCapFor / binTargetFor)</div><div><span class="e-k">STANDING — </span>SUPERSEDED — governing mechanism retired. This obligation applied to instrument-v1 and remains preserved with its admitted evidence. It does not bind the successor drawing-set interface because the mechanism it constrained is no longer present. Supersession is not satisfaction, failure, or revocation of historical evidence.</div><div><span class="e-k">PRESERVED IN — </span>backup/instrument-v1/ · with its recorded observations</div></div></details>
+      <!-- obligations:end -->
+        <div class="m" style="font-size:9.5px;line-height:1.7;color:var(--quiet);padding-top:8px">An obligation is what the set owes; a receipt is an observation that it paid, bound to the build observed. The verdicts PASS · FAIL · NOT_EVALUATED are established outside the artifact by the evaluators each row names; missing or stale evidence is NOT_EVALUATED, never a score. The standing claims on sheet 6 are the subset the set can execute against itself. The obligations of the retired instrument are listed after the set's own: preserved with their evidence, not owed here, never dropped.</div>
+      </div>
+      <div class="col" style="gap:22px">
+        <div class="list"><div class="hd">CHAIN OF RECORD</div><div id="prov"></div><div class="m" style="font-size:10px;line-height:1.7;color:var(--mid);padding-top:8px"><span id="patent2">—</span> · footer reads US PATENT PENDING</div></div>
+        <div class="list notes-g">
+          <div class="hd">GENERAL NOTES — NORMATIVE</div>
+          <div class="gn"><b>1.</b> The surface states only what the record can support. Conditions and sources travel with every claim. Nothing is stated as established that has not been checked.</div>
+          <div class="gn"><b>2.</b> Evidence classes are distinct and never averaged: ● log-verified by CytherAI · ◌ externally validated, not operated by CytherAI · — not disclosed · SEALED, indexed by structure only.</div>
+          <div class="gn"><b>3.</b> A claim executed by this set (CL, DS) is a predicate over the set itself; an obligation is discharged only by the evaluator it names, outside the artifact, and its receipt binds one build.</div>
+          <div class="gn"><b>4.</b> The seal is derived from the public manifest and changes when the disclosed state changes; the object on sheet 1 is this browser's demonstration and enters no record.</div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<script src="js/manifest.js" defer integrity="sha384-Yw5BMsdf/1JSQk2eiP9T84irrzFpur9n/Ch7Kjb5OBmnHysKxg+ySbChES6OmBZS" crossorigin="anonymous"></script>
+<script src="js/instrument.js" defer integrity="sha384-SFCZRwUz5Q+bbjOjgnMrmXDUDoGsdR6YlNrxeXta/juhjcLUaqs3f/Qk7bzkFqwt" crossorigin="anonymous"></script>
+<script src="js/claims.js" defer integrity="sha384-7dsVU7m2fJZ/oQP3ftUgzmP34AEfk7keeidFjey9T0NMLFNHsTx8QsLludsYmj6b" crossorigin="anonymous"></script>
+<script src="js/drawing-set.js" defer integrity="sha384-FQuQRbtYPNZij40LzK6JMXi31MAFtg44WsgFynbyuaIQc967UnfqZ+QT073b3c7B" crossorigin="anonymous"></script>
+</body>
+</html>
