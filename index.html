@@ -19,7 +19,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#ECF0F4">
-<meta name="build-hash" content="EF57500CC99E3711">
+<meta name="build-hash" content="9236E6A692F915D4">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -86,6 +86,10 @@ p.body strong{color:var(--ink);font-weight:600}
 .v{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink)}
 .v .acc{color:var(--accent)}
 .tb .brand{font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.22em}
+.tb .idx{display:flex;gap:2px;font-family:var(--mono);font-size:9px;letter-spacing:.04em}
+.tb .idx a{display:inline-flex;align-items:center;justify-content:center;min-height:24px;padding:0 2px;color:var(--quiet);text-decoration:none}
+.tb .idx a[aria-current]{color:var(--ink);box-shadow:inset 0 -1px 0 var(--ink)}
+.tb .idx a:hover{color:var(--accent)}
 .notes{position:absolute;left:0;bottom:0;height:84px;width:350px;border-top:1px solid var(--ink);border-right:1px solid var(--ink);padding:8px 12px;
   font-family:var(--mono);font-size:8.5px;line-height:1.5;color:var(--mid);letter-spacing:.02em;background:var(--paper)}
 .notes b{color:var(--quiet);font-weight:500;letter-spacing:.14em}
@@ -100,6 +104,7 @@ p.body strong{color:var(--ink);font-weight:600}
 .figbox{position:relative;width:min(100%,560px);aspect-ratio:1}
 #fig1{width:100%;height:100%;display:block}
 .handle{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border:1.5px solid var(--accent);background:var(--paper);cursor:grab;padding:0;touch-action:none}
+.handle::after{content:"";position:absolute;inset:-8px}   /* the hit area: the 11 px padding box + 16 = 27 px; the mark stays 14 */
 .handle:active{cursor:grabbing;background:var(--accent)}
 .handle:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .proposal{align-self:stretch;border-top:1px solid var(--rule);padding-top:10px;display:flex;flex-direction:column;gap:8px}
@@ -107,13 +112,13 @@ p.body strong{color:var(--ink);font-weight:600}
 .receipt{font-size:9.5px;line-height:1.8;color:var(--mid)}
 .receipt .k{font-size:9.5px;color:var(--ink)}
 .proposal .acts{display:flex;gap:16px}
-.proposal button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:2px}
+.proposal button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding:5px 0 2px;min-height:24px}
 .proposal button:disabled{color:var(--quiet);border-color:var(--rule);cursor:default}
 .proposal button:not(:disabled):hover{border-color:var(--accent);color:var(--accent)}
 .counters{align-self:stretch;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;color:var(--mid);border-top:1px solid var(--rule);padding-top:10px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
 .counters b{color:var(--ink);font-weight:600}
 .counters .acts{display:flex;gap:16px}
-.counters button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding-bottom:2px}
+.counters button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding:5px 0 2px;min-height:24px}
 .counters button:hover{border-color:var(--accent);color:var(--accent)}
 .figlog{align-self:stretch;font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--quiet);min-height:2.6em}
 
@@ -221,6 +226,7 @@ canvas.seal.lg{width:60px;height:60px}
   .two,.two.narrow,.three{grid-template-columns:1fr;height:auto;gap:28px}
   .tb{position:static;height:auto;flex-wrap:wrap;border-left:none;margin-top:22px}
   .tb .c{flex:1 1 40%;border-bottom:1px solid var(--rule)}
+  .tb .idx a{flex:1;min-width:24px}
   .notes{position:static;width:auto;height:auto;border-right:none}
   .flow{height:auto;position:static}.box{position:static;margin-bottom:10px}
   .section{position:static;height:auto;grid-template-columns:1fr}.wall{height:64px;border:none;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
@@ -234,7 +240,7 @@ canvas.seal.lg{width:60px;height:60px}
 <body>
 
 <!-- ═══════════ SHEET 1 — THE STATEMENT ═══════════ -->
-<section class="sheet" data-title="THE STATEMENT" data-notes="1. Every value on this drawing set sits beside its condition and its source.|2. ● log-verified &nbsp;◌ externally validated &nbsp;— not disclosed.|3. The border of each sheet is the deployment boundary. Nothing drawn crosses it." aria-label="Sheet 1 — the statement">
+<section class="sheet" id="s1" data-title="THE STATEMENT" data-notes="1. Every value on this drawing set sits beside its condition and its source.|2. ● log-verified &nbsp;◌ externally validated &nbsp;— not disclosed.|3. The border of each sheet is the deployment boundary. Nothing drawn crosses it." aria-label="Sheet 1 — the statement">
   <div class="frame"><div class="content">
     <div class="two">
       <div class="col" style="padding-top:10px">
@@ -313,7 +319,7 @@ canvas.seal.lg{width:60px;height:60px}
 </section>
 
 <!-- ═══════════ SHEET 3 — MEASUREMENT ═══════════ -->
-<section class="sheet" data-title="MEASUREMENT · SCHEDULE 1" data-notes="1. Invalid rate is the share of generated programs the kernel refuses. CytherCAD emits none: refusal happens before emission.|2. † T2CAD figure as published by its authors." aria-label="Sheet 3 — measurement">
+<section class="sheet" id="s3" data-title="MEASUREMENT · SCHEDULE 1" data-notes="1. Invalid rate is the share of generated programs the kernel refuses. CytherCAD emits none: refusal happens before emission.|2. † T2CAD figure as published by its authors." aria-label="Sheet 3 — measurement">
   <div class="frame"><div class="content">
     <div class="two narrow">
       <div class="col" style="padding-top:10px">
@@ -347,7 +353,7 @@ canvas.seal.lg{width:60px;height:60px}
 </section>
 
 <!-- ═══════════ SHEET 4 — WHAT RUNS WHERE ═══════════ -->
-<section class="sheet" data-title="WHAT RUNS WHERE · WALL SECTION" data-notes="1. Hatching denotes the deployment boundary as installed by the customer; CytherAI holds no key to it.|2. Verification runs inside the wall — a claim the customer can check, not one they must trust." aria-label="Sheet 4 — what runs where">
+<section class="sheet" id="s4" data-title="WHAT RUNS WHERE · WALL SECTION" data-notes="1. Hatching denotes the deployment boundary as installed by the customer; CytherAI holds no key to it.|2. Verification runs inside the wall — a claim the customer can check, not one they must trust." aria-label="Sheet 4 — what runs where">
   <div class="frame"><div class="content">
     <div class="two narrow">
       <div class="col" style="padding-top:10px">
@@ -385,7 +391,7 @@ canvas.seal.lg{width:60px;height:60px}
 </section>
 
 <!-- ═══════════ SHEET 5 — ACCESS ═══════════ -->
-<section class="sheet" data-title="ACCESS · THREE PATHS" data-notes="1. nda@cytherai.com for path 2; review@cytherai.com for path 3.|2. Selective about what gets built. Thorough about how it gets built." aria-label="Sheet 5 — access">
+<section class="sheet" id="s5" data-title="ACCESS · THREE PATHS" data-notes="1. nda@cytherai.com for path 2; review@cytherai.com for path 3.|2. Selective about what gets built. Thorough about how it gets built." aria-label="Sheet 5 — access">
   <div class="frame"><div class="content">
     <div class="col" style="gap:26px;padding-top:10px">
       <div class="col" style="gap:16px;max-width:760px">
@@ -402,7 +408,7 @@ canvas.seal.lg{width:60px;height:60px}
 </section>
 
 <!-- ═══════════ SHEET 6 — THE RECORD ═══════════ -->
-<section class="sheet" data-title="THE RECORD" data-notes="1. The page renders the commitment; it does not notarize it.|2. A receipt for this build cannot be inside this build: verdicts are established outside the artifact." aria-label="Sheet 6 — the record">
+<section class="sheet" id="s6" data-title="THE RECORD" data-notes="1. The page renders the commitment; it does not notarize it.|2. A receipt for this build cannot be inside this build: verdicts are established outside the artifact." aria-label="Sheet 6 — the record">
   <div class="frame"><div class="content">
     <div class="three">
       <div class="col" style="padding-top:10px">
@@ -475,6 +481,6 @@ canvas.seal.lg{width:60px;height:60px}
 <script src="js/manifest.js" defer integrity="sha384-Yw5BMsdf/1JSQk2eiP9T84irrzFpur9n/Ch7Kjb5OBmnHysKxg+ySbChES6OmBZS" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-SFCZRwUz5Q+bbjOjgnMrmXDUDoGsdR6YlNrxeXta/juhjcLUaqs3f/Qk7bzkFqwt" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-7dsVU7m2fJZ/oQP3ftUgzmP34AEfk7keeidFjey9T0NMLFNHsTx8QsLludsYmj6b" crossorigin="anonymous"></script>
-<script src="js/drawing-set.js" defer integrity="sha384-Me35M0ZSnD6JkqiX7JoRjmhCdiJJPeTzEdC0XIgNDCt8G3nNDELMP5JCSTCGfYYv" crossorigin="anonymous"></script>
+<script src="js/drawing-set.js" defer integrity="sha384-FQuQRbtYPNZij40LzK6JMXi31MAFtg44WsgFynbyuaIQc967UnfqZ+QT073b3c7B" crossorigin="anonymous"></script>
 </body>
 </html>
