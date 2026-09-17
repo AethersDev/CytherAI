@@ -3,15 +3,15 @@
   "corpus": "cytherai-current-artifact",
   "version": 2,
   "candidate": {
-    "build_identity": "9236E6A692F915D4",
+    "build_identity": "E01E6B543C2E1555",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
     "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
     "kernel_hash": "cd7792d1277e6ddaca7473050d5174bad66103082ddbe68b4ac96fa9384320ab",
-    "grammar_hash": "03c501eaebc21d060dd4e0b4378970b91caed4e5b9ae61cbf667518ecc4c78f1",
+    "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "770f5e987b27ee607fe6d6f746a9ed11558c021cb7782ead6f00e281d386fa79",
-    "verification_identity": "cffb037669141ef10f6624ac897e28a9b3ade01d7087e113981a4a804652fae1"
+    "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
+    "verification_identity": "a3f97202311662cfccb266c913ab263468e05765832ea32a5335f9494c53301f"
   },
   "semantics": {
     "result_values": [
@@ -275,6 +275,37 @@
               "js/drawing-set.js#sealClaim"
             ],
             "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "E01E6B543C2E1555",
+            "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+            "harness_version": "2026-09-17",
+            "method": {
+              "measurement": "three consecutive settled samples after FIG. 1 settled, at 1440x900, 390x844 and 320x844 and under reduced motion; the checksum read from every [data-checksum] site against the checksum re-derived in page; DS-04's pixel comparison of a stamped seal with a seal redrawn from parameters re-derived in page; DS-01's serial",
+              "threshold": "every printed checksum equals the derivation; the redrawn seal is pixel-identical to the stamped one on every title block; CLAIMS 11/11 HOLDING in all three samples at every viewport; document build equals the worker cache identity; zero external requests on the Network domain; zero console errors",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#canonical_settle_E01E6B543C2E1555",
+              "js/claims.js#checkRenderManifest",
+              "js/drawing-set.js#sealClaim"
+            ],
+            "observed_at": "2026-09-17"
           }
         ]
       },
@@ -508,6 +539,36 @@
             "result": "PASS",
             "evidence": [
               "vaic/evidence/current-browser-observations.v0.json#epoch_reproduction_9236E6A692F915D4",
+              "js/manifest.js#admit"
+            ],
+            "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "E01E6B543C2E1555",
+            "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full",
+              "device": "local_host",
+              "viewport": "1440x900",
+              "runtime": "HeadlessChrome/152.0.0.0 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-drawing-set-observe.py)",
+            "harness_version": "2026-09-17",
+            "method": {
+              "measurement": "CL-03 read from the rendered claims list; admissions and state checksums re-derived in page for epochs 01, 02, 03 against the published nonces and the revisions rendered on sheet 6",
+              "threshold": "re-derived nonce equals published nonce and re-derived checksum equals the rendered revision for every published epoch",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#epoch_reproduction_E01E6B543C2E1555",
               "js/manifest.js#admit"
             ],
             "observed_at": "2026-09-17"
@@ -4180,6 +4241,36 @@
               "js/claims.js#renderClaims"
             ],
             "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "E01E6B543C2E1555",
+            "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "a3f97202311662cfccb266c913ab263468e05765832ea32a5335f9494c53301f",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "E01E6B543C2E1555",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-17"
           }
         ]
       },
@@ -5447,6 +5538,36 @@
             },
             "harness_identity": "deploy.sh plus tools/test-site.py",
             "harness_version": "9236E6A692F915D4",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "E01E6B543C2E1555",
+            "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "a3f97202311662cfccb266c913ab263468e05765832ea32a5335f9494c53301f",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "E01E6B543C2E1555",
             "method": {
               "measurement": "complete allowlist and dist closure",
               "threshold": "27 files, no forbidden trees, exact integrity identity",

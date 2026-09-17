@@ -379,6 +379,29 @@ Claims.CLAIMS.push(
   { id: "DS-05", text: "THE DRAWING IS AN ADMITTED PROGRAM", m: "The program inked in FIG. 1 — the run's largest admission, or the proposal you accepted — is judged again by CytherInstrument.judge: boundary, then kernel.", run: null }
 );
 const wall = () => { const s = Claims.CLAIMSTATE["CL-01"]; if (!s) return; const n = parseInt(s.detail, 10); $("#ext").textContent = isNaN(n) ? "?" : n; $("#extState").textContent = s.ok ? "HOLDING" : "INVALID"; };
+/* the drafting cursor: where the pointer stands on the sheet, as a drawing reads it — zone
+   letter and column from the border strips, X·Y from the frame's origin. Pointer-driven, one
+   write per frame, nothing runs when the pointer is still; never drawn for touch. */
+(function drafting() {
+  const mk = cls => { const e = document.createElement("div"); e.className = cls; e.setAttribute("aria-hidden", "true"); document.body.appendChild(e); return e; };
+  const v = mk("xh v"), h = mk("xh h"), xy = mk("xy m");
+  let px = -1, py = -1, queued = false;
+  const show = on => { v.style.display = h.style.display = xy.style.display = on ? "block" : "none"; };
+  function paint() {
+    queued = false;
+    const el = document.elementFromPoint(px, py), sheet = el && el.closest(".sheet"), frame = sheet && sheet.querySelector(".frame");
+    if (!frame) { show(false); return; }
+    const r = frame.getBoundingClientRect(), x = px - r.left, y = py - r.top;
+    const inside = x >= 0 && y >= 0 && x <= r.width && y <= r.height;
+    const zone = inside ? "ABCD"[Math.min(3, Math.floor(y / r.height * 4))] + (Math.min(8, Math.floor(x / r.width * 8) + 1)) : "—";
+    v.style.transform = `translateX(${px}px)`; h.style.transform = `translateY(${py}px)`;
+    xy.style.transform = `translate(${px + 14}px, ${py + 14}px)`;
+    xy.textContent = inside ? `X ${Math.round(x)} · Y ${Math.round(y)} · ${zone}` : "OFF SHEET";
+    show(true);
+  }
+  addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; px = e.clientX; py = e.clientY; if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+  addEventListener("pointerleave", () => show(false)); document.addEventListener("mouseleave", () => show(false));
+})();
 const recompute = () => { Claims.recomputeClaims(); wall(); };
 $("#recompute").addEventListener("click", recompute);
 Claims.renderClaims();

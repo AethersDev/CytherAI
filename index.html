@@ -19,7 +19,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#ECF0F4">
-<meta name="build-hash" content="9236E6A692F915D4">
+<meta name="build-hash" content="E01E6B543C2E1555">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -78,6 +78,12 @@ p.body strong{color:var(--ink);font-weight:600}
 .link{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;padding:10px 0 8px;border-bottom:1px solid rgba(16,22,32,.35);align-self:flex-start;text-decoration:none}
 .hair{border-top:1px solid var(--rule)}
 
+/* the drafting cursor — hairlines and a zone readout; drawn only for a mouse, never for touch */
+.xh{position:fixed;left:0;top:0;pointer-events:none;background:var(--rule);z-index:5;display:none}
+.xh.v{width:1px;height:100vh}.xh.h{height:1px;width:100vw}
+.xy{position:fixed;left:0;top:0;pointer-events:none;z-index:5;display:none;font-family:var(--mono);font-size:8.5px;letter-spacing:.16em;color:var(--quiet);background:var(--paper);padding:2px 5px;white-space:nowrap}
+@media(hover:none){.xh,.xy{display:none !important}}
+
 /* title block + notes */
 .tb{position:absolute;right:0;bottom:0;display:flex;height:84px;border-top:1px solid var(--ink);border-left:1px solid var(--ink);background:var(--paper)}
 .tb .c{border-right:1px solid var(--ink);padding:6px 10px;display:flex;flex-direction:column;gap:3px;justify-content:center}
@@ -95,7 +101,22 @@ p.body strong{color:var(--ink);font-weight:600}
 .notes b{color:var(--quiet);font-weight:500;letter-spacing:.14em}
 
 /* sheet 1 */
+.sidx{margin-top:4px}
+.sidx ol{list-style:none;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(4,auto);grid-auto-flow:column;gap:0 26px;margin-top:6px}   /* an index reads down: 1–4 left, 5–7 right */
+.sidx a{display:flex;gap:8px;align-items:baseline;min-height:24px;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;color:var(--mid);text-decoration:none;border-bottom:1px solid var(--rule)}
+.sidx a b{color:var(--ink);font-weight:600;width:12px}
+.sidx a span{color:var(--quiet);letter-spacing:.02em;margin-left:auto;text-align:right;white-space:nowrap}
+.sidx a[aria-current]{color:var(--ink)}
+.sidx a:hover{color:var(--accent)}
 .callout{display:flex;gap:18px;align-items:flex-start;margin-top:14px}
+/* a short viewport keeps the cover's index, as one row of titles; the glosses return with the height */
+@media(max-height:820px) and (min-width:901px){
+  #s1 .two > .col{gap:12px}
+  .callout{margin-top:0}
+  .sidx ol{display:flex;flex-wrap:wrap;gap:0 12px}
+  .sidx a span{display:none}
+  .sidx a{min-height:22px}
+}
 .balloon{width:26px;height:26px;border:1px solid var(--ink);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;flex-shrink:0;margin-top:10px}
 .big{font-family:var(--mono);font-size:clamp(44px,4.4vw,62px);line-height:1;letter-spacing:-.03em}
 .big{font-variant-numeric:tabular-nums}
@@ -231,7 +252,9 @@ canvas.seal.lg{width:60px;height:60px}
   .flow{height:auto;position:static}.box{position:static;margin-bottom:10px}
   .section{position:static;height:auto;grid-template-columns:1fr}.wall{height:64px;border:none;border-top:1.5px solid var(--ink);border-bottom:1.5px solid var(--ink)}
   .wall span{transform:translate(-50%,-50%)}
-  .paths,.cells,.spec{grid-template-columns:1fr}
+  .paths,.cells,.spec,.sidx ol{grid-template-columns:1fr}
+  .sidx ol{grid-auto-flow:row;grid-template-rows:none}
+  .xh,.xy{display:none}
   .sheet.tall .frame{margin:12px}
   .tr{grid-template-columns:1fr 64px 64px 64px;font-size:10.5px}
 }
@@ -249,7 +272,6 @@ canvas.seal.lg{width:60px;height:60px}
         <p class="lede">On-premises, air-gapped, log-verified — for work where a wrong output has consequences. Nothing is emitted that has not been verified. This sheet is drawing one, live, now.</p>
         <div class="btns">
           <a class="btn primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">REQUEST A CONVERSATION</a>
-          <a class="btn" href="#s2">NEXT SHEET ↓</a>
         </div>
         <div class="callout">
           <div class="balloon">1</div>
@@ -259,6 +281,18 @@ canvas.seal.lg{width:60px;height:60px}
             <div class="cond">DeepCAD <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> · T2CAD <span data-m="validation:T2C192-IR-0.00:t2cad">0.93%</span> · external benchmark, published, not operated by CytherAI · log-verified evaluation, April 2026</div>
           </div>
         </div>
+        <nav class="sidx" aria-label="Sheet index">
+          <div class="k">SHEET INDEX — READ IN ANY ORDER</div>
+          <ol>
+            <li><a href="#s1" aria-current="page"><b>1</b>THE STATEMENT<span>the pitch</span></a></li>
+            <li><a href="#s2"><b>2</b>THE SYSTEM<span>how it works</span></a></li>
+            <li><a href="#s3"><b>3</b>MEASUREMENT<span>the numbers, with conditions</span></a></li>
+            <li><a href="#s4"><b>4</b>WHAT RUNS WHERE<span>nothing leaves the wall</span></a></li>
+            <li><a href="#s5"><b>5</b>ACCESS<span>three ways to engage</span></a></li>
+            <li><a href="#s6"><b>6</b>THE RECORD<span>the set checks itself</span></a></li>
+            <li><a href="#s7"><b>7</b>OBLIGATIONS<span>what the set owes</span></a></li>
+          </ol>
+        </nav>
       </div>
       <div class="figwrap">
         <noscript><div class="fig" style="align-self:stretch"><div>THIS SET IS DRAWN LIVE FROM ITS MANIFEST. WITH SCRIPTS OFF THE SHEETS STAND AS WRITTEN; FIG. 1, THE TITLE BLOCKS, THE REVISIONS AND THE CLAIMS ARE NOT DRAWN.</div></div></noscript>
@@ -481,6 +515,6 @@ canvas.seal.lg{width:60px;height:60px}
 <script src="js/manifest.js" defer integrity="sha384-Yw5BMsdf/1JSQk2eiP9T84irrzFpur9n/Ch7Kjb5OBmnHysKxg+ySbChES6OmBZS" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-SFCZRwUz5Q+bbjOjgnMrmXDUDoGsdR6YlNrxeXta/juhjcLUaqs3f/Qk7bzkFqwt" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-7dsVU7m2fJZ/oQP3ftUgzmP34AEfk7keeidFjey9T0NMLFNHsTx8QsLludsYmj6b" crossorigin="anonymous"></script>
-<script src="js/drawing-set.js" defer integrity="sha384-FQuQRbtYPNZij40LzK6JMXi31MAFtg44WsgFynbyuaIQc967UnfqZ+QT073b3c7B" crossorigin="anonymous"></script>
+<script src="js/drawing-set.js" defer integrity="sha384-iLpTgTE7TwTTzVHs9Lr7ZIqi18gCb/WARD0jXuscK41M6qNvukMZUzUQribklWrG" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -317,6 +317,10 @@ class SiteContractTests(unittest.TestCase):
         ids = re.findall(r'<section class="sheet[^"]*" id="(s\d)"', index)
         self.assertEqual(ids, [f"s{n}" for n in range(1, 8)])
         self.assertEqual(index.count('<section class="sheet'), 7)
+        # the cover (sheet 1) carries the sheet index as bytes: one link per sheet, in order
+        cover = index[index.index('<nav class="sidx"'):index.index("</nav>", index.index('<nav class="sidx"'))]
+        self.assertEqual(re.findall(r'href="#(s\d)"', cover), ids)
+        self.assertRegex(cover, r'href="#s1" aria-current="page"')
         mark = re.search(r"\.handle\{[^}]*width:(\d+)px;height:(\d+)px[^}]*border:([\d.]+)px", index)
         hit = re.search(r"\.handle::after\{[^}]*inset:-(\d+)px", index)
         self.assertIsNotNone(mark); self.assertIsNotNone(hit)
