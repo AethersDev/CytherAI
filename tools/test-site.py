@@ -53,6 +53,15 @@ HTML_FILES = shell_list(INTEGRITY_SCRIPT, "HTML_FILES")
 # artifact identity in tools/vaic_validate.py — never transcribed a second time
 DEPLOY_FILES = [line.strip() for line in
                 (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if line.strip()]
+# ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its
+# curated gateway, the films and the deck — not the live-MVP tunnel redirect
+REVIEWED_PUBLICATION = {
+    "adii/": {"adii/index.html", "adii/favicon.svg", "adii/fonts/OFL.txt", "adii/fonts/ibm-plex-mono-400.woff2",
+              "adii/fonts/newsreader-variable.woff2", "adii/fonts/public-sans-variable.woff2", "adii/poster.jpg",
+              "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
+    "awc-os/": {"awc-os/index.html", "awc-os/awc-os.js", "awc-os/media/AWC_OS_film_ar.mp4",
+                "awc-os/media/AWC_OS_film_en.mp4", "awc-os/media/AWC_OS_AMAD2026_deck.pptx"},
+}
 
 
 class PageParser(HTMLParser):
@@ -264,8 +273,14 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(len(DEPLOY_FILES), len(set(DEPLOY_FILES)), "deploy allowlist contains duplicates")
         for relative in DEPLOY_FILES:
             self.assertTrue((ROOT / relative).is_file(), f"allowlisted file missing: {relative}")
-        for forbidden in ("backup/", "newC3/", "docs/", "awc-os/"):
+        for forbidden in ("backup/", "newC3/", "docs/", "awc-os/live/"):   # awc-os/live/ redirects to an ephemeral tunnel
             self.assertFalse(any(path.startswith(forbidden) for path in DEPLOY_FILES), forbidden)
+        self.assertFalse(any(path.endswith(".DS_Store") for path in DEPLOY_FILES))
+        # the project pages ship only their reviewed publication set: a new file under
+        # either directory is served after it is reviewed and named here, never before
+        for directory, reviewed in REVIEWED_PUBLICATION.items():
+            served = {path for path in DEPLOY_FILES if path.startswith(directory)}
+            self.assertEqual(served, reviewed, directory)
 
         assets_block = re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL)
         self.assertIsNotNone(assets_block)

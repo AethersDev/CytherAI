@@ -19,7 +19,7 @@ set -euo pipefail
 RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/claims.js js/drawing-set.js"
 
 # HTML files to patch (every served page)
-HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html"
+HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html"
 
 echo "[integrity] Computing SRI hashes..."
 

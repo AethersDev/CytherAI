@@ -3,15 +3,15 @@
   "corpus": "cytherai-current-artifact",
   "version": 2,
   "candidate": {
-    "build_identity": "E01E6B543C2E1555",
+    "build_identity": "AD0FE3E107577AEB",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
     "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
     "kernel_hash": "cd7792d1277e6ddaca7473050d5174bad66103082ddbe68b4ac96fa9384320ab",
-    "grammar_hash": "49a8169db75d5c59a6dcfacf56564f976b3faba0f618863d634a8e113f3ea461",
+    "grammar_hash": "c6a4e54cfcb3590ca3024ec0a867b2306440aa540f94a8cb686528b353f58e44",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "705a7ba813ce3590f02e5ab87cdbfeccf3f7e6dcda6cc94e936ea52edde87b59",
-    "verification_identity": "a3f97202311662cfccb266c913ab263468e05765832ea32a5335f9494c53301f"
+    "artifact_manifest_hash": "6ed810b0b7a8c906ea949fa4bee3c56a17a3c38d4da2aec3977c941e123e8944",
+    "verification_identity": "cc109b0c1dffd560a517999f2c437825881ae9c53b93a06fc8e64869b40fff42"
   },
   "semantics": {
     "result_values": [
@@ -4271,6 +4271,186 @@
               "js/claims.js#renderClaims"
             ],
             "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "D38A8024262EF561",
+            "artifact_manifest_hash": "9cb25eb8159b73bae2d41bc3f904a4bd3071f4513b2dee4f7a70137693027ce3",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "7c7b5eef0f180c2f2cc3d6bfbbecba055de3c32301ebe91fc7becb29b8519571",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "8c662c9e9a002cf2b4f4dd35edc459397c5397292c86114487357fac6756063f",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "D38A8024262EF561",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "37229CCC415DE253",
+            "artifact_manifest_hash": "038df23f69cefa37a71cb75485e4099ab95b51ea54d5870a6e01fd9fbfee97c4",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "8fb6307ca7994b7523bec45eb6defc31f70879432c59edaf3428f4c73e27e2d4",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "37229CCC415DE253",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "0A4F32202F69CE1C",
+            "artifact_manifest_hash": "80e0eb2f608b7347264c1ed05b6e1e5bdfa20121fb88748167df3f4c6a67c90d",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "686f89a1f4726846056379ceb4b99479bc0f725f04523f2824da0115585a48e7",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "0A4F32202F69CE1C",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "724DB274574B1FE6",
+            "artifact_manifest_hash": "2df6846261e8b76f18fdf53c759e7d1e53019465f562ed74800c903556ccca41",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "baf26667cf2570ee2d1a874f173f01cde45a6b5e4f1a8c5a3ccf014422afe997",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "724DB274574B1FE6",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "AD0FE3E107577AEB",
+            "artifact_manifest_hash": "6ed810b0b7a8c906ea949fa4bee3c56a17a3c38d4da2aec3977c941e123e8944",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "c6a4e54cfcb3590ca3024ec0a867b2306440aa540f94a8cb686528b353f58e44",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "33e979fd121f4fdef9884bf48e72a9b7c40bb34f192db27371b8c16b98ae5662",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "AD0FE3E107577AEB",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-10-03"
+          },
+          {
+            "evaluator": "PURE_RUNTIME_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "AD0FE3E107577AEB",
+            "artifact_manifest_hash": "6ed810b0b7a8c906ea949fa4bee3c56a17a3c38d4da2aec3977c941e123e8944",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "c6a4e54cfcb3590ca3024ec0a867b2306440aa540f94a8cb686528b353f58e44",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "cc109b0c1dffd560a517999f2c437825881ae9c53b93a06fc8e64869b40fff42",
+            "environment": {
+              "capability_profile": "local_logic",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "JavaScriptCore jsc",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/test-claims.js",
+            "harness_version": "AD0FE3E107577AEB",
+            "method": {
+              "measurement": "forced-invalid then unrelated single-claim recomputation",
+              "threshold": "invalid state and aggregate bad flag remain",
+              "units": "boolean"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-claims.js#standing-invalid-survives-recompute",
+              "js/claims.js#renderClaims"
+            ],
+            "observed_at": "2026-10-03"
           }
         ]
       },
@@ -5579,6 +5759,186 @@
               "deploy.sh#artifact-source-allowlist"
             ],
             "observed_at": "2026-09-17"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "D38A8024262EF561",
+            "artifact_manifest_hash": "9cb25eb8159b73bae2d41bc3f904a4bd3071f4513b2dee4f7a70137693027ce3",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "7c7b5eef0f180c2f2cc3d6bfbbecba055de3c32301ebe91fc7becb29b8519571",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "8c662c9e9a002cf2b4f4dd35edc459397c5397292c86114487357fac6756063f",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "D38A8024262EF561",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "37229CCC415DE253",
+            "artifact_manifest_hash": "038df23f69cefa37a71cb75485e4099ab95b51ea54d5870a6e01fd9fbfee97c4",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "8fb6307ca7994b7523bec45eb6defc31f70879432c59edaf3428f4c73e27e2d4",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "37229CCC415DE253",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "0A4F32202F69CE1C",
+            "artifact_manifest_hash": "80e0eb2f608b7347264c1ed05b6e1e5bdfa20121fb88748167df3f4c6a67c90d",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "686f89a1f4726846056379ceb4b99479bc0f725f04523f2824da0115585a48e7",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "0A4F32202F69CE1C",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "724DB274574B1FE6",
+            "artifact_manifest_hash": "2df6846261e8b76f18fdf53c759e7d1e53019465f562ed74800c903556ccca41",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "baf26667cf2570ee2d1a874f173f01cde45a6b5e4f1a8c5a3ccf014422afe997",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "72e650ef6f96a627a2b6b7c562f9e8d81bdc7d1bac65137f44fc05cc7eacc747",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "724DB274574B1FE6",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-09-23"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "AD0FE3E107577AEB",
+            "artifact_manifest_hash": "6ed810b0b7a8c906ea949fa4bee3c56a17a3c38d4da2aec3977c941e123e8944",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "c6a4e54cfcb3590ca3024ec0a867b2306440aa540f94a8cb686528b353f58e44",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "33e979fd121f4fdef9884bf48e72a9b7c40bb34f192db27371b8c16b98ae5662",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "AD0FE3E107577AEB",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-10-03"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "AD0FE3E107577AEB",
+            "artifact_manifest_hash": "6ed810b0b7a8c906ea949fa4bee3c56a17a3c38d4da2aec3977c941e123e8944",
+            "record_hash": "5c751bea182d0a0749e410854110151d4a4b80067b7be980048f132b9356dd4a",
+            "grammar_hash": "c6a4e54cfcb3590ca3024ec0a867b2306440aa540f94a8cb686528b353f58e44",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "cc109b0c1dffd560a517999f2c437825881ae9c53b93a06fc8e64869b40fff42",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "AD0FE3E107577AEB",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-10-03"
           }
         ]
       },
