@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CytherAI — Nothing crosses unverified</title>
+<meta name="description" content="CytherAI builds AI for work where a wrong output has consequences. A model proposes, a boundary judges every token, an independent kernel rebuilds the result — and all of it runs inside your walls.">
+<meta name="theme-color" content="#03050A">
+<link rel="icon" href="../../icon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE CROSSING — design prototype, not the front door. One WebGL2 scene behind one
+     scrolling story. The glass is the boundary: beneath it, forty seeded proposers stream
+     the boundary engine of the record (js/instrument.js) and every refused token is drawn
+     where it struck, naming the rule it broke; a program the boundary and the kernel both
+     admit rises through the glass as a solid. The sky is the seal, dsinOrbit(CANON).
+     Every printed manifest fact carries data-m and is checked against CytherManifest.project. -->
+<style>
+:root{
+  --bg:#03050A; --ink:#EEF2F8; --mid:#A7B1C2; --quiet:#7E8AA0; --rule:rgba(150,168,205,.2);
+  --signal:#8197FF; --cobalt:#2036C7;
+  --sans:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --gut:clamp(16px,4.6vw,84px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink);scroll-behavior:smooth}
+body{font:400 18px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--cobalt);color:#fff}
+
+#world{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.no-gl #world{display:none}
+.no-gl body{background:radial-gradient(120% 80% at 70% 60%,#0B1222 0%,var(--bg) 60%)}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(3,5,10,.86) 0%,rgba(3,5,10,.62) 28%,rgba(3,5,10,.12) 52%,rgba(3,5,10,0) 64%)}
+#tags{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#tags span{position:absolute;left:0;top:0;margin:-26px 0 0 4px;padding:3px 0 3px 8px;border-left:1px solid var(--signal);
+  font:500 10.5px/1 var(--mono);letter-spacing:.12em;color:#CDD6FF;white-space:nowrap;opacity:0;will-change:transform,opacity}
+
+header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:24px var(--gut)}
+.brand{font:600 13px/1 var(--mono);letter-spacing:.34em;text-decoration:none}
+.brand i{font-style:normal;color:var(--signal)}
+nav{display:flex;gap:30px;align-items:center}
+nav a{font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mid);text-decoration:none}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 22px;font:600 11.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;color:var(--bg);background:var(--ink);border:1px solid var(--ink);transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.line{background:transparent;color:var(--ink);border-color:rgba(238,242,248,.32)}
+.btn.line:hover{border-color:var(--ink)}
+nav .btn{padding:12px 16px;color:var(--bg)}
+
+.rail{position:fixed;right:var(--gut);top:50%;transform:translateY(-50%);z-index:5;list-style:none;display:flex;flex-direction:column;gap:16px}
+.rail.off{opacity:0;pointer-events:none}.rail{transition:opacity .5s}
+.rail a{display:flex;align-items:center;justify-content:flex-end;gap:12px;font:500 10.5px/1 var(--mono);letter-spacing:.18em;color:var(--quiet);text-decoration:none}
+.rail span{opacity:0;transform:translateX(6px);transition:opacity .35s,transform .35s}
+.rail a[aria-current] span,.rail:hover span{opacity:1;transform:none}
+.rail a::after{content:"";width:16px;height:1px;background:currentColor;transition:width .35s,background .35s}
+.rail a[aria-current]{color:var(--ink)}
+.rail a[aria-current]::after{width:44px;background:var(--signal)}
+
+main{position:relative;z-index:3}
+section{position:relative;min-height:175vh}
+section[data-ch=top]{min-height:100vh}
+section[data-ch=access]{min-height:130vh}
+.copy{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px var(--gut) 150px;max-width:min(760px,54vw);opacity:var(--vis,1)}
+section[data-ch=top] .copy{max-width:min(980px,64vw)}
+.eyebrow{font:500 11.5px/1.5 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--signal);margin-bottom:28px}
+.eyebrow b{color:var(--ink);font-weight:500}
+h1{font-weight:600;font-size:clamp(50px,6.5vw,128px);line-height:.92;letter-spacing:-.05em}
+h2{font-weight:600;font-size:clamp(40px,5vw,88px);line-height:.96;letter-spacing:-.045em}
+h1 span,h2 span{display:block}
+.lede{margin-top:32px;font-size:clamp(17px,1.32vw,21px);line-height:1.55;color:var(--mid);max-width:37ch}
+.lede strong{color:var(--ink);font-weight:500}
+.acts{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.hint{margin-top:40px;font:500 11px/1.7 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet);max-width:52ch}
+.stat{margin-top:34px;padding-top:18px;border-top:1px solid var(--rule);font:500 11.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet);max-width:46ch}
+.stat b{display:block;font:600 clamp(34px,3.4vw,54px)/1 var(--sans);letter-spacing:-.03em;color:var(--ink);margin-bottom:8px;font-variant-numeric:tabular-nums}
+.stat .zero{color:var(--signal)}
+
+@keyframes rise{from{opacity:0;transform:translateY(.32em)}to{opacity:1;transform:none}}
+[data-ch=top] h1 span,[data-ch=top] .lede,[data-ch=top] .acts,[data-ch=top] .hint{animation:rise 1.2s cubic-bezier(.2,.7,.1,1) both}
+[data-ch=top] h1 span:nth-child(2){animation-delay:.12s}
+[data-ch=top] .lede{animation-delay:.5s}[data-ch=top] .acts{animation-delay:.7s}[data-ch=top] .hint{animation-delay:.9s}
+
+.rules{list-style:none;margin-top:30px;max-width:640px;display:grid;grid-template-columns:1fr 1fr;gap:0 30px}
+.rules li{display:grid;grid-template-columns:1fr auto;gap:5px 10px;padding:9px 0 10px;border-bottom:1px solid var(--rule);
+  font:500 10.5px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--mid)}
+.rules li em{grid-column:1/-1;font-style:normal;text-transform:none;letter-spacing:.01em;color:var(--quiet);font-size:11px}
+.rules i{grid-column:1/-1;display:block;height:2px;background:var(--signal);width:calc(var(--w,0) * 100%);transition:width .3s linear}
+.rules b{font-weight:500;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+
+.big{font:600 clamp(104px,14.5vw,260px)/.8 var(--sans);letter-spacing:-.065em;font-variant-numeric:tabular-nums;margin-left:-.04em}
+.big-sub{font:600 clamp(26px,2.6vw,44px)/1.1 var(--sans);letter-spacing:-.03em;margin-top:18px}
+.vs{display:flex;gap:34px;margin-top:22px;font:500 12px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--quiet)}
+.vs b{display:block;font:600 26px/1.1 var(--sans);letter-spacing:-.02em;color:var(--mid);font-variant-numeric:tabular-nums}
+.table{margin-top:26px;max-width:560px;border-top:1px solid var(--rule)}
+.table div{display:flex;justify-content:space-between;gap:20px;padding:7px 0;border-bottom:1px solid var(--rule);font:500 12px/1.4 var(--mono);letter-spacing:.06em;color:var(--mid)}
+.table div b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.foot{margin-top:16px;font:500 10.5px/1.7 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--quiet);max-width:60ch}
+.stale{outline:1px dashed #ff6b6b;outline-offset:3px}
+
+.nc{list-style:none;margin-top:26px;max-width:520px}
+.nc li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--rule);font:500 11px/1.4 var(--mono);letter-spacing:.12em;color:var(--mid)}
+.nc li::after{content:"NOT CLAIMED";color:var(--quiet);white-space:nowrap}
+.state{font-family:var(--mono);color:var(--signal);letter-spacing:.06em}
+
+section[data-ch=access] .copy{max-width:1280px;padding-right:calc(var(--gut) + 140px)}
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:46px;background:var(--rule);border:1px solid var(--rule)}
+.path{background:rgba(3,5,10,.86);padding:30px 28px 28px;display:flex;flex-direction:column;gap:14px;min-height:300px}
+.path .k{font:500 10.5px/1 var(--mono);letter-spacing:.2em;color:var(--signal)}
+.path h3{font-weight:600;font-size:28px;letter-spacing:-.025em;line-height:1.05}
+.path p{color:var(--mid);font-size:16px;line-height:1.55;flex:1}
+.path .btn{align-self:flex-start}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:56px;padding-top:20px;border-top:1px solid var(--rule);
+  font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet)}
+footer nav{gap:22px}footer a{text-decoration:none}footer a:hover{color:var(--ink)}
+
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  padding:16px var(--gut) 18px;pointer-events:none;font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet);
+  background:linear-gradient(0deg,rgba(3,5,10,.82),rgba(3,5,10,0))}
+.hud .live{display:flex;flex-wrap:wrap;gap:6px 26px;align-items:center}
+.hud .live>span:first-child{color:var(--signal)}
+.hud .live>span:first-child::before{content:"";display:inline-block;width:6px;height:6px;margin:0 10px 1px 0;border-radius:50%;background:var(--signal);animation:beat 1.6s ease-in-out infinite}
+.hud b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.hud .zero b{color:var(--signal)}
+.hud .note{text-align:right;max-width:44ch}
+@keyframes beat{50%{opacity:.25}}
+
+#receipt{position:fixed;left:0;top:0;z-index:7;width:330px;padding:16px 18px 14px;background:rgba(4,6,13,.94);border:1px solid rgba(129,151,255,.5);
+  font:500 11px/1.55 var(--mono);letter-spacing:.05em;color:var(--mid);pointer-events:none;opacity:0;transition:opacity .15s}
+#receipt.on{opacity:1}
+#receipt .h{display:flex;justify-content:space-between;color:var(--ink);font-weight:600;letter-spacing:.1em}
+#receipt .h span:last-child{color:var(--signal)}
+#receipt .toks{margin:8px 0 10px;padding:8px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);color:var(--ink);word-spacing:.3em}
+#receipt dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px}
+#receipt dt{color:var(--quiet);text-transform:uppercase;letter-spacing:.12em;font-size:10px;padding-top:1px}
+#receipt dd{color:var(--mid)}
+
+@media(max-width:1100px){.rail{display:none}.hud .note{display:none}}
+@media(max-width:760px){
+  html,body{overflow-x:clip}
+  .scrim{display:none}
+  header{padding:16px}nav a:not(.btn){display:none}
+  nav .btn{padding:10px 12px;font-size:10px;letter-spacing:.12em}
+  section,section[data-ch=top],section[data-ch=access]{min-height:0}
+  .copy{position:relative;min-height:0;max-width:none;opacity:1;justify-content:flex-start;padding:64vh 16px 72px;
+    background:linear-gradient(180deg,rgba(3,5,10,0) 0,rgba(3,5,10,0) 52vh,rgba(3,5,10,.9) 64vh,rgba(3,5,10,.94) 100%)}
+  section[data-ch=top] .copy{max-width:none;padding-top:50vh;background:linear-gradient(180deg,rgba(3,5,10,0) 0,rgba(3,5,10,0) 40vh,rgba(3,5,10,.9) 52vh,rgba(3,5,10,.94) 100%)}
+  section[data-ch=access] .copy{padding-right:16px}
+  h1{font-size:clamp(44px,12.5vw,64px)}h2{font-size:clamp(36px,10vw,52px)}
+  .lede{max-width:none;font-size:16.5px}.hint{display:none}
+  .rules{grid-template-columns:1fr}
+  .paths{grid-template-columns:1fr}.path{min-height:0}
+  .vs{gap:22px}
+  #receipt{width:min(330px,calc(100vw - 24px))}
+  .hud{padding:10px 16px 12px;font-size:9.5px;letter-spacing:.1em;background:rgba(3,5,10,.94);border-top:1px solid var(--rule)}.hud .live{gap:2px 14px}.hud .live>span:nth-child(3){display:none}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-ch=top] *{animation:none !important}}
+</style>
+</head>
+<body>
+<canvas id="world" aria-hidden="true"></canvas>
+<div class="scrim" aria-hidden="true"></div>
+<div id="tags" aria-hidden="true"></div>
+
+<header>
+  <a class="brand" href="../glass/">CYTHER<i>AI</i></a>
+  <nav aria-label="Primary">
+    <a href="../../pages/brief.html">Brief</a>
+    <a href="../../pages/security.html">Security</a>
+    <a class="btn" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a conversation</a>
+  </nav>
+</header>
+
+<ol class="rail" aria-label="Chapters">
+  <li><a href="#propose"><span>PROPOSE</span>01</a></li>
+  <li><a href="#judge"><span>JUDGE</span>02</a></li>
+  <li><a href="#verify"><span>VERIFY</span>03</a></li>
+  <li><a href="#measure"><span>MEASURE</span>04</a></li>
+  <li><a href="#contain"><span>CONTAIN</span>05</a></li>
+  <li><a href="#record"><span>RECORD</span>06</a></li>
+  <li><a href="#access"><span>ACCESS</span>07</a></li>
+</ol>
+
+<main>
+  <section id="top" data-ch="top">
+    <div class="copy">
+      <p class="eyebrow">CytherAI · <b>CytherCAD, live</b></p>
+      <h1><span>Nothing crosses</span><span>unverified.</span></h1>
+      <p class="lede">CytherAI builds AI for work where a wrong output has consequences. <strong>CytherCAD</strong> turns text into CAD: a model proposes every step, a boundary judges each one, and an independent kernel rebuilds the result. What cannot pass is never emitted — and all of it runs on your premises, air-gapped.</p>
+      <div class="acts">
+        <a class="btn" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">Request a conversation</a>
+        <a class="btn line" href="#propose">See it work ↓</a>
+      </div>
+      <p class="hint">Live in this browser — below the glass, proposals striking the boundary. Above it, every program that passed. Hover one for its receipt.</p>
+    </div>
+  </section>
+
+  <section id="propose" data-ch="propose">
+    <div class="copy">
+      <p class="eyebrow">01 · The model proposes</p>
+      <h2><span>The model is allowed</span><span>to be wrong.</span></h2>
+      <p class="lede">Beneath the glass, forty proposers fire drawing tokens upward — <strong>move across 4, move up 1, close the shape</strong>. Here they are hostile on purpose: random tokens, almost all of them wrong. In a CytherAI system a model has no authority. It can only propose.</p>
+      <p class="stat"><b data-t="prop">0</b>tokens proposed in this browser since it opened this page</p>
+    </div>
+  </section>
+
+  <section id="judge" data-ch="judge">
+    <div class="copy">
+      <p class="eyebrow">02 · The boundary judges</p>
+      <h2><span>Every token is judged</span><span>before it exists.</span></h2>
+      <p class="lede">The glass is the boundary. Each token is checked against the grammar, then the geometry. A refused token lights the glass where it struck and names the rule it broke. Nothing is filtered afterwards — <strong>what fails never becomes an output.</strong></p>
+      <ul class="rules" aria-label="Refusals by rule, live">
+        <li data-why="AXIS ORDER"><span>Axis order</span><b>0</b><i></i><em>moves must alternate: across, then up</em></li>
+        <li data-why="ARG RANGE"><span>Arg range</span><b>0</b><i></i><em>a step longer than four</em></li>
+        <li data-why="GRAMMAR"><span>Grammar</span><b>0</b><i></i><em>not a word of the drawing language</em></li>
+        <li data-why="CLOSURE"><span>Closure</span><b>0</b><i></i><em>closed too early, or with no straight line home</em></li>
+        <li data-why="CROSSES"><span>Crosses</span><b>0</b><i></i><em>the drawing would cross itself</em></li>
+        <li data-why="BOUNDS"><span>Bounds</span><b>0</b><i></i><em>leaves the 12 × 12 field</em></li>
+        <li data-why="CLOSING CROSS"><span>Closing cross</span><b>0</b><i></i><em>the line home would cross the drawing</em></li>
+        <li data-why="CLOSURE AXIS"><span>Closure axis</span><b>0</b><i></i><em>the line home runs along the wrong axis</em></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="verify" data-ch="verify">
+    <div class="copy">
+      <p class="eyebrow">03 · A second opinion</p>
+      <h2><span>Then an independent</span><span>kernel checks it again.</span></h2>
+      <p class="lede">When a program closes, a kernel that shares nothing with the boundary but the rules rebuilds it from nothing. Only when both agree does the geometry cross — <strong>blue while it is checked, white once it is verified.</strong> Every solid above the glass passed both. Hover one: it is judged again, now, in your browser.</p>
+      <p class="stat"><b><span data-t="adm">0</span> · <span class="zero" data-t="inv">0</span></b>programs crossed · overruled by the kernel, and stopped</p>
+    </div>
+  </section>
+
+  <section id="measure" data-ch="measure">
+    <div class="copy">
+      <p class="eyebrow">04 · Measured, with its conditions</p>
+      <div class="big" data-m="validation:T2C192-IR-0.00:cyther">0.00%</div>
+      <p class="big-sub">invalid outputs.</p>
+      <div class="vs">
+        <span><b data-m="validation:T2C192-IR-0.00:deepcad">10.00%</b>DeepCAD</span>
+        <span><b data-m="validation:T2C192-IR-0.00:t2cad">0.93%</b>Text2CAD</span>
+      </div>
+      <p class="foot">◌ CytherCAD on Text2CAD-192 — an external benchmark, published, not operated by CytherAI.</p>
+      <div class="table" aria-label="Log-verified evaluation, April 2026">
+        <div><span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span><b data-m="validation:GVR-BEAM-100:cyther">100%</b></div>
+        <div><span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span><b data-m="validation:GVR-COMP-100:cyther">100%</b></div>
+        <div><span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span><b data-m="validation:DIM3-99:cyther">99%</b></div>
+        <div><span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span><b data-m="validation:DIM5-97:cyther">97%</b></div>
+        <div><span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span><b data-m="validation:MOP-91:cyther">91%</b></div>
+      </div>
+      <p class="foot">● Log-verified · CytherAI internal evaluation, April 2026 · every figure a projection of the public manifest. The grammar beneath the glass is a toy; the mechanism is the one in production.</p>
+    </div>
+  </section>
+
+  <section id="contain" data-ch="contain">
+    <div class="copy">
+      <p class="eyebrow">05 · Inside your walls</p>
+      <h2><span>Nothing leaves.</span><span>Not even this page.</span></h2>
+      <p class="lede">Model, boundary, kernel and record run on your hardware, air-gapped. No telemetry, no licence check, no model call — correctness never depends on a service you do not control, <strong>including ours.</strong> This page is built the same way: everything you have seen was computed here.</p>
+      <p class="stat"><b class="zero" data-t="ext">0</b>requests this page has made to anywhere but this site — counted by your browser</p>
+    </div>
+  </section>
+
+  <section id="record" data-ch="record">
+    <div class="copy">
+      <p class="eyebrow">06 · The record</p>
+      <h2><span>The sky is our</span><span>disclosure, computed.</span></h2>
+      <p class="lede">The light overhead is not an illustration. It is derived from our public manifest — state <span class="state" data-t="state">75D1:89D1</span> — by a fixed recurrence, here, in your browser. Change one disclosed fact and the whole sky changes. We state only what the record supports, and we say what we do not claim.</p>
+      <ul class="nc" aria-label="Not claimed">
+        <li>General text-to-CAD semantic parity</li>
+        <li>Cloud-scale throughput</li>
+        <li>Foundation-model generality</li>
+        <li>Unsupervised deployment authority</li>
+        <li>Benchmark leadership beyond the disclosed record</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="access" data-ch="access">
+    <div class="copy">
+      <p class="eyebrow">07 · Access</p>
+      <h2><span>Three ways in.</span></h2>
+      <div class="paths">
+        <div class="path"><span class="k">PATH 1 · OPEN</span><h3>Public materials</h3><p>The brief, this record and its conditions — disclosed without qualification.</p><a class="btn line" href="../../pages/brief.html">Read the brief</a></div>
+        <div class="path"><span class="k">PATH 2 · QUALIFIED</span><h3>Capability review</h3><p>Full validation records, the sealed systems, and a working session with CytherCAD — under NDA and identity confirmation.</p><a class="btn" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA briefing</a></div>
+        <div class="path"><span class="k">PATH 3 · CONTROLLED</span><h3>Technical diligence</h3><p>Architecture, logs and evaluation harnesses, opened for inspection inside a supervised review window.</p><a class="btn line" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request diligence window</a></div>
+      </div>
+      <footer>
+        <span>CytherAI · Riyadh, KSA · US provisional · filed 2025.Q1</span>
+        <nav aria-label="Legal"><a href="../../pages/privacy.html">Privacy</a><a href="../../pages/security.html">Security</a><a href="../../pages/terms.html">Terms</a></nav>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<div class="hud" aria-live="off">
+  <div class="live">
+    <span data-t="state-live">Live</span>
+    <span>Proposed <b data-t="prop">0</b></span>
+    <span>Refused <b data-t="rej">0</b></span>
+    <span>Crossed <b data-t="adm">0</b></span>
+    <span class="zero">Kernel overruled <b data-t="inv">0</b></span>
+  </div>
+  <div class="note">The boundary engine of the record, running in this browser · 40 seeds, deterministic · toy grammar, production mechanism</div>
+</div>
+
+<div id="receipt" aria-hidden="true">
+  <div class="h"><span data-r="id">PRG-00000000</span><span>CROSSED</span></div>
+  <div class="toks" data-r="toks"></div>
+  <dl>
+    <dt>Boundary</dt><dd>admitted · <span data-r="n"></span></dd>
+    <dt>Kernel</dt><dd>verified · independent rebuild</dd>
+    <dt>Judged now</dt><dd data-r="now"></dd>
+    <dt>Proposer</dt><dd data-r="seed"></dd>
+    <dt>Crossed</dt><dd data-r="when"></dd>
+  </dl>
+</div>
+
+<script src="../../js/manifest.js" defer></script>
+<script src="../../js/instrument.js" defer></script>
+<script src="sim.js" defer></script>
+<script src="scene.js" defer></script>
+</body>
+</html>

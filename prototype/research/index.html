@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>CytherAI — The model proposes. The system decides.</title>
+<meta name="description" content="CytherAI is a research company building AI for work where a wrong output has consequences: systems in which something outside the model decides what is allowed to happen. Every figure on this page runs in your browser.">
+<meta name="theme-color" content="#F7F8FA">
+<link rel="icon" href="../../icon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/public-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<link rel="stylesheet" href="research.css">
+<!-- CytherAI — an executable research journal (design prototype, not the front door).
+     Fig. 1a streams the boundary engine of the record (js/instrument.js); Figs. 1b–1d run the
+     toy worlds of ../glass/worlds.js, whose deciding programs are real code and whose data are
+     toys; Table 2 runs the canonical standing claims (js/claims.js); Plate I is
+     dsinOrbit(CANON). Every printed manifest fact carries data-m and CL-02 reads it back. -->
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main" aria-label="CytherAI home"><canvas id="mark" width="52" height="52" aria-hidden="true"></canvas>CytherAI</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#research">Research</a>
+      <a href="#findings">Findings</a>
+      <a href="#deployment">Deployment</a>
+      <a href="#record">Record</a>
+      <a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Talk to us</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-text reveal">
+        <p class="label eyebrow">Verifiable AI · Research &amp; systems · Riyadh</p>
+        <h1>The model proposes. <em>The system decides.</em></h1>
+        <p class="lede">CytherAI is a research company building AI for work where a wrong output has consequences. We build the half a model cannot supply: the part that decides what is allowed to happen, and keeps the record of what did.</p>
+        <div class="ctas">
+          <a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Talk to our team</a>
+          <a class="btn ghost arrow" href="#findings">Read the findings</a>
+        </div>
+        <p class="howto"><span class="dot"></span>Figure 1 runs in your browser. Choose a system, step through it, and keep the receipts.</p>
+      </div>
+
+      <figure class="fig1 reveal" id="fig1">
+        <div class="panel">
+          <div class="panel-head">
+            <span class="label">Fig. 1 · <span id="figname">The boundary, live</span></span>
+            <span class="pill" id="figpill">Live</span>
+          </div>
+          <div class="tabs" role="tablist" aria-label="Choose a system">
+            <button role="tab" id="t-cad" aria-controls="p-cad" aria-selected="true"><i>1a</i>Geometry<span>CytherCAD</span></button>
+            <button role="tab" id="t-adii" aria-controls="p-adii" aria-selected="false" tabindex="-1"><i>1b</i>Investigation<span>ADII</span></button>
+            <button role="tab" id="t-awc" aria-controls="p-awc" aria-selected="false" tabindex="-1"><i>1c</i>Execution<span>AWC-OS</span></button>
+            <button role="tab" id="t-sijil" aria-controls="p-sijil" aria-selected="false" tabindex="-1"><i>1d</i>Records<span>SijilOS</span></button>
+          </div>
+
+          <div class="tp" role="tabpanel" id="p-cad" aria-labelledby="t-cad">
+            <canvas id="cadCanvas" aria-label="Forty proposers emit drawing tokens; an authority line judges each one; only programs both the boundary and an independent kernel admit cross into the tray below."></canvas>
+            <div class="stats">
+              <div><b data-t="prop">—</b><span>Proposed</span></div>
+              <div><b data-t="rej">—</b><span>Refused</span></div>
+              <div><b data-t="adm">—</b><span>Crossed</span></div>
+              <div class="zero"><b data-t="bad">0</b><span>Failed re-check</span></div>
+            </div>
+            <div class="ctl"><button data-act="pause">Pause</button><button data-act="step" disabled>Step one token</button><span class="hint">Click a crossed shape to keep its receipt.</span></div>
+          </div>
+
+          <div class="tp" role="tabpanel" id="p-adii" aria-labelledby="t-adii" hidden>
+            <div class="cases" role="group" aria-label="Cases"></div>
+            <svg class="chart" id="adiiChart" viewBox="0 0 560 210" role="img" aria-label="Twenty daily totals for one branch; one value is flagged."></svg>
+            <p class="askline" id="adiiAsk"></p>
+            <div class="choices" id="adiiChoices"><button data-guess="FIX">Correct it</button><button data-guess="LEAVE">Leave it</button><button data-guess="ESCALATE">Escalate it</button></div>
+            <ol class="steps" id="adiiSteps"></ol>
+            <div class="ctl"><button data-act="next" disabled>Next step</button><button data-act="all" disabled>Show all</button><button data-act="case">Next case →</button></div>
+          </div>
+
+          <div class="tp" role="tabpanel" id="p-awc" aria-labelledby="t-awc" hidden>
+            <div class="cases" role="group" aria-label="Questions"></div>
+            <div class="prog"><p class="qq" id="awcQ"></p><ol id="awcLines"></ol><div id="awcVerdict"></div></div>
+            <div class="ctl"><button data-act="step">Run next line</button><button data-act="run">Run to the end</button><button data-act="alt" hidden>Run the alternative it offers</button></div>
+          </div>
+
+          <div class="tp" role="tabpanel" id="p-sijil" aria-labelledby="t-sijil" hidden>
+            <table class="ledger"><thead><tr><th>#</th><th>Event</th><th class="num">Net</th><th class="num">VAT</th><th>Chain</th></tr></thead><tbody id="sijRows"></tbody></table>
+            <p class="lane" id="sijLane">Submit an intent. The ledger appends it, or refuses it with the rule it broke.</p>
+            <div class="cases acts" role="group" aria-label="Intents">
+              <button data-kind="sale">Record a sale</button><button data-kind="refund">Refund part of an invoice</button>
+              <button data-kind="overrefund">Refund more than is left</button><button data-kind="badvat">Charge VAT at 5%</button>
+              <button data-kind="duplicate">Record an invoice twice</button><button data-kind="edit">Edit a past event</button>
+              <button data-kind="correct" class="em" hidden>Append a correction instead</button><button data-kind="replay" class="em">Replay from genesis</button>
+            </div>
+          </div>
+        </div>
+        <figcaption id="figcap"></figcaption>
+        <details class="tray" id="tray">
+          <summary><span>Receipts you kept</span><b id="trayN">0</b></summary>
+          <ol id="trayList"></ol>
+          <p class="hint" id="trayEmpty">Nothing kept yet. Every case you decide, program you run and intent you submit leaves a receipt here.</p>
+        </details>
+      </figure>
+    </div>
+  </section>
+
+  <section class="proof" aria-label="Evidence">
+    <div class="wrap">
+      <div><b data-m="validation:T2C192-IR-0.00:cyther">0.00%</b><span>invalid outputs, CytherCAD on Text2CAD-192: an external benchmark</span></div>
+      <div><b>ZATCA</b><span>Phase 1 certified compliant, SijilOS, April 2025</span></div>
+      <div><b>2</b><span>production environments, SijilOS live beta</span></div>
+      <div><b>0</b><span>external dependencies at the execution path, CytherCAD and SijilOS</span></div>
+      <div><b>Offline</b><span>AWC-OS demonstrated on-device, with no connection</span></div>
+    </div>
+  </section>
+
+  <section class="sec" id="research">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label"><i>01</i>Research agenda</p>
+        <div>
+          <h2>A capable model is <em>half a system.</em></h2>
+          <p>Models are probabilistic; consequences are not. Our research is the other half: what a model may generate, what checks its work from outside, what can refuse it, and what keeps the record. These are shared questions. Each system answers the ones its domain needs, and Table 1 shows which, with sources.</p>
+        </div>
+      </div>
+      <div class="method reveal">
+        <article><span class="n">PRINCIPLE 01</span><h3>Bound before you ask.</h3><p>Define what a system may do before asking what a model can do.</p></article>
+        <article><span class="n">PRINCIPLE 02</span><h3>Check from outside.</h3><p>Whatever decides must not be the thing that proposed. A model never approves itself.</p></article>
+        <article><span class="n">PRINCIPLE 03</span><h3>Make stopping a result.</h3><p>Refuse, block and escalate are outcomes with reasons, not failures to hide.</p></article>
+      </div>
+      <figure class="reveal">
+        <div class="panel">
+          <div class="panel-head"><span class="label">Table 1 · Mechanisms, by system</span><span class="pill static">As our sources state</span></div>
+          <table class="matrix">
+            <thead><tr><th>System</th><th>A model proposes</th><th>Constrained as it generates</th><th>Checked outside the model</th><th>A policy can refuse</th><th>Escalates to a person</th><th>Replayable record</th><th>Runs offline or on-premises</th></tr></thead>
+            <tbody>
+              <tr><th>CytherCAD</th><td data-l="A model proposes"><span>● 16.1M autoregressive <sup>B</sup></span></td><td data-l="Constrained as it generates"><span>● constrained decoding <sup>B</sup></span></td><td data-l="Checked outside the model"><span>● geometric kernel <sup>B</sup></span></td><td data-l="A policy can refuse" class="no">—</td><td data-l="Escalates to a person" class="no">—</td><td data-l="Replayable record" class="no">—</td><td data-l="Runs offline or on-premises"><span>● on-premises, air-gapped <sup>B</sup></span></td></tr>
+              <tr><th>ADII</th><td data-l="A model proposes"><span>● investigator agent <sup>A</sup></span></td><td data-l="Constrained as it generates" class="no">—</td><td data-l="Checked outside the model"><span>● does the change hold? <sup>A</sup></span></td><td data-l="A policy can refuse"><span>● is the change allowed? <sup>A</sup></span></td><td data-l="Escalates to a person"><span>● escalate <sup>A</sup></span></td><td data-l="Replayable record" class="no">—</td><td data-l="Runs offline or on-premises" class="no">—</td></tr>
+              <tr><th>AWC-OS</th><td data-l="A model proposes"><span>● fine-tuned, writes programs <sup>G</sup></span></td><td data-l="Constrained as it generates" class="no">—</td><td data-l="Checked outside the model"><span>● canonical interpreter <sup>G</sup></span></td><td data-l="A policy can refuse"><span>● constitutional predicates <sup>G</sup></span></td><td data-l="Escalates to a person" class="no">—</td><td data-l="Replayable record"><span>● replayable receipt <sup>G</sup></span></td><td data-l="Runs offline or on-premises"><span>● offline, on-device demo <sup>G</sup></span></td></tr>
+              <tr><th>SijilOS</th><td data-l="A model proposes" class="no">—</td><td data-l="Constrained as it generates" class="no">—</td><td data-l="Checked outside the model" class="no">—</td><td data-l="A policy can refuse" class="no">—</td><td data-l="Escalates to a person" class="no">—</td><td data-l="Replayable record"><span>● event-sourced, immutable log <sup>B</sup></span></td><td data-l="Runs offline or on-premises"><span>● offline-first, on-premises <sup>B</sup></span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption><b>Table 1</b>● means our public materials state it. Sources: <a href="../../pages/brief.html">B, the capability brief</a> · <a href="../../adii/">A, the ADII page</a> · <a href="../../awc-os/">G, the AWC-OS evaluation gateway</a>. — means those materials do not establish it; it does not mean the system lacks it.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="sec" id="findings" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label"><i>02</i>Findings</p>
+        <div>
+          <h2>Four questions, <em>four kinds of consequence.</em></h2>
+          <p>Each entry states the question, the method, what was observed, where it stops, and the artifact that supports it. Maturity is given as it stands.</p>
+        </div>
+      </div>
+
+      <article class="entry reveal" id="cythercad">
+        <header class="entry-head"><span class="rid">R-01</span><span class="sys-name">CytherCAD <span>Geometry</span></span><span class="status prod">Production-validated</span></header>
+        <h3>Can a generator be kept from emitting invalid geometry while it generates, rather than filtered afterwards?</h3>
+        <div class="entry-body">
+          <dl class="fields">
+            <div><dt>Method</dt><dd>A compact autoregressive model (16.1M parameters) produces executable parametric construction programs. Constrained decoding enforces geometric validity at generation time; kernel-backed verification confirms dimensional accuracy afterwards.</dd></div>
+            <div><dt>Observation</dt><dd><span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> invalid outputs on Text2CAD-192, against <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> for DeepCAD and <span data-m="validation:T2C192-IR-0.00:t2cad">0.93%</span> for Text2CAD, as published (Fig. 2).</dd></div>
+            <div><dt>Limitation</dt><dd>Valid is not the same as intended: dimensional accuracy is 99% within ±3 mm and multi-operation accuracy 91%, both on n = 35. General text-to-CAD semantic parity is not claimed. Text2CAD-192 is published by others; we do not operate it.</dd></div>
+            <div><dt>Artifact</dt><dd><a class="arrow" href="../../pages/brief.html#cythercad">Validation summary v1.1, April 2026 · Exhibit A, CAD-2024-001</a></dd></div>
+          </dl>
+          <figure class="aside">
+            <div class="panel">
+              <div class="panel-head"><span class="label">Fig. 2 · Validation summary v1.1</span><span class="pill static">Published</span></div>
+              <div class="bars">
+                <h4>Invalid rate on Text2CAD-192 · lower is better</h4>
+                <div class="bar us"><span>CytherCAD</span><i style="--w:0%"></i><b data-m="validation:T2C192-IR-0.00:cyther">0.00%</b></div>
+                <div class="bar"><span>Text2CAD</span><i style="--w:9.3%"></i><b data-m="validation:T2C192-IR-0.00:t2cad">0.93%</b></div>
+                <div class="bar"><span>DeepCAD</span><i style="--w:100%"></i><b data-m="validation:T2C192-IR-0.00:deepcad">10.00%</b></div>
+              </div>
+              <div class="tbl">
+                <h4>Log-verified · CytherAI internal evaluation, April 2026</h4>
+                <div><span data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</span><b data-m="validation:GVR-BEAM-100:cyther">100%</b></div>
+                <div><span data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</span><b data-m="validation:GVR-COMP-100:cyther">100%</b></div>
+                <div><span data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</span><b data-m="validation:DIM3-99:cyther">99%</b></div>
+                <div><span data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</span><b data-m="validation:DIM5-97:cyther">97%</b></div>
+                <div><span data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</span><b data-m="validation:MOP-91:cyther">91%</b></div>
+              </div>
+            </div>
+            <figcaption><b>Fig. 2</b>Comparison figures are as published by their authors. Every number here is a projection of our public manifest, checked by CL-02 (Table 2).</figcaption>
+            <p class="try"><button data-open="cad">Watch the mechanism in Fig. 1a ↑</button></p>
+          </figure>
+        </div>
+      </article>
+
+      <article class="entry reveal" id="adii">
+        <header class="entry-head"><span class="rid">R-02</span><span class="sys-name">ADII <span>Data</span></span><span class="status res">Research</span></header>
+        <h3>When a number in a real system looks wrong, who may change it?</h3>
+        <div class="entry-body">
+          <dl class="fields">
+            <div><dt>Method</dt><dd>An investigator agent reads through a read-only tool layer and proposes an answer: fix it, leave it, or escalate it. The AI that proposes a fix cannot approve it. Two programs outside the model decide whether the change is allowed, and whether it holds.</dd></div>
+            <div><dt>Observation</dt><dd>Demonstrated end to end on a recorded fix, replayed.</dd></div>
+            <div><dt>Limitation</dt><dd>A research project. No evaluation results are published, and no deployment is claimed.</dd></div>
+            <div><dt>Artifact</dt><dd><a class="arrow" href="../../adii/">ADII running, a recorded fix replayed, 2026</a></dd></div>
+          </dl>
+          <aside class="aside exhibit">
+            <span class="label">Exhibit · Fig. 1b</span>
+            <p class="big-q">“Would you correct this?”</p>
+            <p>Six cases of a number that looks wrong. Decide first; then see what the evidence and the two checks say.</p>
+            <button data-open="adii">Open the cases in Fig. 1b ↑</button>
+          </aside>
+        </div>
+      </article>
+
+      <article class="entry reveal" id="awc-os">
+        <header class="entry-head"><span class="rid">R-03</span><span class="sys-name">AWC-OS <span>Money</span></span><span class="status eval">Evaluation · AMAD 2026</span></header>
+        <h3>Can an AI’s financial answer be stopped when it is not authorized, by something other than the model?</h3>
+        <div class="entry-body">
+          <dl class="fields">
+            <div><dt>Method</dt><dd>A fine-tuned model writes a financial program. A canonical deterministic interpreter executes it, refuses it under a constitutional predicate (offering a compliant alternative), or blocks it when an assertion fails, with a replayable receipt either way.</dd></div>
+            <div><dt>Observation</dt><dd>A measured failure, retained: one savings prompt generated an over-promising takaful program. Its assertion failed and the engine returned BLOCKED. No rule was relaxed and no output rewritten to force a pass.</dd></div>
+            <div><dt>Limitation</dt><dd>Evaluation stage. The live demonstrator runs on an evaluation machine at 4–8 seconds per question. Success is measured as unauthorized answers failing safely, not as an answer every time.</dd></div>
+            <div><dt>Artifact</dt><dd><a class="arrow" href="../../awc-os/">Evaluation gateway: film, deck and source, AMAD 2026</a></dd></div>
+          </dl>
+          <aside class="aside exhibit">
+            <span class="label">Exhibit · Fig. 1c</span>
+            <p class="big-q">Step through an illustrated takaful failure.</p>
+            <p>An over-promising program like the recorded one, run line by line on a small illustrative engine, not the canonical interpreter. Watch its own assertion stop it.</p>
+            <button data-open="awc" data-preset="takaful">Run it in Fig. 1c ↑</button>
+          </aside>
+        </div>
+      </article>
+
+      <article class="entry reveal" id="sijilos">
+        <header class="entry-head"><span class="rid">R-04</span><span class="sys-name">SijilOS <span>Records</span></span><span class="status beta">Live beta · 2 environments</span></header>
+        <h3>Can a financial ledger keep how every record came to be, and do it with no network?</h3>
+        <div class="entry-body">
+          <dl class="fields">
+            <div><dt>Method</dt><dd>An event-sourced transactional ledger for the Saudi market. Intent is stored over time as an immutable log, and current state is derived from it. A correction is a new event; history is never edited.</dd></div>
+            <div><dt>Observation</dt><dd>ZATCA Phase 1: certified compliant, April 2025. Live beta in two production environments. Offline-first, with zero core cloud dependency.</dd></div>
+            <div><dt>Limitation</dt><dd>The certification is ZATCA Phase 1; the system is in live beta.</dd></div>
+            <div><dt>Artifact</dt><dd><a class="arrow" href="../../pages/brief.html#sijilos">Operational record · Exhibit B, SIJ-2025-001</a></dd></div>
+          </dl>
+          <aside class="aside exhibit">
+            <span class="label">Exhibit · Fig. 1d</span>
+            <p class="big-q">Try to edit history.</p>
+            <p>Submit intents to an append-only ledger, try to rewrite a past event, then replay the whole ledger from genesis.</p>
+            <button data-open="sijil">Open the ledger in Fig. 1d ↑</button>
+          </aside>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec night" id="deployment">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label"><i>03</i>Deployment &amp; security</p>
+        <div>
+          <h2>Where each system runs, <em>as its record states.</em></h2>
+          <p>We state deployment per system, from the material that supports it, and nothing for a system whose material does not say.</p>
+        </div>
+      </div>
+      <div class="attrs reveal">
+        <div><span class="label">CytherCAD</span><h3>On-premises, air-gapped</h3><p>Runs on your hardware: private and air-gapped.</p><a href="../../pages/brief.html#cythercad">Brief · Exhibit A</a></div>
+        <div><span class="label">SijilOS</span><h3>Offline-first, on-premises</h3><p>Full offline operation, with zero core cloud dependency.</p><a href="../../pages/brief.html#sijilos">Brief · Exhibit B</a></div>
+        <div><span class="label">AWC-OS</span><h3>Offline, on-device demonstration</h3><p>Ran offline on a phone through its canonical engine. The live demonstrator is served from an evaluation machine.</p><a href="../../awc-os/">Evaluation gateway</a></div>
+        <div><span class="label">ADII</span><h3>Not stated</h3><p>Our public material for ADII does not describe a deployment, so we claim none.</p><a href="../../adii/">ADII page</a></div>
+        <div><span class="label">CytherCAD · SijilOS</span><h3>Zero external dependencies</h3><p>A constraint at the execution path, with measurable correctness and defined acceptance gates.</p><a href="../../pages/brief.html">Brief · §01</a></div>
+        <div><span class="label">All systems</span><h3>Disclosure-governed access</h3><p>Architecture, training methodology and deployment specifications under qualified review; identity and NDA required.</p><a href="../../pages/brief.html">Brief · §04</a></div>
+      </div>
+      <p class="measure reveal"><b data-t="ext">0</b><span>requests this page has made outside this site, counted by your browser now (CL-01). This is a fact about this page, not a claim about any system.</span></p>
+    </div>
+  </section>
+
+  <section class="sec" id="record">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label"><i>04</i>The record</p>
+        <div>
+          <h2>We publish the record, <em>and its limits.</em></h2>
+          <p>What we state is what the record supports, with its conditions and sources. The claims below are checked by this page, in your browser, now.</p>
+        </div>
+      </div>
+      <div class="rec">
+        <div>
+          <figure class="reveal">
+            <div class="panel">
+              <div class="panel-head"><span class="label">Table 2 · Standing claims</span><span class="pill" id="claimsFooter">Checking</span></div>
+              <div class="claims" id="claimRows"></div>
+              <div class="ctl"><button id="recompute">Re-run every claim</button><span class="hint">Open a claim for its method and value.</span></div>
+            </div>
+            <figcaption><b>Table 2</b>The canonical claims of the record (js/claims.js), executed against this page. A claim that fails prints INVALID in place; it is never hidden.</figcaption>
+          </figure>
+
+          <h4 class="sub reveal">Chain of record</h4>
+          <table class="records reveal">
+            <thead><tr><th>Date</th><th>Record</th><th>System</th><th>Source</th></tr></thead>
+            <tbody>
+              <tr><td>2024 · Q4</td><td>Zero-dependency architecture established</td><td>CytherCAD</td><td>Chain of record</td></tr>
+              <tr><td>2025 · Q1</td><td>US provisional patent application filed</td><td>CytherAI</td><td>Not public</td></tr>
+              <tr><td>2025 · 04</td><td>ZATCA Phase 1: certified compliant</td><td>SijilOS</td><td><a href="../../pages/brief.html#sijilos">Exhibit B</a></td></tr>
+              <tr><td>2026 · Q1</td><td>Evaluation confirms the zero-dependency execution path</td><td>CytherCAD</td><td>Chain of record</td></tr>
+              <tr><td>2026 · 04</td><td>Validation summary v1.1: <span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> invalid on Text2CAD-192</td><td>CytherCAD</td><td><a href="../../pages/brief.html#cythercad">Exhibit A</a></td></tr>
+              <tr><td>2026</td><td>AMAD 2026 evaluation: Alinma Bank × Tuwaiq Academy</td><td>AWC-OS</td><td><a href="../../awc-os/">Gateway</a></td></tr>
+              <tr><td>2026</td><td>A governed fix, recorded and replayed</td><td>ADII</td><td><a href="../../adii/">Replay</a></td></tr>
+            </tbody>
+          </table>
+
+          <h4 class="sub reveal">Revisions of this disclosure</h4>
+          <table class="records revs reveal"><thead><tr><th>Epoch</th><th>Derived</th><th>State</th></tr></thead><tbody id="revs"></tbody></table>
+          <p class="note reveal">Every date in this table is a provisional date: a demonstration placeholder held in the public manifest, not a verified historical timestamp. It is printed as the manifest holds it until the manifest is deliberately revised.</p>
+          <p class="note reveal">The page renders the commitment; it does not notarize it. A signed tag or an external transparency anchor would be needed for that, and none is claimed.</p>
+
+          <h4 class="sub reveal">Not claimed</h4>
+          <ul class="nc reveal" aria-label="Not claimed">
+            <li>General text-to-CAD semantic parity</li>
+            <li>Cloud-scale throughput</li>
+            <li>Foundation-model generality</li>
+            <li>Unsupervised deployment authority</li>
+            <li>Benchmark leadership beyond the disclosed record</li>
+          </ul>
+        </div>
+        <figure class="plate-fig reveal">
+          <div class="panel plate"><canvas id="plate" aria-label="Plate I: a dense filament orbit drawn in ink, the disclosure seal."></canvas></div>
+          <figcaption><b>Plate I</b>The disclosure seal for state <span data-checksum>75D1:89D1</span>, computed in your browser from our public manifest by a fixed recurrence. Change one disclosed fact and the plate changes.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec engage" id="engage" style="padding-top:0">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <p class="label"><i>05</i>Engage</p>
+        <div>
+          <h2>Tell us what must <em>never happen.</em></h2>
+          <p>We start where a wrong answer becomes a consequence: the action that must be refused, the number nobody may change alone, the record that must survive. Then we build the half that holds.</p>
+        </div>
+      </div>
+      <div class="paths reveal">
+        <div class="path"><span class="label">Path 1 · Open</span><h3>Public materials</h3><p>The capability brief, the record and its conditions, disclosed without qualification.</p><a class="btn ghost arrow" href="../../pages/brief.html">Read the brief</a></div>
+        <div class="path"><span class="label">Path 2 · Qualified</span><h3>Capability review</h3><p>Full validation records and a working session with the systems, under NDA and identity confirmation.</p><a class="btn" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request a briefing</a></div>
+        <div class="path"><span class="label">Path 3 · Controlled</span><h3>Technical diligence</h3><p>Architecture, logs and evaluation harnesses, opened for inspection inside a supervised review window.</p><a class="btn ghost arrow" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request a window</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div><a class="brand" href="#main"><canvas id="mark2" width="52" height="52" aria-hidden="true"></canvas>CytherAI</a><p>Research and systems for AI that must be right, and must be able to say no. Riyadh, Kingdom of Saudi Arabia.</p></div>
+      <div><h4>Findings</h4><ul><li><a href="#cythercad">R-01 · CytherCAD</a></li><li><a href="#adii">R-02 · ADII</a></li><li><a href="#awc-os">R-03 · AWC-OS</a></li><li><a href="#sijilos">R-04 · SijilOS</a></li></ul></div>
+      <div><h4>Research</h4><ul><li><a href="../../pages/brief.html">Capability brief</a></li><li><a href="#record">The record</a></li><li><a href="../crossing/">The boundary, at scale</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="mailto:contact@cytherai.com">contact@cytherai.com</a></li><li><a href="../../pages/security.html">Security</a></li><li><a href="../../pages/privacy.html">Privacy</a></li><li><a href="../../pages/terms.html">Terms</a></li></ul></div>
+    </div>
+    <div class="base"><span>© 2026 CytherAI · US provisional patent filed 2025.Q1</span><span>Public manifest state <span data-checksum>75D1:89D1</span></span></div>
+  </div>
+</footer>
+
+<div class="tip" id="tip" aria-hidden="true"></div>
+
+<script src="../../js/manifest.js" defer></script>
+<script src="../../js/instrument.js" defer></script>
+<script src="../../js/claims.js" defer></script>
+<script src="../glass/worlds.js" defer></script>
+<script src="research.js" defer></script>
+</body>
+</html>
