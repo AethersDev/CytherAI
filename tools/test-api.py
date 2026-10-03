@@ -46,7 +46,7 @@ INVENTORY = {
     },
     "CytherDrawingSet": {
         "production": [],
-        "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor"],
+        "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor", "atlasFor"],
     },
 }
 SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"]

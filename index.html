@@ -19,7 +19,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#ECF0F4">
-<meta name="build-hash" content="E01E6B543C2E1555">
+<meta name="build-hash" content="AD0FE3E107577AEB">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -75,6 +75,7 @@ p.body strong{color:var(--ink);font-weight:600}
 .btns{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .btn{font-family:var(--mono);font-size:11px;letter-spacing:.16em;padding:15px 20px;text-decoration:none;display:inline-block;border:1px solid rgba(16,22,32,.35);color:var(--mid)}
 .btn.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn:disabled{opacity:.55;cursor:default}
 .link{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;padding:10px 0 8px;border-bottom:1px solid rgba(16,22,32,.35);align-self:flex-start;text-decoration:none}
 .hair{border-top:1px solid var(--rule)}
 
@@ -142,6 +143,34 @@ p.body strong{color:var(--ink);font-weight:600}
 .counters button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--ink);border-bottom:1px solid rgba(16,22,32,.35);padding:5px 0 2px;min-height:24px}
 .counters button:hover{border-color:var(--accent);color:var(--accent)}
 .figlog{align-self:stretch;font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--quiet);min-height:2.6em}
+
+/* the local atlas: the finite neighbourhood of two coupled edge edits */
+#atlasDialog{width:min(1060px,calc(100vw - 28px));max-height:calc(100vh - 28px);padding:0;border:1.5px solid var(--ink);background:var(--paper);color:var(--ink);overflow:auto;box-shadow:0 28px 80px rgba(16,22,32,.2)}
+#atlasDialog::backdrop{background:rgba(16,22,32,.62)}
+.atlas-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;border-bottom:1px solid var(--ink);padding:18px 22px}
+.atlas-head h2{font-size:clamp(24px,3vw,38px);margin-top:7px}
+.atlas-close{font-family:var(--mono);font-size:10px;letter-spacing:.12em;border:1px solid var(--ink);padding:9px 12px;min-height:36px}
+.atlas-intro{font-size:13px;line-height:1.55;color:var(--mid);padding:14px 22px 0;max-width:78ch}
+.atlas-body{display:grid;grid-template-columns:minmax(280px,1fr) minmax(280px,1fr);gap:20px;padding:18px 22px}
+.atlas-plate{min-width:0}
+.atlas-axis{font-family:var(--mono);font-size:10px;letter-spacing:.07em;color:var(--mid);margin-bottom:10px}
+.atlas-grid{display:grid;grid-template-columns:repeat(var(--cols),minmax(0,1fr));gap:3px;max-width:400px}
+.atlas-cell{aspect-ratio:1;min-width:0;position:relative;border:1px solid var(--rule);background:var(--panel)}
+.atlas-cell.admitted{background:var(--ink);border-color:var(--ink)}
+.atlas-cell.current::after{content:"";position:absolute;inset:28%;border:1px solid var(--paper)}
+.atlas-cell.non-program{border-color:transparent;background:linear-gradient(135deg,transparent 48%,var(--quiet) 49%,var(--quiet) 51%,transparent 52%);opacity:.65}
+.atlas-cell.arg-range{background:#DCE2EB}.atlas-cell.bounds{background:#BFCBE0}.atlas-cell.crosses{background:repeating-linear-gradient(135deg,#CED8EB 0 2px,#EFF2F8 2px 5px)}
+.atlas-cell[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:1px;z-index:1}
+.atlas-legend{display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:12px;font-family:var(--mono);font-size:9px;line-height:1.5;color:var(--mid)}
+.atlas-legend span::before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:middle;border:1px solid var(--rule);background:var(--swatch)}
+.atlas-legend .seam::before{background:linear-gradient(135deg,transparent 45%,var(--quiet) 48%,var(--quiet) 52%,transparent 55%)}
+.atlas-preview{width:100%;max-width:310px;aspect-ratio:1;display:block;background:var(--panel);border:1px solid var(--rule)}
+.atlas-result{font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--mid);min-height:6em;margin-top:12px;white-space:pre-line}
+.atlas-result b{color:var(--ink)}
+.atlas-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.atlas-actions button{font-family:var(--mono);font-size:10px;letter-spacing:.1em;padding:10px 12px;border:1px solid var(--ink);min-height:40px}
+.atlas-actions button:disabled{border-color:var(--rule);color:var(--quiet);cursor:default}
+.atlas-foot{font-family:var(--mono);font-size:9px;line-height:1.65;color:var(--quiet);border-top:1px solid var(--rule);padding:12px 22px 18px}
 
 /* the admitted object, carried through the set */
 .obj{border:1px solid var(--rule);background:var(--panel);padding:10px 12px;display:flex;gap:12px;align-items:center}
@@ -258,6 +287,9 @@ canvas.seal.lg{width:60px;height:60px}
   .sheet.tall .frame{margin:12px}
   .tr{grid-template-columns:1fr 64px 64px 64px;font-size:10.5px}
 }
+@media(max-width:700px){
+  .atlas-body{grid-template-columns:1fr;gap:18px}.atlas-preview{max-width:240px}
+}
 </style>
 </head>
 <body>
@@ -272,6 +304,7 @@ canvas.seal.lg{width:60px;height:60px}
         <p class="lede">On-premises, air-gapped, log-verified — for work where a wrong output has consequences. Nothing is emitted that has not been verified. This sheet is drawing one, live, now.</p>
         <div class="btns">
           <a class="btn primary" href="mailto:nda@cytherai.com?subject=Capability%20Conversation%20Request">REQUEST A CONVERSATION</a>
+          <button class="btn" id="openAtlas" type="button" disabled>ATLAS UNFOLDING</button>
         </div>
         <div class="callout">
           <div class="balloon">1</div>
@@ -512,9 +545,21 @@ canvas.seal.lg{width:60px;height:60px}
   </div></div>
 </section>
 
+<dialog id="atlasDialog" aria-labelledby="atlasTitle">
+  <div class="atlas-head"><div><div class="eyebrow">FIG. 1c · TWO COUPLED EDGE EDITS</div><h2 id="atlasTitle">The admissible neighbourhood.</h2></div><button class="atlas-close" id="atlasClose" type="button">CLOSE ×</button></div>
+  <p class="atlas-intro">Each square is one nearby proposal for this browser’s drawing. The two edges share a token, so moving them together changes the boundary. Select a square to inspect the program and the first relation that refuses it.</p>
+  <div class="atlas-body">
+    <div class="atlas-plate"><div class="atlas-axis" id="atlasAxes"></div><div class="atlas-grid" id="atlasGrid" role="group" aria-label="Nearby programs by two edge offsets"></div>
+      <div class="atlas-legend"><span style="--swatch:#101620">ADMITTED</span><span style="--swatch:#DCE2EB">ARG RANGE</span><span style="--swatch:#BFCBE0">BOUNDS</span><span style="--swatch:#CED8EB">CROSSES</span><span class="seam">NON-PROGRAM SEAM</span></div>
+    </div>
+    <div class="atlas-plate"><div class="atlas-axis">THE BASE DRAWING IN INK · THE SELECTED PROPOSAL IN BLUE</div><svg class="atlas-preview" id="atlasPreview" viewBox="0 0 140 140" role="img" aria-label="Selected proposal compared with the admitted drawing"></svg><div class="atlas-result" id="atlasResult" aria-live="polite"></div><div class="atlas-actions"><button id="atlasAccept" type="button" disabled>ACCEPT THIS PROGRAM</button><button id="atlasOrigin" type="button">RETURN TO ORIGIN</button></div></div>
+  </div>
+  <div class="atlas-foot" id="atlasFoot"></div>
+</dialog>
+
 <script src="js/manifest.js" defer integrity="sha384-Yw5BMsdf/1JSQk2eiP9T84irrzFpur9n/Ch7Kjb5OBmnHysKxg+ySbChES6OmBZS" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-SFCZRwUz5Q+bbjOjgnMrmXDUDoGsdR6YlNrxeXta/juhjcLUaqs3f/Qk7bzkFqwt" crossorigin="anonymous"></script>
 <script src="js/claims.js" defer integrity="sha384-7dsVU7m2fJZ/oQP3ftUgzmP34AEfk7keeidFjey9T0NMLFNHsTx8QsLludsYmj6b" crossorigin="anonymous"></script>
-<script src="js/drawing-set.js" defer integrity="sha384-iLpTgTE7TwTTzVHs9Lr7ZIqi18gCb/WARD0jXuscK41M6qNvukMZUzUQribklWrG" crossorigin="anonymous"></script>
+<script src="js/drawing-set.js" defer integrity="sha384-4+eVue/L3T3RB8D74pvJi1pzg4HsTnqOS3c80D+ZM1QAMaGikdWplYKMB3WPzSH2" crossorigin="anonymous"></script>
 </body>
 </html>
