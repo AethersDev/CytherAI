@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>CytherAI — We build the other half of AI</title>
+<meta name="description" content="A model can propose anything. In every CytherAI system, something outside the model decides what is allowed to happen — and keeps the record of what did. CytherCAD, ADII, AWC-OS, SijilOS.">
+<meta name="theme-color" content="#03050A">
+<link rel="icon" href="../../icon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE GLASS — design prototype, not the front door. One sheet of glass, four systems
+     standing on it. Below the glass a model proposes; above it stands only what that
+     system's authority allowed. CytherCAD streams the boundary engine of the record
+     (js/instrument.js via ../crossing/sim.js); ADII, AWC-OS and SijilOS run the toy worlds
+     of worlds.js, whose authorities are real code and whose data are toys — each says so
+     where it stands. The sky is the seal, dsinOrbit(CANON). Printed manifest facts carry
+     data-m and are checked against CytherManifest.project. -->
+<style>
+:root{
+  --bg:#03050A; --ink:#EEF2F8; --mid:#A7B1C2; --quiet:#7E8AA0; --rule:rgba(150,168,205,.2);
+  --signal:#8197FF; --cobalt:#2036C7;
+  --sans:"SF Pro Display","SF Pro Text",-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",system-ui,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  --gut:clamp(16px,4.6vw,84px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink);scroll-behavior:smooth}
+body{font:400 18px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--cobalt);color:#fff}
+
+#world{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:0}
+.no-gl #world{display:none}
+.no-gl body{background:radial-gradient(120% 80% at 70% 60%,#0B1222 0%,var(--bg) 60%)}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(3,5,10,.86) 0%,rgba(3,5,10,.62) 28%,rgba(3,5,10,.12) 52%,rgba(3,5,10,0) 64%)}
+
+#tags{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+#tags span{position:absolute;left:0;top:0;margin:-24px 0 0 6px;padding:4px 0 4px 9px;border-left:1px solid rgba(129,151,255,.7);
+  font:500 10.5px/1.25 var(--mono);letter-spacing:.06em;color:#C9D2F2;white-space:nowrap;opacity:0;will-change:transform,opacity;max-width:64ch;overflow:hidden;text-overflow:ellipsis}
+#tags .rule{color:#B9C6FF;border-left-color:var(--signal)}
+#tags .ok{color:#fff;border-left-color:#fff}
+#tags .esc{color:#fff;border-left:1px solid #fff;padding-left:9px}
+#tags .esc::before{content:"↑ ";color:var(--signal)}
+#tags .prop{color:#9EAACB;border-left-color:rgba(158,170,203,.55)}
+
+#names{position:fixed;inset:0;z-index:3;pointer-events:none}
+#names a{position:absolute;left:0;top:0;opacity:0;text-decoration:none;will-change:transform,opacity}
+#names a>span{display:flex;flex-direction:column;align-items:center;gap:6px;transform:translate(-50%,-100%);padding-bottom:12px;white-space:nowrap}
+#names b{font:600 15px/1 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+#names i{font:500 10px/1 var(--mono);font-style:normal;letter-spacing:.2em;text-transform:uppercase;color:var(--signal)}
+#names a>span::after{content:"";width:1px;height:18px;background:linear-gradient(var(--signal),transparent)}
+#names a:hover b{text-decoration:underline;text-underline-offset:4px}
+
+header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:24px var(--gut)}
+.brand{font:600 13px/1 var(--mono);letter-spacing:.34em;text-decoration:none}
+.brand i{font-style:normal;color:var(--signal)}
+nav{display:flex;gap:30px;align-items:center}
+nav a{font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mid);text-decoration:none}
+nav a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 22px;font:600 11.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;
+  text-decoration:none;color:var(--bg);background:var(--ink);border:1px solid var(--ink);transition:background .2s,color .2s}
+.btn:hover{background:transparent;color:var(--ink)}
+.btn.line{background:transparent;color:var(--ink);border-color:rgba(238,242,248,.32)}
+.btn.line:hover{border-color:var(--ink)}
+nav .btn{padding:12px 16px;color:var(--bg)}
+
+.rail{position:fixed;right:var(--gut);top:50%;transform:translateY(-50%);z-index:5;list-style:none;display:flex;flex-direction:column;gap:16px;transition:opacity .5s}
+.rail.off{opacity:0;pointer-events:none}
+.rail a{display:flex;align-items:center;justify-content:flex-end;gap:12px;font:500 10.5px/1 var(--mono);letter-spacing:.18em;color:var(--quiet);text-decoration:none}
+.rail span{opacity:0;transform:translateX(6px);transition:opacity .35s,transform .35s}
+.rail a[aria-current] span,.rail:hover span{opacity:1;transform:none}
+.rail a::after{content:"";width:16px;height:1px;background:currentColor;transition:width .35s,background .35s}
+.rail a[aria-current]{color:var(--ink)}
+.rail a[aria-current]::after{width:44px;background:var(--signal)}
+
+main{position:relative;z-index:4}
+section{position:relative;min-height:175vh}
+section[data-ch=top]{min-height:100vh}
+section[data-ch=close]{min-height:130vh}
+.copy{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:110px var(--gut) 132px;max-width:min(800px,56vw);opacity:var(--vis,1)}
+section[data-ch=top] .copy{max-width:min(940px,62vw)}
+.eyebrow{font:500 11.5px/1.5 var(--mono);letter-spacing:.22em;text-transform:uppercase;color:var(--signal);margin-bottom:26px}
+.eyebrow b{color:var(--ink);font-weight:500}
+h1{font-weight:600;font-size:clamp(50px,6.4vw,124px);line-height:.93;letter-spacing:-.05em}
+h2{font-weight:600;font-size:clamp(38px,4vw,74px);line-height:.96;letter-spacing:-.045em}
+h1 span,h2 span{display:block}
+.lede{margin-top:30px;font-size:clamp(17px,1.3vw,21px);line-height:1.55;color:var(--mid);max-width:38ch}
+.lede strong{color:var(--ink);font-weight:500}
+.acts{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+.key{display:flex;gap:26px;margin-top:38px;font:500 10.5px/1.5 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet)}
+.key span::before{content:"";display:inline-block;width:18px;height:1px;margin:0 9px 3px 0;vertical-align:middle;background:currentColor}
+.key .up{color:var(--ink)}
+.key .dn{color:#8FA0D8}
+
+.q{margin-top:22px;font:500 11px/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--quiet)}
+.q b{display:block;margin-top:6px;font:500 clamp(19px,1.6vw,24px)/1.3 var(--sans);letter-spacing:-.01em;text-transform:none;color:var(--ink)}
+.verdicts{display:grid;grid-template-columns:repeat(3,1fr);margin-top:24px;max-width:560px;border-top:1px solid var(--rule)}
+.verdicts div{padding:14px 14px 0 0}
+.verdicts b{display:block;font:600 clamp(30px,2.8vw,44px)/1 var(--sans);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.verdicts span{display:block;margin-top:8px;font:500 11px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+.verdicts em{display:block;margin-top:4px;font-style:normal;font-size:13px;line-height:1.4;color:var(--quiet)}
+.verdicts .stop b{color:var(--signal)}
+.links{display:flex;flex-wrap:wrap;gap:22px;margin-top:24px}
+.links a{font:500 11.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--ink);padding-bottom:6px;border-bottom:1px solid rgba(238,242,248,.35)}
+.links a:hover{border-bottom-color:var(--ink)}
+.honest{margin-top:16px;font:500 10.5px/1.65 var(--mono);letter-spacing:.06em;color:var(--quiet);max-width:58ch}
+.stat{margin-top:30px;padding-top:16px;border-top:1px solid var(--rule);font:500 11.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet);max-width:46ch}
+.stat b{display:block;font:600 clamp(34px,3.4vw,54px)/1 var(--sans);letter-spacing:-.03em;color:var(--ink);margin-bottom:8px;font-variant-numeric:tabular-nums}
+.zero{color:var(--signal)!important}
+.mono{font-family:var(--mono);letter-spacing:.04em}
+.stale{outline:1px dashed #ff6b6b;outline-offset:3px}
+
+@keyframes rise{from{opacity:0;transform:translateY(.32em)}to{opacity:1;transform:none}}
+[data-ch=top] h1 span,[data-ch=top] .lede,[data-ch=top] .acts,[data-ch=top] .key{animation:rise 1.2s cubic-bezier(.2,.7,.1,1) both}
+[data-ch=top] h1 span:nth-child(2){animation-delay:.12s}
+[data-ch=top] .lede{animation-delay:.5s}[data-ch=top] .acts{animation-delay:.7s}[data-ch=top] .key{animation-delay:.9s}
+
+.nc{list-style:none;margin-top:24px;max-width:520px}
+.nc li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--rule);font:500 11px/1.4 var(--mono);letter-spacing:.12em;color:var(--mid)}
+.nc li::after{content:"NOT CLAIMED";color:var(--quiet);white-space:nowrap}
+
+section[data-ch=close] .copy{max-width:1280px;padding-right:calc(var(--gut) + 140px)}
+.paths{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:44px;background:var(--rule);border:1px solid var(--rule)}
+.path{background:rgba(3,5,10,.88);padding:28px 26px 26px;display:flex;flex-direction:column;gap:13px;min-height:280px}
+.path .k{font:500 10.5px/1 var(--mono);letter-spacing:.2em;color:var(--signal)}
+.path h3{font-weight:600;font-size:26px;letter-spacing:-.025em;line-height:1.05}
+.path p{color:var(--mid);font-size:16px;line-height:1.55;flex:1}
+.path .btn{align-self:flex-start}
+footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-top:52px;padding-top:20px;border-top:1px solid var(--rule);
+  font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet)}
+footer nav{gap:22px}footer a{text-decoration:none}footer a:hover{color:var(--ink)}
+
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;
+  padding:16px var(--gut) 18px;pointer-events:none;font:500 10.5px/1.6 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--quiet);
+  background:linear-gradient(0deg,rgba(3,5,10,.82),rgba(3,5,10,0))}
+.hud .live{display:flex;flex-wrap:wrap;gap:6px 22px;align-items:center}
+.hud .live>span:first-child{color:var(--signal)}
+.hud .live>span:first-child::before{content:"";display:inline-block;width:6px;height:6px;margin:0 10px 1px 0;border-radius:50%;background:var(--signal);animation:beat 1.6s ease-in-out infinite}
+.hud b{color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums}
+.hud .note{text-align:right;max-width:40ch}
+@keyframes beat{50%{opacity:.25}}
+
+#receipt{position:fixed;left:0;top:0;z-index:7;width:360px;padding:16px 18px 14px;background:rgba(4,6,13,.95);border:1px solid rgba(129,151,255,.5);
+  font:500 11px/1.55 var(--mono);letter-spacing:.04em;color:var(--mid);pointer-events:none;opacity:0;transition:opacity .15s}
+#receipt.on{opacity:1}
+#receipt .h{display:flex;justify-content:space-between;gap:12px;color:var(--ink);font-weight:600;letter-spacing:.06em}
+#receipt .h span:last-child{color:var(--signal);white-space:nowrap}
+#receipt .sub{margin:8px 0 10px;padding:8px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);color:var(--ink);word-spacing:.2em}
+#receipt dl{display:grid;grid-template-columns:auto 1fr;gap:3px 14px}
+#receipt dt{color:var(--quiet);text-transform:uppercase;letter-spacing:.12em;font-size:10px;padding-top:1px;white-space:nowrap}
+#receipt dd{color:var(--mid)}
+
+@media(max-width:1100px){.rail{display:none}.hud .note{display:none}}
+@media(max-width:760px){
+  html,body{overflow-x:clip}
+  .scrim{display:none}
+  header{padding:16px}nav a:not(.btn){display:none}
+  nav .btn{padding:10px 12px;font-size:10px;letter-spacing:.12em}
+  section,section[data-ch=top],section[data-ch=close]{min-height:0}
+  .copy{position:relative;min-height:0;max-width:none;opacity:1;justify-content:flex-start;padding:64vh 16px 72px;
+    background:linear-gradient(180deg,rgba(3,5,10,0) 0,rgba(3,5,10,0) 52vh,rgba(3,5,10,.9) 64vh,rgba(3,5,10,.94) 100%)}
+  section[data-ch=top] .copy{max-width:none;padding-top:50vh;background:linear-gradient(180deg,rgba(3,5,10,0) 0,rgba(3,5,10,0) 40vh,rgba(3,5,10,.9) 52vh,rgba(3,5,10,.94) 100%)}
+  section[data-ch=close] .copy{padding-right:16px}
+  h1{font-size:clamp(44px,12vw,62px)}h2{font-size:clamp(36px,10vw,52px)}
+  .lede{max-width:none;font-size:16.5px}.key{flex-direction:column;gap:6px}
+  .verdicts em{display:none}
+  .paths{grid-template-columns:1fr}.path{min-height:0}
+  #names b{font-size:13px}
+  #receipt{width:min(360px,calc(100vw - 24px))}
+  .hud{padding:10px 16px 12px;font-size:9.5px;letter-spacing:.1em;background:rgba(3,5,10,.94);border-top:1px solid var(--rule)}.hud .live{gap:2px 12px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}[data-ch=top] *{animation:none !important}}
+</style>
+</head>
+<body>
+<canvas id="world" aria-hidden="true"></canvas>
+<div class="scrim" aria-hidden="true"></div>
+<div id="tags" aria-hidden="true"></div>
+<div id="names">
+  <a data-station="cad" href="#cad"><span><b>CytherCAD</b><i>Geometry</i></span></a>
+  <a data-station="adii" href="#adii"><span><b>ADII</b><i>Data</i></span></a>
+  <a data-station="awc" href="#awc"><span><b>AWC-OS</b><i>Money</i></span></a>
+  <a data-station="sijil" href="#sijil"><span><b>SijilOS</b><i>Records</i></span></a>
+</div>
+
+<header>
+  <a class="brand" href="#top">CYTHER<i>AI</i></a>
+  <nav aria-label="Primary">
+    <a href="#cad">Systems</a>
+    <a href="../../pages/brief.html">Brief</a>
+    <a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Request a conversation</a>
+  </nav>
+</header>
+
+<ol class="rail" aria-label="Chapters">
+  <li><a href="#cad"><span>GEOMETRY</span>01</a></li>
+  <li><a href="#adii"><span>DATA</span>02</a></li>
+  <li><a href="#awc"><span>MONEY</span>03</a></li>
+  <li><a href="#sijil"><span>RECORDS</span>04</a></li>
+  <li><a href="#contain"><span>YOUR WALLS</span>05</a></li>
+  <li><a href="#record"><span>THE RECORD</span>06</a></li>
+  <li><a href="#close"><span>BEGIN</span>07</a></li>
+</ol>
+
+<main>
+  <section id="top" data-ch="top">
+    <div class="copy">
+      <p class="eyebrow">CytherAI · <b>Riyadh</b></p>
+      <h1><span>We build the other</span><span>half of AI.</span></h1>
+      <p class="lede">A model can propose anything. In every CytherAI system, <strong>something outside the model decides what is allowed to happen</strong> — and keeps the record of what did. Four systems stand on this glass: geometry, data, money, records.</p>
+      <div class="acts">
+        <a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Request a conversation</a>
+        <a class="btn line" href="#cad">Walk the glass ↓</a>
+      </div>
+      <p class="key"><span class="dn">Below the glass · proposed</span><span class="up">Above it · allowed</span></p>
+    </div>
+  </section>
+
+  <section id="cad" data-ch="cad">
+    <div class="copy">
+      <p class="eyebrow">01 · CytherCAD · Geometry</p>
+      <h2><span>Language in.</span><span>Only valid geometry out.</span></h2>
+      <p class="lede">CytherCAD turns text into CAD. The model proposes a construction program token by token; a boundary refuses every token that breaks the grammar or the geometry, and an independent kernel rebuilds whatever closes. <strong><span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> invalid outputs</strong> on Text2CAD-192 — an external benchmark, published, not operated by CytherAI.</p>
+      <p class="q">The question it must answer<b>“Is this valid geometry?”</b></p>
+      <div class="verdicts">
+        <div><b data-t="cad">0</b><span>Crossed</span><em>admitted, then verified</em></div>
+        <div class="stop"><b data-t="cad-rej">0</b><span>Refused</span><em>tokens stopped at the glass</em></div>
+        <div class="stop"><b data-t="cad-inv">0</b><span>Overruled</span><em>stopped by the kernel after the boundary admitted them</em></div>
+      </div>
+      <p class="links"><a href="../crossing/">Enter THE CROSSING →</a><a href="../../pages/brief.html#cythercad">Technical record →</a></p>
+      <p class="honest">Live: the boundary engine of the record, in this browser. A toy grammar; the production mechanism. Hover a solid for its receipt.</p>
+    </div>
+  </section>
+
+  <section id="adii" data-ch="adii">
+    <div class="copy">
+      <p class="eyebrow">02 · ADII · Data</p>
+      <h2><span>A number looks wrong.</span><span>Who may change it?</span></h2>
+      <p class="lede">ADII investigates and answers: fix it, leave it, or escalate it. <strong>The AI that proposes a fix can’t approve it</strong> — two programs outside the model decide whether the change is allowed, and whether it holds. Watch a proposal wait beneath the glass until both say yes.</p>
+      <p class="q">The question it must answer<b>“Do we have grounds to change this?”</b></p>
+      <div class="verdicts">
+        <div><b data-t="fix">0</b><span>Fix</span><em>allowed, and it holds</em></div>
+        <div><b data-t="leave">0</b><span>Leave</span><em>the sources agree — it was real</em></div>
+        <div class="stop"><b data-t="esc">0</b><span>Escalate</span><em>not ours to decide — a person’s</em></div>
+      </div>
+      <p class="links"><a href="../../adii/">Watch a recorded investigation →</a></p>
+      <p class="honest">Toy data and a scripted investigator stand in for the model. The two gates are real programs, running here — an illustration of ADII’s architecture, not ADII.</p>
+    </div>
+  </section>
+
+  <section id="awc" data-ch="awc">
+    <div class="copy">
+      <p class="eyebrow">03 · AWC-OS · Money</p>
+      <h2><span>The model writes it.</span><span>The engine decides.</span></h2>
+      <p class="lede">AWC-OS is a constitutional financial-intelligence layer. A model writes a financial program; a deterministic symbolic engine executes it, refuses it, or blocks it — with a replayable receipt either way. <strong>Success is not an answer every time. It is unauthorized answers failing safely.</strong></p>
+      <p class="q">The question it must answer<b>“Is this calculation allowed to become an answer?”</b></p>
+      <div class="verdicts">
+        <div><b data-t="exe">0</b><span>Executed</span><em>every assertion passed</em></div>
+        <div class="stop"><b data-t="ref">0</b><span>Refused</span><em>broke the constitution — an alternative offered</em></div>
+        <div class="stop"><b data-t="blk">0</b><span>Blocked</span><em>could not prove its own conditions</em></div>
+      </div>
+      <p class="links"><a href="../../awc-os/">Open the evaluation gateway →</a></p>
+      <p class="honest">Toy programs on a small engine written for this page — an illustration of AWC-OS, not AWCOSCore. Its money is exact: integer halalas, rounded half-up. Hover a receipt to read its program.</p>
+    </div>
+  </section>
+
+  <section id="sijil" data-ch="sijil">
+    <div class="copy">
+      <p class="eyebrow">04 · SijilOS · Records</p>
+      <h2><span>Nothing is overwritten.</span><span>Ever.</span></h2>
+      <p class="lede">SijilOS is an event-sourced ledger for the Saudi market. It stores intent over time, not just the current state: <strong>a correction is a new event, and history is never edited.</strong> ZATCA Phase 1 certified (April 2025), live beta in two production environments, fully offline-capable.</p>
+      <p class="q">The question it must answer<b>“How did this record come to be?”</b></p>
+      <div class="verdicts">
+        <div><b data-t="sij">0</b><span>Appended</span><em>each bound to the one before</em></div>
+        <div class="stop"><b data-t="sij-rej">0</b><span>Rejected</span><em>wrong VAT, over-refunds, edits</em></div>
+        <div><b class="mono" data-t="head" style="font-size:clamp(18px,1.6vw,24px);letter-spacing:.04em">—</b><span>Chain head</span><em>recomputed from every event</em></div>
+      </div>
+      <p class="links"><a href="../../pages/brief.html#sijilos">System brief →</a></p>
+      <p class="honest">A toy ledger illustrating event sourcing — not SijilOS. The present enters at the glass and pushes the past upward; hover any layer for the state at that moment.</p>
+    </div>
+  </section>
+
+  <section id="contain" data-ch="contain">
+    <div class="copy">
+      <p class="eyebrow">05 · Inside your walls</p>
+      <h2><span>The deciding half</span><span>runs where you do.</span></h2>
+      <p class="lede">CytherCAD runs on-premises and air-gapped. SijilOS is offline-first, with zero core cloud dependency. AWC-OS ran its demonstration offline, on a phone. <strong>Correctness never depends on a service you don’t control — including ours.</strong> This page is built the same way: everything you have seen was computed here.</p>
+      <p class="stat"><b class="zero" data-t="ext">0</b>requests this page has made to anywhere but this site — counted by your browser</p>
+    </div>
+  </section>
+
+  <section id="record" data-ch="record">
+    <div class="copy">
+      <p class="eyebrow">06 · The record</p>
+      <h2><span>We state only what</span><span>the record supports.</span></h2>
+      <p class="lede">The light overhead is not an illustration. It is derived from our public manifest — state <span class="mono" style="color:var(--signal)" data-t="state">75D1:89D1</span> — by a fixed recurrence, here, in your browser. Change one disclosed fact and the whole sky changes. We also say what we do not claim.</p>
+      <ul class="nc" aria-label="Not claimed">
+        <li>General text-to-CAD semantic parity</li>
+        <li>Cloud-scale throughput</li>
+        <li>Foundation-model generality</li>
+        <li>Unsupervised deployment authority</li>
+        <li>Benchmark leadership beyond the disclosed record</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="close" data-ch="close">
+    <div class="copy">
+      <p class="eyebrow">07 · Begin</p>
+      <h2><span>Tell us what must</span><span>never happen.</span></h2>
+      <p class="lede">We start where a wrong answer becomes a consequence — the action that must be refused, the number nobody may change alone, the record that must survive. Then we build the half that holds.</p>
+      <div class="paths">
+        <div class="path"><span class="k">PATH 1 · OPEN</span><h3>Public materials</h3><p>The brief, the record and its conditions — disclosed without qualification.</p><a class="btn line" href="../../pages/brief.html">Read the brief</a></div>
+        <div class="path"><span class="k">PATH 2 · QUALIFIED</span><h3>Capability review</h3><p>Full validation records and a working session with the systems — under NDA and identity confirmation.</p><a class="btn" href="mailto:nda@cytherai.com?subject=NDA%20Briefing%20Request">Request NDA briefing</a></div>
+        <div class="path"><span class="k">PATH 3 · CONTROLLED</span><h3>Technical diligence</h3><p>Architecture, logs and evaluation harnesses, opened for inspection inside a supervised review window.</p><a class="btn line" href="mailto:review@cytherai.com?subject=Diligence%20Window%20Request">Request diligence window</a></div>
+      </div>
+      <footer>
+        <span>CytherAI · Riyadh, KSA</span>
+        <nav aria-label="Legal"><a href="../../pages/privacy.html">Privacy</a><a href="../../pages/security.html">Security</a><a href="../../pages/terms.html">Terms</a></nav>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<div class="hud" aria-live="off">
+  <div class="live">
+    <span>Live</span>
+    <span>Crossed — geometry <b data-t="cad">0</b></span>
+    <span>data <b data-t="adii">0</b></span>
+    <span>money <b data-t="awc">0</b></span>
+    <span>records <b data-t="sij">0</b></span>
+    <span>Stopped at the glass <b class="zero" data-t="stopped">0</b></span>
+  </div>
+  <div class="note">Four authorities running here · CytherCAD: the engine of the record · ADII, AWC-OS, SijilOS: toy-scale</div>
+</div>
+
+<div id="receipt" aria-hidden="true">
+  <div class="h"><span data-r="title"></span><span data-r="badge"></span></div>
+  <div class="sub" data-r="sub"></div>
+  <dl></dl>
+</div>
+
+<script src="../../js/manifest.js" defer></script>
+<script src="../../js/instrument.js" defer></script>
+<script src="../crossing/sim.js" defer></script>
+<script src="worlds.js" defer></script>
+<script src="glass.js" defer></script>
+</body>
+</html>
