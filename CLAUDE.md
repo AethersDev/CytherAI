@@ -11,6 +11,14 @@ Browser-only checks (layout, service worker, the seal and FIG. 1 as rendered) re
 `docs/deploy.md`; the retired world's laws run with `backup/instrument-v1/verify.sh`.
 Serve with any static file server: `python3 -m http.server 8000` from the repo root.
 
+One check at a time: a jsc regression takes the modules it needs before it, in load
+order, exactly as `verify.sh` lists them (`$JSC js/manifest.js js/instrument.js
+tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `unittest`
+(`python3 tools/test-vaic.py VaicCorpusTests.test_<name>`); the other `tools/test-*.py`
+are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
+`websocket-client`, for driving Chrome over CDP. `CANONICAL_REF` is local `master`,
+which tracks `origin/main`; there is no local `main`.
+
 The first VAIC-0 research corpus lives under `vaic/`. `./verify.sh` validates its
 schema, receipt authority/build binding, coverage scope, and negative controls.
 Corpus `FAIL` or `NOT_EVALUATED` results are reported without being laundered into
@@ -214,6 +222,21 @@ Visual language, fixed: cool blue-grey = proposal, blue = candidate, dotted/mark
 refused, black = admitted, ghost = superseded. `tools/test-drawing-set.js` pins the
 object, the edge and its limits (−3 admitted · −4 ARG RANGE · +2 CROSSES).
 
+The pure `CytherDrawingSet.atlasFor(program, edge, radius)` enumerates a research
+slice of two coupled edge edits for FIG. 1. It chooses the unique other movable
+edge two tokens away (the edges share one neighbour), or returns `null` when there
+is no unique partner. Both offsets act simultaneously on the base program: an
+intermediate zero-length token from applying edits sequentially cannot erase a
+valid final candidate. Only a final zero length is `NON_PROGRAM`; all other cells
+are classified by `CytherInstrument.judge`. The full ±radius map is retained,
+while `window` is derived from the token-length-valid cells plus one integer ring.
+The seed-02 edge-2 × edge-4 map is a discovery case pinned by the regression.
+After FIG. 1 settles, **EXPLORE THE ATLAS** opens FIG. 1c: a grammar-derived
+window of the map, a selected-program comparison, and the first refusal from
+`judge`. Arrow keys traverse cells; an admitted selected program can be accepted
+and is then carried through sheets 2–6 as this browser's demonstration. The
+full ±radius counts remain visible as a local receipt, not an evaluation figure.
+
 **General Note 1, printed on Sheet 7:** *The surface states only what the record can
 support. Conditions and sources travel with every claim. Nothing is stated as established
 that has not been checked.*
@@ -225,7 +248,7 @@ that has not been checked.*
 | `js/manifest.js` | `CytherManifest` | public manifest + deterministic derivation (fnv, dsin, admit, dsinOrbit, legibility, checksum, project) |
 | `js/instrument.js` | `CytherInstrument` | the boundary: `biEngine` (seeded stream, positioned events), `judge` (a proposed program against boundary then kernel), `audit`, `lastAudit`; pure, DOM-free |
 | `js/claims.js` | `CytherClaims` | the six canonical predicates CL-01 · 02 · 03 · 05 · 06b · 07 and the registry (`CLAIMS`, `setClaim`, `recomputeClaims`, `renderClaims` → `#claimRows`, `#claimsFooter`, `[data-claims-count]`); a page pushes its own predicates before the first render |
-| `js/drawing-set.js` | `CytherDrawingSet` | the set: frame/title block/seal on every sheet, projections of the manifest, FIG. 1, the adjustable edge, the carried object, DS-01..05 (seal serial ≡ state, ink and quietest ink ≥ 4.5:1 on paper read from the tokens, seal ≡ derivation pixel for pixel, the drawing is an admitted program), CL-03/CL-05 setting, `sw.js` registration; pure geometry (`walk`, `extent`, `progId`, `pickEdge`, `candidateFor`) exported for the verifier |
+| `js/drawing-set.js` | `CytherDrawingSet` | the set: frame/title block/seal on every sheet, projections of the manifest, FIG. 1, the adjustable edge, the carried object, DS-01..05 (seal serial ≡ state, ink and quietest ink ≥ 4.5:1 on paper read from the tokens, seal ≡ derivation pixel for pixel, the drawing is an admitted program), CL-03/CL-05 setting, `sw.js` registration; pure geometry (`walk`, `extent`, `progId`, `pickEdge`, `candidateFor`, `atlasFor`) exported for the verifier |
 
 Claim identifiers are part of the claim: a canonical `CL` number is used only where the
 predicate is the canonical one; a predicate over this set is a `DS`. The world predicates
@@ -234,6 +257,12 @@ CL-04, CL-06, CL-06c, CL-08 left with the world and no page carries a row for th
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
+
+**Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
+`REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
+named there. `adii/` keeps every URL its first publication served, the CVs included;
+`awc-os/live/` redirects to an ephemeral tunnel and never ships. Both pages are stamped like
+the subpages; `sw.js` sends media, documents and range requests to the network uncached.
 
 **Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
 or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`),
@@ -274,5 +303,6 @@ because `newC3/epoch04-preimage.txt` hashes to the published digest.
   whole, with its verifiers — see its README), `graphite-v2/` (old engine-backed homepage,
   with the three modules only it loaded), `dossier-v3/` (old shared CSS + the dossier IIFE
   modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
-  v-next design map), `drawing-set-demo.html` (the demo the drawing set was approved from).
+  v-next design map), `drawing-set-demo.html` (the demo the drawing set was approved from), `project-pages/` (the ADII and AWC-OS pages
+  as first published, before curation).
   Supersede, never erase: retire into `backup/`, do not delete.

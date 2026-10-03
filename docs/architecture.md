@@ -66,8 +66,9 @@ caller fails verification.
 | `vaic/` | The VAIC-0 obligation corpus (`v1`, superseding `v0`, which stays as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across both lineages (`tools/test-vaic.py`) |
 | `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
 | `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
-| `backup/` | Retired surfaces: `instrument-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html` | No | Historical record only; retire here, never delete, never deploy |
-| `awc-os/` | Gitignored AWC-OS evaluation microsite and media | No | Separate artifact with separate network/product assumptions |
+| `backup/` | Retired surfaces: `instrument-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html`, and the uncurated project pages (`project-pages/`) | No | Historical record only; retire here, never delete, never deploy |
+| `adii/` | ADII project page: the replay, its poster and fonts, the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
+| `awc-os/` | AWC-OS evaluation gateway (curated), its films and deck | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 
 ## Homepage boot and steady state

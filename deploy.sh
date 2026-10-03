@@ -38,8 +38,9 @@ for a in $(sed -n '/^var ASSETS = \[/,/^\];/p' "$ROOT/sw.js" | sed -n "s/.*'\([^
 done
 [ "$MISSING" -eq 0 ] || { echo "  ERROR: allowlist and sw.js ASSETS have drifted" >&2; exit 1; }
 
-# The record must never be in the artifact.
-for d in backup newC3 docs awc-os; do
+# The record must never be in the artifact, nor the AWC-OS live-MVP redirect (an ephemeral
+# tunnel). The project pages ship only their reviewed set, pinned in tools/test-site.py.
+for d in backup newC3 docs awc-os/live; do
     [ ! -e "$DIST/$d" ] || { echo "  ERROR: $d reached the artifact" >&2; exit 1; }
 done
 
