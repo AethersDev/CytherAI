@@ -40,5 +40,48 @@ ok(moved.map(function (t) { return t.s; }).join(" ") === "H+1 V−2 H+4 V+4 H−
    "a move changes only the two neighbouring tokens (sign and length) and never the base program");
 ok(D.pickEdge(toks("H+1 V−1 H−1 Z")) === 1 && D.pickEdge(toks("H+2 V+2 H−2 V−1 Z")) === 1 && D.pickEdge(toks("H+1 Z")) === null,
    "the smallest admissible program offers its middle token; ties keep the earlier edge; a program too short to close offers none");
+
+/* EVIDENCE: coupled-edge-atlas — discovery case, chosen after inspecting all ten
+   pairs. The rule is structural: edge 2 and edge 4 share token 3. The 13x13
+   enumeration remains pinned even where the derived display window omits cells. */
+var atlas = D.atlasFor(best.prog, k, 6);
+ok(atlas && atlas.edges.join(",") === "2,4" && atlas.cells.length === 169 && atlas.domain.min === -6 && atlas.domain.max === 6,
+   "the selected pair is the unique movable edge sharing a neighbour with edge 2; the full ±6 domain is retained");
+var mark = function (c) { return c.status === "NON_PROGRAM" ? "·" : c.status === "ADMITTED" ? (c.x === 0 && c.y === 0 ? "@" : "#") :
+  ({ "ARG RANGE": "A", BOUNDS: "B", CROSSES: "X", "CLOSING CROSS": "C", CLOSURE: "L", "AXIS ORDER": "O", KERNEL: "K" }[c.why] || "?"); };
+var rows = [];
+for (var y = 6; y >= -6; y--) rows.push(atlas.cells.filter(function (c) { return c.y === y; }).map(mark).join(""));
+var expected = [
+  "AAAAA·AAABAAA", "AAAAA·AABBAA·", "·············",
+  "AAAAA·####·AA", "AAAAA·###·AAA", "AAAA#·##·XAAA",
+  "AAA##·@·XXAAA", "AAAAA··AAAAAA", "AAAAA·AAAAAAA",
+  "AAAA··AAAAAAA", "AAA·A·AAAAAAA", "AA·AA·AAAAAAA",
+  "A·AAA·AAAAAAA"
+];
+ok(rows.join("/") === expected.join("/"), "the 2×4 atlas pins all 169 cell classifications: " + rows.join("/"));
+var current = atlas.cells.filter(function (c) { return c.x === 0 && c.y === 0; })[0];
+ok(current.status === "ADMITTED" && current.programId === "PRG-446DF7E6" && atlas.cells.filter(function (c) { return c.status === "ADMITTED"; }).every(function (c) { return c.kernel; }),
+   "the current cell names the inked object and every admitted cell received judge's kernel pass");
+ok(atlas.cells.filter(function (c) { return c.status === "NON_PROGRAM"; }).every(function (c) { return !c.why && !c.program; }),
+   "the zero-length seam is not attributed to a boundary refusal");
+var bounds = atlas.cells.filter(function (c) { return c.x === 3 && c.y === 6; })[0],
+    crosses = atlas.cells.filter(function (c) { return c.x === 2 && c.y === 0; })[0];
+ok(bounds.why === "BOUNDS" && crosses.why === "CROSSES" &&
+   [bounds, crosses].every(function (c) { return c.judgment.at === c.at && Number.isInteger(c.judgment.x) && Number.isInteger(c.judgment.y); }),
+   "refused cells retain the first relation and its witness position for a drawing");
+var restored = atlas.cells.filter(function (c) { return c.x === 1 && c.y === 3; })[0];
+ok(D.candidateFor(best.prog, 2, 1) === null && restored.status === "ADMITTED" && I.judge(restored.program).ok,
+   "simultaneous offsets can restore a shared token that a sequential intermediate would erase");
+var transposed = D.atlasFor(best.prog, 4, 6);
+ok(transposed && atlas.cells.every(function (c) { var t = transposed.cells.filter(function (z) { return z.x === c.y && z.y === c.x; })[0];
+  return t && t.status === c.status && t.why === c.why && t.at === c.at && t.programId === c.programId; }),
+   "classification and program identity do not depend on which edit is enumerated first");
+ok(JSON.stringify(atlas.window) === '{"minX":-4,"maxX":4,"minY":-1,"maxY":6}' &&
+   atlas.cells.every(function (c) { return !c.program || !c.program.every(function (t) { return t.k === "Z" || t.mg <= 4; }) ||
+     (c.x >= atlas.window.minX && c.x <= atlas.window.maxX && c.y >= atlas.window.minY && c.y <= atlas.window.maxY); }),
+   "the grammar-length window plus one ring is derived and leaves no length-valid cell outside");
+ok(D.atlasFor(best.prog, 3, 6) === null, "a handle with two coupled partners has no arbitrary atlas partner");
+ok(best.prog.map(function (t) { return t.s; }).join(" ") === "H+1 V+1 H+4 V+1 H−2 V+4 H−3 Z",
+   "atlas enumeration leaves the base program unchanged");
 if (fails) throw new Error(fails + " drawing-set regression(s) failed");
 print("drawing set: all pass");
