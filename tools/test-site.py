@@ -237,6 +237,12 @@ class SiteContractTests(unittest.TestCase):
         self.assertIsNotNone(cache)
         self.assertEqual(cache.group(1), build_hash)
 
+    def test_every_page_withholds_the_referrer_itself(self) -> None:
+        """docs/deploy.md §1 requires Referrer-Policy: no-referrer; GitHub Pages cannot send it (§7), and a page can."""
+        for page in HTML_FILES:
+            policies = [attrs.get("content") for tag, attrs in parse_page(page).tags if tag == "meta" and attrs.get("name") == "referrer"]
+            self.assertEqual(policies, ["no-referrer"], page)
+
     def test_build_identity_commits_to_every_served_byte(self) -> None:
         """Same identity ⇒ same served candidate.
 

@@ -205,7 +205,12 @@ strikes the pane. Its law: **Black may propose. White may exist. Cobalt must exp
 - **Refused** — the bead ceases at the pane; a cobalt ghost flashes where its attempt was
   assembling and the pane keeps a Cyther Trace (TRACE-1) drawn from the receipt.
 - **Accepted** — the token crosses, still black, into a candidate profile under the pane:
-  visible and causally absent. No shadow, no consequence.
+  visible and causally absent. No shadow, no consequence. In scene 3 (*Only the valid
+  crosses. An accepted step is not yet an admitted program.*) the rain thins, one proposer
+  (`FEATURE`) assembles at a fixed `PLACE` the camera watches, the pane's memory recedes to a
+  third (`uMemory`; nothing is erased), and its next accepted step is followed: carried from
+  where it struck to the vertex it adds, its segment joining only on arrival. The follow is
+  tied to the engine's attempt; any emphasis follows a real event, never precedes one.
 - **Admitted** — only a program the kernel admits becomes real: its profile lands on the floor
   as a hard shadow (the licence), held 0.4 s, and porcelain extrudes straight up out of it
   (0.9 s). Each admission takes the next perimeter bay around the room, decided when it is
@@ -216,14 +221,22 @@ The one causal light is vertical and never moves, so a solid's shadow is its pro
 height; a fill follows the cursor and casts nothing. Cobalt is evidence, composited after the
 tone map: never lit, blurred, refracted or reflected. Ten scenes (`SC`, one `[data-k]` section
 each, counted by `tools/test-site.py`) carry the copy; scenes 4–7 are the four systems, each
-with its claim and the condition it holds under. Hovering a trace reads its receipt; hovering a
-solid lifts it off its licence and names it (`ADMITTED · id · ops · proposal n of seed`).
+with its claim and the condition it holds under. Hovering or tapping a trace reads its receipt;
+hovering or tapping a solid lifts it off its licence and names it (`ADMITTED · id · ops ·
+proposal n of seed`). The studio is focusable (`role="application"`, last in tab order): ← →
+read the refusals newest first, ↑ ↓ the programs admitted, Esc clears; every receipt goes
+through `#receipt`, a status region, so it is announced. A press that does not travel reads;
+only a drag proposes. Keyboard focus inside a section scrolls it to its centre, where its copy
+is fully visible.
 A press-and-drag seeds the visitor's own proposer; its first refusal is carried to the end,
 revealed by the light, and replayable from `#trace=SEED.INDEX.HASH` (local, never sent; a
 fragment that does not reproduce on this build is refused, `#unsent`). **When nothing is
 changing, nothing renders:** `settled()` halts the frame loop and `#still` says so; scroll,
 resize, hover or a gesture `wake()`s it. Without WebGL2 and a float colour buffer, the
-`.no-gl` cover stands in and the copy follows the scroll one frame at a time. There is no
+`.no-gl` cover stands in, captioned with the three relations (black: proposed or accepted, no
+consequence · cobalt: refused, why · white: admitted, it stands), and the copy follows
+the scroll one frame at a time. Short viewports (≤ 540 px tall: 200% zoom of a laptop, a
+phone on its side) compact the type so every section's copy fits its pinned page. There is no
 sound. Reduced motion skips the opening, moves the camera without easing and thins the rain.
 
 **`index.html`** — inline `<style>` only, type from `adii/fonts/` (shared, precached); loads
