@@ -5577,6 +5577,63 @@
           }
         }
       }
+    },
+    "origin_closure_5627D34CD6B86545": {
+      "artifact_build": "5627D34CD6B86545",
+      "observed_at": "2026-10-05",
+      "origin": "https://cytherai.com/ (GitHub Pages, 'Enforce HTTPS' on)",
+      "harness": "Claude Code origin closure check (scratchpad q-origin.py): curl 8.7.1 (system trust store)",
+      "contract": "docs/deploy.md §1–§4 as amended by the owner's acceptance of GitHub Pages' limits (§7; vaic/release-dispositions.v0.json, CY-ORIGIN-001)",
+      "result": "PASS",
+      "closure": {
+        "served_files": 41,
+        "http_301_to_same_https_path": 41,
+        "https_bytes_identical_to_artifact": 41
+      },
+      "hidden_paths": {
+        "newC3/epoch04-preimage.txt": "404",
+        "backup/graphite-v2/index.html": "404",
+        "backup/drawing-set-v1/index.html": "404",
+        "PRODUCTION_PLAN.md": "404",
+        "prototype/unhappened-4/index.html": "404",
+        "prototype/exception/index.html": "404",
+        "js/drawing-set.js": "404",
+        "definitely-missing": "404"
+      },
+      "styled_404_body": true,
+      "manifest_mime": "application/manifest+json; charset=utf-8",
+      "headers_on_root": {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "max-age=600",
+        "strict-transport-security": null,
+        "x-content-type-options": null,
+        "referrer-policy": null,
+        "permissions-policy": null,
+        "content-security-policy": null
+      },
+      "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead",
+      "referrer_meta_pages": [
+        10,
+        10
+      ],
+      "worker_cache": "cytherai-substrate-5627D34CD6B86545",
+      "tls": [
+        "SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF",
+        "subject: CN=cytherai.com",
+        "expire date: Dec 14 19:29:02 2026 GMT",
+        "issuer: C=US; O=Let's Encrypt; CN=YR2"
+      ],
+      "www": {
+        "http": [
+          "301",
+          "https://cytherai.com/"
+        ],
+        "https": [
+          "301",
+          "https://cytherai.com/"
+        ]
+      },
+      "supersedes_finding": "#origin_closure_D215BA534299A451 (HTTP not redirected): resolved by the owner switching on 'Enforce HTTPS' on 2026-10-05"
     }
   }
 }
