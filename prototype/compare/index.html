@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compare · THE UNHAPPENED</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; frame-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self';">
-<!-- A design-review tool, linked from nothing: both versions live, one scroll position. -->
+<!-- A design-review tool, linked from nothing: two versions live, one scroll position. ?2,3 picks the pair. -->
 <style>
 html,body{margin:0;height:100%;overflow:hidden;background:#EEF0F2;font:400 12px/1 ui-monospace,"SF Mono",Menlo,monospace;color:#0B0F19}
 iframe{position:fixed;top:0;left:0;width:100%;height:100%;border:0}
@@ -19,11 +19,11 @@ body.split::after{content:"";position:fixed;top:0;bottom:0;left:50%;width:1px;ba
 </style>
 </head>
 <body data-show="1">
-<iframe id="v1" src="../unhappened/" title="THE UNHAPPENED, version 1"></iframe>
-<iframe id="v2" src="../unhappened-2/" title="THE UNHAPPENED, version 2"></iframe>
+<iframe id="v1" title="first version"></iframe>
+<iframe id="v2" title="second version"></iframe>
 <div class="bar" role="toolbar" aria-label="Compare versions">
   <button data-show="1" aria-pressed="true"><b>1</b>Version 1</button>
-  <button data-show="2" aria-pressed="false"><b>2</b>Version 2 · the shadow law</button>
+  <button data-show="2" aria-pressed="false"><b>2</b>Version 2</button>
   <button id="split" aria-pressed="false"><b>S</b>Side by side</button>
 </div>
 <script src="compare.js" defer></script>

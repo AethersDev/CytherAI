@@ -2,7 +2,11 @@
    Keys 1 and 2 flip between them in place; S shows them side by side. */
 (function () {
 "use strict";
-const frames = [...document.querySelectorAll("iframe")], btns = [...document.querySelectorAll("[data-show]")], split = document.getElementById("split");
+/* which two: ?2,4 compares version 2 with version 4; no query, 1 with 2 */
+const PAGES = { 1: "../unhappened/", 2: "../unhappened-2/", 3: "v3.html", 4: "../unhappened-4/" }, pair = (location.search.match(/^\?([1-4]),([1-4])$/) || [0, "1", "2"]).slice(1);
+const frames = [...document.querySelectorAll("iframe")], btns = [...document.querySelectorAll(".bar [data-show]")], split = document.getElementById("split");
+frames.forEach((f, i) => { f.src = PAGES[pair[i]]; f.title = "THE UNHAPPENED, version " + pair[i]; });
+btns.forEach((b, i) => { b.lastChild.textContent = "Version " + pair[i]; });
 function show(k) { document.body.dataset.show = k; btns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.show === k))); }
 btns.forEach(b => b.addEventListener("click", () => show(b.dataset.show)));
 split.addEventListener("click", () => split.setAttribute("aria-pressed", String(document.body.classList.toggle("split"))));
