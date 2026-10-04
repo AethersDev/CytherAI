@@ -14,6 +14,21 @@
       "disposition": "OPEN_DEFECT",
       "observed_against": "661AFC4C3C67BFD1",
       "note": "The FORK control measured 33.28 px wide against a declared 44x44 target envelope at 320x844. The binding is expired, so this is not a current FAIL and does not condemn the present candidate; it is a known defect awaiting re-observation. It is registered here because the certification block in docs/deploy.md dropped the hit-target assertion without naming it as open."
+    },
+    {
+      "subject": "CY-ORIGIN-001",
+      "kind": "OBLIGATION",
+      "disposition": "ACCEPTED_LIMITATION",
+      "decided": "2026-10-04",
+      "decided_by": "owner",
+      "note": "The site stays on GitHub Pages and Pages' limits are accepted as the origin contract there (docs/deploy.md §1, §7): no frame-ancestors (no authenticated or state-changing action; contact composes a mailto:), no nosniff (same-origin, SRI-pinned scripts; no uploads), no Permissions-Policy (nothing requests camera, microphone or location), no HSTS for a custom domain (valid certificate; HTTP must redirect to HTTPS instead), max-age=600 instead of no-cache (the worker installs one build or nothing), application/javascript instead of text/javascript (both execute). Referrer-Policy is NOT accepted as absent: every page withholds the referrer itself. This decision changes the contract the origin is judged against, never a verdict."
+    },
+    {
+      "subject": "vaic/evidence/current-browser-observations.v0.json#origin_closure_D215BA534299A451",
+      "kind": "RECORDED_OBSERVATION",
+      "disposition": "OPEN_DEFECT",
+      "observed_against": "D215BA534299A451",
+      "note": "http://cytherai.com/ serves the page with 200 instead of redirecting to https://. Not a Pages limit: 'Enforce HTTPS' (repository Settings → Pages) fixes it. Everything else in the amended contract held. Until it is on, CY-ORIGIN-001 has no PASS receipt; re-run docs/deploy.md §4 after switching it on."
     }
   ]
 }

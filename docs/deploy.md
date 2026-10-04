@@ -90,6 +90,13 @@ Never publish the working tree: `backup/`, `newC3/`,
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Nothing on the site uses these. Say so at the origin. |
 | `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | **Final domain only.** Effectively irreversible for the max-age — do not set on a staging host or a domain whose subdomains are not all HTTPS. |
 
+**On GitHub Pages (accepted by the owner, 2026-10-04 — §7).** Pages sends none of these
+headers and cannot be configured to. The contract on Pages is therefore: `Referrer-Policy` is
+carried by every page itself (`<meta name="referrer" content="no-referrer">`); the other four
+are accepted as absent, each for the reason recorded in §7 and in
+`vaic/release-dispositions.v0.json`. **HTTPS is not one of them:** Pages can redirect HTTP to
+HTTPS ("Enforce HTTPS"), so on Pages the contract requires it (§3, §4).
+
 Do **not** add a header-level `Content-Security-Policy` that duplicates the page
 policies. `index.html` ships the strictest one it can (`script-src 'self'`, no
 inline); a coarser origin-wide header would only weaken the reading. The origin
@@ -138,6 +145,7 @@ curl -s -o /dev/null -w '%{http_code}\n' https://HOST/PRODUCTION_PLAN.md        
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
 curl -s https://HOST/definitely-missing | grep -q "No record at this path"          # styled 404 body
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/definitely-missing            # AND status 404
+curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://HOST/                # 301 https://HOST/
 ```
 
 ## 5. Browser matrix — Chrome observed, WebKit residual
@@ -616,7 +624,9 @@ decisions, not engineering steps.
    is genuinely engine-specific, not merely unobserved.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
    the three 404 checks in §4 pass on staging.
-3. The origin sends the §1 headers (`curl -sI` verified).
+3. The origin sends the §1 headers (`curl -sI` verified), or, on GitHub Pages, exactly the
+   limits accepted in §7 and nothing more: every page withholds the referrer, and HTTP
+   redirects to HTTPS.
 4. **Owner decision — the front-door claims.** Each states only what a shipped source
    states, with its condition beside it: CytherCAD's invalid rate against its DeepCAD
    baseline on an external benchmark (`pages/brief.html#cythercad`), ADII as a research
@@ -656,23 +666,37 @@ NOT_EVALUATED until either the origin can send the headers or the contract recor
 limits as accepted. That decision is the owner's, and it is a release-disposition entry,
 not an edit to the obligation.
 
-**OWNER DECISION REQUIRED — the hosting contract.** One of:
+**OWNER DECISION — accepted, 2026-10-04: the site stays on GitHub Pages, and Pages' limits are
+accepted.** Recorded in `vaic/release-dispositions.v0.json` (subject `CY-ORIGIN-001`,
+`ACCEPTED_LIMITATION`). What is accepted, and why each is acceptable here:
 
-- **Accept Pages' limits.** Record a release disposition on CY-ORIGIN-001 naming what Pages
-  cannot do and why each is acceptable here: no `frame-ancestors` (the site has no
-  authenticated or state-changing action; contact composes a `mailto:`); no `nosniff` (every
-  script is same-origin and SRI-pinned); no `Permissions-Policy` (nothing requests camera,
-  microphone or location); `max-age=600` (the worker installs one build or nothing, so a
-  returning reader sees at most ten minutes of the previous build, never a mixed one). The
-  referrer is withheld by every page itself (`<meta name="referrer" content="no-referrer">`,
-  pinned by `tools/test-site.py`). Then verify the live origin against the amended contract.
-- **Move to an origin that sends the headers** (a `_headers` file on Cloudflare Pages or
-  Netlify, or a proxy in front of Pages), keep the §1 contract as written, and verify it there
-  with §4.
+| Pages cannot | Accepted because |
+|---|---|
+| send `frame-ancestors` | the site has no authenticated or state-changing action to be tricked into; contact composes a `mailto:` |
+| send `X-Content-Type-Options: nosniff` | every script is same-origin and pinned by SRI; there are no user uploads to reinterpret |
+| send `Permissions-Policy` | nothing on the site requests camera, microphone or location |
+| send `Strict-Transport-Security` for a custom domain | it serves a valid certificate (Let's Encrypt, renewed by Pages); HTTP must redirect to HTTPS instead — not accepted as absent |
+| serve `no-cache` for `index.html` and `sw.js` (it sends `max-age=600`) | the worker installs one build or nothing; a returning reader sees at most ten minutes of the previous build, never a mixed one |
+| serve `.js` as `text/javascript` (it sends `application/javascript`) | both are JavaScript MIME types every browser executes, module scripts included |
 
-Either way: keep the current `gh-pages` commit as the rollback artifact (`git branch
-rollback/<build> origin/gh-pages` before publishing), merge to `master`, publish the exact
-tested build, and run §4 against the live origin before anything is called certified.
+`Referrer-Policy` is not accepted as absent: every page withholds the referrer itself, pinned
+by `tools/test-site.py`. The §1 contract is unchanged for any origin that can send headers;
+moving to one (a `_headers` file on Cloudflare Pages or Netlify, or a proxy in front of Pages)
+needs no new decision.
+
+**Observed against the amended contract, 2026-10-04 (build `D215BA534299A451`;
+`vaic/evidence/current-browser-observations.v0.json#origin_closure_D215BA534299A451`).** All 39
+served files are byte-identical to the tested artifact; the hidden paths and a miss return 404
+with the styled body; the manifest is `application/manifest+json`; the worker's cache is this
+build's; headless Chrome on desktop and phone runs it with zero external requests, no console
+error, and no frame requested once settled. **One defect: HTTP is not redirected** —
+`http://cytherai.com/` serves the page with `200`. That is the *Enforce HTTPS* setting
+(repository Settings → Pages), the owner's to switch on; until it is on, the observation is a
+recorded FAIL (`OPEN_DEFECT` in the register) and CY-ORIGIN-001 stays NOT_EVALUATED. Once it
+is on, re-run §4: `curl -sI http://cytherai.com/` must answer `301` to `https://`.
+
+The rollback artifact is the previous `gh-pages` commit, kept as the local branch
+`rollback/9236E6A692F915D4` (`git push --force origin rollback/9236E6A692F915D4:gh-pages`).
 
 ## Next work — external certification and owner attestation
 

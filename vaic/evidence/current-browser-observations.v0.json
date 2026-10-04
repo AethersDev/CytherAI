@@ -2559,6 +2559,60 @@
           }
         }
       }
+    },
+    "origin_closure_D215BA534299A451": {
+      "artifact_build": "D215BA534299A451",
+      "observed_at": "2026-10-04",
+      "origin": "https://cytherai.com/ (GitHub Pages, gh-pages a8f4f92)",
+      "harness": "Claude Code origin check: curl per docs/deploy.md §4, and headless Chrome 154 over CDP against the live origin",
+      "contract": "docs/deploy.md §1–§4 as amended by the owner's acceptance of GitHub Pages' limits (§7; vaic/release-dispositions.v0.json, CY-ORIGIN-001)",
+      "result": "FAIL",
+      "failed": [
+        "http://cytherai.com/ answers 200 with the page instead of redirecting to https:// (also /pages/brief.html): 'Enforce HTTPS' is off"
+      ],
+      "held": {
+        "served_bytes": "39 of 39 files byte-identical (sha256) to the artifact deploy.sh builds from the release commit",
+        "hidden_paths_404": [
+          "newC3/epoch04-preimage.txt",
+          "backup/graphite-v2/index.html",
+          "backup/drawing-set-v1/index.html",
+          "PRODUCTION_PLAN.md",
+          "prototype/unhappened-4/index.html",
+          "js/drawing-set.js",
+          "definitely-missing"
+        ],
+        "styled_404_body": true,
+        "manifest_mime": "application/manifest+json",
+        "worker_cache": "cytherai-substrate-D215BA534299A451",
+        "referrer_meta": "no-referrer, every page",
+        "tls": "TLSv1.3, CN=cytherai.com, Let's Encrypt, expires 2026-12-14",
+        "chrome_desktop_1440x900": {
+          "build": "D215BA534299A451",
+          "modules": "object,object,object",
+          "external_requests": 0,
+          "console_errors": 0,
+          "frames_requested_in_3s_once_settled": 0,
+          "worker_controls_after_reload": true
+        },
+        "chrome_phone_390x844": {
+          "build": "D215BA534299A451",
+          "modules": "object,object,object",
+          "external_requests": 0,
+          "console_errors": 0,
+          "frames_requested_in_3s_once_settled": 0,
+          "worker_controls_after_reload": true
+        }
+      },
+      "accepted_as_absent": {
+        "headers": [
+          "frame-ancestors",
+          "X-Content-Type-Options",
+          "Permissions-Policy",
+          "Strict-Transport-Security"
+        ],
+        "cache_control": "max-age=600 on every response",
+        "js_mime": "application/javascript"
+      }
     }
   }
 }
