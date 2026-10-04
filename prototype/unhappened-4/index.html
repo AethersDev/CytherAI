@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js intro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>CytherAI — The model proposes. The system decides.</title>
+<meta name="description" content="CytherAI builds the part of AI that decides what is allowed to happen. Every proposal on this page is judged in your browser; every refusal leaves evidence.">
+<meta name="theme-color" content="#EEF0F2">
+<link rel="icon" href="../../icon.svg" type="image/svg+xml">
+<link rel="preload" href="../research/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../research/fonts/public-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE UNHAPPENED, version 4 — design prototype, not the front door. Versions 1–2: ../unhappened/, ../unhappened-2/.
+     The page obeys laws it never states: only what was admitted can cast a shadow, and the solid rises from its own
+     shadow. Nothing exists when the page begins; everything standing at the end was admitted while you watched.
+     Black may propose. White may exist. Cobalt must explain why.
+     Cobalt appears only where the system acted: a refusal's trace, the ghost of the stroke it
+     refused, a held value's counterfactual, the chain, a receipt being read. Nothing decorative
+     moves; nothing decorative sounds. -->
+<style>
+@font-face{font-family:"Newsreader";src:url(../research/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800;font-display:swap}
+@font-face{font-family:"Public Sans";src:url(../research/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../research/fonts/ibm-plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
+:root{
+  --bg:#EEF0F2; --ink:#0B0F19; --ink2:#373E4E; --ink3:#5A6375; --evidence:#1C2EB0;
+  --serif:"Newsreader",ui-serif,Georgia,serif; --sans:"Public Sans",-apple-system,"Segoe UI",system-ui,sans-serif; --mono:"Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gut:clamp(20px,4.6vw,76px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink);scroll-behavior:smooth}
+body{font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--ink);color:#fff}
+#studio{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
+.no-gl #studio{display:none}
+.no-gl body{background:radial-gradient(120% 90% at 70% 60%,#FFFFFF 0%,var(--bg) 60%)}
+/* without WebGL the law still holds, on paper: black with no shadow, porcelain with one, a cobalt hairline between */
+.cover{display:none}
+.no-gl .try,.no-gl .hud{display:none}
+.no-gl .cover{display:block;position:fixed;inset:0;pointer-events:none}
+.cover i{position:absolute;top:42%;width:min(13vw,170px);aspect-ratio:1;border-radius:50%}
+.cover .b{left:57%;background:radial-gradient(circle at 34% 28%,#4a505c 0%,#0d1016 38%,#020304 72%)}
+.cover .w{left:79%;background:radial-gradient(circle at 34% 28%,#fff 0%,#f1efeb 42%,#cbc8c2 100%)}
+.cover .w::after{content:"";position:absolute;left:-6%;right:-6%;top:118%;height:18%;border-radius:50%;background:radial-gradient(closest-side,rgba(11,15,25,.34),rgba(11,15,25,.12) 60%,rgba(11,15,25,0))}
+.cover .c{left:calc(57% + min(13vw,170px) + 2vw);right:calc(21% + 2vw);top:calc(42% + min(6.5vw,85px));height:1px;width:auto;aspect-ratio:auto;border-radius:0;background:var(--evidence)}
+.scrim{position:fixed;inset:0;pointer-events:none;z-index:1;background:linear-gradient(90deg,rgba(238,240,242,.82) 0%,rgba(238,240,242,.5) 26%,rgba(238,240,242,0) 46%)}
+
+header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:24px var(--gut);transition:opacity 1.2s}
+.intro header{opacity:0}
+.brand{display:flex;align-items:center;gap:10px;font:600 18px/1 var(--sans);letter-spacing:-.01em;text-decoration:none}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--ink);box-shadow:inset -2px -2px 3px rgba(255,255,255,.35)}
+nav{display:flex;align-items:center;gap:28px}
+nav a{font:500 14.5px/1 var(--sans);color:var(--ink2);text-decoration:none}
+nav a:hover{color:var(--ink)}
+#sound{font:400 12px/1 var(--mono);letter-spacing:.06em;color:var(--ink3);background:none;border:0;cursor:pointer;padding:8px 0}
+#sound[aria-pressed=true]{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:#fff;
+  font:600 14.5px/1 var(--sans);text-decoration:none;transition:background .25s,border-color .25s,color .25s,transform .25s}
+.btn:hover{background:#262D3D;border-color:#262D3D;transform:translateY(-1px)}
+.btn.ghost{background:rgba(255,255,255,.55);color:var(--ink);border-color:rgba(11,15,25,.16);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.btn.ghost:hover{border-color:var(--ink);background:#fff}
+nav .btn{height:40px;padding:0 18px}
+
+main{position:relative;z-index:2;pointer-events:none}
+main a,main button{pointer-events:auto}
+section{position:relative;min-height:165vh}
+section[data-k="0"]{min-height:118vh}
+section[data-k="2"]{min-height:150vh}
+.copy{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:96px var(--gut) 120px;max-width:min(640px,47vw);
+  opacity:var(--v,1);transform:translateY(calc((1 - var(--v,1)) * 22px));transition:opacity .2s}
+.intro [data-k="0"] .copy{opacity:0;transform:translateY(16px)}
+[data-k="0"] .copy{transition:opacity 1.6s cubic-bezier(.2,.7,.1,1),transform 1.6s cubic-bezier(.2,.7,.1,1)}
+.copy.center{max-width:none;align-items:center;text-align:center}
+.eyebrow{font:400 12px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:24px}
+.eyebrow b{font-weight:400;color:var(--ink)}
+h1,h2{font-family:var(--serif);font-weight:370;letter-spacing:-.035em;line-height:.97}
+h1{font-size:clamp(54px,6.8vw,120px)}
+h2{font-size:clamp(46px,5.5vw,96px)}
+h1 em,h2 em{font-style:italic;font-weight:330}
+h1 span,h2 span{display:block}
+.lede{margin-top:26px;font-size:clamp(18px,1.45vw,23px);line-height:1.45;color:var(--ink2);max-width:28ch}
+.law{font:italic 380 clamp(28px,3vw,46px)/1.2 var(--serif);letter-spacing:-.02em;color:#fff;text-shadow:0 1px 18px rgba(0,0,0,.25)}
+.law span{display:block}
+.acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.mark{display:flex;align-items:baseline;gap:14px;margin-top:30px;font:400 12px/1.5 var(--mono);color:var(--ink3)}
+.mark b{font:400 13px/1 var(--mono);color:var(--ink);letter-spacing:.04em;border:1px solid rgba(11,15,25,.25);padding:6px 9px}
+.try{margin-top:34px;font:400 12px/1.5 var(--mono);color:var(--ink3)}
+footer{margin-top:42px;display:flex;flex-wrap:wrap;gap:10px 22px;font:400 12px/1.6 var(--mono);color:var(--ink3)}
+footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink)}
+
+.hud{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:20px var(--gut);
+  font:400 11.5px/1.6 var(--mono);color:var(--ink3);pointer-events:none;transition:opacity 1.2s}
+.intro .hud{opacity:0}
+.hud b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
+.hud .note{text-align:right;max-width:44ch}
+#receipt{position:fixed;left:0;top:0;z-index:8;pointer-events:none;font:400 11.5px/1.4 var(--mono);letter-spacing:.06em;color:var(--evidence);white-space:nowrap}
+#receipt[hidden]{display:none}
+#receipt[data-kind=real]{color:var(--ink)}
+#yours,#unsent,#still{display:block}
+#yours[hidden],#unsent[hidden],#still[hidden],#copy[hidden],#mine[hidden]{display:none}
+#copy{pointer-events:auto;margin-left:10px;font:inherit;color:var(--ink);background:none;border:0;border-bottom:1px solid currentColor;cursor:pointer;padding:0}
+#mine{position:fixed;left:0;top:0;z-index:5;display:flex;align-items:center;gap:14px;pointer-events:none;font:400 12px/1.5 var(--mono);color:var(--ink2)}
+#mineTrace{display:block;width:56px;height:56px;color:var(--evidence)}#mineTrace svg{display:block;width:100%;height:100%}
+#mine b{display:block;font-weight:400;color:var(--ink);letter-spacing:.06em}#mine i{display:block;font-style:normal;color:var(--ink3)}
+
+@media(max-width:1000px){nav a:not(.btn){display:none}.hud .note{display:none}}
+@media(max-width:760px){
+  .scrim{background:linear-gradient(0deg,rgba(238,240,242,.94) 0%,rgba(238,240,242,.75) 34%,rgba(238,240,242,0) 56%)}
+  .cover i{top:18%;width:26vw}.cover .b{left:14%}.cover .w{left:60%}
+  .cover .c{left:calc(14% + 30vw);right:calc(14% + 4vw);top:calc(18% + 13vw)}
+  header{padding:18px 18px}
+  section{min-height:150vh}
+  .copy{max-width:none;justify-content:flex-end;padding:90px 20px 96px}
+  .copy.center{justify-content:center}
+  h1{font-size:clamp(46px,13vw,64px)}h2{font-size:clamp(40px,11vw,56px)}
+  .lede{font-size:17px}
+  .hud{padding:14px 20px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<canvas id="studio" aria-label="A pane of glass in a white studio. Proposals fall onto it and are judged as they strike."></canvas>
+<div class="cover" aria-hidden="true"><i class="b"></i><i class="c"></i><i class="w"></i></div>
+<div class="scrim" aria-hidden="true"></div>
+
+<header>
+  <a class="brand" href="#top" aria-label="CytherAI home"><i></i>CytherAI</a>
+  <nav aria-label="Primary">
+    <a href="#systems">Systems</a>
+    <a href="../research/">Research</a>
+    <button id="sound" type="button" aria-pressed="false">Sound off</button>
+    <a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Talk to us</a>
+  </nav>
+</header>
+
+<main>
+  <section data-k="0" id="top">
+    <div class="copy">
+      <h1><span>The model proposes.</span><span><em>The system decides.</em></span></h1>
+      <p class="lede">We build the part of AI that decides what is allowed to happen.</p>
+      <div class="acts"><a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Talk to us</a><a class="btn ghost" href="#wrong">Watch ↓</a></div>
+      <p class="try">Press and drag on the glass to make a proposal.</p>
+    </div>
+  </section>
+
+  <section data-k="1" id="wrong">
+    <div class="copy">
+      <h2><span>Most proposals</span><span><em>are wrong.</em></span></h2>
+      <p class="lede">What never happens leaves evidence. Hover a trace to read it.</p>
+    </div>
+  </section>
+
+  <section data-k="2">
+    <div class="copy center">
+      <p class="law"><span>Black may propose.</span><span>White may exist.</span><span>Cobalt must explain why.</span></p>
+    </div>
+  </section>
+
+  <section data-k="3">
+    <div class="copy">
+      <h2><span>Only the valid</span><span><em>crosses.</em></span></h2>
+    </div>
+  </section>
+
+  <section data-k="4" id="systems">
+    <div class="copy">
+      <p class="eyebrow">01 · <b>CytherCAD</b></p>
+      <h2><span>Language in.</span><span><em>Valid geometry out.</em></span></h2>
+      <p class="mark"><b data-m="validation:T2C192-IR-0.00:cyther">0.00%</b><span>invalid · Text2CAD-192, external</span></p>
+    </div>
+  </section>
+
+  <section data-k="5">
+    <div class="copy">
+      <p class="eyebrow">02 · <b>ADII</b></p>
+      <h2><span>A wrong number</span><span><em>is held.</em></span></h2>
+      <p class="lede">Changed only if the change is allowed, and holds. Otherwise, a person decides.</p>
+    </div>
+  </section>
+
+  <section data-k="6">
+    <div class="copy">
+      <p class="eyebrow">03 · <b>AWC-OS</b></p>
+      <h2><span>Not every answer</span><span><em>is allowed.</em></span></h2>
+      <p class="lede">An answer that breaks its own conditions never reaches you.</p>
+    </div>
+  </section>
+
+  <section data-k="7">
+    <div class="copy">
+      <p class="eyebrow">04 · <b>SijilOS</b></p>
+      <h2><span>Nothing is</span><span><em>overwritten.</em></span></h2>
+      <p class="mark"><b>ZATCA</b><span>Phase 1 certified · live in two production environments</span></p>
+    </div>
+  </section>
+
+  <section data-k="8">
+    <div class="copy">
+      <h2><span>Inside</span><span><em>your walls.</em></span></h2>
+      <p class="lede">Built from what was admitted. CytherCAD runs air-gapped; SijilOS runs offline. This page has made <b data-t="ext">0</b> requests outside this site.</p>
+    </div>
+  </section>
+
+  <section data-k="9">
+    <div class="copy">
+      <h2><span>Tell us what must</span><span><em>never happen.</em></span></h2>
+      <div class="acts"><a class="btn" href="mailto:contact@cytherai.com?subject=A%20system%20worth%20building">Talk to us</a><a class="btn ghost" href="../research/">Read the research →</a></div>
+      <footer>
+        <a href="../../pages/brief.html">Brief</a><a href="../../adii/">ADII</a><a href="../../awc-os/">AWC-OS</a>
+        <a href="../../pages/security.html">Security</a><a href="../../pages/privacy.html">Privacy</a><a href="../../pages/terms.html">Terms</a>
+        <span>© 2026 CytherAI · Riyadh</span>
+      </footer>
+    </div>
+  </section>
+</main>
+
+<div class="hud" aria-live="off">
+  <span><span><b data-t="judged">0</b> proposed operations judged here · <b data-t="refused">0</b> refused · <b data-t="admitted">0</b> <span data-t="admittedw">programs admitted</span></span>
+    <span id="yours" hidden>Your proposer · seed <b data-t="yseed">—</b> · <b data-t="ycross">0</b> crossed · <b data-t="yref">0</b> refused <button id="copy" type="button" hidden>Copy a link to your trace</button></span>
+    <span id="unsent" hidden>The trace in this link does not reproduce on this build, so it was not shown.</span>
+    <span id="still" hidden>Nothing is changing · rendering stopped</span></span>
+  <span class="note">Every bead is one proposed operation — a token offered to extend a program — judged by CytherCAD’s boundary engine, here. Everything standing on the floor is a program it admitted while you watched.</span>
+</div>
+<div id="receipt" hidden></div>
+<div id="mine" hidden><span id="mineTrace"></span><span><b id="mineHash"></b>This did not happen.<i id="mineWho"></i></span></div>
+
+<script src="../../js/manifest.js" defer></script>
+<script src="../../js/instrument.js" defer></script>
+<script src="../unhappened/trace.js" defer></script>
+<script src="unhappened.js" defer></script>
+</body>
+</html>
