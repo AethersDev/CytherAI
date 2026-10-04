@@ -605,7 +605,8 @@ const SC = [
   { e: [7.9, 4.5, 9.8], t: [.25, 1.45, 0], f: 30, rain: 36 },        /* the model proposes */
   { e: [3.9, 3.3, 4.6], t: [.55, 2.2, .15], f: 34, rain: 46 },       /* most proposals are wrong */
   { e: [1.1, 2.2, 1.25], t: [-2.4, 2.15, -1.3], f: 50, rain: 40 },   /* inside the boundary */
-  { e: [2.75, 3.55, 2.85], t: [1.15, 2.05, .5], f: 32, rain: 4 },   /* only the valid crosses: close over FEATURE's PLACE, its candidate under the pane */
+  { e: [2.75, 3.55, 2.85], t: [1.15, 2.05, .5], f: 32, rain: 4,     /* only the valid crosses: close over FEATURE's PLACE, its candidate under the pane */
+    phone: { e: [3.85, 4.6, 4.45], t: [1.15, 2.5, .5] } },           /* a portrait phone sees a third of the width: further back, the place lowered into the open middle */
   { focus: [4.2, 2.4], ty: .2, f: 30, rain: 40 },                     /* CytherCAD: the newest solid */
   { focus: [4.0, 1.7], ty: .6, f: 30, rain: 34 },                     /* ADII */
   { focus: [3.8, 1.4], ty: .75, f: 30, rain: 34 },                    /* AWC-OS */
@@ -616,6 +617,7 @@ const SC = [
 const latest = () => admitted[admitted.length - 1] || null;
 const standing = () => { for (let i = admitted.length - 1; i >= 0; i--) if (admitted[i].h > .05) return admitted[i]; return null; };
 function frameOf(s) {
+  if (MOBILE && s.phone) return Object.assign({}, s, s.phone);
   if (!s.focus) return s;
   const g = latest(), F = g ? [g.cx, g.cz] : nextBay(), out = Math.hypot(...F) > .1 ? F.map(v => v / Math.hypot(...F)) : [.6, .8];
   const c = Math.cos(.45), sn = Math.sin(.45), o = [out[0] * c - out[1] * sn, out[0] * sn + out[1] * c];   /* a little off-axis, from outside the room */
