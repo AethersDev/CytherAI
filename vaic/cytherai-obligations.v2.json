@@ -7879,7 +7879,7 @@
       "relation_implementation": "reusable",
       "evaluation": {
         "result": "NOT_EVALUATED",
-        "reason": "No time-indexed production-origin closure receipt exists for the current candidate.",
+        "reason": "The owner accepted GitHub Pages' limits as the origin contract on 2026-10-04 (docs/deploy.md §7; vaic/release-dispositions.v0.json). The live origin was observed against the amended contract for build D215BA534299A451 and does not redirect HTTP to HTTPS (evidence ledger #origin_closure_D215BA534299A451, a recorded FAIL with an open disposition); no PASS receipt exists until 'Enforce HTTPS' is on and §4 is re-run.",
         "receipts": []
       },
       "transition": {
