@@ -269,6 +269,17 @@ or obligations disclosure; the VAIC corpus is the record (`vaic/`).
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 
+**The experiment** (`exception/`, linked from the homepage's nav, closing section and footer;
+it does not replace the front door) is THE EXCEPTION: two decisions that look right.
+*Draw* releases a drawing to the real boundary engine (`CytherInstrument.judge`, so `judge` is
+a production symbol): refused at operation 6 (CROSSES), the never-judged rest drawn as a
+labelled preview, then a valid alternative admitted by the kernel (`PRG-9FD9BC52`). *Correct*
+holds a number against evidence and is an illustration of ADII with constructed figures, which
+the page says. Every claim on it stays within what its source establishes (the grammar rule,
+not physical strength). It shipped without an unfamiliar-reader test; that test stays optional,
+and its result, when run, is recorded in `docs/deploy.md` §5h. Its files are pinned in
+`REVIEWED_PUBLICATION`; `exception/exception.js` is SRI'd like the homepage modules.
+
 **Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
 named there. `adii/` keeps every URL its first publication served, the CVs included;
@@ -314,6 +325,8 @@ literals.
 - **`PRODUCTION_PLAN.md`** is the build spec of instrument-v1 (phases P1–P9), superseded
   by the drawing set on 2026-09-16 and kept as its record; the drawing set's design record
   is `backup/drawing-set-demo.html` (the approved demo) and `git show 99b167a:CLAUDE.md`.
+- **THE EXCEPTION** began as `prototype/exception/` on the `exception` branch and moved to
+  `exception/` when it was published (2026-10-04).
 - **`prototype/`** holds the homepage design studies (`crossing/`, `glass/`, `section/`,
   `research/`) and THE UNHAPPENED's versions: `unhappened/` (v1, TRACE-1 and the carried
   receipt), `unhappened-2/` (v2, only what was admitted casts a
