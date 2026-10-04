@@ -31,14 +31,14 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = ROOT / "vaic/cytherai-obligations.v1.json"
+CORPUS = ROOT / "vaic/cytherai-obligations.v2.json"
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 # harness_identity, as receipts name it -> the command whose exit status IS the observation
 # The world's harnesses (tools/test-ledger.js; tools/test-site.py plus tools/test-motion.py)
-# retired with it to backup/instrument-v1/: their obligations gain no receipt on a build
-# that does not ship the mechanism they observed.
+# retired with it to backup/instrument-v1/, and the drawing set's (tools/test-claims.js) to
+# backup/drawing-set-v1/: their obligations gain no receipt on a build that does not ship the
+# mechanism they observed.
 HARNESS = {
-    "tools/test-claims.js": [JSC, "js/manifest.js", "js/claims.js", "tools/test-claims.js"],
     "deploy.sh plus tools/test-site.py": [
         "python3", "tools/test-site.py",
         "SiteContractTests.test_deploy_allowlist_and_service_worker_cannot_drift"],

@@ -1,9 +1,10 @@
 """The canonical derivation surface shared by the asset tools.
 
-dsin/dcos are ports of js/manifest.js — the engine-invariant polynomial sine
-the admission domain runs on (IEEE-exact +,*,floor). The Python port is
-bit-identical to jsc; canon_from_source() never hand-copies parameters, it
-executes the repository's own js/manifest.js under jsc and reads them out.
+dsin/dcos are ports of the engine-invariant polynomial sine (IEEE-exact +,*,floor)
+that js/manifest.js carried until the drawing set retired (2026-10-04; the JS now lives
+in backup/drawing-set-v1/js/manifest.js), bit-identical to it under jsc.
+canon_from_source() never hand-copies parameters: it executes the repository's own
+js/manifest.js under jsc and reads them out.
 """
 import json, math, os, subprocess
 

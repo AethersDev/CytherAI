@@ -1,8 +1,8 @@
 #!/bin/sh
 # Reproducible zero-dependency repository verification.
-# Browser-only checks (layout, service worker, the seal and FIG. 1 as rendered) remain
-# in the browser matrix documented in docs/deploy.md. The retired world's laws run
-# against their snapshot with backup/instrument-v1/verify.sh.
+# Browser-only checks (layout, service worker, the studio as rendered) remain in the
+# browser matrix documented in docs/deploy.md. The retired front doors' laws run against
+# their snapshots: backup/instrument-v1/verify.sh and backup/drawing-set-v1/verify.sh.
 
 set -eu
 
@@ -12,21 +12,18 @@ cd "$ROOT"
 JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc
 
 echo "[verify] homepage modules parse"
-for file in js/manifest.js js/instrument.js js/claims.js js/drawing-set.js; do
+for file in js/manifest.js js/instrument.js js/trace.js js/unhappened.js; do
     "$JSC" "$file"
 done
 
 echo "[verify] public API inventory"
 python3 tools/test-api.py
 
-echo "[verify] claims regression"
-"$JSC" js/manifest.js js/claims.js tools/test-claims.js
-
 echo "[verify] boundary engine"
 "$JSC" js/manifest.js js/instrument.js tools/test-boundary.js
 
-echo "[verify] drawing set — the object, its edge, the claims split"
-"$JSC" js/manifest.js js/instrument.js js/claims.js js/drawing-set.js tools/test-drawing-set.js
+echo "[verify] TRACE-1 — the Cyther Trace grammar"
+"$JSC" js/manifest.js js/instrument.js js/trace.js tools/test-trace.js
 
 echo "[verify] manifest projection"
 python3 tools/test-projection.py

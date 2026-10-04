@@ -8,7 +8,8 @@
    Standing claims are CytherClaims' canonical predicates; the five drawing-set
    predicates (DS) are registered here, because they are predicates over this set.
 
-   Pure geometry of a program (walk, extent, progId, pickEdge, candidateFor) loads
+   Pure geometry of a program (walk, extent, progId, pickEdge, candidateFor,
+   atlasFor) loads
    under jsc and is pinned by tools/test-drawing-set.js; DOM wiring is guarded.
    ============================================================================ */
 (function (root) {
@@ -36,7 +37,51 @@ function candidateFor(base, k, d) {
   const shift = (tk, delta) => { const m = tk.sg * tk.mg + delta; if (m === 0) return false; tk.sg = m > 0 ? 1 : -1; tk.mg = Math.abs(m); tk.s = tk.k + (tk.sg > 0 ? "+" : "−") + tk.mg; return true; };
   return shift(pre, d) && shift(post, -d) ? t : null;
 }
-const API = { walk, extent, progId, pickEdge, candidateFor };
+/* Two offsets act on the BASE program at once. Applying candidateFor twice would
+   reject an intermediate zero-length shared token that the second edit can restore,
+   making the map depend on edit order. Only the final zero-length token is absent. */
+function candidatePairFor(base, k, d, partner, e) {
+  const changes = new Map(), add = (i, v) => changes.set(i, (changes.get(i) || 0) + v);
+  add(k - 1, d); add(k + 1, -d); add(partner - 1, e); add(partner + 1, -e);
+  const t = base.map(x => Object.assign({}, x));
+  for (const [i, delta] of changes) {
+    const tk = t[i], m = tk.sg * tk.mg + delta;
+    if (m === 0) return null;
+    tk.sg = m > 0 ? 1 : -1; tk.mg = Math.abs(m);
+    tk.s = tk.k + (tk.sg > 0 ? "+" : "−") + tk.mg;
+  }
+  return t;
+}
+/* Enumerate two edge edits without drawing them. Edges two tokens apart share one
+   neighbour; only that pair can couple the two offsets through one token length.
+   A zero-length final neighbour is not a program and never reaches the judge. */
+function atlasFor(base, edge, radius = 6) {
+  const n = base.length - 1, partners = [];
+  if (!Number.isInteger(edge) || edge < 1 || edge >= n - 1 ||
+      !Number.isInteger(radius) || radius < 1 || radius > BI_G) throw new RangeError("atlas edge or radius");
+  for (let k = 1; k < n - 1; k++) if (Math.abs(k - edge) === 2) partners.push(k);
+  if (partners.length !== 1) return null;   /* no unique coupled axis */
+  const partner = partners[0], cells = [];
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (let y = -radius; y <= radius; y++) for (let x = -radius; x <= radius; x++) {
+    const program = candidatePairFor(base, edge, x, partner, y);
+    if (!program) { cells.push({ x, y, status: "NON_PROGRAM" }); continue; }
+    const grammarLength = program.every(t => t.k === "Z" || t.mg <= 4);
+    if (grammarLength) { minX = Math.min(minX, x); maxX = Math.max(maxX, x); minY = Math.min(minY, y); maxY = Math.max(maxY, y); }
+    const result = Inst.judge(program);
+    cells.push({ x, y, status: result.ok ? "ADMITTED" : "REFUSED",
+      why: result.why, at: result.at, kernel: result.kernel === true,
+      judgment: result, programId: progId(program), program });
+  }
+  /* The display window is the token-length-valid span plus one integer ring.
+     Full cells remain in the result and in the regression even outside it. */
+  const window = minX === Infinity ? null : {
+    minX: Math.max(-radius, minX - 1), maxX: Math.min(radius, maxX + 1),
+    minY: Math.max(-radius, minY - 1), maxY: Math.min(radius, maxY + 1)
+  };
+  return { edges: [edge, partner], domain: { min: -radius, max: radius }, window, cells };
+}
+const API = { walk, extent, progId, pickEdge, candidateFor, atlasFor };
 root.CytherDrawingSet = API;
 
 /* ============================================================================
@@ -211,6 +256,84 @@ function renderObject() {
     else if (kind === "record") body.innerHTML = `${id} · ${n} tokens · ${e.maxx - e.minx} × ${e.maxy - e.miny}<br>${how}<br>GRAMMAR <b>PASS</b> · AXIS ORDER <b>PASS</b> · ARG RANGE <b>PASS</b> · BOUNDS <b>PASS</b> · CROSSES <b>PASS</b> · CLOSURE <b>PASS</b> · KERNEL <b>PASS</b><br><span style="color:var(--quiet)">a local derivation receipt — this browser's, not the manifest's; the seal above is the manifest's</span>`;
   });
 }
+/* FIG. 1c — a finite atlas of nearby programs. Every square comes from atlasFor;
+   the view has no alternate geometry or boundary rule. The full 13×13 result is
+   kept in memory even though the grammar-derived window frames fewer cells. */
+const atlasDialog = $("#atlasDialog"), atlasButton = $("#openAtlas"), atlasGrid = $("#atlasGrid"),
+  atlasPreview = $("#atlasPreview"), atlasResult = $("#atlasResult"), atlasAccept = $("#atlasAccept");
+let atlasData = null, atlasSelected = null;
+const atlasCell = (x, y) => atlasData && atlasData.cells.find(c => c.x === x && c.y === y);
+function inspectAtlas(c, focus) {
+  if (!c) return;
+  atlasSelected = c;
+  atlasGrid.querySelectorAll("button").forEach(b => {
+    const chosen = +b.dataset.x === c.x && +b.dataset.y === c.y;
+    b.setAttribute("aria-pressed", chosen ? "true" : "false"); b.tabIndex = chosen ? 0 : -1;
+    if (chosen && focus) b.focus();
+  });
+  clear(atlasPreview);
+  const point = ([x, y]) => [(x + 1) * 10, (y + 1) * 10];
+  for (let i = 0; i <= 12; i += 2) for (let j = 0; j <= 12; j += 2) {
+    const [x, y] = point([i, j]); el("circle", { cx: x, cy: y, r: .45, fill: "#9BA7B8" }, atlasPreview);
+  }
+  const line = (pts, attrs) => { if (pts.length > 1) el("polyline", Object.assign({ points: pts.map(p => point(p).join(",")).join(" "), fill: "none", "stroke-linejoin": "miter" }, attrs), atlasPreview); };
+  line(walk(drawing.toks), { stroke: "#101620", "stroke-width": 1.5, opacity: .7 });
+  if (c.program && (c.x !== 0 || c.y !== 0)) {
+    const pts = walk(c.program), v = c.judgment;
+    if (v.ok) line(pts, { stroke: "#2036C7", "stroke-width": 1.9 });
+    else {
+      line(pts.slice(0, v.at + 1), { stroke: "#2036C7", "stroke-width": 1.6 });
+      line(pts.slice(v.at, v.at + 2), { stroke: "#2036C7", "stroke-width": 1.4, "stroke-dasharray": "2 2" });
+    }
+  }
+  const loc = `EDGE ${atlasData.edges[0] + 1} ${c.x >= 0 ? "+" : ""}${c.x} · EDGE ${atlasData.edges[1] + 1} ${c.y >= 0 ? "+" : ""}${c.y}`;
+  atlasResult.textContent = c.status === "NON_PROGRAM"
+    ? `${loc}\nNON-PROGRAM SEAM · a final neighbouring token has zero length. No program was submitted to the boundary.`
+    : c.status === "ADMITTED"
+      ? `${loc}\n${c.programId} · ADMITTED\nBoundary PASS · kernel PASS. ${c.x === 0 && c.y === 0 ? "This is the present drawing." : "This candidate may become the drawing."}`
+      : `${loc}\n${c.programId} · REFUSED\n${c.why} at token ${c.at + 1} (${c.program[c.at] ? c.program[c.at].s : "end"}), from grid ${c.judgment.x},${c.judgment.y}. The black drawing retains authority.`;
+  atlasAccept.disabled = c.status !== "ADMITTED" || (c.x === 0 && c.y === 0);
+}
+function openAtlas() {
+  if (!drawing) return;
+  atlasData = atlasFor(drawing.toks, pickEdge(drawing.toks), 6);
+  clear(atlasGrid); atlasAccept.disabled = true;
+  if (!atlasData || !atlasData.window) {
+    atlasResult.textContent = "This drawing has no unique pair of coupled movable edges. Its single-edge handle remains available on Sheet 1.";
+    atlasDialog.showModal(); return;
+  }
+  const w = atlasData.window, counts = {};
+  atlasData.cells.forEach(c => { const key = c.status === "REFUSED" ? c.why : c.status; counts[key] = (counts[key] || 0) + 1; });
+  $("#atlasAxes").textContent = `EDGE ${atlasData.edges[0] + 1} OFFSET → · EDGE ${atlasData.edges[1] + 1} OFFSET ↑ · INTEGER GRID UNITS`;
+  atlasGrid.style.setProperty("--cols", w.maxX - w.minX + 1);
+  for (let y = w.maxY; y >= w.minY; y--) for (let x = w.minX; x <= w.maxX; x++) {
+    const c = atlasCell(x, y), b = document.createElement("button"); b.type = "button";
+    b.className = "atlas-cell " + (c.status === "NON_PROGRAM" ? "non-program" : c.status === "ADMITTED" ? "admitted" : c.why.toLowerCase().replace(/\s+/g, "-")) + (x === 0 && y === 0 ? " current" : "");
+    b.dataset.x = x; b.dataset.y = y;
+    b.setAttribute("aria-label", `Edge ${atlasData.edges[0] + 1} ${x >= 0 ? "+" : ""}${x}, edge ${atlasData.edges[1] + 1} ${y >= 0 ? "+" : ""}${y}: ${c.status === "REFUSED" ? "refused, " + c.why : c.status.replace("_", " ").toLowerCase()}`);
+    b.addEventListener("click", () => inspectAtlas(c, true));
+    b.addEventListener("keydown", e => { const move = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, 1], ArrowDown: [0, -1] }[e.key];
+      if (!move) return; const next = atlasCell(c.x + move[0], c.y + move[1]);
+      if (next && next.x >= w.minX && next.x <= w.maxX && next.y >= w.minY && next.y <= w.maxY) { e.preventDefault(); inspectAtlas(next, true); }
+    });
+    atlasGrid.appendChild(b);
+  }
+  const observed = atlasData.cells.filter(c => c.status === "ADMITTED"), checked = observed.filter(c => c.kernel).length;
+  $("#atlasFoot").textContent = `FULL DOMAIN −6…+6 ON BOTH AXES · ${atlasData.cells.length} CELLS · ${counts.ADMITTED || 0} ADMITTED · ${counts.NON_PROGRAM || 0} NON-PROGRAM · ${checked}/${observed.length} ADMITTED CELLS RETURNED KERNEL PASS BY judge() · DISPLAY WINDOW ${w.minX}…${w.maxX} × ${w.minY}…${w.maxY} IS THE TOKEN-LENGTH-VALID SPAN PLUS ONE RING. THIS BROWSER'S LOCAL DEMONSTRATION; NO PUBLISHED EVALUATION FIGURE IS INFERRED.`;
+  atlasDialog.showModal(); inspectAtlas(atlasCell(0, 0), true);
+}
+atlasButton.addEventListener("click", openAtlas);
+$("#atlasClose").addEventListener("click", () => atlasDialog.close());
+$("#atlasOrigin").addEventListener("click", () => inspectAtlas(atlasCell(0, 0), true));
+atlasAccept.addEventListener("click", () => {
+  const c = atlasSelected; if (!c || c.status !== "ADMITTED") return;
+  proposals++;
+  drawDone(c.program, `ATLAS ${c.x >= 0 ? "+" : ""}${c.x},${c.y >= 0 ? "+" : ""}${c.y} · ACCEPTED`, false);
+  lastVerdict = { proposal: proposals }; renderObject();
+  Claims.setClaim("DS-05", true, "drawing " + drawing.id + " judged admitted");
+  log.textContent = `● ${drawing.id} admitted from the local atlas by the boundary and kernel; the new program is now inked.`;
+  atlasDialog.close();
+});
 function flashAdmission(toks) {   /* a later, smaller admission: acknowledged once in the construction register — never a second inked object */
   const pts = pathOf(toks), g = el("polyline", { points: pts.map(p => p.join(",")).join(" "), fill: "none", stroke: "#2036C7", "stroke-width": 1, opacity: .45 }, layers.flash);
   if (reduced) { g.remove(); return; }
@@ -332,9 +455,11 @@ function finish() {
   Claims.setClaim("CL-05", eng.st.inv === 0 && eng.st.adm > 0, `${eng.st.prop.toLocaleString()} proposals · ${eng.st.adm} admitted · ${eng.st.inv} invalid · seed 0${SEED}`);
   if (best) { drawDone(best.prog, `PROGRAM ${best.n} OF ${eng.st.adm} · LARGEST ADMITTED`, false); lastVerdict = { n: best.n }; renderObject(); log.textContent = `Settled. ${eng.st.adm} programs admitted, ${eng.st.inv} invalid emitted. FIG. 1 keeps ${best.id}. Move its edge to propose a change; RUN AGAIN reproduces every stroke.`; }
   Claims.setClaim("DS-05", !!drawing && Inst.judge(drawing.toks).ok, drawing ? "drawing " + drawing.id + " judged admitted" : "no drawing");
+  atlasButton.disabled = !drawing; atlasButton.textContent = drawing ? "EXPLORE THE ATLAS" : "ATLAS UNAVAILABLE";
 }
 function run() {
   cancelAnimationFrame(raf); eng = Inst.biEngine(SEED); why = {}; best = null; bestArea = -1; running = true; state.textContent = "LIVE"; drawing = null; proposals = 0; liveToks = [];
+  atlasButton.disabled = true; atlasButton.textContent = "ATLAS UNFOLDING"; if (atlasDialog.open) atlasDialog.close();
   clear(layers.done); clear(layers.dims); clear(layers.ident); clear(layers.live); clear(layers.cand); clear(layers.flash); for (const o of field) o.g.remove(); field.length = 0; placeHandle(); lastVerdict = null; renderObject();
   if (reduced) { for (let i = 0; i < N; i++) handleEv(eng.step(), 0); finish(); return; }
   (function frame(now) {
@@ -379,6 +504,29 @@ Claims.CLAIMS.push(
   { id: "DS-05", text: "THE DRAWING IS AN ADMITTED PROGRAM", m: "The program inked in FIG. 1 — the run's largest admission, or the proposal you accepted — is judged again by CytherInstrument.judge: boundary, then kernel.", run: null }
 );
 const wall = () => { const s = Claims.CLAIMSTATE["CL-01"]; if (!s) return; const n = parseInt(s.detail, 10); $("#ext").textContent = isNaN(n) ? "?" : n; $("#extState").textContent = s.ok ? "HOLDING" : "INVALID"; };
+/* the drafting cursor: where the pointer stands on the sheet, as a drawing reads it — zone
+   letter and column from the border strips, X·Y from the frame's origin. Pointer-driven, one
+   write per frame, nothing runs when the pointer is still; never drawn for touch. */
+(function drafting() {
+  const mk = cls => { const e = document.createElement("div"); e.className = cls; e.setAttribute("aria-hidden", "true"); document.body.appendChild(e); return e; };
+  const v = mk("xh v"), h = mk("xh h"), xy = mk("xy m");
+  let px = -1, py = -1, queued = false;
+  const show = on => { v.style.display = h.style.display = xy.style.display = on ? "block" : "none"; };
+  function paint() {
+    queued = false;
+    const el = document.elementFromPoint(px, py), sheet = el && el.closest(".sheet"), frame = sheet && sheet.querySelector(".frame");
+    if (!frame) { show(false); return; }
+    const r = frame.getBoundingClientRect(), x = px - r.left, y = py - r.top;
+    const inside = x >= 0 && y >= 0 && x <= r.width && y <= r.height;
+    const zone = inside ? "ABCD"[Math.min(3, Math.floor(y / r.height * 4))] + (Math.min(8, Math.floor(x / r.width * 8) + 1)) : "—";
+    v.style.transform = `translateX(${px}px)`; h.style.transform = `translateY(${py}px)`;
+    xy.style.transform = `translate(${px + 14}px, ${py + 14}px)`;
+    xy.textContent = inside ? `X ${Math.round(x)} · Y ${Math.round(y)} · ${zone}` : "OFF SHEET";
+    show(true);
+  }
+  addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return; px = e.clientX; py = e.clientY; if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+  addEventListener("pointerleave", () => show(false)); document.addEventListener("mouseleave", () => show(false));
+})();
 const recompute = () => { Claims.recomputeClaims(); wall(); };
 $("#recompute").addEventListener("click", recompute);
 Claims.renderClaims();
