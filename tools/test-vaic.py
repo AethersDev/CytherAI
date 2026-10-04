@@ -289,12 +289,21 @@ class VaicCorpusTests(unittest.TestCase):
             added = dict(RESTAMP.append(ROOT, path, harness=harness, today="2099-01-01"))
         self.assertTrue(superseded.isdisjoint(added), added)
 
-    def test_current_corpus_is_structurally_valid_but_not_projection_valid(self) -> None:
+    def test_release_is_certified_only_when_projection_and_origin_both_hold(self) -> None:
+        """Derived, not declared. Which verdicts hold is the corpus's business and moves as evidence arrives (the
+        origin was NOT_CERTIFIED until 'Enforce HTTPS' was switched on, 2026-10-05); the law does not: a scope holds
+        only when every binding obligation in it has PASSed on this build, and a release needs both."""
         result = self.validate()
         self.assertEqual(result["structure"], "VALID")
-        self.assertEqual(result["projection"], "INVALID")
-        self.assertEqual(result["origin"], "NOT_CERTIFIED")
-        self.assertEqual(result["release"], "NOT_CERTIFIED")
+        build = self.corpus["candidate"]["build_identity"]
+        def holds(scope: str, severity: str) -> bool:
+            rows = [r for r in self.corpus["obligations"] if r["transition"]["disposition"] != "SUPERSEDED"
+                    and r["scope"] == scope and r["severity"] == severity]
+            return bool(rows) and all(r["evaluation"]["result"] == "PASS" and
+                                      any(x["artifact_build"] == build for x in r["evaluation"]["receipts"]) for r in rows)
+        self.assertEqual(result["projection"] == "VALID", holds("projection", "mandatory"))
+        self.assertEqual(result["origin"] == "VALID", holds("origin", "release_mandatory"))
+        self.assertEqual(result["release"] == "CERTIFIED", result["projection"] == "VALID" and result["origin"] == "VALID")
 
     def test_effective_verdicts_are_derived_not_declared(self) -> None:
         """The validator's aggregation must equal an independent derivation.

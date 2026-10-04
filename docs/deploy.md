@@ -783,6 +783,17 @@ error, and no frame requested once settled. **One defect: HTTP is not redirected
 recorded FAIL (`OPEN_DEFECT` in the register) and CY-ORIGIN-001 stays NOT_EVALUATED. Once it
 is on, re-run §4: `curl -sI http://cytherai.com/` must answer `301` to `https://`.
 
+**Resolved, 2026-10-05 (build `5627D34CD6B86545`; `#origin_closure_5627D34CD6B86545`).** The owner
+switched on *Enforce HTTPS*. The origin was observed again against the amended contract, over
+every served path: all 41 answer `301` from `http://` to the same `https://` path and serve bytes
+identical to the artifact; the hidden paths (including `prototype/exception/`) and a miss return
+`404` with the styled body; the worker's cache is this build's; all ten pages withhold the
+referrer; the certificate is valid to 2026-12-14; `www` in either scheme lands on
+`https://cytherai.com/`. CY-ORIGIN-001 now carries a PASS receipt (ORIGIN_HARNESS, exhaustive over
+the declared closure, the harness outside the recorded verification set). The release stays
+NOT_CERTIFIED for one reason only: CY-TEMP-002, the human-reviewed reading of the three
+transitions (§5e), has not been run.
+
 The rollback artifact is the previous `gh-pages` commit, kept as the local branch
 `rollback/9236E6A692F915D4` (`git push --force origin rollback/9236E6A692F915D4:gh-pages`).
 

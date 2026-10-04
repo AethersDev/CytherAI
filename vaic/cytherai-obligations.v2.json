@@ -11,7 +11,7 @@
     "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
     "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
-    "verification_identity": "21512b8db6df03ffaa383fa1cc8cf15c45c14d13d3f473ed04e28b172da6408a"
+    "verification_identity": "7a52642ea349503003769f84b1985ecdaac5b467d179183b023497b2b4d07749"
   },
   "semantics": {
     "result_values": [
@@ -6230,6 +6230,36 @@
               "deploy.sh#artifact-source-allowlist"
             ],
             "observed_at": "2026-10-04"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "5627D34CD6B86545",
+            "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "7a52642ea349503003769f84b1985ecdaac5b467d179183b023497b2b4d07749",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "5627D34CD6B86545",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-10-05"
           }
         ]
       },
@@ -8142,9 +8172,38 @@
       "incompatible_with": [],
       "relation_implementation": "reusable",
       "evaluation": {
-        "result": "NOT_EVALUATED",
-        "reason": "The owner accepted GitHub Pages' limits as the origin contract on 2026-10-04 (docs/deploy.md §7; vaic/release-dispositions.v0.json). The live origin was observed against the amended contract for build D215BA534299A451 and does not redirect HTTP to HTTPS (evidence ledger #origin_closure_D215BA534299A451, a recorded FAIL with an open disposition); no PASS receipt exists until 'Enforce HTTPS' is on and §4 is re-run.",
-        "receipts": []
+        "result": "PASS",
+        "receipts": [
+          {
+            "evaluator": "ORIGIN_HARNESS",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "5627D34CD6B86545",
+            "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "production_origin",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "curl 8.7.1 (system trust store), against https://cytherai.com/",
+              "accessibility_mode": null
+            },
+            "harness_identity": "Claude Code origin closure check (scratchpad q-origin.py)",
+            "harness_version": "2026-10-05",
+            "method": {
+              "measurement": "every served path of the artifact over http (301 to the same https path) and https (sha256 against deploy.sh's build); the declared hidden paths; MIME, worker generation, TLS, the www host; headers against the contract as amended in §7",
+              "threshold": "41 of 41 redirect and match; every hidden path 404 with the styled body; no header beyond the accepted limits missing",
+              "units": "paths"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#origin_closure_5627D34CD6B86545"
+            ],
+            "observed_at": "2026-10-05"
+          }
+        ]
       },
       "transition": {
         "disposition": "CARRIED_FORWARD",
