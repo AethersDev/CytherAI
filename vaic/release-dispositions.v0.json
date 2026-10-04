@@ -26,9 +26,14 @@
     {
       "subject": "vaic/evidence/current-browser-observations.v0.json#origin_closure_D215BA534299A451",
       "kind": "RECORDED_OBSERVATION",
-      "disposition": "OPEN_DEFECT",
+      "disposition": "RESOLVED",
       "observed_against": "D215BA534299A451",
-      "note": "http://cytherai.com/ serves the page with 200 instead of redirecting to https://. Not a Pages limit: 'Enforce HTTPS' (repository Settings → Pages) fixes it. Everything else in the amended contract held. Until it is on, CY-ORIGIN-001 has no PASS receipt; re-run docs/deploy.md §4 after switching it on."
+      "note": "http://cytherai.com/ serves the page with 200 instead of redirecting to https://. Not a Pages limit: 'Enforce HTTPS' (repository Settings → Pages) fixes it. Everything else in the amended contract held. Until it is on, CY-ORIGIN-001 has no PASS receipt; re-run docs/deploy.md §4 after switching it on.",
+      "resolved": {
+        "date": "2026-10-05",
+        "how": "the owner switched on 'Enforce HTTPS'; every served path now answers 301 to its https address",
+        "evidence": "vaic/evidence/current-browser-observations.v0.json#origin_closure_5627D34CD6B86545"
+      }
     }
   ]
 }
