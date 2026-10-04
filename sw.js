@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-AD0FE3E107577AEB';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-33EF803E25246693';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -15,11 +15,14 @@ var ASSETS = [
   'pages/privacy.html',
   'pages/security.html',
   'pages/terms.html',
-  // the drawing-set homepage modules
+  // the front door modules, and the fonts it draws its type with (shared with adii/)
   'js/manifest.js',
   'js/instrument.js',
-  'js/claims.js',
-  'js/drawing-set.js',
+  'js/trace.js',
+  'js/unhappened.js',
+  'adii/fonts/newsreader-variable.woff2',
+  'adii/fonts/public-sans-variable.woff2',
+  'adii/fonts/ibm-plex-mono-400.woff2',
   // subpage stylesheet
   'css/cytherai.css',
   'manifest.webmanifest',

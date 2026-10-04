@@ -26,23 +26,25 @@ remain separate.
 
 ## Artifacts
 
-- `cytherai-obligations.v1.json` — the current corpus: 19 typed obligations with their
+- `cytherai-obligations.v2.json` — the current corpus: 19 typed obligations with their
   quantified contexts, dependencies, required evaluator authority/coverage, results,
-  build-bound receipts, and — because it supersedes `v0` — a `transition` on every row:
-  9 CARRIED_FORWARD to the drawing set (successor surface named, rebound fields listed),
-  10 SUPERSEDED with instrument-v1 (retired mechanism named, preserved with their
-  evidence, not owed). Every receipt of `v0` is in it verbatim.
-- `cytherai-obligations.v0.json` — the corpus as written against instrument-v1, kept as
-  history; the guards walk its admitted states too.
+  build-bound receipts, and — because it supersedes `v1` — a `transition` on every row:
+  5 CARRIED_FORWARD to THE UNHAPPENED (successor surface named, rebound fields listed,
+  version raised where a field moved), 4 SUPERSEDED with the drawing set and 10 still
+  SUPERSEDED with instrument-v1 (retired mechanism named, preserved with their evidence,
+  not owed). Every receipt of `v1` is in it verbatim.
+- `cytherai-obligations.v1.json` — the corpus as written against the drawing set, kept as
+  history; `cytherai-obligations.v0.json` — as written against instrument-v1, kept as
+  history. The guards walk the admitted states of both.
 - `evaluator-matrix.v0.json` — evaluator classes, reusable relation authority,
   coverage semantics, and explicit non-authority.
 - `evidence/current-browser-observations.v0.json` — bounded observation ledger.
   Each observation carries its own artifact build; prior-build observations are
   retained but cannot certify the current candidate.
 - `tools/vaic_validate.py` — structural and receipt validator. Evidence resolves by
-  identity and anchor; a retired file (instrument-v1's, in `backup/instrument-v1/`)
-  keeps resolving the historical receipts that cite it, and a current receipt may not
-  cite it.
+  identity and anchor; a retired file (in `backup/instrument-v1/` or
+  `backup/drawing-set-v1/`) keeps resolving the historical receipts that cite it, and a
+  current receipt may not cite it.
 - `tools/test-vaic.py` — the negative controls proving the validator rejects common
   authority, coverage and history laundering paths.
 
@@ -57,14 +59,16 @@ python3 tools/test-vaic.py
 nothing is built.
 
 `v0` was written against instrument-v1, the homepage retired on 2026-09-16; `v1` is the
-transition to the drawing set — surviving obligations, explicit successor bindings, and
-supersession records — never `v0` minus inconvenient rows. A superseded obligation's
+transition to the drawing set, and `v2` the transition to THE UNHAPPENED on 2026-10-04 —
+each surviving obligations, explicit successor bindings, and supersession records, never
+the predecessor minus inconvenient rows. A superseded obligation's
 effective verdict is `SUPERSEDED`: not owed by the candidate, not counted for or against
 its projection, its observations preserved.
 
 ## Initial corpus result
 
-For build `F1FF314DEC2C4717`:
+Recorded at genesis, against instrument-v1, and kept as that record; the validator derives
+the current distribution (`python3 tools/vaic_validate.py`). For build `F1FF314DEC2C4717`:
 
 | Result | Count | Meaning |
 |---|---:|---|
