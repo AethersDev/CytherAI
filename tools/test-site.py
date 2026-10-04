@@ -61,6 +61,7 @@ REVIEWED_PUBLICATION = {
               "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
     "awc-os/": {"awc-os/index.html", "awc-os/awc-os.js", "awc-os/media/AWC_OS_film_ar.mp4",
                 "awc-os/media/AWC_OS_film_en.mp4", "awc-os/media/AWC_OS_AMAD2026_deck.pptx"},
+    "exception/": {"exception/index.html", "exception/exception.js"},
 }
 
 
