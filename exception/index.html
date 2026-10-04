@@ -5,18 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="light">
 <meta name="referrer" content="no-referrer">
-<title>THE EXCEPTION — prototype</title>
-<link rel="icon" href="../../icon.svg" type="image/svg+xml">
-<link rel="preload" href="../../adii/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
+<title>It looks right. Would you let it happen? — CytherAI</title>
+<meta name="description" content="Two decisions that look right. One number that looks wrong, one drawing that looks complete. An experiment from CytherAI.">
+<meta name="build-hash" content="5627D34CD6B86545">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="preload" href="../adii/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
-<!-- THE EXCEPTION — a design experiment, not the front door. One encounter is built (Correct, ADII); Draw, Execute and Record
+<!-- THE EXCEPTION — a published experiment, linked from the front door and not replacing it; not yet tested with
+     unfamiliar readers (docs/deploy.md §5h). One encounter is built (Correct, ADII); Draw, Execute and Record
      are named and not yet open. Structure: temptation → decision → interruption → evidence. Every prevented action leaves an
      empty space shaped like its consequence, and those absences become the page. The Correct encounter is an ILLUSTRATION:
      its figures are constructed, and it says so on screen; ADII's recorded run (adii/) is a different case. -->
 <style>
-@font-face{font-family:"Newsreader";src:url(../../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800;font-style:normal italic;font-display:swap}
-@font-face{font-family:"Public Sans";src:url(../../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900;font-display:swap}
-@font-face{font-family:"Plex Mono";src:url(../../adii/fonts/ibm-plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:"Newsreader";src:url(../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800;font-style:normal italic;font-display:swap}
+@font-face{font-family:"Public Sans";src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
 :root{
   --bg:#EEF0F2; --ink:#0B0F19; --ink2:#373E4E; --ink3:#5A6375; --evidence:#1C2EB0; --porcelain:#FBFAF7;
   --serif:"Newsreader",ui-serif,Georgia,serif; --sans:"Public Sans",-apple-system,"Segoe UI",system-ui,sans-serif; --mono:"Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -33,6 +36,7 @@ a{color:inherit;text-underline-offset:3px}
 
 .brand{position:fixed;top:22px;left:var(--gut);z-index:5;font:600 16px/1 var(--sans);letter-spacing:-.01em;text-decoration:none;display:flex;gap:9px;align-items:center}
 .brand i{width:9px;height:9px;border-radius:50%;background:var(--ink)}
+.experiment{position:absolute;top:24px;right:var(--gut)}
 .label{font:400 11.5px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
 
 /* ---------- the question ---------- */
@@ -166,7 +170,8 @@ a{color:inherit;text-underline-offset:3px}
 </style>
 </head>
 <body>
-<a class="brand" href="../../"><i></i>CytherAI</a>
+<a class="brand" href="../" aria-label="CytherAI home"><i></i>CytherAI</a>
+<p class="label experiment">An experiment</p>
 
 <section id="ask" aria-labelledby="q">
   <h1 id="q">It looks right.</h1>
@@ -193,7 +198,7 @@ a{color:inherit;text-underline-offset:3px}
 <section id="draw" hidden aria-labelledby="dt">
   <div class="top">
     <p class="label">Draw · a shape that looks right</p>
-    <p class="illus">Judged in your browser by this site's real boundary engine (<a href="../../js/instrument.js">js/instrument.js</a>): a toy grammar of rectilinear profiles, not CytherCAD itself.</p>
+    <p class="illus">Judged in your browser by this site's real boundary engine (<a href="../js/instrument.js">js/instrument.js</a>): a toy grammar of rectilinear profiles, not CytherCAD itself.</p>
   </div>
   <h2 id="dt"><span>Would you release this?</span></h2>
   <div class="board">
@@ -220,7 +225,7 @@ a{color:inherit;text-underline-offset:3px}
 <section id="correct" hidden aria-labelledby="ct">
   <div class="top">
     <p class="label">Correct · a number that looks wrong</p>
-    <p class="illus">An illustration: the figures here are constructed. ADII's <a href="../../adii/">recorded run</a> is a different case.</p>
+    <p class="illus">An illustration: the figures here are constructed. ADII's <a href="../adii/">recorded run</a> is a different case.</p>
   </div>
   <h2 id="ct"><span>One day is four times any other.</span><br><em>It looks like an error.</em></h2>
   <svg class="chart" role="img" aria-label="Daily sales through Ramadan: steady, rising slightly in the last week, then one day four times any other."></svg>
@@ -261,13 +266,13 @@ a{color:inherit;text-underline-offset:3px}
   <div class="why">
     <p>Three independent records agree with the number. Nothing about it was wrong except how it looked.</p>
     <p><b>ADII</b> investigates before it changes a value: when a number looks wrong it answers fix it, leave it, or escalate it. The AI that proposes a fix can't approve it; two programs outside the model decide whether a change is allowed and whether it holds. Here, the evidence held the number.</p>
-    <p class="note">An illustration with constructed figures. In ADII's <a href="../../adii/">recorded run</a> the case went the other way: a 49% drop that came from a partially loaded batch, where the right answer was to fix it.</p>
+    <p class="note">An illustration with constructed figures. In ADII's <a href="../adii/">recorded run</a> the case went the other way: a 49% drop that came from a partially loaded batch, where the right answer was to fix it.</p>
     <div class="acts"><button class="btn" type="button" data-act="back">Back to the question</button><button class="btn ghosted" type="button" data-act="again" hidden>Test my correction</button></div>
   </div>
 </section>
 
-<script src="../../js/manifest.js" defer></script>
-<script src="../../js/instrument.js" defer></script>
-<script src="exception.js" defer></script>
+<script src="../js/manifest.js" defer integrity="sha384-G3rj/SJ8vH07o590ZnROvlJJE79yXJT1T89J7KHfTDZmD81Zt+vjOj5PhwuiAQv/" crossorigin="anonymous"></script>
+<script src="../js/instrument.js" defer integrity="sha384-kt35YGJ0Nz7AXsxArQLjc4Ksw0es4JXjKnavedmf8Gfqt+H8SjLoaY7M2Bdwq6Ny" crossorigin="anonymous"></script>
+<script src="exception.js" defer integrity="sha384-NHvToCmtyekmLl1siBnVmaukbQASRg60cThqdgcH3LuWixPbRwkSHgAeCi5MEbY/" crossorigin="anonymous"></script>
 </body>
 </html>

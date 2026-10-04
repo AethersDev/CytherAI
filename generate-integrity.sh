@@ -16,10 +16,10 @@ set -euo pipefail
 # a developer page — linked from nowhere, not in deploy.paths, not precached — and
 # carry no SRI or build stamp. (The build identity below is a different projection:
 # it covers every deploy.paths byte, requested or not.)
-RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/trace.js js/unhappened.js"
+RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/trace.js js/unhappened.js exception/exception.js"
 
 # HTML files to patch (every served page)
-HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html"
+HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html exception/index.html"
 
 echo "[integrity] Computing SRI hashes..."
 

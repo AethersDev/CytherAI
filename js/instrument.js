@@ -8,8 +8,8 @@
    seed, same stream, on every machine.
 
    Ported from newC3/synthesis-rev5.html. Pure and DOM-free: THE UNHAPPENED
-   (js/unhappened.js) streams biEngine, one proposed operation per bead; judge and
-   audit serve the verifiers. The drawing set's FIG. 1 and the world's canvas/log
+   (js/unhappened.js) streams biEngine, one proposed operation per bead; THE EXCEPTION
+   (exception/exception.js) judges a proposed drawing with judge; audit serves the verifiers. The drawing set's FIG. 1 and the world's canvas/log
    wiring left with them (backup/drawing-set-v1/, backup/instrument-v1/).
    ============================================================================ */
 (function (root) {
