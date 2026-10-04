@@ -3,15 +3,15 @@
   "corpus": "cytherai-current-artifact",
   "version": 3,
   "candidate": {
-    "build_identity": "8E49D942927C5361",
+    "build_identity": "5627D34CD6B86545",
     "artifact": "dist/",
     "canonical_record": "js/manifest.js",
     "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
-    "kernel_hash": "6d580affe72b246d1f099d2bb3211a0b19e4dba4e5bf4cd66e548c3b80f3f8a4",
-    "grammar_hash": "2a15f20ffadd163beaf248f23fe2c3258f3af8d59c2a1968e1c354fb19e433f0",
+    "kernel_hash": "8cecf0e8a752018f66dcb1428dc3c5352f61c486504565caf5585c43bb993d95",
+    "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
-    "artifact_manifest_hash": "3157dae4f8f6b0c7476c6f1786ebfed3edb959694cdd22410047f540ed9e3858",
-    "verification_identity": "c54a997e6b86c7c608fff88a73d42b4b2d03eee65fc771b66a065681d555b2e7"
+    "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+    "verification_identity": "21512b8db6df03ffaa383fa1cc8cf15c45c14d13d3f473ed04e28b172da6408a"
   },
   "semantics": {
     "result_values": [
@@ -741,6 +741,35 @@
             "result": "PASS",
             "evidence": [
               "vaic/evidence/current-browser-observations.v0.json#reading_ink_8E49D942927C5361"
+            ],
+            "observed_at": "2026-10-04"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "SAMPLED",
+            "artifact_build": "5627D34CD6B86545",
+            "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full, mobile_bounded, reduced_motion, no_webgl",
+              "device": "local_host",
+              "viewport": "1440x900, 390x844, 320x844",
+              "runtime": "HeadlessChrome 154.0.8037.98 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default; prefers-reduced-motion: reduce"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-unhappened-observe.py)",
+            "harness_version": "2026-10-04",
+            "method": {
+              "measurement": "WCAG 2.1 contrast of each reading element's computed ink against every ground pixel at its glyph support, the frame loop frozen between a fill-transparent and a fill-magenta capture; one sample per section per profile (708 element samples)",
+              "threshold": "minimum ≥ 4.5:1 at every glyph-support pixel; observed worst 4.88:1",
+              "units": "contrast ratio"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#reading_ink_5627D34CD6B86545"
             ],
             "observed_at": "2026-10-04"
           }
@@ -6171,6 +6200,36 @@
               "deploy.sh#artifact-source-allowlist"
             ],
             "observed_at": "2026-10-04"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "5627D34CD6B86545",
+            "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "21512b8db6df03ffaa383fa1cc8cf15c45c14d13d3f473ed04e28b172da6408a",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "5627D34CD6B86545",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-10-04"
           }
         ]
       },
@@ -6765,6 +6824,35 @@
             "result": "PASS",
             "evidence": [
               "vaic/evidence/current-browser-observations.v0.json#unhappened_settle_8E49D942927C5361"
+            ],
+            "observed_at": "2026-10-04"
+          },
+          {
+            "evaluator": "BROWSER_HARNESS",
+            "coverage": "BOUNDED",
+            "artifact_build": "5627D34CD6B86545",
+            "artifact_manifest_hash": "056905644b306ce81a622b72111cdf96881338bd4ee885685181c4fceeb48604",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "5a79419a443d5b71ae5bedcfc12020893ecc1c1e969668c907e06887e527c399",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "desktop_full, mobile_bounded, reduced_motion, no_webgl",
+              "device": "local_host",
+              "viewport": "1440x900, 390x844, 320x844",
+              "runtime": "HeadlessChrome 154.0.8037.98 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+              "accessibility_mode": "default; prefers-reduced-motion: reduce"
+            },
+            "harness_identity": "Claude Code bounded CDP browser observation (scratchpad q-unhappened-observe.py)",
+            "harness_version": "2026-10-04",
+            "method": {
+              "measurement": "requestAnimationFrame calls counted for 3 s after #still appears at the end of the story, in five profiles (desktop, two phone widths, reduced motion, no WebGL); then a 40 px scroll, counted again",
+              "threshold": "0 frames requested once settled in every profile; a scroll requests frames and the page settles again",
+              "units": "frame requests"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#unhappened_settle_5627D34CD6B86545"
             ],
             "observed_at": "2026-10-04"
           }
