@@ -645,6 +645,25 @@ battery green (`#unhappened_settle_8E49D942927C5361`, `#reading_ink_8E49D942927C
 Mode, rotation), Safari on macOS (its automation is off on this Mac), VoiceOver, 120 Hz. There is
 no sound to check: production has none.
 
+## 5h. THE EXCEPTION — published as an experiment, 2026-10-04
+
+`exception/` ships beside the front door and does not replace it; the homepage links it from
+the nav ("Try it"), its closing section ("Would you let it happen? →") and its footer. Two
+encounters: *Draw* releases a drawing to this site's real boundary engine (refused at operation
+6, CROSSES; the alternative admitted, kernel-verified, `PRG-9FD9BC52`), and *Correct* holds a
+number against evidence as a labelled illustration with constructed figures. Execute and Record
+are parked until each has a defensible case.
+
+**Status, stated plainly: understanding has not been tested.** No unfamiliar reader has used it
+yet. The test stays optional and does not gate the release; when it is run (pick either
+encounter, note whether they try the other unprompted, then ask "What does CytherAI build?"),
+its answers are recorded here verbatim with the build they saw.
+
+Build `5627D34CD6B86545`: both encounters run from the served path under SRI on desktop and
+phone with no console error and nothing off-site; the homepage battery green with the new links
+(reading ink ≥ 4.88:1 over 150 elements on desktop, "Try it" in the tab order, 10 pages and 35
+local references resolving, none broken).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 CY-TEMP-002 is HUMAN_REVIEWED: no harness can establish that a stranger tells acceptance from

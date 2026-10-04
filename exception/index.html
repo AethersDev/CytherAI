@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="no-referrer">
+<title>It looks right. Would you let it happen? — CytherAI</title>
+<meta name="description" content="Two decisions that look right. One number that looks wrong, one drawing that looks complete. An experiment from CytherAI.">
+<meta name="build-hash" content="5627D34CD6B86545">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="preload" href="../adii/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- THE EXCEPTION — a published experiment, linked from the front door and not replacing it; not yet tested with
+     unfamiliar readers (docs/deploy.md §5h). One encounter is built (Correct, ADII); Draw, Execute and Record
+     are named and not yet open. Structure: temptation → decision → interruption → evidence. Every prevented action leaves an
+     empty space shaped like its consequence, and those absences become the page. The Correct encounter is an ILLUSTRATION:
+     its figures are constructed, and it says so on screen; ADII's recorded run (adii/) is a different case. -->
+<style>
+@font-face{font-family:"Newsreader";src:url(../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800;font-style:normal italic;font-display:swap}
+@font-face{font-family:"Public Sans";src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Plex Mono";src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2");font-weight:400;font-display:swap}
+:root{
+  --bg:#EEF0F2; --ink:#0B0F19; --ink2:#373E4E; --ink3:#5A6375; --evidence:#1C2EB0; --porcelain:#FBFAF7;
+  --serif:"Newsreader",ui-serif,Georgia,serif; --sans:"Public Sans",-apple-system,"Segoe UI",system-ui,sans-serif; --mono:"Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gut:clamp(20px,5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);color:var(--ink)}
+body{font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh;overflow-x:hidden;
+  background:radial-gradient(120% 80% at 70% 0%,#F6F7F8 0%,var(--bg) 55%)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit;text-underline-offset:3px}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+[hidden]{display:none!important}
+
+.brand{position:fixed;top:22px;left:var(--gut);z-index:5;font:600 16px/1 var(--sans);letter-spacing:-.01em;text-decoration:none;display:flex;gap:9px;align-items:center}
+.brand i{width:9px;height:9px;border-radius:50%;background:var(--ink)}
+.experiment{position:absolute;top:24px;right:var(--gut)}
+.label{font:400 11.5px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3)}
+
+/* ---------- the question ---------- */
+#ask{position:relative;isolation:isolate;min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:120px var(--gut) 80px}
+#ask h1{font:340 clamp(64px,11vw,176px)/.92 var(--serif);letter-spacing:-.045em}
+#ask .sub{margin-top:22px;font:italic 340 clamp(26px,3.2vw,46px)/1.15 var(--serif);letter-spacing:-.02em;color:var(--ink2)}
+.choices{margin-top:clamp(48px,8vh,88px);display:flex;flex-wrap:wrap;gap:0 clamp(18px,3vw,44px);font:400 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.choice{display:flex;flex-direction:column;gap:12px;padding:10px 0;text-align:left}
+.choice .name{color:var(--ink);border-bottom:1px solid currentColor;padding-bottom:4px}
+.choice .meta{font-size:10.5px;letter-spacing:.08em;color:var(--ink3);min-height:1.5em}
+.choice .meta b{font-weight:400;color:var(--evidence)}
+/* what you tried to do becomes the page: the correction that never happened, hollow, behind the question */
+.ghost{position:absolute;right:var(--gut);top:clamp(90px,16vh,170px);z-index:-1;font:300 clamp(90px,17vw,280px)/1 var(--serif);letter-spacing:-.04em;
+  color:transparent;-webkit-text-stroke:1.2px rgba(11,15,25,.18);pointer-events:none;user-select:none}
+.ghost::after{content:"";position:absolute;left:-4%;right:-4%;top:54%;height:2px;background:var(--evidence);opacity:.55;transform:rotate(-4deg)}
+.close{margin-top:clamp(56px,10vh,110px);max-width:760px}
+.close h2{font:340 clamp(32px,4.2vw,58px)/1.06 var(--serif);letter-spacing:-.03em}
+.close form{margin-top:26px;display:flex;flex-direction:column;gap:12px;max-width:620px}
+.close textarea{font:400 16px/1.5 var(--sans);color:var(--ink);background:rgba(255,255,255,.6);border:1px solid rgba(11,15,25,.18);border-radius:10px;padding:14px 16px;min-height:96px;resize:vertical}
+.close textarea:focus{outline:2px solid var(--ink);outline-offset:1px}
+.close .send{align-self:flex-start}
+.btn{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 22px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:600 14.5px/1 var(--sans)}
+.btn.ghosted{background:transparent;color:var(--ink);border-color:rgba(11,15,25,.25)}
+.btn:hover{transform:translateY(-1px)}
+.note{font:400 12px/1.6 var(--mono);color:var(--ink3)}
+
+/* ---------- the encounter ---------- */
+#correct{min-height:100vh;padding:96px var(--gut) 90px;max-width:1240px;margin:0 auto}
+.top{display:flex;justify-content:space-between;gap:20px;align-items:baseline;flex-wrap:wrap}
+.illus{font:400 11.5px/1.5 var(--mono);color:var(--ink3);max-width:46ch;text-align:right}
+.illus a{color:var(--ink)}
+#correct h2{margin-top:26px;font:340 clamp(40px,6vw,92px)/.98 var(--serif);letter-spacing:-.04em}
+#correct h2 em{font-style:italic;font-weight:320;color:var(--ink2)}
+.chart{margin-top:30px;width:100%;height:auto;display:block;overflow:visible}
+.chart .line{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.chart .base{stroke:rgba(11,15,25,.14);stroke-width:1;vector-effect:non-scaling-stroke}
+.chart .tick{font:400 11px var(--mono);fill:var(--ink3)}
+.chart .spike{fill:var(--porcelain);stroke:var(--ink);stroke-width:1.4;vector-effect:non-scaling-stroke}
+
+.stage{position:relative;margin-top:34px;display:grid;grid-template-columns:auto 1fr;gap:28px 40px;align-items:center}
+.number{position:relative;background:var(--porcelain);border-radius:16px;padding:22px 28px 20px;
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 18px 40px -18px rgba(11,15,25,.35),0 2px 6px rgba(11,15,25,.08)}
+.number .v{font:360 clamp(46px,6vw,84px)/1 var(--serif);letter-spacing:-.03em;font-variant-numeric:lining-nums}
+.number .v small{font:400 .32em/1 var(--mono);letter-spacing:.08em;vertical-align:.9em;margin-right:.4em;color:var(--ink3)}
+.number .d{margin-top:10px}
+.number.held::after{content:"";position:absolute;left:28px;right:28px;bottom:12px;height:2px;background:var(--evidence);transform-origin:left;animation:draw .5s ease-out both}
+@keyframes draw{from{transform:scaleX(0)}}
+.side{display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.decide{display:flex;gap:12px;flex-wrap:wrap}
+.proposal{display:flex;flex-direction:column;gap:6px}
+.proposal .v{position:relative;font:360 clamp(40px,5vw,72px)/1 var(--serif);letter-spacing:-.03em;color:var(--ink);transition:color .5s,-webkit-text-stroke-color .5s}
+.proposal .v::before{content:"→ ";font-family:var(--sans);font-weight:300;font-size:.6em;vertical-align:.12em;color:var(--ink3)}
+/* the correction that never replaced the number: an outline where it would have been, struck */
+.proposal.absent .v{color:transparent;-webkit-text-stroke:1.2px var(--ink)}
+.proposal.absent .v::after{content:"";position:absolute;left:1.05em;right:-.05em;top:52%;height:2px;background:var(--evidence);transform-origin:left;animation:draw .45s ease-out both}
+.cursor{position:absolute;left:0;top:0;width:18px;height:22px;z-index:3;pointer-events:none;transition:transform .9s cubic-bezier(.3,.7,.2,1),opacity .3s}
+.cursor svg{display:block}
+.status{font:400 12px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--evidence);min-height:1.5em}
+
+.evidence{position:relative;margin-top:40px;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.card{background:#fff;border-radius:12px;padding:18px 20px;border:1px solid rgba(28,46,176,.18);box-shadow:0 10px 28px -20px rgba(28,46,176,.6);
+  opacity:0;transform:translateY(10px);transition:opacity .5s,transform .6s cubic-bezier(.2,.7,.1,1)}
+.card.in{opacity:1;transform:none}
+.card h3{font:400 11px/1.4 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--evidence)}
+.card p,.card li{font:400 13.5px/1.5 var(--sans);color:var(--ink2)}
+.card .big{margin-top:8px;font:360 26px/1.15 var(--serif);color:var(--ink);letter-spacing:-.01em}
+.card ul{list-style:none;margin-top:10px;display:grid;gap:3px}
+.card li{display:flex;justify-content:space-between;gap:12px;font:400 12px/1.5 var(--mono);color:var(--ink2)}
+.card li.sum{margin-top:6px;padding-top:6px;border-top:1px solid rgba(11,15,25,.15);color:var(--ink)}
+.card .ok{margin-top:10px;font:400 11.5px/1.4 var(--mono);color:var(--evidence)}
+.wires{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.wires line{stroke:var(--evidence);stroke-width:1;opacity:.55}
+
+.verdict{margin-top:56px;font:italic 330 clamp(40px,6.6vw,104px)/1 var(--serif);letter-spacing:-.04em;opacity:0;transition:opacity 1.1s}
+.verdict.in{opacity:1}
+.why{margin-top:26px;max-width:62ch;display:grid;gap:12px;opacity:0;transition:opacity .8s .3s}
+.why.in{opacity:1}
+.why p{color:var(--ink2)}
+.why .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+
+/* ---------- Draw ---------- */
+#draw{min-height:100vh;padding:96px var(--gut) 90px;max-width:1240px;margin:0 auto}
+#draw h2{margin-top:26px;font:340 clamp(40px,6vw,92px)/.98 var(--serif);letter-spacing:-.04em}
+.board{margin-top:34px;display:grid;grid-template-columns:minmax(280px,520px) 1fr;gap:28px 48px;align-items:start}
+.plate{margin:0}
+.sheet{width:100%;height:auto;display:block;background:rgba(255,255,255,.55);border-radius:16px;box-shadow:0 18px 40px -26px rgba(11,15,25,.45)}
+.sheet .dot{fill:rgba(11,15,25,.16)}
+.sheet .proposed{fill:rgba(11,15,25,.07);fill-rule:evenodd;stroke:var(--ink);stroke-width:.13;stroke-linejoin:miter}
+.sheet .seg{stroke:var(--ink);stroke-width:.16;stroke-linecap:square}
+.sheet .refused{stroke:var(--evidence);stroke-width:.12;stroke-dasharray:.28 .2}
+.sheet .touch{fill:none;stroke:var(--evidence);stroke-width:.09}
+.sheet .unjudged{fill:none;stroke:rgba(11,15,25,.28);stroke-width:.07;stroke-dasharray:.16 .2}
+.sheet .admitted{fill:var(--porcelain);stroke:var(--ink);stroke-width:.06;filter:drop-shadow(0 .35px .5px rgba(11,15,25,.35))}
+.sheet .note{font:400 .42px var(--mono);fill:var(--ink3)}
+.sheet .note.ev{fill:var(--evidence)}
+.plate figcaption{margin-top:12px}
+.legend{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 18px;font:400 11.5px/1.4 var(--mono);color:var(--ink3)}
+.legend span{display:inline-flex;align-items:center;gap:7px}.legend .ev{color:var(--evidence)}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid var(--ink)}
+.legend i.k-ref{border-top:2px dashed var(--evidence)}.legend i.k-un{border-top:1.5px dotted rgba(11,15,25,.45)}
+.legend i.k-adm{height:12px;border:1.5px solid var(--ink);background:var(--porcelain);width:16px}
+.ops{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.ops button{font:400 14px/1 var(--mono);padding:9px 11px;border-radius:8px;border:1px solid rgba(11,15,25,.22);background:rgba(255,255,255,.6);color:var(--ink)}
+.ops button[data-state="ok"]{border-color:var(--ink)}
+.ops button[data-state="refused"]{border-color:var(--evidence);color:var(--evidence);background:#fff}
+.ops button[data-state="unjudged"]{color:var(--ink3);border-style:dashed}
+.ops button[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:2px}
+.op-detail{min-height:4.5em;max-width:46ch;font:400 14.5px/1.5 var(--sans);color:var(--ink2)}
+.op-detail b{font:400 12px/1.4 var(--mono);letter-spacing:.06em;color:var(--ink);display:block;margin-bottom:4px}
+.op-detail b.ev{color:var(--evidence)}
+.verdict2{margin-top:48px;font:italic 330 clamp(30px,4.2vw,62px)/1.08 var(--serif);letter-spacing:-.03em;opacity:0;transition:opacity 1s;max-width:22ch}
+.verdict2.in{opacity:1}
+.why2{margin-top:22px}
+.ghost-draw{position:absolute;right:calc(var(--gut) + 2vw);bottom:9vh;width:clamp(120px,15vw,210px);z-index:-1;overflow:visible}
+.ghost-draw .h{fill:none;stroke:rgba(11,15,25,.2);stroke-width:.08}
+.ghost-draw .ev{fill:none;stroke:var(--evidence);stroke-width:.09;opacity:.6}
+
+@media(max-width:760px){
+  #ask{padding:96px 20px 64px}
+  #draw{padding:84px 20px 70px}
+  .board{grid-template-columns:1fr}
+  .ghost-draw{position:relative;right:auto;bottom:auto;align-self:flex-start;margin-top:24px;width:140px}
+  .ghost{position:relative;right:auto;top:auto;align-self:flex-end;margin-top:28px;font-size:clamp(72px,26vw,120px)}   /* its own line on a phone, between the choice and the closing question: never across the question */
+  #correct{padding:84px 20px 70px}
+  .illus{text-align:left}
+  .stage{grid-template-columns:1fr}
+  .evidence{grid-template-columns:1fr}
+  .wires{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<a class="brand" href="../" aria-label="CytherAI home"><i></i>CytherAI</a>
+<p class="label experiment">An experiment</p>
+
+<section id="ask" aria-labelledby="q">
+  <h1 id="q">It looks right.</h1>
+  <p class="sub">Would you let it happen?</p>
+  <div class="choices" role="group" aria-label="Choose what you would do">
+    <button class="choice" type="button" data-go="draw"><span class="name">Draw</span><span class="meta" data-meta="draw"></span></button>
+    <button class="choice" type="button" data-go="correct"><span class="name">Correct</span><span class="meta" data-meta="correct"></span></button>
+    <!-- Execute (AWC-OS) and Record (SijilOS) are parked until each has a defensible case: two finished encounters with
+         distinct lessons, not four slots. Their buttons return here when they do. -->
+  </div>
+  <div class="ghost" aria-hidden="true" hidden></div>
+  <svg class="ghost-draw" viewBox="-1 -1 14 14" aria-hidden="true" hidden></svg>
+  <div class="close" hidden>
+    <h2>Which mistake can your business not afford to make?</h2>
+    <form id="describe">
+      <label class="label" for="mistake">Describe it</label>
+      <textarea id="mistake" name="mistake" placeholder="The one change that must never go through unchecked…" required></textarea>
+      <button class="btn send" type="submit">Describe it to CytherAI →</button>
+      <p class="note">This opens your mail app with what you wrote; nothing is sent from this page.</p>
+    </form>
+  </div>
+</section>
+
+<section id="draw" hidden aria-labelledby="dt">
+  <div class="top">
+    <p class="label">Draw · a shape that looks right</p>
+    <p class="illus">Judged in your browser by this site's real boundary engine (<a href="../js/instrument.js">js/instrument.js</a>): a toy grammar of rectilinear profiles, not CytherCAD itself.</p>
+  </div>
+  <h2 id="dt"><span>Would you release this?</span></h2>
+  <div class="board">
+    <figure class="plate">
+      <svg class="sheet" viewBox="-1 -1 14 14" role="img" aria-label="The proposed drawing: two squares, one above and to the right of the other, meeting at a single corner."></svg>
+      <figcaption class="label" data-n="caption">Proposed drawing.</figcaption>
+      <p class="legend" hidden></p>
+    </figure>
+    <div class="side">
+      <div class="decide"><button class="btn" type="button" data-act="release">Release it</button></div>
+      <p class="label ops-title" hidden>The instruction, one operation at a time</p>
+      <ol class="ops" aria-label="The drawing's operations"></ol>
+      <div class="op-detail" aria-live="polite"></div>
+      <p class="status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="verdict2" aria-live="polite"></p>
+  <div class="why why2">
+    <p>The engine judged the instruction, not the picture. It stopped at the first operation it could not admit; what follows that point was never judged, and is shown only as a faint preview.</p>
+    <div class="acts"><button class="btn" type="button" data-act="alt">Try a valid alternative</button><button class="btn ghosted" type="button" data-act="back">Back to the question</button></div>
+  </div>
+</section>
+
+<section id="correct" hidden aria-labelledby="ct">
+  <div class="top">
+    <p class="label">Correct · a number that looks wrong</p>
+    <p class="illus">An illustration: the figures here are constructed. ADII's <a href="../adii/">recorded run</a> is a different case.</p>
+  </div>
+  <h2 id="ct"><span>One day is four times any other.</span><br><em>It looks like an error.</em></h2>
+  <svg class="chart" role="img" aria-label="Daily sales through Ramadan: steady, rising slightly in the last week, then one day four times any other."></svg>
+  <div class="stage">
+    <div class="number"><div class="v"><small>SAR</small><span data-n="value"></span></div><p class="d label" data-n="day"></p></div>
+    <div class="side">
+      <div class="decide">
+        <button class="btn ghosted" type="button" data-act="leave">Leave it</button>
+        <button class="btn" type="button" data-act="correct">Correct it</button>
+      </div>
+      <div class="proposal" hidden><div class="v" data-n="proposal"></div><p class="label" data-n="plabel">your correction: the median of the seven days before</p></div>
+      <p class="status" role="status" aria-live="polite"></p>
+    </div>
+    <div class="cursor" aria-hidden="true" hidden><svg viewBox="0 0 18 22" width="18" height="22"><path d="M1 1 L1 18 L5.5 13.8 L8.6 20.6 L11.3 19.4 L8.3 12.7 L14.5 12.7 Z" fill="#0B0F19" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg></div>
+  </div>
+  <div class="evidence" aria-live="polite">
+    <svg class="wires" aria-hidden="true"></svg>
+    <article class="card" data-card="items">
+      <h3>The line items</h3>
+      <p class="big"><span data-n="orders"></span> orders</p>
+      <ul data-n="lines"></ul>
+      <p class="ok">every line accounted for · to the halala</p>
+    </article>
+    <article class="card" data-card="deposit">
+      <h3>The deposit</h3>
+      <p class="big">SAR <span data-n="deposit"></span></p>
+      <p>Settled to the bank the next morning, from the card acquirer and cash on delivery, for this day's orders.</p>
+      <p class="ok">matches the day exactly</p>
+    </article>
+    <article class="card" data-card="calendar">
+      <h3>The calendar</h3>
+      <p class="big">The eve of Eid al-Fitr</p>
+      <p>The last day of Ramadan. The same evening last year sold SAR <span data-n="lastyear"></span>, <span data-n="lastratio"></span> its month.</p>
+      <p class="ok">the day people buy for Eid</p>
+    </article>
+  </div>
+  <p class="verdict" aria-live="polite"></p>
+  <div class="why">
+    <p>Three independent records agree with the number. Nothing about it was wrong except how it looked.</p>
+    <p><b>ADII</b> investigates before it changes a value: when a number looks wrong it answers fix it, leave it, or escalate it. The AI that proposes a fix can't approve it; two programs outside the model decide whether a change is allowed and whether it holds. Here, the evidence held the number.</p>
+    <p class="note">An illustration with constructed figures. In ADII's <a href="../adii/">recorded run</a> the case went the other way: a 49% drop that came from a partially loaded batch, where the right answer was to fix it.</p>
+    <div class="acts"><button class="btn" type="button" data-act="back">Back to the question</button><button class="btn ghosted" type="button" data-act="again" hidden>Test my correction</button></div>
+  </div>
+</section>
+
+<script src="../js/manifest.js" defer integrity="sha384-G3rj/SJ8vH07o590ZnROvlJJE79yXJT1T89J7KHfTDZmD81Zt+vjOj5PhwuiAQv/" crossorigin="anonymous"></script>
+<script src="../js/instrument.js" defer integrity="sha384-kt35YGJ0Nz7AXsxArQLjc4Ksw0es4JXjKnavedmf8Gfqt+H8SjLoaY7M2Bdwq6Ny" crossorigin="anonymous"></script>
+<script src="exception.js" defer integrity="sha384-NHvToCmtyekmLl1siBnVmaukbQASRg60cThqdgcH3LuWixPbRwkSHgAeCi5MEbY/" crossorigin="anonymous"></script>
+</body>
+</html>
