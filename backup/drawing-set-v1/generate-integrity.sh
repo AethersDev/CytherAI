@@ -11,12 +11,12 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-# the front door's modules (THE UNHAPPENED) + subpage stylesheet: every resource a served
-# page requests with an integrity attribute. pages/runner.html and the engine it loads are
+# the drawing-set homepage modules + subpage stylesheet: every resource a served page
+# requests with an integrity attribute. pages/runner.html and the engine it loads are
 # a developer page — linked from nowhere, not in deploy.paths, not precached — and
 # carry no SRI or build stamp. (The build identity below is a different projection:
 # it covers every deploy.paths byte, requested or not.)
-RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/trace.js js/unhappened.js"
+RESOURCES="css/cytherai.css js/manifest.js js/instrument.js js/claims.js js/drawing-set.js"
 
 # HTML files to patch (every served page)
 HTML_FILES="index.html contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html"

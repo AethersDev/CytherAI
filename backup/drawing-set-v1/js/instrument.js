@@ -7,10 +7,9 @@
    Deterministic: seeded LCG, high bits only (low LCG bits are correlated) — same
    seed, same stream, on every machine.
 
-   Ported from newC3/synthesis-rev5.html. Pure and DOM-free: THE UNHAPPENED
-   (js/unhappened.js) streams biEngine, one proposed operation per bead; judge and
-   audit serve the verifiers. The drawing set's FIG. 1 and the world's canvas/log
-   wiring left with them (backup/drawing-set-v1/, backup/instrument-v1/).
+   Ported from newC3/synthesis-rev5.html. Pure and DOM-free: FIG. 1 of the drawing
+   set (js/drawing-set.js) streams biEngine and judges proposals with judge; the
+   world's canvas/log wiring left with the world (backup/instrument-v1/js/instrument.js).
    ============================================================================ */
 (function (root) {
 "use strict";
@@ -110,15 +109,17 @@ function judge(toks) {
   }
   return { ok: false, at: toks.length, why: "CLOSURE", x: at.x, y: at.y };   /* never closed */
 }
-/* pure audit — runs `count` proposals at `seed`, returns the invariant stats (tools/test-boundary.js). */
+/* pure audit — runs `count` proposals at `seed`, returns the invariant stats. Feeds CL-05. */
 function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < count; i++) e.step(); return e.st; }
 
+const last = audit(1500, 2);   /* the seed-02 audit, so CL-05 has evidence at boot */
+function lastAudit() { return last; }
 
 /* biEngine is the one boundary engine: FIG. 1 streams it, the audit runs it, and any
    surface that demonstrates the boundary consumes this export rather than a copy — a
    copy is a silent drift path from the mechanism it claims to show. tools/test-boundary.js
    pins the stream. */
-const API = { audit, biEngine, judge };
+const API = { audit, lastAudit, biEngine, judge };
 
 root.CytherInstrument = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;

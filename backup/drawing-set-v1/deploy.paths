@@ -8,9 +8,9 @@ pages/privacy.html
 pages/security.html
 pages/terms.html
 js/manifest.js
+js/claims.js
 js/instrument.js
-js/trace.js
-js/unhappened.js
+js/drawing-set.js
 css/cytherai.css
 sw.js
 manifest.webmanifest

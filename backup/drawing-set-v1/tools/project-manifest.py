@@ -7,7 +7,7 @@ Each printed fact is a marked element — <span data-m="count:systems_indexed">0
 — and this tool rewrites every marked element's text to CytherManifest.project(name),
 read by executing js/manifest.js under jsc, never hand-copied. The documents keep
 their facts as bytes (a reader without scripts still has them) while the manifest
-stays the single authority; the front door reads its marks back at runtime.
+stays the single authority; CL-02 reads the same elements back at runtime.
 
     python3 tools/project-manifest.py           rewrite the pages in place
     python3 tools/project-manifest.py --check   exit 1 if any page would change

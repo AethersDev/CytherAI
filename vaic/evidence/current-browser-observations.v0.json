@@ -10,7 +10,8 @@
     "E7FD12A8025BCD99",
     "EF57500CC99E3711",
     "9236E6A692F915D4",
-    "E01E6B543C2E1555"
+    "E01E6B543C2E1555",
+    "33EF803E25246693"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -803,6 +804,817 @@
           "published": 0
         }
       ]
+    },
+    "unhappened_settle_33EF803E25246693": {
+      "artifact_build": "33EF803E25246693",
+      "build_identity": "33EF803E25246693",
+      "observed_at": "2026-10-04",
+      "runtime": "HeadlessChrome 154.0.8037.95 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q-unhappened-observe.py)",
+      "surface": "THE UNHAPPENED (index.html, js/unhappened.js, js/trace.js)",
+      "method": "window.requestAnimationFrame wrapped before any page script (Page.addScriptToEvaluateOnNewDocument) to count frame requests; scroll to the last section; wait for #still; reset the count and wait 3 s; then scroll 40 px and count again",
+      "modules_executed_under_sri": "object,object,object",
+      "marks": [
+        {
+          "name": "validation:T2C192-IR-0.00:cyther",
+          "printed": "0.00%",
+          "projected": "0.00%",
+          "outlined": false
+        },
+        {
+          "name": "validation:T2C192-IR-0.00:deepcad",
+          "printed": "10.00%",
+          "projected": "10.00%",
+          "outlined": false
+        }
+      ],
+      "claims_rendered": [
+        "0.00%invalid rate on Text2CAD-192, against 10.00% for DeepCAD · an external benchmark CytherAI does not operate · source",
+        "A research project: no evaluation results are published and no deployment is claimed. The recorded run",
+        "A demonstration: the MVP runs on an evaluation machine, not on deployed hosting. The demonstration",
+        "ZATCA Phase 1certified compliant, April 2025 · live beta in 2 production environments · source",
+        "CytherCAD runs on-prem, private and air-gapped; SijilOS is offline-first, with zero core cloud dependency. The brief"
+      ],
+      "profiles": {
+        "1440x900 · dpr 1": {
+          "intro_class_at_load": true,
+          "settle_s_after_scrolling_to_the_end": 2.31,
+          "frames_requested_in_3s_once_settled": 0,
+          "still_note_shown": true,
+          "frames_requested_after_a_40px_scroll": 6,
+          "resettled": true,
+          "no_gl_class": false,
+          "overflow_x": false,
+          "external_requests": [],
+          "requests_observed": 22,
+          "in_page_external_count": "0",
+          "console_errors": 0,
+          "worker": {
+            "caches": [
+              "cytherai-substrate-33EF803E25246693"
+            ],
+            "controlled_after_reload": true
+          },
+          "offline_reload_with_the_server_stopped": {
+            "rendered": true,
+            "build": "33EF803E25246693",
+            "console_errors": 0
+          }
+        },
+        "390x844 · dpr 3 · mobile, touch": {
+          "intro_class_at_load": true,
+          "settle_s_after_scrolling_to_the_end": 1.79,
+          "frames_requested_in_3s_once_settled": 0,
+          "still_note_shown": true,
+          "frames_requested_after_a_40px_scroll": 6,
+          "resettled": true,
+          "no_gl_class": false,
+          "overflow_x": false,
+          "external_requests": [],
+          "requests_observed": 22,
+          "in_page_external_count": "0",
+          "console_errors": 0,
+          "worker": {
+            "caches": [
+              "cytherai-substrate-33EF803E25246693"
+            ],
+            "controlled_after_reload": true
+          },
+          "offline_reload_with_the_server_stopped": {
+            "rendered": true,
+            "build": "33EF803E25246693",
+            "console_errors": 0
+          }
+        },
+        "320x844 · dpr 2 · mobile, touch": {
+          "intro_class_at_load": true,
+          "settle_s_after_scrolling_to_the_end": 1.54,
+          "frames_requested_in_3s_once_settled": 0,
+          "still_note_shown": true,
+          "frames_requested_after_a_40px_scroll": 6,
+          "resettled": true,
+          "no_gl_class": false,
+          "overflow_x": false,
+          "external_requests": [],
+          "requests_observed": 22,
+          "in_page_external_count": "0",
+          "console_errors": 0,
+          "worker": {
+            "caches": [
+              "cytherai-substrate-33EF803E25246693"
+            ],
+            "controlled_after_reload": true
+          }
+        },
+        "1440x900 · prefers-reduced-motion: reduce": {
+          "intro_class_at_load": false,
+          "settle_s_after_scrolling_to_the_end": 1.03,
+          "frames_requested_in_3s_once_settled": 0,
+          "still_note_shown": true,
+          "frames_requested_after_a_40px_scroll": 39,
+          "resettled": true,
+          "no_gl_class": false,
+          "overflow_x": false,
+          "external_requests": [],
+          "requests_observed": 11,
+          "in_page_external_count": "0",
+          "console_errors": 0
+        },
+        "1440x900 · WebGL2 refused (getContext('webgl2') → null): the .no-gl cover": {
+          "intro_class_at_load": false,
+          "settle_s_after_scrolling_to_the_end": 0.0,
+          "frames_requested_in_3s_once_settled": 0,
+          "still_note_shown": true,
+          "frames_requested_after_a_40px_scroll": 6,
+          "resettled": true,
+          "no_gl_class": true,
+          "overflow_x": false,
+          "external_requests": [],
+          "requests_observed": 11,
+          "in_page_external_count": "0",
+          "console_errors": 0
+        }
+      },
+      "trace": {
+        "forged_fragment_refused": true,
+        "gesture_produced_link": true,
+        "link_replayed_in_a_fresh_page": true,
+        "carried_receipt_at_end": "7A60A047This did not happen.sent to you · TRACE-1",
+        "external_requests": [],
+        "console_errors": 0
+      }
+    },
+    "reading_ink_33EF803E25246693": {
+      "artifact_build": "33EF803E25246693",
+      "observed_at": "2026-10-04",
+      "runtime": "HeadlessChrome 154.0.8037.95 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad q-unhappened-observe.py)",
+      "surface": "the copy of every [data-k] section and the HUD, over the composited studio and its scrim, and over the no-WebGL cover",
+      "method": "for each section: scroll its centre to the viewport centre (its copy at full opacity), wait 3.2 s, freeze the frame loop; capture the page with every reading glyph's fill transparent (the ground actually composited beneath it, text-shadow included) and with every fill #FF00FF (glyph support = pixels differing by ≥ 64 in a channel); WCAG 2.1 contrast of each element's computed ink, alpha-composited, against every ground pixel at its glyph support; unfreeze",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "one frozen sample per section per profile; a finite sweep licenses no universal proposition",
+      "profiles": {
+        "1440x900 · dpr 1": {
+          "elements_measured": 142,
+          "worst": {
+            "section": 0,
+            "element": "p.try",
+            "text": "Press and drag on the glass to m",
+            "min": 5.01,
+            "p01": 5.02
+          },
+          "by_section": {
+            "0": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.try",
+                "text": "Press and drag on the glass to m",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.01,
+                "p01": 5.02,
+                "glyph_px": 877
+              }
+            },
+            "1": {
+              "elements": 11,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "Most proposals",
+                "ink": "rgb(11, 15, 25)",
+                "min": 6.93,
+                "p01": 9.13,
+                "glyph_px": 7845
+              }
+            },
+            "2": {
+              "elements": 11,
+              "skipped": 0,
+              "worst": {
+                "element": "span.note",
+                "text": "Every bead is one proposed opera",
+                "ink": "rgb(55, 62, 78)",
+                "min": 7.15,
+                "p01": 7.42,
+                "glyph_px": 4421
+              }
+            },
+            "3": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "span.note",
+                "text": "Every bead is one proposed opera",
+                "ink": "rgb(55, 62, 78)",
+                "min": 8.88,
+                "p01": 8.96,
+                "glyph_px": 4489
+              }
+            },
+            "4": {
+              "elements": 17,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "01 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.1,
+                "glyph_px": 61
+              }
+            },
+            "5": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluatio",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.06,
+                "p01": 5.07,
+                "glyph_px": 1669
+              }
+            },
+            "6": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "A demonstration: the MVP runs on",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.05,
+                "p01": 5.07,
+                "glyph_px": 1519
+              }
+            },
+            "7": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "04 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.11,
+                "p01": 5.11,
+                "glyph_px": 63
+              }
+            },
+            "8": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "CytherCAD runs on-prem, private ",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.07,
+                "p01": 5.11,
+                "glyph_px": 1978
+              }
+            },
+            "9": {
+              "elements": 19,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "© 2026 CytherAI · Riyadh",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.07,
+                "p01": 5.1,
+                "glyph_px": 489
+              }
+            }
+          }
+        },
+        "390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 132,
+          "worst": {
+            "section": 5,
+            "element": "p.eyebrow",
+            "text": "02 ·",
+            "min": 4.85,
+            "p01": 4.88
+          },
+          "by_section": {
+            "0": {
+              "elements": 13,
+              "skipped": 0,
+              "worst": {
+                "element": "p.try",
+                "text": "Press and drag on the glass to m",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.15,
+                "glyph_px": 6215
+              }
+            },
+            "1": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "p.lede",
+                "text": "What never happens leaves eviden",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.04,
+                "p01": 9.12,
+                "glyph_px": 15406
+              }
+            },
+            "2": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "proposed operations",
+                "ink": "rgb(55, 62, 78)",
+                "min": 8.8,
+                "p01": 8.8,
+                "glyph_px": 2629
+              }
+            },
+            "3": {
+              "elements": 9,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "proposed operations",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.12,
+                "p01": 9.14,
+                "glyph_px": 2644
+              }
+            },
+            "4": {
+              "elements": 16,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "01 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.97,
+                "p01": 4.97,
+                "glyph_px": 415
+              }
+            },
+            "5": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "02 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.85,
+                "p01": 4.88,
+                "glyph_px": 423
+              }
+            },
+            "6": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "03 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.88,
+                "p01": 4.89,
+                "glyph_px": 424
+              }
+            },
+            "7": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "04 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.01,
+                "p01": 5.02,
+                "glyph_px": 429
+              }
+            },
+            "8": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "CytherCAD runs on-prem, private ",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.14,
+                "glyph_px": 14160
+              }
+            },
+            "9": {
+              "elements": 18,
+              "skipped": 0,
+              "worst": {
+                "element": "a",
+                "text": "Terms",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.15,
+                "glyph_px": 830
+              }
+            }
+          }
+        },
+        "320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 132,
+          "worst": {
+            "section": 5,
+            "element": "p.eyebrow",
+            "text": "02 ·",
+            "min": 4.83,
+            "p01": 4.83
+          },
+          "by_section": {
+            "0": {
+              "elements": 13,
+              "skipped": 0,
+              "worst": {
+                "element": "p.try",
+                "text": "Press and drag on the glass to m",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.11,
+                "p01": 5.15,
+                "glyph_px": 2877
+              }
+            },
+            "1": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "p.lede",
+                "text": "What never happens leaves eviden",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.06,
+                "p01": 9.12,
+                "glyph_px": 7073
+              }
+            },
+            "2": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "proposed operations",
+                "ink": "rgb(55, 62, 78)",
+                "min": 8.8,
+                "p01": 8.8,
+                "glyph_px": 1298
+              }
+            },
+            "3": {
+              "elements": 9,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "refused ·",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.12,
+                "p01": 9.2,
+                "glyph_px": 533
+              }
+            },
+            "4": {
+              "elements": 16,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "01 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.88,
+                "p01": 4.88,
+                "glyph_px": 180
+              }
+            },
+            "5": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "02 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.83,
+                "p01": 4.83,
+                "glyph_px": 192
+              }
+            },
+            "6": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "03 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.92,
+                "p01": 4.93,
+                "glyph_px": 193
+              }
+            },
+            "7": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "04 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 4.97,
+                "p01": 4.97,
+                "glyph_px": 194
+              }
+            },
+            "8": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "CytherCAD runs on-prem, private ",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.15,
+                "glyph_px": 6773
+              }
+            },
+            "9": {
+              "elements": 18,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "© 2026 CytherAI · Riyadh",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.1,
+                "p01": 5.15,
+                "glyph_px": 1615
+              }
+            }
+          }
+        },
+        "1440x900 · prefers-reduced-motion: reduce": {
+          "elements_measured": 142,
+          "worst": {
+            "section": 0,
+            "element": "p.try",
+            "text": "Press and drag on the glass to m",
+            "min": 5.01,
+            "p01": 5.02
+          },
+          "by_section": {
+            "0": {
+              "elements": 14,
+              "skipped": 0,
+              "worst": {
+                "element": "p.try",
+                "text": "Press and drag on the glass to m",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.01,
+                "p01": 5.02,
+                "glyph_px": 877
+              }
+            },
+            "1": {
+              "elements": 11,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "Most proposals",
+                "ink": "rgb(11, 15, 25)",
+                "min": 7.78,
+                "p01": 16.16,
+                "glyph_px": 7849
+              }
+            },
+            "2": {
+              "elements": 11,
+              "skipped": 0,
+              "worst": {
+                "element": "span.note",
+                "text": "Every bead is one proposed opera",
+                "ink": "rgb(55, 62, 78)",
+                "min": 7.15,
+                "p01": 7.42,
+                "glyph_px": 4421
+              }
+            },
+            "3": {
+              "elements": 10,
+              "skipped": 0,
+              "worst": {
+                "element": "span.note",
+                "text": "Every bead is one proposed opera",
+                "ink": "rgb(55, 62, 78)",
+                "min": 8.88,
+                "p01": 8.96,
+                "glyph_px": 4489
+              }
+            },
+            "4": {
+              "elements": 17,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "invalid rate on Text2CAD-192, ag",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.07,
+                "p01": 5.1,
+                "glyph_px": 683
+              }
+            },
+            "5": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluatio",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.05,
+                "p01": 5.07,
+                "glyph_px": 1669
+              }
+            },
+            "6": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "A demonstration: the MVP runs on",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.05,
+                "p01": 5.07,
+                "glyph_px": 1519
+              }
+            },
+            "7": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "04 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.11,
+                "p01": 5.11,
+                "glyph_px": 63
+              }
+            },
+            "8": {
+              "elements": 15,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "CytherCAD runs on-prem, private ",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.07,
+                "p01": 5.11,
+                "glyph_px": 1978
+              }
+            },
+            "9": {
+              "elements": 19,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "© 2026 CytherAI · Riyadh",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.07,
+                "p01": 5.1,
+                "glyph_px": 489
+              }
+            }
+          }
+        },
+        "1440x900 · WebGL2 refused (getContext('webgl2') → null): the .no-gl cover": {
+          "elements_measured": 61,
+          "worst": {
+            "section": 8,
+            "element": "p.cond",
+            "text": "CytherCAD runs on-prem, private ",
+            "min": 5.24,
+            "p01": 5.25
+          },
+          "by_section": {
+            "0": {
+              "elements": 5,
+              "skipped": 0,
+              "worst": {
+                "element": "p.lede",
+                "text": "We build the part of AI that dec",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.29,
+                "p01": 9.29,
+                "glyph_px": 3102
+              }
+            },
+            "1": {
+              "elements": 3,
+              "skipped": 0,
+              "worst": {
+                "element": "p.lede",
+                "text": "What never happens leaves eviden",
+                "ink": "rgb(55, 62, 78)",
+                "min": 9.29,
+                "p01": 9.29,
+                "glyph_px": 2863
+              }
+            },
+            "2": {
+              "elements": 3,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "Black may propose.",
+                "ink": "rgb(11, 15, 25)",
+                "min": 16.61,
+                "p01": 16.61,
+                "glyph_px": 2858
+              }
+            },
+            "3": {
+              "elements": 2,
+              "skipped": 0,
+              "worst": {
+                "element": "span",
+                "text": "Only the valid",
+                "ink": "rgb(11, 15, 25)",
+                "min": 16.61,
+                "p01": 16.61,
+                "glyph_px": 7116
+              }
+            },
+            "4": {
+              "elements": 9,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "01 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.25,
+                "p01": 5.25,
+                "glyph_px": 62
+              }
+            },
+            "5": {
+              "elements": 7,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "02 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.25,
+                "p01": 5.25,
+                "glyph_px": 60
+              }
+            },
+            "6": {
+              "elements": 7,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "03 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.25,
+                "p01": 5.25,
+                "glyph_px": 60
+              }
+            },
+            "7": {
+              "elements": 7,
+              "skipped": 0,
+              "worst": {
+                "element": "p.eyebrow",
+                "text": "04 ·",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.25,
+                "p01": 5.25,
+                "glyph_px": 64
+              }
+            },
+            "8": {
+              "elements": 7,
+              "skipped": 0,
+              "worst": {
+                "element": "p.cond",
+                "text": "CytherCAD runs on-prem, private ",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.24,
+                "p01": 5.25,
+                "glyph_px": 1989
+              }
+            },
+            "9": {
+              "elements": 11,
+              "skipped": 0,
+              "worst": {
+                "element": "a",
+                "text": "Brief",
+                "ink": "rgb(90, 99, 117)",
+                "min": 5.24,
+                "p01": 5.24,
+                "glyph_px": 118
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

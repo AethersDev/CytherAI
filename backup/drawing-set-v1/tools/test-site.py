@@ -111,10 +111,9 @@ def local_target(page: str, raw_url: str) -> Path | None:
         return None
     if parts.path == "/":
         return ROOT / "index.html"
-    path = parts.path + "index.html" if parts.path.endswith("/") else parts.path   # a directory serves its index
-    if path.startswith("/"):
-        return ROOT / path.lstrip("/")
-    return (ROOT / page).parent / path
+    if parts.path.startswith("/"):
+        return ROOT / parts.path.lstrip("/")
+    return (ROOT / page).parent / parts.path
 
 
 def sri_for(relative: str) -> str:
@@ -187,12 +186,11 @@ class SiteContractTests(unittest.TestCase):
     def test_homepage_module_order_and_script_posture(self) -> None:
         index = parse_page("index.html")
         scripts = [attrs for tag, attrs in index.tags if tag == "script"]
-        # load order is a contract: the record, the boundary engine, the trace grammar, then the
-        # page that reads all three at load (js/unhappened.js binds CytherManifest, CytherInstrument
-        # and CytherTrace at its top level)
+        # load order is a contract: the record, the boundary engine, the claims (which read
+        # CytherSubstrate's absence at load), then the set that registers its predicates
         self.assertEqual(
             [attrs.get("src") for attrs in scripts],
-            ["js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js"],
+            ["js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"],
         )
         self.assertTrue(all(attrs.get("defer") == "" for attrs in scripts))
         self.assertFalse(any(not attrs.get("src") for attrs in scripts), "index CSP forbids inline script")
@@ -247,7 +245,7 @@ class SiteContractTests(unittest.TestCase):
         baseline = VAIC.build_identity(ROOT)
         self.assertEqual(baseline, VAIC.current_build(ROOT), "the stamp is the projection")
         mutations = {
-            "index.html": lambda b: b.replace(b"<span>The model proposes.</span>", b"<span>The model proposes (counterfactual).</span>", 1),
+            "index.html": lambda b: b.replace(b'aria-label="Sheet 1 \xe2\x80\x94 the statement"', b'aria-label="Sheet 1 \xe2\x80\x94 the statement (counterfactual)"', 1),
             "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
             "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
         }
@@ -326,17 +324,27 @@ class SiteContractTests(unittest.TestCase):
                 declared = tuple(map(int, icon["sizes"].split("x")))
                 self.assertEqual((width, height), declared, relative)
 
-    def test_every_scene_of_the_story_has_its_section(self) -> None:
-        """js/unhappened.js walks the camera, the rain and the systems through SC — one entry per
-        [data-k] section of index.html, in order. A section without a scene (or a scene without its
-        section) silently shifts every scene after it: the copy and the picture stop agreeing."""
+    def test_every_sheet_is_addressable_and_the_edge_handle_meets_its_target(self) -> None:
+        """The title block's sheet index (js/drawing-set.js) links #s1..#s7 — every sheet must
+        carry that id, in order, or a visitor landing mid-set has no way across it. The FIG. 1
+        handle draws a 14 px mark; its hit area is the ::after box, and must reach 24 px."""
         index = (ROOT / "index.html").read_text(encoding="utf-8")
-        runtime = (ROOT / "js/unhappened.js").read_text(encoding="utf-8")
-        sections = [int(k) for k in re.findall(r'<section data-k="(\d+)"', index)]
-        story = runtime[runtime.index("const SC = ["):runtime.index("];", runtime.index("const SC = ["))]
-        scenes = re.findall(r"^\s*\{ (?:e|focus):", story, re.M)
-        self.assertEqual(sections, list(range(len(sections))))
-        self.assertEqual(len(scenes), len(sections))
+        ids = re.findall(r'<section class="sheet[^"]*" id="(s\d)"', index)
+        self.assertEqual(ids, [f"s{n}" for n in range(1, 8)])
+        self.assertEqual(index.count('<section class="sheet'), 7)
+        # the cover (sheet 1) carries the sheet index as bytes: one link per sheet, in order
+        cover = index[index.index('<nav class="sidx"'):index.index("</nav>", index.index('<nav class="sidx"'))]
+        self.assertEqual(re.findall(r'href="#(s\d)"', cover), ids)
+        self.assertRegex(cover, r'href="#s1" aria-current="page"')
+        mark = re.search(r"\.handle\{[^}]*width:(\d+)px;height:(\d+)px[^}]*border:([\d.]+)px", index)
+        hit = re.search(r"\.handle::after\{[^}]*inset:-(\d+)px", index)
+        self.assertIsNotNone(mark); self.assertIsNotNone(hit)
+        w, h, border, pad = int(mark.group(1)), int(mark.group(2)), float(mark.group(3)), int(hit.group(1))
+        self.assertEqual((w, h), (14, 14), "the mark is the owner's: 14 px")
+        # the pseudo-element is anchored to the padding box, inside the border
+        self.assertGreaterEqual(min(w, h) - 2 * border + 2 * pad, 24, "the hit area must meet WCAG 2.5.8")
+        for rule in (".counters button", ".proposal button", ".tb .idx a"):
+            self.assertRegex(index, re.escape(rule) + r"\{[^}]*min-height:24px", rule)
 
     def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
         """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
@@ -442,7 +450,7 @@ class SiteContractTests(unittest.TestCase):
         """
         register = json.loads((ROOT / "vaic/release-dispositions.v0.json").read_text(encoding="utf-8"))
         disposed = {entry["subject"] for entry in register["dispositions"]}
-        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v2.json")
+        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v1.json")
         matrix = VAIC.load_json(ROOT / "vaic/evaluator-matrix.v0.json")
         summary = VAIC.validate(corpus, matrix, ROOT)
         self.assertEqual(summary["structure"], "VALID")
