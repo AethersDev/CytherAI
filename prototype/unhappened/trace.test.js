@@ -35,7 +35,8 @@ const kern = T.svg(T.code("KERNEL", 0, 5, true));              /* unbroken ring 
 ok(arcs(kern) === 2 && !spoke(kern) && dot(kern), "KERNEL: one unbroken ring, no spoke, a dot");
 const clos = T.svg(T.code("CLOSURE", 3, 77, false));           /* r 1: 2 breaks · depth class 1: 2 rings */
 ok(arcs(clos) === 4 && !spoke(clos) && clos === T.svg(T.code("CLOSURE", 3, 77, false)), "CLOSURE: 4 arcs, deterministic");
-ok(T.VERSION === "TRACE-1" && T.GLSL.indexOf("float sig(vec2 q, float code, float grow)") >= 0, "version and the GLSL renderer");
+ok(T.VERSION === "TRACE-1" && T.GLSL.indexOf("float sig(vec2 q, float code, float grow, float px)") >= 0
+   && T.GLSL.indexOf("float sig(vec2 q, float code, float grow){ return sig(q, code, grow, 0.); }") >= 0, "version; the GLSL renderer, with and without a pixel floor");
 
 print(fails ? fails + " of " + n + " TRACE-1 checks failed" : "TRACE-1: " + n + " checks pass");
 if (fails) throw new Error("trace.test");

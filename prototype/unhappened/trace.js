@@ -22,7 +22,9 @@
      discarded (budget exhausted)  → a centre dot: the attempt was abandoned here
    code = r + 16·depth + 64·(h mod 64) + 4096·discarded   (13 bits; exact in float32)
    One drawing, two renderers: GLSL for surfaces (1 unit = 1 world unit; seen from
-   above, +x right and +z down) and SVG in the same frame.
+   above, +x right and +z down) and SVG in the same frame. The GLSL form may be given
+   the renderer's pixel footprint (px, in trace units): it floors line width so a trace
+   keeps at least a pixel of ink at any distance, and changes no field → mark.
    ============================================================================ */
 (function (root) {
 "use strict";
@@ -38,16 +40,17 @@ function code(why, accepted, hash, discarded) {
 
 const f = x => x.toFixed(4);
 const GLSL = `
-float sig(vec2 q, float code, float grow){
+float sig(vec2 q, float code, float grow, float px){
   float r = mod(code, 16.), dep = mod(floor(code / 16.), 4.), ang = mod(floor(code / 64.), 64.) / 64. * 6.28318, disc = floor(code / 4096.);
-  float rad = length(q), th = atan(q.y, q.x) - ang, v = 0., base = (${f(G.base)} + ${f(G.step)} * r) * grow;
-  for (int i = 0; i < 4; i++) { if (float(i) > dep) break; v = max(v, exp(-pow((rad - base - float(i) * ${f(G.gap)} * grow) / ${f(G.line)}, 2.))); }
+  float rad = length(q), th = atan(q.y, q.x) - ang, v = 0., base = (${f(G.base)} + ${f(G.step)} * r) * grow, lw = max(${f(G.line)}, px * .7);
+  for (int i = 0; i < 4; i++) { if (float(i) > dep) break; v = max(v, exp(-pow((rad - base - float(i) * ${f(G.gap)} * grow) / lw, 2.))); }
   if (r < 8.) v *= smoothstep(${f(G.brk * 2 / 3)}, ${f(G.brk * 4 / 3)}, fract(th / 6.28318 * (mod(r, 4.) + 1.) + 1.));
   float outer = base + dep * ${f(G.gap)} * grow;
-  float spoke = exp(-pow(abs(sin(th)) * rad / ${f(G.spoke)}, 2.)) * step(cos(th), 0.) * smoothstep(base * .35, base * .5, rad) * (1. - smoothstep(outer, outer + .006, rad));
+  float spoke = exp(-pow(abs(sin(th)) * rad / max(${f(G.spoke)}, px * .6), 2.)) * step(cos(th), 0.) * smoothstep(base * .35, base * .5, rad) * (1. - smoothstep(outer, outer + .006, rad));
   v = max(v, spoke * step(4., r) * step(r, 7.));
-  return max(v, exp(-pow(rad / ${f(G.dot)}, 2.)) * disc);
+  return max(v, exp(-pow(rad / max(${f(G.dot)}, px), 2.)) * disc);
 }
+float sig(vec2 q, float code, float grow){ return sig(q, code, grow, 0.); }
 `;
 
 function svg(c) {
