@@ -115,8 +115,48 @@ a{color:inherit;text-underline-offset:3px}
 .why p{color:var(--ink2)}
 .why .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
 
+/* ---------- Draw ---------- */
+#draw{min-height:100vh;padding:96px var(--gut) 90px;max-width:1240px;margin:0 auto}
+#draw h2{margin-top:26px;font:340 clamp(40px,6vw,92px)/.98 var(--serif);letter-spacing:-.04em}
+.board{margin-top:34px;display:grid;grid-template-columns:minmax(280px,520px) 1fr;gap:28px 48px;align-items:start}
+.plate{margin:0}
+.sheet{width:100%;height:auto;display:block;background:rgba(255,255,255,.55);border-radius:16px;box-shadow:0 18px 40px -26px rgba(11,15,25,.45)}
+.sheet .dot{fill:rgba(11,15,25,.16)}
+.sheet .proposed{fill:rgba(11,15,25,.07);fill-rule:evenodd;stroke:var(--ink);stroke-width:.13;stroke-linejoin:miter}
+.sheet .seg{stroke:var(--ink);stroke-width:.16;stroke-linecap:square}
+.sheet .refused{stroke:var(--evidence);stroke-width:.12;stroke-dasharray:.28 .2}
+.sheet .touch{fill:none;stroke:var(--evidence);stroke-width:.09}
+.sheet .unjudged{fill:none;stroke:rgba(11,15,25,.28);stroke-width:.07;stroke-dasharray:.16 .2}
+.sheet .admitted{fill:var(--porcelain);stroke:var(--ink);stroke-width:.06;filter:drop-shadow(0 .35px .5px rgba(11,15,25,.35))}
+.sheet .note{font:400 .42px var(--mono);fill:var(--ink3)}
+.sheet .note.ev{fill:var(--evidence)}
+.plate figcaption{margin-top:12px}
+.legend{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px 18px;font:400 11.5px/1.4 var(--mono);color:var(--ink3)}
+.legend span{display:inline-flex;align-items:center;gap:7px}.legend .ev{color:var(--evidence)}
+.legend i{display:inline-block;width:22px;height:0;border-top:3px solid var(--ink)}
+.legend i.k-ref{border-top:2px dashed var(--evidence)}.legend i.k-un{border-top:1.5px dotted rgba(11,15,25,.45)}
+.legend i.k-adm{height:12px;border:1.5px solid var(--ink);background:var(--porcelain);width:16px}
+.ops{list-style:none;display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.ops button{font:400 14px/1 var(--mono);padding:9px 11px;border-radius:8px;border:1px solid rgba(11,15,25,.22);background:rgba(255,255,255,.6);color:var(--ink)}
+.ops button[data-state="ok"]{border-color:var(--ink)}
+.ops button[data-state="refused"]{border-color:var(--evidence);color:var(--evidence);background:#fff}
+.ops button[data-state="unjudged"]{color:var(--ink3);border-style:dashed}
+.ops button[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:2px}
+.op-detail{min-height:4.5em;max-width:46ch;font:400 14.5px/1.5 var(--sans);color:var(--ink2)}
+.op-detail b{font:400 12px/1.4 var(--mono);letter-spacing:.06em;color:var(--ink);display:block;margin-bottom:4px}
+.op-detail b.ev{color:var(--evidence)}
+.verdict2{margin-top:48px;font:italic 330 clamp(30px,4.2vw,62px)/1.08 var(--serif);letter-spacing:-.03em;opacity:0;transition:opacity 1s;max-width:22ch}
+.verdict2.in{opacity:1}
+.why2{margin-top:22px}
+.ghost-draw{position:absolute;right:calc(var(--gut) + 2vw);bottom:9vh;width:clamp(120px,15vw,210px);z-index:-1;overflow:visible}
+.ghost-draw .h{fill:none;stroke:rgba(11,15,25,.2);stroke-width:.08}
+.ghost-draw .ev{fill:none;stroke:var(--evidence);stroke-width:.09;opacity:.6}
+
 @media(max-width:760px){
   #ask{padding:96px 20px 64px}
+  #draw{padding:84px 20px 70px}
+  .board{grid-template-columns:1fr}
+  .ghost-draw{position:relative;right:auto;bottom:auto;align-self:flex-start;margin-top:24px;width:140px}
   .ghost{position:relative;right:auto;top:auto;align-self:flex-end;margin-top:28px;font-size:clamp(72px,26vw,120px)}   /* its own line on a phone, between the choice and the closing question: never across the question */
   #correct{padding:84px 20px 70px}
   .illus{text-align:left}
@@ -134,12 +174,13 @@ a{color:inherit;text-underline-offset:3px}
   <h1 id="q">It looks right.</h1>
   <p class="sub">Would you let it happen?</p>
   <div class="choices" role="group" aria-label="Choose what you would do">
-    <button class="choice" type="button" aria-disabled="true" title="This encounter is still being built"><span class="name">Draw</span><span class="meta">in development</span></button>
+    <button class="choice" type="button" data-go="draw"><span class="name">Draw</span><span class="meta" data-meta="draw"></span></button>
     <button class="choice" type="button" data-go="correct"><span class="name">Correct</span><span class="meta" data-meta="correct"></span></button>
     <button class="choice" type="button" aria-disabled="true" title="This encounter is still being built"><span class="name">Execute</span><span class="meta">in development</span></button>
     <button class="choice" type="button" aria-disabled="true" title="This encounter is still being built"><span class="name">Record</span><span class="meta">in development</span></button>
   </div>
   <div class="ghost" aria-hidden="true" hidden></div>
+  <svg class="ghost-draw" viewBox="-1 -1 14 14" aria-hidden="true" hidden></svg>
   <div class="close" hidden>
     <h2>Which mistake can your business not afford to make?</h2>
     <form id="describe">
@@ -148,6 +189,33 @@ a{color:inherit;text-underline-offset:3px}
       <button class="btn send" type="submit">Describe it to CytherAI →</button>
       <p class="note">This opens your mail app with what you wrote; nothing is sent from this page.</p>
     </form>
+  </div>
+</section>
+
+<section id="draw" hidden aria-labelledby="dt">
+  <div class="top">
+    <p class="label">Draw · a shape that looks right</p>
+    <p class="illus">Judged in your browser by this site's real boundary engine (<a href="../../js/instrument.js">js/instrument.js</a>): a toy grammar of rectilinear profiles, not CytherCAD itself.</p>
+  </div>
+  <h2 id="dt"><span>Would you release this?</span></h2>
+  <div class="board">
+    <figure class="plate">
+      <svg class="sheet" viewBox="-1 -1 14 14" role="img" aria-label="The proposed drawing: two squares, one above and to the right of the other, meeting at a single corner."></svg>
+      <figcaption class="label" data-n="caption">Proposed drawing.</figcaption>
+      <p class="legend" hidden></p>
+    </figure>
+    <div class="side">
+      <div class="decide"><button class="btn" type="button" data-act="release">Release it</button></div>
+      <p class="label ops-title" hidden>The instruction, one operation at a time</p>
+      <ol class="ops" aria-label="The drawing's operations"></ol>
+      <div class="op-detail" aria-live="polite"></div>
+      <p class="status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+  <p class="verdict2" aria-live="polite"></p>
+  <div class="why why2">
+    <p>The engine judged the instruction, not the picture. It stopped at the first operation it could not admit; what follows that point was never judged, and is shown only as a faint preview.</p>
+    <div class="acts"><button class="btn" type="button" data-act="alt">Try a valid alternative</button><button class="btn ghosted" type="button" data-act="back">Back to the question</button></div>
   </div>
 </section>
 
@@ -200,6 +268,8 @@ a{color:inherit;text-underline-offset:3px}
   </div>
 </section>
 
+<script src="../../js/manifest.js" defer></script>
+<script src="../../js/instrument.js" defer></script>
 <script src="exception.js" defer></script>
 </body>
 </html>
