@@ -268,7 +268,8 @@ or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`),
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
 build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
-admitted states only; headers contract and Pages' limits in `docs/deploy.md` §7). **Developer page:** `pages/runner.html` loads
+admitted states only; headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
+2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them). **Developer page:** `pages/runner.html` loads
 `engine/trajectory-engine.js` and its `.test.js` — linked from no page, not in
 `deploy.paths`, not precached, unstamped.
 
