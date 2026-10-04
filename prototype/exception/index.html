@@ -42,8 +42,6 @@ a{color:inherit;text-underline-offset:3px}
 .choices{margin-top:clamp(48px,8vh,88px);display:flex;flex-wrap:wrap;gap:0 clamp(18px,3vw,44px);font:400 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
 .choice{display:flex;flex-direction:column;gap:12px;padding:10px 0;text-align:left}
 .choice .name{color:var(--ink);border-bottom:1px solid currentColor;padding-bottom:4px}
-.choice[aria-disabled="true"]{cursor:default}
-.choice[aria-disabled="true"] .name{color:var(--ink3);border-bottom-style:dotted}
 .choice .meta{font-size:10.5px;letter-spacing:.08em;color:var(--ink3);min-height:1.5em}
 .choice .meta b{font-weight:400;color:var(--evidence)}
 /* what you tried to do becomes the page: the correction that never happened, hollow, behind the question */
@@ -176,8 +174,8 @@ a{color:inherit;text-underline-offset:3px}
   <div class="choices" role="group" aria-label="Choose what you would do">
     <button class="choice" type="button" data-go="draw"><span class="name">Draw</span><span class="meta" data-meta="draw"></span></button>
     <button class="choice" type="button" data-go="correct"><span class="name">Correct</span><span class="meta" data-meta="correct"></span></button>
-    <button class="choice" type="button" aria-disabled="true" title="This encounter is still being built"><span class="name">Execute</span><span class="meta">in development</span></button>
-    <button class="choice" type="button" aria-disabled="true" title="This encounter is still being built"><span class="name">Record</span><span class="meta">in development</span></button>
+    <!-- Execute (AWC-OS) and Record (SijilOS) are parked until each has a defensible case: two finished encounters with
+         distinct lessons, not four slots. Their buttons return here when they do. -->
   </div>
   <div class="ghost" aria-hidden="true" hidden></div>
   <svg class="ghost-draw" viewBox="-1 -1 14 14" aria-hidden="true" hidden></svg>
