@@ -19,8 +19,8 @@ const state = { draw: { refusedAt: -1, admitted: false }, correct: { tried: fals
 const CI = window.CytherInstrument, CM = window.CytherManifest, D = $("#draw");
 const tok = s => s === "Z" ? { k: "Z", s: "Z" } : { k: s[0], sg: s[1] === "+" ? 1 : -1, mg: +s.slice(2), s: s[0] + (s[1] === "+" ? "+" : "−") + s.slice(2) };
 const PICTURE = { toks: "H+3 V+3 H+3 V+3 H-3 V-3 H-3 Z".split(" ").map(tok), caption: "Proposed drawing.",
-  because: "The two squares would meet at a single point: a part held together by nothing." };
-const VALID = { toks: "H+3 V+2 H+2 V+3 H-3 V-2 H-2 Z".split(" ").map(tok), caption: "A valid alternative: the same idea, joined by material." };
+  because: "The squares touch at one point. This drawing language requires a non-self-touching outline." };
+const VALID = { toks: "H+3 V+2 H+2 V+3 H-3 V-2 H-2 Z".split(" ").map(tok), caption: "A valid alternative: the same idea, the squares overlapping." };
 const RULE = { CROSSES: "no move may touch the outline already drawn" };
 const corners = toks => { let x = 6, y = 6; const v = [[x, y]]; for (const t of toks) { if (t.k === "Z") { v.push([6, 6]); break; } if (t.k === "H") x += t.sg * t.mg; else y += t.sg * t.mg; v.push([x, y]); } return v; };
 const at = ([x, y]) => `${x} ${12 - y}`, where = ([x, y]) => `(${x}, ${y})`;
@@ -52,7 +52,7 @@ function detail(p, i) {
   $$(".ops button", D).forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.i === i)));
   const box = $(".op-detail", D);
   if (st === "ok") box.innerHTML = t.k === "Z" ? `<b>${n} · accepted</b>It closes the outline. The kernel then rebuilt the whole program on its own and agreed.`
-                                               : `<b>${n} · accepted</b>From ${where(v[i])} to ${where(v[i + 1])}.`;
+                                               : `<b>${n} · accepted step</b>From ${where(v[i])} to ${where(v[i + 1])}. A step, not a program: nothing is admitted until the outline closes and the kernel agrees.`;
   else if (st === "refused") box.innerHTML = `<b class="ev">${n} · refused · ${p.why}</b>It returns to ${where(p.touch)}, a corner the outline already passed. ${p.because}<br><span class="label">Rule: ${RULE[p.why] || p.why}.</span>`;
   else box.innerHTML = `<b>${n} · never judged</b>The engine stops at the first operation it cannot admit; this one was never reached.`;
 }
@@ -75,7 +75,7 @@ async function judgeAndDraw(p) {
     $$(".ops button", D).filter(b2 => +b2.dataset.i > r.at).forEach(b2 => (b2.dataset.state = "unjudged"));
     detail(p, r.at);
     $(".status", D).textContent = `Refused at operation ${r.at + 1} of ${p.toks.length} · ${r.why}`;
-    legend(`<span><i class="k-seg"></i>accepted by the engine</span><span class="ev"><i class="k-ref"></i>refused</span><span><i class="k-un"></i>preview, never judged</span>`);
+    legend(`<span><i class="k-seg"></i>accepted steps · incomplete program</span><span class="ev"><i class="k-ref"></i>refused</span><span><i class="k-un"></i>preview, never judged</span>`);
     return r;
   }
   /* admitted: the closed program, rebuilt by the kernel, becomes something that exists */
@@ -98,7 +98,7 @@ async function alternative() {   /* judged on its own; it completes only if the 
   propose(VALID); await wait(900);
   const r = await judgeAndDraw(VALID);
   state.draw.admitted = r.ok && r.kernel;
-  if (state.draw.admitted) $(".verdict2", D).textContent = "Joined by material, not by a point. Admitted.";
+  if (state.draw.admitted) $(".verdict2", D).textContent = "The same idea, an outline that never touches itself. Admitted.";
 }
 propose(PICTURE);
 $('[data-act="release"]', D).addEventListener("click", release);
@@ -197,7 +197,6 @@ function back() {
 }
 $$("[data-go]").forEach(b => b.addEventListener("click", () => show(b.dataset.go)));
 $$('[data-act="back"]').forEach(b => b.addEventListener("click", back));
-$$('.choice[aria-disabled="true"]').forEach(b => b.addEventListener("click", e => e.preventDefault()));
 $("#describe").addEventListener("submit", e => {
   e.preventDefault();
   const text = $("#mistake").value.trim(); if (!text) return;
