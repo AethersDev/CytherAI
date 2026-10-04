@@ -307,7 +307,7 @@ class SiteContractTests(unittest.TestCase):
         fetches past the HTTP cache, commits only when index.html's build stamp is
         this cache's own, and the fetch handler reads this build's cache alone.
         """
-        install = SW_SOURCE[SW_SOURCE.index("addEventListener('install'"):SW_SOURCE.index("addEventListener('activate'")]
+        install = SW_SOURCE[SW_SOURCE.index("addEventListener('install'"):SW_SOURCE.index("addEventListener('message'")]
         self.assertIn("new Request(a, { cache: 'reload' })", install, "install must bypass the HTTP cache")
         self.assertNotIn("addAll", install, "addAll consults the HTTP cache")
         self.assertIn('/<meta name="build-hash" content="([0-9A-F]+)">/', install)
@@ -319,6 +319,13 @@ class SiteContractTests(unittest.TestCase):
         self.assertIn("caches.open(CACHE).then(function (cache) {\n      return cache.match(key)", fetch_handler,
                       "the handler reads this build's cache only, never a sibling's")
         self.assertNotIn("caches.match(", fetch_handler)
+        # A new build never takes over a page that may still be loading: in Safari (iOS 26.5 simulator) a worker that skipped
+        # waiting answered a returning reader's previous-build page mid-load with this build's modules, and it died of its own
+        # SRI check. It waits until a page whose modules have all run asks it in.
+        self.assertNotIn("skipWaiting", install, "install must not take over open pages")
+        self.assertIn("if (e.data === 'take-over') self.skipWaiting();", SW_SOURCE)
+        self.assertIn('postMessage("take-over")', (ROOT / "js/unhappened.js").read_text(encoding="utf-8"),
+                      "the page that has loaded is the one that lets the new build in")
 
     def test_manifest_icons_are_valid_and_deployed(self) -> None:
         manifest = json.loads((ROOT / "manifest.webmanifest").read_text(encoding="utf-8"))

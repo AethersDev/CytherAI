@@ -80,7 +80,12 @@ module) or verifier (used by a tool), and a symbol with no caller fails verifica
    outlined and logged. The copy is already bytes: a reader without scripts has it.
 2. It asks for a WebGL2 context with a float colour buffer. Without one, `.no-gl` shows the
    static cover and hides the HUD; the copy follows the scroll, one frame per scroll or
-   resize, and the page then requests nothing.
+   resize, and the page then requests nothing. With one, it starts all nine programs at
+   once and asks about them only when the driver has finished (`KHR_parallel_shader_compile`;
+   a cold iOS link can take seconds). Frames before that draw nothing; past `BUDGET` (600 ms)
+   the opening is given up and the copy shows; the canvas fades in on its first frame
+   (`.lit`). A device whose median frame stays over 90 ms at the lowest resolution is
+   `starve()`d to the cover.
 3. A `#trace=SEED.INDEX.HASH` fragment is replayed locally; if it reproduces its own hash
    the sent proposer opens the page, otherwise `#unsent` says so and the page opens as usual.
 4. The opening (skipped with reduced motion, without WebGL, or when the page loads
@@ -108,7 +113,8 @@ module) or verifier (used by a tool), and a symbol with no caller fails verifica
 
 At steady state nothing runs: once no proposal is arriving, no mark or ghost is fading, no
 solid is rising and the camera is at rest, `settled()` stops the frame loop and `#still`
-says so. Scroll, resize, the fonts arriving, a hover over a trace or solid, or a gesture
+says so. That happens at the end of the story, and anywhere after two minutes without input
+(`IDLE`: the rain stops, everything lands, the page rests until it is touched again). Scroll, resize, the fonts arriving, a hover over a trace or solid, or a gesture
 calls `wake()`.
 
 The GPU passes, in order: a fullscreen scene pass (the black candidate profiles raymarched,
@@ -164,6 +170,16 @@ The service worker precaches the pages, the four modules and the three `adii/fon
 the homepage draws its type with, installs one build or
 nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
 navigation to the scope root to cached `index.html`, and removes older caches on activate.
+A new build's worker waits: it never takes over a page that may still be loading. Safari
+checks for the update at the navigation itself, so a worker that skipped waiting answered a
+returning reader's previous-build page, mid-load, with this build's modules, and the page
+died of its own SRI check; Safari's script requests carry no integrity a worker could read,
+and the page is not reliably among the worker's clients when it activates, so no rule inside
+the worker can tell such a page apart. Instead the page decides: once all of its own modules
+have run, `js/unhappened.js` sends `take-over` to a waiting worker, and the next load is the
+new build. A page from before this rule never asks; its tab moves to the new build once no
+page of the old build is open. Reproduced, and the fix verified with a negative control, in
+the iOS 26.5 simulator (`docs/deploy.md` §5g).
 
 ## Verification map
 

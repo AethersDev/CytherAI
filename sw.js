@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-D215BA534299A451';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-A93820E17D59245C';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -53,10 +53,18 @@ self.addEventListener('install', function (e) {
           return Promise.all(responses.map(function (r, i) { return cache.put(ASSETS[i], r); }));
         });
       });
-    }).then(function () {
-      return self.skipWaiting();
     })
   );
+});
+
+// A new build's worker WAITS: it never takes over a page that may still be loading. Safari checks for an update at the
+// navigation itself, so a worker that skipped waiting took over a returning reader's previous-build page mid-load, answered
+// its module requests with this build's bytes, and the page died of its own SRI check (reproduced in the iOS 26.5 simulator,
+// a module whose bytes differ between builds; Safari's requests carry no integrity a worker could read). A page whose own
+// modules have all run asks the waiting worker in (js/unhappened.js): taking over a loaded page is harmless. Otherwise the
+// new build arrives once no page of the old one is open.
+self.addEventListener('message', function (e) {
+  if (e.data === 'take-over') self.skipWaiting();
 });
 
 // Clean old caches on activate
