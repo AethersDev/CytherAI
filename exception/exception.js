@@ -1,4 +1,4 @@
-/* THE EXCEPTION — prototype. temptation → decision → interruption → evidence.
+/* THE EXCEPTION — an experiment linked from the front door. temptation → decision → interruption → evidence.
 
    Draw (CytherCAD) is judged by this site's real boundary engine, js/instrument.js, loaded unchanged: a toy grammar of
    rectilinear profiles, not CytherCAD itself, and the page says so. Its two programs were found through the engine before

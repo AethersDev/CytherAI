@@ -32,15 +32,15 @@ INVENTORY = {
         "verifier": ["MANIFEST", "VALIDATION", "CANON", "ADMISSION_NONCE", "CHECKSUM"],
     },
     "CytherInstrument": {
-        "production": ["biEngine"],
-        "verifier": ["audit", "judge"],
+        "production": ["biEngine", "judge"],
+        "verifier": ["audit"],
     },
     "CytherTrace": {
         "production": ["VERSION", "code", "GLSL", "svg"],
         "verifier": [],
     },
 }
-SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js"]
+SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js", "exception/index.html", "exception/exception.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)

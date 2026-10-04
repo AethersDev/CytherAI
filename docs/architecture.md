@@ -142,6 +142,7 @@ the tone map. The causal light is vertical and fixed; the cursor's fill casts no
 | Route | Runtime |
 |---|---|
 | `/` or `/index.html` | THE UNHAPPENED, four modules |
+| `/exception/` | THE EXCEPTION, an experiment linked from the homepage: `js/manifest.js`, `js/instrument.js` (judge) and `exception/exception.js`, all SRI'd |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |
