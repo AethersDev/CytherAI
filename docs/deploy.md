@@ -529,9 +529,82 @@ the left scrim had already faded. The law now reads in ink on a soft paper veil
 and the scrim keeps ≥ .46 of paper across the whole copy column. The HUD also printed
 "1 proposed operations"; it now agrees in number.
 
+**Release candidate, build `D215BA534299A451` (2026-10-04).** The review of the acceptance moment and the
+release checks, against the same harness extended (`#unhappened_settle_D215BA534299A451`,
+`#reading_ink_D215BA534299A451`; receipts on CY-TEMP-001 and CY-SEM-003):
+
+| Profile | Settle | Frames in 3 s once settled | Reading-ink elements · worst | External requests | Console errors | Offline reload |
+|---|---:|---:|---|---|---:|---|
+| 1440×900 | 1.8 s | 0 | 143 · worst 5.01:1 | 0 of 22 | 0 | same build |
+| 390×844 · dpr 3 | 1.54 s | 0 | 133 · worst 4.85:1 | 0 of 22 | 0 | same build |
+| 320×844 · dpr 2 | 1.54 s | 0 | 133 · worst 4.83:1 | 0 of 22 | 0 | — |
+| 1440×900 · reduced motion | 1.03 s | 0 | 143 · worst 5.01:1 | 0 of 11 | 0 | — |
+| 1440×900 · no WebGL | 0.0 s | 0 | 122 · worst 5.24:1 | 0 of 11 | 0 | — |
+
+- **Acceptance.** Scene 3 thins the rain, watches one proposer at a fixed place, recedes the
+  pane's memory and follows that proposer's next real accepted step from strike to vertex.
+  The black candidates were invisible before this build in every scene: their lines wrote no
+  distance, so depth of field blurred them as if they lay at the floor behind them. They now
+  render as v4 intended, black under the pane. Copy: *An accepted step is not yet an admitted
+  program.* Whether a stranger reads it so is §5e, not a harness.
+- **Without a mouse.** Keyboard: 20 stops, every one with a focus ring and fully visible (a
+  focused section scrolls to its centre), the studio last; ← reads *REFUSED · AXIS ORDER · t…*, ↑ reads
+  *ADMITTED · PRG-354F2E1…*, through `#receipt` (`role="status"`); Esc clears. Touch (390×844): a tap on a trace
+  reads the same receipt the keys do and proposes nothing; a drag on the glass proposes.
+- **200% zoom.** 720×450 and 640×360 CSS px: no copy clipped in any section, no overflow (the
+  first run found four sections clipped at 640×360; a short-viewport rule fixed them).
+- **No WebGL.** The cover is captioned with the three relations; the law reads in the copy
+  column; reading ink ≥ 5.24:1 including the captions.
+- **The artifact.** 9 pages, 33 local references, none broken; every film, CV, deck and
+  image answers.
+- **Upgrade from the live site.** A visitor holding the live build (`9236E6A692F915D4`, `0c839ac adii: full names and CVs`, its worker
+  and cache): the first load after this build is deployed is still the old build from its
+  cache; the new worker installs in 2.0 s, the old cache is deleted, and the next load is
+  `D215BA534299A451` with every module executing and no console error.
+- **Referrer.** Every page now withholds the referrer itself (`no-referrer`), the one §1
+  header GitHub Pages cannot send and a page can.
+
 **Open, named:** CY-TEMP-002 (the three transitions, human-reviewed) and CY-ORIGIN-001 (§7)
 are NOT_EVALUATED; Safari/WebKit, VoiceOver, a physical phone, 200% zoom and 120 Hz
 scrolling remain the owner's.
+
+## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
+
+CY-TEMP-002 is HUMAN_REVIEWED: no harness can establish that a stranger tells acceptance from
+admission. Run it against the exact release candidate (its `<meta name="build-hash">`); a later
+byte change expires it like any other receipt.
+
+1. **Who.** Someone who has not seen the site and is told nothing about it. One per sitting.
+2. **Setup.** A private window, the site fresh, the opening allowed to run. They scroll at
+   their own pace. Note the device, browser and build. Do not explain anything, before or
+   during.
+3. **Ask, once they reach *Inside your walls*:**
+   - *"Show me something that was refused."* Expected: a bead that stops at the glass, or its
+     cobalt mark.
+   - *"Show me something that got through. Was it finished?"* Expected: a black bead
+     crossing, or the black outline under the glass, and *not finished / not real yet*.
+   - *"When did something become real?"* Expected: a white solid rising out of its shadow on
+     the floor, after a program completed.
+4. **Result.** PASS only if all three are answered without prompting. If a black outline or a
+   crossed bead is called real, admitted or done, acceptance is still being read as admission:
+   FAIL. Refine scene 3 again and review the new build.
+5. **Record.** Their words verbatim, the build, device, browser and date, and any prompt that
+   was needed. The record is an observation in the evidence ledger
+   (`human_review_<build>`) and a `HUMAN_PERCEPTUAL_EVALUATOR` · `HUMAN_REVIEWED` receipt on
+   CY-TEMP-002 (`verification_identity: EXTERNAL`). The reviewer is not named.
+
+## 5f. The owner's device checks
+
+What a headless browser cannot stand in for, against the same build, appended as observed:
+
+| Check | What to confirm |
+|---|---|
+| Safari (macOS) | the studio renders; Develop → Console shows no error; reduced motion and the settled halt (*Nothing is changing · rendering stopped*) |
+| A real touch phone (iOS Safari, Android Chrome) | a tap on a trace reads its receipt; a drag on the glass proposes; scrolling is smooth; the HUD reads |
+| Keyboard only | Tab reaches the nav, every section's links (each section scrolls to full view), the footer, then the studio; ← → ↑ ↓ read receipts; Esc clears; the focus ring is visible throughout |
+| VoiceOver (macOS and iOS) | headings and copy in order; the studio announces its label; each arrow key's receipt is spoken |
+| 200% zoom (⌘+) | no copy clipped in any section (Chrome emulation at 640×360 and 720×450 found none, §5d) |
+| 120 Hz (ProMotion) | the scrubbed camera does not stutter; the page still settles and stops |
 
 ## 6. Launch gate
 
@@ -582,6 +655,24 @@ origin contract) therefore cannot PASS on Pages as the contract is written; it s
 NOT_EVALUATED until either the origin can send the headers or the contract records Pages'
 limits as accepted. That decision is the owner's, and it is a release-disposition entry,
 not an edit to the obligation.
+
+**OWNER DECISION REQUIRED — the hosting contract.** One of:
+
+- **Accept Pages' limits.** Record a release disposition on CY-ORIGIN-001 naming what Pages
+  cannot do and why each is acceptable here: no `frame-ancestors` (the site has no
+  authenticated or state-changing action; contact composes a `mailto:`); no `nosniff` (every
+  script is same-origin and SRI-pinned); no `Permissions-Policy` (nothing requests camera,
+  microphone or location); `max-age=600` (the worker installs one build or nothing, so a
+  returning reader sees at most ten minutes of the previous build, never a mixed one). The
+  referrer is withheld by every page itself (`<meta name="referrer" content="no-referrer">`,
+  pinned by `tools/test-site.py`). Then verify the live origin against the amended contract.
+- **Move to an origin that sends the headers** (a `_headers` file on Cloudflare Pages or
+  Netlify, or a proxy in front of Pages), keep the §1 contract as written, and verify it there
+  with §4.
+
+Either way: keep the current `gh-pages` commit as the rollback artifact (`git branch
+rollback/<build> origin/gh-pages` before publishing), merge to `master`, publish the exact
+tested build, and run §4 against the live origin before anything is called certified.
 
 ## Next work — external certification and owner attestation
 

@@ -91,8 +91,15 @@ module) or verifier (used by a tool), and a symbol with no caller fails verifica
    the stroke; accepted → black, joining its candidate profile under the pane; admitted →
    the program's profile lands as a licence in the next perimeter bay, held 0.4 s, then
    porcelain extrudes out of it over 0.9 s. Scene 8 extrudes the standing solids into
-   walls; nothing is moved.
-6. A press-and-drag on the glass seeds the visitor's proposer from the gesture; its first
+   walls; nothing is moved. Scene 3 thins the rain to 4/s, gives 60% of it to one proposer
+   (`FEATURE`) assembling at a fixed `PLACE` under the camera, recedes the pane's memory
+   (`uMemory`, the stamped traces only; live receipts stay whole), and follows that
+   proposer's next accepted step from strike to vertex (`followed`): its segment, and any
+   later one in the same attempt, is drawn only once its bead arrives; a new attempt ends
+   the follow.
+6. A press that does not travel reads the receipt under it (the touch path); a keyboard
+   user reads them with the arrows on the focused studio; both go through `#receipt`
+   (`role="status"`). A press-and-drag on the glass seeds the visitor's proposer from the gesture; its first
    refusal becomes the carried receipt (`#mine`) and the address `#trace=…`, written with
    `history.replaceState` and never sent.
 7. At the end (scene 9) the light travels to the carried trace and the receipt appears
@@ -106,7 +113,9 @@ calls `wake()`.
 
 The GPU passes, in order: a fullscreen scene pass (the black candidate profiles raymarched,
 the floor with its ledger texture — licence shadow and standing contact), instanced prisms
-for every admitted cell, bead impostors, black ink lines; then cobalt evidence (wires,
+for every admitted cell, bead impostors, black ink lines and, for their cores, their distance
+(so the pane covers a candidate only from the side it is on, and depth of field focuses it
+where it is, not where the floor behind it is); then cobalt evidence (wires,
 ghosts, decals) into a display-resolution target with its own occlusion, composited after
 the tone map. The causal light is vertical and fixed; the cursor's fill casts nothing.
 
