@@ -18,7 +18,8 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#EEF0F2">
-<meta name="build-hash" content="33EF803E25246693">
+<meta name="build-hash" content="D215BA534299A451">
+<meta name="referrer" content="no-referrer">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -48,6 +49,7 @@ body{font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-
 a{color:inherit}
 ::selection{background:var(--ink);color:#fff}
 #studio{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
+#studio:focus-visible{outline:2px solid var(--ink);outline-offset:-6px}
 .no-gl #studio{display:none}
 .no-gl body{background:radial-gradient(120% 90% at 70% 60%,#FFFFFF 0%,var(--bg) 60%)}
 /* without WebGL the law still holds, on paper: black with no shadow, porcelain with one, a cobalt hairline between */
@@ -60,6 +62,8 @@ a{color:inherit}
 .cover .w{left:79%;background:radial-gradient(circle at 34% 28%,#fff 0%,#f1efeb 42%,#cbc8c2 100%)}
 .cover .w::after{content:"";position:absolute;left:-6%;right:-6%;top:118%;height:18%;border-radius:50%;background:radial-gradient(closest-side,rgba(11,15,25,.34),rgba(11,15,25,.12) 60%,rgba(11,15,25,0))}
 .cover .c{left:calc(57% + min(13vw,170px) + 2vw);right:calc(21% + 2vw);top:calc(42% + min(6.5vw,85px));height:1px;width:auto;aspect-ratio:auto;border-radius:0;background:var(--evidence)}
+.cover b{position:absolute;left:0;top:calc(100% + 26px);width:max-content;max-width:max(100%,150px);font:400 11.5px/1.5 var(--mono);color:var(--ink2)}
+.cover .w b{top:calc(136% + 12px)}.cover .c b{top:auto;bottom:12px;max-width:none}
 /* reading ink needs a ground the studio cannot take away: the copy column (text ends by 42.4% of the width) and the HUD's
    band keep ≥ .46 of paper over anything drawn behind them, so ink holds 4.5:1 even over a black bead (CY-SEM-003) */
 .scrim{position:fixed;inset:0;pointer-events:none;z-index:1;
@@ -116,7 +120,6 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
 .hud b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
 .hud .note{text-align:right;max-width:62ch}
 #receipt{position:fixed;left:0;top:0;z-index:8;pointer-events:none;font:400 11.5px/1.4 var(--mono);letter-spacing:.06em;color:var(--evidence);white-space:nowrap}
-#receipt[hidden]{display:none}
 #receipt[data-kind=real]{color:var(--ink)}
 #yours,#unsent,#still{display:block}
 #yours[hidden],#unsent[hidden],#still[hidden],#copy[hidden],#mine[hidden]{display:none}
@@ -126,10 +129,12 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
 #mine b{display:block;font-weight:400;color:var(--ink);letter-spacing:.06em}#mine i{display:block;font-style:normal;color:var(--ink3)}
 
 @media(max-width:1000px){nav a:not(.btn){display:none}.hud .note{display:none}}
+
 @media(max-width:760px){
   .scrim{background:linear-gradient(0deg,rgba(238,240,242,.94) 0%,rgba(238,240,242,.75) 34%,rgba(238,240,242,0) 56%)}
   .cover i{top:18%;width:26vw}.cover .b{left:14%}.cover .w{left:60%}
   .cover .c{left:calc(14% + 30vw);right:calc(14% + 4vw);top:calc(18% + 13vw)}
+  .cover b{max-width:30vw;font-size:10.5px}
   header{padding:18px 18px}
   section{min-height:150vh}
   .copy{max-width:none;justify-content:flex-end;padding:90px 20px 96px}
@@ -139,12 +144,21 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   .mark{flex-wrap:wrap}
   .hud{padding:14px 20px}
 }
+/* short viewports (200% zoom of a laptop, a phone held sideways): every section's copy fits the page it is pinned to, and
+   the veil covers wherever that copy can fall */
+@media(max-height:540px){
+  header{padding-top:12px;padding-bottom:12px}nav .btn{height:34px}
+  .copy{padding-top:62px;padding-bottom:64px}
+  h1{font-size:clamp(28px,9.5vh,54px)}h2{font-size:clamp(26px,8.5vh,48px)}.law{font-size:clamp(22px,6.5vh,34px)}
+  .lede{margin-top:10px;font-size:15px;line-height:1.4}.acts{margin-top:14px}.btn{height:38px}.try{margin-top:10px}
+  .eyebrow{margin-bottom:8px}.mark,.cond{margin-top:10px}footer{margin-top:14px}
+  .scrim{background:linear-gradient(0deg,rgba(238,240,242,.92) 0%,rgba(238,240,242,.8) 60%,rgba(238,240,242,.62) 100%)}
+}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 </head>
 <body>
-<canvas id="studio" aria-label="A pane of glass over an empty floor. Proposals fall onto it and are judged as they strike; only admitted programs become solid."></canvas>
-<div class="cover" aria-hidden="true"><i class="b"></i><i class="c"></i><i class="w"></i></div>
+<div class="cover" aria-hidden="true"><i class="b"><b>proposed, or accepted<br>black: no consequence</b></i><i class="c"><b>refused<br>cobalt: why</b></i><i class="w"><b>admitted<br>white: it stands</b></i></div>
 <div class="scrim" aria-hidden="true"></div>
 
 <header>
@@ -169,7 +183,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="1" id="wrong">
     <div class="copy">
       <h2><span>Most proposals</span><span><em>are wrong.</em></span></h2>
-      <p class="lede">What never happens leaves evidence. Hover a trace to read it.</p>
+      <p class="lede">What never happens leaves evidence. Hover or tap a trace to read it.</p>
     </div>
   </section>
 
@@ -182,6 +196,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="3">
     <div class="copy">
       <h2><span>Only the valid</span><span><em>crosses.</em></span></h2>
+      <p class="lede">An accepted step is not yet an admitted program.</p>
     </div>
   </section>
 
@@ -240,6 +255,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   </section>
 </main>
 
+<canvas id="studio" tabindex="0" role="application" aria-label="The studio: a pane of glass over an empty floor. Proposals fall onto it and are judged as they strike; only admitted programs become solid. Left and right arrows read the refusals on the pane, newest first; up and down read the programs admitted; Escape clears."></canvas>
 <div class="hud" aria-live="off">
   <span><span><b data-t="judged">0</b> <span data-t="judgedw">proposed operations</span> judged here · <b data-t="refused">0</b> refused · <b data-t="admitted">0</b> <span data-t="admittedw">programs admitted</span></span>
     <span id="yours" hidden>Your proposer · seed <b data-t="yseed">—</b> · <b data-t="ycross">0</b> crossed · <b data-t="yref">0</b> refused <button id="copy" type="button" hidden>Copy a link to your trace</button></span>
@@ -247,12 +263,12 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
     <span id="still" hidden>Nothing is changing · rendering stopped</span></span>
   <span class="note">Every bead is one proposed operation — a token offered to extend a program — judged here by the boundary engine of the record: a toy grammar of rectilinear profiles, not CytherCAD itself. Everything standing on the floor is a program it admitted while you watched.</span>
 </div>
-<div id="receipt" hidden></div>
+<div id="receipt" role="status"></div>
 <div id="mine" hidden><span id="mineTrace"></span><span><b id="mineHash"></b>This did not happen.<i id="mineWho"></i></span></div>
 
 <script src="js/manifest.js" defer integrity="sha384-G3rj/SJ8vH07o590ZnROvlJJE79yXJT1T89J7KHfTDZmD81Zt+vjOj5PhwuiAQv/" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-tXA6nPjk3UzSUFAhJDzTbVjUj6BNdrgKTqG5m3KKZWD9QsMWzXifWEjnJxqmTGp4" crossorigin="anonymous"></script>
 <script src="js/trace.js" defer integrity="sha384-YIUC+HNwVTiPx+xMe6HX5Z/XBuFNfF8J68eE4rmcBSwWKrnFgfFcZ1znk2M12mnj" crossorigin="anonymous"></script>
-<script src="js/unhappened.js" defer integrity="sha384-TkM62gtFvf9rOFJRHgtoQYFqZNBwIDOOiA0yF3zO7GGe+9VgjfhiuqGIQQtBZQZq" crossorigin="anonymous"></script>
+<script src="js/unhappened.js" defer integrity="sha384-dekaE9XCCr3DcZXfEsC3uUUcOZSjswoll4fE071P6S8U30dGE3r/9wUZZhsCRFnp" crossorigin="anonymous"></script>
 </body>
 </html>

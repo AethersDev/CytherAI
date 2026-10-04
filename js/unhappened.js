@@ -222,6 +222,10 @@ const WIRE = [LINE_VS, `in float vA, vS, vD; out vec4 o; uniform sampler2D uScen
 void main(){ if (vD > texture(uScene, gl_FragCoord.xy / uRes).a * 1.002 + .015) discard; float g = 1. - vS * vS; o = vec4(vA * g * g); }`];
 const INK = [LINE_VS, `in float vA, vS, vD; layout(location = 0) out vec4 o; layout(location = 1) out vec4 o2;
 void main(){ float g = 1. - vS * vS; o = vec4(vec3(.012), vA * g * g); o2 = vec4(0.); }`];
+/* where a candidate's line is solid it is also there: its distance enters the scene, so the pane covers it only from the side
+   the pane is on (seen from above it lies behind the glass; seen from below, in front of it) */
+const INKD = [LINE_VS, `in float vA, vS, vD; layout(location = 0) out vec4 o; layout(location = 1) out vec4 o2;
+void main(){ float g = 1. - vS * vS; if (vA * g * g < .35) discard; o = vec4(0., 0., 0., vD); o2 = vec4(0.); }`];
 
 /* stamping: a trace into the pane's memory; a licence (r) or standing porcelain (g) into the floor's */
 const STAMP = [`layout(location=0) in vec2 aQ; layout(location=1) in vec3 aS; uniform vec2 uGH2; out vec2 vQ; flat out float vCode;
@@ -233,7 +237,7 @@ void main(){ vec2 w = aS.xy + aQ * aS.z; gl_Position = vec4((w - uFloor.xy) / uF
 
 const FINAL = [FULL, STUDIO + TRACE + `in vec2 vUV; out vec4 o;
 uniform sampler2D uScene, uTrace; uniform mat4 uInvVP, uVP; uniform vec3 uEye, uKey, uGC, uGH; uniform float uGR, uGlassOn, uTime, uExposure, uFocusD, uAspect;
-uniform vec4 uHits[24], uFocus, uIntro, uMine, uLamp; uniform vec2 uTexel; uniform sampler2D uEv, uCov;
+uniform vec4 uHits[24], uFocus, uIntro, uMine, uLamp; uniform float uMemory; uniform vec2 uTexel; uniform sampler2D uEv, uCov;
 const vec3 INK = vec3(.110, .180, .690);   /* evidence in display values: not lit, not exposed, not blurred */
 vec3 glassN(vec3 p){ const vec2 k = vec2(1., -1.); const float e = .0005; vec3 q = p - uGC;
   return normalize(k.xyy * sdRBox(q + k.xyy * e, uGH, uGR) + k.yyx * sdRBox(q + k.yyx * e, uGH, uGR) + k.yxy * sdRBox(q + k.yxy * e, uGH, uGR) + k.xxx * sdRBox(q + k.xxx * e, uGH, uGR)); }
@@ -251,7 +255,7 @@ vec3 lens(vec2 uv){
 }
 /* the pane's memory of every refusal, the ones still happening, and the one being read */
 float traceAt(vec2 xz, float px){
-  float v = min(texture(uTrace, xz / (2. * uGH.xz) + .5).r, .75);
+  float v = min(texture(uTrace, xz / (2. * uGH.xz) + .5).r, .75) * uMemory;   /* the pane's memory: kept whole, receding only while one step is watched */
   for (int i = 0; i < 24; i++) {
     vec4 h = uHits[i]; float age = uTime - h.z; if (age < 0. || age > 1.6) continue;
     vec2 q = xz - h.xy; if (dot(q, q) > .05) continue;
@@ -337,7 +341,7 @@ function gpu() {
     p.u = {}; for (let i = 0, n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS); i < n; i++) { const a = gl.getActiveUniform(p, i); p.u[a.name.replace(/\[0\]$/, "")] = { l: gl.getUniformLocation(p, a.name), t: a.type }; }
     return p;
   };
-  const P = { scene: prog(SCENE), prism: prog(PRISM), bead: prog(BEAD), wire: prog(WIRE), ink: prog(INK), stamp: prog(STAMP), licence: prog(LICENCE), final: prog(FINAL) };
+  const P = { scene: prog(SCENE), prism: prog(PRISM), bead: prog(BEAD), wire: prog(WIRE), ink: prog(INK), inkd: prog(INKD), stamp: prog(STAMP), licence: prog(LICENCE), final: prog(FINAL) };
   const VEC = { [gl.FLOAT]: "uniform1fv", [gl.FLOAT_VEC2]: "uniform2fv", [gl.FLOAT_VEC3]: "uniform3fv", [gl.FLOAT_VEC4]: "uniform4fv" };
   const set = (p, o) => { gl.useProgram(p); for (const k in o) { const u = p.u[k]; if (!u) continue; const v = o[k];
     if (u.t === gl.FLOAT_MAT4) gl.uniformMatrix4fv(u.l, false, v); else if (u.t === gl.INT || u.t === gl.SAMPLER_2D) gl.uniform1i(u.l, v); else if (u.t === gl.UNSIGNED_INT) gl.uniform1ui(u.l, v); else gl[VEC[u.t]](u.l, typeof v === "number" ? [v] : v); } };
@@ -426,7 +430,9 @@ function gpu() {
     if (f.nInk) {                                                /* black candidates: seen, and nothing more */
       gl.enable(gl.BLEND); gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ZERO, gl.ONE); gl.depthMask(false); gl.depthFunc(gl.LEQUAL);
       set(P.ink, Object.assign({ uRes: [RT.w, RT.h], uPx: RT.w / innerWidth }, common)); drawLines("ink", bInk, inks, f.nInk);
-      gl.depthMask(true); gl.disable(gl.BLEND);
+      gl.disable(gl.BLEND); gl.colorMask(false, false, false, true); gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.NONE]);   /* distance only */
+      set(P.inkd, Object.assign({ uRes: [RT.w, RT.h], uPx: RT.w / innerWidth }, common)); drawLines("ink", bInk, inks, f.nInk);
+      gl.colorMask(true, true, true, true); gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1]); gl.depthMask(true);
     }
     gl.disable(gl.DEPTH_TEST);
     /* evidence wires: at display resolution, unlit, hidden only by what stands in front of them */
@@ -440,7 +446,7 @@ function gpu() {
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.viewport(0, 0, canvas.width, canvas.height);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, RT.tex); gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, trTex);
     gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, EV.tex); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, RT.cov);
-    set(P.final, Object.assign({ uScene: 0, uTrace: 1, uEv: 2, uCov: 3, uGR: GLASS.r, uExposure: 2.45, uHits: f.hits, uFocus: f.focusTrace, uIntro: f.intro, uMine: f.mine, uLamp: f.lamp, uFocusD: f.focusD, uAspect: RT.w / RT.h, uTexel: [1 / RT.w, 1 / RT.h] }, common));
+    set(P.final, Object.assign({ uScene: 0, uTrace: 1, uEv: 2, uCov: 3, uGR: GLASS.r, uExposure: 2.45, uHits: f.hits, uFocus: f.focusTrace, uIntro: f.intro, uMine: f.mine, uLamp: f.lamp, uMemory: f.memory, uFocusD: f.focusD, uAspect: RT.w / RT.h, uTexel: [1 / RT.w, 1 / RT.h] }, common));
     gl.bindVertexArray(V.empty); gl.drawArrays(gl.TRIANGLES, 0, 3);
   }
   return { draw, beads, wires, inks, stamps, prisms, aspect: () => canvas.width / canvas.height };
@@ -452,6 +458,9 @@ const TR = window.CytherTrace;
 const anchorFor = pp => { const h = CM.fnv(hex(pp.seed) + "/" + pp.attempt) >>> 0; return [((h & 0xffff) / 65535 - .5) * 4.9, ((h >>> 16) / 65535 - .5) * 2.9]; };
 const proposer = (seed, user) => { const pp = { e: CI.biEngine(seed), seed, user, n: 0, path: [[6, 6]], toks: [], refused: 0, crossed: 0, attempt: 0, ends: false }; pp.anchor = anchorFor(pp); return pp; };
 const RAIN = [3, 4, 5, 8, 9, 10, 13, 14, 16, 17, 19, 20].map(s => proposer(s, false));   /* seed 3's first proposal is refused: the opening */
+/* while "only the valid crosses" is on screen, one proposer assembles in one place the camera watches, and receives most of
+   the thinned rain; its beads strike all around that place, so an accepted one is seen travelling to join its candidate */
+const FEATURED = 1, FEATURE = RAIN[FEATURED], PLACE = [1.15, .5];
 let yours = null, opening = null, rainTurn = 0;
 const YOURS = RAIN.length, OPENING = RAIN.length + 1, byOwner = i => i < RAIN.length ? RAIN[i] : i === YOURS ? yours : opening;
 const tally = { judged: 0, accepted: 0, refused: 0 };            /* operations; admitted programs are admitted.length */
@@ -534,18 +543,34 @@ function spawn(x, y, z, v, who, stop = false) {
     spawnAt = i + 1; bx[i] = x; by[i] = y; bz[i] = z; vx[i] = (rand() - .5) * .2; vy[i] = v; vz[i] = (rand() - .5) * .2;
     st[i] = 0; rad[i] = BR * (stop ? 1.5 : .82 + rand() * .36); owner[i] = who; still[i] = stop ? 1 : 0; return; }
 }
+/* acceptance, followed: in "only the valid crosses" the next operation the engine accepts (and only after it has accepted
+   it) is carried, still black, from where it struck to the vertex it adds; its segment joins the candidate when it arrives */
+const CROSS = 1.1;
+let followed = null;
 function simulate(now, dt, rain) {
   const n = Math.floor(rain * dt + rand());
-  for (let k = 0; k < n; k++) { const j = rainTurn++ % RAIN.length, [x, z] = inPane(RAIN[j].anchor[0] + (rand() - .5) * .9, RAIN[j].anchor[1] + (rand() - .5) * .7); spawn(x, 6.2 + rand() * 1.2, z, -1.5 - rand() * .9, j); }
+  const watched = weight(3) > .5;
+  if (watched !== (FEATURE.home === PLACE)) { FEATURE.home = watched ? PLACE : null; if (watched) FEATURE.anchor = PLACE; }
+  for (let k = 0; k < n; k++) {
+    const j = watched && rand() < .6 ? FEATURED : rainTurn++ % RAIN.length, wide = j === FEATURED && watched ? 2 : 1;
+    const [x, z] = inPane(RAIN[j].anchor[0] + (rand() - .5) * .9 * wide, RAIN[j].anchor[1] + (rand() - .5) * .7 * wide); spawn(x, 6.2 + rand() * 1.2, z, -1.5 - rand() * .9, j);
+  }
   for (let i = 0; i < MAXB; i++) {
     if (st[i] === 9) continue;
-    bx[i] += vx[i] * dt; by[i] += vy[i] * dt; bz[i] += vz[i] * dt;
-    const r = rad[i];
+    const r = rad[i], f = followed && followed.i === i ? followed : null;
+    if (f) {
+      const k = ease(clamp01((now - f.t0) / CROSS));
+      bx[i] = lerp(f.from[0], f.to[0], k); by[i] = lerp(f.from[1], f.to[1], k); bz[i] = lerp(f.from[2], f.to[2], k);
+      if (k >= 1) { st[i] = 9; f.arrived = now; }   /* it has joined: the bead is now the outline's newest vertex */
+    } else { bx[i] += vx[i] * dt; by[i] += vy[i] * dt; bz[i] += vz[i] * dt; }
     if (st[i] === 0 && onGlass(bx[i], bz[i]) && by[i] - r <= TOP && by[i] > BOTTOM) {   /* the instant of judgment */
-      if (judge(byOwner(owner[i]), bx[i], bz[i], now, still[i] === 1) === "rej") { st[i] = 9; R.beads[i * 4 + 3] = 0; continue; }   /* refused: it ceases; the trace remains */
+      const pp = byOwner(owner[i]), v = judge(pp, bx[i], bz[i], now, still[i] === 1);
+      if (v === "rej") { st[i] = 9; R.beads[i * 4 + 3] = 0; continue; }   /* refused: it ceases; the trace remains */
       st[i] = 3; vx[i] = vz[i] = 0;                               /* accepted into its attempt: it crosses, still black, and joins the candidate below */
+      if (v === "ok" && !followed && weight(3) > .6 && pp === FEATURE)
+        followed = { i, pp, k: pp.path.length - 2, attempt: pp.attempt, from: [bx[i], by[i], bz[i]], to: under(pp.anchor, CS)(pp.path[pp.path.length - 1]), t0: now, arrived: -1 };
     }
-    if ((st[i] === 3 && by[i] < BOTTOM - .05) || by[i] < -1) st[i] = 9;   /* black that missed the pane passes through the floor: nothing stops it */
+    if ((st[i] === 3 && !f && by[i] < BOTTOM - .05) || by[i] < -1) st[i] = 9;   /* black that missed the pane passes through the floor: nothing stops it */
     const d = R.beads; d[i * 4] = bx[i]; d[i * 4 + 1] = by[i]; d[i * 4 + 2] = bz[i]; d[i * 4 + 3] = st[i] === 9 ? 0 : r;
   }
 }
@@ -558,7 +583,7 @@ const SC = [
   { e: [7.9, 4.5, 9.8], t: [.25, 1.45, 0], f: 30, rain: 36 },        /* the model proposes */
   { e: [3.9, 3.3, 4.6], t: [.55, 2.2, .15], f: 34, rain: 46 },       /* most proposals are wrong */
   { e: [1.1, 2.2, 1.25], t: [-2.4, 2.15, -1.3], f: 50, rain: 40 },   /* inside the boundary */
-  { e: [6.0, 1.55, 6.6], t: [.1, .95, 0], f: 31, rain: 40 },         /* only the valid crosses */
+  { e: [2.75, 3.55, 2.85], t: [1.15, 2.05, .5], f: 32, rain: 4 },   /* only the valid crosses: close over FEATURE's PLACE, its candidate under the pane */
   { focus: [4.2, 2.4], ty: .2, f: 30, rain: 40 },                     /* CytherCAD: the newest solid */
   { focus: [4.0, 1.7], ty: .6, f: 30, rain: 34 },                     /* ADII */
   { focus: [3.8, 1.4], ty: .75, f: 30, rain: 34 },                    /* AWC-OS */
@@ -654,7 +679,20 @@ const under = (a, s) => ([gx, gy]) => [a[0] + (gx - 6) * s, BOTTOM - .045, a[1] 
 function lines(now) {
   nWires = 0; nInk = 0;
   /* the candidates assembling under the pane: black, visible, causally absent */
-  for (const pp of [...RAIN, yours, opening]) { if (!pp || pp.path.length < 2) continue; const at = under(pp.anchor, CS); for (let k = 0; k + 1 < pp.path.length; k++) ink(at(pp.path[k]), at(pp.path[k + 1]), 1.8); }
+  /* within one attempt a path only grows; a new attempt (admitted, abandoned) ends the follow */
+  if (followed && (followed.pp.attempt !== followed.attempt || followed.arrived >= 0 && now - followed.arrived > 1.2)) followed = null;
+  for (const pp of [...RAIN, yours, opening]) {
+    if (!pp || pp.path.length < 2) continue;
+    const at = under(pp.anchor, CS), f = followed && followed.pp === pp ? followed : null;
+    for (let k = 0; k + 1 < pp.path.length; k++) {
+      const a = at(pp.path[k]), b = at(pp.path[k + 1]);
+      if (!f) { ink(a, b, 2.4); continue; }
+      if (k < f.k) { ink(a, b, 4.2); continue; }   /* the outline it joins is drawn heavier while it is followed */
+      if (f.arrived < 0) break;                    /* its segment, and any after it, exist on screen only once its bead has arrived */
+      const g = k === f.k ? ease(clamp01((now - f.arrived) / .35)) : 1;
+      ink(a, [lerp(a[0], b[0], g), a[1], lerp(a[2], b[2], g)], 4.2);
+    }
+  }
   /* the refused stroke, flashing where its attempt was assembling */
   for (const g of ghosts) {
     const life = g.big ? 2.8 : .75, age = now - g.t; if (age > life) continue;
@@ -722,28 +760,54 @@ function solidAt(px, py) {
 const tip = $("#receipt"), yourLine = $("#yours");
 let focusTrace = [0, 0, 0, 0], drag = null;
 const onCanvas = e => e.target === canvas;
-const showTip = (e, text, kind) => { tip.textContent = text; tip.dataset.kind = kind; tip.hidden = false; tip.style.transform = `translate(${Math.min(e.clientX + 16, innerWidth - tip.offsetWidth - 12)}px,${e.clientY + 18}px)`; };
+/* what is under a point: a trace on the pane, else an admitted solid */
+function pick(px, py) {
+  const g = glassPoint(px, py); let best = null, bd = .012;
+  if (g) for (let i = traces.length - 1; i >= 0 && i > traces.length - 4000; i--) { const t = traces[i], d = (t.x - g[0]) ** 2 + (t.z - g[1]) ** 2; if (d < bd) { bd = d; best = t; } }
+  return best ? { t: best } : { s: solidAt(px, py) };
+}
+/* one receipt, however it was asked for (pointer, touch or keys); #receipt is a status region, so it is also read aloud */
+function read(hit, x, y) {
+  const t = hit.t || null, s = t ? null : hit.s || null;
+  if (t) { if (focusTrace[0] !== t.x || focusTrace[1] !== t.z || lifted) { lifted = null; wake(); } focusTrace = [t.x, t.z, t.code, 1]; }
+  else { if (focusTrace[3]) wake(); focusTrace = [0, 0, 0, 0]; if (s !== lifted) { lifted = s; wake(); } }   /* why does this exist? because this program was admitted, here: lifted off its licence, which stays where it was issued */
+  canvas.style.cursor = t || s ? "default" : "crosshair";
+  const text = t ? t.label : s ? "ADMITTED · " + s.id + " · " + s.ops + " operations · proposal " + fmt(s.index) + " of seed " + hex(s.seed) : "";
+  if (tip.textContent !== text) { tip.textContent = text; tip.dataset.kind = t ? "" : "real"; }
+  if (text) tip.style.transform = `translate(${Math.max(12, Math.min(x + 16, innerWidth - tip.offsetWidth - 12))}px,${y + 18}px)`;
+  return !!text;
+}
+const unread = () => read({}, 0, 0);
 addEventListener("pointermove", e => {
   ptr.x = e.clientX / innerWidth * 2 - 1; ptr.y = e.clientY / innerHeight * 2 - 1;
-  if (!R || drag || !onCanvas(e)) { if (!drag) { focusTrace = [0, 0, 0, 0]; tip.hidden = true; if (lifted) { lifted = null; wake(); } } return; }
-  const g = glassPoint(e.clientX, e.clientY); let best = null, bd = .012;
-  if (g) for (let i = traces.length - 1; i >= 0 && i > traces.length - 4000; i--) { const t = traces[i], d = (t.x - g[0]) ** 2 + (t.z - g[1]) ** 2; if (d < bd) { bd = d; best = t; } }
-  if (best) {
-    if (focusTrace[0] !== best.x || focusTrace[1] !== best.z || lifted) { lifted = null; wake(); }
-    focusTrace = [best.x, best.z, best.code, 1]; canvas.style.cursor = "default"; showTip(e, best.label, ""); return;
-  }
-  if (focusTrace[3]) wake(); focusTrace = [0, 0, 0, 0];
-  /* why does this exist? because this program was admitted, here: lifted off its licence, which stays where it was issued */
-  const s = solidAt(e.clientX, e.clientY);
-  if (s !== lifted) { lifted = s; wake(); }
-  if (s) { canvas.style.cursor = "default"; showTip(e, "ADMITTED · " + s.id + " · " + s.ops + " operations · proposal " + fmt(s.index) + " of seed " + hex(s.seed), "real"); return; }
-  tip.hidden = true; canvas.style.cursor = "crosshair";
+  if (drag) return;
+  if (!R || !onCanvas(e)) { if (R) unread(); return; }
+  read(pick(e.clientX, e.clientY), e.clientX, e.clientY);
 }, { passive: true });
-addEventListener("scroll", () => { wake(); lifted = null; if (!tip.hidden) { tip.hidden = true; focusTrace = [0, 0, 0, 0]; } }, { passive: true });   /* a receipt belongs to the view it was read in */
-addEventListener("pointerdown", e => { if (R && e.button === 0 && onCanvas(e)) { const g = glassPoint(e.clientX, e.clientY); if (g) drag = { g, x: e.clientX, y: e.clientY }; } });
+addEventListener("scroll", () => { wake(); if (R) unread(); }, { passive: true });   /* a receipt belongs to the view it was read in */
+/* without a pointer: ← → step through the refusals on the pane, newest first; ↑ ↓ through the programs admitted; Esc clears */
+const keyed = { list: null, at: 0 };
+canvas.addEventListener("keydown", e => {
+  if (e.key === "Escape") { unread(); return; }
+  const step = { ArrowLeft: [traces, 1], ArrowRight: [traces, -1], ArrowUp: [admitted, 1], ArrowDown: [admitted, -1] }[e.key];
+  if (!step || !R) return;
+  e.preventDefault();
+  const [list, d] = step; if (!list.length) return;
+  keyed.at = keyed.list === list && tip.textContent ? Math.max(0, Math.min(list.length - 1, keyed.at + d)) : 0; keyed.list = list;
+  const it = list[list.length - 1 - keyed.at], c = list === traces ? xf(VP, it.x, TOP, it.z) : xf(VP, it.cx, it.h, it.cz);
+  const x = (c[0] / c[3] * .5 + .5) * innerWidth, y = (.5 - c[1] / c[3] * .5) * innerHeight;
+  read(list === traces ? { t: it } : { s: it }, Math.max(16, Math.min(x, innerWidth - 16)), Math.max(16, Math.min(y, innerHeight - 80)));
+});
+canvas.addEventListener("blur", () => { if (R) unread(); });
+/* a section's copy is only fully visible at its centre: keyboard focus inside one brings it there */
+addEventListener("focusin", e => { const s = e.target.closest("[data-k]"); if (s && e.target.matches(":focus-visible")) scrollTo({ top: pivots[secs.indexOf(s)] - innerHeight / 2, behavior: CALM ? "auto" : "smooth" }); });
+addEventListener("pointerdown", e => { if (R && e.button === 0 && onCanvas(e)) drag = { g: glassPoint(e.clientX, e.clientY), x: e.clientX, y: e.clientY }; });
 addEventListener("pointercancel", () => { drag = null; });
 addEventListener("pointerup", e => {
   if (!drag) return; const d = drag; drag = null;
+  /* a press that does not travel reads what is under it (on touch, the only way to read); only a drag proposes */
+  if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 10 && read(pick(e.clientX, e.clientY), e.clientX, e.clientY)) return;
+  if (!d.g) return;
   const g2 = glassPoint(e.clientX, e.clientY) || d.g;
   /* your gesture is the seed: where you touched the glass, and which way you moved; your attempts assemble where you touched */
   const key = [Math.round(d.g[0] / .05), Math.round(d.g[1] / .05), Math.round((g2[0] - d.g[0]) / .1), Math.round((g2[1] - d.g[1]) / .1)].join("|");
@@ -824,7 +888,7 @@ function frame(ms) {
     const done = ending(clock);
     const [lo, hi] = bounds();
     R.draw({ dt, time: clock, vp: VP, ivp: IVP, eye: EYE, right: RIGHT, up: UP, key: key.map(v => v / kl), glass: glassOn, fov: cam.f * Math.PI / 180,
-      bk: BK, bkh: BKH, bmin: lo, bmax: hi, hits, focusTrace, intro: introU, dec: decal(), kerf: kerf(), mine: mineU, lamp, licences,
+      bk: BK, bkh: BKH, bmin: lo, bmax: hi, hits, focusTrace, intro: introU, dec: decal(), kerf: kerf(), mine: mineU, lamp, memory: 1 - .65 * weight(3), licences,
       focusD: Math.hypot(EYE[0] - cam.t[0], EYE[1] - cam.t[1], EYE[2] - cam.t[2]), nStamps, nWires, nInk, nCells });
     if (done && settled()) halted = true;
   } else halted = true;   /* no studio: the copy follows the scroll, one frame per scroll or resize */
