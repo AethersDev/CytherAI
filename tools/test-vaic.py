@@ -15,11 +15,15 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = "vaic/cytherai-obligations.v1.json"
-# The admission lineage of the corpus is every file it has ever lived in. v1 supersedes v0
-# and carries every receipt of v0 verbatim; the guards walk both paths, so a receipt
-# admitted into v0 on the canonical ref must still be present, unchanged, in the live v1.
-LINEAGE = ("vaic/cytherai-obligations.v0.json", CORPUS)
+CORPUS = "vaic/cytherai-obligations.v2.json"
+# The admission lineage of the corpus is every file it has ever lived in. Each successor
+# supersedes its predecessor and carries every receipt verbatim (v1 the instrument-v1 → drawing
+# set step, v2 the drawing set → THE UNHAPPENED step); the guards walk every path, so a receipt
+# admitted into any of them on the canonical ref must still be present, unchanged, in the live corpus.
+LINEAGE = ("vaic/cytherai-obligations.v0.json", "vaic/cytherai-obligations.v1.json", CORPUS)
+# each recorded step's dispositions — the shape of the transition, not a verdict distribution
+STEPS = {"vaic/cytherai-obligations.v1.json": {"CARRIED_FORWARD": 9, "SUPERSEDED": 10},
+         CORPUS: {"CARRIED_FORWARD": 5, "SUPERSEDED": 14}}
 # A commit records a state; canonical reachability ADMITS it. Without a designated
 # lineage, a receipt on any throwaway branch would become institutional history, and
 # deleting that branch would make admitted history vanish. Both cannot be acceptable.
@@ -211,36 +215,40 @@ class VaicCorpusTests(unittest.TestCase):
             self.assertEqual(sorted(lost), [],
                              "an admitted receipt was dropped; admitted history is append-only")
 
-    def test_v1_carries_every_v0_receipt_verbatim_and_records_every_transition(self) -> None:
-        """v1 = surviving obligations + successor bindings + supersession records — never
-        v0 minus inconvenient rows. Admission freezes meaning: every receipt of v0 is in v1
-        unchanged, every row has exactly one transition, and only the fields a carried-forward
-        row declares as rebound differ from v0."""
-        v0 = VAIC.load_json(ROOT / LINEAGE[0])
-        self.assertEqual(self.corpus.get("supersedes"), LINEAGE[0])
-        live = self.receipts_by_key(self.corpus)
-        for key, receipt in self.receipts_by_key(v0).items():
-            self.assertEqual(live.get(key), receipt, key)
-        rows0 = {row["id"]: row for row in v0["obligations"]}
-        dispositions = Counter()
-        for row in self.corpus["obligations"]:
-            transition = row["transition"]
-            dispositions[transition["disposition"]] += 1
-            self.assertEqual(transition["statement"], self.corpus["transition"][transition["disposition"]])
-            before = rows0[row["id"]]
-            # v0's receipts are a verbatim prefix: re-evaluation appends, never edits
-            old = before["evaluation"]["receipts"]
-            self.assertEqual(row["evaluation"]["receipts"][:len(old)], old, row["id"])
-            changed = {k for k in before if k not in ("version", "evaluation") and before[k] != row.get(k)}
-            if transition["disposition"] == "SUPERSEDED":
-                self.assertEqual(changed, set(), f"{row['id']}: a superseded row is preserved as written")
-                self.assertEqual(row["evaluation"], before["evaluation"], f"{row['id']}: a superseded row gains nothing")
-                self.assertTrue(transition["retired_mechanism"])
-            else:
-                self.assertEqual(changed, set(transition["rebound_fields"]), row["id"])
-                self.assertEqual(row["version"], 2 if changed else before["version"], row["id"])
-        self.assertEqual(dispositions, Counter({"CARRIED_FORWARD": 9, "SUPERSEDED": 10}))
-        self.assertEqual(len(self.corpus["obligations"]), len(v0["obligations"]))
+    def test_every_successor_carries_its_predecessor_verbatim_and_records_every_transition(self) -> None:
+        """A successor = surviving obligations + successor bindings + supersession records — never
+        its predecessor minus inconvenient rows. Admission freezes meaning: for every step of the
+        lineage, every receipt of the predecessor is in the successor unchanged, every row has
+        exactly one transition, a superseded row is preserved as written and gains nothing, and
+        only the fields a carried-forward row declares as rebound differ (the transition record
+        itself is each step's own, so it is not a field the step may silently change)."""
+        for older, newer in zip(LINEAGE, LINEAGE[1:]):
+            prev = VAIC.load_json(ROOT / older)
+            succ = self.corpus if newer == CORPUS else VAIC.load_json(ROOT / newer)
+            self.assertEqual(succ.get("supersedes"), older)
+            live = self.receipts_by_key(succ)
+            for key, receipt in self.receipts_by_key(prev).items():
+                self.assertEqual(live.get(key), receipt, f"{newer}: {key}")
+            rows0 = {row["id"]: row for row in prev["obligations"]}
+            dispositions = Counter()
+            for row in succ["obligations"]:
+                transition = row["transition"]
+                dispositions[transition["disposition"]] += 1
+                self.assertEqual(transition["statement"], succ["transition"][transition["disposition"]])
+                before = rows0[row["id"]]
+                # the predecessor's receipts are a verbatim prefix: re-evaluation appends, never edits
+                old = before["evaluation"]["receipts"]
+                self.assertEqual(row["evaluation"]["receipts"][:len(old)], old, row["id"])
+                changed = {k for k in before if k not in ("version", "evaluation", "transition") and before[k] != row.get(k)}
+                if transition["disposition"] == "SUPERSEDED":
+                    self.assertEqual(changed, set(), f"{newer} {row['id']}: a superseded row is preserved as written")
+                    self.assertEqual(row["evaluation"], before["evaluation"], f"{newer} {row['id']}: a superseded row gains nothing")
+                    self.assertTrue(transition["retired_mechanism"])
+                else:
+                    self.assertEqual(changed, set(transition["rebound_fields"]), f"{newer} {row['id']}")
+                    self.assertEqual(row["version"], before["version"] + 1 if changed else before["version"], f"{newer} {row['id']}")
+            self.assertEqual(dispositions, Counter(STEPS[newer]), newer)
+            self.assertEqual(len(succ["obligations"]), len(prev["obligations"]), newer)
 
     def test_a_superseded_obligation_is_neither_owed_nor_forgotten(self) -> None:
         result = self.validate()
@@ -257,7 +265,7 @@ class VaicCorpusTests(unittest.TestCase):
         row = next(r for r in corpus["obligations"] if r["id"] == "CY-EPI-001")
         receipt = self.current_receipt(corpus)
         receipt.update({"evaluator": row["authorized_evaluators"][0], "coverage": row["required_coverage"]["classes"][0],
-                        "evidence": ["js/claims.js#renderClaims"], "result": row["evaluation"]["result"]})
+                        "evidence": ["js/unhappened.js#settled"], "result": row["evaluation"]["result"]})
         row["evaluation"]["receipts"].append(receipt)
         bad = self.validate(corpus)
         self.assertEqual(bad["structure"], "INVALID")
@@ -267,7 +275,7 @@ class VaicCorpusTests(unittest.TestCase):
             "missing transition": lambda c: c["obligations"][0].pop("transition"),
             "unknown disposition": lambda c: c["obligations"][0]["transition"].update(disposition="RETIRED"),
             "superseded without its mechanism": lambda c: next(r for r in c["obligations"] if r["id"] == "CY-RES-001")["transition"].pop("retired_mechanism"),
-            "carried without its surface": lambda c: c["obligations"][0]["transition"].pop("successor_surface"),
+            "carried without its surface": lambda c: next(r for r in c["obligations"] if r["transition"]["disposition"] == "CARRIED_FORWARD")["transition"].pop("successor_surface"),
         }.items():
             with self.subTest(label):
                 corpus = copy.deepcopy(self.corpus)
@@ -367,7 +375,7 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("another candidate" in error for error in result["errors"]))
 
-    def anchored(self, source: str, reference: str = "js/claims.js#renderClaims"):
+    def anchored(self, source: str, reference: str = "js/unhappened.js#settled"):
         """Resolve a reference against a throwaway tree holding just the cited file."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -377,26 +385,26 @@ class VaicCorpusTests(unittest.TestCase):
             return VAIC.evidence_defect(root, reference, "IRRELEVANT")
 
     def test_line_drift_cannot_invalidate_an_anchored_citation(self) -> None:
-        body = "function renderClaims() {\n  return 'CLAIMS 6/6 HOLDING';\n}\n"
+        body = "function settled() {\n  return intro.on === false;\n}\n"
         self.assertIsNone(self.anchored(body))
         # the headline property: 200 lines above the cited code change nothing
         self.assertIsNone(self.anchored("// pad\n" * 200 + body))
         self.assertIsNone(self.anchored("\n" * 200 + body))
 
     def test_a_deleted_or_renamed_anchor_is_corruption(self) -> None:
-        defect = self.anchored("function renderRows() {\n  return 1;\n}\n")
+        defect = self.anchored("function quiescent() {\n  return 1;\n}\n")
         self.assertIsNotNone(defect)
         self.assertIn("does not define", defect)
 
     def test_a_duplicated_anchor_is_corruption(self) -> None:
-        body = "function renderClaims() {\n  return 1;\n}\n"
+        body = "function settled() {\n  return 1;\n}\n"
         defect = self.anchored(body * 2)
         self.assertIsNotNone(defect)
         self.assertIn("defines 2 times", defect)
 
     def test_a_call_site_is_not_a_definition(self) -> None:
         # a mention of the name must not satisfy a citation that means the object
-        source = "const out = renderClaims();\nexport { renderClaims };\n"
+        source = "const out = settled();\nexport { settled };\n"
         self.assertIsNotNone(self.anchored(source))
 
     def test_explicit_markers_anchor_files_without_language_symbols(self) -> None:

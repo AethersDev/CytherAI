@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-9236E6A692F915D4';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-D215BA534299A451';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -15,11 +15,14 @@ var ASSETS = [
   'pages/privacy.html',
   'pages/security.html',
   'pages/terms.html',
-  // the drawing-set homepage modules
+  // the front door modules, and the fonts it draws its type with (shared with adii/)
   'js/manifest.js',
   'js/instrument.js',
-  'js/claims.js',
-  'js/drawing-set.js',
+  'js/trace.js',
+  'js/unhappened.js',
+  'adii/fonts/newsreader-variable.woff2',
+  'adii/fonts/public-sans-variable.woff2',
+  'adii/fonts/ibm-plex-mono-400.woff2',
   // subpage stylesheet
   'css/cytherai.css',
   'manifest.webmanifest',
@@ -80,6 +83,11 @@ self.addEventListener('fetch', function (e) {
   // Only handle same-origin GET requests
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith(self.location.origin)) return;
+  // Films, replays and downloads go to the network untouched: media is fetched in byte
+  // ranges a cached 200 cannot answer, and the cache-on-fetch below would otherwise
+  // copy every video and document a reader opens into this build's cache.
+  if (e.request.headers.has('range') || e.request.destination === 'video' || e.request.destination === 'audio' ||
+      /\.(mp4|pdf|pptx)$/i.test(new URL(e.request.url).pathname)) return;
 
   // A navigation to the scope root requests "<scope>/", and cache matching is
   // exact — it never pairs with the precached "index.html". Substituting the key
