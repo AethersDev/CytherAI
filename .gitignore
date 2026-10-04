@@ -1,5 +1,5 @@
 .DS_Store
-awc-os/
+awc-os/live/
 dist/
 __pycache__/
 .claude/settings.local.json

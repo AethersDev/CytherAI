@@ -23,33 +23,24 @@ def check(cond, name):
     print(("PASS  " if cond else "FAIL  ") + name)
     if not cond: fails.append(name)
 
-MODULES = {
-    "CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js", "CytherClaims": "js/claims.js",
-    "CytherDrawingSet": "js/drawing-set.js",
-}
-# the local names served modules bind each global to
-ALIASES = {"CytherManifest": ["CM"], "CytherClaims": ["Claims", "C"], "CytherInstrument": ["Inst"], "CytherDrawingSet": ["D"]}
+MODULES = {"CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js", "CytherTrace": "js/trace.js"}
+# the local names served modules bind each global to (js/unhappened.js publishes nothing: it is the page)
+ALIASES = {"CytherManifest": ["CM"], "CytherInstrument": ["CI"], "CytherTrace": ["TR"]}
 INVENTORY = {
     "CytherManifest": {
-        "production": ["MANIFEST", "EPOCHS", "COMMITMENTS", "PUBLISHED_NONCES", "NORM", "CANON", "ADMISSION_NONCE", "CHECKSUM",
-                       "LEGIBILITY_CAP", "project", "fnv", "dsin", "dsinOrbit", "legibility", "paramsFor", "admit",
-                       "normalizeManifest", "stateChecksum", "VALIDATION"],
-        "verifier": [],
-    },
-    "CytherClaims": {
-        "production": ["CLAIMS", "CLAIMSTATE", "setClaim", "recomputeClaims", "renderClaims", "wcagRatio"],
-        "verifier": ["checkRenderManifest", "recomputeOne", "summary"],
+        "production": ["project", "fnv"],
+        "verifier": ["MANIFEST", "VALIDATION", "CANON", "ADMISSION_NONCE", "CHECKSUM"],
     },
     "CytherInstrument": {
-        "production": ["lastAudit", "audit", "biEngine", "judge"],
+        "production": ["biEngine"],
+        "verifier": ["audit", "judge"],
+    },
+    "CytherTrace": {
+        "production": ["VERSION", "code", "GLSL", "svg"],
         "verifier": [],
     },
-    "CytherDrawingSet": {
-        "production": [],
-        "verifier": ["walk", "extent", "progId", "pickEdge", "candidateFor"],
-    },
 }
-SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/claims.js", "js/drawing-set.js"]
+SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)
