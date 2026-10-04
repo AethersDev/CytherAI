@@ -1,15 +1,15 @@
 # Deployment contract
 
-> **Front door changed 2026-09-16.** The homepage is now the drawing set (`index.html`,
-> `js/drawing-set.js`; `docs/architecture.md`). Every browser observation recorded below
-> — the certification block, §5 (Chrome observed / WebKit residual), §5a (the promoted
-> terminal exposure), §5b (CY-SEM-003 on the composited plate ground) — was made against
-> instrument-v1, now retired whole to `backup/instrument-v1/`. Those records stand as
-> written: they are the history of that world, not evidence about this one. The drawing
-> set's own qualification (integrity, restamp, Chrome, Safari, mobile, zero-external) is
-> the last step of the migration and is recorded when it is made, not before. §1–§4 and
-> §6 (headers, MIME, redirects, live-origin verification, the launch gate) are the
-> contract for any front door and remain in force.
+> **Front door changed 2026-10-04.** The homepage is now THE UNHAPPENED (`index.html`,
+> `js/unhappened.js`, `js/trace.js`; `docs/architecture.md`). The drawing set it replaced is
+> retired whole to `backup/drawing-set-v1/`; its Chrome record is §5c and stands as written.
+> Before it, the front door changed on 2026-09-16 from instrument-v1 (retired whole to
+> `backup/instrument-v1/`), and every browser observation in the certification block, §5,
+> §5a and §5b was made against that world. All of these are the history of the worlds they
+> observed, not evidence about this one. THE UNHAPPENED's own Chrome observation is §5d;
+> Safari, VoiceOver, a physical phone and the origin remain the owner's. §1–§4 and §6
+> (headers, MIME, redirects, live-origin verification, the launch gate) are the contract for
+> any front door and remain in force.
 
 ## Certification status
 
@@ -84,7 +84,7 @@ Never publish the working tree: `backup/`, `newC3/`,
 
 | Header | Value | Why |
 |---|---|---|
-| `Content-Security-Policy` | `frame-ancestors 'none'` | `frame-ancestors` is **ignored** in a `<meta>` CSP, so the per-page meta policies cannot deliver it. Without it the homepage — hold-to-cross control, mailto CTAs — can be framed and overlaid. Header-level only; keep the meta CSP as defense in depth. |
+| `Content-Security-Policy` | `frame-ancestors 'none'` | `frame-ancestors` is **ignored** in a `<meta>` CSP, so the per-page meta policies cannot deliver it. Without it the homepage — the glass that takes a press-and-drag, the contact CTAs — can be framed and overlaid. Header-level only; keep the meta CSP as defense in depth. |
 | `X-Content-Type-Options` | `nosniff` | The site serves JS with SRI; MIME sniffing must not be able to reinterpret a response. |
 | `Referrer-Policy` | `no-referrer` | The site makes zero external requests by design; referrers must not leak on outbound clicks either. |
 | `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Nothing on the site uses these. Say so at the origin. |
@@ -490,6 +490,49 @@ directions. CY-SEM-001/002 re-bound (`#canonical_settle_9236E6A692F915D4`,
 `#epoch_reproduction_9236E6A692F915D4`). Safari/WebKit, VoiceOver, a physical phone and
 120 Hz remain the owner's.
 
+## 5d. THE UNHAPPENED — Chrome observed, 2026-10-04
+
+Build `33EF803E25246693`, the artifact `dist/` served as an origin root, HeadlessChrome 154
+over CDP (`vaic/evidence/current-browser-observations.v0.json#unhappened_settle_33EF803E25246693`
+and `#reading_ink_33EF803E25246693`; the receipts bind CY-TEMP-001 and CY-SEM-003 in
+`vaic/cytherai-obligations.v2.json`). Frame requests are counted by wrapping
+`requestAnimationFrame` before any page script; reading ink is measured against the ground
+actually composited beneath it — the frame loop frozen, one capture with every glyph's fill
+transparent (the ground), one with every fill magenta (glyph support) — at every
+glyph-support pixel, one sample per section.
+
+| Profile | Settle after the end | Frames in 3 s once settled | Scroll wakes, resettles | Reading-ink elements · worst | External requests | Console errors | Horizontal overflow | Offline reload through the worker |
+|---|---:|---:|---|---|---|---:|---|---|
+| 1440×900 | 2.31 s | 0 | yes | 142 · worst 5.01:1 | 0 of 22 | 0 | none | same build |
+| 390×844 · dpr 3 | 1.79 s | 0 | yes | 132 · worst 4.85:1 | 0 of 22 | 0 | none | same build |
+| 320×844 · dpr 2 | 1.54 s | 0 | yes | 132 · worst 4.83:1 | 0 of 22 | 0 | none | — |
+| 1440×900 · reduced motion | 1.03 s | 0 | yes | 142 · worst 5.01:1 | 0 of 11 | 0 | none | — |
+| 1440×900 · no WebGL | 0.0 s | 0 | yes | 61 · worst 5.24:1 | 0 of 11 | 0 | none | — |
+
+Also observed: the four modules execute under SRI; the worker installs exactly one build
+(`caches.keys()` is `cytherai-substrate-33EF803E25246693`) and controls the page after a
+reload; with the server stopped, a reload renders the same build from the worker. The two
+`data-m` marks print `0.00%` and `10.00%`, equal to `CytherManifest.project`, none outlined;
+every claim renders with its condition and source. The opening runs once (≈4.4 s) and is
+skipped under reduced motion and without WebGL. A forged `#trace=00000003.5.DEADBEEF` is
+refused (`#unsent`); a press-and-drag on the glass produces `#trace=D7CF8F5E.1.7A60A047`
+within 1.8 s, the link replays in a fresh page, and its receipt is carried to the end as
+*sent to you · TRACE-1*.
+
+**Fixed before this build, named here so the record is not more optimistic by omission.**
+The first run of the harness (build `82B60586F9858C49`, a provisional candidate never
+committed) measured the white law line inside the pane at 1.13–1.67:1 at its worst glyph
+pixels (medians 1.2–3.2:1) on every profile, the HUD's quiet ink at 4.11:1 on desktop and
+down to 1.79:1 over the pane's interior, and a bead behind *Most proposals* at 3.72:1 where
+the left scrim had already faded. The law now reads in ink on a soft paper veil
+(and, without WebGL, in the copy column), the HUD is `--ink2` over a bottom band of the scrim,
+and the scrim keeps ≥ .46 of paper across the whole copy column. The HUD also printed
+"1 proposed operations"; it now agrees in number.
+
+**Open, named:** CY-TEMP-002 (the three transitions, human-reviewed) and CY-ORIGIN-001 (§7)
+are NOT_EVALUATED; Safari/WebKit, VoiceOver, a physical phone, 200% zoom and 120 Hz
+scrolling remain the owner's.
+
 ## 6. Launch gate
 
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
@@ -501,23 +544,20 @@ decisions, not engineering steps.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
    the three 404 checks in §4 pass on staging.
 3. The origin sends the §1 headers (`curl -sI` verified).
-4. **Owner decision — the epoch-04 commitment.** The chip no longer claims a
-   seal it does not have: it prints `COMMITMENTS[0].status`, currently
-   `PREIMAGE PUBLIC · DEMONSTRATION`, which is true —
-   `newC3/epoch04-preimage.txt` hashes to the published digest, and the deploy
-   allowlist keeps that file off the origin but does not make the preimage
-   secret. Launch may proceed on that honest statement. To ship an actual
-   pre-registration instead, replace digest, date and status in `js/manifest.js`
-   (data-only) once the preimage exists in the owner's custody alone **and**
-   appears in no history intended for public release — note that the current
-   preimage is in the git history, so a real seal needs a fresh preimage, not
-   a deletion. Restoring `PREIMAGE SEALED` before that is true re-opens the
-   defect this replaced.
-5. `./verify.sh` green at the release commit; the browser-only runner reports
-   33/33 and the served homepage reports claims `10/10 HOLDING`.
-6. The `PROVISIONAL` values in `js/manifest.js` (epoch history, counts,
-   commitment preimage) reviewed by the owner. Shipping them knowingly is
-   permitted — they are marked in source — but it must be a decision.
+4. **Owner decision — the front-door claims.** Each states only what a shipped source
+   states, with its condition beside it: CytherCAD's invalid rate against its DeepCAD
+   baseline on an external benchmark (`pages/brief.html#cythercad`), ADII as a research
+   project with no published results, AWC-OS as a demonstration on an evaluation machine,
+   SijilOS's ZATCA Phase 1 certification and live beta (`pages/brief.html#sijilos`), and
+   the deployment conditions (on-prem / offline-first). The owner confirms each source is
+   current before launch. (The epoch-04 commitment left the front door with the drawing set;
+   its record is §5c and `backup/drawing-set-v1/`.)
+5. `./verify.sh` green at the release commit; the browser-only runner reports 33/33; the
+   served homepage settles and stops rendering (§5d) with zero external requests.
+6. The `PROVISIONAL` values in `js/manifest.js` (the disclosure tuple and its counts)
+   reviewed by the owner. None is printed on the front door; they drive the checksum and
+   the derived social card and icon. Shipping them knowingly is permitted — they are
+   marked in source — but it must be a decision.
 
 ---
 
@@ -551,8 +591,7 @@ Construction is finished; nothing below is a repository change.
    record divergence only.
 2. Deploy the exact candidate bytes to the intended origin.
 3. Verify headers, HSTS, MIME behaviour and 404 handling there (§1–§4).
-4. Decide whether epoch-04 remains an explicitly public demonstration or is
-   supplemented by a fresh genuine commitment (gate item 4).
+4. Confirm every front-door claim against its current source (gate item 4).
 5. Sign off every `PROVISIONAL` manifest value at exactly its declared
    evidentiary status.
 6. Re-run the complete release battery **only if candidate bytes change**.
