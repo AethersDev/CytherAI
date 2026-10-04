@@ -630,6 +630,17 @@ p99 18.3 ms. The accessibility tree: one h1 and eight h2 in order, banner/naviga
 20 interactive elements named, every factual statement present as text, the receipt region
 polite.
 
+**Addendum, build `8E49D942927C5361`: scene 3 on phones.** Reported by the owner: the accepted
+step in *Only the valid crosses* did not show on a phone. Its close camera was tuned on desktop;
+a portrait phone sees about a third of the width, and the phone's upward lens shift put the
+watched place at the top edge, under the header, with the middle of the screen empty. Scene 3
+now has a phone framing (further back, the place lowered into the open middle), and short wide
+screens (a phone on its side) keep the desktop veil so the studio stays visible beside the
+copy; only short narrow ones (200% zoom) are veiled whole. Observed: the candidate, its beads
+and receipts in frame at 390×844, 320×700, 844×390 and on the iPhone 17e simulator (390×699);
+reading ink ≥ 4.88:1 in every profile, 5.07:1 in landscape and 5.05:1 at 1280×520; the full
+battery green (`#unhappened_settle_8E49D942927C5361`, `#reading_ink_8E49D942927C5361`).
+
 **Still the owner's.** A physical iPhone (thermal throttling, real GPU, touch feel, Low Power
 Mode, rotation), Safari on macOS (its automation is off on this Mac), VoiceOver, 120 Hz. There is
 no sound to check: production has none.
