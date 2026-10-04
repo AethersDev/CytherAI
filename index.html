@@ -18,7 +18,7 @@
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:alt" content="Density plate of the canonical CytherAI mark: a filament orbit accumulated in dark ink on cold paper, one lobe tinted cobalt, beside a quiet paper lane.">
 <meta name="theme-color" content="#EEF0F2">
-<meta name="build-hash" content="D215BA534299A451">
+<meta name="build-hash" content="A93820E17D59245C">
 <meta name="referrer" content="no-referrer">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -48,13 +48,14 @@ html{background:var(--bg);color:var(--ink);scroll-behavior:smooth}
 body{font:400 17px/1.55 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit}
 ::selection{background:var(--ink);color:#fff}
-#studio{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y}
+#studio{position:fixed;inset:0;width:100%;height:100%;display:block;cursor:crosshair;touch-action:pan-y;opacity:0;transition:opacity .6s}
+.lit #studio{opacity:1}   /* the canvas shows nothing until the studio has drawn: paper, not a black rectangle */
 #studio:focus-visible{outline:2px solid var(--ink);outline-offset:-6px}
 .no-gl #studio{display:none}
 .no-gl body{background:radial-gradient(120% 90% at 70% 60%,#FFFFFF 0%,var(--bg) 60%)}
 /* without WebGL the law still holds, on paper: black with no shadow, porcelain with one, a cobalt hairline between */
 .cover{display:none}
-.no-gl .try,.no-gl .hud{display:none}
+.no-gl .try,.no-gl .hud,.no-gl [data-studio]{display:none}   /* nothing to hover without the studio */
 .no-gl .copy.center{align-items:flex-start;text-align:left;background:none}   /* the law reads in the copy column, clear of the cover */
 .no-gl .cover{display:block;position:fixed;inset:0;pointer-events:none}
 .cover i{position:absolute;top:42%;width:min(13vw,170px);aspect-ratio:1;border-radius:50%}
@@ -71,7 +72,9 @@ a{color:inherit}
              linear-gradient(90deg,rgba(238,240,242,.84) 0%,rgba(238,240,242,.6) 26%,rgba(238,240,242,.46) 44%,rgba(238,240,242,0) 62%)}
 
 header{position:fixed;top:0;left:0;right:0;z-index:6;display:flex;align-items:center;justify-content:space-between;padding:24px var(--gut);transition:opacity 1.2s}
-.intro header{opacity:0}
+/* the opening holds the page back; if the scripts never take it over (blocked, failed, too old), it lets go by itself */
+@keyframes unveil{to{opacity:1;transform:none}}
+.intro header{opacity:0;animation:unveil .8s 6s forwards}
 .brand{display:flex;align-items:center;gap:10px;font:600 18px/1 var(--sans);letter-spacing:-.01em;text-decoration:none}
 .brand i{width:10px;height:10px;border-radius:50%;background:var(--ink);box-shadow:inset -2px -2px 3px rgba(255,255,255,.35)}
 nav{display:flex;align-items:center;gap:28px}
@@ -89,9 +92,9 @@ main a,main button{pointer-events:auto}
 section{position:relative;min-height:165vh}
 section[data-k="0"]{min-height:118vh}
 section[data-k="2"]{min-height:150vh}
-.copy{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding:96px var(--gut) 120px;max-width:min(640px,47vw);
+.copy{position:sticky;top:0;height:100vh;height:100svh;display:flex;flex-direction:column;justify-content:center;padding:96px var(--gut) 120px;max-width:min(640px,47vw);
   opacity:var(--v,1);transform:translateY(calc((1 - var(--v,1)) * 22px));transition:opacity .2s}
-.intro [data-k="0"] .copy{opacity:0;transform:translateY(16px)}
+.intro [data-k="0"] .copy{opacity:0;transform:translateY(16px);animation:unveil .8s 6s forwards}
 [data-k="0"] .copy{transition:opacity 1.6s cubic-bezier(.2,.7,.1,1),transform 1.6s cubic-bezier(.2,.7,.1,1)}
 .copy.center{max-width:none;align-items:center;text-align:center;
   background:radial-gradient(min(560px,80vw) 220px at 50% 50%,rgba(238,240,242,.86),rgba(238,240,242,.72) 60%,rgba(238,240,242,0))}
@@ -102,6 +105,7 @@ h1{font-size:clamp(54px,6.8vw,120px)}
 h2{font-size:clamp(46px,5.5vw,96px)}
 h1 em,h2 em{font-style:italic;font-weight:330}
 h1 span,h2 span{display:block}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}   /* for assistive technology only: a heading names its system */
 .lede{margin-top:26px;font-size:clamp(18px,1.45vw,23px);line-height:1.45;color:var(--ink2);max-width:28ch}
 .law{font:italic 380 clamp(28px,3vw,46px)/1.2 var(--serif);letter-spacing:-.02em;color:var(--ink)}
 .law span{display:block}
@@ -116,7 +120,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
 
 .hud{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:20px var(--gut);
   font:400 11.5px/1.6 var(--mono);color:var(--ink2);pointer-events:none;transition:opacity 1.2s}
-.intro .hud{opacity:0}
+.intro .hud{opacity:0;animation:unveil .8s 6s forwards}
 .hud b{font-weight:400;color:var(--ink);font-variant-numeric:tabular-nums}
 .hud .note{text-align:right;max-width:62ch}
 #receipt{position:fixed;left:0;top:0;z-index:8;pointer-events:none;font:400 11.5px/1.4 var(--mono);letter-spacing:.06em;color:var(--evidence);white-space:nowrap}
@@ -137,7 +141,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   .cover b{max-width:30vw;font-size:10.5px}
   header{padding:18px 18px}
   section{min-height:150vh}
-  .copy{max-width:none;justify-content:flex-end;padding:90px 20px 96px}
+  .copy{max-width:none;justify-content:flex-end;padding:90px 20px calc(var(--hud,76px) + 20px)}   /* clear of the HUD at its real height */
   .copy.center{justify-content:center}
   h1{font-size:clamp(46px,13vw,64px)}h2{font-size:clamp(40px,11vw,56px)}
   .lede{font-size:17px}
@@ -148,7 +152,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
    the veil covers wherever that copy can fall */
 @media(max-height:540px){
   header{padding-top:12px;padding-bottom:12px}nav .btn{height:34px}
-  .copy{padding-top:62px;padding-bottom:64px}
+  .copy{padding-top:62px;padding-bottom:calc(var(--hud,48px) + 16px)}
   h1{font-size:clamp(28px,9.5vh,54px)}h2{font-size:clamp(26px,8.5vh,48px)}.law{font-size:clamp(22px,6.5vh,34px)}
   .lede{margin-top:10px;font-size:15px;line-height:1.4}.acts{margin-top:14px}.btn{height:38px}.try{margin-top:10px}
   .eyebrow{margin-bottom:8px}.mark,.cond{margin-top:10px}footer{margin-top:14px}
@@ -183,7 +187,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="1" id="wrong">
     <div class="copy">
       <h2><span>Most proposals</span><span><em>are wrong.</em></span></h2>
-      <p class="lede">What never happens leaves evidence. Hover or tap a trace to read it.</p>
+      <p class="lede">What never happens leaves evidence. <span data-studio>Hover or tap a trace to read it.</span></p>
     </div>
   </section>
 
@@ -203,7 +207,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="4" id="systems">
     <div class="copy">
       <p class="eyebrow">01 · <b>CytherCAD</b></p>
-      <h2><span>Language in.</span><span><em>Valid geometry out.</em></span></h2>
+      <h2><span class="sr">CytherCAD: </span><span>Language in.</span><span><em>Valid geometry out.</em></span></h2>
       <p class="mark"><span class="fig" data-m="validation:T2C192-IR-0.00:cyther">0.00%</span><span>invalid rate on Text2CAD-192, against <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> for DeepCAD · an external benchmark CytherAI does not operate · <a href="pages/brief.html#cythercad">source</a></span></p>
     </div>
   </section>
@@ -211,7 +215,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="5">
     <div class="copy">
       <p class="eyebrow">02 · <b>ADII</b></p>
-      <h2><span>A wrong number</span><span><em>is held.</em></span></h2>
+      <h2><span class="sr">ADII: </span><span>A wrong number</span><span><em>is held.</em></span></h2>
       <p class="lede">Changed only if the change is allowed, and holds. Otherwise, a person decides.</p>
       <p class="cond">A research project: no evaluation results are published and no deployment is claimed. <a href="adii/">The recorded run</a></p>
     </div>
@@ -220,7 +224,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="6">
     <div class="copy">
       <p class="eyebrow">03 · <b>AWC-OS</b></p>
-      <h2><span>Not every answer</span><span><em>is allowed.</em></span></h2>
+      <h2><span class="sr">AWC-OS: </span><span>Not every answer</span><span><em>is allowed.</em></span></h2>
       <p class="lede">An answer that breaks its own conditions never reaches you.</p>
       <p class="cond">A demonstration: the MVP runs on an evaluation machine, not on deployed hosting. <a href="awc-os/">The demonstration</a></p>
     </div>
@@ -229,7 +233,7 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
   <section data-k="7">
     <div class="copy">
       <p class="eyebrow">04 · <b>SijilOS</b></p>
-      <h2><span>Nothing is</span><span><em>overwritten.</em></span></h2>
+      <h2><span class="sr">SijilOS: </span><span>Nothing is</span><span><em>overwritten.</em></span></h2>
       <p class="mark"><span class="fig">ZATCA Phase 1</span><span>certified compliant, April 2025 · live beta in 2 production environments · <a href="pages/brief.html#sijilos">source</a></span></p>
     </div>
   </section>
@@ -269,6 +273,6 @@ footer a{text-decoration:none;pointer-events:auto}footer a:hover{color:var(--ink
 <script src="js/manifest.js" defer integrity="sha384-G3rj/SJ8vH07o590ZnROvlJJE79yXJT1T89J7KHfTDZmD81Zt+vjOj5PhwuiAQv/" crossorigin="anonymous"></script>
 <script src="js/instrument.js" defer integrity="sha384-tXA6nPjk3UzSUFAhJDzTbVjUj6BNdrgKTqG5m3KKZWD9QsMWzXifWEjnJxqmTGp4" crossorigin="anonymous"></script>
 <script src="js/trace.js" defer integrity="sha384-YIUC+HNwVTiPx+xMe6HX5Z/XBuFNfF8J68eE4rmcBSwWKrnFgfFcZ1znk2M12mnj" crossorigin="anonymous"></script>
-<script src="js/unhappened.js" defer integrity="sha384-dekaE9XCCr3DcZXfEsC3uUUcOZSjswoll4fE071P6S8U30dGE3r/9wUZZhsCRFnp" crossorigin="anonymous"></script>
+<script src="js/unhappened.js" defer integrity="sha384-KHf+5TU4N/R2El09j9Jrig98fIspzkBIhgraThjpQZIUOkqn+vV5jjuJsxhfcm93" crossorigin="anonymous"></script>
 </body>
 </html>

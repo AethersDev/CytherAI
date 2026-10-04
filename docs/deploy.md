@@ -576,6 +576,64 @@ release checks, against the same harness extended (`#unhappened_settle_D215BA534
 are NOT_EVALUATED; Safari/WebKit, VoiceOver, a physical phone, 200% zoom and 120 Hz
 scrolling remain the owner's.
 
+## 5g. Hardening pass — iOS Simulator, long sessions, weak devices, 2026-10-04
+
+The concept frozen; one production-engineering pass. Build `A93820E17D59245C` (Chrome battery
+§5d-style, receipts on CY-SEM-003 and CY-TEMP-001; `vaic/evidence/current-browser-observations.v0.json#hardening_A93820E17D59245C`
+for everything below, each part naming the build it was measured on). iOS WebKit was run in
+the iOS 26.5 Simulator (Xcode 27.0: iPhone 17, 17e, 17 Pro Max, Air) against a test copy of the
+artifact that differs only by an injected diagnostics script and `connect-src 'self'`.
+
+**Found and fixed.**
+
+- **iOS startup was blank for seconds.** Shader compilation blocked the page: on a cold iPhone
+  17 Pro Max the scene program's link alone took 2.4 s, first paint came at 6.5 s and the copy at
+  11.6 s. The nine programs now compile on the driver's threads
+  (`KHR_parallel_shader_compile`, available in WebKit and Chrome) and are queried only when
+  finished; past 600 ms the opening is given up so initialisation never poses as silence; the
+  canvas stays invisible until its first frame. Cold iPhone Air: first paint 2.6 s, copy 3.5 s,
+  studio 4.2 s (simulator launch included). Chrome: first studio frame at 79 ms.
+- **A returning iOS reader could get a dead page at every deploy.** Safari checks for the
+  worker update at the navigation itself; a new worker that skipped waiting took over the
+  previous-build page mid-load and answered its module requests with the new bytes, which then
+  failed SRI. Two worker-side fixes were tried and rejected on evidence: serving by
+  `request.integrity` (Safari sends an empty one for a parser-inserted deferred script) and
+  serving pages open at activation from the previous cache (failed with differing module
+  bytes). The fix is the standard one: a new worker waits, and a page whose modules have all run
+  lets it in (`take-over`). With module bytes differing between builds, the old policy lost 3 of
+  6 first visits; the waiting policy kept 9 of 9, every reload running. Cost: a tab holding a
+  page from before this build stays on that build across reloads and moves on in its next
+  session (Chrome, observed: reload = old build, next session = new, no error). The live build's
+  own upgrade (from the drawing set) went through the old policy.
+- **If the scripts never run, the copy now shows anyway**: the opening's hiding unveils itself
+  after 6 s (CSS).
+- **The HUD covered the copy on short iPhones** once "Your proposer" appeared under Safari's
+  toolbar. The copy now clears the HUD at its measured height and pins to `100svh`; zero
+  overlaps since, on every device and section.
+- **A weak or software GPU ran a slideshow** (3–8 fps, frames to 965 ms). The governor now judges
+  by the second, steps resolution down within seconds, and a device still under ~11 fps at the
+  lowest resolution gets the paper cover (`starve()`), which reads as intended.
+- **An unattended tab never rested**, and after ~48,000 refusals the pane's memory saturated
+  into a solid cobalt field. After two minutes without input the rain now stops and the page
+  rests; any input brings it back.
+- **A tap on the glass made a proposal**, so a thumb landing to scroll could seed one. Only a
+  drag proposes now; a tap reads.
+- **Headings** now carry their system's name for assistive technology.
+
+**Measured and left alone.** Frame times are flat: Chrome p99 ≤ 18.6 ms in every minute of a
+20-minute session (57,723 operations, 204 programs, no frame over 33 ms), p99 18.3 ms and worst
+29.5 ms in the 1.5 s after each of 184 admissions, 18.2 ms while hovering receipts over an
+8,000-trace history; iOS Simulator ≈ 60 fps per scene, p99 17–23 ms. The JS heap moves between
+7 and 30 MB with no trend; listeners stay at 11. The 6,000-cell prism cap holds about 565
+programs (about an hour of continuous heavy rain). With the CPU slowed 6× Chrome still holds
+p99 18.3 ms. The accessibility tree: one h1 and eight h2 in order, banner/navigation/main, all
+20 interactive elements named, every factual statement present as text, the receipt region
+polite.
+
+**Still the owner's.** A physical iPhone (thermal throttling, real GPU, touch feel, Low Power
+Mode, rotation), Safari on macOS (its automation is off on this Mac), VoiceOver, 120 Hz. There is
+no sound to check: production has none.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 CY-TEMP-002 is HUMAN_REVIEWED: no harness can establish that a stranger tells acceptance from
