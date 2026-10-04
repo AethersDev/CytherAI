@@ -5,23 +5,26 @@ must move together when the site changes. The repository is a zero-dependency
 static site: source HTML, CSS, and JavaScript are served directly. There is no
 framework, package graph, bundle, or server application.
 
-The homepage is **the drawing set** (since 2026-09-16). Its predecessor, the substrate /
-disclosure-engine homepage **instrument-v1**, is retired whole to `backup/instrument-v1/`
-— a verbatim snapshot of commit `bf82377` with every verifier that established its laws;
-its README indexes it and `backup/instrument-v1/verify.sh` runs them. This guide as it
-stood for that world is `git show bf82377:docs/architecture.md`.
+The homepage is **THE UNHAPPENED** (since 2026-10-04): a WebGL2 studio in which every
+proposal is judged in the browser and only what the kernel admits becomes matter. Its
+predecessors are retired whole, each a verbatim snapshot with every verifier that
+established its laws and its own `verify.sh`: **the drawing set** to
+`backup/drawing-set-v1/` (commit `99b167a`; this guide as it stood for it is
+`git show 99b167a:docs/architecture.md`) and **instrument-v1** to `backup/instrument-v1/`
+(commit `bf82377`). The drawing set is superseded as presentation and preserved as
+historical record; nothing of its design is carried into the front door.
 
 ## System map
 
 ```mermaid
 flowchart TD
-  I["index.html — seven sheets"] --> M["js/manifest.js"]
+  I["index.html — ten scenes over the studio"] --> M["js/manifest.js"]
   M --> B["js/instrument.js — the boundary engine"]
-  M --> C["js/claims.js — six canonical predicates"]
-  B --> D["js/drawing-set.js — the set"]
-  C --> D
-  D --> DOM["title blocks · seal · FIG. 1 · claims · projections"]
-  D --> SW["sw.js registration"]
+  B --> T["js/trace.js — TRACE-1"]
+  T --> U["js/unhappened.js — the studio"]
+  U --> DOM["copy · HUD · receipts · the carried trace"]
+  U --> GL["WebGL2 passes, or the .no-gl cover"]
+  U --> SW["sw.js registration"]
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
   R["pages/runner.html — developer page, not deployed"] --> E["engine/trajectory-engine.js"]
@@ -32,92 +35,98 @@ flowchart TD
   DEP --> DIST["dist/ public artifact"]
   DIST --> SW
 
-  V["vaic/cytherai-obligations.v1.json"] --> PO["tools/project-obligations.py"] --> S7["Sheet 7"]
   M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
 ```
 
-The homepage modules are classic deferred scripts and communicate through four
-explicit `window` APIs. Load order is a contract, not an incidental HTML detail: the
-claims module reads `CytherSubstrate`'s absence at load and registers the canonical
-register only; the set pushes its own predicates before the first render. The public
-surface is an inventory (`tools/test-api.py`): every symbol is declared as production
-(called by another served module) or verifier (used by a tool), and a symbol with no
-caller fails verification.
+The homepage modules are classic deferred scripts and communicate through three
+explicit `window` APIs; `js/unhappened.js` exports nothing. Load order is a contract:
+each module reads only the APIs loaded before it. The public surface is an inventory
+(`tools/test-api.py`): every symbol is declared as production (called by another served
+module) or verifier (used by a tool), and a symbol with no caller fails verification.
 
 | Order | Module | Public API | Responsibility |
 |---:|---|---|---|
-| 1 | `js/manifest.js` | `CytherManifest` | Public disclosure tuple, deterministic parameters (`dsin`, `dsinOrbit`), admission, checksum, epoch history, `project` |
-| 2 | `js/instrument.js` | `CytherInstrument` | The boundary engine: `biEngine` (seeded hostile proposer, incremental admission, independent kernel; every event names the position it was judged from), `judge` (a proposed program against the same boundary and kernel), `audit`, `lastAudit`. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
-| 3 | `js/claims.js` | `CytherClaims` | The six canonical predicates (CL-01 zero external requests · CL-02 render ≡ manifest over every `[data-checksum]` site and every `data-m` fact · CL-03 published admission ≡ derivation · CL-05 the boundary emits no invalid program · CL-06b the mark does not flood the reading lane · CL-07 deterministic admission core), the stored-state registry, per-claim and all-claim recomputation, the renderer (`#claimRows`, `#claimsFooter`, `[data-claims-count]`) |
-| 4 | `js/drawing-set.js` | `CytherDrawingSet` | The set: the frame on every sheet (zone strips, title block, notes, seal), projections of the manifest (revisions, not claimed, chain of record), FIG. 1 and the adjustable edge, the admitted object carried through sheets 2–6, DS-01..05, CL-03/CL-05 setting, `sw.js` registration. Pure geometry exported for `tools/test-drawing-set.js` |
+| 1 | `js/manifest.js` | `CytherManifest` | The public manifest: `project` (the `data-m` facts the pages print, read back at runtime) and `fnv`; `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
+| 2 | `js/instrument.js` | `CytherInstrument` | The boundary engine: `biEngine` (seeded hostile proposer, incremental admission, independent kernel; every event names the position it was judged from), `judge`, `audit`. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
+| 3 | `js/trace.js` | `CytherTrace` | TRACE-1, the Cyther Trace: `code` (a receipt → its trace code), `GLSL` (the same drawing for the studio's shaders), `svg` (for the carried receipt), `VERSION`. `tools/test-trace.js` pins the grammar |
+| 4 | `js/unhappened.js` | — | The studio: the world (bays, admitted programs), the GPU, proposers, the story (ten scenes), the pointer, the readout, the ending, `settled`/`wake`, `sw.js` registration |
 
 ## Directory and ownership map
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
-| `index.html` | The seven sheets and their inline visual system | Yes | Every HTML byte moves the build identity: re-stamp after any edit; SCHEDULE 1, the sheet-1 figures and the sealed-records count are projector-owned (`data-m`); Sheet 7's obligations block is projector-owned |
+| `index.html` | The ten scenes' copy, the HUD and the inline visual system | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`); one `[data-k]` section per scene in `SC` |
 | `js/` | The four homepage modules | All four | A module change requires `./generate-integrity.sh` (SRI) and re-stamping |
+| `prototype/` | Homepage design studies, THE UNHAPPENED v1–v4 and the comparison harness | No | Design record; production does not load from it |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
 | `pages/` | Brief and legal pages; `runner.html` is a developer page | Content pages only | Content pages share navigation and CSS; `runner.html` is linked from no page, not in `deploy.paths`, not precached, unstamped |
 | `engine/` | Trajectory engine and its browser suite | No | Run locally through `pages/runner.html`; not part of the homepage dependency graph or the artifact |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
-| `vaic/` | The VAIC-0 obligation corpus (`v1`, superseding `v0`, which stays as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across both lineages (`tools/test-vaic.py`) |
+| `vaic/` | The VAIC-0 obligation corpus (`v2`, superseding `v1` and through it `v0`, both kept as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across every lineage (`tools/test-vaic.py`) |
 | `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
 | `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
-| `backup/` | Retired surfaces: `instrument-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html`, and the uncurated project pages (`project-pages/`) | No | Historical record only; retire here, never delete, never deploy |
-| `adii/` | ADII project page: the replay, its poster and fonts, the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
+| `backup/` | Retired surfaces: `instrument-v1/` and `drawing-set-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html`, and the uncurated project pages (`project-pages/`) | No | Historical record only; retire here, never delete, never deploy, never import from |
+| `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage), the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
 | `awc-os/` | AWC-OS evaluation gateway (curated), its films and deck | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 
 ## Homepage boot and steady state
 
-`js/drawing-set.js` runs after the three APIs exist.
+`js/unhappened.js` runs after the three APIs exist.
 
-1. The seal is drawn once from `CytherManifest.CANON` (`dsinOrbit`, 16,000 points) and
-   stamped onto every title block; each sheet receives zone strips, its title block
-   (title, DRAWN FROM + checksum, CHECKED BY + count, REV · EPOCH · DATE, SHEET n / 7,
-   APPROVED seal) and its notes block from `data-title` / `data-notes`.
-2. Revisions (epochs and commitments — the commitment status printed verbatim), not
-   claimed, the chain of record and the obligations count are rendered from the manifest.
-   SCHEDULE 1 and the sheet-1 figures are already bytes: `tools/project-manifest.py` wrote
-   them, so a reader without scripts has them.
-3. FIG. 1 runs `biEngine(2)` for 1,500 proposals at 5 per frame. Refusals appear in the
-   construction field where they were judged, with a witness at the offending relation,
-   and age out; the live program is drawn as it grows; on admission the LARGEST program
-   so far is stated by identity and inked over a ~500 ms resolution (smaller admissions
-   flash once). With reduced motion the run completes synchronously.
-4. On settle: counters, refusals by class (FIG. 2b), the REFUSED box, CL-05 and DS-05 are
-   set; the adjustable edge appears (pointer along its normal, or arrow keys; Enter
-   accepts an admitted candidate; Escape resets); the admitted object is rendered into
-   the five `.obj` boxes on sheets 2–6.
-5. The claims render pending, then executable predicates recompute 150 ms after load; the
-   three published admissions are re-derived in yielded steps for CL-03. RECOMPUTE ALL
-   re-runs every predicate that has a `run`.
-6. The service worker registers from the root; its cache name carries the build hash.
+1. It reads back every `data-m` mark against `CytherManifest.project`; a stale mark is
+   outlined and logged. The copy is already bytes: a reader without scripts has it.
+2. It asks for a WebGL2 context with a float colour buffer. Without one, `.no-gl` shows the
+   static cover and hides the HUD; the copy follows the scroll, one frame per scroll or
+   resize, and the page then requests nothing.
+3. A `#trace=SEED.INDEX.HASH` fragment is replayed locally; if it reproduces its own hash
+   the sent proposer opens the page, otherwise `#unsent` says so and the page opens as usual.
+4. The opening (skipped with reduced motion, without WebGL, or when the page loads
+   scrolled): one bead drops onto empty air, its judgment leaves the first trace, the light
+   finds the glass and the copy appears.
+5. Twelve seeded proposers rain onto the pane at the rate each scene sets (`SC`). Every
+   bead is one `biEngine` step: refused → a Cyther Trace on the pane and a cobalt ghost of
+   the stroke; accepted → black, joining its candidate profile under the pane; admitted →
+   the program's profile lands as a licence in the next perimeter bay, held 0.4 s, then
+   porcelain extrudes out of it over 0.9 s. Scene 8 extrudes the standing solids into
+   walls; nothing is moved.
+6. A press-and-drag on the glass seeds the visitor's proposer from the gesture; its first
+   refusal becomes the carried receipt (`#mine`) and the address `#trace=…`, written with
+   `history.replaceState` and never sent.
+7. At the end (scene 9) the light travels to the carried trace and the receipt appears
+   beside it. The service worker registers from the root; its cache name carries the build
+   hash.
 
-At steady state nothing runs: the field ages out, the settle loop stops, and the page is
-static until RUN AGAIN, AUDIT 10,000, the handle, or RECOMPUTE ALL.
+At steady state nothing runs: once no proposal is arriving, no mark or ghost is fading, no
+solid is rising and the camera is at rest, `settled()` stops the frame loop and `#still`
+says so. Scroll, resize, the fonts arriving, a hover over a trace or solid, or a gesture
+calls `wake()`.
+
+The GPU passes, in order: a fullscreen scene pass (the black candidate profiles raymarched,
+the floor with its ledger texture — licence shadow and standing contact), instanced prisms
+for every admitted cell, bead impostors, black ink lines; then cobalt evidence (wires,
+ghosts, decals) into a display-resolution target with its own occlusion, composited after
+the tone map. The causal light is vertical and fixed; the cursor's fill casts nothing.
 
 ## State and evidence boundaries
 
-- Canonical state comes from `CytherManifest.MANIFEST` and deterministic derivation. Its
-  checksum, seal and admissions can be recomputed; the page prints the checksum at every
-  title block and CL-02 reads each site back.
-- The admitted object in FIG. 1 is this browser's demonstration: it is judged by the
-  production boundary and kernel, carried through the sheets with a local derivation
-  receipt, and enters no record. It never mixes with a manifest fact.
-- The claims engine stores one result per claim. Recomputing one claim changes only that
-  result; a passing re-run cannot erase an unrelated invalid state (`tools/test-claims.js`).
-- Sheet 7 discloses what the set owes and who may establish it — never a receipt or a
-  verdict, because a receipt for a build cannot be inside that build.
+- Canonical facts come from `CytherManifest`: the two front-door figures and the brief's
+  validation figures are projections, and the page reads them back.
+- Everything the studio shows is this browser's demonstration: judged by the production
+  boundary engine — a toy grammar of rectilinear profiles, not CytherCAD, as the HUD
+  states — and it enters no record. Counts are of operations judged on this visit.
+- The carried trace is local: a fragment replays a decision, never a picture, and is shown
+  only if it reproduces on this build.
+- The page discloses no obligation, receipt or verdict; the VAIC corpus under `vaic/` is the
+  record, and a receipt for a build cannot be inside that build.
 
 ## Routes
 
 | Route | Runtime |
 |---|---|
-| `/` or `/index.html` | The drawing set, four modules |
+| `/` or `/index.html` | THE UNHAPPENED, four modules |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |
@@ -129,8 +138,7 @@ static until RUN AGAIN, AUDIT 10,000, the handle, or RECOMPUTE ALL.
 
 The release flow is fail-closed:
 
-1. Edit source. After a manifest edit run `python3 tools/project-manifest.py`; after an
-   obligation edit run `python3 tools/project-obligations.py`.
+1. Edit source. After a manifest edit run `python3 tools/project-manifest.py`.
 2. For any change to a served file (anything in `deploy.paths`), run
    `./generate-integrity.sh` (SRI over the requested resources; the 16-hex build identity
    over every `deploy.paths` byte, stamped into every HTML file and the worker cache
@@ -143,7 +151,8 @@ The release flow is fail-closed:
    refuses uncommitted served files, a HEAD not on `master`, and a failing `./verify.sh`.
    The origin contract and Pages' recorded limits are `docs/deploy.md` §1–§4, §7.
 
-The service worker precaches the pages and the four modules, installs one build or
+The service worker precaches the pages, the four modules and the three `adii/fonts/` files
+the homepage draws its type with, installs one build or
 nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
 navigation to the scope root to cached `index.html`, and removes older caches on activate.
 
@@ -153,15 +162,17 @@ navigation to the scope root to cached `index.html`, and removes older caches on
 ./verify.sh
 ```
 
-Module parsing, the public API inventory, the claims-suite law, the boundary stream, the
-drawing set's object and edge, the projection laws, page/resource integration, SRI/build/
-cache identity, deployment closure, the subpage ink law, the derived-asset receipts, and
-the VAIC-0 corpus (structure, retired-evidence resolution, fail-closed controls).
+Module parsing, the public API inventory, the boundary stream, the TRACE-1 grammar, the
+projection laws, page/resource integration (one section per scene), SRI/build/cache
+identity, deployment closure, the subpage ink law, the derived-asset receipts, and the
+VAIC-0 corpus (structure, retired-evidence resolution, every lineage, fail-closed controls).
+The retired front doors: `backup/drawing-set-v1/verify.sh`, `backup/instrument-v1/verify.sh`.
 
-Browser-only validation remains required for: `CLAIMS 11/11 HOLDING` after settle at
-desktop and phone widths; the seal and FIG. 1 as rendered; the adjustable edge by pointer
-and keyboard; layout at 200% zoom and reduced motion; service-worker install/update/
-offline; Safari/WebKit rendering and VoiceOver.
+Browser-only validation remains required for: the studio as rendered at desktop and phone
+widths; the settled halt (no frame requested once settled, `#still` shown); the no-WebGL
+cover; reading ink over the studio and its scrim (CY-SEM-003); layout at 200% zoom and
+reduced motion; `#trace` replay and refusal; zero external requests; service-worker
+install/update/offline; Safari/WebKit rendering and VoiceOver.
 
 ## Change-impact recipes
 
@@ -171,12 +182,15 @@ offline; Safari/WebKit rendering and VoiceOver.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
   icon/manifest references, `generate-integrity.sh` (HTML_FILES), `deploy.paths`, and
   decide whether it belongs in `sw.js`.
-- Add a claim: a canonical `CL` number only where the predicate is the canonical one;
-  otherwise a `DS` pushed onto `CytherClaims.CLAIMS` in `js/drawing-set.js` with its
-  method sentence; `tools/test-claims.js` holds the canonical six.
+- Add a claim to the front door: only as a shipped source states it, with its condition
+  beside it and a link to the source; a figure is a `data-m` projection (add it to
+  `HEADLINE` in `tools/test-projection.py`). An unsupported claim is dropped.
+- Add or remove a scene: an `SC` entry in `js/unhappened.js` and its `[data-k]` section
+  together (`tools/test-site.py` counts both).
 - Change manifest facts: review every `PROVISIONAL` marker, run the projector, regenerate
   integrity, and treat a genuine commitment as an owner-custody decision.
-- Change an obligation: edit the corpus, run `tools/project-obligations.py` (Sheet 7),
-  regenerate integrity, re-stamp; never edit an admitted receipt.
+- Change an obligation: a new corpus version that supersedes the live one and carries every
+  receipt verbatim (CARRIED_FORWARD or SUPERSEDED per row); re-stamp; never edit an
+  admitted receipt.
 - Retire a served file: move it whole into the declared snapshot, add it to `RETIRED`,
   remove it from `deploy.paths`; the receipts that cite it keep resolving.
