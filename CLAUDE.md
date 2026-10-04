@@ -232,11 +232,23 @@ A press-and-drag seeds the visitor's own proposer; its first refusal is carried 
 revealed by the light, and replayable from `#trace=SEED.INDEX.HASH` (local, never sent; a
 fragment that does not reproduce on this build is refused, `#unsent`). **When nothing is
 changing, nothing renders:** `settled()` halts the frame loop and `#still` says so; scroll,
-resize, hover or a gesture `wake()`s it. Without WebGL2 and a float colour buffer, the
+resize, hover or a gesture `wake()`s it. A page left alone is not watched: after `IDLE` (two
+minutes) without input the rain stops and the page rests the same way (`resting`); any input
+brings it back. A long active session is bounded too: traces cap at 8,000, ghosts at 40; the
+6,000-cell prism cap holds about 565 programs (about an hour of continuous heavy rain). **Startup never blocks:** the nine programs compile
+and link on the driver's threads (`KHR_parallel_shader_compile`) and are queried only when done
+(`R.ready()`); if the studio is not ready within `BUDGET` (600 ms) the opening is given up and
+the copy shows at once, and the canvas stays invisible until its first frame (`.lit`). If the
+scripts never take over, the opening's hidden copy unveils itself after 6 s (CSS). **A device
+that cannot carry the studio gets the plain page:** the governor judges frames per second,
+steps resolution down to 0.42, and if the median frame is still over 90 ms twice, `starve()`
+releases the context and the cover stands in. Without WebGL2 and a float colour buffer, the
 `.no-gl` cover stands in, captioned with the three relations (black: proposed or accepted, no
 consequence · cobalt: refused, why · white: admitted, it stands), and the copy follows
 the scroll one frame at a time. Short viewports (≤ 540 px tall: 200% zoom of a laptop, a
-phone on its side) compact the type so every section's copy fits its pinned page. There is no
+phone on its side) compact the type so every section's copy fits its pinned page; on a phone the
+copy keeps clear of the HUD at its measured height (`--hud`) and pins to the small viewport
+(`100svh`). Headings carry their system's name for assistive technology (`.sr`). There is no
 sound. Reduced motion skips the opening, moves the camera without easing and thins the rain.
 
 **`index.html`** — inline `<style>` only, type from `adii/fonts/` (shared, precached); loads
@@ -264,7 +276,11 @@ named there. `adii/` keeps every URL its first publication served, the CVs inclu
 the subpages; `sw.js` sends media, documents and range requests to the network uncached.
 
 **Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
-or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`),
+or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a new build's
+worker **waits** and never takes over a page that may still be loading: Safari checks for the
+update at the navigation itself, and a worker that skipped waiting answered a returning
+reader's previous-build page with this build's modules, which then failed SRI. A page whose
+modules have all run lets the waiting worker in (`take-over`), so the next load is new),
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
 build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;

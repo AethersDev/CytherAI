@@ -327,6 +327,7 @@ void main(){
 const canvas = $("#studio");
 const gl = canvas && canvas.getContext("webgl2", { antialias: false, alpha: false, depth: false, stencil: false, powerPreference: "high-performance" });
 const MAXB = MOBILE ? 700 : 1600, MAXW = 1200, MAXS = 64, MAXP = 6000, MAXI = 600, MAXL = 4000;
+const BOOT = performance.now();
 let R = null;
 try { if (gl) R = gpu(); } catch (err) { console.error(err); R = null; }
 if (!R) document.documentElement.classList.add("no-gl");
@@ -334,14 +335,24 @@ if (!R) document.documentElement.classList.add("no-gl");
 function gpu() {
   /* the lens and the evidence both read distances from the scene: without a float target they would be wrong, so there is no studio */
   if (!gl.getExtension("EXT_color_buffer_float")) throw new Error("no float colour buffer: the plain page stands in");
-  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, HEAD + src); gl.compileShader(s); if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s)); return s; };
-  const prog = ([vs, fs]) => {
-    const p = gl.createProgram(); gl.attachShader(p, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(p, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(p);
-    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
+  /* every program is compiled and linked at once and asked about only when it is finished: with KHR_parallel_shader_compile the
+     driver works on its own threads while the page paints and reads (a cold link on iOS can take seconds); without it the first
+     question blocks, as it always did */
+  const par = gl.getExtension("KHR_parallel_shader_compile");
+  const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, HEAD + src); gl.compileShader(s); return s; };
+  const prog = ([vs, fs]) => { const p = gl.createProgram(); p.sh = [sh(gl.VERTEX_SHADER, vs), sh(gl.FRAGMENT_SHADER, fs)]; p.sh.forEach(s => gl.attachShader(p, s)); gl.linkProgram(p); return p; };
+  const finish = p => {
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(p.sh.map(s => gl.getShaderInfoLog(s)).join("") || gl.getProgramInfoLog(p));
     p.u = {}; for (let i = 0, n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS); i < n; i++) { const a = gl.getActiveUniform(p, i); p.u[a.name.replace(/\[0\]$/, "")] = { l: gl.getUniformLocation(p, a.name), t: a.type }; }
     return p;
   };
   const P = { scene: prog(SCENE), prism: prog(PRISM), bead: prog(BEAD), wire: prog(WIRE), ink: prog(INK), inkd: prog(INKD), stamp: prog(STAMP), licence: prog(LICENCE), final: prog(FINAL) };
+  let live = false;
+  function ready() {
+    if (live) return true;
+    if (par && !Object.values(P).every(p => gl.getProgramParameter(p, par.COMPLETION_STATUS_KHR))) return false;
+    Object.values(P).forEach(finish); return live = true;
+  }
   const VEC = { [gl.FLOAT]: "uniform1fv", [gl.FLOAT_VEC2]: "uniform2fv", [gl.FLOAT_VEC3]: "uniform3fv", [gl.FLOAT_VEC4]: "uniform4fv" };
   const set = (p, o) => { gl.useProgram(p); for (const k in o) { const u = p.u[k]; if (!u) continue; const v = o[k];
     if (u.t === gl.FLOAT_MAT4) gl.uniformMatrix4fv(u.l, false, v); else if (u.t === gl.INT || u.t === gl.SAMPLER_2D) gl.uniform1i(u.l, v); else if (u.t === gl.UNSIGNED_INT) gl.uniform1ui(u.l, v); else gl[VEC[u.t]](u.l, typeof v === "number" ? [v] : v); } };
@@ -391,12 +402,22 @@ function gpu() {
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) throw new Error("studio framebuffer incomplete");
     RT = { tex, cov, depth, fb, w, h };
   }
-  let slow = 0, frames = 0;
-  function govern(dt) { frames++; if (dt > 1 / 45) slow++; if (frames >= 60) { if (slow > 30 && scale > .42) scale *= .86; frames = slow = 0; } }
+  /* resolution follows the device, judged by the second, so a slow one adapts within seconds. One that cannot hold ~11 fps even
+     at the lowest resolution is starved: it gets the plain page, not a slideshow */
+  let win = [], judgedAt = 0, prev = 0, starved = 0;
+  function govern() {
+    const t = performance.now(), d = t - prev; prev = t;
+    if (d > 1000 || document.hidden) { win = []; judgedAt = t; return false; }   /* a pause (hidden, halted, the first frame) is not slowness */
+    win.push(d); if (t - judgedAt < 1000 || win.length < 3) return false;
+    const med = win.sort((a, b) => a - b)[win.length >> 1]; win = []; judgedAt = t;
+    if (med > 40 && scale > .42) { scale = Math.max(.42, scale * .8); starved = 0; return false; }
+    starved = scale <= .42 && med > 90 ? starved + 1 : 0;
+    return starved >= 2;
+  }
   const drawLines = (vaoName, b, data, n) => { gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferSubData(gl.ARRAY_BUFFER, 0, data.subarray(0, n * 8)); gl.bindVertexArray(V[vaoName]); gl.drawArraysInstanced(gl.TRIANGLE_STRIP, 0, 4, n); };
 
   function draw(f) {
-    govern(f.dt); targets();
+    const tooSlow = govern(); targets();
     gl.disable(gl.DEPTH_TEST);
     if (f.nStamps) {
       gl.bindFramebuffer(gl.FRAMEBUFFER, trFb); gl.viewport(0, 0, TW, TH); gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE);
@@ -448,8 +469,9 @@ function gpu() {
     gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, EV.tex); gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, RT.cov);
     set(P.final, Object.assign({ uScene: 0, uTrace: 1, uEv: 2, uCov: 3, uGR: GLASS.r, uExposure: 2.45, uHits: f.hits, uFocus: f.focusTrace, uIntro: f.intro, uMine: f.mine, uLamp: f.lamp, uMemory: f.memory, uFocusD: f.focusD, uAspect: RT.w / RT.h, uTexel: [1 / RT.w, 1 / RT.h] }, common));
     gl.bindVertexArray(V.empty); gl.drawArrays(gl.TRIANGLES, 0, 3);
+    return tooSlow;
   }
-  return { draw, beads, wires, inks, stamps, prisms, aspect: () => canvas.width / canvas.height };
+  return { draw, ready, beads, wires, inks, stamps, prisms, aspect: () => canvas.width / canvas.height };
 }
 
 /* ================= proposers: the rain's, the opening's, and yours ================= */
@@ -758,6 +780,9 @@ function solidAt(px, py) {
   return best;
 }
 const tip = $("#receipt"), yourLine = $("#yours");
+/* the copy keeps clear of the HUD's reading line at its real height (it grows when your proposer appears, and wraps on a phone) */
+const hudEl = $(".hud"), hudLine = $(".hud > span");
+new ResizeObserver(() => document.documentElement.style.setProperty("--hud", hudLine.offsetHeight + parseFloat(getComputedStyle(hudEl).paddingBottom) + "px")).observe(hudLine);
 let focusTrace = [0, 0, 0, 0], drag = null;
 const onCanvas = e => e.target === canvas;
 /* what is under a point: a trace on the pane, else an admitted solid */
@@ -805,8 +830,9 @@ addEventListener("pointerdown", e => { if (R && e.button === 0 && onCanvas(e)) d
 addEventListener("pointercancel", () => { drag = null; });
 addEventListener("pointerup", e => {
   if (!drag) return; const d = drag; drag = null;
-  /* a press that does not travel reads what is under it (on touch, the only way to read); only a drag proposes */
-  if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 10 && read(pick(e.clientX, e.clientY), e.clientX, e.clientY)) return;
+  /* a press that does not travel reads what is under it (on touch, the only way to read), or clears what was read; it never
+     proposes: only a drag does, so a thumb that lands on the glass to scroll seeds nothing */
+  if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 10) { read(pick(e.clientX, e.clientY), e.clientX, e.clientY); return; }
   if (!d.g) return;
   const g2 = glassPoint(e.clientX, e.clientY) || d.g;
   /* your gesture is the seed: where you touched the glass, and which way you moved; your attempts assemble where you touched */
@@ -848,23 +874,44 @@ function ending(now) {
   return k >= 1;
 }
 /* nothing is allowed to change: no proposal arriving, no mark still fading, no solid still rising, the camera at rest */
-function settled() {
-  if (intro.on || rain > .02) return false;
+function settled(rate) {
+  if (intro.on || rate > .02) return false;
   for (let i = 0; i < MAXB; i++) if (st[i] !== 9) return false;
   for (let i = 0; i < 24; i++) if (clock - hits[i * 4 + 2] < 1.6) return false;
   for (const g of ghosts) if (clock - g.t < (g.big ? 2.8 : .75)) return false;
   for (const g of admitted) if (clock - g.birth < HOLD + RISE) return false;
   return true;
 }
-function wake() { if (!halted) return; halted = false; stillNote.hidden = true; last = performance.now() / 1000; requestAnimationFrame(frame); }
+/* a page left alone is not watched: after IDLE without input the rain stops and, once everything has landed, the page
+   rests exactly as it does at the end; any input brings it back */
+const IDLE = 120000;
+let lastInput = performance.now(), resting = false;
+for (const t of ["pointermove", "pointerdown", "wheel", "scroll", "keydown", "resize"]) addEventListener(t, () => { lastInput = performance.now(); if (resting) wake(); }, { passive: true });
+function wake() { if (!halted) return; halted = false; resting = false; stillNote.hidden = true; last = performance.now() / 1000; requestAnimationFrame(frame); }
 
 /* ================= one clock ================= */
 let last = performance.now() / 1000, clock = 0, hud = -1;
 if (opening) opening.anchor = OPEN.slice();
-if (opening && !intro.on) judge(opening, OPEN[0], OPEN[1], 0, false);
+intro.owed = !!opening && !intro.on;   /* the opening proposal, judged on the studio's first frame */
+function endIntro() { intro.on = false; intro.end = clock; glassOn = 1; lightSweep = 0; introU = [0, 0, 0, 0]; document.documentElement.classList.remove("intro"); intro.owed = !!opening && !intro.dropped; }
+/* the studio exists once its programs do. The copy is not held back for an opening that cannot start yet: past BUDGET the
+   opening is given up and the page reads as a page while the studio finishes; it then fades in */
+const BUDGET = 600;
+function studioReady() {
+  try { if (R.ready()) { document.documentElement.classList.add("lit"); return true; } }
+  catch (err) { console.error(err); R = null; document.documentElement.classList.add("no-gl"); }
+  if (intro.on && (!R || performance.now() - BOOT > BUDGET)) endIntro();
+  return false;
+}
+/* a device that cannot carry the studio is given the plain page, and its GPU back */
+function starve() {
+  const lose = gl.getExtension("WEBGL_lose_context"); R = null; if (lose) lose.loseContext();
+  document.documentElement.classList.remove("lit"); document.documentElement.classList.add("no-gl"); if (intro.on) endIntro();
+}
 function frame(ms) {
   const dt = Math.min(ms / 1000 - last, .05); last = ms / 1000; clock += dt;
   story(clock, dt);
+  if (R && !studioReady()) { requestAnimationFrame(frame); return; }
   if (intro.on) {
     if (intro.t0 < 0) intro.t0 = clock;
     const t = clock - intro.t0;
@@ -874,23 +921,24 @@ function frame(ms) {
     if (intro.tr && h >= 0) introU = [intro.tr.x, intro.tr.z, intro.tr.code, 1 - ease(clamp01((h - 2.4) / 1.2))];
     if (h > .9) { const k = clamp01((h - .9) / 1.8); glassOn = k; lightSweep = 1 - ease(k); }   /* then the light finds the glass */
     if (h > 2.2 && !intro.copy) { document.documentElement.classList.remove("intro"); intro.copy = true; }
-    if (h > 3.4 || p > .35 || t > 11) { intro.on = false; intro.end = clock; glassOn = 1; lightSweep = 0; introU = [0, 0, 0, 0]; document.documentElement.classList.remove("intro");
-      if (opening && !intro.dropped) judge(opening, OPEN[0], OPEN[1], clock, false); }
+    if (h > 3.4 || p > .35 || t > 11) endIntro();
   }
   const ramp = intro.on ? 0 : intro.end < 0 ? 1 : clamp01((clock - intro.end) / 2.5);
-  const rainNow = rain * (CALM ? .35 : MOBILE ? .55 : 1) * ramp;
+  const idle = performance.now() - lastInput > IDLE, rainNow = idle ? 0 : rain * (CALM ? .35 : MOBILE ? .55 : 1) * ramp;
   view();
   if (R) {
     nStamps = 0;
+    if (intro.owed) { intro.owed = false; judge(opening, OPEN[0], OPEN[1], clock, false); }
     simulate(clock, dt, rainNow);
     matter(dt); extrude(clock); lines(clock);
     const free = p > 8.6 ? 0 : 1, az = .62 + ptr.sx * .55 * free - lightSweep * 1.5, key = [-Math.cos(az) * .62, .74 - ptr.sy * .08 * free, Math.sin(az) * .62 + .2], kl = Math.hypot(...key);
     const done = ending(clock);
     const [lo, hi] = bounds();
-    R.draw({ dt, time: clock, vp: VP, ivp: IVP, eye: EYE, right: RIGHT, up: UP, key: key.map(v => v / kl), glass: glassOn, fov: cam.f * Math.PI / 180,
+    const starved = R.draw({ dt, time: clock, vp: VP, ivp: IVP, eye: EYE, right: RIGHT, up: UP, key: key.map(v => v / kl), glass: glassOn, fov: cam.f * Math.PI / 180,
       bk: BK, bkh: BKH, bmin: lo, bmax: hi, hits, focusTrace, intro: introU, dec: decal(), kerf: kerf(), mine: mineU, lamp, memory: 1 - .65 * weight(3), licences,
       focusD: Math.hypot(EYE[0] - cam.t[0], EYE[1] - cam.t[1], EYE[2] - cam.t[2]), nStamps, nWires, nInk, nCells });
-    if (done && settled()) halted = true;
+    if (starved) starve();
+    else if ((done || idle) && settled(rainNow)) { halted = true; resting = !done; }
   } else halted = true;   /* no studio: the copy follows the scroll, one frame per scroll or resize */
   if (halted || clock - hud > .2) {
     hud = clock; put("judged", fmt(tally.judged)); put("judgedw", tally.judged === 1 ? "proposed operation" : "proposed operations"); put("refused", fmt(tally.refused)); put("admitted", fmt(admitted.length)); put("admittedw", admitted.length === 1 ? "program admitted" : "programs admitted"); put("ext", String(external()));
@@ -900,5 +948,11 @@ function frame(ms) {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});   /* insecure context — run online-only */
+/* the worker. A new build's worker waits (sw.js): it may not take over a page still loading. This page's modules have all run,
+   so it asks a waiting worker in, now or once it has installed; the next load is the new build */
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").then(reg => {
+  const letIn = w => w && w.postMessage("take-over");
+  letIn(reg.waiting);
+  reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });
+}).catch(() => {});   /* insecure context — run online-only */
 })();
