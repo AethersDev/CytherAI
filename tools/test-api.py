@@ -23,24 +23,20 @@ def check(cond, name):
     print(("PASS  " if cond else "FAIL  ") + name)
     if not cond: fails.append(name)
 
-MODULES = {"CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js", "CytherTrace": "js/trace.js"}
-# the local names served modules bind each global to (js/unhappened.js publishes nothing: it is the page)
-ALIASES = {"CytherManifest": ["CM"], "CytherInstrument": ["CI"], "CytherTrace": ["TR"]}
+MODULES = {"CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js"}
+# the local names served modules bind each global to (js/film.js reads no module and publishes nothing)
+ALIASES = {"CytherManifest": ["CM"], "CytherInstrument": ["CI"]}
 INVENTORY = {
     "CytherManifest": {
-        "production": ["project", "fnv"],
-        "verifier": ["MANIFEST", "VALIDATION", "CANON", "ADMISSION_NONCE", "CHECKSUM"],
+        "production": ["fnv"],
+        "verifier": ["project", "MANIFEST", "VALIDATION", "CANON", "ADMISSION_NONCE", "CHECKSUM"],
     },
     "CytherInstrument": {
-        "production": ["biEngine", "judge"],
-        "verifier": ["audit"],
-    },
-    "CytherTrace": {
-        "production": ["VERSION", "code", "GLSL", "svg"],
-        "verifier": [],
+        "production": ["judge"],
+        "verifier": ["biEngine", "audit"],
     },
 }
-SERVED = ["index.html", "js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js", "exception/index.html", "exception/exception.js"]
+SERVED = ["index.html", "js/film.js", "js/manifest.js", "js/instrument.js", "exception/index.html", "exception/exception.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)

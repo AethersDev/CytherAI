@@ -188,13 +188,9 @@ class SiteContractTests(unittest.TestCase):
     def test_homepage_module_order_and_script_posture(self) -> None:
         index = parse_page("index.html")
         scripts = [attrs for tag, attrs in index.tags if tag == "script"]
-        # load order is a contract: the record, the boundary engine, the trace grammar, then the
-        # page that reads all three at load (js/unhappened.js binds CytherManifest, CytherInstrument
-        # and CytherTrace at its top level)
-        self.assertEqual(
-            [attrs.get("src") for attrs in scripts],
-            ["js/manifest.js", "js/instrument.js", "js/trace.js", "js/unhappened.js"],
-        )
+        # the front door runs one script and reads no module: the film, its sentences, the sequences
+        # and the worker are js/film.js (THE EXCEPTION loads the record and the engine itself)
+        self.assertEqual([attrs.get("src") for attrs in scripts], ["js/film.js"])
         self.assertTrue(all(attrs.get("defer") == "" for attrs in scripts))
         self.assertFalse(any(not attrs.get("src") for attrs in scripts), "index CSP forbids inline script")
 
@@ -254,7 +250,7 @@ class SiteContractTests(unittest.TestCase):
         baseline = VAIC.build_identity(ROOT)
         self.assertEqual(baseline, VAIC.current_build(ROOT), "the stamp is the projection")
         mutations = {
-            "index.html": lambda b: b.replace(b"<span>The model proposes.</span>", b"<span>The model proposes (counterfactual).</span>", 1),
+            "index.html": lambda b: b.replace(b"Keep control of what changes.", b"Keep control of what changes (counterfactual).", 1),
             "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
             "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
         }
@@ -325,7 +321,7 @@ class SiteContractTests(unittest.TestCase):
         # SRI check. It waits until a page whose modules have all run asks it in.
         self.assertNotIn("skipWaiting", install, "install must not take over open pages")
         self.assertIn("if (e.data === 'take-over') self.skipWaiting();", SW_SOURCE)
-        self.assertIn('postMessage("take-over")', (ROOT / "js/unhappened.js").read_text(encoding="utf-8"),
+        self.assertIn('postMessage("take-over")', (ROOT / "js/film.js").read_text(encoding="utf-8"),
                       "the page that has loaded is the one that lets the new build in")
 
     def test_manifest_icons_are_valid_and_deployed(self) -> None:
@@ -340,17 +336,20 @@ class SiteContractTests(unittest.TestCase):
                 declared = tuple(map(int, icon["sizes"].split("x")))
                 self.assertEqual((width, height), declared, relative)
 
-    def test_every_scene_of_the_story_has_its_section(self) -> None:
-        """js/unhappened.js walks the camera, the rain and the systems through SC — one entry per
-        [data-k] section of index.html, in order. A section without a scene (or a scene without its
-        section) silently shifts every scene after it: the copy and the picture stop agreeing."""
-        index = (ROOT / "index.html").read_text(encoding="utf-8")
-        runtime = (ROOT / "js/unhappened.js").read_text(encoding="utf-8")
-        sections = [int(k) for k in re.findall(r'<section data-k="(\d+)"', index)]
-        story = runtime[runtime.index("const SC = ["):runtime.index("];", runtime.index("const SC = ["))]
-        scenes = re.findall(r"^\s*\{ (?:e|focus):", story, re.M)
-        self.assertEqual(sections, list(range(len(sections))))
-        self.assertEqual(len(scenes), len(sections))
+    def test_every_film_the_front_door_names_ships(self) -> None:
+        """The page names its media in three places no resolver above reads: a <video>'s poster, a
+        sequence's data-src (assigned when it comes into view) and the film paths js/film.js picks by
+        orientation. Each must be a deployed file, or the page shows a black frame where the film was.
+        (THE UNHAPPENED's scene/section parity law retired with it: backup/unhappened-v1/.)"""
+        index = parse_page("index.html")
+        named = {attrs[key] for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
+        named |= set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))
+        self.assertEqual(len([1 for tag, attrs in index.tags if tag == "video" and "seq" in attrs.get("class", "")]), 3,
+                         "one sequence per system")
+        self.assertTrue(named, "the page names no film")
+        self.assertEqual(sorted(named - set(DEPLOY_FILES)), [], "named but not shipped")
+        self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
+                         "shipped but named by nothing")
 
     def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
         """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
@@ -456,7 +455,7 @@ class SiteContractTests(unittest.TestCase):
         """
         register = json.loads((ROOT / "vaic/release-dispositions.v0.json").read_text(encoding="utf-8"))
         disposed = {entry["subject"] for entry in register["dispositions"]}
-        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v2.json")
+        corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v3.json")
         matrix = VAIC.load_json(ROOT / "vaic/evaluator-matrix.v0.json")
         summary = VAIC.validate(corpus, matrix, ROOT)
         self.assertEqual(summary["structure"], "VALID")

@@ -15,15 +15,17 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = "vaic/cytherai-obligations.v2.json"
+CORPUS = "vaic/cytherai-obligations.v3.json"
 # The admission lineage of the corpus is every file it has ever lived in. Each successor
 # supersedes its predecessor and carries every receipt verbatim (v1 the instrument-v1 → drawing
-# set step, v2 the drawing set → THE UNHAPPENED step); the guards walk every path, so a receipt
+# set step, v2 the drawing set → THE UNHAPPENED step, v3 THE UNHAPPENED → the film step); the
+# guards walk every path, so a receipt
 # admitted into any of them on the canonical ref must still be present, unchanged, in the live corpus.
-LINEAGE = ("vaic/cytherai-obligations.v0.json", "vaic/cytherai-obligations.v1.json", CORPUS)
+LINEAGE = ("vaic/cytherai-obligations.v0.json", "vaic/cytherai-obligations.v1.json", "vaic/cytherai-obligations.v2.json", CORPUS)
 # each recorded step's dispositions — the shape of the transition, not a verdict distribution
 STEPS = {"vaic/cytherai-obligations.v1.json": {"CARRIED_FORWARD": 9, "SUPERSEDED": 10},
-         CORPUS: {"CARRIED_FORWARD": 5, "SUPERSEDED": 14}}
+         "vaic/cytherai-obligations.v2.json": {"CARRIED_FORWARD": 5, "SUPERSEDED": 14},
+         CORPUS: {"CARRIED_FORWARD": 4, "SUPERSEDED": 15}}
 # A commit records a state; canonical reachability ADMITS it. Without a designated
 # lineage, a receipt on any throwaway branch would become institutional history, and
 # deleting that branch would make admitted history vanish. Both cannot be acceptable.
@@ -265,7 +267,7 @@ class VaicCorpusTests(unittest.TestCase):
         row = next(r for r in corpus["obligations"] if r["id"] == "CY-EPI-001")
         receipt = self.current_receipt(corpus)
         receipt.update({"evaluator": row["authorized_evaluators"][0], "coverage": row["required_coverage"]["classes"][0],
-                        "evidence": ["js/unhappened.js#settled"], "result": row["evaluation"]["result"]})
+                        "evidence": ["js/film.js#still"], "result": row["evaluation"]["result"]})
         row["evaluation"]["receipts"].append(receipt)
         bad = self.validate(corpus)
         self.assertEqual(bad["structure"], "INVALID")
@@ -384,7 +386,7 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("another candidate" in error for error in result["errors"]))
 
-    def anchored(self, source: str, reference: str = "js/unhappened.js#settled"):
+    def anchored(self, source: str, reference: str = "js/film.js#settled"):
         """Resolve a reference against a throwaway tree holding just the cited file."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -657,6 +659,12 @@ class VaicCorpusTests(unittest.TestCase):
 
     def test_origin_pass_cannot_compensate_for_projection_failure(self) -> None:
         corpus = copy.deepcopy(self.corpus)
+        # the projection failure is made here, never borrowed from the live corpus: until 2026-10-12
+        # this test leaned on CY-TEMP-002 never having been evaluated, and a corpus that legitimately
+        # passes its projection would have turned the law into a harness failure
+        build = corpus["candidate"]["build_identity"]
+        ink = next(row for row in corpus["obligations"] if row["id"] == "CY-SEM-003")
+        ink["evaluation"]["receipts"] = [r for r in ink["evaluation"]["receipts"] if r["artifact_build"] != build]
         origin = next(row for row in corpus["obligations"] if row["scope"] == "origin")
         # a receipt only certifies the candidate it is bound to, so the synthetic
         # origin PASS has to be an observation of THIS build to license anything
