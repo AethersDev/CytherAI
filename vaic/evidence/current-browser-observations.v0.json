@@ -15,7 +15,8 @@
     "D215BA534299A451",
     "A93820E17D59245C",
     "8E49D942927C5361",
-    "5627D34CD6B86545"
+    "5627D34CD6B86545",
+    "B068554A3A562886"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -5634,6 +5635,1027 @@
         ]
       },
       "supersedes_finding": "#origin_closure_D215BA534299A451 (HTTP not redirected): resolved by the owner switching on 'Enforce HTTPS' on 2026-10-05"
+    },
+    "reading_ink_B068554A3A562886": {
+      "artifact_build": "B068554A3A562886",
+      "observed_at": "2026-10-12",
+      "runtime": "HeadlessChrome 155.0.8059.39 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by a static server that answers byte ranges",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad inkprobe.py)",
+      "surface": "every reading element of the front door: the film's captions, the statement and its links, the header, Replay and the conceptual-visualization line over the film and its local darkening; the principle over the final composition; the three systems and the close over the page ground",
+      "method": "play() stubbed so the film is held; for each declared second the video is seeked and the seek confirmed to land within 0.05 s (the server answers byte ranges; a run whose seek misses stops), then 1.0 s for the cue and the 0.6 s fade; the film is then ended (the still state) and each section scrolled to the viewport centre; capture the page with every glyph's fill transparent (the ground actually composited beneath it, text-shadow and darkening included) and with every fill #FF00FF (glyph support = pixels differing by ≥ 64 in a channel); WCAG 2.1 contrast of each fully opaque element's computed ink, alpha-composited, against every ground pixel at its glyph support. The page's CSP was bypassed for the probe's own capture style only.",
+      "samples": "film seconds 1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9; the still state; #systems, #adii, #awc-os, #cythercad, .close",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "the declared seconds, sections and three viewports only; a finite sweep licenses no universal proposition",
+      "result": "PASS",
+      "elements_measured": 388,
+      "worst_min": 4.75,
+      "history": "The first measurement of this front door (on the study, 2026-10-12) found seven elements below 4.5:1 over bright film: the header on phones, the conceptual-visualization line and Replay along the film's lower edge, and the principle over the final composition. Localized darkening under the header, along the lower edge, behind Replay and behind the principle fixed them before this build. An earlier run of the same probe against a server without byte ranges did not seek and is not evidence.",
+      "profiles": {
+        "1440x900 · dpr 1": {
+          "elements_measured": 134,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.17,
+            "p01": 5.17
+          },
+          "by_sample": {
+            "t1.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.54,
+                "p01": 5.68,
+                "glyph_px": 785
+              }
+            },
+            "t2.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.97,
+                "p01": 5.97,
+                "glyph_px": 785
+              }
+            },
+            "t3.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.89,
+                "p01": 5.93,
+                "glyph_px": 785
+              }
+            },
+            "t4.2": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.17,
+                "p01": 5.17,
+                "glyph_px": 771
+              }
+            },
+            "t5.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.8,
+                "p01": 5.85,
+                "glyph_px": 785
+              }
+            },
+            "t5.8": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.93,
+                "p01": 5.97,
+                "glyph_px": 785
+              }
+            },
+            "t6.6": {
+              "elements": 6,
+              "worst": {
+                "element": "p.line",
+                "text": "Not everything should be allowed to chan",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.54,
+                "p01": 8.62,
+                "glyph_px": 7127
+              }
+            },
+            "t8.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.line",
+                "text": "CytherAI builds the part of AIthat decid",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.99,
+                "p01": 10.21,
+                "glyph_px": 10854
+              }
+            },
+            "t9.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 785
+              }
+            },
+            "t9.9": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.08,
+                "p01": 6.11,
+                "glyph_px": 785
+              }
+            },
+            "t11.0": {
+              "elements": 8,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.08,
+                "p01": 6.08,
+                "glyph_px": 785
+              }
+            },
+            "t11.9": {
+              "elements": 8,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.07,
+                "p01": 6.08,
+                "glyph_px": 785
+              }
+            },
+            "still": {
+              "elements": 9,
+              "worst": {
+                "element": "button.mono",
+                "text": "Replay",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.93,
+                "p01": 5.93,
+                "glyph_px": 105
+              }
+            },
+            "#systems": {
+              "elements": 5,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.08,
+                "p01": 6.11,
+                "glyph_px": 785
+              }
+            },
+            "#adii": {
+              "elements": 8,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluation result",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 2179
+              }
+            },
+            "#awc-os": {
+              "elements": 10,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluation result",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 627
+              }
+            },
+            "#cythercad": {
+              "elements": 11,
+              "worst": {
+                "element": "p.cond",
+                "text": "A demonstration: the MVP runs on an eval",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 550
+              }
+            },
+            ".close": {
+              "elements": 15,
+              "worst": {
+                "element": "p.cond",
+                "text": "Runs on-prem, private and air-gapped.",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 964
+              }
+            }
+          }
+        },
+        "390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 128,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "min": 4.81,
+            "p01": 5.1
+          },
+          "by_sample": {
+            "t1.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.72,
+                "p01": 5.76,
+                "glyph_px": 5538
+              }
+            },
+            "t2.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.68,
+                "p01": 5.77,
+                "glyph_px": 5537
+              }
+            },
+            "t3.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.72,
+                "p01": 5.72,
+                "glyph_px": 5536
+              }
+            },
+            "t4.2": {
+              "elements": 6,
+              "worst": {
+                "element": "p.line",
+                "text": "Not everything should be allowed to chan",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.18,
+                "p01": 6.79,
+                "glyph_px": 15978
+              }
+            },
+            "t5.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.6,
+                "p01": 5.63,
+                "glyph_px": 5528
+              }
+            },
+            "t5.8": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.67,
+                "p01": 5.72,
+                "glyph_px": 5537
+              }
+            },
+            "t6.6": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.63,
+                "p01": 5.72,
+                "glyph_px": 5538
+              }
+            },
+            "t8.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.97,
+                "p01": 5.97,
+                "glyph_px": 5537
+              }
+            },
+            "t9.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.72,
+                "p01": 5.77,
+                "glyph_px": 5537
+              }
+            },
+            "t9.9": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.89,
+                "p01": 5.97,
+                "glyph_px": 5539
+              }
+            },
+            "t11.0": {
+              "elements": 8,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.8,
+                "p01": 5.89,
+                "glyph_px": 5539
+              }
+            },
+            "t11.9": {
+              "elements": 8,
+              "worst": {
+                "element": "h1",
+                "text": "Let AI change things.Keep control of wha",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.08,
+                "p01": 9.53,
+                "glyph_px": 21437
+              }
+            },
+            "still": {
+              "elements": 9,
+              "worst": {
+                "element": "h1",
+                "text": "Let AI change things.Keep control of wha",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.08,
+                "p01": 9.53,
+                "glyph_px": 21437
+              }
+            },
+            "#systems": {
+              "elements": 6,
+              "worst": {
+                "element": "small.mono",
+                "text": "One principle. Three systems.",
+                "ink": [
+                  255,
+                  173,
+                  87
+                ],
+                "min": 4.81,
+                "p01": 5.1,
+                "glyph_px": 3180
+              }
+            },
+            "#adii": {
+              "elements": 6,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluation result",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 15097
+              }
+            },
+            "#awc-os": {
+              "elements": 6,
+              "worst": {
+                "element": "p.cond",
+                "text": "A demonstration: the MVP runs on an eval",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 14711
+              }
+            },
+            "#cythercad": {
+              "elements": 9,
+              "worst": {
+                "element": "p.cond",
+                "text": "Runs on-prem, private and air-gapped.",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 6928
+              }
+            },
+            ".close": {
+              "elements": 16,
+              "worst": {
+                "element": "p.cond",
+                "text": "Runs on-prem, private and air-gapped.",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 6928
+              }
+            }
+          }
+        },
+        "320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 126,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "h2",
+            "text": "The model proposes.The system decides.",
+            "min": 4.75,
+            "p01": 11.4
+          },
+          "by_sample": {
+            "t1.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.63,
+                "p01": 5.67,
+                "glyph_px": 2790
+              }
+            },
+            "t2.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.63,
+                "p01": 5.72,
+                "glyph_px": 2789
+              }
+            },
+            "t3.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.62,
+                "p01": 5.63,
+                "glyph_px": 2789
+              }
+            },
+            "t4.2": {
+              "elements": 6,
+              "worst": {
+                "element": "p.line",
+                "text": "Not everything should be allowed to chan",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.46,
+                "p01": 6.7,
+                "glyph_px": 7517
+              }
+            },
+            "t5.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.43,
+                "p01": 5.49,
+                "glyph_px": 2786
+              }
+            },
+            "t5.8": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.58,
+                "p01": 5.58,
+                "glyph_px": 2788
+              }
+            },
+            "t6.6": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.58,
+                "p01": 5.67,
+                "glyph_px": 2785
+              }
+            },
+            "t8.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.53,
+                "p01": 5.53,
+                "glyph_px": 2790
+              }
+            },
+            "t9.0": {
+              "elements": 6,
+              "worst": {
+                "element": "p.line",
+                "text": "CytherAI builds the part of AIthat decid",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 5.77,
+                "p01": 10.89,
+                "glyph_px": 11774
+              }
+            },
+            "t9.9": {
+              "elements": 6,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.58,
+                "p01": 5.63,
+                "glyph_px": 2790
+              }
+            },
+            "t11.0": {
+              "elements": 8,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.53,
+                "p01": 5.66,
+                "glyph_px": 2790
+              }
+            },
+            "t11.9": {
+              "elements": 8,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.63,
+                "p01": 5.85,
+                "glyph_px": 2790
+              }
+            },
+            "still": {
+              "elements": 9,
+              "worst": {
+                "element": "p.note",
+                "text": "A conceptual visualization. It measures ",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 5.63,
+                "p01": 5.85,
+                "glyph_px": 2790
+              }
+            },
+            "#systems": {
+              "elements": 6,
+              "worst": {
+                "element": "h2",
+                "text": "The model proposes.The system decides.",
+                "ink": [
+                  236,
+                  231,
+                  220
+                ],
+                "min": 4.75,
+                "p01": 11.4,
+                "glyph_px": 10060
+              }
+            },
+            "#adii": {
+              "elements": 6,
+              "worst": {
+                "element": "p.cond",
+                "text": "A research project: no evaluation result",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 7171
+              }
+            },
+            "#awc-os": {
+              "elements": 6,
+              "worst": {
+                "element": "p.cond",
+                "text": "A demonstration: the MVP runs on an eval",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 6895
+              }
+            },
+            "#cythercad": {
+              "elements": 8,
+              "worst": {
+                "element": "p.cond",
+                "text": "Runs on-prem, private and air-gapped.",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 3239
+              }
+            },
+            ".close": {
+              "elements": 15,
+              "worst": {
+                "element": "p.cond",
+                "text": "Runs on-prem, private and air-gapped.",
+                "ink": [
+                  143,
+                  140,
+                  153
+                ],
+                "min": 6.11,
+                "p01": 6.11,
+                "glyph_px": 3239
+              }
+            }
+          }
+        }
+      }
+    },
+    "film_settle_B068554A3A562886": {
+      "artifact_build": "B068554A3A562886",
+      "build_identity": "B068554A3A562886",
+      "observed_at": "2026-10-12",
+      "runtime": "HeadlessChrome 155.0.8059.39 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by a static server that answers byte ranges",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad settleprobe.py)",
+      "surface": "the film front door (index.html, js/film.js, css/film.css, film/)",
+      "method": "before any page script (Page.addScriptToEvaluateOnNewDocument), requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire; autoplay allowed; wait for the film's still state; scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll to the close; reset the counts and wait 3 s; then scroll a sequence back into view (it must play), wait for every video to stop, reset and count 3 s again. Desktop then checks the worker's caches, control after reload, and a reload with the server stopped.",
+      "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile; a stimulus starts motion (outside reduced motion, where the sequences hold their final frames by design) and the page settles again",
+      "result": "PASS",
+      "profiles": {
+        "1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.35,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.1,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 16,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.1,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 16,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.0,
+          "#adii_played": false,
+          "#awc-os_played": false,
+          "#cythercad_played": false,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        }
+      },
+      "worker": {
+        "caches": [
+          "cytherai-substrate-B068554A3A562886"
+        ],
+        "controlled_after_reload": true,
+        "offline_reload_with_the_server_stopped": {
+          "build": "B068554A3A562886",
+          "state": "still",
+          "statement_visible": true,
+          "poster_shown": "film/final-landscape.jpg",
+          "fonts_loaded": "News,Plex,Public",
+          "console_errors_besides_the_unreachable_film": []
+        }
+      }
     }
   }
 }
