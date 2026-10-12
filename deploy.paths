@@ -9,8 +9,8 @@ pages/security.html
 pages/terms.html
 js/manifest.js
 js/instrument.js
-js/trace.js
-js/unhappened.js
+js/film.js
+css/film.css
 css/cytherai.css
 sw.js
 manifest.webmanifest
@@ -41,3 +41,13 @@ awc-os/media/AWC_OS_film_en.mp4
 awc-os/media/AWC_OS_AMAD2026_deck.pptx
 exception/index.html
 exception/exception.js
+film/film-landscape.mp4
+film/film-portrait.mp4
+film/final-landscape.jpg
+film/final-portrait.jpg
+film/sys-adii.mp4
+film/sys-adii.jpg
+film/sys-awcos.mp4
+film/sys-awcos.jpg
+film/sys-cad.mp4
+film/sys-cad.jpg

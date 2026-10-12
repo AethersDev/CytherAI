@@ -59,7 +59,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v2.json"
+DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v3.json"
 DEFAULT_MATRIX = ROOT / "vaic/evaluator-matrix.v0.json"
 
 RESULTS = {"PASS", "FAIL", "NOT_EVALUATED"}
@@ -81,13 +81,13 @@ DIGEST = re.compile(r"[0-9a-f]{64}")
 IDENTITY_COVERAGE = {
     "record_hash": ("js/manifest.js",),
     "kernel_hash": ("js/manifest.js", "js/instrument.js"),
-    "grammar_hash": ("index.html", "js/unhappened.js", "js/trace.js"),
+    "grammar_hash": ("index.html", "js/film.js", "css/film.css"),
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
-        "tools/test-api.py", "tools/test-boundary.js", "tools/test-trace.js",
+        "tools/test-api.py", "tools/test-boundary.js",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }
@@ -102,15 +102,17 @@ COVERED = frozenset(path for paths in IDENTITY_COVERAGE.values() for path in pat
 # cite a retired file, because the current build does not ship it. A file that is still
 # live but has lost a cited anchor to the snapshot (tools/test-site.py) resolves the same
 # way: the live file first, then the snapshot, and the first file that defines the anchor
-# must define it exactly once. The drawing set retired the same way on 2026-10-04: its
-# modules and the verifiers only it needed moved whole into its own snapshot.
-ARCHIVES = ("backup/instrument-v1", "backup/drawing-set-v1")
+# must define it exactly once. The drawing set retired the same way on 2026-10-04, and THE
+# UNHAPPENED on 2026-10-12: each one's modules and the verifiers only it needed moved whole
+# into its own snapshot.
+ARCHIVES = ("backup/instrument-v1", "backup/drawing-set-v1", "backup/unhappened-v1")
 RETIRED = frozenset((
     "js/substrate.js", "js/ledger.js", "js/site.js", "js/develop-worker.js",
     "tools/test-motion.py", "tools/test-ledger.js", "tools/test-develop.js",
     "tools/test-poster.py", "tools/test-exposure.js",
     "js/claims.js", "js/drawing-set.js", "tools/test-claims.js", "tools/test-drawing-set.js",
     "tools/test-projection.js", "tools/project-obligations.py",
+    "js/trace.js", "js/unhappened.js", "tools/test-trace.js",
 ))
 # a verifier that is not the declared set, and a receipt issued before verifiers were
 # recorded; UNRECORDED can never speak for the current candidate
