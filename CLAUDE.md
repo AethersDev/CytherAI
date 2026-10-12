@@ -7,10 +7,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Pure static site — no framework, package manager, bundler, or linter. The
 zero-dependency verification entrypoint is `./verify.sh`; it runs the jsc module and
 logic regressions, the Python projection/integration tests, and the corpus validator.
-Browser-only checks (layout, service worker, the studio as rendered, the settled halt)
+Browser-only checks (layout, service worker, reading ink over the film, the settled state)
 remain in `docs/deploy.md`; the retired front doors' laws run against their snapshots,
-`backup/instrument-v1/verify.sh` and `backup/drawing-set-v1/verify.sh`.
-Serve with any static file server: `python3 -m http.server 8000` from the repo root.
+`backup/instrument-v1/verify.sh`, `backup/drawing-set-v1/verify.sh` and
+`backup/unhappened-v1/verify.sh`.
+Serve with any static file server: `python3 -m http.server 8000` from the repo root — but
+`http.server` answers no byte ranges, so the films cannot seek there; a browser observation
+that seeks a film needs a server that answers `Range` (GitHub Pages does).
 
 One check at a time: a jsc regression takes the modules it needs before it, in load
 order, exactly as `verify.sh` lists them (`$JSC js/manifest.js js/instrument.js
@@ -82,7 +85,8 @@ inside one development transaction are one epoch, not three.
 
 **A corpus transition is a successor, never a subtraction.** Each corpus supersedes the
 one before (`supersedes`: `v1` → `v0`, re-bound to the drawing set; `v2` → `v1`, re-bound
-to THE UNHAPPENED), carries every receipt of its predecessor verbatim, and records on every
+to THE UNHAPPENED; `v3` → `v2`, re-bound to the film), carries every receipt of its predecessor
+verbatim, and records on every
 row a `transition`: **CARRIED_FORWARD** — the requirement is unchanged, its surface and
 verifier re-bound to the current front door (`successor_surface`, `rebound_fields`, and
 `version` + 1 when a field moved) — or **SUPERSEDED** — the mechanism it governed retired
@@ -195,82 +199,58 @@ front door other than those two.
 
 The architecture and change-impact guide is `docs/architecture.md`.
 
-## Architecture — THE UNHAPPENED
+## Architecture — the film
 
-The homepage is a pane of glass over an empty floor, rendered in WebGL2. Nothing exists when
-the page begins. Every bead is one proposed operation — a token offered to extend a program —
-judged in the browser by `CytherInstrument.biEngine`, the boundary engine of the record, as it
-strikes the pane. Its law: **Black may propose. White may exist. Cobalt must explain why.**
+The homepage is a twelve-second film, rendered offline in Blender (Cycles on the Apple GPU,
+`tools/render-film.py`), silent, with its sentences as HTML over it: *AI can change
+everything.* · *Not everything should be allowed to change.* · *CytherAI builds the part of AI
+that decides what is allowed to happen.* · then the statement *Let AI change things. Keep
+control of what changes.* with **The three systems ↓** and **Talk to us ↗**. One continuous
+shot: an exact structure of glass fins, ceramic plates and machined frames around a warm
+current rebuilds itself; a wave of change runs to a hairline plane; one pale slab stops a
+fraction short of it and stays while the current runs on through the plane; a fitting group
+passes, then the rest settle and pass; the camera emerges to a still composition, which stays
+as the setting of what follows. Phones get a separately composed vertical film (the structure
+as a tower). The line *A conceptual visualization. It measures no product.* sits under the
+film: its sentences are positioning, and no motion on the page claims to correspond to a
+system event (CY-TEMP-002 was superseded with THE UNHAPPENED).
 
-- **Refused** — the bead ceases at the pane; a cobalt ghost flashes where its attempt was
-  assembling and the pane keeps a Cyther Trace (TRACE-1) drawn from the receipt.
-- **Accepted** — the token crosses, still black, into a candidate profile under the pane:
-  visible and causally absent. No shadow, no consequence. In scene 3 (*Only the valid
-  crosses. An accepted step is not yet an admitted program.*) the rain thins, one proposer
-  (`FEATURE`) assembles at a fixed `PLACE` the camera watches, the pane's memory recedes to a
-  third (`uMemory`; nothing is erased), and its next accepted step is followed: carried from
-  where it struck to the vertex it adds, its segment joining only on arrival. The follow is
-  tied to the engine's attempt; any emphasis follows a real event, never precedes one.
-- **Admitted** — only a program the kernel admits becomes real: its profile lands on the floor
-  as a hard shadow (the licence), held 0.4 s, and porcelain extrudes straight up out of it
-  (0.9 s). Each admission takes the next perimeter bay around the room, decided when it is
-  admitted; the walls of scene 8 are the same solids extruded further, never moved. A short
-  visit leaves a short room — gaps are left, never filled.
+Below it, over the final composition: *One principle. Three systems.* and *The model
+proposes. The system decides.* Then ADII, AWC-OS and CytherCAD, each a six-second sequence in
+the film's materials (`tools/render-systems.py`), a headline, two sentences a shipped page
+states, its condition, and one route into the evidence (`adii/`, `awc-os/`,
+`pages/brief.html`); CytherCAD's two figures are the front door's only `data-m` marks. The
+close is *Tell us what must never happen.* with the contact address.
 
-The one causal light is vertical and never moves, so a solid's shadow is its profile at any
-height; a fill follows the cursor and casts nothing. Cobalt is evidence, composited after the
-tone map: never lit, blurred, refracted or reflected. Ten scenes (`SC`, one `[data-k]` section
-each, counted by `tools/test-site.py`) carry the copy; scenes 4–7 are the four systems, each
-with its claim and the condition it holds under. Hovering or tapping a trace reads its receipt;
-hovering or tapping a solid lifts it off its licence and names it (`ADMITTED · id · ops ·
-proposal n of seed`). The studio is focusable (`role="application"`, last in tab order): ← →
-read the refusals newest first, ↑ ↓ the programs admitted, Esc clears; every receipt goes
-through `#receipt`, a status region, so it is announced. A press that does not travel reads;
-only a drag proposes. Keyboard focus inside a section scrolls it to its centre, where its copy
-is fully visible.
-A press-and-drag seeds the visitor's own proposer; its first refusal is carried to the end,
-revealed by the light, and replayable from `#trace=SEED.INDEX.HASH` (local, never sent; a
-fragment that does not reproduce on this build is refused, `#unsent`). **When nothing is
-changing, nothing renders:** `settled()` halts the frame loop and `#still` says so; scroll,
-resize, hover or a gesture `wake()`s it. A page left alone is not watched: after `IDLE` (two
-minutes) without input the rain stops and the page rests the same way (`resting`); any input
-brings it back. A long active session is bounded too: traces cap at 8,000, ghosts at 40; the
-6,000-cell prism cap holds about 565 programs (about an hour of continuous heavy rain). **Startup never blocks:** the nine programs compile
-and link on the driver's threads (`KHR_parallel_shader_compile`) and are queried only when done
-(`R.ready()`); if the studio is not ready within `BUDGET` (600 ms) the opening is given up and
-the copy shows at once, and the canvas stays invisible until its first frame (`.lit`). If the
-scripts never take over, the opening's hidden copy unveils itself after 6 s (CSS). **A device
-that cannot carry the studio gets the plain page:** the governor judges frames per second,
-steps resolution down to 0.42, and if the median frame is still over 90 ms twice, `starve()`
-releases the context and the cover stands in. Without WebGL2 and a float colour buffer, the
-`.no-gl` cover stands in, captioned with the three relations (black: proposed or accepted, no
-consequence · cobalt: refused, why · white: admitted, it stands), and the copy follows
-the scroll one frame at a time. Short viewports (≤ 540 px tall: 200% zoom of a laptop, a
-phone on its side) compact the type so every section's copy fits its pinned page; on a phone the
-copy keeps clear of the HUD at its measured height (`--hud`) and pins to the small viewport
-(`100svh`). Headings carry their system's name for assistive technology (`.sr`). There is no
-sound. Reduced motion skips the opening, moves the camera without easing and thins the rain.
+The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced
+motion, a refused or failed play, or a film not started within `GUARD` (3 s) shows the final
+composition and the whole statement at once (`still()`). Each sequence plays once from its
+first frame when half of it is in view and holds its last frame, which is also its poster;
+reduced motion shows the posters. **When nothing is changing, nothing runs:** once the film
+and every sequence in view have ended, the page requests no frame, plays nothing and fires no
+timer (CY-TEMP-001). If the script never runs, the statement unveils itself after 6 s
+(`.no-js`, CSS). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by
+localized darkening only: under the header, along the film's lower edge, behind Replay,
+behind each caption and the statement, and behind the principle. There is no sound.
 
-**`index.html`** — inline `<style>` only, type from `adii/fonts/` (shared, precached); loads
-four modules `defer` with SRI, in order:
-
-| Module | `window.*` | Role |
-|---|---|---|
-| `js/manifest.js` | `CytherManifest` | the public manifest: `project` (the `data-m` facts) and `fnv`; `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets |
-| `js/instrument.js` | `CytherInstrument` | the boundary: `biEngine` (seeded stream, positioned events), `judge` (a proposed program against boundary then kernel), `audit`; pure, DOM-free |
-| `js/trace.js` | `CytherTrace` | TRACE-1, the Cyther Trace: one drawing of a receipt (`code` → `GLSL` for the studio, `svg` for the carried receipt); pinned by `tools/test-trace.js` |
-| `js/unhappened.js` | — | the studio: the world, the bays, the GPU passes, the story, the pointer, the readout, the ending, `settled`/`wake`, `sw.js` registration |
-
-The HUD's note states the demonstration's limit: the engine is a toy grammar of rectilinear
-profiles, not CytherCAD itself. The page carries no claim registry, seal, sheet, title block
-or obligations disclosure; the VAIC corpus is the record (`vaic/`).
+**`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
+precached); `css/film.css` and one script, `js/film.js` (`defer`), both with SRI.
+`js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the
+sequences' IntersectionObserver, and `sw.js` registration (it lets a waiting worker in with
+`take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
+live in `film/`: two films with their final-frame posters, three sequences with theirs;
+`tools/test-site.py` holds every file the page names to `deploy.paths`, and back.
+`js/manifest.js` (`CytherManifest`: `fnv` for THE EXCEPTION; `project` and the record for the
+verifiers and derived assets) and `js/instrument.js` (`CytherInstrument`: `judge` for THE
+EXCEPTION; `biEngine` and `audit` for the verifiers) are no longer loaded by the front door.
 
 **Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 
-**The experiment** (`exception/`, linked from the homepage's nav, closing section and footer;
-it does not replace the front door) is THE EXCEPTION: two decisions that look right.
+**The experiment** (`exception/`, published beside the front door on 2026-10-04; since the
+film became the front door on 2026-10-12 no homepage link points to it) is THE EXCEPTION: two
+decisions that look right.
 *Draw* releases a drawing to the real boundary engine (`CytherInstrument.judge`, so `judge` is
 a production symbol): refused at operation 6 (CROSSES), the never-judged rest drawn as a
 labelled preview, then a valid alternative admitted by the kernel (`PRG-9FD9BC52`). *Correct*
@@ -291,7 +271,7 @@ or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a
 worker **waits** and never takes over a page that may still be loading: Safari checks for the
 update at the navigation itself, and a worker that skipped waiting answered a returning
 reader's previous-build page with this build's modules, which then failed SRI. A page whose
-modules have all run lets the waiting worker in (`take-over`), so the next load is new),
+script has run lets the waiting worker in (`take-over`), so the next load is new),
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
 build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
@@ -308,7 +288,10 @@ commit `99b167a`) — the seven-sheet engineering drawing set, FIG. 1, the eleve
 claims (`6 CL · 5 DS`) and Sheet 7, superseded on 2026-10-04 **as presentation, preserved as
 historical record**: its claims stay attributable to it, and nothing of its design (CSS,
 components, layout, terminology, badges, seal, sheet numbering) is imported into the front
-door. Do not build a `/record` page from it unless asked.
+door. Do not build a `/record` page from it unless asked. **unhappened-v1**
+(`backup/unhappened-v1/`, commit `f5c1e37`) — THE UNHAPPENED: the pane, the beads, TRACE-1,
+the shadows and porcelain, the ten scenes; superseded on 2026-10-12 the same way, as
+presentation, preserved as record, nothing of its design carried.
 
 ## Register rules (grep-enforced)
 
@@ -331,7 +314,13 @@ literals.
   `research/`) and THE UNHAPPENED's versions: `unhappened/` (v1, TRACE-1 and the carried
   receipt), `unhappened-2/` (v2, only what was admitted casts a
   shadow), `unhappened-4/` (v4, the solid rises from its own shadow — promoted to production
-  on 2026-10-04, minus its sound) and `compare/` (the side-by-side harness). Not served.
+  on 2026-10-04, minus its sound, retired on 2026-10-12) and `compare/` (the side-by-side
+  harness). Not served.
+- **The film** was built as an untracked study (`cyther-film/`, never committed) from pasted
+  directions on 2026-10-11, revised once on a reviewer's critique (the one refused slab, the
+  camera holding at the refusal), then extended into the site with three systems and
+  published on 2026-10-12; its render sources moved to `tools/render-film.py` and
+  `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header).
 - **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
   Do not modify it — supersede, never erase.
 - **`backup/`** holds the retired surfaces: `instrument-v1/` (the substrate homepage,
@@ -339,7 +328,8 @@ literals.
   with the three modules only it loaded), `dossier-v3/` (old shared CSS + the dossier IIFE
   modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
   v-next design map), `drawing-set-v1/` (the drawing set, whole, with its verifiers — see its
-  README), `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
+  README), `unhappened-v1/` (THE UNHAPPENED, whole, with its verifiers — see its README),
+  `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
   snapshot's modules), `project-pages/` (the ADII and AWC-OS pages as first published,
   before curation).
   Supersede, never erase: retire into `backup/`, do not delete.

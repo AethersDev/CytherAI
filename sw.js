@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-5627D34CD6B86545';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-B068554A3A562886';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -15,11 +15,12 @@ var ASSETS = [
   'pages/privacy.html',
   'pages/security.html',
   'pages/terms.html',
-  // the front door modules, and the fonts it draws its type with (shared with adii/)
-  'js/manifest.js',
-  'js/instrument.js',
-  'js/trace.js',
-  'js/unhappened.js',
+  // the front door: its script, its stylesheet, the final composition it stands on when the film
+  // cannot play (offline included), and the fonts it draws its type with (shared with adii/)
+  'js/film.js',
+  'css/film.css',
+  'film/final-landscape.jpg',
+  'film/final-portrait.jpg',
   'adii/fonts/newsreader-variable.woff2',
   'adii/fonts/public-sans-variable.woff2',
   'adii/fonts/ibm-plex-mono-400.woff2',
@@ -61,7 +62,7 @@ self.addEventListener('install', function (e) {
 // navigation itself, so a worker that skipped waiting took over a returning reader's previous-build page mid-load, answered
 // its module requests with this build's bytes, and the page died of its own SRI check (reproduced in the iOS 26.5 simulator,
 // a module whose bytes differ between builds; Safari's requests carry no integrity a worker could read). A page whose own
-// modules have all run asks the waiting worker in (js/unhappened.js): taking over a loaded page is harmless. Otherwise the
+// script has run asks the waiting worker in (js/film.js): taking over a loaded page is harmless. Otherwise the
 // new build arrives once no page of the old one is open.
 self.addEventListener('message', function (e) {
   if (e.data === 'take-over') self.skipWaiting();
