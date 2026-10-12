@@ -31,13 +31,13 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-CORPUS = ROOT / "vaic/cytherai-obligations.v2.json"
+CORPUS = ROOT / "vaic/cytherai-obligations.v3.json"
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 # harness_identity, as receipts name it -> the command whose exit status IS the observation
 # The world's harnesses (tools/test-ledger.js; tools/test-site.py plus tools/test-motion.py)
 # retired with it to backup/instrument-v1/, and the drawing set's (tools/test-claims.js) to
-# backup/drawing-set-v1/: their obligations gain no receipt on a build that does not ship the
-# mechanism they observed.
+# backup/drawing-set-v1/; THE UNHAPPENED's browser observations were never automated harnesses.
+# Their obligations gain no receipt on a build that does not ship the mechanism they observed.
 HARNESS = {
     "deploy.sh plus tools/test-site.py": [
         "python3", "tools/test-site.py",
