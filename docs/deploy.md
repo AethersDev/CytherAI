@@ -1,7 +1,12 @@
 # Deployment contract
 
-> **Front door changed 2026-10-04.** The homepage is now THE UNHAPPENED (`index.html`,
-> `js/unhappened.js`, `js/trace.js`; `docs/architecture.md`). The drawing set it replaced is
+> **Front door changed 2026-10-12.** The homepage is now the film (`index.html`, `js/film.js`,
+> `css/film.css`, `film/`; `docs/architecture.md`). THE UNHAPPENED it replaced is retired whole
+> to `backup/unhappened-v1/`; its Chrome record is §5d and §5g and stands as written. The film's
+> own Chrome observation is §5i.
+>
+> **Front door changed 2026-10-04.** The homepage became THE UNHAPPENED (`index.html`,
+> `js/unhappened.js`, `js/trace.js`). The drawing set it replaced is
 > retired whole to `backup/drawing-set-v1/`; its Chrome record is §5c and stands as written.
 > Before it, the front door changed on 2026-09-16 from instrument-v1 (retired whole to
 > `backup/instrument-v1/`), and every browser observation in the certification block, §5,
@@ -664,7 +669,59 @@ phone with no console error and nothing off-site; the homepage battery green wit
 (reading ink ≥ 4.88:1 over 150 elements on desktop, "Try it" in the tab order, 10 pages and 35
 local references resolving, none broken).
 
+## 5i. The film — Chrome observed, 2026-10-12
+
+Build `B068554A3A562886`, the artifact `dist/` served as an origin root by a static server that
+answers byte ranges (as GitHub Pages does; `python3 -m http.server` does not, and a film cannot
+seek there), HeadlessChrome 155 over CDP
+(`vaic/evidence/current-browser-observations.v0.json#reading_ink_B068554A3A562886` and
+`#film_settle_B068554A3A562886`; the receipts bind CY-SEM-003 and CY-TEMP-001 in
+`vaic/cytherai-obligations.v3.json`). Reading ink: the film held at twelve declared seconds
+(every seek confirmed to land, or the run stops), the still state and each section in view;
+one capture with every glyph's fill transparent (the ground actually composited beneath it,
+darkening and text-shadow included), one with every fill magenta (glyph support), WCAG 2.1
+contrast at every glyph-support pixel. Settling: frame requests and timer callbacks counted
+from before any page script, and the media playing, for 3 s once the film and every sequence
+have ended.
+
+| Profile | Film to still | Frames · timers · media in 3 s once settled | A sequence scrolled back plays, then resettles | Reading-ink elements · worst | External requests | Console errors | Horizontal overflow |
+|---|---:|---|---|---|---|---:|---|
+| 1440×900 | 11.35 s | 0 · 0 · 0 | yes | 134 · worst 5.17:1 | 0 of 17 | 0 | none |
+| 390×844 · dpr 3 | 11.1 s | 0 · 0 · 0 | yes | 128 · worst 4.81:1 | 0 of 16 | 0 | none |
+| 320×844 · dpr 2 | 11.1 s | 0 · 0 · 0 | yes | 126 · worst 4.75:1 | 0 of 16 | 0 | none |
+| 1440×900 · reduced motion | at once | 0 · 0 · 0 | posters held, by design | — | 0 of 13 | 0 | none |
+
+Also observed: the worker installs exactly one build (`caches.keys()` is
+`cytherai-substrate-B068554A3A562886`) and controls the page after a reload; with the server
+stopped, a reload renders the same build from the worker, in the still state, the statement
+visible over the cached final composition, all three fonts loaded, and no console error
+besides the unreachable film. Each sequence played when it came into view; the statement,
+its links and Replay stand at the end; the page names no film that does not ship.
+
+**Fixed before this build, named here so the record is not more optimistic by omission.** The
+first measurement (on the study, the same day) found seven elements below 4.5:1 over bright
+film: the header on phones (to 1.12:1), the conceptual-visualization line (to 1.0:1) and
+Replay (2.21:1) along the film's lower edge, and the principle over the final composition (to
+1.24:1). Localized darkening under the header, along the lower edge, behind Replay and behind
+the principle fixed them; the captions and the statement already held. An earlier run of the
+probe against a server without byte ranges never sought the film, so its captions were
+measured over the opening frame only; it is not evidence. A reviewer also found the phone
+document 479 px wide (a caption's darkening reached past the screen) while the harness
+reported no overflow: it compared the width with `innerWidth`, which mobile emulation widens
+to the content. The film section now clips its decoration, and every overflow figure here is
+measured against the emulated width.
+
+**Open, named:** CY-ORIGIN-001 until the origin closure is observed after publishing (§7);
+Safari/WebKit muted inline autoplay, a physical phone (including iOS Low Power Mode, which
+refuses autoplay and must show the still state), VoiceOver and a slow real network remain the
+owner's (§5f). No unfamiliar viewer has yet been asked to say what the film shows.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
+
+> **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
+> corresponds to the engine's own transitions; the film claims no such correspondence (it is
+> labelled a conceptual visualization), so the obligation is SUPERSEDED in `v3` and this
+> protocol stands as written for the retired front door.
 
 CY-TEMP-002 is HUMAN_REVIEWED: no harness can establish that a stranger tells acceptance from
 admission. Run it against the exact release candidate (its `<meta name="build-hash">`); a later
@@ -695,12 +752,13 @@ What a headless browser cannot stand in for, against the same build, appended as
 
 | Check | What to confirm |
 |---|---|
-| Safari (macOS) | the studio renders; Develop → Console shows no error; reduced motion and the settled halt (*Nothing is changing · rendering stopped*) |
-| A real touch phone (iOS Safari, Android Chrome) | a tap on a trace reads its receipt; a drag on the glass proposes; scrolling is smooth; the HUD reads |
-| Keyboard only | Tab reaches the nav, every section's links (each section scrolls to full view), the footer, then the studio; ← → ↑ ↓ read receipts; Esc clears; the focus ring is visible throughout |
-| VoiceOver (macOS and iOS) | headings and copy in order; the studio announces its label; each arrow key's receipt is spoken |
-| 200% zoom (⌘+) | no copy clipped in any section (Chrome emulation at 640×360 and 720×450 found none, §5d) |
-| 120 Hz (ProMotion) | the scrubbed camera does not stutter; the page still settles and stops |
+| Safari (macOS) | the film autoplays muted and inline; each sentence appears in its window; it ends on the still composition with the statement and Replay; Develop → Console shows no error |
+| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once; each sequence plays as it comes into view |
+| Android Chrome | as iPhone; the statement's links are reachable with the thumb |
+| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route, *Talk to us* and the footer; the focus ring is visible throughout |
+| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the three systems' headings and copy in order; the films are silent and hidden from it |
+| A slow real network | a film that has not started within 3 s gives way to the still composition, and Replay plays it once it can |
+| 200% zoom (⌘+) | the statement, the captions and the systems' copy unclipped |
 
 ## 6. Launch gate
 
@@ -716,15 +774,15 @@ decisions, not engineering steps.
    limits accepted in §7 and nothing more: every page withholds the referrer, and HTTP
    redirects to HTTPS.
 4. **Owner decision — the front-door claims.** Each states only what a shipped source
-   states, with its condition beside it: CytherCAD's invalid rate against its DeepCAD
-   baseline on an external benchmark (`pages/brief.html#cythercad`), ADII as a research
-   project with no published results, AWC-OS as a demonstration on an evaluation machine,
-   SijilOS's ZATCA Phase 1 certification and live beta (`pages/brief.html#sijilos`), and
-   the deployment conditions (on-prem / offline-first). The owner confirms each source is
-   current before launch. (The epoch-04 commitment left the front door with the drawing set;
+   states, with its condition beside it: ADII as a research project with no published
+   results and no claimed deployment (`adii/`), AWC-OS as a demonstration on an evaluation
+   machine (`awc-os/`), CytherCAD's invalid rate against its DeepCAD baseline on an external
+   benchmark and its on-prem, air-gapped condition (`pages/brief.html`). The film's sentences
+   are positioning beside the line *A conceptual visualization. It measures no product.*
+   The owner confirms each source is current before launch. (The epoch-04 commitment left the front door with the drawing set;
    its record is §5c and `backup/drawing-set-v1/`.)
 5. `./verify.sh` green at the release commit; the browser-only runner reports 33/33; the
-   served homepage settles and stops rendering (§5d) with zero external requests.
+   served homepage settles and stops (§5i) with zero external requests.
 6. The `PROVISIONAL` values in `js/manifest.js` (the disclosure tuple and its counts)
    reviewed by the owner. None is printed on the front door; they drive the checksum and
    the derived social card and icon. Shipping them knowingly is permitted — they are
