@@ -1,8 +1,9 @@
 #!/bin/sh
 # Reproducible zero-dependency repository verification.
-# Browser-only checks (layout, service worker, the studio as rendered) remain in the
+# Browser-only checks (layout, service worker, the film and reading ink as rendered) remain in the
 # browser matrix documented in docs/deploy.md. The retired front doors' laws run against
-# their snapshots: backup/instrument-v1/verify.sh and backup/drawing-set-v1/verify.sh.
+# their snapshots: backup/instrument-v1/verify.sh, backup/drawing-set-v1/verify.sh and
+# backup/unhappened-v1/verify.sh.
 
 set -eu
 
@@ -11,8 +12,8 @@ cd "$ROOT"
 
 JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc
 
-echo "[verify] homepage modules parse"
-for file in js/manifest.js js/instrument.js js/trace.js js/unhappened.js; do
+echo "[verify] served modules parse (the front door's script, THE EXCEPTION's modules)"
+for file in js/film.js js/manifest.js js/instrument.js; do
     "$JSC" "$file"
 done
 
@@ -21,9 +22,6 @@ python3 tools/test-api.py
 
 echo "[verify] boundary engine"
 "$JSC" js/manifest.js js/instrument.js tools/test-boundary.js
-
-echo "[verify] TRACE-1 — the Cyther Trace grammar"
-"$JSC" js/manifest.js js/instrument.js js/trace.js tools/test-trace.js
 
 echo "[verify] manifest projection"
 python3 tools/test-projection.py
