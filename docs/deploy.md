@@ -711,8 +711,19 @@ reported no overflow: it compared the width with `innerWidth`, which mobile emul
 to the content. The film section now clips its decoration, and every overflow figure here is
 measured against the emulated width.
 
-**Open, named:** CY-ORIGIN-001 until the origin closure is observed after publishing (§7);
-Safari/WebKit muted inline autoplay, a physical phone (including iOS Low Power Mode, which
+**The live origin (2026-10-12, after publishing).** CY-ORIGIN-001 PASS
+(`#origin_closure_B068554A3A562886`): 53 of 53 served paths redirect from http to the same
+https path and serve bytes identical to the artifact; every hidden path (THE UNHAPPENED's
+snapshot and modules, the render scripts and the study included) is 404 with the styled body;
+every film answers a byte range (206); the worker is `cytherai-substrate-B068554A3A562886`;
+the header absences are exactly the limits accepted in §7. The film suite against
+`https://cytherai.com/` passed on desktop and phone. On the first, cold-CDN fetch the phone's
+vertical film started about 4 s after load and played slower than real time while it
+buffered (it ended about 15 s after load); its sentences stayed in step with it, and the
+replay ran at full speed. A mid-film stall is not covered by `GUARD`, which only gives way
+when the film has not started: a refinement to weigh, not a defect against any obligation.
+
+**Open, named:** Safari/WebKit muted inline autoplay, a physical phone (including iOS Low Power Mode, which
 refuses autoplay and must show the still state), VoiceOver and a slow real network remain the
 owner's (§5f). No unfamiliar viewer has yet been asked to say what the film shows.
 
