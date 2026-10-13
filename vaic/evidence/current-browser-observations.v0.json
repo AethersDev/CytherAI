@@ -9263,6 +9263,96 @@
       "found_and_fixed_before_this_build": [
         "the first candidate with the seal (16BE64E535F53F83, never committed) set the header link as a flex row with a gap, which also split the wordmark into 'cyther ai'; the gap is now the seal's own margin"
       ]
+    },
+    "origin_closure_D163C64D2D9485FE": {
+      "artifact_build": "D163C64D2D9485FE",
+      "observed_at": "2026-10-13",
+      "origin": "https://cytherai.com/ (GitHub Pages, 'Enforce HTTPS' on)",
+      "harness": "Claude Code origin closure check (scratchpad originprobe.py): curl 8.7.1 (system trust store)",
+      "contract": "docs/deploy.md §1–§4 as amended by the owner's acceptance of GitHub Pages' limits (§7; vaic/release-dispositions.v0.json, CY-ORIGIN-001)",
+      "method": "every deploy.paths file over http (expect 301 to the same https path) and over https with a cache-busting query (sha256 against the local deploy.sh build of the admitted commit); / against index.html; the declared hidden paths (404 with the styled body); MIME; a byte range on each film; the worker generation; TLS; the www host; headers on the root; the referrer meta on every page as served",
+      "result": "PASS",
+      "closure": {
+        "served_files": 54,
+        "http_301_to_same_https_path": 54,
+        "https_bytes_identical_to_artifact": 54,
+        "root_serves_index": true
+      },
+      "hidden_paths": {
+        "newC3/epoch04-preimage.txt": "404",
+        "backup/graphite-v2/index.html": "404",
+        "backup/drawing-set-v1/index.html": "404",
+        "backup/unhappened-v1/index.html": "404",
+        "PRODUCTION_PLAN.md": "404",
+        "prototype/unhappened-4/index.html": "404",
+        "prototype/exception/index.html": "404",
+        "js/drawing-set.js": "404",
+        "js/unhappened.js": "404",
+        "js/trace.js": "404",
+        "tools/render-film.py": "404",
+        "tools/render-og-film.py": "404",
+        "backup/og-card-v1/og-card.png": "404",
+        "backup/icon-v1/icon.svg": "404",
+        "tools/render-seal.py": "404",
+        "cyther-film/index.html": "404",
+        "cyther-seal-identity.html": "404",
+        "definitely-missing": "404"
+      },
+      "styled_404_body": true,
+      "mime": {
+        "index.html": "text/html; charset=utf-8",
+        "manifest.webmanifest": "application/manifest+json; charset=utf-8",
+        "js/film.js": "application/javascript; charset=utf-8",
+        "css/film.css": "text/css; charset=utf-8",
+        "film/film-landscape.mp4": "video/mp4",
+        "film/final-portrait.jpg": "image/jpeg",
+        "sw.js": "application/javascript; charset=utf-8"
+      },
+      "byte_ranges": {
+        "film/film-landscape.mp4": {
+          "status": "HTTP/2 206 ",
+          "content_range": "content-range: bytes 100-199/12140983"
+        },
+        "film/film-portrait.mp4": {
+          "status": "HTTP/2 206 ",
+          "content_range": "content-range: bytes 100-199/7434897"
+        },
+        "film/sys-adii.mp4": {
+          "status": "HTTP/2 206 ",
+          "content_range": "content-range: bytes 100-199/718353"
+        }
+      },
+      "worker_cache": "cytherai-substrate-D163C64D2D9485FE",
+      "tls": [
+        "SSL connection using TLSv1.3 / AEAD-CHACHA20-POLY1305-SHA256 / [blank] / UNDEF",
+        "subject: CN=cytherai.com",
+        "expire date: Dec 14 19:29:02 2026 GMT",
+        "issuer: C=US; O=Let's Encrypt; CN=YR2"
+      ],
+      "www": {
+        "http": [
+          "301",
+          "https://cytherai.com/"
+        ],
+        "https": [
+          "301",
+          "https://cytherai.com/"
+        ]
+      },
+      "headers_on_root": {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "max-age=600",
+        "strict-transport-security": null,
+        "x-content-type-options": null,
+        "referrer-policy": null,
+        "permissions-policy": null,
+        "content-security-policy": null
+      },
+      "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead",
+      "referrer_meta_pages": [
+        10,
+        10
+      ]
     }
   }
 }
