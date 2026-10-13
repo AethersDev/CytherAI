@@ -727,6 +727,64 @@ when the film has not started: a refinement to weigh, not a defect against any o
 refuses autoplay and must show the still state), VoiceOver and a slow real network remain the
 owner's (§5f). No unfamiliar viewer has yet been asked to say what the film shows.
 
+## 5j. The stall fallback, the film's social card and a production audit — 2026-10-13
+
+Build `7384EF28FD9CCBCB`, `dist/` served as an origin root with byte ranges, HeadlessChrome 155.0.8059.40 over CDP unless
+stated (`vaic/evidence/current-browser-observations.v0.json#film_stall_7384EF28FD9CCBCB`,
+`#film_settle_7384EF28FD9CCBCB`, `#reading_ink_7384EF28FD9CCBCB`, `#production_audit_7384EF28FD9CCBCB`).
+
+**A film that starts and then stalls.** A reviewer read in `js/film.js` that the startup guard was cleared once playback
+began and nothing handled a later stall; the live build confirmed it (§5i: the phone film stopped at 0.5 s on a cold CDN).
+The film now gives way to its final composition and the whole statement when it stops advancing for `STALL` (2 s) while
+the page is visible; it drops its source, so its poster stands and a late download cannot pull the visitor back; Replay
+stays theirs. The sequences rest on their posters the same way. A test server that starves one file part way
+(`stallserve.py`) showed, against the live build `B068554A3A562886` first, the failure: the film held a frame at 3.72 s
+with its caption and no statement for as long as it was watched, the sequence held a frame at 1.42 s. Against this build:
+
+| Case | Stopped advancing | Gave way | Then |
+|---|---:|---:|---|
+| The film starves at 35% (bytes released at 14 s) | 3.64 s | 5.45 s | the poster and the statement, 0 timers in 3 s, still after the bytes arrive; Replay plays the film |
+| A sequence starves at 30% | 1.29 s | 3.6 s | rests on its poster, stays so scrolled away and back, 0 timers |
+| The film starves while the page is hidden | — | 2.07 s after the page is visible | nothing while hidden (4 s) |
+
+A screenshot of the first build of the fix caught the stopped caption fading out under the statement; captions now leave
+without a fade once the page is still. A first settling run then counted one timer callback after a replayed sequence:
+the sequences' watch noticed on its next 250 ms tick that nothing played. It now stops on the last pause or end, and the
+page settles with its media (0 frames, 0 timers, 0 playing media in four profiles). Reading ink across 388 element samples,
+worst 4.75:1; the probe holds the film at its declared seconds by reporting the page hidden, whose time the stall rule
+does not count.
+
+**The phone on Chrome's throttling presets** (390×844, worker bypassed, cache disabled):
+
+| Connection | First sentence | What the visitor gets | Still at |
+|---|---:|---|---:|
+| Fast 4G | 1.31 | the whole film | 12.74 s |
+| Slow 4G | — | the final composition and the statement, no film | 3.36 s |
+| 3G | — | the final composition and the statement, no film | 4.12 s |
+
+Below about 5 Mbit/s the vertical film cannot keep pace with real time (7.4 MB over 12 s); those visitors get the message
+within about four seconds rather than a stuttering film.
+
+**The social card** is now the film's last frame with its statement (`tools/render-og-film.py`, `assets/og/og-card.png`,
+IMG-008, ILLUSTRATIVE); the orbit plate it replaced is `backup/og-card-v1/` with its receipt. Every page that names it
+asks X for the large card (`twitter:card`); X's own markup documentation answered HTTP 402 and was not read.
+
+**Audit, the same build.**
+- iOS Safari 26.5 (Simulator, iPhone 16 Pro Max, an instrumented test copy reporting to a local server): the vertical film
+  autoplays muted and inline, each sentence in its window, still at 12 s, no error; the sequences play in view and hold.
+  The wordmark's ✳ rendered as a green colour-emoji tile; U+FE0E now asks for the text glyph, and it renders warm.
+- A returning visitor (the live build's worker in place, then this build, `js/film.js` bytes differing): in Chrome and in
+  iOS Safari the next load is the old build intact from its worker, the one after is this build, its script runs, no error.
+- Accessibility: the statement, the page's only `h1`, was absent from the accessibility tree for the film's first 11 s;
+  it is present from the start now, its links waiting for it. The silent film had no text alternative (WCAG 2.1 1.2.1);
+  a screen-reader-only paragraph describes it and carries its three sentences. Twelve Tab stops, each visible and outlined.
+- 200% zoom (720×450, 640×360), a phone on its side (844×390) and a small phone (320×568): no overflow, nothing outside the
+  viewport, no overlap.
+- `manifest.webmanifest` carried the light theme and background colours; both are `#07070a`.
+
+**Open, named:** macOS Safari (`safaridriver` needs the owner's admin password), a physical phone (Low Power Mode refuses
+autoplay; the still state is built for it), VoiceOver as heard, and a first-time viewer.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -796,7 +854,7 @@ decisions, not engineering steps.
    served homepage settles and stops (§5i) with zero external requests.
 6. The `PROVISIONAL` values in `js/manifest.js` (the disclosure tuple and its counts)
    reviewed by the owner. None is printed on the front door; they drive the checksum and
-   the derived social card and icon. Shipping them knowingly is permitted — they are
+   the derived icon (the social card is the film's frame since 2026-10-13). Shipping them knowingly is permitted — they are
    marked in source — but it must be a decision.
 
 ---
