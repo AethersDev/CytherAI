@@ -1,9 +1,10 @@
 # Production asset promotion log
 
 One entry per asset promoted into the deployment artifact. Studies never ship;
-every shipped asset is either **DERIVED** (deterministically produced from
-canonical repository state) or **ILLUSTRATIVE** (claim-free imagery whose
-status is stated in adjacent HTML). Every entry records the reproduction
+every shipped asset is **DERIVED** (deterministically produced from
+canonical repository state), **COMPUTED** (deterministically produced from a
+fixed input the receipt names, not from repository state) or **ILLUSTRATIVE**
+(claim-free imagery whose status is stated in adjacent HTML). Every entry records the reproduction
 command and the output digest; a promoted asset with no receipt is a defect.
 `tools/test-assets.py` (a `./verify.sh` stage) re-reads these receipts: every output's
 bytes must match its digest and size, every DERIVED entry's state checksum and
@@ -22,9 +23,9 @@ card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
-| Method | The frame covers the card (centred, 45 px cropped top and bottom); the darkening the front door sets behind its statement (a top band and a radial veil, lower left); the wordmark (Public Sans 720/340, the ✳ in `#ffad57`); *Let AI change things. Keep control of what changes.* in Newsreader 300, 60 px, `#ece7dc` with the front door's text-shadow. |
-| Output | `assets/og/og-card.png` · 1200×630 · 612,765 bytes |
-| SHA-256 | `ade67c693e77d62263acea0e230e9cd3b0c09d640ec74abfb11a38c43abc7d15` |
+| Method | The frame covers the card (centred, 45 px cropped top and bottom); the darkening the front door sets behind its statement (a top band and a radial veil, lower left); the identity's primary lockup: the Cyther Seal pixel-fitted at 34 px (`tools/render-seal.py`) left of the wordmark (Public Sans 720/340); *Let AI change things. Keep control of what changes.* in Newsreader 300, 60 px, `#ece7dc` with the front door's text-shadow. Until 2026-10-13 the wordmark carried a warm ✳ instead of the seal (612,765 bytes, `ade67c693e77d62263acea0e230e9cd3b0c09d640ec74abfb11a38c43abc7d15`). |
+| Output | `assets/og/og-card.png` · 1200×630 · 612,212 bytes |
+| SHA-256 | `7433e5b37b8a91b40ec86a5f3878b3dad7ce2214c323257a814432c7e8e18e6e` |
 | Determinism | Run twice on Google Chrome 155.0.8059.40 (macOS, Apple Silicon); byte-identical output both runs. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame; the ring and the current visible right of the statement. A square centre crop keeps the ring and the current and cuts the statement's left edge. |
 | Deployment | `deploy.sh` allowlist only, at the path the previous card had, so the six pages that name it (`index.html`, `contact.html`, `pages/brief.html`, `pages/{privacy,security,terms}.html`) keep their `og:image` URL. Not precached, not in the SRI fingerprint; no page requests it. |
@@ -55,17 +56,39 @@ card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 
 ---
 
-## ICON — the derived mark
+## ICON — the Cyther Seal
 
 | | |
+|---|---|
+| Asset ID | IMG-009 |
+| Source | The Cyther Seal identity (`cyther-seal-identity.html`, a draft the owner adopted on 2026-10-13: "for the seal chose what ever version that is more aligned with the whole website then apply it"): the principal mark, the solid seal |
+| Classification | **COMPUTED** |
+| Command | `python3 tools/render-seal.py` |
+| Fixed input | The word `CytherAI`: SHA-256 `9db0cc58ca67af9c2f718a3fe85403455c16cda52e4f49f73f2a3d7eba07befe`, read two bits at a time; a constrained walk on a 6×6 grid: 77 proposals, 29 admitted, 48 refused; the published path `00 01 11 21 20 30 40 50 51 52 53 54 44 43 33 32 22 12 02 03 04 05 15 25 35 34 24 14 13 23`, which the script refuses to run without. |
+| Method | `icon.svg`: the identity's pixel-fitted seal on a 32-unit grid (u = 2, crispEdges), so it is sharp at 16 and 32 px. The PNGs: the seal full-bleed in ink `#ECE7DC` with its path in ground `#07070A`, a square-capped, mitred polyline on whole pixels at the vector seal's proportions (180: stroke 10, spacing 22; 192: 11, 24; 512: 28, 64); the maskable 512 keeps its path inside the central 80% circle (stroke 23, spacing 53). No warm: the identity keeps warm for the end cell of the open line only. |
+| Outputs | `icon.svg` · `assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web manifest, `any`), `icon-512-maskable.png` (web manifest, `maskable`) |
+| SHA-256 | svg `0e293384f3f81f6a68ea8deb2d1a51ea2b03dee30f2b9385bf777343f394a2f2` · 180 `3525ea646b48ba55ef4fa8ae86c0ef588150def4a39b529590cbb636eb786b07` · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469` · 512 `f23ff1cb401544e819a354aec0c15acb43ff41af1697adf990f2ded44ca686c1` · maskable `988f49c2a82743262a2e9021a9cfd19137fa2f39d028387c10f01bae397b8352` |
+| Determinism | Run twice; all five outputs byte-identical (no anti-aliased pixel, fixed zlib through `tools/pngout.py`). |
+| Acceptance checks | The computed path equals the published one (the script exits otherwise); 512 maskable: half-diagonal of the path 203.6 px ≤ 204.8 px (40% of the side); every seal inline on a page equals the computed one (`tools/test-site.py`). |
+| Deployment | `deploy.sh` allowlist (`icon-512-maskable.png` added). `sw.js` ASSETS keeps `icon.svg`, the favicon every page links; the rasters are fetched by the OS at install or pin time. |
+| Supersedes | IMG-002, the derived orbit filament, retired whole to `backup/icon-v1/` on 2026-10-13 (below) |
+| Owner sign-off | The adoption above |
+
+---
+
+## ICON-V1 — the derived mark, retired
+
+| | |
+|---|---|
+| Retired | 2026-10-13: served as `icon.svg` and `assets/icons/icon-{180,192,512}.png` from `5e3f51a` until the Cyther Seal (IMG-009) replaced them; the bytes and `derive-icon.py` moved whole to `backup/icon-v1/`. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-002 |
 | Source study | `docs/audit/generation-studies/img/IMG-002-icon-study-rev2.png` (visual-work, round 2, accepted as SVG derivation reference) — geometric reference only; no study pixel ships |
 | Classification | **DERIVED** |
-| Command | `python3 tools/derive-icon.py` (rev 1) |
+| Command | `python3 tools/derive-icon.py` (rev 1; now `backup/icon-v1/derive-icon.py`, kept as the record of the method: it imports `pngout` and `canon` from its own directory, which the snapshot does not carry) |
 | Canonical inputs | `CytherManifest.CANON` and admission nonce 0 via jsc from `js/manifest.js`; state checksum `75D1:89D1` |
 | Method | The silhouette is the **densest filament of the canonical mark**: dsin-orbit density field at 384-grid (4,000,000 iterations), cells above the 95th percentile of occupied density, largest connected component — the orbit's right rim caustic, a sweeping band with a dense knot. Regularized by Euclidean-disk morphology (close 3 / dilate 16 / open 18; the opening radius constructs the minimum stroke width), hole-filled, traced (Moore), simplified (Douglas–Peucker 2.0), smoothed (Chaikin ×2, DP 0.6), placed into the central 76% of a 512 viewBox. Rasters are scanline even-odd fills of the same polygon, 4×4 supersampled, ink on opaque paper. |
-| Outputs | `icon.svg` (replaces the retired warm-gold lambda — closes ADV-001) · `assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web-manifest, `any` + `maskable`) |
+| Outputs | `backup/icon-v1/icon.svg` (replaced the retired warm-gold lambda — closed ADV-001) · `backup/icon-v1/assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web-manifest, `any` + `maskable`) |
 | SHA-256 | svg `884d04d844768cc653ac8315d141966dddee54127053eab705189b019bf2552b` · 180 `7351a474f52eba33eb04d26a96b2136f897bf096e1cb6fc32506e722f85615b0` · 192 `daa09fb19742c55ffd79fe177fdd1d27082b28d8f9e3f55317824565deb939f8` · 512 `24dcbaee5a902979d5edcd6825cb29b5026dded9552d608203f9768241f82998` |
 | Determinism | Run twice; all four outputs byte-identical. |
 | Acceptance checks | 16×16 single-bit reduction: **1** four-connected component at thresholds 0.25 / 0.50 / 0.75 (the round-2 study split 21+13 at midpoint — this is the test that had to pass). 32×32: 1 / 1 / 1. Minimum stroke width: disk opening at r=25 (floor 50px = 9.8% of viewBox) keeps 99.5% of ink in one component; construction gives ≈54px = 10.6%. Margins ≥ 12% all sides. Circular mask: rmax 200.3 ≤ 256 (no clipping), and ≤ 204.8 — inside the 40% maskable safe zone, so `purpose: maskable` is mechanically true. Monochrome: paper + ink only, no accent anywhere (removability is trivial). Ink coverage 12.3% of viewBox. |

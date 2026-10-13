@@ -87,7 +87,7 @@ IDENTITY_COVERAGE = {
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
-        "tools/test-api.py", "tools/test-boundary.js",
+        "tools/test-api.py", "tools/test-boundary.js", "tools/render-seal.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }
