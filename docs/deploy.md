@@ -832,6 +832,8 @@ arrival. Two attempts were discarded on the way: an early-download hint, which i
 which slowed the watched sequence on Slow 4G. Chrome on Slow 4G now plays all three through, scrolled to during the film or
 after it. Reading ink across 349 element samples, worst 4.75:1; 0 frames, timers or playing media once settled.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_C9EF337977140EDC`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
