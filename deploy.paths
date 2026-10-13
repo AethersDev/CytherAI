@@ -1,4 +1,6 @@
 index.html
+ar/index.html
+ar/contact.html
 CNAME
 .nojekyll
 contact.html
@@ -10,12 +12,14 @@ pages/terms.html
 js/manifest.js
 js/instrument.js
 js/film.js
+js/theme.js
 css/film.css
 css/cytherai.css
 sw.js
 manifest.webmanifest
 icon.svg
 assets/og/og-card.png
+assets/og/og-card-ar.png
 assets/icons/icon-180.png
 assets/icons/icon-192.png
 assets/icons/icon-512.png
@@ -29,6 +33,9 @@ adii/fonts/OFL.txt
 adii/fonts/ibm-plex-mono-400.woff2
 adii/fonts/newsreader-variable.woff2
 adii/fonts/public-sans-variable.woff2
+fonts/OFL.txt
+fonts/ibm-plex-sans-arabic-300.woff2
+fonts/ibm-plex-sans-arabic-400.woff2
 adii/poster.jpg
 adii/replay.mp4
 adii/cv/ibrahem.pdf

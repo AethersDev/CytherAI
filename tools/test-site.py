@@ -17,6 +17,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import posixpath
 import re
 import shutil
 import struct
@@ -118,6 +119,16 @@ def local_target(page: str, raw_url: str) -> Path | None:
     return (ROOT / page).parent / path
 
 
+def wcag(a: str, b: str) -> float:
+    """WCAG 2.1 contrast of two #rrggbb colours"""
+    def rel(h):
+        f = [(v / 255) / 12.92 if v / 255 <= 0.03928 else ((v / 255 + 0.055) / 1.055) ** 2.4
+             for v in (int(h[k:k + 2], 16) for k in (1, 3, 5))]
+        return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2]
+    la, lb = rel(a), rel(b)
+    return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
+
+
 def sri_for(relative: str) -> str:
     digest = hashlib.sha384((ROOT / relative).read_bytes()).digest()
     return "sha384-" + base64.b64encode(digest).decode("ascii")
@@ -131,7 +142,12 @@ class SiteContractTests(unittest.TestCase):
             "contact.html": {
                 "Brief": "pages/brief.html", "Contact": "contact.html",
                 "Security": "pages/security.html", "Privacy": "pages/privacy.html",
-                "Terms": "pages/terms.html",
+                "Terms": "pages/terms.html", "العربية": "ar/contact.html",
+            },
+            "ar/contact.html": {
+                "الموجز": "../pages/brief.html", "تواصل": "contact.html",
+                "الأمن": "../pages/security.html", "الخصوصية": "../pages/privacy.html",
+                "الشروط": "../pages/terms.html", "English": "../contact.html",
             },
             "pages/brief.html": {
                 "Brief": "brief.html", "Contact": "../contact.html",
@@ -151,7 +167,7 @@ class SiteContractTests(unittest.TestCase):
             },
         }
         current = {
-            "contact.html": "Contact", "pages/brief.html": "Brief",
+            "contact.html": "Contact", "ar/contact.html": "تواصل", "pages/brief.html": "Brief",
             "pages/security.html": "Security", "pages/privacy.html": "Privacy",
             "pages/terms.html": "Terms",
         }
@@ -160,7 +176,7 @@ class SiteContractTests(unittest.TestCase):
                 links = parse_page(page).nav_links
                 brand = [(text, attrs) for text, attrs in links if text == "CYTHERAI"]
                 self.assertEqual(len(brand), 1)
-                self.assertEqual(brand[0][1].get("aria-label"), "CytherAI home")
+                self.assertEqual(brand[0][1].get("aria-label"), "الصفحة الرئيسية لـ CytherAI" if page.startswith("ar/") else "CytherAI home")
                 content_links = [(text, attrs) for text, attrs in links if text != "CYTHERAI"]
                 self.assertEqual({text: attrs.get("href") for text, attrs in content_links}, expected)
                 marked = [text for text, attrs in content_links if attrs.get("aria-current") == "page"]
@@ -186,17 +202,18 @@ class SiteContractTests(unittest.TestCase):
                         self.assertTrue(target.is_file(), f"{page}: unresolved local target {raw_url}")
 
     def test_homepage_module_order_and_script_posture(self) -> None:
-        index = parse_page("index.html")
-        scripts = [attrs for tag, attrs in index.tags if tag == "script"]
-        # the front door runs one script and reads no module: the film, its sentences, the sequences
-        # and the worker are js/film.js (THE EXCEPTION loads the record and the engine itself)
-        self.assertEqual([attrs.get("src") for attrs in scripts], ["js/film.js"])
-        self.assertTrue(all(attrs.get("defer") == "" for attrs in scripts))
-        self.assertFalse(any(not attrs.get("src") for attrs in scripts), "index CSP forbids inline script")
+        # each front door reads no module: js/theme.js sets the theme in the head, before the page paints (a remembered
+        # choice never flashes the other); the film, its sentences, the sequences and the worker are js/film.js, deferred
+        # (THE EXCEPTION loads the record and the engine itself). Their CSP forbids inline script.
+        for page, up in (("index.html", ""), ("ar/index.html", "../")):
+            scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
+            self.assertEqual([attrs.get("src") for attrs in scripts], [up + "js/theme.js", up + "js/film.js"], page)
+            self.assertEqual([attrs.get("defer") for attrs in scripts], [None, ""], page)
 
-        contact_scripts = [attrs for tag, attrs in parse_page("contact.html").tags if tag == "script"]
-        self.assertEqual(len(contact_scripts), 1)
-        self.assertFalse(contact_scripts[0].get("src"), "contact keeps exactly one inline form script")
+        for page in ("contact.html", "ar/contact.html"):
+            contact_scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
+            self.assertEqual(len(contact_scripts), 1, page)
+            self.assertFalse(contact_scripts[0].get("src"), f"{page} keeps exactly one inline form script")
 
         for page in ("pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html"):
             source = (ROOT / page).read_text(encoding="utf-8")
@@ -316,6 +333,9 @@ class SiteContractTests(unittest.TestCase):
         self.assertIn("caches.open(CACHE).then(function (cache) {\n      return cache.match(key)", fetch_handler,
                       "the handler reads this build's cache only, never a sibling's")
         self.assertNotIn("caches.match(", fetch_handler)
+        # a navigation to a directory reads its precached index: "/" is index.html, "/ar/" is ar/index.html (offline, an Arabic
+        # visitor whose worker was installed from the English page reached an error page before this; docs/deploy.md §5q)
+        self.assertIn("path.slice(SCOPE.length) + 'index.html'", fetch_handler)
         # A new build never takes over a page that may still be loading: in Safari (iOS 26.5 simulator) a worker that skipped
         # waiting answered a returning reader's previous-build page mid-load with this build's modules, and it died of its own
         # SRI check. It waits until a page whose modules have all run asks it in.
@@ -341,11 +361,13 @@ class SiteContractTests(unittest.TestCase):
         sequence's data-src (assigned when it comes into view) and the film paths js/film.js picks by
         orientation. Each must be a deployed file, or the page shows a black frame where the film was.
         (THE UNHAPPENED's scene/section parity law retired with it: backup/unhappened-v1/.)"""
-        index = parse_page("index.html")
-        named = {attrs[key] for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
-        named |= set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))
-        self.assertEqual(len([1 for tag, attrs in index.tags if tag == "video" and "seq" in attrs.get("class", "")]), 3,
-                         "one sequence per system")
+        named = set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))   # resolved at the site's root
+        for page in ("index.html", "ar/index.html"):
+            index = parse_page(page)
+            named |= {posixpath.normpath(posixpath.join(posixpath.dirname(page), attrs[key]))
+                      for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
+            self.assertEqual(len([1 for tag, attrs in index.tags if tag == "video" and "seq" in attrs.get("class", "")]), 3,
+                             f"{page}: one sequence per system")
         self.assertTrue(named, "the page names no film")
         self.assertEqual(sorted(named - set(DEPLOY_FILES)), [], "named but not shipped")
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
@@ -358,13 +380,13 @@ class SiteContractTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
         seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
         found = 0
-        for page in HTML_FILES + ["tools/og-card.html"]:
+        for page in HTML_FILES + ["tools/og-card.html", "tools/og-card-ar.html"]:
             for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
                 size, ink, ground = re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1), re.search(r'<rect[^>]*fill="(#[0-9A-F]{6})"', svg).group(1), \
                     re.search(r'<path fill="(#[0-9A-F]{6})"', svg).group(1)
                 self.assertEqual(svg, seal.fitted_svg(int(size), ink, ground, ' class="seal"'), page)
                 found += 1
-        self.assertGreaterEqual(found, 8, "the front door, six subpages and the card each carry the seal")
+        self.assertGreaterEqual(found, 11, "both front doors, both contact pages, five subpages and both cards carry the seal")
         mirrored = seal.fitted_svg(26).replace('d="M', 'd="m', 1)
         self.assertNotEqual(mirrored, seal.fitted_svg(26), "the comparison has teeth")
 
@@ -377,19 +399,55 @@ class SiteContractTests(unittest.TestCase):
         """
         css = (ROOT / "css/cytherai.css").read_text(encoding="utf-8")
         tok = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", css))
-        def rel(h):
-            f = [(v / 255) / 12.92 if v / 255 <= 0.03928 else ((v / 255 + 0.055) / 1.055) ** 2.4
-                 for v in (int(h[k:k + 2], 16) for k in (1, 3, 5))]
-            return 0.2126 * f[0] + 0.7152 * f[1] + 0.0722 * f[2]
-        def wcag(a, b):
-            la, lb = rel(a), rel(b)
-            return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
         grounds = {k: tok[k] for k in ("paper", "paper-lifted", "paper-dense", "panel")}
         inks = {k: tok[k] for k in ("ink", "ink-mid", "ink-quiet", "accent", "refuse")}
         worst = min((wcag(i, g), ik, gk) for ik, i in inks.items() for gk, g in grounds.items())
         self.assertGreaterEqual(worst[0], 4.5, f"{worst[1]} on {worst[2]} is {worst[0]:.2f}:1")
         self.assertEqual(tok["quiet"], tok["ink-quiet"])
         self.assertEqual(tok["label"], tok["ink-mid"])
+
+    def test_the_front_door_inks_hold_aa_in_both_themes(self) -> None:
+        """Light mode (js/theme.js) re-tokens the sections below the film; the film and what sits on it keep the dark
+        tokens. Every ink must hold 4.5:1 on its ground in both, tokens read from css/film.css and never restated here.
+        (Text over the film itself is measured in a browser: CY-SEM-003.)"""
+        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        hexes = lambda block: dict(re.findall(r"--([\w-]+):(#[0-9a-f]{6})\b", block))
+        themes = {"dark": hexes(re.search(r":root\{([^}]*)\}", css).group(1)),
+                  "light": hexes(re.search(r"\[data-theme=light\] :is\([^)]*\)\{([^}]*)\}", css).group(1))}
+        for theme, tok in themes.items():
+            for ink in ("ink", "soft", "dim", "warm"):
+                with self.subTest(theme=theme, ink=ink):
+                    self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"{theme} --{ink} on --ground")
+
+    def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
+        """ar/index.html carries index.html's film, cues, sections, sequences and projected figures, only in Arabic; a cue,
+        a section, a sequence or a figure added to one and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
+        def shape(page: str):
+            tags, base = parse_page(page).tags, posixpath.dirname(page)
+            at = lambda u: posixpath.normpath(posixpath.join(base, u))
+            return ([(a.get("data-from"), a.get("data-to")) for t, a in tags if {"line", "landing"} & set(a.get("class", "").split())],
+                    [a["id"] for t, a in tags if t == "section" and a.get("id")],
+                    [(at(a["poster"]), at(a["data-src"])) for t, a in tags if t == "video" and "seq" in a.get("class", "")],
+                    [a["data-m"] for t, a in tags if a.get("data-m")])
+        self.assertEqual(shape("ar/index.html"), shape("index.html"))
+        for page, lang, direction in (("index.html", "en", None), ("ar/index.html", "ar", "rtl"),
+                                      ("contact.html", "en", None), ("ar/contact.html", "ar", "rtl")):
+            html = next(a for t, a in parse_page(page).tags if t == "html")
+            self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
+
+    def test_each_language_names_the_other(self) -> None:
+        """Each page and its Arabic counterpart declare both as alternates (hreflang) and link each other visibly, the link
+        marked with the language it leads to."""
+        for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html")):
+            for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
+                tags = parse_page(page).tags
+                alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)
+                              for t, a in tags if t == "link" and a.get("rel") == "alternate"}
+                self.assertEqual(alternates.get("en").resolve(), (ROOT / en).resolve(), page)
+                self.assertEqual(alternates.get("ar").resolve(), (ROOT / ar).resolve(), page)
+                visible = [a for t, a in tags if t == "a" and a.get("hreflang") == lang and a.get("lang") == lang
+                           and local_target(page, a["href"]).resolve() == (ROOT / other).resolve()]
+                self.assertEqual(len(visible), 1, f"{page} links {other} once, marked {lang}")
 
     @staticmethod
     def synthetic_tree(paths: dict[str, str]):

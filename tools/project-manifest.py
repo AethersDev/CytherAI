@@ -18,7 +18,7 @@ import json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
-PAGES = ("index.html", "pages/brief.html")
+PAGES = ("index.html", "ar/index.html", "pages/brief.html")
 MARK = re.compile(r'(<(span|td|div)\b[^>]*\bdata-m="([^"]+)"[^>]*>)([^<]*)(</\2>)')
 
 

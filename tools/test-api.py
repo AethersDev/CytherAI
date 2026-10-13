@@ -36,7 +36,7 @@ INVENTORY = {
         "verifier": ["biEngine", "audit"],
     },
 }
-SERVED = ["index.html", "js/film.js", "js/manifest.js", "js/instrument.js", "exception/index.html", "exception/exception.js"]
+SERVED = ["index.html", "ar/index.html", "js/film.js", "js/theme.js", "js/manifest.js", "js/instrument.js", "exception/index.html", "exception/exception.js"]
 def code(text, path):
     """the file without its comments — a symbol named in prose is not a call"""
     if path.endswith(".html"): return re.sub(r"<!--.*?-->", "", text, flags=re.S)

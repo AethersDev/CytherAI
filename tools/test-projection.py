@@ -41,6 +41,8 @@ printed = {n.split(":")[1] for n in names["pages/brief.html"] if n.startswith("v
 check(printed == set(values["__index"]), "P3 pages/brief.html prints every validation identifier")
 check(sorted(names["index.html"]) == sorted(HEADLINE),
       "P3 index.html prints exactly the invalid rate and its DeepCAD baseline as projections, and no count")
+check(sorted(names["ar/index.html"]) == sorted(HEADLINE),
+      "P3 ar/index.html prints the same two projections, and no count")
 # P4
 idx = pages["index.html"]
 corrupt = idx.replace('data-m="validation:T2C192-IR-0.00:cyther">0.00%<', 'data-m="validation:T2C192-IR-0.00:cyther">0.01%<', 1)

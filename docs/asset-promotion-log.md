@@ -34,6 +34,26 @@ card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 
 ---
 
+## OG-CARD-AR — the Arabic link-preview plate
+
+| | |
+|---|---|
+| Asset ID | IMG-010 |
+| Source | The English card's composition (IMG-008) with the Arabic front door's statement (`ar/index.html`) |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py ar` (headless Chrome renders `tools/og-card-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
+| Method | IMG-008's frame, darkening and lockup (the lockup stays left to right, as the identity draws it); *دع الذكاء الاصطناعي يغيّر الأشياء. واحتفظ بزمام ما يتغيّر.* in IBM Plex Sans Arabic 300, 58 px, line height 1.4, right-aligned, kept over the frame's dark left side where it reads, `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card-ar.png` · 1200×630 · 606,626 bytes |
+| SHA-256 | `b0c7765545a846d0a2bff8062e7eb615a160d419518a70e69635b4875fcfc3af` |
+| Determinism | Run twice on Google Chrome 155.0.8059.40 (macOS, Apple Silicon); byte-identical output both runs. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame, the Arabic joined and its marks unclipped; the ring and the current visible right of the statement. |
+| Deployment | `deploy.sh` allowlist only; named by `ar/index.html` and `ar/contact.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | Nothing; added 2026-10-14 with the Arabic front door. |
+| Owner sign-off | PENDING |
+
+---
+
 ## OG-CARD-V1 — the derived link-preview plate, retired
 
 | | |
