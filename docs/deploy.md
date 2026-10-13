@@ -1085,8 +1085,15 @@ Simulator (iOS 26.5, an iPhone 16 Pro Max image; simulator evidence, not a physi
 with its Arabic captions, balanced, and reaches its still state; the arrows render as text, not emoji; the light
 appearance leaves the film dark, as designed.
 
+**After publishing.** `https://cytherai.com/ar/` and `/ar/contact.html` serve the artifact's bytes (and `http://…/ar/`
+redirects to them). On the live site in the iOS Simulator, a first-time visitor (Safari's website data moved aside),
+the device set to light: `/ar/` played the whole film, its Arabic captions in turn, and reached its statement; the film
+stayed dark, as designed.
+
 **Open, named:** a native Arabic reader's review of the copy (the owner's, as agreed), VoiceOver in Arabic as heard,
 Safari on a Mac and a physical iPhone.
+
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_2874B365763AE0ED`), 61 of 61 served paths matching the artifact. Release CERTIFIED.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
