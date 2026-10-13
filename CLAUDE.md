@@ -228,9 +228,13 @@ advancing for `STALL` (2 s) while the page is visible shows the final compositio
 statement (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back. Each sequence plays once from its first frame when half of it is in view and holds its
-last frame, which is also its poster; refused, not started within `GUARD` or stalled for
-`STALL`, it rests on that poster for good; scrolling past one before it begins is not a
-failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
+last frame, which is also its poster. iOS Safari downloads a clip only when asked to play it and
+buffers all of it before the first frame moves, so once the film is still the three are warmed
+in turn (started muted off screen, paused as they play) and arrive ready; without that, a
+phone sat on the last frame for seconds, as if frozen (2026-10-13, seen by the owner). A slow
+start is never a failure; refused, or stalled for `STALL` after it has moved, a sequence rests
+on its poster and tries again the next time it comes into view; scrolling past one before it
+begins is not a failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
 page that names one) is the film's last frame with its statement (`tools/render-og-film.py`;
 the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing runs:** once the film
 and every sequence in view have ended, the page requests no frame, plays nothing and fires no
