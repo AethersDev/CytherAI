@@ -10,7 +10,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offse
 #film{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
 header{position:absolute;top:0;left:0;right:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
 .note{position:absolute;left:5vw;bottom:18px;margin:0;color:var(--dim)}
-.wordmark{font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.wordmark i{font-style:normal;color:var(--warm);padding-left:12px}
+.wordmark{display:inline-flex;align-items:center;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
 main{position:relative;z-index:2;height:100svh;padding:0 5vw;overflow:hidden}
 .line,.landing{position:absolute;left:5vw;bottom:17vh;max-width:min(860px,90vw);margin:0;opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s}
