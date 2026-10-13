@@ -19,7 +19,7 @@ then on hostile mutations that must each produce a defect:
   D5  moved canonical parameters (CANON) likewise, where the log writes them;
   D6  an output dropped from a receipt is a coverage defect (the manifest still names it);
   D7  a malformed digest and a duplicated receipt each fail closed;
-  D8  every icon the web manifest and the pages name has a receipt.
+  D8  every icon the web manifest and the pages name, and every card a page names, has a receipt.
 
 The manifest.js file digest the OG entry records is provenance of the reading,
 not a derivation input — the card depends on CANON, which is bound here — so a
@@ -99,9 +99,11 @@ paths = sorted({p for r in receipts(log) for p in r["outputs"]})
 files = {p: open(os.path.join(ROOT, p), "rb").read() for p in paths if os.path.isfile(os.path.join(ROOT, p))}
 CANON, _, CHECKSUM = canon_from_source()
 required = {i["src"] for i in json.load(open(os.path.join(ROOT, "manifest.webmanifest")))["icons"]}
-for page in ("index.html", "contact.html", "404.html", "pages/brief.html"):
-    for href in re.findall(r'<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"', open(os.path.join(ROOT, page), encoding="utf-8").read()):
+for page in ("index.html", "ar/index.html", "contact.html", "ar/contact.html", "404.html", "pages/brief.html"):
+    source = open(os.path.join(ROOT, page), encoding="utf-8").read()
+    for href in re.findall(r'<link rel="(?:icon|apple-touch-icon)" href="([^"]+)"', source):
         required.add(href.lstrip("/").replace("../", ""))
+    required.update(re.findall(r'<meta property="og:image" content="https://cytherai\.com/([^"]+)"', source))
 
 d = audit(log, files, CANON, CHECKSUM, required)
 check(not d, "D1 every promoted asset matches its receipt and every DERIVED asset is bound to %s (%d receipts, %d files)%s" % (CHECKSUM, len(receipts(log)), len(paths), "" if not d else " — " + "; ".join(d)))
@@ -118,7 +120,7 @@ bad = log.replace("bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1
 dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.png` |\n"
 check(any("not a sha256" in x for x in audit(bad, files, CANON, CHECKSUM, required)) and any("duplicated" in x for x in audit(dup, files, CANON, CHECKSUM, required)),
       "D7 a malformed digest and a duplicated receipt each fail closed")
-check(required <= set(paths), "D8 every icon the manifest and pages name has a receipt: %s" % ", ".join(sorted(required)))
+check(required <= set(paths), "D8 every icon and card the manifest and pages name has a receipt: %s" % ", ".join(sorted(required)))
 
 print()
 if fails:

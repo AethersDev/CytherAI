@@ -10,6 +10,8 @@
 <meta property="og:description" content="CytherAI builds the part of AI that decides what is allowed to happen.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_SA">
 <!-- og:image is metadata fetched by link scrapers, never by this page. The card is ILLUSTRATIVE: the film's
      last frame with its statement (tools/render-og-film.py); docs/asset-promotion-log.md records it. -->
 <meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
@@ -19,8 +21,11 @@
 <meta property="og:image:alt" content="The last frame of CytherAI’s film, a conceptual visualization: a structure of glass and ceramic split by a thin luminous ring, a warm current running through it, beside the line Let AI change things. Keep control of what changes.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#07070a">
-<meta name="build-hash" content="B466667CA05CD04F">
+<meta name="build-hash" content="2874B365763AE0ED">
 <meta name="referrer" content="no-referrer">
+<link rel="alternate" hreflang="en" href="https://cytherai.com/">
+<link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/">
+<link rel="alternate" hreflang="x-default" href="https://cytherai.com/">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
@@ -30,19 +35,20 @@
 <!-- The front door: a twelve-second film, offline-rendered and silent, with its sentences as HTML over it
      (js/film.js); then one principle and three systems, each a six-second sequence, a headline, two
      sentences from its shipped page and one route into the evidence; then the invitation. -->
-<link rel="stylesheet" href="css/film.css" integrity="sha384-Xr2LsKyuikNEy6YelCYTgsdooEpFy1DZw1qivpGGWj02HYK10XAeJjAeP4XaRmw1" crossorigin="anonymous">
-<script src="js/film.js" defer integrity="sha384-XfAUSBW01r/M8xJ7N+sTzeWq/6Lj4qQ+UIVmFTlx5auBljrFYBpiH1HhPeIgLL37" crossorigin="anonymous"></script>
+<script src="js/theme.js" integrity="sha384-O3ofJqlVGG6VwaoxP2Rhb2/n/ca3IqQtqmrfbLnvr/n5u8qcTCHYHIBXBZft9ipx" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="css/film.css" integrity="sha384-P4uBcP4OwdjzmCok23w9L00pa75pb91qBWBr8RkNsUUxMKMgnKPkEU4KZeyVwl28" crossorigin="anonymous">
+<script src="js/film.js" defer integrity="sha384-jvLykSn1WtKIqBMzA6SPIns2Ebisvf1hfBqLHpChyarJtNnd3l2cFB5yVVbwBPli" crossorigin="anonymous"></script>
 </head>
 <body data-state="film">
 <video id="film" muted playsinline preload="auto" aria-hidden="true"></video>
-<header><a class="wordmark" href="./" aria-label="CytherAI home"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><a class="top" href="#systems">The three systems ↓</a></header>
+<header><a class="wordmark" href="./" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top to" href="#systems">The three systems ↓</a><a class="top" href="ar/" hreflang="ar" lang="ar">العربية</a><button id="theme" type="button" aria-pressed="false" aria-label="Light mode"><svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.75a7.25 7.25 0 0 1 0 14.5z" fill="currentColor"/></svg></button></nav></header>
 <main>
 <p class="line" data-from="0.4" data-to="3.1" aria-hidden="true">AI can change everything.</p>
 <p class="line" data-from="3.6" data-to="7.0" aria-hidden="true">Not everything should be allowed to change.</p>
 <p class="line" data-from="7.4" data-to="10.2" aria-hidden="true">CytherAI builds the part of AI<br>that decides what is allowed to happen.</p>
 <p class="sr">The film, without sound: a structure of glass and ceramic rebuilds itself around a warm current; one change stops short of a thin ring and stays behind while the current runs on through it; a group that fits passes; the structure settles. Its sentences: AI can change everything. Not everything should be allowed to change. CytherAI builds the part of AI that decides what is allowed to happen.</p>
 <section class="landing" data-from="10.6"><h1>Let AI change things.<br>Keep control of what changes.</h1><nav><a class="solid" href="#systems">The three systems ↓</a><a class="plain" href="mailto:contact@cytherai.com">Talk to us ↗</a></nav></section>
-<button id="replay" class="mono" hidden>Replay</button>
+<button id="replay" class="mono" data-play="Play the film" hidden>Replay</button>
 <p class="note mono">A conceptual visualization. It measures no product.</p>
 </main>
 <section class="principle" id="systems"><small class="mono">One principle. Three systems.</small><h2>The model proposes.<br>The system decides.</h2></section>
@@ -71,5 +77,5 @@
 <a class="route" href="pages/brief.html">Read the validation record →</a></div>
 </section>
 <section class="close"><h2>Tell us what must<br>never happen.</h2><nav><a class="solid" href="mailto:contact@cytherai.com">Talk to us ↗</a><span class="mono">contact@cytherai.com</span></nav>
-<footer class="mono"><span>© 2026 CytherAI · Riyadh</span><span><a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a></span></footer></section>
+<footer class="mono"><span>© 2026 CytherAI · Riyadh</span><span><a href="contact.html">Contact</a> · <a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a></span></footer></section>
 </body></html>

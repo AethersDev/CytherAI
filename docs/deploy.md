@@ -1027,6 +1027,67 @@ seconds in two of the runs are Safari launching cold: each run quits it first.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B466667CA05CD04F`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
+## 5q. Arabic and light mode — 2026-10-14
+
+Build `2874B365763AE0ED` (`#arabic_and_light_2874B365763AE0ED`, `#reading_ink_2874B365763AE0ED`, `#film_settle_2874B365763AE0ED`). The owner asked for
+an Arabic version "with professional implementation and consideration of everything like RTL", and a light mode. Their
+choices: the front door and the contact page in Arabic, published as drafted and refined afterwards; the film dark in
+light mode, everything below it light; light mode by the device's setting, with a switch whose choice is remembered.
+
+**Arabic.** `ar/index.html` and `ar/contact.html`, `lang="ar" dir="rtl"`, each paired with its English page by
+`hreflang` and a visible link marked with the language it leads to. The copy is Modern Standard Arabic for Saudi
+investors, each claim as the English one states it and as its shipped source does: the CytherCAD sentence names
+Text2CAD-192 as the external benchmark CytherAI does not operate, as the brief does. The figures are the projector's
+(Western digits). Links to pages that exist only in English (the brief, ADII, the legal pages) say so (بالإنجليزية);
+AWC-OS's page already opens in Arabic. Product names stay in Latin script, marked `lang="en"` so a screen reader says
+them right, and isolated so a name like Text2CAD-192 never breaks or reorders. The type is IBM Plex Sans Arabic 300 and
+400 (`fonts/`), shipped unmodified: its licence reserves the name "Plex", and subsetting would have saved 17 KB a
+weight. Arabic is never letter-spaced or upper-cased, which breaks its joins; its lines are taller for its marks; its
+headings and captions are balanced. The stylesheet is logical (`inset-inline`), so the English page is unchanged and
+the Arabic one mirrors, the darkening behind its sentences included; the lockup stays left to right, as the identity
+draws it. Arrows point the way the text reads (← ↖). The films and the worker resolve against the site's root, so
+`/ar/` shares them. The Arabic card (`assets/og/og-card-ar.png`, IMG-010) is the English card's composition with the
+Arabic statement. `tools/test-site.py` now requires the Arabic front door to carry exactly the English one's cues,
+sections, sequences and figures, each Arabic page to be `ar`/`rtl`, and each pair to name the other.
+
+**Light mode.** `js/theme.js` runs in the head, before the page paints: the remembered choice, or else the device's
+setting, as `data-theme`; the header's switch (`aria-pressed`) toggles it, and choosing the device's own theme forgets
+the choice. The principle, the systems and the close take light tokens; the film, the header and the sentences over it
+stay dark. A first run caught the light sections' headings nearly invisible: they inherited the page's cream ink, set
+once on the body; the light sections now set their own ink. Every ink holds 4.5:1 on its ground in both themes
+(`tools/test-site.py`).
+
+**Offline, in Arabic.** The worker matched a navigation's key only for the root: `/` read the precached `index.html`,
+but `/ar/` asked the network. A visitor whose worker was installed from the English page and who then opened `/ar/`
+offline reached the browser's error page (reproduced on the candidate before the fix). Every directory now reads its
+precached index; the same visit renders the Arabic page, still, its statement visible.
+
+**Observed on this build** (HeadlessChrome 155 over CDP unless stated):
+
+| | `/` | `/ar/` |
+|---|---|---|
+| Reading ink, dark (3 viewports) | 365 samples, worst 4.86:1 | 403 samples, worst 5.36:1 |
+| Reading ink, light (3 viewports) | 365 samples, worst 4.90:1 | 403 samples, worst 5.36:1 |
+| Settled: frames · timers · playing media, 4 profiles | 0 · 0 · 0 | 0 · 0 · 0 |
+| The worker: this build, control after reload, offline reload | yes | yes (registered at the root from `/ar/`) |
+| Playback: the film, Replay, reduced motion, a refused play, a play that never starts | as before | the same, its captions in Arabic |
+| Accessibility: the statement a heading from the first moment; Tab stops on screen, visible, outlined | 15 stops | 15 stops; names in Arabic |
+| 200% zoom, a phone on its side, a small phone: overflow, overlaps | none | none |
+| Sequences on Slow 4G: at most one download; the warm-up past a clip arriving in one piece | — | yes; all three warmed |
+
+The switch, in both languages, from either device setting: dark (or light) with nothing remembered, a click to the
+other, remembered; a reload keeps it, and the first frame painted is already that theme; a second click returns to
+the device's theme and forgets. The light sections' headings are `#121118` on `#f3f1ec`. On both contact pages the
+page's own validation (what the browser accepts and the page refuses: a name of one letter, `a@b`, a short message)
+refuses three fields in the page's language, the Arabic counting them in the plural; with every field empty the
+browser's own validation stops the form first, in both. The stall fallback passes its three cases. In the iOS
+Simulator (iOS 26.5, an iPhone 16 Pro Max image; simulator evidence, not a physical iPhone's) `/ar/` plays the film
+with its Arabic captions, balanced, and reaches its still state; the arrows render as text, not emoji; the light
+appearance leaves the film dark, as designed.
+
+**Open, named:** a native Arabic reader's review of the copy (the owner's, as agreed), VoiceOver in Arabic as heard,
+Safari on a Mac and a physical iPhone.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

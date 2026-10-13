@@ -261,7 +261,8 @@ path: `tools/test-site.py` requires every inline seal to equal the computed one.
 marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the orbit plate).
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
-precached); `css/film.css` and one script, `js/film.js` (`defer`), both with SRI.
+precached); `css/film.css` and two scripts with SRI: `js/theme.js` in the head (it sets the theme before the page
+paints) and `js/film.js` (`defer`).
 `js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the
 sequences' IntersectionObserver, and `sw.js` registration once the film is still (its install would take the
 link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
@@ -271,7 +272,24 @@ live in `film/`: two films with their final-frame posters, three sequences with 
 verifiers and derived assets) and `js/instrument.js` (`CytherInstrument`: `judge` for THE
 EXCEPTION; `biEngine` and `audit` for the verifiers) are no longer loaded by the front door.
 
-**Subpages** (`contact.html`, `pages/{brief,privacy,security,terms}.html`) share
+**Arabic** (`ar/`, 2026-10-14): `ar/index.html` is the front door in Arabic and `ar/contact.html` the contact page;
+the brief, the ADII page and the legal pages stay English and the Arabic pages mark their links to them
+(بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
+both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
+exactly the English one's cues, sections, sequences and projected figures (the projector writes its two figures too,
+Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
+or upper-cased (spacing breaks the joins), gets taller lines, and keeps a Latin name whole and in its own order
+(`[lang=en]`, isolated). Its type is IBM Plex Sans Arabic 300/400 (`fonts/`, OFL, shipped unmodified: the licence
+reserves the name "Plex", so it is not subset). The lockup stays left to right. The Arabic card is
+`assets/og/og-card-ar.png` (`tools/render-og-film.py ar`). The copy was drafted in Modern Standard Arabic and
+published for the owner to refine.
+
+**Light mode** (2026-10-14): `js/theme.js` sets `data-theme` on the root from the visitor's remembered choice
+(the header's switch, `#theme`, `aria-pressed`) or else the device's setting; choosing the device's own theme forgets
+the choice. Only the principle, the systems and the close take the light tokens; the film, the header and the
+sentences over it are dark in both. Every ink holds 4.5:1 on its ground in both themes (`tools/test-site.py`).
+
+**Subpages** (`contact.html`, `ar/contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 

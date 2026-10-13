@@ -12,6 +12,7 @@ document.documentElement.classList.remove("no-js");
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
 const lines = [...document.querySelectorAll(".line")], landing = document.querySelector(".landing");
 const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const root = new URL("../", document.currentScript.src);   // the site's root: the films and the worker are the same from ar/
 const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play
                      // through, about 4 s in on a 2.4–3.2 Mbit/s link (a sequence may take as long as it needs)
 const STALL = 2000;  // ms the film may then fall behind real time, in all, while the page is visible, before its final frame stands
@@ -21,8 +22,8 @@ let timer = 0, guard = 0, last = 0, at = 0, behind = 0, started = false, warmed 
 /* the poster is the film's final frame. Without a film (load false) it stands, and nothing downloads */
 function source(load) {
   const p = portrait.matches;
-  v.poster = p ? "film/final-portrait.jpg" : "film/final-landscape.jpg";
-  if (load) v.src = p ? "film/film-portrait.mp4" : "film/film-landscape.mp4";
+  v.poster = new URL(p ? "film/final-portrait.jpg" : "film/final-landscape.jpg", root).href;
+  if (load) v.src = new URL(p ? "film/film-portrait.mp4" : "film/film-landscape.mp4", root).href;
   else if (v.hasAttribute("src")) { v.removeAttribute("src"); v.load(); }
 }
 function cue(t) {
@@ -54,7 +55,7 @@ v.addEventListener("ended", still);
 v.addEventListener("error", still);
 replay.addEventListener("click", film);
 portrait.addEventListener("change", () => { if (body.dataset.state === "still") source(false); });
-if (stillMotion) { replay.textContent = "Play the film"; still(); } else film();
+if (stillMotion) { replay.textContent = replay.dataset.play; still(); } else film();
 
 /* Each system's sequence plays once, from its first frame, whenever it comes into view, and holds its last frame, which is
    also its poster. iOS Safari downloads a clip only once it is asked to play, and buffers the whole of it before the first
@@ -134,7 +135,7 @@ if (!stillMotion) seqs.forEach(s => io.observe(s));
 function enlist() {
   if (enlisted || !("serviceWorker" in navigator)) return;
   enlisted = true;
-  navigator.serviceWorker.register("sw.js").then(reg => {
+  navigator.serviceWorker.register(new URL("sw.js", root)).then(reg => {
     const letIn = w => w && w.postMessage("take-over");
     letIn(reg.waiting);
     reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });

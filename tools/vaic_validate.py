@@ -81,7 +81,7 @@ DIGEST = re.compile(r"[0-9a-f]{64}")
 IDENTITY_COVERAGE = {
     "record_hash": ("js/manifest.js",),
     "kernel_hash": ("js/manifest.js", "js/instrument.js"),
-    "grammar_hash": ("index.html", "js/film.js", "css/film.css"),
+    "grammar_hash": ("index.html", "ar/index.html", "js/film.js", "js/theme.js", "css/film.css"),
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",

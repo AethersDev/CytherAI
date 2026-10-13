@@ -23,7 +23,8 @@
     "E7D99F9F08D3BC89",
     "3C3C51BEDEAB3A59",
     "FD22B035CA263E92",
-    "B466667CA05CD04F"
+    "B466667CA05CD04F",
+    "2874B365763AE0ED"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -16022,6 +16023,694 @@
         10
       ],
       "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead"
+    },
+    "reading_ink_2874B365763AE0ED": {
+      "artifact_build": "2874B365763AE0ED",
+      "observed_at": "2026-10-14",
+      "runtime": "HeadlessChrome 155.0.8059.40 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by a static server that answers byte ranges",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad inkprobe.py)",
+      "surface": "every reading element of both front doors, / and /ar/, in both themes: the film's captions, the statement and its links, the header (the language link and the theme switch included), Replay and the conceptual-visualization line over the film and its local darkening (mirrored for right to left); the principle; the three systems and the close over the page ground, dark or light",
+      "method": "play() stubbed so the film is held; for each declared second the video is seeked and the seek confirmed to land within 0.05 s, then 1.0 s for the cue and the 0.6 s fade; the film is then ended (the still state) and each section scrolled to the viewport centre; prefers-color-scheme emulated dark or light (js/theme.js follows it); capture the page with every glyph's fill transparent and with every fill #FF00FF (glyph support = pixels differing by ≥ 64 in a channel); WCAG 2.1 contrast of each fully opaque element's computed ink, alpha-composited, against every ground pixel at its glyph support. The page's CSP was bypassed for the probe's own capture style only.",
+      "samples": "film seconds 1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9; the still state; #systems, #adii, #awc-os, #cythercad, .close; each in English and Arabic, dark and light, at three viewports",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "the declared seconds, sections, two languages, two themes and three viewports only; a finite sweep licenses no universal proposition",
+      "result": "PASS",
+      "elements_measured": 1536,
+      "worst_min": 4.86,
+      "history": "Re-observed for the Arabic front door and light mode; the films are those re-encoded in 3C3C51BEDEAB3A59. The probe holds the film by reporting the page hidden, whose time the stall rule does not count.",
+      "profiles": {
+        "/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 135,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.17,
+            "p01": 5.17
+          }
+        },
+        "/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 116,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "min": 4.86,
+            "p01": 5.09
+          }
+        },
+        "/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 114,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "h2",
+            "text": "The model proposes.The system decides.",
+            "min": 5.13,
+            "p01": 11.45
+          }
+        },
+        "/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 135,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.17,
+            "p01": 5.17
+          }
+        },
+        "/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 116,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t11.9",
+            "element": "h1",
+            "text": "Let AI change things.Keep control of wha",
+            "min": 4.9,
+            "p01": 9.5
+          }
+        },
+        "/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 114,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.0",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.39,
+            "p01": 5.49
+          }
+        },
+        "/ar/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 146,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.8",
+            "element": "p.note",
+            "text": "تصوّر مفاهيمي. لا يقيس أي منتج.",
+            "min": 5.81,
+            "p01": 5.81
+          }
+        },
+        "/ar/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 128,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.0",
+            "element": "p.note",
+            "text": "تصوّر مفاهيمي. لا يقيس أي منتج.",
+            "min": 5.59,
+            "p01": 5.59
+          }
+        },
+        "/ar/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 129,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.line",
+            "text": "ليس كل شيء ينبغي أن يُسمح بتغييره.",
+            "min": 5.36,
+            "p01": 6.79
+          }
+        },
+        "/ar/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 146,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "min": 5.55,
+            "p01": 5.55
+          }
+        },
+        "/ar/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 128,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#systems",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "min": 5.55,
+            "p01": 5.55
+          }
+        },
+        "/ar/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 129,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.line",
+            "text": "ليس كل شيء ينبغي أن يُسمح بتغييره.",
+            "min": 5.36,
+            "p01": 6.78
+          }
+        }
+      }
+    },
+    "film_settle_2874B365763AE0ED": {
+      "artifact_build": "2874B365763AE0ED",
+      "build_identity": "2874B365763AE0ED",
+      "observed_at": "2026-10-14",
+      "runtime": "HeadlessChrome 155.0.8059.40 (macOS, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by a static server that answers byte ranges",
+      "harness": "Claude Code bounded CDP browser observation (scratchpad settleprobe.py)",
+      "surface": "both front doors, / and /ar/ (index.html, ar/index.html, js/film.js, js/theme.js, css/film.css, film/)",
+      "method": "before any page script, requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire; autoplay allowed; wait for the film's still state; scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll to the close; reset the counts and wait 3 s; then scroll a sequence back into view (it must play), wait for every video to stop, reset and count 3 s again. Each page then checks the worker's caches, control after reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).",
+      "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages; a stimulus starts motion (outside reduced motion) and the page settles again",
+      "result": "PASS",
+      "profiles": {
+        "/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.34,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 18,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.07,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.06,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.0,
+          "#adii_played": false,
+          "#awc-os_played": false,
+          "#cythercad_played": false,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.31,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 19,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.06,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 18,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 11.06,
+          "#adii_played": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 18,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.0,
+          "#adii_played": false,
+          "#awc-os_played": false,
+          "#cythercad_played": false,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        }
+      },
+      "worker": {
+        "/": {
+          "caches": [
+            "cytherai-substrate-2874B365763AE0ED"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "2874B365763AE0ED",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/final-landscape.jpg",
+            "fonts_loaded": "News,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        },
+        "/ar/": {
+          "caches": [
+            "cytherai-substrate-2874B365763AE0ED"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "2874B365763AE0ED",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/final-landscape.jpg",
+            "fonts_loaded": "Arabic,Arabic,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        }
+      }
+    },
+    "arabic_and_light_2874B365763AE0ED": {
+      "artifact_build": "2874B365763AE0ED",
+      "observed_at": "2026-10-14",
+      "harness": "Claude Code bounded observations: scratchpad themeprobe.py, filmtest.py, a11yprobe.py, zoomprobe.py, stalltest.py, warmprobe.py, seqprobe.py (Chrome over CDP); the iOS Simulator through xcrun simctl (iOS 26.5, an iPhone 16 Pro Max image; screenshots of /ar/ in dark and light appearance; simulator evidence, not a physical iPhone's)",
+      "finding": "The owner asked for an Arabic version, professionally implemented (right to left and the rest), and a light mode (2026-10-14); they chose the front door and the contact page in Arabic, published as drafted and refined later, the film dark in light mode, and light mode by the device's setting with a remembered switch.",
+      "result": "PASS",
+      "theme_switch": {
+        "en/ device dark": {
+          "fresh": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": null,
+            "first": "dark",
+            "label": "Light mode",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "clicked": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": "light",
+            "first": "dark",
+            "label": "Light mode",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "reloaded": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": "light",
+            "first": "light",
+            "label": "Light mode",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "clicked_back": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": null,
+            "first": "light",
+            "label": "Light mode",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          }
+        },
+        "en/ device light": {
+          "fresh": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": null,
+            "first": "light",
+            "label": "Light mode",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "clicked": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": "dark",
+            "first": "light",
+            "label": "Light mode",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "reloaded": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": "dark",
+            "first": "dark",
+            "label": "Light mode",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "clicked_back": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": null,
+            "first": "dark",
+            "label": "Light mode",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          }
+        },
+        "ar/ device dark": {
+          "fresh": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": null,
+            "first": "dark",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "clicked": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": "light",
+            "first": "dark",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "reloaded": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": "light",
+            "first": "light",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "clicked_back": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": null,
+            "first": "light",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          }
+        },
+        "ar/ device light": {
+          "fresh": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": null,
+            "first": "light",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          },
+          "clicked": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": "dark",
+            "first": "light",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "reloaded": {
+            "theme": "dark",
+            "pressed": "false",
+            "stored": "dark",
+            "first": "dark",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(236, 231, 220)",
+            "ground": "rgb(7, 7, 10)"
+          },
+          "clicked_back": {
+            "theme": "light",
+            "pressed": "true",
+            "stored": null,
+            "first": "dark",
+            "label": "الوضع الفاتح",
+            "h2": "rgb(18, 17, 24)",
+            "ground": "rgb(243, 241, 236)"
+          }
+        }
+      },
+      "contact_pages_refuse_in_their_language": {
+        "contact.html": {
+          "feedback": "NOT TRANSMITTED — 3 fields marked below need attention.",
+          "invalid": [
+            "contact-name",
+            "contact-email",
+            "contact-message"
+          ],
+          "focused": "contact-name",
+          "errors": [
+            "Name must be at least 2 characters.",
+            "Enter a valid email address.",
+            "Message must be at least 10 characters."
+          ]
+        },
+        "ar/contact.html": {
+          "feedback": "لم تُرسَل — 3 حقول أدناه تحتاج إلى مراجعة.",
+          "invalid": [
+            "contact-name",
+            "contact-email",
+            "contact-message"
+          ],
+          "focused": "contact-name",
+          "errors": [
+            "يجب ألّا يقلّ الاسم عن حرفين.",
+            "أدخل بريدًا إلكترونيًا صالحًا.",
+            "يجب ألّا تقلّ الرسالة عن 10 أحرف."
+          ]
+        }
+      },
+      "arabic_warm_up_past_a_clip_arriving_in_one_piece": [
+        "adii",
+        "awc-os",
+        "cythercad"
+      ],
+      "arabic_sequences_chrome_slow_4g": {
+        "jump": {
+          "preset": "Slow 4G",
+          "scenario": "jump",
+          "sections": {
+            "#cythercad": {
+              "first_frame_moves_s": 0.51,
+              "ended_s": 6.62,
+              "reached_s": 6
+            }
+          },
+          "max_downloading_at_once": 1,
+          "overlaps": []
+        },
+        "after": {
+          "preset": "Slow 4G",
+          "scenario": "after",
+          "sections": {
+            "#adii": {
+              "first_frame_moves_s": 0.25,
+              "ended_s": 6.36,
+              "reached_s": 6
+            },
+            "#awc-os": {
+              "first_frame_moves_s": 0.25,
+              "ended_s": 6.08,
+              "reached_s": 6
+            },
+            "#cythercad": {
+              "first_frame_moves_s": 0.25,
+              "ended_s": 6.11,
+              "reached_s": 6
+            }
+          },
+          "max_downloading_at_once": 1,
+          "overlaps": []
+        }
+      },
+      "stall_regression": {
+        "S1": true,
+        "S2": true,
+        "S3": true
+      },
+      "not_observed": "Safari on a Mac, a physical iPhone, VoiceOver as heard in Arabic, and a native reader's review of the Arabic copy"
     }
   }
 }
