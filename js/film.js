@@ -56,11 +56,13 @@ if (stillMotion) { replay.textContent = "Play the film"; still(); } else film();
 /* Each system's sequence plays once, from its first frame, whenever it comes into view, and holds its last frame, which is
    also its poster. iOS Safari downloads a clip only once it is asked to play, and buffers the whole of it before the first
    frame moves: a sequence asked on arrival sat on its last frame for seconds, as if frozen. So once the film is still the
-   three are warmed in turn: each is started muted off screen and paused the moment it plays, and arrives ready. A slow
-   start is never a failure. A sequence refused, or one that has moved and then stops for STALL while visible, rests on
-   its poster; it tries again the next time it comes into view. */
-const seqs = [...document.querySelectorAll(".seq")], pace = new Map(), inView = new Set();
-let watch = 0;
+   three are warmed in turn: each is started muted off screen and paused the moment it plays, and arrives ready. One
+   sequence downloads at a time (the slot), and one in view comes first: arriving, it takes the slot from a clip warming
+   off screen, which goes back in the queue, never from another in view, which it waits behind. A slow start is never a
+   failure. A sequence refused, or one that has moved and then stops for STALL while visible, rests on its poster; it
+   tries again the next time it comes into view. */
+const seqs = [...document.querySelectorAll(".seq")], pace = new Map(), inView = new Set(), want = new Set(), tried = new Set();
+let watch = 0, slot = null;
 const playing = s => pace.has(s) && !s.paused && !s.ended;
 /* the watch runs only while a sequence is actually playing: it starts on the `playing` event and stops the moment the
    last one pauses or ends, so the page is settled when its media is */
@@ -80,31 +82,44 @@ seqs.forEach(s => {
   s.addEventListener("playing", () => { pace.set(s, { t: -1, at: performance.now() }); if (!watch) watch = setInterval(look, 250); });
   s.addEventListener("pause", idle); s.addEventListener("ended", idle);
 });
-/* resolves once the whole clip is buffered, or it is dropped (rest): one download at a time, so a sequence being watched
-   never shares a slow link with the next one warming */
+const full = s => { const b = s.buffered; return s.hasAttribute("src") && b.length > 0 && b.end(b.length - 1) >= s.duration - 0.05; };
+/* resolves once the whole clip is buffered, or it is dropped (rest, or giving way to a sequence in view) */
 const whole = s => new Promise(done => {
   const check = () => {
-    const b = s.buffered;
-    if (!s.hasAttribute("src") || (b.length && b.end(b.length - 1) >= s.duration - 0.05)) {
-      s.removeEventListener("progress", check); s.removeEventListener("emptied", check); done();
-    }
+    if (!s.hasAttribute("src") || full(s)) { s.removeEventListener("progress", check); s.removeEventListener("emptied", check); done(); }
   };
   s.addEventListener("progress", check); s.addEventListener("emptied", check); check();
 });
+function begin(s) {
+  s.currentTime = 0;
+  s.play().catch(err => { if (err.name !== "AbortError") rest(s); });   // AbortError: scrolled away before it began, not a failure
+}
+/* the slot goes to s: in view it plays from its first frame; off screen it warms (refused or interrupted, it tries again on arrival) */
+function give(s) {
+  slot = s; load(s);
+  if (inView.has(s)) begin(s);
+  else { tried.add(s); s.play().then(() => { if (!inView.has(s)) s.pause(); }, () => {}); }
+  whole(s).then(() => { if (slot === s) slot = null; next(); });
+}
+/* a free slot goes to the first sequence in view still waiting for it, else, once the film is still, the next to warm */
+function next() {
+  if (slot) return;
+  const s = seqs.find(s => want.has(s)) || (warmed && seqs.find(s => !inView.has(s) && !tried.has(s) && !full(s)));
+  if (s) { want.delete(s); give(s); }
+}
 function warm() {
   if (stillMotion || warmed) return;   // reduced motion plays no sequence; still() runs at load then, before the sequences exist
-  warmed = true;
-  seqs.reduce((chain, s) => chain.then(() => {
-    load(s);
-    if (!inView.has(s)) s.play().then(() => { if (!inView.has(s)) s.pause(); }, () => {});   // refused or interrupted: it tries again on arrival
-    return whole(s);
-  }), Promise.resolve());
+  warmed = true; next();
 }
 const io = new IntersectionObserver(es => es.forEach(e => {
   const s = e.target;
-  if (!e.isIntersecting) { inView.delete(s); s.pause(); return; }
-  inView.add(s); load(s); s.currentTime = 0;
-  s.play().catch(err => { if (err.name !== "AbortError") rest(s); });   // AbortError: scrolled away before it began, not a failure
+  if (!e.isIntersecting) { inView.delete(s); want.delete(s); s.pause(); return; }
+  inView.add(s);
+  if (full(s) || slot === s) { begin(s); return; }
+  if (slot && !inView.has(slot)) {   // a clip warming off screen gives way, and goes back in the queue
+    const w = slot; slot = null; tried.delete(w); w.pause(); w.removeAttribute("src"); w.load();
+  }
+  if (slot) want.add(s); else give(s);
 }), { threshold: 0.5 });
 if (!stillMotion) seqs.forEach(s => io.observe(s));
 
