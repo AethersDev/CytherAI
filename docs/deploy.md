@@ -950,6 +950,8 @@ starts gives way after 6 s.
 **Open, named:** Safari on a Mac and a physical iPhone, as the owner sees them; below about 2.4 Mbit/s the film still
 gives way to the statement after 6 s, by design.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_3C3C51BEDEAB3A59`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
