@@ -231,7 +231,10 @@ back. Each sequence plays once from its first frame when half of it is in view a
 last frame, which is also its poster. iOS Safari downloads a clip only when asked to play it and
 buffers all of it before the first frame moves, so once the film is still the three are warmed
 in turn (started muted off screen, paused as they play) and arrive ready; without that, a
-phone sat on the last frame for seconds, as if frozen (2026-10-13, seen by the owner). A slow
+phone sat on the last frame for seconds, as if frozen (2026-10-13, seen by the owner). One
+sequence downloads at a time (the film is outside that queue): one arriving in view takes the
+slot from a clip warming off screen, which goes back in the queue, never from another in view,
+which it waits behind. A slow
 start is never a failure; refused, or stalled for `STALL` after it has moved, a sequence rests
 on its poster and tries again the next time it comes into view; scrolling past one before it
 begins is not a failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
@@ -345,9 +348,10 @@ literals.
   camera holding at the refusal), then extended into the site with three systems and
   published on 2026-10-12; its render sources moved to `tools/render-film.py` and
   `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header).
-- **The history was rewritten once** (2026-10-13, at the owner's request): the `Co-Authored-By:` lines were removed
-  from every commit message and `main` was force-pushed; trees, order, authors and dates are unchanged, and the old
-  history is the branch `history/before-message-rewrite`. Every old → new hash is in
+- **`main`'s history was rewritten once** (2026-10-13, at the owner's request): the `Co-Authored-By:` lines were
+  removed from every commit message on `main` and it was force-pushed; trees, order, authors and dates are unchanged.
+  The original history, trailers included, remains on the backup branch `history/before-message-rewrite` (local and
+  on `origin`) and on the older development branches, which predate the rewrite. Every old → new hash is in
   `docs/history-rewrite-2026-10-13.md`; admitted records that cite old hashes resolve through it. Commit messages
   carry no attribution trailer.
 - **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).

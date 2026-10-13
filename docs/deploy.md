@@ -817,7 +817,9 @@ Build `C9EF337977140EDC` (`#sequence_warmup_C9EF337977140EDC`, `#reading_ink_C9E
 played. Chrome, even throttled to Slow 4G, played all three; iOS Safari did not, and the reason is how it loads video: it
 downloads a clip only once asked to play it, and buffers all of it before the first frame moves. A sequence asked on
 arrival therefore sat on its poster, which is its last frame, for the whole download, and the live build's start limit
-could abandon it for good. At 1.8 Mbit/s (an instrumented test copy in the iOS Simulator, the sequences rate-limited):
+could abandon it for good. At 1.8 Mbit/s (an instrumented test copy in the iOS Simulator, iOS 26.5 on an iPhone 16 Pro Max
+image, the sequences rate-limited by the test server, the page scrolled by script at 16, 23 and 31 s; this is simulator
+evidence, not a physical iPhone's):
 
 | Sequence | Size | Live build `D163C64D2D9485FE`: still for | This build: playing after |
 |---|---:|---:|---:|
@@ -826,13 +828,66 @@ could abandon it for good. At 1.8 Mbit/s (an instrumented test copy in the iOS S
 | CytherCAD | 0.72 MB | 3.1 s | 0.2 s |
 
 Once the film is still, the three are warmed in turn: each is started muted off screen and paused as it plays, and the
-next waits until the last is wholly buffered, so a sequence being watched never shares a slow link with one warming. A
+next waits until the last is wholly buffered. (That did not keep a sequence being watched off a link shared with one
+warming, as this section first said: a sequence arriving in view loaded beside the clip warming, and beside one scrolled
+past mid-download. A reviewer found it; §5m.) A
 slow start is never a failure; a sequence that has moved and then stalls rests on its poster and tries again on its next
 arrival. Two attempts were discarded on the way: an early-download hint, which iOS ignored, and warming without waiting,
 which slowed the watched sequence on Slow 4G. Chrome on Slow 4G now plays all three through, scrolled to during the film or
 after it. Reading ink across 349 element samples, worst 4.75:1; 0 frames, timers or playing media once settled.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_C9EF337977140EDC`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
+
+## 5m. One download at a time — 2026-10-13
+
+Build `E7D99F9F08D3BC89` (`#sequence_download_slot_E7D99F9F08D3BC89`, `#reading_ink_E7D99F9F08D3BC89`,
+`#film_settle_E7D99F9F08D3BC89`). A reviewer read in `js/film.js` that a sequence arriving in view loaded and played on its
+own, outside the warm-up queue, so two downloads could overlap and §5l's "never shares a slow link" was too broad. A
+probe that records, every 100 ms, each moment two or more sequences hold a source not yet wholly buffered confirmed it
+on the live build, and found a second path: a sequence scrolled past mid-download kept downloading beside the next.
+
+The sequences now share one download slot. A sequence arriving in view takes it from a clip warming off screen, which
+drops its download and goes back in the queue; it never takes it from another sequence in view, and waits behind it.
+A free slot goes first to a sequence in view still waiting, then to the next to warm. The film is outside the queue: a
+sequence scrolled to while the film is still loading downloads beside it.
+
+**Chrome, Slow 4G** (Chrome's preset caps the whole link; cache disabled, worker bypassed; seconds after arrival):
+
+| Scenario | Live build `C9EF337977140EDC` | This build |
+|---|---|---|
+| Phone, straight to CytherCAD as the warm-up begins | 2 downloading at once; first frame 1.29 s, ended 8.23 s | 1; 1.04 s, ended 6.97 s |
+| Phone, past ADII and AWC-OS (0.6 s each) to CytherCAD | 3 at once; first frame 1.28 s, 4.9 of 6 s in 9 s, never ended | 1; 0.51 s, ended 6.7 s |
+| Desktop 1440×900, ADII and AWC-OS both in view | 2 at once; ADII 1.03 → 8.76 s, AWC-OS 1.55 → 8.76 s | 1; ADII 1.03 → 7.23 s, AWC-OS waits: 5.69 → 11.61 s |
+| Phone, each system after the film | — | 1; ADII 0.52, AWC-OS 0.26, CytherCAD 0.26 s, each ended |
+| Phone, ADII 4 s after load, then on | — | 1; 0.26, 0.25, 0.25 s, each ended |
+
+The cost is named: with two sequences in view on a slow link, the second now waits for the first (AWC-OS began at 5.7 s
+rather than 1.6 s) while the first plays at its own pace instead of both sharing the link and stuttering. On a fast link
+a clip of 0.6–0.7 MB arrives in a fraction of a second and the wait does not show.
+
+**iOS Simulator** (iOS 26.5, an iPhone 16 Pro Max image; an instrumented test copy, the sequences served at 225 KB/s in
+all, one link shared by every download; the page scrolled by script; simulator evidence, not a physical iPhone's):
+
+| Walk | Live build `C9EF337977140EDC` | This build |
+|---|---|---|
+| Each system after the film (in view at 16, 23, 31 s) | playing 0.1, 0.2, 0.2 s after arrival | 0.1, 0.2, 0.2 s |
+| Straight to CytherCAD at 13 s, as the warm-up begins; then ADII, AWC-OS | CytherCAD playing after 6.6 s, sharing the link with the warm-up, and not ended 11 s after arrival; the others 0.2 s | CytherCAD after 3.6 s, alone (iOS downloads a cold clip whole before it moves: 0.72 MB at 1.8 Mbit/s), ended at 22.7 s; the others 0.2 s |
+
+Runs were discarded on the way, none admitted: a shell loop that passed no arguments opened a broken address in the
+simulator during two runs; a tab left by one batch posted into the next one's log; a port reused from an earlier upgrade
+test was still controlled by that test's service worker, which served an old build in place of the copy under test. Each
+run now quits Safari first, takes a port never used before, and counts only the page it opened and the build it served.
+
+**Unchanged behaviour, re-observed.** The stall fallback passes its three cases: the film starved at 35% gives way 2.0 s
+after it stops; a starved sequence rests on its poster within `STALL` + 1.5 s at each of two arrivals, with 0 timer
+callbacks once everything has stopped; the film starved while the page is hidden gives way 2.04 s after it is shown.
+Settling: 0 frames, timers or playing media once still in four profiles; the worker caches exactly this build and serves
+it with the server stopped. Reading ink across 349 element samples, worst 4.75:1. The playback suite (desktop, phone,
+reduced motion, a refused play, a play that never starts) behaves as before. Accessibility and zoom were not re-run: no
+markup or style changed.
+
+**Open, named:** a physical iPhone (its radio, Low Power Mode, memory and thermal limits). Every iOS figure in §5l and here
+is the Simulator's.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
