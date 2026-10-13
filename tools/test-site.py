@@ -351,6 +351,23 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
                          "shipped but named by nothing")
 
+    def test_every_seal_is_the_computed_one(self) -> None:
+        """The Cyther Seal is computed from the company's name, and its identity forbids redrawing the path. Every seal
+        inline on a served page, and on the social card's composition, must be exactly the pixel-fitted seal
+        tools/render-seal.py computes at its size and colours; a hand-edited cell, a mirrored path or another colour fails."""
+        spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
+        seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
+        found = 0
+        for page in HTML_FILES + ["tools/og-card.html"]:
+            for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
+                size, ink, ground = re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1), re.search(r'<rect[^>]*fill="(#[0-9A-F]{6})"', svg).group(1), \
+                    re.search(r'<path fill="(#[0-9A-F]{6})"', svg).group(1)
+                self.assertEqual(svg, seal.fitted_svg(int(size), ink, ground, ' class="seal"'), page)
+                found += 1
+        self.assertGreaterEqual(found, 8, "the front door, six subpages and the card each carry the seal")
+        mirrored = seal.fitted_svg(26).replace('d="M', 'd="m', 1)
+        self.assertNotEqual(mirrored, seal.fitted_svg(26), "the comparison has teeth")
+
     def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
         """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
 

@@ -112,7 +112,7 @@ check(any("og-card.png digest" in x for x in audit(log, mut, CANON, CHECKSUM, re
 d = audit(log, files, CANON, "0000:0000", required)
 check(sum("current state is 0000:0000" in x for x in d) == sum(r["classification"] == "DERIVED" for r in receipts(log)) >= 3, "D4 a moved canonical state stales every DERIVED receipt (%d)" % sum("current state" in x for x in d))
 check(any("other canonical parameters" in x for x in audit(log, files, [c + 1e-3 for c in CANON], CHECKSUM, required)), "D5 moved canonical parameters stale the receipts that write them")
-dropped = log.replace(" · 192 `daa09fb19742c55ffd79fe177fdd1d27082b28d8f9e3f55317824565deb939f8`", "")
+dropped = log.replace(" · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469`", "")
 check(dropped != log and any("icon-192.png is named" in x for x in audit(dropped, files, CANON, CHECKSUM, required)), "D6 an output dropped from the icon receipt is a coverage defect")
 bad = log.replace("bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d", "not-a-digest")
 dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.png` |\n"
