@@ -952,6 +952,32 @@ gives way to the statement after 6 s, by design.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_3C3C51BEDEAB3A59`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
+## 5o. The first visit — 2026-10-13
+
+Build `FD22B035CA263E92` (`#film_first_visit_FD22B035CA263E92`, `#reading_ink_FD22B035CA263E92`,
+`#film_settle_FD22B035CA263E92`). With `3C3C51BEDEAB3A59` live, the site in the iOS Simulator played the film for a
+returning visitor, on the first load after the release and the next, every sentence in turn and then the statement; on a
+newly created simulated iPhone, a first visit, it showed the film's first frame and gave way after `GUARD`. On a first
+visit the worker registered as soon as the script ran, and its install fetched the precache past the HTTP cache (0.70
+MB: the posters, the fonts, the pages) beside the film as it started; the simulator runs above had rate-limited only
+the media, so they never saw it. The worker now registers once the film is still. A first visit with every file on one
+shared link (an instrumented test copy in the iOS Simulator):
+
+| Link | `3C3C51BEDEAB3A59` (worker at once) | This build (worker once still) |
+|---|---|---|
+| 4 Mbit/s | film moving at 5.6 s, played through | moving at 4.0 s, played through |
+| 3.2 Mbit/s | never moved; still at 6.0 s | moving at 5.0 s, played through |
+
+Everything else re-observed on this build, unchanged: in the iOS Simulator both films start in 3–4 s at 2.4–4 Mbit/s and
+play through; Chrome's presets as in §5n; the stall fallback's three cases; settling, 0 frames, timers or playing media
+in four profiles, the worker caching exactly this build once the film is still and serving it with the server stopped;
+reading ink across 349 element samples, worst 4.86:1; the sequences, never more than one download at once, and the
+warm-up past a clip that arrives in one piece; the playback suite.
+
+**Open, named:** Safari on a Mac and a physical iPhone, as the owner sees them. A returning visitor's first load after a
+release still installs the new worker beside the film (Safari checks for it at the navigation itself). Below about 3
+Mbit/s on a first visit the film may give way to the statement after 6 s, by design.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
