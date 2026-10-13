@@ -3,14 +3,16 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-B466667CA05CD04F';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-2874B365763AE0ED';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
 
 var ASSETS = [
   'index.html',
+  'ar/index.html',
   'contact.html',
+  'ar/contact.html',
   'pages/brief.html',
   'pages/privacy.html',
   'pages/security.html',
@@ -18,12 +20,15 @@ var ASSETS = [
   // the front door: its script, its stylesheet, the final composition it stands on when the film
   // cannot play (offline included), and the fonts it draws its type with (shared with adii/)
   'js/film.js',
+  'js/theme.js',
   'css/film.css',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'adii/fonts/newsreader-variable.woff2',
   'adii/fonts/public-sans-variable.woff2',
   'adii/fonts/ibm-plex-mono-400.woff2',
+  'fonts/ibm-plex-sans-arabic-300.woff2',
+  'fonts/ibm-plex-sans-arabic-400.woff2',
   // subpage stylesheet
   'css/cytherai.css',
   'manifest.webmanifest',
@@ -98,12 +103,13 @@ self.addEventListener('fetch', function (e) {
   if (e.request.headers.has('range') || e.request.destination === 'video' || e.request.destination === 'audio' ||
       /\.(mp4|pdf|pptx)$/i.test(new URL(e.request.url).pathname)) return;
 
-  // A navigation to the scope root requests "<scope>/", and cache matching is
-  // exact — it never pairs with the precached "index.html". Substituting the key
-  // is the whole fix: without it, offline navigation to "/" fails on any cache
-  // generation that has not already served "/" online.
-  var key = (e.request.mode === 'navigate' && new URL(e.request.url).pathname === SCOPE)
-    ? 'index.html'
+  // A navigation to a directory requests "<dir>/", and cache matching is exact — it
+  // never pairs with the precached "<dir>/index.html". Substituting the key is the
+  // whole fix: without it, offline navigation to "/" (or to "/ar/", the Arabic front
+  // door) fails on any cache generation that has not already served it online.
+  var path = new URL(e.request.url).pathname;
+  var key = (e.request.mode === 'navigate' && path.indexOf(SCOPE) === 0 && path.slice(-1) === '/')
+    ? path.slice(SCOPE.length) + 'index.html'
     : e.request;
 
   e.respondWith(
