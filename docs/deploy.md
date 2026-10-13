@@ -974,9 +974,18 @@ in four profiles, the worker caching exactly this build once the film is still a
 reading ink across 349 element samples, worst 4.86:1; the sequences, never more than one download at once, and the
 warm-up past a clip that arrives in one piece; the playback suite.
 
+**After publishing.** With `3C3C51BEDEAB3A59` live, the settled simulator, a returning visitor, played the film on the
+first load after the release and the next. With this build live, the same simulator made a first-time visitor (Safari
+quit, its website data and HTTP cache moved aside) played it too: each sentence in turn, the statement at 16 s, the link
+measured just before at 1 MB in 1.6 s. Three first visits on newly created simulated iPhones gave way to the statement
+instead, and none of them counts: a new simulator's own first-boot downloads took the link (1 MB in 43.7 s while one
+ran, 1.9 s with none).
+
 **Open, named:** Safari on a Mac and a physical iPhone, as the owner sees them. A returning visitor's first load after a
 release still installs the new worker beside the film (Safari checks for it at the navigation itself). Below about 3
 Mbit/s on a first visit the film may give way to the statement after 6 s, by design.
+
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_FD22B035CA263E92`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
