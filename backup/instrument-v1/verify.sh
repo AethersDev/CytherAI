@@ -1,6 +1,6 @@
 #!/bin/sh
 # The retired world's laws, run against this snapshot — the verifiers and the files they
-# read are the ones committed at bf82377, the last commit in which the world was whole
+# read are the ones committed at 9d6cbdb, the last commit in which the world was whole
 # and the front door. Run from anywhere: backup/instrument-v1/verify.sh
 set -eu
 ROOT=$(cd "$(dirname "$0")" && pwd)

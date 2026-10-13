@@ -1,6 +1,6 @@
 #!/bin/sh
 # The retired drawing set's laws, run against this snapshot — the verifiers and the files they
-# read are the ones committed at 99b167a, the last commit in which the drawing set was whole
+# read are the ones committed at c921f00, the last commit in which the drawing set was whole
 # and the front door. Run from anywhere: backup/drawing-set-v1/verify.sh
 set -eu
 ROOT=$(cd "$(dirname "$0")" && pwd)

@@ -1,6 +1,6 @@
 #!/bin/sh
 # THE UNHAPPENED's laws, run against this snapshot — the verifiers and the files they read are the
-# ones committed at f5c1e37, the last commit in which THE UNHAPPENED was whole and the front door.
+# ones committed at 011ffd0, the last commit in which THE UNHAPPENED was whole and the front door.
 # Run from anywhere: backup/unhappened-v1/verify.sh
 set -eu
 ROOT=$(cd "$(dirname "$0")" && pwd)
