@@ -223,15 +223,25 @@ states, its condition, and one route into the evidence (`adii/`, `awc-os/`,
 close is *Tell us what must never happen.* with the contact address.
 
 The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced
-motion, a refused or failed play, or a film not started within `GUARD` (3 s) shows the final
-composition and the whole statement at once (`still()`). Each sequence plays once from its
-first frame when half of it is in view and holds its last frame, which is also its poster;
-reduced motion shows the posters. **When nothing is changing, nothing runs:** once the film
+motion, a refused or failed play, a film not started within `GUARD` (3 s), or one that stops
+advancing for `STALL` (2 s) while the page is visible shows the final composition and the whole
+statement (`still()`); a film stopped short of its end drops its source, so its poster — the
+same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
+back. Each sequence plays once from its first frame when half of it is in view and holds its
+last frame, which is also its poster; refused, not started within `GUARD` or stalled for
+`STALL`, it rests on that poster for good; scrolling past one before it begins is not a
+failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
+page that names one) is the film's last frame with its statement (`tools/render-og-film.py`;
+the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing runs:** once the film
 and every sequence in view have ended, the page requests no frame, plays nothing and fires no
 timer (CY-TEMP-001). If the script never runs, the statement unveils itself after 6 s
 (`.no-js`, CSS). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by
 localized darkening only: under the header, along the film's lower edge, behind Replay,
-behind each caption and the statement, and behind the principle. There is no sound.
+behind each caption and the statement, and behind the principle. There is no sound. The
+statement is the page's `h1` and is in the accessibility tree from the first moment (only its
+links wait for it, so focus never lands on something invisible); a screen-reader-only
+paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; the
+wordmark's ✳ is followed by U+FE0E, or iOS draws it as a green emoji tile.
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
 precached); `css/film.css` and one script, `js/film.js` (`defer`), both with SRI.

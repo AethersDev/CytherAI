@@ -3,8 +3,8 @@
   "short_name": "CytherAI",
   "start_url": "index.html",
   "display": "standalone",
-  "theme_color": "#101620",
-  "background_color": "#ECF0F4",
+  "theme_color": "#07070a",
+  "background_color": "#07070a",
   "icons": [
     {
       "src": "icon.svg",
