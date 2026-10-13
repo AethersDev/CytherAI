@@ -977,9 +977,9 @@ warm-up past a clip that arrives in one piece; the playback suite.
 **After publishing.** With `3C3C51BEDEAB3A59` live, the settled simulator, a returning visitor, played the film on the
 first load after the release and the next. With this build live, the same simulator made a first-time visitor (Safari
 quit, its website data and HTTP cache moved aside) played it too: each sentence in turn, the statement at 16 s, the link
-measured just before at 1 MB in 1.6 s. Three first visits on newly created simulated iPhones gave way to the statement
-instead, and none of them counts: a new simulator's own first-boot downloads took the link (1 MB in 43.7 s while one
-ran, 1.9 s with none).
+measured just before at 1 MB in 1.6 s. Of three first visits on newly created simulated iPhones, two gave way to the
+statement and one played the film; none of them counts as a measure of the site, because a new simulator's own
+first-boot downloads take the link (1 MB in 43.7 s while one ran, 1.9 s with none).
 
 **Open, named:** Safari on a Mac and a physical iPhone, as the owner sees them. A returning visitor's first load after a
 release still installs the new worker beside the film (Safari checks for it at the navigation itself). Below about 3
