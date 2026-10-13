@@ -787,6 +787,28 @@ asks X for the large card (`twitter:card`); X's own markup documentation answere
 **Open, named:** macOS Safari (`safaridriver` needs the owner's admin password), a physical phone (Low Power Mode refuses
 autoplay; the still state is built for it), VoiceOver as heard, and a first-time viewer.
 
+## 5k. The Cyther Seal — 2026-10-13
+
+Build `D163C64D2D9485FE` (`#seal_adoption_D163C64D2D9485FE`, `#reading_ink_D163C64D2D9485FE`,
+`#film_settle_D163C64D2D9485FE`). The owner adopted the seal identity (`cyther-seal-identity.html`, a draft) and asked
+for "whatever version is more aligned with the whole website". The primary lockup was chosen: the solid seal, in the
+site's own ink and ground, left of the wordmark, in place of the ✳. The draft's "inline · replaces the asterisk" lockup
+paints the whole seal warm, which its own colour rule forbids ("never the colour of the whole seal on ground"); warm
+stays the site's accent for labels and the film's current.
+
+- **Computed, not drawn.** The identity's published Python, its in-page JavaScript and `tools/render-seal.py` give the
+  same path from SHA-256("CytherAI"): 77 proposals, 29 admitted, 48 refused, 30 of 36 cells. The script refuses to run if
+  its path ever differs from the published one; `tools/test-site.py` requires every inline seal (the front door, six
+  subpages, the card) to equal the computed one, and catches a one-cell move.
+- **Where it is.** The front door's header (pixel-fitted, 26 px), the cold-paper subpages' nav (16 px, paper ink), the
+  social card (34 px), the favicon (the 32-unit fitted seal) and the app icons (180, 192, 512 and a maskable 512 whose
+  path stays inside the central 80% circle). The orbit icon family and its generator are retired to `backup/icon-v1/`.
+- **Found before this build.** The first candidate set the header link as a flex row with a gap, which split the
+  wordmark into "cyther ai"; the gap is the seal's own margin now.
+- **Unchanged behaviour, re-observed.** Reading ink across 349 element samples, worst 4.75:1; 0 frames, timers or
+  playing media once settled in four profiles; the stall fallback passes its three cases.
+- **iOS Safari.** On the iOS 26.5 Simulator (iPhone 16 Pro Max) the seal renders crisp on the front door and on the cold-paper brief; the film plays and settles, no error. One run of the Chrome playback suite logged a single connection reset from the local test server; a re-run was clean in every scenario.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
