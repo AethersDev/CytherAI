@@ -12,9 +12,9 @@ document.documentElement.classList.remove("no-js");
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
 const lines = [...document.querySelectorAll(".line")], landing = document.querySelector(".landing");
 const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const GUARD = 3000;  // ms a film or a sequence may take to start before its final frame stands in
+const GUARD = 3000;  // ms the film may take to start before its final frame stands in (a sequence may take as long as it needs)
 const STALL = 2000;  // ms it may then stop advancing, while the page is visible, before its final frame stands in
-let timer = 0, guard = 0, last = -1, moved = 0, started = false;
+let timer = 0, guard = 0, last = -1, moved = 0, started = false, warmed = false;
 
 /* the poster is the film's final frame. Without a film (load false) it stands, and nothing downloads */
 function source(load) {
@@ -32,6 +32,7 @@ function still(e) {
   clearInterval(timer); clearTimeout(guard); v.pause();
   if (!(e && e.type === "ended")) source(false);
   body.dataset.state = "still"; cue(Infinity); replay.hidden = false;
+  warm();
 }
 function tick() {
   const t = v.currentTime, now = performance.now();
@@ -52,34 +53,58 @@ replay.addEventListener("click", film);
 portrait.addEventListener("change", () => { if (body.dataset.state === "still") source(false); });
 if (stillMotion) { replay.textContent = "Play the film"; still(); } else film();
 
-/* Each system's sequence plays once, from its first frame, whenever it comes into view; its poster is its final frame.
-   A sequence refused, not started within GUARD, or stopped for STALL while visible rests on that poster for good. */
-const seqs = [...document.querySelectorAll(".seq")], pace = new Map();
+/* Each system's sequence plays once, from its first frame, whenever it comes into view, and holds its last frame, which is
+   also its poster. iOS Safari downloads a clip only once it is asked to play, and buffers the whole of it before the first
+   frame moves: a sequence asked on arrival sat on its last frame for seconds, as if frozen. So once the film is still the
+   three are warmed in turn: each is started muted off screen and paused the moment it plays, and arrives ready. A slow
+   start is never a failure. A sequence refused, or one that has moved and then stops for STALL while visible, rests on
+   its poster; it tries again the next time it comes into view. */
+const seqs = [...document.querySelectorAll(".seq")], pace = new Map(), inView = new Set();
 let watch = 0;
 const playing = s => pace.has(s) && !s.paused && !s.ended;
-/* the watch runs only while a sequence plays: it stops the moment the last one pauses or ends, so the page is settled
-   when its media is */
+/* the watch runs only while a sequence is actually playing: it starts on the `playing` event and stops the moment the
+   last one pauses or ends, so the page is settled when its media is */
 function idle() { if (watch && !seqs.some(playing)) { clearInterval(watch); watch = 0; } }
-function rest(s) { io.unobserve(s); pace.delete(s); s.pause(); s.removeAttribute("src"); s.load(); }
+function load(s) { if (!s.hasAttribute("src")) { s.preload = "auto"; s.src = s.dataset.src; } }
+function rest(s) { pace.delete(s); s.pause(); s.removeAttribute("src"); s.load(); }
 function look() {
   const now = performance.now();
   for (const [s, p] of pace) {
     if (s.paused || s.ended) continue;
     if (s.currentTime !== p.t || document.hidden) { p.t = s.currentTime; p.at = now; }
-    else if (now - p.at > (p.started ? STALL : GUARD)) rest(s);
+    else if (now - p.at > STALL) rest(s);
   }
   idle();
 }
-seqs.forEach(s => { s.addEventListener("pause", idle); s.addEventListener("ended", idle); });
+seqs.forEach(s => {
+  s.addEventListener("playing", () => { pace.set(s, { t: -1, at: performance.now() }); if (!watch) watch = setInterval(look, 250); });
+  s.addEventListener("pause", idle); s.addEventListener("ended", idle);
+});
+/* resolves once the whole clip is buffered, or it is dropped (rest): one download at a time, so a sequence being watched
+   never shares a slow link with the next one warming */
+const whole = s => new Promise(done => {
+  const check = () => {
+    const b = s.buffered;
+    if (!s.hasAttribute("src") || (b.length && b.end(b.length - 1) >= s.duration - 0.05)) {
+      s.removeEventListener("progress", check); s.removeEventListener("emptied", check); done();
+    }
+  };
+  s.addEventListener("progress", check); s.addEventListener("emptied", check); check();
+});
+function warm() {
+  if (stillMotion || warmed) return;   // reduced motion plays no sequence; still() runs at load then, before the sequences exist
+  warmed = true;
+  seqs.reduce((chain, s) => chain.then(() => {
+    load(s);
+    if (!inView.has(s)) s.play().then(() => { if (!inView.has(s)) s.pause(); }, () => {});   // refused or interrupted: it tries again on arrival
+    return whole(s);
+  }), Promise.resolve());
+}
 const io = new IntersectionObserver(es => es.forEach(e => {
   const s = e.target;
-  if (!e.isIntersecting) { s.pause(); return; }
-  if (!s.src) s.src = s.dataset.src;
-  const p = { t: -1, at: performance.now(), started: false };
-  pace.set(s, p); s.currentTime = 0;
-  s.play().then(() => { p.started = true; p.at = performance.now(); },
-                err => { if (err.name !== "AbortError") rest(s); });   // AbortError: scrolled away before it began, not a failure
-  if (!watch) watch = setInterval(look, 250);
+  if (!e.isIntersecting) { inView.delete(s); s.pause(); return; }
+  inView.add(s); load(s); s.currentTime = 0;
+  s.play().catch(err => { if (err.name !== "AbortError") rest(s); });   // AbortError: scrolled away before it began, not a failure
 }), { threshold: 0.5 });
 if (!stillMotion) seqs.forEach(s => io.observe(s));
 
