@@ -81,18 +81,28 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 
 `js/film.js` runs once the document is parsed.
 
-1. It removes `no-js` (without the script, `.no-js` unveils the statement after 6 s, CSS).
+1. It removes `no-js` (without the script, `.no-js` unveils the statement after 6 s, CSS). The
+   statement is the `h1` and is exposed to assistive technology from the start, invisible but
+   present; its links stay `visibility: hidden` until it appears. The film's text alternative is
+   a `.sr` paragraph before it.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
    `film/film-portrait.mp4`) and plays it muted. Reduced motion skips straight to the still
-   state with *Play the film*; a refused play, a media error, or no start within `GUARD`
-   (3 s) does the same with *Replay*.
+   state with *Play the film* and downloads no film; a refused play, a media error, or no
+   start within `GUARD` (3 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
-   window (`data-from`/`data-to`); the statement appears at 10.6 s.
+   window (`data-from`/`data-to`); the statement appears at 10.6 s. If `currentTime` stops
+   advancing for `STALL` (2 s) while the page is visible (a hidden page's time does not
+   count), the film gives way to the still state at once: it drops its source, so the poster
+   — its final frame — stands, and a late download cannot restart it; its caption leaves
+   without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
    statement and Replay. The film never restarts on its own.
 5. Each system's sequence gets its source when half of it first comes into view and plays
    once from its first frame; it holds its last frame, which is also its poster. Leaving
-   view pauses it. Reduced motion never plays them.
+   view pauses it. Refused, not started within `GUARD`, or stopped for `STALL` while visible,
+   it drops its source and rests on its poster for good (a 250 ms watch runs only while a
+   sequence plays). An `AbortError` (scrolled away before it began) is not a failure.
+   Reduced motion never plays them.
 6. The service worker registers from the root and is asked to take over once this script
    has run; its cache name carries the build hash.
 
