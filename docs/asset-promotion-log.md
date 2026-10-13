@@ -17,13 +17,34 @@ card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 
 | | |
 |---|---|
+| Asset ID | IMG-008 |
+| Source | The front door's film: its final frame, `film/final-landscape.jpg` (the last frame of `tools/render-film.py`'s landscape render), and the statement it ends on |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
+| Method | The frame covers the card (centred, 45 px cropped top and bottom); the darkening the front door sets behind its statement (a top band and a radial veil, lower left); the wordmark (Public Sans 720/340, the ✳ in `#ffad57`); *Let AI change things. Keep control of what changes.* in Newsreader 300, 60 px, `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card.png` · 1200×630 · 612,765 bytes |
+| SHA-256 | `ade67c693e77d62263acea0e230e9cd3b0c09d640ec74abfb11a38c43abc7d15` |
+| Determinism | Run twice on Google Chrome 155.0.8059.40 (macOS, Apple Silicon); byte-identical output both runs. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame; the ring and the current visible right of the statement. A square centre crop keeps the ring and the current and cuts the statement's left edge. |
+| Deployment | `deploy.sh` allowlist only, at the path the previous card had, so the six pages that name it (`index.html`, `contact.html`, `pages/brief.html`, `pages/{privacy,security,terms}.html`) keep their `og:image` URL. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-001, the derived orbit plate, retired whole to `backup/og-card-v1/` on 2026-10-13 (below) |
+| Owner sign-off | PENDING |
+
+---
+
+## OG-CARD-V1 — the derived link-preview plate, retired
+
+| | |
+|---|---|
+| Retired | 2026-10-13: served as `assets/og/og-card.png` from `88ccafb` until the film's card (IMG-008) replaced it; the bytes and their generator moved whole to `backup/og-card-v1/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-001 |
 | Source study | `docs/audit/generation-studies/img/IMG-001-og-composition-study.png` (visual-work, round 1, approved composition) — framing reference only; no study pixel ships |
 | Classification | **DERIVED** |
-| Command | `python3 tools/render-og.py` (renderer rev 1) |
+| Command | `python3 tools/render-og.py` (renderer rev 1; now `backup/og-card-v1/render-og.py`, kept as the record of the method: it imports `pngout` and `canon` from its own directory, which the snapshot does not carry) |
 | Canonical inputs | `CytherManifest.CANON = [-1.7515999999999998, 1.85944, -0.98268, -0.6072]` and admission nonce 0, read from `js/manifest.js` (sha256 `84b0fee171f2029f7494dc4916bf4cb520d2f139da4074f1ba04dd4ac3d878f9`) by executing it under jsc — never hand-copied. State checksum `75D1:89D1`. |
 | Method | dsin/dcos orbit recurrence (engine-invariant; Python port verified bit-identical to jsc), plate-0 grammar of `js/substrate.js` verbatim: angular-lobe anchor inks with rot 0.12, log tonemap with gamma 1.5, dark core on light paper, alpha over `#ECF0F4`. 2400×1260 source, 12,000,000 iterations, then exact 2×2 box-mean downsample. The 2× source is never written to disk. |
-| Output | `assets/og/og-card.png` · 1200×630 · 355,054 bytes |
+| Output | `backup/og-card-v1/og-card.png` · 1200×630 · 355,054 bytes |
 | SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |
 | Determinism | Run twice; byte-identical output both runs. |
 | Acceptance checks | Left-45% lane and bottom-12% band: every 24px block mean L ≥ 229 (`#E0E6EF` floor) — measured pure paper, min block L 239.4. Core = the lobe-convergence point (the orbit origin, where the four angular ink anchors meet): (0.671 W, 0.505 H), 48px box mean L 170.8 against paper 239.4. Palette: warm 0.00%, off-cold-hue 0.00%, accent (saturated cold hue) 4.58% ≤ 8%. Crops 1.91:1, centered 1:1, centered 4:5: convergence core inside each with ≥ 40px margin; quiet fraction ≥ 30%. |

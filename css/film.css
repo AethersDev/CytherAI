@@ -20,6 +20,9 @@ main::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;z-
 .principle::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 75% 60% at 28% 50%,#07070ae0,#07070a99 50%,transparent 80%)}
 .line::before,.landing::before{content:"";position:absolute;inset:-12vh -28vw -14vh -10vw;z-index:-1;background:radial-gradient(ellipse at 35% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
 .on{opacity:1;visibility:visible;transition:opacity .6s,visibility 0s}
+.landing{visibility:visible}.landing nav{transition:visibility 0s .6s}.landing:not(.on) nav{visibility:hidden}.landing.on nav{transition:visibility 0s}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body[data-state=still] .line{transition:none}
 .no-js .landing{animation:unveil .6s 6s forwards}@keyframes unveil{to{opacity:1;visibility:visible}}
 .landing h1{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0;text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
 .landing nav{display:flex;gap:28px;align-items:center;margin-top:28px;flex-wrap:wrap}
