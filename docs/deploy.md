@@ -782,6 +782,8 @@ asks X for the large card (`twitter:card`); X's own markup documentation answere
   viewport, no overlap.
 - `manifest.webmanifest` carried the light theme and background colours; both are `#07070a`.
 
+**The live origin (2026-10-13, after publishing).** CY-ORIGIN-001 PASS (`#origin_closure_7384EF28FD9CCBCB`): 53 of 53 served paths redirect from http and serve the artifact's bytes (the new social card included); every hidden path is 404 with the styled body (the retired card and the render scripts included); every film answers a byte range; the worker is `cytherai-substrate-7384EF28FD9CCBCB`. Release CERTIFIED.
+
 **Open, named:** macOS Safari (`safaridriver` needs the owner's admin password), a physical phone (Low Power Mode refuses
 autoplay; the still state is built for it), VoiceOver as heard, and a first-time viewer.
 
