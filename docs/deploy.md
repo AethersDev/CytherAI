@@ -807,6 +807,7 @@ stays the site's accent for labels and the film's current.
   wordmark into "cyther ai"; the gap is the seal's own margin now.
 - **Unchanged behaviour, re-observed.** Reading ink across 349 element samples, worst 4.75:1; 0 frames, timers or
   playing media once settled in four profiles; the stall fallback passes its three cases.
+- **The live origin.** CY-ORIGIN-001 PASS (`#origin_closure_D163C64D2D9485FE`): 54 of 54 served paths redirect from http and serve the artifact's bytes (the maskable icon included); every hidden path is 404 (the retired icons and the seal's generator included). Release CERTIFIED.
 - **iOS Safari.** On the iOS 26.5 Simulator (iPhone 16 Pro Max) the seal renders crisp on the front door and on the cold-paper brief; the film plays and settles, no error. One run of the Chrome playback suite logged a single connection reset from the local test server; a re-run was clean in every scenario.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
