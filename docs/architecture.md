@@ -98,12 +98,15 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
    without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
    statement and Replay. The film never restarts on its own.
-5. Each system's sequence gets its source when half of it first comes into view and plays
-   once from its first frame; it holds its last frame, which is also its poster. Leaving
-   view pauses it. Refused, not started within `GUARD`, or stopped for `STALL` while visible,
-   it drops its source and rests on its poster for good (a 250 ms watch runs only while a
-   sequence plays). An `AbortError` (scrolled away before it began) is not a failure.
-   Reduced motion never plays them.
+5. Once the film is still, the three sequences are warmed in turn: each is given its source,
+   started muted off screen and paused as soon as it plays, so iOS Safari (which downloads a
+   clip only when asked to play it, and buffers all of it first) has it ready. When half of a
+   sequence is in view it plays once from its first frame and holds its last, which is also
+   its poster; leaving view pauses it. A slow start is never a failure. Refused, or stopped for
+   `STALL` after it has moved while visible, it drops its source and rests on its poster, and
+   tries again the next time it comes into view (a 250 ms watch runs only between a `playing`
+   event and the next pause or end). An `AbortError` is not a failure. Reduced motion never
+   plays them.
 6. The service worker registers from the root and is asked to take over once this script
    has run; its cache name carries the build hash.
 
