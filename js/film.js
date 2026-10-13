@@ -12,7 +12,8 @@ document.documentElement.classList.remove("no-js");
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
 const lines = [...document.querySelectorAll(".line")], landing = document.querySelector(".landing");
 const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const GUARD = 3000;  // ms the film may take to start before its final frame stands in (a sequence may take as long as it needs)
+const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play
+                     // through, about 4 s in on a 2.4–3.2 Mbit/s link (a sequence may take as long as it needs)
 const STALL = 2000;  // ms it may then stop advancing, while the page is visible, before its final frame stands in
 let timer = 0, guard = 0, last = -1, moved = 0, started = false, warmed = false;
 
@@ -83,12 +84,13 @@ seqs.forEach(s => {
   s.addEventListener("pause", idle); s.addEventListener("ended", idle);
 });
 const full = s => { const b = s.buffered; return s.hasAttribute("src") && b.length > 0 && b.end(b.length - 1) >= s.duration - 0.05; };
-/* resolves once the whole clip is buffered, or it is dropped (rest, or giving way to a sequence in view) */
+/* resolves once the whole clip is buffered, or it is dropped (rest, or giving way to a sequence in view). A clip that
+   arrives in one piece may report its progress before it is parsed, buffered still empty, and never again; its
+   canplaythrough comes after the parse */
+const WHOLE = ["progress", "canplaythrough", "emptied"];
 const whole = s => new Promise(done => {
-  const check = () => {
-    if (!s.hasAttribute("src") || full(s)) { s.removeEventListener("progress", check); s.removeEventListener("emptied", check); done(); }
-  };
-  s.addEventListener("progress", check); s.addEventListener("emptied", check); check();
+  const check = () => { if (!s.hasAttribute("src") || full(s)) { WHOLE.forEach(t => s.removeEventListener(t, check)); done(); } };
+  WHOLE.forEach(t => s.addEventListener(t, check)); check();
 });
 function begin(s) {
   s.currentTime = 0;
