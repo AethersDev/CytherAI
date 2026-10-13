@@ -810,6 +810,28 @@ stays the site's accent for labels and the film's current.
 - **The live origin.** CY-ORIGIN-001 PASS (`#origin_closure_D163C64D2D9485FE`): 54 of 54 served paths redirect from http and serve the artifact's bytes (the maskable icon included); every hidden path is 404 (the retired icons and the seal's generator included). Release CERTIFIED.
 - **iOS Safari.** On the iOS 26.5 Simulator (iPhone 16 Pro Max) the seal renders crisp on the front door and on the cold-paper brief; the film plays and settles, no error. One run of the Chrome playback suite logged a single connection reset from the local test server; a re-run was clean in every scenario.
 
+## 5l. The sequences on a phone — 2026-10-13
+
+Build `C9EF337977140EDC` (`#sequence_warmup_C9EF337977140EDC`, `#reading_ink_C9EF337977140EDC`,
+`#film_settle_C9EF337977140EDC`). The owner saw ADII's and CytherCAD's sequences frozen on a phone while AWC-OS's
+played. Chrome, even throttled to Slow 4G, played all three; iOS Safari did not, and the reason is how it loads video: it
+downloads a clip only once asked to play it, and buffers all of it before the first frame moves. A sequence asked on
+arrival therefore sat on its poster, which is its last frame, for the whole download, and the live build's start limit
+could abandon it for good. At 1.8 Mbit/s (an instrumented test copy in the iOS Simulator, the sequences rate-limited):
+
+| Sequence | Size | Live build `D163C64D2D9485FE`: still for | This build: playing after |
+|---|---:|---:|---:|
+| ADII | 0.72 MB | 3.5 s | 0.1 s |
+| AWC-OS | 0.59 MB | 2.5 s | 0.2 s |
+| CytherCAD | 0.72 MB | 3.1 s | 0.2 s |
+
+Once the film is still, the three are warmed in turn: each is started muted off screen and paused as it plays, and the
+next waits until the last is wholly buffered, so a sequence being watched never shares a slow link with one warming. A
+slow start is never a failure; a sequence that has moved and then stalls rests on its poster and tries again on its next
+arrival. Two attempts were discarded on the way: an early-download hint, which iOS ignored, and warming without waiting,
+which slowed the watched sequence on Slow 4G. Chrome on Slow 4G now plays all three through, scrolled to during the film or
+after it. Reading ink across 349 element samples, worst 4.75:1; 0 frames, timers or playing media once settled.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
