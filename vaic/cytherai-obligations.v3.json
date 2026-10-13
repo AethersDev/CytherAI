@@ -8409,6 +8409,35 @@
               "vaic/evidence/current-browser-observations.v0.json#origin_closure_B068554A3A562886"
             ],
             "observed_at": "2026-10-12"
+          },
+          {
+            "evaluator": "ORIGIN_HARNESS",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "7384EF28FD9CCBCB",
+            "artifact_manifest_hash": "2c27939e2d953a12d857ec405fd4e691acf692545195a126c317cc387d473e2d",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "605549a26b75102535d71915712c71a7a1b951b7a24bb397753c2d2eeb7b9929",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "production_origin",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "curl 8.7.1 (system trust store), against https://cytherai.com/",
+              "accessibility_mode": null
+            },
+            "harness_identity": "Claude Code origin closure check (scratchpad originprobe.py)",
+            "harness_version": "2026-10-13",
+            "method": {
+              "measurement": "every served path of the artifact over http (301 to the same https path) and https (sha256 against deploy.sh's build, cache-busted); the declared hidden paths; MIME, byte ranges on the films, worker generation, TLS, the www host; headers against the contract as amended in §7",
+              "threshold": "53 of 53 redirect and match; every hidden path 404 with the styled body; every film answers a byte range; no header beyond the accepted limits missing",
+              "units": "paths"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#origin_closure_7384EF28FD9CCBCB"
+            ],
+            "observed_at": "2026-10-13"
           }
         ]
       },
