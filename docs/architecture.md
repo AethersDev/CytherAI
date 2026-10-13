@@ -89,7 +89,7 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
    `film/film-portrait.mp4`) and plays it muted. Reduced motion skips straight to the still
    state with *Play the film* and downloads no film; a refused play, a media error, or no
-   start within `GUARD` (3 s) does the same with *Replay*.
+   start within `GUARD` (6 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
    window (`data-from`/`data-to`); the statement appears at 10.6 s. If `currentTime` stops
    advancing for `STALL` (2 s) while the page is visible (a hidden page's time does not
@@ -207,7 +207,13 @@ muted inline autoplay and VoiceOver.
   or `tools/render-systems.py` (usage in each script's header; the published films used 64
   samples with `TL=24`/`TL=14` landscape/portrait, the sequences 48 with `TL=10`), encode with
   `ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p
-  -movflags +faststart <out>.mp4` and the last frame as its poster, replace the files under
+  -movflags +faststart <out>.mp4` (the master) and the last frame as its poster. The films are
+  delivered lighter than their masters, because Safari starts a film only once it expects to play
+  through: `ffmpeg -i <master> [-vf scale=1440:810:flags=lanczos] -c:v libx264 -preset veryslow
+  -tune film -crf 29 -pix_fmt yuv420p -movflags +faststart -an film/film-<orientation>.mp4`
+  (landscape scaled to 1440×810, about 2.7 Mbit/s; portrait at 810×1440, about 2.3 Mbit/s). The
+  render frames of the published films were not kept; their CRF 23 masters are
+  `git show e40fa72:film/film-<orientation>.mp4`. Replace the files under
   `film/`, regenerate integrity, and observe reading ink again: the ground under every caption
   has changed.
 - Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
