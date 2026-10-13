@@ -1,7 +1,7 @@
 /* The front door: a twelve-second film, offline-rendered (tools/render-film.py), with its sentences as HTML over
    it, then three systems, each a six-second sequence (tools/render-systems.py). The film plays once, muted; reduced
-   motion, a refused or failed play, a film not started within GUARD, or a film that stops advancing for STALL while the
-   page is visible show the final composition and the complete statement, and stay: nothing restarts on its own, and a
+   motion, a refused or failed play, a film not started within GUARD, or a film that falls STALL behind real time while
+   the page is visible show the final composition and the complete statement, and stay: nothing restarts on its own, and a
    late download cannot pull the visitor back into the film. Replay is theirs. DOM wiring only: under jsc (verify.sh)
    it parses and returns. */
 (function () {
@@ -14,8 +14,9 @@ const lines = [...document.querySelectorAll(".line")], landing = document.queryS
 const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play
                      // through, about 4 s in on a 2.4–3.2 Mbit/s link (a sequence may take as long as it needs)
-const STALL = 2000;  // ms it may then stop advancing, while the page is visible, before its final frame stands in
-let timer = 0, guard = 0, last = -1, moved = 0, started = false, warmed = false, enlisted = false;
+const STALL = 2000;  // ms the film may then fall behind real time, in all, while the page is visible, before its final frame stands
+                     // in: short pauses count together (on Slow 4G they stretched its 12 s to 21). A sequence may stop this long
+let timer = 0, guard = 0, last = 0, at = 0, behind = 0, started = false, warmed = false, enlisted = false;
 
 /* the poster is the film's final frame. Without a film (load false) it stands, and nothing downloads */
 function source(load) {
@@ -37,13 +38,14 @@ function still(e) {
 }
 function tick() {
   const t = v.currentTime, now = performance.now();
-  if (t !== last || !started || document.hidden) { last = t; moved = now; }   // a hidden page's time does not count
-  else if (now - moved > STALL) { still(); return; }
+  if (started && !document.hidden) behind = Math.max(0, behind + (now - at) - (t - last) * 1000);   // a hidden page's time does not count
+  last = t; at = now;
+  if (behind > STALL) { still(); return; }
   cue(t);
 }
 function film() {
   if (v.hasAttribute("src")) v.currentTime = 0; else source(true);
-  body.dataset.state = "film"; replay.hidden = true; started = false; cue(0);
+  body.dataset.state = "film"; replay.hidden = true; started = false; behind = 0; last = v.currentTime; at = performance.now(); cue(0);
   clearInterval(timer); timer = setInterval(tick, 80);
   clearTimeout(guard); guard = setTimeout(still, GUARD);
   v.play().then(() => { clearTimeout(guard); started = true; }, still);

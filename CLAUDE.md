@@ -223,8 +223,8 @@ states, its condition, and one route into the evidence (`adii/`, `awc-os/`,
 close is *Tell us what must never happen.* with the contact address.
 
 The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced
-motion, a refused or failed play, a film not started within `GUARD` (6 s), or one that stops
-advancing for `STALL` (2 s) while the page is visible shows the final composition and the whole
+motion, a refused or failed play, a film not started within `GUARD` (6 s), or one that falls
+`STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition and the whole
 statement (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back. Each sequence plays once from its first frame when half of it is in view and holds its
