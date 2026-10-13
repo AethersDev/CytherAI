@@ -1018,7 +1018,14 @@ sequences, never more than one download at once, and the warm-up past a clip tha
 suite, Replay included. (Its sample labels drift on desktop, because each screenshot takes time; measured without them,
 the film advances at 1.0× the page's clock.)
 
+**After publishing.** On the live site in the settled simulator, a returning visitor (two loads, the first possibly
+the previous build from its worker) and a first-time visitor (Safari quit, its website data and HTTP cache moved aside)
+each saw the whole film, sentence by sentence; the link measured before each at 1 MB in 1.0–1.8 s. The blank first
+seconds in two of the runs are Safari launching cold: each run quits it first.
+
 **Open, named:** Safari on a Mac and a physical iPhone.
+
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B466667CA05CD04F`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
