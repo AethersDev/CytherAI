@@ -84,7 +84,8 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 1. It removes `no-js` (without the script, `.no-js` unveils the statement after 6 s, CSS). The
    statement is the `h1` and is exposed to assistive technology from the start, invisible but
    present; its links stay `visibility: hidden` until it appears. The film's text alternative is
-   a `.sr` paragraph before it.
+   a `.sr` paragraph before it. The header's mark is the Cyther Seal, inline SVG, pixel-fitted at
+   26 px (`tools/render-seal.py`); `tools/test-site.py` holds every inline seal to the computed one.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
    `film/film-portrait.mp4`) and plays it muted. Reduced motion skips straight to the still
    state with *Play the film* and downloads no film; a refused play, a media error, or no
@@ -202,6 +203,9 @@ muted inline autoplay and VoiceOver.
   -movflags +faststart <out>.mp4` and the last frame as its poster, replace the files under
   `film/`, regenerate integrity, and observe reading ink again: the ground under every caption
   has changed.
+- Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
+  `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
+  the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
   icon/manifest references, `generate-integrity.sh` (HTML_FILES), `deploy.paths`, and
   decide whether it belongs in `sw.js`.
