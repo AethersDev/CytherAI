@@ -16,7 +16,11 @@ boundary `CLAUDE.md` already names (a force-push rewrites the universe the guard
 anchored), so it is recorded here rather than left silent.
 
 **The old history is preserved** on the branch `history/before-message-rewrite` (local and on `origin`), whose tip is the
-last pre-rewrite `master`, `7c87915`. The living documents (`CLAUDE.md`, `docs/architecture.md`, `docs/deploy.md`,
+last pre-rewrite `master`, `7c87915`. So the trailers were removed from `main`'s history, not from the repository: the
+backup branch keeps all 122, and the older development branches, every commit of which predates the rewrite, keep
+theirs (`exception`, `plate3-target`, `repo-hygiene`, `research-journal`, `visual-integration`, `visual-pass` and
+`visual-work` locally; `plate3-target`, `repo-hygiene` and `visual-pass` also on `origin`). Rewriting or deleting
+those is a separate decision, the owner's. The living documents (`CLAUDE.md`, `docs/architecture.md`, `docs/deploy.md`,
 `docs/asset-promotion-log.md`, the `backup/*/README.md` and `verify.sh` files) were updated to the new hashes. Three kinds of
 record were not, because rewriting them would falsify history: the admitted evidence ledger
 (`vaic/evidence/current-browser-observations.v0.json` cites `0e864c1` and `f50148b`), the instrument-v1 audit record

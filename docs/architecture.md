@@ -102,7 +102,11 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
    started muted off screen and paused as soon as it plays, so iOS Safari (which downloads a
    clip only when asked to play it, and buffers all of it first) has it ready. When half of a
    sequence is in view it plays once from its first frame and holds its last, which is also
-   its poster; leaving view pauses it. A slow start is never a failure. Refused, or stopped for
+   its poster; leaving view pauses it. One sequence downloads at a time (the slot; the film is
+   outside it): a free slot goes to the first sequence in view still waiting for it, else to
+   the next to warm; one arriving takes it from a clip warming off screen (which drops its
+   download and goes back in the queue), never from another in view, which it waits behind.
+   A slow start is never a failure. Refused, or stopped for
    `STALL` after it has moved while visible, it drops its source and rests on its poster, and
    tries again the next time it comes into view (a 250 ms watch runs only between a `playing`
    event and the next pause or end). An `AbortError` is not a failure. Reduced motion never
