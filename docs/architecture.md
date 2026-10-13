@@ -111,8 +111,9 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
    tries again the next time it comes into view (a 250 ms watch runs only between a `playing`
    event and the next pause or end). An `AbortError` is not a failure. Reduced motion never
    plays them.
-6. The service worker registers from the root and is asked to take over once this script
-   has run; its cache name carries the build hash.
+6. Once the film is still, the service worker registers from the root and is asked to take
+   over; its cache name carries the build hash. Its install fetches the precache past the HTTP
+   cache (0.7 MB), which on a first visit would take the link from the film as it starts.
 
 At steady state nothing runs: no frame is requested (the page never asks for one), no media
 plays and no timer fires (CY-TEMP-001, `docs/deploy.md` §5i). Replay, a sequence scrolled
@@ -173,7 +174,7 @@ returning reader's previous-build page, mid-load, with this build's modules, and
 died of its own SRI check; Safari's script requests carry no integrity a worker could read,
 and the page is not reliably among the worker's clients when it activates, so no rule inside
 the worker can tell such a page apart. Instead the page decides: once its own script has
-run, `js/film.js` sends `take-over` to a waiting worker, and the next load is the
+run and its film is still, `js/film.js` sends `take-over` to a waiting worker, and the next load is the
 new build. A page from before this rule never asks; its tab moves to the new build once no
 page of the old build is open. Reproduced, and the fix verified with a negative control, in
 the iOS 26.5 simulator (`docs/deploy.md` §5g).
