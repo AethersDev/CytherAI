@@ -891,6 +891,65 @@ is the Simulator's.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_E7D99F9F08D3BC89`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
+## 5n. The film on a real connection — 2026-10-13
+
+Build `3C3C51BEDEAB3A59` (`#film_delivery_3C3C51BEDEAB3A59`, `#reading_ink_3C3C51BEDEAB3A59`,
+`#film_settle_3C3C51BEDEAB3A59`). The owner reported that the film did not play in Safari or on an iPhone. The live
+site in the iOS Simulator showed the same: the page gave way to the final composition and the statement without the
+film ever moving. The cause was the films' weight against the link, not this morning's sequence change (the film's code
+did not move):
+
+- **The link.** From the owner's network the origin delivered a film at 3.9 to 9.5 Mbit/s on one connection and about
+  6.8 Mbit/s on two. The films were encoded at 4.95 Mbit/s (phone) and 8.09 Mbit/s (desktop): the desktop film arrived
+  slower than it plays, the phone film barely faster.
+- **Safari.** iOS Safari starts a film only once it expects to play it through without stopping; it then never
+  stopped. With the start limit lifted (an instrumented test copy, the film rate-limited by the test server), the
+  shipped phone film began 12.1 s after load at 3.2 Mbit/s and 19.1 s at 2.4 Mbit/s. `GUARD` gave it 3 s, so at 4
+  Mbit/s and below the visitor never saw it.
+
+The fix is a lighter film and a start limit a real link can meet. Both films are re-encoded from their CRF 23 masters
+(the render frames were not kept): the desktop film at 1440×810, 2.72 Mbit/s, 4.1 MB (from 12.1 MB); the phone film at
+810×1440, 2.34 Mbit/s, 3.5 MB (from 7.4 MB); x264 `veryslow`, `-tune film`, CRF 29. Against the masters, VMAF 86.0 and
+91.1; at a 1:1 crop the difference is a slightly softer motion blur. `GUARD` is 6 s.
+
+**iOS Simulator** (iOS 26.5, an iPhone 16 Pro Max image; an instrumented test copy, the films and sequences served at
+the stated rate in all; simulator evidence, not a physical iPhone's or Safari on a Mac):
+
+| Link | Phone film, live build `E7D99F9F08D3BC89` | Phone film, this build | Desktop film in iOS WebKit, live build | Desktop film, this build |
+|---|---|---|---|---|
+| 5 Mbit/s | moving at 4.5 s, played through | — | — | — |
+| 4 Mbit/s | never moved; still at 5.0 s | moving at 3.5 s, played through | never moved; still at 5.0 s | moving at 3.0 s, played through |
+| 3.2 Mbit/s | never moved; still at 3.5 s | moving at 4.0 s, played through | never moved; still at 3.0 s | moving at 4.0 s, played through |
+| 2.4 Mbit/s | — | moving at 4.0 s, played through | — | — |
+
+(Seconds from the page's first script. The desktop film was played in iOS Safari by a test copy, because Safari on a Mac
+cannot be driven here; both are WebKit, and the Mac remains the owner's to see.)
+
+**A download turn that stuck.** While this was tested, the stall case for a sequence failed once: on its second
+arrival AWC-OS never got the download turn, and stayed on its poster. Media events logged across 17 runs showed why. A
+clip that arrives in one piece may report its progress (and suspend) before Chrome has parsed it, its buffered range
+still empty, and never again: 3 of 68 loads, all in one run. The turn then stayed on a clip already whole; the next
+arrival dropped that clip, and the turn stuck on one in view. The live build `E7D99F9F08D3BC89` has the same code (and
+`C9EF337977140EDC`'s warm-up the same wait). Of 35 loads that completed, a full-buffer `progress` was seen in 32 and a
+full-buffer `progress` or `canplaythrough` in all 35, so the turn is now also released on `canplaythrough`. A probe that
+makes the race certain (every video's `buffered` reads empty until the clip has fired `canplaythrough`) warms only ADII
+before the change, and all three after it.
+
+**Chrome** (the phone, its throttling presets, worker bypassed, cache disabled) starts a film with little buffered and
+plays it as it arrives, so the cost of the lighter film and the longer limit falls here, and is named: on Fast 4G the
+whole film, as before (first sentence 1.32 s); on Slow 4G (1.6 Mbit/s) the film now plays through rather than giving way
+at 3.6 s, but slower than real time, ending 21 s after load with its sentences in step (the statement readable at 19.8 s);
+on 3G the statement at 7.4 s rather than 4.6 s, after `GUARD`'s 6 s.
+
+**Unchanged behaviour, re-observed.** The stall fallback passes its three cases. Settling: 0 frames, timers or playing
+media once still in four profiles; the worker caches exactly this build and serves it with the server stopped. Reading
+ink over the re-encoded films across 349 element samples, worst 4.86:1. The sequences on Slow 4G: never more than one
+download at once, after a jump, a skim, two in view and after the film. The playback suite as before; a play that never
+starts gives way after 6 s.
+
+**Open, named:** Safari on a Mac and a physical iPhone, as the owner sees them; below about 2.4 Mbit/s the film still
+gives way to the statement after 6 s, by design.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
