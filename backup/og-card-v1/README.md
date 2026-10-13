@@ -1,6 +1,6 @@
 # og-card-v1 — the derived link-preview plate, retired
 
-The social card every page named as `og:image` from commit `88ccafb` until 2026-10-13: a density plate of the
+The social card every page named as `og:image` from commit `4f09d81` until 2026-10-13: a density plate of the
 canonical CytherAI mark (the Clifford orbit at `CytherManifest.CANON`, ink on cold paper, one lobe cobalt), DERIVED
 by `render-og.py` from the manifest. It was replaced by the film's card (`tools/render-film.py`'s final frame with
 the statement, `tools/render-og-film.py`) when the film became the front door. Its receipt, IMG-001, stands in

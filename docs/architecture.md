@@ -10,10 +10,10 @@ silent, with its sentences as HTML over it, then one principle and three systems
 six-second sequence in the film's materials with a headline, two sentences a shipped page
 states and one route into its evidence, then the invitation. Its predecessors are retired
 whole, each a verbatim snapshot with every verifier that established its laws and its own
-`verify.sh`: **THE UNHAPPENED** to `backup/unhappened-v1/` (commit `f5c1e37`; this guide as
-it stood for it is `git show f5c1e37:docs/architecture.md`), **the drawing set** to
-`backup/drawing-set-v1/` (commit `99b167a`) and **instrument-v1** to `backup/instrument-v1/`
-(commit `bf82377`). Each is superseded as presentation and preserved as historical record;
+`verify.sh`: **THE UNHAPPENED** to `backup/unhappened-v1/` (commit `011ffd0`; this guide as
+it stood for it is `git show 011ffd0:docs/architecture.md`), **the drawing set** to
+`backup/drawing-set-v1/` (commit `c921f00`) and **instrument-v1** to `backup/instrument-v1/`
+(commit `9d6cbdb`). Each is superseded as presentation and preserved as historical record;
 nothing of their design is carried into the front door.
 
 ## System map

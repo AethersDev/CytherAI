@@ -30,7 +30,7 @@ Manifest owner sign-off          OPEN
 Asset promotion sign-off         OPEN — docs/asset-promotion-log.md
 ```
 
-The d1281d6/bdebc59 Chromium record below remains true of those commits, but it
+The 22b2955/665739b Chromium record below remains true of those commits, but it
 does not certify this tree. The performance-remediation track changed HTML and
 three hashed JS modules; the current build identity is `F1FF314DEC2C4717`.
 A local in-app-browser battery re-ran the current observable core with device-size
@@ -46,17 +46,17 @@ useful but is not promoted to full browser certification for the new candidate.
 ### Release-candidate artifact equivalence
 
 ```
-Chromium-observed source commit:      d1281d6
-Release-candidate repository commit:  bdebc59
+Chromium-observed source commit:      22b2955
+Release-candidate repository commit:  665739b
 Repository delta:     ten generated study PNGs removed from assets/; no
                       runtime, deployment, integrity, service-worker, HTML,
                       CSS, or JS file changed
 Artifact equivalence: rebuilt dist/ contains 19 files; every file SHA-256
-                      identical to the d1281d6 Chromium-observed baseline;
+                      identical to the 22b2955 Chromium-observed baseline;
                       build hash remains C4F7059DAC405AE6; integrity
                       regeneration is idempotent
-Conclusion:           Chrome certification evidence from d1281d6 remains
-                      applicable to bdebc59 because the complete
+Conclusion:           Chrome certification evidence from 22b2955 remains
+                      applicable to 665739b because the complete
                       browser-consumed artifact is byte-identical
 ```
 
@@ -233,7 +233,7 @@ here would not invalidate the architecture.
 | W7 | VoiceOver rotor announcement | The heading DOM is verified; how VoiceOver reads it is AT-specific |
 | W8 | Plate rendering fidelity | Canvas output was screenshotted in Chrome and looks correct; WebKit compositing of `backdrop-filter` + `mask-composite` is its own path |
 
-#### SAFARI 27.0 OBSERVED (2026-08-05, safaridriver against the built artifact, commit 07a4221)
+#### SAFARI 27.0 OBSERVED (2026-08-05, safaridriver against the built artifact, commit ff20fa8)
 
 Driven over WebDriver against `dist/` served on localhost, with a
 tampered-byte negative control on a second port. Divergence from the Chrome
@@ -266,7 +266,7 @@ controlled, content-neutral, worth one glance at launch.
 
 **The finding.** Accent-coloured text drops below AA in the mid-descent: worst
 **2.14:1** at d=1.20. Verified **pre-existing, not a P8 regression** — the
-pre-P8 tree (770d8c5) fails at five sample depths against four now, and P8
+pre-P8 tree (aaec088) fails at five sample depths against four now, and P8
 improved the worst case from 1.88:1 to 2.49:1.
 
 **The cause.** `BGS` and `ACCENTS` are both locked (§4.1) and their luminance
@@ -440,7 +440,7 @@ mobile `.d-body`. Everything in the flip and controlled strata is comfortable (1
 the exposure is on the pale surface paper and on the floor's `.law`.
 
 **It is a pre-existing defect, widened by the tone change, not created by it.** The same
-harness against `69550d8` (the build before `docs/audit/07`):
+harness against `917bebf` (the build before `docs/audit/07`):
 
 | sample | before · worst / % below | after · worst / % below |
 |---|---|---|

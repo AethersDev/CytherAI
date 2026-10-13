@@ -306,14 +306,14 @@ admitted states only; headers contract in `docs/deploy.md` §1, and Pages' limit
 
 **Retired front doors** live whole in `backup/`, each a verbatim snapshot with every verifier
 that established its laws, its own `verify.sh` and a README; the receipts that cite their
-files resolve through them. **instrument-v1** (`backup/instrument-v1/`, commit `bf82377`) —
+files resolve through them. **instrument-v1** (`backup/instrument-v1/`, commit `9d6cbdb`) —
 the substrate / disclosure-engine homepage. **drawing-set-v1** (`backup/drawing-set-v1/`,
-commit `99b167a`) — the seven-sheet engineering drawing set, FIG. 1, the eleven standing
+commit `c921f00`) — the seven-sheet engineering drawing set, FIG. 1, the eleven standing
 claims (`6 CL · 5 DS`) and Sheet 7, superseded on 2026-10-04 **as presentation, preserved as
 historical record**: its claims stay attributable to it, and nothing of its design (CSS,
 components, layout, terminology, badges, seal, sheet numbering) is imported into the front
 door. Do not build a `/record` page from it unless asked. **unhappened-v1**
-(`backup/unhappened-v1/`, commit `f5c1e37`) — THE UNHAPPENED: the pane, the beads, TRACE-1,
+(`backup/unhappened-v1/`, commit `011ffd0`) — THE UNHAPPENED: the pane, the beads, TRACE-1,
 the shadows and porcelain, the ten scenes; superseded on 2026-10-12 the same way, as
 presentation, preserved as record, nothing of its design carried.
 
@@ -331,7 +331,7 @@ literals.
 
 - **`PRODUCTION_PLAN.md`** is the build spec of instrument-v1 (phases P1–P9), superseded
   by the drawing set on 2026-09-16 and kept as its record; the drawing set's design record
-  is `backup/drawing-set-demo.html` (the approved demo) and `git show 99b167a:CLAUDE.md`.
+  is `backup/drawing-set-demo.html` (the approved demo) and `git show c921f00:CLAUDE.md`.
 - **THE EXCEPTION** began as `prototype/exception/` on the `exception` branch and moved to
   `exception/` when it was published (2026-10-04).
 - **`prototype/`** holds the homepage design studies (`crossing/`, `glass/`, `section/`,
@@ -345,6 +345,11 @@ literals.
   camera holding at the refusal), then extended into the site with three systems and
   published on 2026-10-12; its render sources moved to `tools/render-film.py` and
   `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header).
+- **The history was rewritten once** (2026-10-13, at the owner's request): the `Co-Authored-By:` lines were removed
+  from every commit message and `main` was force-pushed; trees, order, authors and dates are unchanged, and the old
+  history is the branch `history/before-message-rewrite`. Every old → new hash is in
+  `docs/history-rewrite-2026-10-13.md`; admitted records that cite old hashes resolve through it. Commit messages
+  carry no attribution trailer.
 - **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
   Do not modify it — supersede, never erase.
 - **`backup/`** holds the retired surfaces: `instrument-v1/` (the substrate homepage,
