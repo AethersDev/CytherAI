@@ -889,6 +889,8 @@ markup or style changed.
 **Open, named:** a physical iPhone (its radio, Low Power Mode, memory and thermal limits). Every iOS figure in §5l and here
 is the Simulator's.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_E7D99F9F08D3BC89`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
