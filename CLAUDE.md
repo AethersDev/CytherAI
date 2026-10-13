@@ -263,8 +263,8 @@ marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the o
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
 precached); `css/film.css` and one script, `js/film.js` (`defer`), both with SRI.
 `js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the
-sequences' IntersectionObserver, and `sw.js` registration (it lets a waiting worker in with
-`take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
+sequences' IntersectionObserver, and `sw.js` registration once the film is still (its install would take the
+link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
 live in `film/`: two films with their final-frame posters, three sequences with theirs;
 `tools/test-site.py` holds every file the page names to `deploy.paths`, and back.
 `js/manifest.js` (`CytherManifest`: `fnv` for THE EXCEPTION; `project` and the record for the
@@ -298,7 +298,7 @@ or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a
 worker **waits** and never takes over a page that may still be loading: Safari checks for the
 update at the navigation itself, and a worker that skipped waiting answered a returning
 reader's previous-build page with this build's modules, which then failed SRI. A page whose
-script has run lets the waiting worker in (`take-over`), so the next load is new),
+film is still lets the waiting worker in (`take-over`), so the next load is new),
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
 build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;

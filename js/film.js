@@ -15,7 +15,7 @@ const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia
 const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play
                      // through, about 4 s in on a 2.4–3.2 Mbit/s link (a sequence may take as long as it needs)
 const STALL = 2000;  // ms it may then stop advancing, while the page is visible, before its final frame stands in
-let timer = 0, guard = 0, last = -1, moved = 0, started = false, warmed = false;
+let timer = 0, guard = 0, last = -1, moved = 0, started = false, warmed = false, enlisted = false;
 
 /* the poster is the film's final frame. Without a film (load false) it stands, and nothing downloads */
 function source(load) {
@@ -33,7 +33,7 @@ function still(e) {
   clearInterval(timer); clearTimeout(guard); v.pause();
   if (!(e && e.type === "ended")) source(false);
   body.dataset.state = "still"; cue(Infinity); replay.hidden = false;
-  warm();
+  warm(); enlist();
 }
 function tick() {
   const t = v.currentTime, now = performance.now();
@@ -125,11 +125,17 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), { threshold: 0.5 });
 if (!stillMotion) seqs.forEach(s => io.observe(s));
 
-/* the worker. A new build's worker waits (sw.js): it may not take over a page still loading. This page's script has run,
-   so it asks a waiting worker in, now or once it has installed; the next load is the new build */
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").then(reg => {
-  const letIn = w => w && w.postMessage("take-over");
-  letIn(reg.waiting);
-  reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });
-}).catch(() => {});   /* insecure context — run online-only */
+/* the worker, once the film is still: its install fetches the precache past the HTTP cache (0.7 MB), which on a first
+   visit would take the link from the film as it starts. A new build's worker waits (sw.js): it may not take over a page
+   still loading. This page's script has run, so it asks a waiting worker in, now or once it has installed; the next load
+   is the new build */
+function enlist() {
+  if (enlisted || !("serviceWorker" in navigator)) return;
+  enlisted = true;
+  navigator.serviceWorker.register("sw.js").then(reg => {
+    const letIn = w => w && w.postMessage("take-over");
+    letIn(reg.waiting);
+    reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });
+  }).catch(() => {});   /* insecure context — run online-only */
+}
 })();
