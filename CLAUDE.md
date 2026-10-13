@@ -240,8 +240,18 @@ localized darkening only: under the header, along the film's lower edge, behind 
 behind each caption and the statement, and behind the principle. There is no sound. The
 statement is the page's `h1` and is in the accessibility tree from the first moment (only its
 links wait for it, so focus never lands on something invisible); a screen-reader-only
-paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; the
-wordmark's ✳ is followed by U+FE0E, or iOS draws it as a green emoji tile.
+paragraph (`.sr`) is the silent film's text alternative and carries its three sentences.
+
+**The mark is the Cyther Seal** (adopted 2026-10-13 from the owner's identity draft): a path
+computed from SHA-256 of the word `CytherAI` — a walk on a 6×6 grid that admits a move only
+inside the grid on an unused cell (77 proposals, 29 admitted, 48 refused). `tools/render-seal.py`
+computes it, writes the favicon and app icons, and prints the inline seal for a page; below 48
+px every seal is pixel-fitted (u = ⌊size/13⌋ px, so its edges fall on whole pixels). The front
+door uses the primary lockup, the seal left of the wordmark, ink `#ECE7DC` with its path in
+ground; the cold-paper subpages put the paper-ink seal before `CYTHERAI`; the social card
+carries the same lockup. Warm is never the seal's colour. Never redraw, rotate or mirror the
+path: `tools/test-site.py` requires every inline seal to equal the computed one. The retired
+marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the orbit plate).
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
 precached); `css/film.css` and one script, `js/film.js` (`defer`), both with SRI.
@@ -339,6 +349,8 @@ literals.
   modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
   v-next design map), `drawing-set-v1/` (the drawing set, whole, with its verifiers — see its
   README), `unhappened-v1/` (THE UNHAPPENED, whole, with its verifiers — see its README),
+  `icon-v1/` and `og-card-v1/` (the derived orbit icon family and social plate, with their
+  generators, replaced on 2026-10-13 by the Cyther Seal and the film's card),
   `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
   snapshot's modules), `project-pages/` (the ADII and AWC-OS pages as first published,
   before curation).
