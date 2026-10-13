@@ -50,7 +50,8 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
-| `js/film.js` | — | `index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; DOM wiring behind `typeof document` |
+| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
+| `js/theme.js` | — | `index.html`, `ar/index.html` (head, not deferred) | The theme: the remembered choice or the device's setting, as `data-theme`; the switch (`#theme`) |
 | `js/manifest.js` | `CytherManifest` | `exception/` | The public manifest: `fnv` (THE EXCEPTION); `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | `exception/` | The boundary engine: `judge` (THE EXCEPTION); `biEngine` and `audit` for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
 
@@ -59,7 +60,9 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
 | `index.html` | The film's sentences, the principle, the three systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
-| `css/film.css`, `js/film.js` | The front door's style and its one script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
+| `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections, sequences and figures (`tools/test-site.py`) |
+| `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
+| `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films, the three sequences, their final-frame posters | Yes | Rendered by `tools/render-film.py` and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | Yes | THE EXCEPTION's; a change requires SRI and re-stamping |
 | `prototype/` | Homepage design studies, THE UNHAPPENED v1–v4 and the comparison harness | No | Design record; production does not load from it |
@@ -137,7 +140,9 @@ starts motion again.
 
 | Route | Runtime |
 |---|---|
-| `/` or `/index.html` | The film: `css/film.css` and `js/film.js`, both SRI'd; media from `film/` |
+| `/` or `/index.html` | The film: `css/film.css`, `js/theme.js` and `js/film.js`, all SRI'd; media from `film/` |
+| `/ar/` | The film in Arabic: the same stylesheet, scripts and media |
+| `/ar/contact.html` | The contact page in Arabic: shared CSS plus its inline validation/copy script, in Arabic |
 | `/exception/` | THE EXCEPTION, an experiment published beside the front door (no homepage link since 2026-10-12): `js/manifest.js`, `js/instrument.js` (judge) and `exception/exception.js`, all SRI'd |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
@@ -205,6 +210,10 @@ muted inline autoplay and VoiceOver.
 - Add or remove a front-door script or stylesheet: `index.html`, `generate-integrity.sh`
   (RESOURCES), `deploy.paths`, `sw.js`, `tools/test-api.py` (SERVED),
   `tools/test-site.py` (the script list), `IDENTITY_COVERAGE` (`grammar_hash`), and this guide.
+- Change the front door's words: change `index.html` and `ar/index.html` together. A cue, a section, a sequence or a
+  figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Re-render
+  both cards (`python3 tools/render-og-film.py`, `… ar`) if the statement moves, and record both digests.
+- Add a theme token: give it a value in `:root` and in the light block of `css/film.css`; the ink law reads both.
 - Re-render a film or a sequence: `blender -b -P tools/render-film.py -- <l|p> anim <dir> …`
   or `tools/render-systems.py` (usage in each script's header; the published films used 64
   samples with `TL=24`/`TL=14` landscape/portrait, the sequences 48 with `TL=10`), encode with

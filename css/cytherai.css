@@ -7,6 +7,7 @@
    for links-as-actions, focus, form focus, and verified/status values.
    ============================================================================ */
 
+@font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
 :root{
   /* surfaces (cold) */
   --paper:#ECF0F4; --paper-lifted:#F3F6FA; --paper-dense:#E0E6EF;
@@ -174,3 +175,10 @@ tr:first-child td{border-top:none}
   .footer-container{flex-direction:column;align-items:flex-start}
   .footer-links{margin-left:0}
 }
+/* Arabic (ar/): the Arabic type in every role, never letter-spaced or upper-cased (spacing breaks the joins), labels a
+   size up for its marks; the skip link waits off the right edge, which a right-to-left page cannot scroll to */
+:lang(ar){--font-sans:Arabic,system-ui,sans-serif;--font-mono:'SF Mono',Menlo,Arabic,monospace;--font-serif:Arabic,Georgia,serif}
+:lang(ar) *{letter-spacing:0!important;text-transform:none!important}
+:lang(ar) [lang=en]{unicode-bidi:isolate;white-space:nowrap}   /* a Latin name in Arabic text stays whole, in its own order */
+:lang(ar) :is(.nav-links,.nav-scope,.hero-stamp,.form-label,.form-hint,.form-error,.btn,.footer-links){font-size:13px}
+[dir=rtl] .skip-link{left:auto;right:-9999px}[dir=rtl] .skip-link:focus{left:auto;right:12px}
