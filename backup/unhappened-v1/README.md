@@ -2,7 +2,7 @@
 
 This directory is the CytherAI homepage as it stood from 2026-10-04, when THE UNHAPPENED replaced
 the drawing set, until 2026-10-12, when the film became the front door. It is a verbatim snapshot of
-commit `f5c1e37` — the last commit in which THE UNHAPPENED was complete and served at `/` — of every
+commit `011ffd0` — the last commit in which THE UNHAPPENED was complete and served at `/` — of every
 file it was made of and every verifier that established its laws. Nothing here is served, precached
 or fingerprinted. Nothing here is to be edited: the snapshot is the record of what THE UNHAPPENED
 was, and the receipts in `vaic/cytherai-obligations.v2.json` that cite its files resolve through it
@@ -21,7 +21,7 @@ candidate profile with no consequence) or admitted (its profile landed on the fl
 and porcelain extruded from it). Ten scenes carried the copy; scenes 4–7 named CytherCAD, ADII,
 AWC-OS and SijilOS with the condition each claim held under. When nothing was changing nothing
 rendered (`settled()`); a visitor's drag seeded their own proposer, replayable from `#trace=`. Its
-design record is the root `CLAUDE.md` as it stood at `f5c1e37` (`git show f5c1e37:CLAUDE.md`) and
+design record is the root `CLAUDE.md` as it stood at `011ffd0` (`git show 011ffd0:CLAUDE.md`) and
 `prototype/unhappened-4/`, the version promoted on 2026-10-04.
 
 | Path | What it is |

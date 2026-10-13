@@ -2,7 +2,7 @@
 
 This directory is the CytherAI homepage as it stood from the P1–P9 build (2026-07) until
 2026-09-16, when the drawing set became the front door. It is a verbatim snapshot of commit
-`bf82377` — the last commit in which this world was complete and served at `/` — of every
+`9d6cbdb` — the last commit in which this world was complete and served at `/` — of every
 file the world was made of and every verifier that established its laws. Nothing here is
 served, precached or fingerprinted. Nothing here is to be edited: the snapshot is the record
 of what the world was, and the receipts in `vaic/cytherai-obligations.v0.json` that cite
@@ -18,7 +18,7 @@ ledger; a bistable reading ink with hysteresis governed legibility over the comp
 ground. `PRODUCTION_PLAN.md` at the repository root is its build specification; `docs/audit/`
 holds the audits (00–08) that shaped it; `docs/deploy.md` §5–5b holds the browser
 observations made against it. Its epochs are described in the root `CLAUDE.md` history and
-in `docs/architecture.md` as they stood at `bf82377` (`git show bf82377:docs/architecture.md`).
+in `docs/architecture.md` as they stood at `9d6cbdb` (`git show 9d6cbdb:docs/architecture.md`).
 
 | Path | What it is |
 |---|---|

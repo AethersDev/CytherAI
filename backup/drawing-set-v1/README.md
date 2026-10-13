@@ -2,7 +2,7 @@
 
 This directory is the CytherAI homepage as it stood from 2026-09-16, when the drawing set
 replaced instrument-v1, until 2026-10-04, when THE UNHAPPENED became the front door. It is a
-verbatim snapshot of commit `99b167a` — the last commit in which the drawing set was complete
+verbatim snapshot of commit `c921f00` — the last commit in which the drawing set was complete
 and served at `/` — of every file it was made of and every verifier that established its laws.
 Nothing here is served, precached or fingerprinted. Nothing here is to be edited: the snapshot
 is the record of what the drawing set was, and the receipts in `vaic/cytherai-obligations.v1.json`
@@ -22,7 +22,7 @@ one edge of it could be adjusted, every position judged; FIG. 1c opened an atlas
 edge edits. Sheet 6 carried eleven standing claims (`6 CL · 5 DS`) and the revisions list;
 Sheet 7 disclosed every VAIC obligation, projected from the corpus. Its design record is
 `backup/drawing-set-demo.html` (the approved demo, which now loads this snapshot's modules) and
-the root `CLAUDE.md` as it stood at `99b167a` (`git show 99b167a:CLAUDE.md`).
+the root `CLAUDE.md` as it stood at `c921f00` (`git show c921f00:CLAUDE.md`).
 
 | Path | What it is |
 |---|---|
