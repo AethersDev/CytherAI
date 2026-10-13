@@ -987,6 +987,39 @@ Mbit/s on a first visit the film may give way to the statement after 6 s, by des
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_FD22B035CA263E92`), 54 of 54 served paths matching the artifact. Release CERTIFIED.
 
+## 5p. Short pauses count together — 2026-10-13
+
+Build `B466667CA05CD04F` (`#film_interruption_budget_B466667CA05CD04F`, `#reading_ink_B466667CA05CD04F`,
+`#film_settle_B466667CA05CD04F`). A reviewer read in `js/film.js` that the stall clock reset whenever the film advanced,
+so pauses shorter than `STALL` never added up: on Chrome's Slow 4G preset `FD22B035CA263E92` played the 12 s film over
+21 s, the statement readable at 19.8 s. The film now gives way once it has fallen `STALL` (2 s) behind real time in all
+while the page is visible: the wall time since it started, less the film time played, a hidden page's time excluded. A
+single 2 s stop still gives way at 2 s. Replay keeps the same rule, as it kept the continuous one.
+
+Before the change, the cost was checked: in every iOS run recorded on `FD22B035CA263E92` (2.4–4 Mbit/s, first visits
+included) the film, once started, never fell more than 0.07 s behind real time, because Safari starts a film only once it
+expects to play it through. A 2 s budget cannot take the film from those visitors.
+
+**Chrome** (the phone, its throttling presets, worker bypassed, cache disabled):
+
+| Preset | `FD22B035CA263E92` | This build |
+|---|---|---|
+| Fast 4G | the whole film; still at 12.85 s | the whole film; still at 12.9 s |
+| Slow 4G | first sentence 3.86 s; the film played through, slowly; statement readable at 19.81 s | first sentence 3.89 s; gave way with the film at 4.6 s; statement readable at 9.79 s |
+| 3G | the statement at 7.42 s, no film | the statement at 7.66 s, no film |
+
+**iOS Simulator** (an instrumented test copy; simulator evidence, not a physical iPhone's): with the budget in place both
+films still play through, the phone film moving at 4.1–4.6 s at 2.4–4 Mbit/s, the desktop film (played in iOS Safari) at
+3.5–4.5 s at 3.2–4 Mbit/s, and a first visit with every file on the link at 4.1–4.7 s.
+
+**Unchanged behaviour, re-observed.** The stall fallback's three cases; settling, 0 frames, timers or playing media in
+four profiles, the worker caching exactly this build; reading ink across 349 element samples, worst 4.86:1; the
+sequences, never more than one download at once, and the warm-up past a clip that arrives in one piece; the playback
+suite, Replay included. (Its sample labels drift on desktop, because each screenshot takes time; measured without them,
+the film advances at 1.0× the page's clock.)
+
+**Open, named:** Safari on a Mac and a physical iPhone.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

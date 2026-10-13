@@ -91,9 +91,10 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
    state with *Play the film* and downloads no film; a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
-   window (`data-from`/`data-to`); the statement appears at 10.6 s. If `currentTime` stops
-   advancing for `STALL` (2 s) while the page is visible (a hidden page's time does not
-   count), the film gives way to the still state at once: it drops its source, so the poster
+   window (`data-from`/`data-to`); the statement appears at 10.6 s. It also adds up how far
+   the film has fallen behind real time since it started, while the page is visible (a hidden
+   page's time does not count), so short pauses count together; past `STALL` (2 s) the film
+   gives way to the still state at once: it drops its source, so the poster
    — its final frame — stands, and a late download cannot restart it; its caption leaves
    without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
