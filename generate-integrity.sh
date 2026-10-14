@@ -40,12 +40,18 @@ for FILE in $RESOURCES; do
     BASENAME=$(basename "$FILE")
     echo "  $FILE → ${SRI:0:24}..."
 
-    # Patch all HTML files
+    # The URL names the bytes (?v= the first 12 hex of their SHA-256), in every page and in the worker's precache. A worker
+    # of an older build answers from its cache by URL: a page it never cached (the Arabic front door, on its first visit)
+    # came new from the network and was answered the old stylesheet, which its integrity refused (docs/deploy.md §5r).
+    # A URL that names the bytes is one no older worker has cached, so it goes to the network for them.
+    VERSION=$(shasum -a 256 "$FILE" | cut -c1-12)
     for HTML in $HTML_FILES; do
         if [ ! -f "$HTML" ]; then continue; fi
-        sed -i '' -E "s|(href=\"[^\"]*${BASENAME}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
-        sed -i '' -E "s|(src=\"[^\"]*${BASENAME}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
+        sed -i '' -E "s#((href|src)=\"[^\"]*${BASENAME})(\?v=[0-9a-f]*)?\"#\1?v=${VERSION}\"#g" "$HTML"
+        sed -i '' -E "s|(href=\"[^\"]*${BASENAME}\?v=${VERSION}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
+        sed -i '' -E "s|(src=\"[^\"]*${BASENAME}\?v=${VERSION}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
     done
+    sed -i '' -E "s#'${FILE}(\?v=[0-9a-f]*)?'#'${FILE}?v=${VERSION}'#" sw.js
 done
 
 # Build identity = first 16 hex chars of SHA-256 of the canonical served-artifact
