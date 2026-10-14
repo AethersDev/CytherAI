@@ -1147,8 +1147,18 @@ the worker's cache, and warns that the preload went unused; on a first visit, wh
 requested once and nothing warns. No byte crosses the network for it; it is left open. The contact pages' mixed-content
 notice is the `mailto:` form, by design, in both languages.
 
-**Open, named:** the owner's review of the rest of the Arabic, VoiceOver in Arabic as heard, Safari on a Mac and a
-physical iPhone.
+**A returning visitor's switchover** (the reviewer saw it on the live site, reproduced here). A visitor whose worker is
+from the previous build gets that build on their first load of `/ar/`, complete and styled, its old wording included,
+and again on a reload while the film plays; once a page's film is still it lets the new worker in, and the next load is
+this build. Measured in Chrome, the worker from `2874B365763AE0ED` and this build served: first load and an immediate
+reload `2874B365763AE0ED` (the old CytherCAD line), the same page once still `2874B365763AE0ED`, the reload after that
+`E6B35C3BEFAE718A` (the narrowed line). That is the worker's design (§5j: it never takes over a page that may still be
+loading); the cost is one load, or two for a visitor who reloads during the film.
+
+**The Arabic copy, reviewed.** A second review read the rest of the Arabic against the English and found no further
+correction to make; it advised leaving the wording settled rather than changing it for preference.
+
+**Open, named:** VoiceOver in Arabic as heard, Safari on a Mac and a physical iPhone.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_E6B35C3BEFAE718A`), 61 of 61 served paths matching the artifact. Release CERTIFIED.
 
