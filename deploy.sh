@@ -34,7 +34,7 @@ done
 # Every precached asset must exist in the artifact, or install fails atomically.
 MISSING=0
 for a in $(sed -n '/^var ASSETS = \[/,/^\];/p' "$ROOT/sw.js" | sed -n "s/.*'\([^']*\)'.*/\1/p"); do
-    [ -f "$DIST/$a" ] || { echo "  ERROR: sw.js precaches $a, absent from the artifact" >&2; MISSING=1; }
+    [ -f "$DIST/${a%%\?*}" ] || { echo "  ERROR: sw.js precaches $a, absent from the artifact" >&2; MISSING=1; }   # ?v= names the bytes, not the path
 done
 [ "$MISSING" -eq 0 ] || { echo "  ERROR: allowlist and sw.js ASSETS have drifted" >&2; exit 1; }
 

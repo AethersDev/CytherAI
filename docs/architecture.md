@@ -42,7 +42,7 @@ flowchart TD
   M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
 ```
 
-The front door loads one stylesheet and one deferred script, both with SRI; `js/film.js`
+The front door loads one stylesheet, `js/theme.js` in the head and one deferred script, all with SRI; `js/film.js`
 reads no module and publishes nothing. THE EXCEPTION loads the two record modules, which
 communicate through explicit `window` APIs; load order is a contract there. The public
 surface is an inventory (`tools/test-api.py`): every symbol is declared as production (called
@@ -157,7 +157,8 @@ The release flow is fail-closed:
 
 1. Edit source. After a manifest edit run `python3 tools/project-manifest.py`.
 2. For any change to a served file (anything in `deploy.paths`), run
-   `./generate-integrity.sh` (SRI over the requested resources; the 16-hex build identity
+   `./generate-integrity.sh` (SRI over the requested resources, each URL versioned by its bytes,
+   `?v=` the first 12 hex of their SHA-256, in the pages and the worker's precache; the 16-hex build identity
    over every `deploy.paths` byte, stamped into every HTML file and the worker cache
    name), then `python3 tools/vaic_restamp.py` once per transaction.
 3. Run `./verify.sh`.

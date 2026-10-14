@@ -1095,6 +1095,53 @@ Safari on a Mac and a physical iPhone.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_2874B365763AE0ED`), 61 of 61 served paths matching the artifact. Release CERTIFIED.
 
+## 5r. The Arabic release reviewed — 2026-10-14
+
+Build `E6B35C3BEFAE718A` (`#arabic_review_E6B35C3BEFAE718A`, `#reading_ink_E6B35C3BEFAE718A`, `#film_settle_E6B35C3BEFAE718A`).
+
+**A returning visitor's first Arabic page lost its stylesheet.** A reviewer opened the live `/ar/` (`2874B365763AE0ED`) in
+a browser that had visited before: no stylesheet applied, the headings in Times, the page 1,288 px wide at 390, while
+the theme switch worked. The live stylesheet matched its integrity. Reproduced exactly with a worker installed by the
+English-only build `B466667CA05CD04F`: that worker answers from its cache by URL; `/ar/` was not in its cache and came
+new from the network, but `../css/film.css` and `../js/film.js` were, and it answered them with the old bytes, which
+the page's integrity refused (the console names the old digests). `/ar/contact.html` lost `css/cytherai.css` the same
+way; `js/theme.js`, new to that cache, came from the network and worked. Reloading could not help: the new worker
+waits for the page's script to let it in, and that script had been refused.
+
+Every integrity-checked URL now names its bytes (`?v=`, the first 12 hex of their SHA-256), stamped by
+`generate-integrity.sh` into the pages and into the worker's precache alike. No older worker has cached such a URL, so
+it fetches the matching bytes, and the fix reaches visitors whose old worker is already installed: it travels in the
+new page's URLs, not in the worker. `tools/test-site.py` requires every such URL, in every page and in the precache, to
+name its file's current bytes (a stale version fails it).
+
+| Upgrade | `/ar/` | `/ar/contact.html` |
+|---|---|---|
+| Worker from `B466667CA05CD04F`, then the live `2874B365763AE0ED` | no stylesheet, Times, 1,288 px | no stylesheet, Times |
+| Worker from `B466667CA05CD04F`, then this build | whole: stylesheet, the Arabic type, 390 px, no console error | whole |
+| Worker from `2874B365763AE0ED`, then this build | whole | whole |
+
+**The copy, corrected as the review asked.** CytherCAD's condition said complete privacy (بخصوصية تامة) and isolation
+from any network (عن أي شبكة), stronger than "private and air-gapped"; it now reads يعمل داخل المنشأة، في بيئة خاصة ومعزولة
+عن الشبكات الخارجية. ADII: «صحّحه، أو اتركه كما هو، أو أحِل المسألة للمراجعة» for "fix it, leave it, or escalate it",
+and «ما إذا كان يجتاز التحقق» for "whether it holds". AWC-OS: «حُجب مقترح لأنه لم يستوفِ شرطًا من شروطه», as its own
+Arabic page puts it (فشل تأكيده). CytherCAD's heading: «من وصفٍ لغوي إلى شكلٍ هندسي صالح», since هندسة alone also means
+engineering. The brand links carried `lang="en"` around an Arabic label; the links no longer claim English (their
+name is the Arabic label), and on the contact page the Latin brand text carries `lang="en"` itself. The contact page's hand-off reads «جارٍ فتح برنامج البريد لإكمال الإرسال», then that the page cannot verify
+delivery; its navigation and footer say which of their links lead to English pages. The new navigation label sat above its links (each link
+carries vertical padding, the label none); the navigation now centres its items, and the English subpages render
+pixel for pixel as before (the contact page and the brief, at 1440 and 390 px).
+
+**Re-observed on this build**, every check of §5q: reading ink over both front doors in both themes at three viewports,
+1,534 element samples in all, worst 4.86:1 (`/`, the principle's label on a phone) and 5.36:1 (`/ar/`); 0 frames, timers or
+playing media once settled in four profiles of each page, the worker caching exactly this build and serving it with
+the server stopped; playback, accessibility (every Tab stop on screen, visible, outlined) and zoom in both languages,
+no console error; the stall fallback's three cases; the sequences from `/ar/`, one download at a time, the warm-up past a
+clip that arrives in one piece; `/ar/` offline for a visitor whose worker came from the English page; the theme switch;
+both contact pages refusing in their own language.
+
+**Open, named:** the owner's review of the rest of the Arabic, VoiceOver in Arabic as heard, Safari on a Mac and a
+physical iPhone.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
