@@ -1139,8 +1139,18 @@ no console error; the stall fallback's three cases; the sequences from `/ar/`, o
 clip that arrives in one piece; `/ar/` offline for a visitor whose worker came from the English page; the theme switch;
 both contact pages refusing in their own language.
 
+**After publishing.** In a fresh Chrome on the live site, the worker installed from the English page, `/ar/` and
+`/ar/contact.html` load whole at 390 px: the stylesheet applied, the Arabic type, nothing overflowing, the narrowed
+CytherCAD line. Their console differs from the English pages' in one way, named here: under the worker Chrome requests
+each Arabic font a second time (and the English serif, which the Arabic page does not use), every request answered from
+the worker's cache, and warns that the preload went unused; on a first visit, where the preload matters, each font is
+requested once and nothing warns. No byte crosses the network for it; it is left open. The contact pages' mixed-content
+notice is the `mailto:` form, by design, in both languages.
+
 **Open, named:** the owner's review of the rest of the Arabic, VoiceOver in Arabic as heard, Safari on a Mac and a
 physical iPhone.
+
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_E6B35C3BEFAE718A`), 61 of 61 served paths matching the artifact. Release CERTIFIED.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
