@@ -207,7 +207,7 @@ class SiteContractTests(unittest.TestCase):
         # (THE EXCEPTION loads the record and the engine itself). Their CSP forbids inline script.
         for page, up in (("index.html", ""), ("ar/index.html", "../")):
             scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
-            self.assertEqual([attrs.get("src") for attrs in scripts], [up + "js/theme.js", up + "js/film.js"], page)
+            self.assertEqual([urlsplit(attrs.get("src")).path for attrs in scripts], [up + "js/theme.js", up + "js/film.js"], page)
             self.assertEqual([attrs.get("defer") for attrs in scripts], [None, ""], page)
 
         for page in ("contact.html", "ar/contact.html"):
@@ -250,6 +250,25 @@ class SiteContractTests(unittest.TestCase):
         cache = re.search(r"var CACHE = 'cytherai-substrate-([0-9A-F]+)(?:-r\d+)?'", SW_SOURCE)
         self.assertIsNotNone(cache)
         self.assertEqual(cache.group(1), build_hash)
+
+    def test_every_module_url_names_its_bytes(self) -> None:
+        """A worker answers from its cache by URL. When a page its build never cached (the Arabic front door, on its first
+        visit) came new from the network, an English-only build's worker answered its stylesheet and script with the old
+        bytes, which the page's integrity refused: no style, Times, 1288 px wide at 390 (docs/deploy.md §5r). So every
+        integrity-checked URL names its bytes (?v= the first 12 hex of their SHA-256), in the pages and in the precache
+        alike, and no older worker has ever cached a newer one."""
+        version = {r: "v=" + hashlib.sha256((ROOT / r).read_bytes()).hexdigest()[:12] for r in RESOURCES}
+        for page in HTML_FILES:
+            for tag, attrs in parse_page(page).tags:
+                raw = attrs.get("src") if tag == "script" else attrs.get("href") if tag == "link" else None
+                if not raw or "integrity" not in attrs:
+                    continue
+                resource = local_target(page, raw).resolve().relative_to(ROOT).as_posix()
+                self.assertEqual(urlsplit(raw).query, version[resource], f"{page}: {raw}")
+        assets = re.findall(r"'([^']+)'", re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL).group(1))
+        for asset in assets:
+            path, _, query = asset.partition("?")
+            self.assertEqual(query, version.get(path, ""), f"sw.js precaches {asset}")
 
     def test_every_page_withholds_the_referrer_itself(self) -> None:
         """docs/deploy.md §1 requires Referrer-Policy: no-referrer; GitHub Pages cannot send it (§7), and a page can."""
@@ -306,7 +325,7 @@ class SiteContractTests(unittest.TestCase):
 
         assets_block = re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL)
         self.assertIsNotNone(assets_block)
-        sw_assets = re.findall(r"'([^']+)'", assets_block.group(1))
+        sw_assets = [a.split("?")[0] for a in re.findall(r"'([^']+)'", assets_block.group(1))]   # ?v= names the bytes, not the path
         self.assertEqual(len(sw_assets), len(set(sw_assets)), "service-worker assets contain duplicates")
         self.assertTrue(set(sw_assets).issubset(DEPLOY_FILES))
         self.assertTrue(set(HTML_FILES).issubset(DEPLOY_FILES))

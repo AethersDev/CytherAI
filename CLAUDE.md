@@ -317,8 +317,10 @@ worker **waits** and never takes over a page that may still be loading: Safari c
 update at the navigation itself, and a worker that skipped waiting answered a returning
 reader's previous-build page with this build's modules, which then failed SRI. A page whose
 film is still lets the waiting worker in (`take-over`), so the next load is new),
-`manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources +
-build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
+`manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources, each URL naming its bytes
+(`?v=` the first 12 hex of their SHA-256) in the pages and in the worker's precache alike, so no older build's
+worker can answer a newer page from its cache: it did, to the Arabic front door's first visit, and the page lost its
+stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
 admitted states only; headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
 2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them). **Developer page:** `pages/runner.html` loads

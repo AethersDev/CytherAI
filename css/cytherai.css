@@ -57,7 +57,7 @@ body.kbd :focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .nav-brand:hover{color:var(--accent)}
 .nav-scope{color:var(--ink-quiet);text-transform:uppercase}
 .nav-scope b{color:var(--accent);font-weight:500}
-.nav-links{display:flex;gap:14px;margin-left:auto;list-style:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.nav-links{display:flex;align-items:center;gap:14px;margin-left:auto;list-style:none;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
 .nav-links a{text-decoration:none;color:var(--ink-quiet);display:inline-block;padding:16px 2px}
 .nav-links a:hover,.nav-links a[aria-current="page"]{color:var(--accent)}
 /* current page is never colour-only: the accent run carries an underline */
