@@ -1192,6 +1192,8 @@ PASS).
 The retired branches are tagged `archive/<name>` (`docs/history-rewrite-2026-10-13.md`), the five that were on GitHub
 there too; removing the branches themselves waits for the owner's permission.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B76DECC774B9AFBB`), 57 of 57 served paths matching the artifact. Release CERTIFIED.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
