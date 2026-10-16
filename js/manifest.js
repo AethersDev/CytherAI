@@ -3,9 +3,11 @@
    The public manifest and its deterministic derivation core. One normalized
    disclosure tuple drives the checksum and the canonical parameters (CANON) the
    derived social card and icon are drawn from; the pages print its facts as
-   projections (project), never as literals.
+   projections (project), never as literals. No page loads it: the projector and the
+   verifiers read it under jsc (THE EXCEPTION, the last page that did, retired on
+   2026-10-16 to backup/exception-v1/).
 
-   Ported from newC3/synthesis-rev5.html; MANIFEST merges the real facts from
+   Ported from backup/newC3/synthesis-rev5.html; MANIFEST merges the real facts from
    content/record.js (§5.1, §7.1). The epoch history, the commitments, and the
    admission and legibility screen that derived the drawing set's seal retired with
    it (2026-10-04) and are preserved whole in backup/drawing-set-v1/js/manifest.js.
@@ -137,10 +139,10 @@ const ADMISSION_NONCE = 0;
 const CANON = paramsFor(NORM, ADMISSION_NONCE);
 const CHECKSUM = stateChecksum(NORM);
 
-/* the public surface — every symbol has a caller in a served module or a verifier
-   (tools/test-api.py holds the inventory); derive, seedsFor, paramsFor, normalizeManifest
-   and stateChecksum are the derivation's internals. */
-const API = { MANIFEST, VALIDATION, CANON, ADMISSION_NONCE, CHECKSUM, project, fnv };
+/* the public surface — every symbol has a caller in a verifier (tools/test-api.py holds
+   the inventory); fnv, derive, seedsFor, paramsFor, normalizeManifest and stateChecksum
+   are the derivation's internals. */
+const API = { MANIFEST, VALIDATION, CANON, ADMISSION_NONCE, CHECKSUM, project };
 root.CytherManifest = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;
 
