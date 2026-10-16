@@ -26,11 +26,10 @@ flowchart TD
   F --> SW["sw.js registration"]
   RF["tools/render-film.py · tools/render-systems.py (Blender, offline)"] -.-> MED
 
-  X["exception/index.html — THE EXCEPTION"] --> M["js/manifest.js"]
-  M --> B["js/instrument.js — the boundary engine (judge)"]
-  B --> XE["exception/exception.js"]
-
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
+
+  M["js/manifest.js — the record (no page loads it)"] --> B["js/instrument.js — the boundary engine (no page loads it)"]
+  B --> TB["tools/test-boundary.js"]
 
   SRC["Tracked source"] --> SRI["generate-integrity.sh"]
   SRI --> ID["SRI attributes and build hash"]
@@ -42,17 +41,17 @@ flowchart TD
 ```
 
 The front door loads one stylesheet, `js/theme.js` in the head and one deferred script, all with SRI; `js/film.js`
-reads no module and publishes nothing. THE EXCEPTION loads the two record modules, which
-communicate through explicit `window` APIs; load order is a contract there. The public
-surface is an inventory (`tools/test-api.py`): every symbol is declared as production (called
-by another served file) or verifier (used by a tool), and a symbol with no caller fails.
+reads no module and publishes nothing. No page loads the two record modules (THE EXCEPTION, the
+last that did, retired on 2026-10-16 to `backup/exception-v1/`): the projector and the verifiers
+run them under jsc, the manifest first. Their public surface is an inventory
+(`tools/test-api.py`): every symbol is used by a tool, and a symbol with no caller fails.
 
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
 | `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
 | `js/theme.js` | — | `index.html`, `ar/index.html` (head, not deferred) | The theme: the remembered choice or the device's setting, as `data-theme`; the switch (`#theme`) |
-| `js/manifest.js` | `CytherManifest` | `exception/` | The public manifest: `fnv` (THE EXCEPTION); `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
-| `js/instrument.js` | `CytherInstrument` | `exception/` | The boundary engine: `judge` (THE EXCEPTION); `biEngine` and `audit` for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
+| `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
+| `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
 
 ## Directory and ownership map
 
@@ -63,14 +62,14 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films, the three sequences, their final-frame posters | Yes | Rendered by `tools/render-film.py` and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
-| `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | Yes | THE EXCEPTION's; a change requires SRI and re-stamping |
+| `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
 | `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators, the film's Blender render scripts and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
 | `vaic/` | The VAIC-0 obligation corpus (`v3`, superseding `v2` and through it `v1` and `v0`, all kept as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across every lineage (`tools/test-vaic.py`) |
-| `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
+| `docs/` | Deployment contract and release record, asset provenance, architecture, the history rewrite | No | Evidence and operational instructions, never origin content |
 | `backup/` | The record: the retired front doors whole with their verifiers, the design studies (`prototype/`, `newC3/`), the trajectory engine and its runner, the build plan of instrument-v1; indexed in `backup/README.md` | No | Historical record only; retire here, never delete, never deploy, never import from |
 | `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage), the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
 | `awc-os/` | AWC-OS evaluation gateway (curated), its films and deck | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
@@ -139,7 +138,6 @@ starts motion again.
 | `/` or `/index.html` | The film: `css/film.css`, `js/theme.js` and `js/film.js`, all SRI'd; media from `film/` |
 | `/ar/` | The film in Arabic: the same stylesheet, scripts and media |
 | `/ar/contact.html` | The contact page in Arabic: shared CSS plus its inline validation/copy script, in Arabic |
-| `/exception/` | THE EXCEPTION, an experiment published beside the front door (no homepage link since 2026-10-12): `js/manifest.js`, `js/instrument.js` (judge) and `exception/exception.js`, all SRI'd |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |

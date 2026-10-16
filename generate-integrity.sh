@@ -11,13 +11,13 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-# the front door's scripts and stylesheet (the film), THE EXCEPTION's modules + subpage stylesheet:
-# every resource a served page requests with an integrity attribute. (The build identity below is a different
-# projection: it covers every deploy.paths byte, requested or not.)
-RESOURCES="css/cytherai.css css/film.css js/film.js js/theme.js js/manifest.js js/instrument.js exception/exception.js"
+# the front door's scripts and stylesheet (the film) + the subpage stylesheet: every resource a served page requests
+# with an integrity attribute. (The build identity below is a different projection: it covers every deploy.paths
+# byte, requested or not.)
+RESOURCES="css/cytherai.css css/film.css js/film.js js/theme.js"
 
 # HTML files to patch (every served page)
-HTML_FILES="index.html ar/index.html contact.html ar/contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html exception/index.html"
+HTML_FILES="index.html ar/index.html contact.html ar/contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html"
 
 echo "[integrity] Computing SRI hashes..."
 

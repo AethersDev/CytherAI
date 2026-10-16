@@ -12,10 +12,8 @@ cd "$ROOT"
 
 JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc
 
-echo "[verify] served modules parse (the front door's scripts, THE EXCEPTION's modules)"
-for file in js/film.js js/theme.js js/manifest.js js/instrument.js; do
-    "$JSC" "$file"
-done
+echo "[verify] every served script parses (deploy.paths' .js, checkSyntax: parsed, not run)"
+"$JSC" -e "$(sed -n 's/.*\.js$/checkSyntax("&");/p' deploy.paths)"
 
 echo "[verify] public API inventory"
 python3 tools/test-api.py
