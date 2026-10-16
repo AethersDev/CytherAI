@@ -17,17 +17,20 @@ Everything the site no longer uses lives here, whole: nothing is served, precach
 | `brand-studies/` | The identity and dossier drafts of July 2026 (commit `517070b`) |
 | `icon-v1/`, `og-card-v1/` | The orbit icon family and social plate, with their generators (replaced by the Cyther Seal and the film's card, 2026-10-13) |
 | `project-pages/` | The ADII and AWC-OS pages as first published, before curation |
+| `exception-v1/` | THE EXCEPTION, published at `/exception/` from 2026-10-04 to 2026-10-16: the page, the two modules as it loaded them (their integrity holds), its fonts with their licence, the icon |
+| `audit/` | The instrument-v1 audit record, 00–08 |
 | `trajectory-engine/` | The engine's `-v2.js` dev source, its prototypes, the v-next design map, and its last source with the browser suite (`engine/`, `pages/runner.html`) |
 
 The three retired front doors' laws run against their snapshots: `backup/<name>/verify.sh`. The engine's suite runs
-in a browser from `trajectory-engine/pages/runner.html`, served from the repository root.
+in a browser from `trajectory-engine/pages/runner.html`, and THE EXCEPTION from `exception-v1/exception/`, each
+served from the repository root.
 
 ## Moved here on 2026-10-16
 
 The repository was reorganized so its root holds only the site, its release tooling and its docs. Every move was a
 rename, the bytes unchanged (`git log --follow` crosses it). Older records cite the old paths, which were true when
-they were written: `docs/deploy.md`, `docs/audit/`, the snapshots' READMEs, the evidence ledger, and the comments in
-`js/manifest.js` and `js/instrument.js` ("Ported from newC3/…"). Resolve them here.
+they were written: `docs/deploy.md`, the audit record, the snapshots' READMEs and the evidence ledger. Resolve them
+here.
 
 | Was | Now |
 |---|---|
@@ -38,6 +41,8 @@ they were written: `docs/deploy.md`, `docs/audit/`, the snapshots' READMEs, the 
 | `pages/runner.html` | `backup/trajectory-engine/pages/runner.html` |
 | `backup/<draft>.html` (seven identity and dossier drafts) | `backup/brand-studies/<draft>.html` |
 | `backup/lambda-crown-brand-system 2.html` | `backup/brand-studies/lambda-crown-brand-system-2.html` |
+| `docs/audit/` | `backup/audit/` |
+| `exception/` (retired, with copies of `js/manifest.js` and `js/instrument.js` as it loaded them) | `backup/exception-v1/exception/` |
 
 The studies reached the live site by relative links from `prototype/` (`../../pages/…`, `../../js/…`); to run one as
 it was, check out its last commit before the move. `prototype/compare/v3.html` also loaded the owner's untracked

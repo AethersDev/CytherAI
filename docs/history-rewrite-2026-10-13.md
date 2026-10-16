@@ -28,6 +28,12 @@ record were not, because rewriting them would falsify history: the admitted evid
 branch, or through the map below to the commit that now holds the same tree. The pull requests on GitHub point at the
 old history as well.
 
+**2026-10-16.** At the owner's direction each of those development branches, and the four local `rollback/<build>`
+branches, is also tagged `archive/<name>` in this repository, so removing a branch loses no commit. The five branches
+that were on `origin` are tagged there too (`archive/plate3-target`, `archive/repo-hygiene`, `archive/visual-pass-origin`
+for `origin`'s `visual-pass`, `archive/AethersDev-patch-1`, `archive/uploads-until-2026-09-12`); the tags of branches
+that were only local stay local, since `visual-work` and the rollbacks hold commits never published.
+
 ## The map (old → new), newest first
 
 ```

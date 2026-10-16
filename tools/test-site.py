@@ -62,7 +62,6 @@ REVIEWED_PUBLICATION = {
               "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
     "awc-os/": {"awc-os/index.html", "awc-os/awc-os.js", "awc-os/media/AWC_OS_film_ar.mp4",
                 "awc-os/media/AWC_OS_film_en.mp4", "awc-os/media/AWC_OS_AMAD2026_deck.pptx"},
-    "exception/": {"exception/index.html", "exception/exception.js"},
 }
 
 
@@ -203,8 +202,8 @@ class SiteContractTests(unittest.TestCase):
 
     def test_homepage_module_order_and_script_posture(self) -> None:
         # each front door reads no module: js/theme.js sets the theme in the head, before the page paints (a remembered
-        # choice never flashes the other); the film, its sentences, the sequences and the worker are js/film.js, deferred
-        # (THE EXCEPTION loads the record and the engine itself). Their CSP forbids inline script.
+        # choice never flashes the other); the film, its sentences, the sequences and the worker are js/film.js, deferred.
+        # Their CSP forbids inline script.
         for page, up in (("index.html", ""), ("ar/index.html", "../")):
             scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
             self.assertEqual([urlsplit(attrs.get("src")).path for attrs in scripts], [up + "js/theme.js", up + "js/film.js"], page)

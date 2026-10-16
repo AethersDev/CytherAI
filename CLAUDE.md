@@ -177,8 +177,9 @@ may both block release, but under different clauses.
 Zero external requests, ever. The homepage CSP forbids inline `<script>`
 (`script-src 'self'`); all homepage JS is in external modules. No node — verify JS with
 `jsc`: `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc`.
-A ReferenceError on a browser global is a PASS for a parse check; SyntaxError is a fail.
-Pure logic is guarded so it loads under jsc; DOM wiring is behind `typeof document`.
+`./verify.sh` parses every served script (each `.js` in `deploy.paths`) with jsc's `checkSyntax`, which parses
+without running, so a browser global is no failure there; a SyntaxError is. The record and the engine
+(`js/manifest.js`, `js/instrument.js`) run under jsc in the boundary and projection checks.
 Chrome 151 is installed; browser observations are driven over CDP (headless, an
 `Emulation.setDeviceMetricsOverride` viewport, `./generate-integrity.sh` first or SRI
 blocks every module).
@@ -191,8 +192,8 @@ the VAIC candidate, appends the automated-set receipts; existing receipts are ne
 The figures the pages print — the CytherCAD invalid rate and the DeepCAD baseline it is
 stated against on `index.html`, the validation figures on `pages/brief.html` — are
 projections of `js/manifest.js`: marked elements (`data-m="name"`) that
-`python3 tools/project-manifest.py` rewrites from `CytherManifest.project`, and that the
-front door reads back at runtime (a stale mark is outlined and logged). After a manifest
+`python3 tools/project-manifest.py` rewrites from `CytherManifest.project` (no page reads
+them back at runtime: no page loads the record). After a manifest
 edit, run the projector before the integrity step; `tools/test-projection.py` fails on a
 stale page, an unknown name, an identifier the brief does not print, or any mark on the
 front door other than those two.
@@ -268,9 +269,10 @@ sequences' IntersectionObserver, and `sw.js` registration once the film is still
 link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
 live in `film/`: two films with their final-frame posters, three sequences with theirs;
 `tools/test-site.py` holds every file the page names to `deploy.paths`, and back.
-`js/manifest.js` (`CytherManifest`: `fnv` for THE EXCEPTION; `project` and the record for the
-verifiers and derived assets) and `js/instrument.js` (`CytherInstrument`: `judge` for THE
-EXCEPTION; `biEngine` and `audit` for the verifiers) are no longer loaded by the front door.
+`js/manifest.js` (`CytherManifest`: `project` and the record, for the projector, the verifiers and
+the derived assets) and `js/instrument.js` (`CytherInstrument`: `biEngine`, `audit` and `judge`, for
+the verifiers) are loaded by no page and not published; they stay at their paths because the
+corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds their surface.
 
 **Arabic** (`ar/`, 2026-10-14): `ar/index.html` is the front door in Arabic and `ar/contact.html` the contact page;
 the brief, the ADII page and the legal pages stay English and the Arabic pages mark their links to them
@@ -293,17 +295,13 @@ sentences over it are dark in both. Every ink holds 4.5:1 on its ground in both 
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
 Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
 
-**The experiment** (`exception/`, published beside the front door on 2026-10-04; since the
-film became the front door on 2026-10-12 no homepage link points to it) is THE EXCEPTION: two
-decisions that look right.
-*Draw* releases a drawing to the real boundary engine (`CytherInstrument.judge`, so `judge` is
-a production symbol): refused at operation 6 (CROSSES), the never-judged rest drawn as a
-labelled preview, then a valid alternative admitted by the kernel (`PRG-9FD9BC52`). *Correct*
-holds a number against evidence and is an illustration of ADII with constructed figures, which
-the page says. Every claim on it stays within what its source establishes (the grammar rule,
-not physical strength). It shipped without an unfamiliar-reader test; that test stays optional,
-and its result, when run, is recorded in `docs/deploy.md` §5h. Its files are pinned in
-`REVIEWED_PUBLICATION`; `exception/exception.js` is SRI'd like the homepage modules.
+**The experiment, retired** (2026-10-16, at the owner's direction): THE EXCEPTION, two decisions
+that look right, was published at `/exception/` on 2026-10-04 and linked from no page after
+2026-10-12. *Draw* released a drawing to the real boundary engine (`CytherInstrument.judge`):
+refused at operation 6 (CROSSES), then a valid alternative admitted by the kernel
+(`PRG-9FD9BC52`); *Correct* was an illustration of ADII with constructed figures, which the page
+said. It is preserved whole in `backup/exception-v1/` (the page, the two modules as it loaded
+them, its fonts), which opens from the repository root; `/exception/` now answers 404.
 
 **Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
@@ -359,7 +357,7 @@ literals.
   by the drawing set on 2026-09-16 and kept as its record; the drawing set's design record
   is `backup/drawing-set-demo.html` (the approved demo) and `git show c921f00:CLAUDE.md`.
 - **THE EXCEPTION** began as `prototype/exception/` on the `exception` branch and moved to
-  `exception/` when it was published (2026-10-04).
+  `exception/` when it was published (2026-10-04); it retired whole to `backup/exception-v1/` on 2026-10-16.
 - **`backup/prototype/`** holds the homepage design studies (`crossing/`, `glass/`, `section/`,
   `research/`) and THE UNHAPPENED's versions: `unhappened/` (v1, TRACE-1 and the carried
   receipt), `unhappened-2/` (v2, only what was admitted casts a
@@ -392,5 +390,6 @@ literals.
   generators, replaced on 2026-10-13 by the Cyther Seal and the film's card),
   `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
   snapshot's modules), `project-pages/` (the ADII and AWC-OS pages as first published,
-  before curation).
+  before curation), `exception-v1/` (THE EXCEPTION, whole) and `audit/` (the instrument-v1
+  audit record, 00–08, formerly `docs/audit/`).
   Supersede, never erase: retire into `backup/`, do not delete.
