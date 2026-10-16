@@ -11,7 +11,7 @@
     "grammar_hash": "0082fc3c5d5aa042ea17b4026db613107dd1b7ff7cae772b6d5cfef24a062627",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
     "artifact_manifest_hash": "6c4a8f175ee4d510cdbf708569a8c379f8569833a7c03aa17285a27d057bcf56",
-    "verification_identity": "722550d1f82fbbbab857db608a45c0586282ee0652bc8aa44684ac85b2794331"
+    "verification_identity": "8504eb00dd34f8629beae8b9a31fb7f3fb62c7ea728a16b0348f23202dc46042"
   },
   "semantics": {
     "result_values": [
@@ -6852,6 +6852,36 @@
               "deploy.sh#artifact-source-allowlist"
             ],
             "observed_at": "2026-10-14"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "E6B35C3BEFAE718A",
+            "artifact_manifest_hash": "6c4a8f175ee4d510cdbf708569a8c379f8569833a7c03aa17285a27d057bcf56",
+            "record_hash": "2de6b22005d6394480979d8efd458f9e9a2c16525b491f986a3bd76ec5314011",
+            "grammar_hash": "0082fc3c5d5aa042ea17b4026db613107dd1b7ff7cae772b6d5cfef24a062627",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "8504eb00dd34f8629beae8b9a31fb7f3fb62c7ea728a16b0348f23202dc46042",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "E6B35C3BEFAE718A",
+            "method": {
+              "measurement": "complete allowlist and dist closure",
+              "threshold": "27 files, no forbidden trees, exact integrity identity",
+              "units": "files and hashes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-10-16"
           }
         ]
       },

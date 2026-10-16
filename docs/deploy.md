@@ -79,9 +79,9 @@ must hold before the site is public.
 
 **Artifact:** `./deploy.sh` → `dist/`. Publish the *contents* of `dist/` as the
 origin root. `dist/` is gitignored and rebuilt from scratch on every run.
-Never publish the working tree: `backup/`, `newC3/`,
-`docs/`, `PRODUCTION_PLAN.md`, `CLAUDE.md`, `generate-integrity.sh` and
-`deploy.sh` itself are excluded by construction (allowlist, not denylist).
+Never publish the working tree: `backup/`, `docs/`, `README.md`, `CLAUDE.md`,
+`generate-integrity.sh` and `deploy.sh` itself are excluded by construction
+(allowlist, not denylist).
 
 ---
 
@@ -144,9 +144,9 @@ the HTTP cache expires (reproduced in Chrome 151 before the fix).
 
 ```
 curl -sI https://HOST/ | grep -iE 'frame-ancestors|strict-transport|nosniff|referrer|permissions'
-curl -s -o /dev/null -w '%{http_code}\n' https://HOST/newC3/epoch04-preimage.txt   # expect 404
+curl -s -o /dev/null -w '%{http_code}\n' https://HOST/backup/newC3/epoch04-preimage.txt # expect 404
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/backup/graphite-v2/index.html # expect 404
-curl -s -o /dev/null -w '%{http_code}\n' https://HOST/PRODUCTION_PLAN.md            # expect 404
+curl -s -o /dev/null -w '%{http_code}\n' https://HOST/CLAUDE.md                     # expect 404
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
 curl -s https://HOST/definitely-missing | grep -q "No record at this path"          # styled 404 body
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/definitely-missing            # AND status 404
@@ -1227,8 +1227,9 @@ decisions, not engineering steps.
    are positioning beside the line *A conceptual visualization. It measures no product.*
    The owner confirms each source is current before launch. (The epoch-04 commitment left the front door with the drawing set;
    its record is §5c and `backup/drawing-set-v1/`.)
-5. `./verify.sh` green at the release commit; the browser-only runner reports 33/33; the
-   served homepage settles and stops (§5i) with zero external requests.
+5. `./verify.sh` green at the release commit; the served homepage settles and stops (§5i)
+   with zero external requests. (The trajectory engine's browser runner left this gate on
+   2026-10-16 with the engine, retired to `backup/trajectory-engine/`: no page loads it.)
 6. The `PROVISIONAL` values in `js/manifest.js` (the disclosure tuple and its counts)
    reviewed by the owner. None is printed on the front door; they drive the checksum and
    the derived icon (the social card is the film's frame since 2026-10-13). Shipping them knowingly is permitted — they are
