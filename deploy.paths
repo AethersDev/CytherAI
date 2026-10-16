@@ -9,8 +9,6 @@ pages/brief.html
 pages/privacy.html
 pages/security.html
 pages/terms.html
-js/manifest.js
-js/instrument.js
 js/film.js
 js/theme.js
 css/film.css
@@ -47,8 +45,6 @@ awc-os/awc-os.js
 awc-os/media/AWC_OS_film_ar.mp4
 awc-os/media/AWC_OS_film_en.mp4
 awc-os/media/AWC_OS_AMAD2026_deck.pptx
-exception/index.html
-exception/exception.js
 film/film-landscape.mp4
 film/film-portrait.mp4
 film/final-landscape.jpg

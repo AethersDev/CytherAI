@@ -147,6 +147,7 @@ curl -sI https://HOST/ | grep -iE 'frame-ancestors|strict-transport|nosniff|refe
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/backup/newC3/epoch04-preimage.txt # expect 404
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/backup/graphite-v2/index.html # expect 404
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/CLAUDE.md                     # expect 404
+curl -s -o /dev/null -w '%{http_code}\n' https://HOST/exception/                    # expect 404 (retired 2026-10-16)
 curl -sI https://HOST/manifest.webmanifest | grep -i content-type                   # manifest+json
 curl -s https://HOST/definitely-missing | grep -q "No record at this path"          # styled 404 body
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/definitely-missing            # AND status 404
@@ -1161,6 +1162,35 @@ correction to make; it advised leaving the wording settled rather than changing 
 **Open, named:** VoiceOver in Arabic as heard, Safari on a Mac and a physical iPhone.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_E6B35C3BEFAE718A`), 61 of 61 served paths matching the artifact. Release CERTIFIED.
+
+## 5s. The repository reorganized; THE EXCEPTION retired — 2026-10-16
+
+Build `B76DECC774B9AFBB` (`#reading_ink_B76DECC774B9AFBB`, `#film_settle_B76DECC774B9AFBB`).
+
+**The repository holds the site, its release tooling and its record.** Retired material moved whole into `backup/`
+(renames only; `backup/README.md` maps every path), the owner's untracked studies moved out to
+`~/Desktop/cyther-studies/`, and `README.md` is the entry point. That alone moved no served byte: `E6B35C3BEFAE718A`
+stayed live and certified, its 61 files byte-identical.
+
+**THE EXCEPTION retired**, at the owner's direction. Linked from no page since 2026-10-12, it was the last page to load
+`js/manifest.js` and `js/instrument.js`; the four files leave the served set (57 files), `/exception/` answers the
+styled 404, and the page lives whole in `backup/exception-v1/`, with the modules as it loaded them, so its integrity
+holds: opened from the repository root it loads its engine and its type with no console error. The modules stay at
+their paths, which the corpus binds; their surface lost `fnv` (THE EXCEPTION's only call to it), and `judge` is
+verifier surface (`tools/test-boundary.js`). `tools/test-api.py` now fails if a page loads either module again. The
+front door's code, styles and media are unchanged; the build moved because the served set did.
+
+**Every served script parses.** `./verify.sh` checks each `.js` in `deploy.paths` with jsc's `checkSyntax`, so `sw.js`
+and `awc-os/awc-os.js`, never parsed before, now are: a syntax error appended to `awc-os/awc-os.js` fails it, and the
+step it replaces let that through.
+
+Re-observed on this build (Chrome 155.0.8059.82): reading ink over the film on both front doors, dark and light, at
+three viewports, 1,534 element samples, none below 4.5:1, worst 4.86:1 (CY-SEM-003 PASS); both pages settle to no
+frame, timer or playing media in every profile, the worker caching this build and serving it offline (CY-TEMP-001
+PASS).
+
+The retired branches are tagged `archive/<name>` (`docs/history-rewrite-2026-10-13.md`), the five that were on GitHub
+there too; removing the branches themselves waits for the owner's permission.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
