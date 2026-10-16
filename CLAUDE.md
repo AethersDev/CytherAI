@@ -323,9 +323,7 @@ worker can answer a newer page from its cache: it did, to the Arabic front door'
 stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
 admitted states only; headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
-2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them). **Developer page:** `pages/runner.html` loads
-`engine/trajectory-engine.js` and its `.test.js` — linked from no page, not in
-`deploy.paths`, not precached, unstamped.
+2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them).
 
 **Retired front doors** live whole in `backup/`, each a verbatim snapshot with every verifier
 that established its laws, its own `verify.sh` and a README; the receipts that cite their
@@ -352,18 +350,24 @@ literals.
 
 ## Provenance
 
-- **`PRODUCTION_PLAN.md`** is the build spec of instrument-v1 (phases P1–P9), superseded
+- **The repository holds the site, its release tooling and its record, nothing else** (reorganized 2026-10-16): the
+  served files at their URL paths, the release scripts, `tools/`, `vaic/`, `docs/`, and `backup/`, where everything
+  retired lives; `backup/README.md` indexes it and maps every path that moved. The owner's untracked studies (the
+  `cyther-*` folders, `design-ledger/`, `cyther-seal-identity.html` and four prototypes, `unhappened-3/` among them)
+  live outside the repository, in `~/Desktop/cyther-studies/`; never move them back in or commit them.
+- **`backup/PRODUCTION_PLAN.md`** is the build spec of instrument-v1 (phases P1–P9), superseded
   by the drawing set on 2026-09-16 and kept as its record; the drawing set's design record
   is `backup/drawing-set-demo.html` (the approved demo) and `git show c921f00:CLAUDE.md`.
 - **THE EXCEPTION** began as `prototype/exception/` on the `exception` branch and moved to
   `exception/` when it was published (2026-10-04).
-- **`prototype/`** holds the homepage design studies (`crossing/`, `glass/`, `section/`,
+- **`backup/prototype/`** holds the homepage design studies (`crossing/`, `glass/`, `section/`,
   `research/`) and THE UNHAPPENED's versions: `unhappened/` (v1, TRACE-1 and the carried
   receipt), `unhappened-2/` (v2, only what was admitted casts a
   shadow), `unhappened-4/` (v4, the solid rises from its own shadow — promoted to production
   on 2026-10-04, minus its sound, retired on 2026-10-12) and `compare/` (the side-by-side
-  harness). Not served.
-- **The film** was built as an untracked study (`cyther-film/`, never committed) from pasted
+  harness). Not served; their links to the live site resolved from `prototype/`, so open them at their last commit
+  there to run them.
+- **The film** was built as an untracked study (`cyther-film/`, never committed, now in the studies folder) from pasted
   directions on 2026-10-11, revised once on a reviewer's critique (the one refused slab, the
   camera holding at the refusal), then extended into the site with three systems and
   published on 2026-10-12; its render sources moved to `tools/render-film.py` and
@@ -374,13 +378,15 @@ literals.
   on `origin`) and on the older development branches, which predate the rewrite. Every old → new hash is in
   `docs/history-rewrite-2026-10-13.md`; admitted records that cite old hashes resolve through it. Commit messages
   carry no attribution trailer.
-- **`newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
+- **`backup/newC3/`** is the design record (concept prototypes → synthesis rev5 → substrate-demo).
   Do not modify it — supersede, never erase.
 - **`backup/`** holds the retired surfaces: `instrument-v1/` (the substrate homepage,
   whole, with its verifiers — see its README), `graphite-v2/` (old engine-backed homepage,
   with the three modules only it loaded), `dossier-v3/` (old shared CSS + the dossier IIFE
-  modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, and the
-  v-next design map), `drawing-set-v1/` (the drawing set, whole, with its verifiers — see its
+  modules), `trajectory-engine/` (the engine's `-v2.js` dev source, its prototypes, the
+  v-next design map, and the engine's last source with its browser suite, `engine/` and
+  `pages/runner.html`, retired 2026-10-16: no page loads it), `brand-studies/` (the identity
+  and dossier drafts of July 2026), `drawing-set-v1/` (the drawing set, whole, with its verifiers — see its
   README), `unhappened-v1/` (THE UNHAPPENED, whole, with its verifiers — see its README),
   `icon-v1/` and `og-card-v1/` (the derived orbit icon family and social plate, with their
   generators, replaced on 2026-10-13 by the Cyther Seal and the film's card),

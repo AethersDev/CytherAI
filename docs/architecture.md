@@ -31,7 +31,6 @@ flowchart TD
   B --> XE["exception/exception.js"]
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
-  R["pages/runner.html — developer page, not deployed"] --> E["engine/trajectory-engine.js"]
 
   SRC["Tracked source"] --> SRI["generate-integrity.sh"]
   SRI --> ID["SRI attributes and build hash"]
@@ -65,17 +64,14 @@ by another served file) or verifier (used by a tool), and a symbol with no calle
 | `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films, the three sequences, their final-frame posters | Yes | Rendered by `tools/render-film.py` and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | Yes | THE EXCEPTION's; a change requires SRI and re-stamping |
-| `prototype/` | Homepage design studies, THE UNHAPPENED v1–v4 and the comparison harness | No | Design record; production does not load from it |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
-| `pages/` | Brief and legal pages; `runner.html` is a developer page | Content pages only | Content pages share navigation and CSS; `runner.html` is linked from no page, not in `deploy.paths`, not precached, unstamped |
-| `engine/` | Trajectory engine and its browser suite | No | Run locally through `pages/runner.html`; not part of the homepage dependency graph or the artifact |
+| `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators, the film's Blender render scripts and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
 | `vaic/` | The VAIC-0 obligation corpus (`v3`, superseding `v2` and through it `v1` and `v0`, all kept as history), evaluator matrix, evidence ledger, release dispositions | No | Receipts append; admitted receipts are immutable across every lineage (`tools/test-vaic.py`) |
 | `docs/` | Deployment contract, audit record (00–08, all instrument-v1), asset provenance, architecture | No | Evidence and operational instructions, never origin content |
-| `newC3/` | Frozen design/prototype record and public demo preimage | No | Supersede; do not rewrite or deploy |
-| `backup/` | Retired surfaces: `instrument-v1/`, `drawing-set-v1/` and `unhappened-v1/` (whole, with verifiers), `graphite-v2/`, `dossier-v3/`, `trajectory-engine/`, `drawing-set-demo.html`, and the uncurated project pages (`project-pages/`) | No | Historical record only; retire here, never delete, never deploy, never import from |
+| `backup/` | The record: the retired front doors whole with their verifiers, the design studies (`prototype/`, `newC3/`), the trajectory engine and its runner, the build plan of instrument-v1; indexed in `backup/README.md` | No | Historical record only; retire here, never delete, never deploy, never import from |
 | `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage), the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
 | `awc-os/` | AWC-OS evaluation gateway (curated), its films and deck | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |

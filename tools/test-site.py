@@ -314,7 +314,7 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(len(DEPLOY_FILES), len(set(DEPLOY_FILES)), "deploy allowlist contains duplicates")
         for relative in DEPLOY_FILES:
             self.assertTrue((ROOT / relative).is_file(), f"allowlisted file missing: {relative}")
-        for forbidden in ("backup/", "newC3/", "docs/", "awc-os/live/"):   # awc-os/live/ redirects to an ephemeral tunnel
+        for forbidden in ("backup/", "docs/", "awc-os/live/"):   # awc-os/live/ redirects to an ephemeral tunnel
             self.assertFalse(any(path.startswith(forbidden) for path in DEPLOY_FILES), forbidden)
         self.assertFalse(any(path.endswith(".DS_Store") for path in DEPLOY_FILES))
         # the project pages ship only their reviewed publication set: a new file under
