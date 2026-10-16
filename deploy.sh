@@ -1,12 +1,12 @@
 #!/bin/sh
 # Build the published artifact: dist/ contains the site and nothing else.
 #
-# The repo doctrine is "supersede, never erase" — backup/ and newC3/ are the
-# design record and stay tracked. They must not reach the public origin: they
-# carry superseded claims, the retired warm/gold register, older homepages and
-# their modules, the engine's dev source, and newC3/epoch04-preimage.txt, whose
-# sha256 is the digest the floor prints as PREIMAGE SEALED. Publishing is
-# therefore an explicit allowlist, never "upload the tree".
+# The repo doctrine is "supersede, never erase" — backup/ is the design record
+# and stays tracked. It must not reach the public origin: it carries superseded
+# claims, the retired warm/gold register, older homepages and their modules, the
+# engine's dev source, and backup/newC3/epoch04-preimage.txt, whose sha256 is the
+# digest the retired floor printed as PREIMAGE SEALED. Publishing is therefore an
+# explicit allowlist, never "upload the tree".
 #
 # POSIX/BSD. Run from anywhere: ./deploy.sh
 
@@ -40,7 +40,7 @@ done
 
 # The record must never be in the artifact, nor the AWC-OS live-MVP redirect (an ephemeral
 # tunnel). The project pages ship only their reviewed set, pinned in tools/test-site.py.
-for d in backup newC3 docs awc-os/live; do
+for d in backup docs awc-os/live; do
     [ ! -e "$DIST/$d" ] || { echo "  ERROR: $d reached the artifact" >&2; exit 1; }
 done
 

@@ -4,7 +4,8 @@
 Classification: COMPUTED. SHA-256("CytherAI") is read two bits at a time (00 and 11 straight, 01 left, 10 right; when
 the digest runs out it is hashed again). A walk from the top-left cell of a 6×6 grid, heading right, admits a move only
 if it stays inside the grid on an unused cell, and stops when no move is possible: 77 proposals, 29 admitted, 48
-refused. That path is the mark (the identity: cyther-seal-identity.html, "Check it"); nothing places a cell by hand.
+refused. That path is the mark (the identity: the owner's draft cyther-seal-identity.html, "Check it", kept outside the
+repository in ~/Desktop/cyther-studies/); nothing places a cell by hand.
 
 The seal is ink with its path in ground: #ECE7DC / #07070A on the dark ground, #101620 / #ECF0F4 on cold paper. Warm is
 never the seal's colour. Below 48 px every rendering is pixel-fitted (the identity's rule): an 11-unit lattice of
