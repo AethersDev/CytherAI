@@ -12,8 +12,8 @@ cd "$ROOT"
 
 JSC=/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc
 
-echo "[verify] served modules parse (the front door's script, THE EXCEPTION's modules)"
-for file in js/film.js js/manifest.js js/instrument.js; do
+echo "[verify] served modules parse (the front door's scripts, THE EXCEPTION's modules)"
+for file in js/film.js js/theme.js js/manifest.js js/instrument.js; do
     "$JSC" "$file"
 done
 
