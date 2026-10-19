@@ -30,14 +30,8 @@ def canon_from_source():
     """(CANON, ADMISSION_NONCE, CHECKSUM) — from js/manifest.js, via jsc."""
     driver = ('print(JSON.stringify({p:CytherManifest.CANON,'
               'n:CytherManifest.ADMISSION_NONCE,c:CytherManifest.CHECKSUM}))')
-    dpath = os.path.join(ROOT, "tools", ".canon-driver.js")
-    with open(dpath, "w") as f:
-        f.write(driver)
-    try:
-        out = subprocess.run([JSC, os.path.join(ROOT, "js/manifest.js"), dpath],
-                             check=True, capture_output=True, text=True).stdout
-    finally:
-        os.remove(dpath)
+    out = subprocess.run([JSC, os.path.join(ROOT, "js/manifest.js"), "-e", driver],   # -e: nothing written to tools/
+                         check=True, capture_output=True, text=True).stdout
     j = json.loads(out)
     return j["p"], j["n"], j["c"]
 

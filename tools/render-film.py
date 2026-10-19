@@ -1,10 +1,15 @@
 # Everything changes. One thing holds. — the 12-second film, built and rendered offline in Blender (Cycles, Metal).
-# blender -b -P tools/render-film.py -- <l|p> <stills|anim|blend> <outdir> <WxH> <samples> [t1,t2,...]
+# blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> <stills|anim|blend> <outdir> <WxH> <samples> [t1,t2,...]
+# (--factory-startup: not the operator's startup.blend; --python-exit-code 1: a script error is a failed render, not exit 0.
+#  Environment: TL, seconds per frame for Cycles (0: the sample count decides; the published film used 24 landscape, 14
+#  portrait, so its frames depend on the machine); EDGE, the opening's edge-light energy (default 3600);
+#  HIDE, objects left out of stills.)
 import bpy, math, os, random, sys
 from mathutils import Vector, Matrix, Quaternion
 
 args = sys.argv[sys.argv.index('--') + 1:]
 ORIENT, MODE, OUT = args[0], args[1], args[2]
+if ORIENT not in ('l', 'p') or MODE not in ('stills', 'anim', 'blend'): raise SystemExit('usage: -- <l|p> <stills|anim|blend> <outdir> <WxH> <samples> [t1,...]')
 W, H = (int(x) for x in args[3].split('x'))
 SPP = int(args[4])
 TIMES = [float(x) for x in args[5].split(',')] if MODE == 'stills' else []

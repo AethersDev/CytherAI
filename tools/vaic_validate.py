@@ -63,6 +63,8 @@ DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v3.json"
 DEFAULT_MATRIX = ROOT / "vaic/evaluator-matrix.v0.json"
 
 RESULTS = {"PASS", "FAIL", "NOT_EVALUATED"}
+# the release judges these scopes and nothing else, so a row cannot leave judgment by being relabelled
+SCOPES = {"projection", "origin"}
 # A successor corpus (one that names what it `supersedes`) carries a transition record on
 # every row: CARRIED_FORWARD — the requirement is unchanged and re-bound to the successor
 # surface — or SUPERSEDED — the mechanism it governed retired. A superseded obligation is
@@ -73,7 +75,13 @@ RESULTS = {"PASS", "FAIL", "NOT_EVALUATED"}
 DISPOSITIONS = {"CARRIED_FORWARD", "SUPERSEDED"}
 EFFECTIVE = ("PASS", "FAIL", "NOT_EVALUATED", "SUPERSEDED")
 IDENTITY_FIELDS = ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash")
+# Two of a receipt's identities are projections of its build: the same build cannot have carried
+# other bytes, so a mismatch there is contradiction. The record and the policy are not served and
+# move without moving the build; a receipt that names an older one is history, as a moved build is.
+BUILD_PROJECTIONS = ("artifact_manifest_hash", "grammar_hash")
 DIGEST = re.compile(r"[0-9a-f]{64}")
+BUILD = re.compile(r"[0-9A-F]{16}")
+DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 
 # Identities are separated by epistemic role and never collapsed into one digest, so a
 # receipt can state exactly what moved: a verifier-only change must not pretend the
@@ -87,7 +95,7 @@ IDENTITY_COVERAGE = {
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
-        "tools/test-api.py", "tools/test-boundary.js", "tools/render-seal.py",
+        "tools/test-api.py", "tools/test-boundary.js", "tools/render-seal.py", "tools/canon.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }
@@ -144,9 +152,11 @@ class CorpusError(ValueError):
 
 
 def load_json(path: Path) -> dict[str, Any]:
+    # ValueError covers malformed JSON, bytes that are not UTF-8 and an integer past Python's
+    # digit limit; RecursionError, nesting deeper than the parser descends. All are the data's.
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:
         raise CorpusError(f"cannot load {path}: {exc}") from exc
     if not isinstance(value, dict):
         raise CorpusError(f"{path}: root must be an object")
@@ -245,7 +255,8 @@ def anchor_sites(source: str, anchor: str) -> list[int]:
     return [source.count("\n", 0, match.start()) + 1 for match in pattern.finditer(source)]
 
 
-def evidence_defect(root: Path, reference: str, observed_build: str, historical: bool = False) -> str | None:
+def evidence_defect(root: Path, reference: str, observed_build: str, historical: bool = False,
+                    result: str | None = None) -> str | None:
     """Why this evidence reference does not resolve, or None when it does.
 
     A location is not an identity. A citation resolves through the identity that
@@ -253,9 +264,12 @@ def evidence_defect(root: Path, reference: str, observed_build: str, historical:
     lines above the cited code cannot invalidate a receipt and deleting the cited
     object cannot silently keep one alive. A HISTORICAL receipt (one observed on an
     earlier build) may also resolve through the declared archive snapshots, which is
-    how a retired file keeps resolving the evidence that cited it.
+    how a retired file keeps resolving the evidence that cited it. A ledger observation
+    backs only the result it recorded: a PASS cannot cite an observation of a FAIL.
     """
     path_text, separator, anchor = reference.partition("#")
+    if separator and not anchor:
+        return f"cites an empty anchor in {path_text}"
     if path_text in RETIRED and not historical:
         return f"cites {path_text}, which is retired and not in this build"
     if path_text not in COVERED and path_text not in RETIRED:
@@ -270,13 +284,16 @@ def evidence_defect(root: Path, reference: str, observed_build: str, historical:
     if path.suffix == ".json":
         try:
             document = json.loads(path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
+        except (ValueError, RecursionError):
             return f"cites unparseable {path_text}"
-        observation = document.get("observations", {}).get(anchor)
+        observations = document.get("observations") if isinstance(document, dict) else None
+        observation = observations.get(anchor) if isinstance(observations, dict) else None
         if not isinstance(observation, dict):
             return f"cites absent observation {anchor!r} in {path_text}"
         if observation.get("artifact_build") != observed_build:
             return f"cites observation {anchor!r}, which was not made on build {observed_build}"
+        if observation.get("result") not in (None, result):
+            return f"cites observation {anchor!r}, which recorded {observation.get('result')}, not {result}"
         return None
     for path in present:
         sites = anchor_sites(path.read_text(encoding="utf-8"), anchor)
@@ -286,29 +303,24 @@ def evidence_defect(root: Path, reference: str, observed_build: str, historical:
 
 
 def dependency_cycle(edges: dict[str, list[str]]) -> list[str] | None:
-    """Walks an edge map of shape-valid rows only; an unknown node cannot participate."""
-    visiting: set[str] = set()
+    """Walks an edge map of shape-valid rows only; an unknown node cannot participate.
+
+    Iterative, so a long acyclic chain is a judgment and never a RecursionError."""
     visited: set[str] = set()
-
-    def walk(node: str, path: list[str]) -> list[str] | None:
-        if node in visiting:
-            return path[path.index(node):] + [node]
-        if node in visited:
-            return None
-        visiting.add(node)
-        for child in edges[node]:
-            if child in edges:
-                found = walk(child, path + [child])
-                if found:
-                    return found
-        visiting.discard(node)
-        visited.add(node)
-        return None
-
-    for node in edges:
-        found = walk(node, [node])
-        if found:
-            return found
+    for start in edges:
+        if start in visited:
+            continue
+        path, children = [start], [iter(edges[start])]
+        while path:
+            child = next((c for c in children[-1] if c in edges), None)
+            if child is None:
+                visited.add(path.pop())
+                children.pop()
+            elif child in path:
+                return path[path.index(child):] + [child]
+            elif child not in visited:
+                path.append(child)
+                children.append(iter(edges[child]))
     return None
 
 
@@ -339,6 +351,18 @@ def verifier_binding(value: Any) -> tuple[str, str | None]:
     if isinstance(value, str) and DIGEST.fullmatch(value):
         return "DIGEST", value
     return "MALFORMED", None
+
+
+def receipt_identity(receipt: dict[str, Any]) -> tuple:
+    """What a receipt observed and who observed it; two receipts with one identity make history ambiguous.
+
+    The candidate is the build, the record and the policy. A recorded verifier is one observer;
+    EXTERNAL is many (Chromium and WebKit, say), told apart by the observation each cites.
+    Evidence enters as text, so a malformed list still yields an identity."""
+    observer = receipt.get("verification_identity")
+    if observer == EXTERNAL:
+        observer = (EXTERNAL, *map(str, receipt.get("evidence") or ()))
+    return (receipt.get("artifact_build"), receipt.get("record_hash"), receipt.get("policy_hash"), observer)
 
 
 def distribution(counts: Counter, licensed: bool) -> dict[str, Any]:
@@ -402,7 +426,10 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         errors.append("deploy.paths must declare the deployable set")
     for path in undeclared:
         errors.append(f"deploy.paths declares {path}, which is not in the tree")
-    expected_identities = {
+    absent = sorted(path for path in COVERED if not (root / path).is_file())
+    for path in absent:
+        errors.append(f"identity file {path} is missing")
+    expected_identities = {} if absent else {
         "record_hash": sha256_file(root / "js/manifest.js"),
         "kernel_hash": shasum_manifest_hash(root, list(IDENTITY_COVERAGE["kernel_hash"])),
         "grammar_hash": shasum_manifest_hash(root, list(IDENTITY_COVERAGE["grammar_hash"])),
@@ -498,6 +525,10 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
             errors.append(f"{oid}: invalid mandatory_source {row['mandatory_source']!r}")
         if row["mandatory_source"] in {"core", "grammar"} and row["severity"] != "mandatory":
             errors.append(f"{oid}: inherited core/grammar obligation must be mandatory")
+        if row["scope"] not in SCOPES:
+            errors.append(f"{oid}: scope {row['scope']!r} is none the release judges")
+        elif row["mandatory_source"] in {"core", "grammar"} and row["scope"] != "projection":
+            errors.append(f"{oid}: inherited core/grammar obligation must be judged in the projection")
         if row["relation"] not in declared_relations:
             errors.append(f"{oid}: undeclared relation {row['relation']!r}")
         if row["relation"] in forbidden:
@@ -538,8 +569,9 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
             if not evaluation.get("reason"):
                 errors.append(f"{oid}: NOT_EVALUATED requires a reason")
 
-        bindings: list[str] = []
-        seen: set[tuple[str, str]] = set()
+        current: list[str] = []         # the results of the receipts bound to this candidate
+        latest: str | None = None       # the result of the latest typed receipt, of any build
+        seen: set[tuple] = set()
         for position, receipt in enumerate(receipts):
             label = f"{oid} receipt[{position}]"
             defects = shape_defects(receipt, RECEIPT_TYPES, label)
@@ -550,12 +582,19 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
                 errors.append(f"{label}: evaluator {receipt['evaluator']!r} is not authorized")
             if receipt["coverage"] not in required_classes:
                 errors.append(f"{label}: coverage {receipt['coverage']!r} is not licensed by the obligation")
-            if receipt["result"] != result:
-                errors.append(f"{label}: result does not match the obligation result")
+            if receipt["result"] not in {"PASS", "FAIL"}:
+                errors.append(f"{label}: an observation is a PASS or a FAIL, not {receipt['result']!r}")
+                continue
+            latest = receipt["result"]
             if not receipt["environment"]:
                 errors.append(f"{label}: environment must be explicit")
             if not receipt["method"]:
                 errors.append(f"{label}: method must be explicit")
+            if not BUILD.fullmatch(receipt["artifact_build"]):
+                errors.append(f"{label}: artifact_build is not a build identity")
+                continue                # a receipt that names no build binds nothing
+            if not DATE.fullmatch(receipt["observed_at"]):
+                errors.append(f"{label}: observed_at is not a date")
 
             # An observation binds BOTH the candidate it was made on and the verifier
             # that produced it; either moving expires its authority over the candidate
@@ -570,27 +609,27 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
                 continue
             verifier_current = state == EXTERNAL or (
                 state == "DIGEST" and digest == candidate.get("verification_identity"))
-            # a receipt is identified by what it observed and who observed it; two
-            # receipts with one identity make admitted history ambiguous to audit
-            identity = (observed_build, receipt["verification_identity"])
+            identity = receipt_identity(receipt)
             if identity in seen:
-                errors.append(f"{label}: duplicate receipt identity {identity[0]} / "
-                              f"{identity[1][:12]}")
+                errors.append(f"{label}: duplicate receipt identity {observed_build} / "
+                              f"{receipt['verification_identity'][:12]}")
             seen.add(identity)
-            malformed_identity = False
+            malformed_identity, moved = False, False
             for identity in IDENTITY_FIELDS:
                 value = receipt[identity]
                 if not DIGEST.fullmatch(value):
                     errors.append(f"{label}: {identity} is not a sha256 digest")
                     malformed_identity = True
-                # Contradiction requires the receipt to claim this exact candidate AND
-                # this exact verifier: the same verifier on the same build could not
-                # have recorded a different product digest. A receipt from an older
-                # verification epoch is history, and its digests are that epoch's.
                 elif observed_build == build and verifier_current and value != candidate.get(identity):
-                    errors.append(f"{label}: claims build {build} but its {identity} "
-                                  f"is another candidate's")
-                    malformed_identity = True
+                    # Contradiction requires the receipt to claim this exact candidate AND
+                    # this exact verifier: the same verifier on the same build could not
+                    # have recorded different served bytes. A record or policy that moved
+                    # under the build is a newer candidate, and the receipt its history.
+                    if identity in BUILD_PROJECTIONS:
+                        errors.append(f"{label}: claims build {build} but its {identity} "
+                                      f"is another candidate's")
+                        malformed_identity = True
+                    moved = True
             if malformed_identity:
                 continue                # an unresolvable identity binds nothing
 
@@ -604,24 +643,34 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
                     continue
                 # evidence resolves against the build the observation names, so a
                 # historical receipt keeps pointing at the record it was drawn from
-                defect = evidence_defect(root, reference, observed_build, historical=observed_build != build)
+                defect = evidence_defect(root, reference, observed_build, historical=observed_build != build,
+                                         result=receipt["result"])
                 if defect:
                     errors.append(f"{label}: {defect}")
                     resolved = False
             if not resolved:
                 continue                # unresolved evidence cannot license anything
-            current_binding = observed_build == build and verifier_current
-            if current_binding and oid in superseded:
-                errors.append(f"{label}: a superseded obligation cannot be observed on build {build}, "
-                              f"which does not ship its mechanism")
-                continue
-            bindings.append("CURRENT" if current_binding else "STALE")
+            if observed_build == build and verifier_current and not moved:
+                if oid in superseded:
+                    errors.append(f"{label}: a superseded obligation cannot be observed on build {build}, "
+                                  f"which does not ship its mechanism")
+                    continue
+                current.append(receipt["result"])
 
-        # the observation stands as recorded; only a receipt bound to this candidate
-        # licenses that observation to speak for it — and a superseded obligation is not
-        # owed by it at all
+        # The observations stand as recorded, every one of them: a FAIL appended after a
+        # history of PASS is a regression, and a later PASS a fix, never corruption. The row's
+        # result is a derived summary that may not lie: the verdict of its receipts bound to
+        # this candidate, where a current FAIL is never outvoted (compensatory scoring is
+        # false), or else its latest observation. Only a current receipt licenses the result to
+        # speak for the candidate, and a superseded obligation is not owed by it at all.
+        if current:
+            verdict = "FAIL" if "FAIL" in current else "PASS"
+            if result != verdict:
+                errors.append(f"{oid}: result {result} is not the verdict of its current receipts ({verdict})")
+        elif latest and result != latest:
+            errors.append(f"{oid}: result {result} is not its latest observation's ({latest})")
         effective[oid] = "SUPERSEDED" if oid in superseded else \
-            result if "CURRENT" in bindings else "NOT_EVALUATED"
+            result if current else "NOT_EVALUATED"
 
     # ---- GRAPH -------------------------------------------------------------
     edges = {row["id"]: [link for link in row["depends_on"] if isinstance(link, str)]
@@ -633,8 +682,9 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
     bespoke = sum(row["relation_implementation"] != "reusable" for row in shaped)
     ratio = bespoke / len(shaped) if shaped else 0.0
     kill_ratio = falsification.get("bespoke_relation_kill_ratio", 0.25)
-    if isinstance(kill_ratio, bool) or not isinstance(kill_ratio, (int, float)):
-        errors.append(f"bespoke_relation_kill_ratio must be a number, not {type(kill_ratio).__name__}")
+    if isinstance(kill_ratio, bool) or not isinstance(kill_ratio, (int, float)) or not 0 <= kill_ratio <= 1:
+        # NaN compares false with everything, so an unchecked one would disable the criterion
+        errors.append(f"bespoke_relation_kill_ratio must be a number in [0, 1], not {kill_ratio!r}")
         kill_ratio = 0.25
     if ratio > kill_ratio:
         errors.append(f"bespoke relation ratio {ratio:.1%} exceeds kill criterion {kill_ratio:.1%}")
@@ -667,6 +717,7 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         "origin": "VALID" if origin_valid else "NOT_CERTIFIED",
         "release": "CERTIFIED" if projection_valid and origin_valid else "NOT_CERTIFIED",
         "superseded": sorted(superseded),
+        "effective": effective if licensed else {},
         "bespoke_relation_ratio": ratio,
         "errors": errors,
     }
@@ -675,11 +726,11 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--corpus", type=Path, default=DEFAULT_CORPUS)
-    parser.add_argument("--matrix", type=Path, default=DEFAULT_MATRIX)
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     try:
-        summary = validate(load_json(args.corpus), load_json(args.matrix))
+        # one matrix only: the one policy_hash names, so the judgment and its binding cannot differ
+        summary = validate(load_json(args.corpus), load_json(DEFAULT_MATRIX))
     except CorpusError as exc:
         # the corpus could not be read at all: still a judgment about the input
         print(f"VAIC-0 STRUCTURE INVALID: {exc}", file=sys.stderr)

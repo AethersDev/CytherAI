@@ -7,10 +7,16 @@ fixed input the receipt names, not from repository state) or **ILLUSTRATIVE**
 (claim-free imagery whose status is stated in adjacent HTML). Every entry records the reproduction
 command and the output digest; a promoted asset with no receipt is a defect.
 `tools/test-assets.py` (a `./verify.sh` stage) re-reads these receipts: every output's
-bytes must match its digest and size, every DERIVED entry's state checksum and
-canonical parameters must equal the current manifest's, and every icon and plate the
-web manifest and the pages name must have an entry — so a manifest edit stales the OG
-card and the icons loudly, as the poster already was by `tools/test-poster.py`.
+bytes must match its digest and size, every live DERIVED entry's state checksum and
+canonical parameters must equal the current manifest's, and every served file under
+`assets/` and `film/`, the icon, and every icon and card the web manifest and the pages
+name must have an entry.
+
+An entry is the record of a promotion. Those of retired assets (OG-CARD-V1, ICON-V1,
+SURFACE-TERMINAL, MOT-001/002) stand as written: the tools they name retired with them
+(`backup/README.md` maps every path that moved), a retired DERIVED entry stays bound to the
+state it records, and their Deployment lines describe the build identity of their day; since
+2026-09-08 it has been a projection of every served byte.
 
 ---
 
@@ -50,6 +56,44 @@ card and the icons loudly, as the poster already was by `tools/test-poster.py`.
 | Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame, the Arabic joined and its marks unclipped; the ring and the current visible right of the statement. |
 | Deployment | `deploy.sh` allowlist only; named by `ar/index.html` and `ar/contact.html`. Not precached, not in the SRI fingerprint; no page requests it. |
 | Supersedes | Nothing; added 2026-10-14 with the Arabic front door. |
+| Owner sign-off | PENDING |
+
+---
+
+## FILM — the front door's film and its final composition
+
+| | |
+|---|---|
+| Asset ID | IMG-011 |
+| Source | `tools/render-film.py` (Blender 5.1, Cycles on the Apple GPU), rendered offline once per orientation |
+| Classification | **ILLUSTRATIVE** — a conceptual visualization; the page says so under the film (*A conceptual visualization. It measures no product.*) and claims no correspondence to a system event |
+| Command | `TL=24 blender -b -P tools/render-film.py -- l anim <dir> 1920x1080 64` and `TL=14 … -- p anim <dir> 1080x1920 64`; the frames encoded as the CRF 23 master (`ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p -movflags +faststart`), its last frame kept as the poster; the delivered film re-encoded from the master: `ffmpeg -i <master> [-vf scale=1440:810:flags=lanczos] -c:v libx264 -preset veryslow -tune film -crf 29 -pix_fmt yuv420p -movflags +faststart -an` (docs/architecture.md, docs/deploy.md §5n) |
+| Canonical inputs | None — the scene is the script. |
+| Output | `film/film-landscape.mp4` · 1440×810, 12 s, H.264 High · 4,081,008 bytes; `film/film-portrait.mp4` · 810×1440, 12 s · 3,502,599 bytes; `film/final-landscape.jpg` · 1920×1080 · 273,896 bytes; `film/final-portrait.jpg` · 810×1440 · 155,883 bytes |
+| SHA-256 | film-landscape.mp4 `fb5d1ce53e76e96846418b9f4be21b067be43bc89412ec3a281ba02494899972` · film-portrait.mp4 `cfddb2b23d1019ae487a08db4a2bb59323c99bc6ad4771748ddd620ef6bb9d37` · final-landscape.jpg `a070f7443f547eead2ec1ed8ebddc80c9b3bf561cb3587e7ebed0fc1750c8c7c` · final-portrait.jpg `2682827ce8a62f83e93c31fc39a339f0b192993415bba80354cf724dab3e78bf` |
+| Determinism | **Not reproducible byte for byte.** Cycles sampled under a wall-clock limit (`TL`, seconds per frame), so another machine or load samples differently; the render frames were not kept. The CRF 23 masters are `git show e40fa72:film/film-<orientation>.mp4`, and the delivered films are reproducible from them by the command above, given the same x264. The receipt binds these bytes, not the renderer. |
+| Acceptance checks | Every `moov` before its `mdat` (faststart); each poster is its film's last frame (PSNR of the poster, scaled to the film, against the film's decoded last frame: 39.1 dB landscape, 39.3 dB portrait; 2026-10-18). Reading ink over the film is the browser obligation CY-SEM-003, re-observed on every build. |
+| Deployment | `deploy.sh` allowlist; `js/film.js` names the films by orientation; the posters are precached by `sw.js` (the still composition stands offline). `tools/test-site.py` holds every film the page names to `deploy.paths`, and back. |
+| Commit | the film was published on 2026-10-12 and re-encoded lighter on 2026-10-13 (`git log -- film/film-landscape.mp4`) |
+| Owner sign-off | PENDING |
+
+---
+
+## SYSTEMS — the three sequences
+
+| | |
+|---|---|
+| Asset ID | IMG-012 |
+| Source | `tools/render-systems.py` (Blender 5.1, Cycles on the Apple GPU), one six-second sequence per system in the film's materials |
+| Classification | **ILLUSTRATIVE** — each shows only what its system's shipped page states (the script's header); the front door gives each its source |
+| Command | `TL=10 blender -b -P tools/render-systems.py -- <adii\|awcos\|cad> anim <dir> 1280x720 48`; the frames encoded with `ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p -movflags +faststart`, the last frame kept as the poster |
+| Canonical inputs | None — the scenes are the script. |
+| Output | `film/sys-adii.mp4` · 1280×720, 6 s · 718,353 bytes; `film/sys-awcos.mp4` · 594,267 bytes; `film/sys-cad.mp4` · 715,829 bytes; `film/sys-adii.jpg` · 1280×720 · 78,273 bytes; `film/sys-awcos.jpg` · 88,703 bytes; `film/sys-cad.jpg` · 78,003 bytes |
+| SHA-256 | sys-adii.mp4 `7179b4fe9e9bdffaeb2765093a89b46cf6058e97191d7b0a1e29ed5dddc9a4a3` · sys-awcos.mp4 `a9c6526d38b6f2677dcdf9431dbacbaf8b2676ff555c882438a75e4a8ab09edc` · sys-cad.mp4 `f327e24a7b9155d7c9aca92393714681ac708588ad3eb67e9f0eb22c6135c38c` · sys-adii.jpg `edabf54454f253a10df668303441cb2727f0a8810ee716714063bd1b1fcf1ff9` · sys-awcos.jpg `66a85294ec3ec942a38c06e48e19ebc86f1511711801d7aabed37d85a73289bd` · sys-cad.jpg `eca8e93d1bab14218fa6ceee7aa5f1a7ad88e12df4df709bb8e7310d56bd4e85` |
+| Determinism | **Not reproducible byte for byte**, as IMG-011: Cycles under a wall-clock limit, frames not kept. The receipt binds these bytes. |
+| Acceptance checks | Faststart; each poster is its sequence's last frame (PSNR 43.9 dB ADII, 44.0 dB AWC-OS, 42.9 dB CytherCAD; 2026-10-18). Known defects, recorded 2026-10-18 and open: in AWC-OS's, the pale alternative slab shares the refused slab's lane and passes through it (frames 95–101, 3.92–4.17 s); in CytherCAD's, two refused tokens overlap (≈ 82 %), so the poster shows two of the three. Both need a re-render (`tools/render-systems.py`, lines that set the lanes and the stop heights). |
+| Deployment | `deploy.sh` allowlist; each `<video class="seq">` names its poster and `data-src`; warmed one at a time once the film is still (`js/film.js`). |
+| Commit | published on 2026-10-12 (`git log -- film/sys-adii.mp4`) |
 | Owner sign-off | PENDING |
 
 ---

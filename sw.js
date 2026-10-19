@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-B76DECC774B9AFBB';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-39E089F84EA28E7D';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -19,9 +19,9 @@ var ASSETS = [
   'pages/terms.html',
   // the front door: its script, its stylesheet, the final composition it stands on when the film
   // cannot play (offline included), and the fonts it draws its type with (shared with adii/)
-  'js/film.js?v=139f30988da3',
+  'js/film.js?v=256209e162df',
   'js/theme.js?v=0d6f0fa62220',
-  'css/film.css?v=82e9f5c236df',
+  'css/film.css?v=bde14c752567',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'adii/fonts/newsreader-variable.woff2',
@@ -30,7 +30,7 @@ var ASSETS = [
   'fonts/ibm-plex-sans-arabic-300.woff2',
   'fonts/ibm-plex-sans-arabic-400.woff2',
   // subpage stylesheet
-  'css/cytherai.css?v=8777d189d93a',
+  'css/cytherai.css?v=b5e32dbc846e',
   'manifest.webmanifest',
   'icon.svg'
 ];
@@ -101,7 +101,7 @@ self.addEventListener('fetch', function (e) {
   // ranges a cached 200 cannot answer, and the cache-on-fetch below would otherwise
   // copy every video and document a reader opens into this build's cache.
   if (e.request.headers.has('range') || e.request.destination === 'video' || e.request.destination === 'audio' ||
-      /\.(mp4|pdf|pptx)$/i.test(new URL(e.request.url).pathname)) return;
+      /\.(mp4|pdf)$/i.test(new URL(e.request.url).pathname)) return;
 
   // A navigation to a directory requests "<dir>/", and cache matching is exact — it
   // never pairs with the precached "<dir>/index.html". Substituting the key is the
@@ -116,8 +116,12 @@ self.addEventListener('fetch', function (e) {
     caches.open(CACHE).then(function (cache) {
       return cache.match(key).then(function (cached) {
         if (cached) return cached;
-        // Not cached — go to network, cache the response
-        return fetch(e.request).then(function (response) {
+        // A page this build did not precache (adii/, awc-os/) is the network's: cached here, its HTML would stand for
+        // this build's whole life, and it was written under a key the lookup above never reads.
+        if (e.request.mode === 'navigate') return fetch(e.request);
+        // Anything else is cached for this build, fetched past the HTTP cache as install does ('no-cache' revalidates):
+        // bytes of the previous build the browser still holds fresh (Pages sends max-age=600) are never frozen here.
+        return fetch(new Request(e.request, { cache: 'no-cache' })).then(function (response) {
           if (response.ok) cache.put(e.request, response.clone());
           return response;
         });
