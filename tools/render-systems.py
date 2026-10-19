@@ -141,8 +141,9 @@ elif WHICH == 'awcos':
     def travel(t, t0, t1, x0=-6.0, x1=-0.25): return x0 + (x1 - x0) * ss(t0, t1, t)
     # 1: arrives, passes, continues: executed
     key(p1, 'location', [(travel(t, 0.3, 1.5) + 1.9 * ss(1.6, 2.6, t), -2.6, lanes[0]) for t in times])
-    # 2: arrives, is turned back: refused; the compliant alternative passes
-    key(p2, 'location', [(travel(t, 1.4, 2.6) - 1.4 * ss(2.8, 3.4, t), -2.6, lanes[1]) for t in times])
+    # 2: arrives, is turned back: refused, and set aside (up out of its lane and back from it) so the compliant
+    #    alternative passes in the lane it left; until 2026-10-19 it stayed in the lane and the alternative passed through it
+    key(p2, 'location', [(travel(t, 1.4, 2.6) - 1.4 * ss(2.8, 3.4, t), -2.6 + 0.5 * ss(2.9, 3.4, t), lanes[1] + 0.65 * ss(2.9, 3.4, t)) for t in times])
     key(alt, 'location', [(travel(t, 3.4, 4.3, -6.0, -0.25) + 1.7 * ss(4.35, 5.2, t), -2.6, lanes[1]) for t in times])
     # 3: fails before the engine: blocked, nothing passes
     key(p3, 'location', [(travel(t, 3.0, 4.6, -6.0, -1.1), -2.6, lanes[2]) for t in times])
@@ -161,14 +162,18 @@ else:
     toks = []
     for i in range(14):
         o = add('tok%d' % i, mesh_box('tok', 0.42, 0.05, 0.42), CERAMIC); toks.append(o)
-    bad = {3, 8, 12}
+    # the refused, each on its own row (0.56 apart; until 2026-10-19 two shared one and merged): each stops a fraction
+    # short of the ring and stays, stepped back out of the stream so the tokens that follow pass in front of it, never
+    # through it
+    bad = {3: -1.46, 8: -0.34, 12: -0.90}
     for i, o in enumerate(toks):
-        t0 = 0.2 + 0.22 * i; z = -0.9 + 0.55 * math.sin(1.7 * i); y = -2.6
-        if i in bad:   # stops a fraction short of the ring and stays
-            key(o, 'location', [(-6 + 5.8 * ss(t0, t0 + 1.2, t), y, z) for t in times])
-        else:          # aligns and passes, into the part
-            key(o, 'location', [(-6 + 5.8 * ss(t0, t0 + 1.2, t) + 2.3 * ss(t0 + 1.25, t0 + 1.7, t), y, z + (-1.0 - z) * ss(t0 + 1.25, t0 + 1.7, t)) for t in times])
-            key(o, 'scale', [(1 - ss(t0 + 1.6, t0 + 1.75, t),) * 3 for t in times])
+        t0 = 0.2 + 0.22 * i; z = bad.get(i, -0.9 + 0.55 * math.sin(1.7 * i)); y = -2.6
+        if i in bad:
+            key(o, 'location', [(-6 + 5.8 * ss(t0, t0 + 1.2, t), y + 0.45 * ss(t0 + 1.1, t0 + 1.3, t), z) for t in times])
+        else:          # aligns and passes, into the part, leaving the ring as it reaches it (a token that lingered there
+                       # was caught by the next, 0.22 s behind it)
+            key(o, 'location', [(-6 + 5.8 * ss(t0, t0 + 1.2, t) + 2.3 * ss(t0 + 1.2, t0 + 1.55, t), y, z + (-1.0 - z) * ss(t0 + 1.2, t0 + 1.55, t)) for t in times])
+            key(o, 'scale', [(1 - ss(t0 + 1.45, t0 + 1.6, t),) * 3 for t in times])
     # the part: a stepped block with a bore, built in three operations past the ring
     base = add('base', mesh_box('base', 2.2, 1.3, 0.6), PALE); base.location = (2.3, -2.0, -1.5)
     step = add('step', mesh_box('step', 1.1, 1.3, 0.6), PALE); step.location = (1.75, -2.0, -0.9)
