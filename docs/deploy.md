@@ -1285,6 +1285,8 @@ viewports, 1,534 element samples, none below 4.5:1, worst 4.86:1 (CY-SEM-003 PAS
 timer or playing media in every profile, every re-rendered sequence playing to its last frame, the worker caching this
 build and serving it offline (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_EAA945BC838E9BBC`), 56 of 56 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
