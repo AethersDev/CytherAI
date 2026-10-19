@@ -1245,6 +1245,8 @@ viewports, 1,534 element samples, none below 4.5:1, worst 4.86:1, unchanged to t
 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
 build and serving it offline (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_39E089F84EA28E7D`), 56 of 56 served paths matching the artifact.
+
 **Open, and the owner's.** The AWC-OS and CytherCAD sequences have recorded animation defects (IMG-012): a re-render.
 The ADII CVs publish four people's phone numbers and personal email addresses; whether they consented is not recorded.
 No browser floor is declared; below Safari 15.4 and Chrome 108 the stage now keeps its height, and an engine
