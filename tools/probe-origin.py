@@ -11,7 +11,8 @@ www host; the headers on the root; the referrer meta on every page as served. PA
 Its receipts are EXTERNAL (it is not run by ./verify.sh: it needs the network); the ledger records the harness and
 this file's digest as harness_version. Until 2026-10-18 it was an untracked scratch script, originprobe.py.
 --record, after a PASS of the stamped candidate, appends the observation to the evidence ledger, its CY-ORIGIN-001
-receipt to the corpus (append only) and its line to docs/deploy.md's newest build record; commit them on master.
+receipt to the corpus (append only) and its line to the build record in docs/deploy.md that names the build;
+commit them on master.
 """
 import hashlib, json, subprocess, sys, time
 from pathlib import Path
@@ -146,10 +147,11 @@ def record(o):
     row["evaluation"]["receipts"].append(receipt)
     row["evaluation"]["result"] = "PASS"
     doc = doc_path.read_text(encoding="utf-8")
-    marker = "**Open, and the owner's.**"   # the newest build record's last paragraph: the origin line goes before it
-    if doc.count(marker) != 1:
-        raise SystemExit("docs/deploy.md: the newest build record's marker is not unique: nothing recorded")
-    doc = doc.replace(marker, f"The live origin: CY-ORIGIN-001 PASS (`#{name}`), {n} of {n} served paths matching the artifact.\n\n" + marker)
+    at = doc.find(f"Build `{o['artifact_build']}`")   # the build's own record; the origin line closes it
+    end = doc.find("\n## ", at)
+    if at < 0 or end < 0:
+        raise SystemExit(f"docs/deploy.md has no build record naming {o['artifact_build']}: nothing recorded")
+    doc = doc[:end] + f"\nThe live origin: CY-ORIGIN-001 PASS (`#{name}`), {n} of {n} served paths matching the artifact.\n" + doc[end:]
     ledger_path.write_text(json.dumps(ledger, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     corpus_path.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     doc_path.write_text(doc, encoding="utf-8")

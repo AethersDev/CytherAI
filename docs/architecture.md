@@ -220,7 +220,7 @@ muted inline autoplay and VoiceOver.
   figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Re-render
   both cards (`python3 tools/render-og-film.py`, `… ar`) if the statement moves, and record both digests.
 - Add a theme token: give it a value in `:root` and in the light block of `css/film.css`; the ink law reads both.
-- Re-render a film or a sequence: `blender -b -P tools/render-film.py -- <l|p> anim <dir> …`
+- Re-render a film or a sequence: `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> anim <dir> …`
   or `tools/render-systems.py` (usage in each script's header; the published films used 64
   samples with `TL=24`/`TL=14` landscape/portrait, the sequences 48 with `TL=10`), encode with
   `ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p
