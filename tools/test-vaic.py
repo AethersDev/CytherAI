@@ -67,7 +67,8 @@ class VaicCorpusTests(unittest.TestCase):
     def is_current(receipt, candidate):
         """Fully current: every binding coordinate matches, not just the build."""
         return receipt.get("artifact_build") == candidate["build_identity"] and \
-            receipt.get("verification_identity") in (candidate["verification_identity"], VAIC.EXTERNAL)
+            receipt.get("verification_identity") in (candidate["verification_identity"], VAIC.EXTERNAL) and \
+            all(receipt.get(k) == candidate[k] for k in ("record_hash", "policy_hash"))
 
     @classmethod
     def current_receipt(cls, corpus):
@@ -93,14 +94,14 @@ class VaicCorpusTests(unittest.TestCase):
         return found
 
     @staticmethod
-    def receipts_by_key(corpus) -> dict[tuple[str, str, str], dict]:
-        """A receipt is identified by what it observed and who observed it."""
-        return {(row["id"], receipt.get("artifact_build"), receipt.get("verification_identity")): receipt
+    def receipts_by_key(corpus) -> dict[tuple, dict]:
+        """A receipt is identified by what it observed and who observed it (VAIC.receipt_identity)."""
+        return {(row["id"], *VAIC.receipt_identity(receipt)): receipt
                 for row in corpus["obligations"]
                 for receipt in row["evaluation"].get("receipts") or []}
 
     @classmethod
-    def receipt_keys(cls, corpus) -> set[tuple[str, str, str]]:
+    def receipt_keys(cls, corpus) -> set[tuple]:
         return set(cls.receipts_by_key(corpus))
 
     @staticmethod
@@ -111,19 +112,23 @@ class VaicCorpusTests(unittest.TestCase):
         asks "has admitted history ever disappeared at any earlier transition?" — a
         receipt admitted in commit A and dropped in B is invisible from C. Walking the
         canonical ref rather than HEAD also means a bogus receipt committed on a branch
-        that is never merged creates no institutional history at all.
+        that is never merged creates no institutional history at all. A missing ref is
+        an error, never an empty history: a fresh clone has origin/main and no master,
+        and a walk over nothing passes every guard (git branch master origin/main).
         """
+        exists = subprocess.run(["git", "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"],
+                                cwd=root, capture_output=True)
+        assert exists.returncode == 0, f"{ref} must exist to serve as the admission lineage"
         states = []
         for path in lineage:
-            listing = subprocess.run(["git", "log", "--format=%H", ref, "--", path],
-                                     cwd=root, capture_output=True, text=True)
-            if listing.returncode != 0:
-                continue
+            # --full-history: a merge that kept one parent's corpus still shows the other's
+            listing = subprocess.run(["git", "log", "--full-history", "--format=%H", ref, "--", path],
+                                     cwd=root, capture_output=True, text=True, check=True)
             for commit in reversed(listing.stdout.split()):
                 blob = subprocess.run(["git", "show", f"{commit}:{path}"],
                                       cwd=root, capture_output=True, text=True)
                 if blob.returncode == 0:
-                    states.append((commit, json.loads(blob.stdout)))
+                    states.append((path, commit, json.loads(blob.stdout)))
         return states
 
     @classmethod
@@ -137,7 +142,7 @@ class VaicCorpusTests(unittest.TestCase):
         """
         live = cls.receipts_by_key(current)
         violations = []
-        for commit, corpus in cls.admitted_states(root, ref, lineage):
+        for _, commit, corpus in cls.admitted_states(root, ref, lineage):
             for key, receipt in cls.receipts_by_key(corpus).items():
                 if key not in live:
                     violations.append(f"{key[0]} receipt admitted in {commit[:9]} has disappeared")
@@ -154,6 +159,25 @@ class VaicCorpusTests(unittest.TestCase):
         already draws between a commitment and a notarization.
         """
         self.assertEqual(self.history_violations(ROOT, self.corpus), [])
+
+    def test_no_admitted_obligation_definition_has_changed(self) -> None:
+        """Admission freezes what an obligation REQUIRES, not only what was observed of it.
+
+        Receipts certify a definition: weakening CY-TEMP-001's bound in place would leave every
+        admitted PASS appearing to certify an obligation nobody tested. A definition changes only
+        by succession (a new corpus file, its rows CARRIED_FORWARD with rebound_fields), so every
+        admitted state of a corpus file must define each of its rows exactly as that file does now;
+        only `evaluation` grows, and its receipts are the other guards' business."""
+        files = {CORPUS: self.corpus}
+        changed = set()
+        for path, commit, corpus in self.admitted_states(ROOT):
+            live = {row["id"]: row for row in files.setdefault(path, VAIC.load_json(ROOT / path))["obligations"]}
+            for row in corpus["obligations"]:
+                now = live.get(row["id"], {})
+                fields = {k for k in row.keys() | now.keys() if k != "evaluation" and row.get(k) != now.get(k)}
+                if fields:
+                    changed.add(f"{path} {row['id']} {sorted(fields)} since {commit[:9]}")
+        self.assertEqual(sorted(changed), [])
 
     def test_the_history_guard_catches_deletion_and_rewriting(self) -> None:
         def receipt(build, verifier, **overrides):
@@ -241,7 +265,8 @@ class VaicCorpusTests(unittest.TestCase):
                 # the predecessor's receipts are a verbatim prefix: re-evaluation appends, never edits
                 old = before["evaluation"]["receipts"]
                 self.assertEqual(row["evaluation"]["receipts"][:len(old)], old, row["id"])
-                changed = {k for k in before if k not in ("version", "evaluation", "transition") and before[k] != row.get(k)}
+                changed = {k for k in before.keys() | row.keys()
+                           if k not in ("version", "evaluation", "transition") and before.get(k) != row.get(k)}
                 if transition["disposition"] == "SUPERSEDED":
                     self.assertEqual(changed, set(), f"{newer} {row['id']}: a superseded row is preserved as written")
                     self.assertEqual(row["evaluation"], before["evaluation"], f"{newer} {row['id']}: a superseded row gains nothing")
@@ -287,7 +312,9 @@ class VaicCorpusTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path, _ = self.scrambled(tmp)
             RESTAMP.stamp(ROOT, path)
-            harness = dict(RESTAMP.HARNESS, **{"tools/test-ledger.js": ["true"], "tools/test-site.py plus tools/test-motion.py": ["true"]})
+            spec = next(iter(RESTAMP.HARNESS.values()))
+            harness = dict(RESTAMP.HARNESS, **{name: {**spec, "command": ["true"]}
+                                               for name in ("tools/test-ledger.js", "tools/test-site.py plus tools/test-motion.py")})
             added = dict(RESTAMP.append(ROOT, path, harness=harness, today="2099-01-01"))
         self.assertTrue(superseded.isdisjoint(added), added)
 
@@ -351,30 +378,112 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertIn("CY-ART-001", result["expired_bindings"])
         self.assertEqual(self.counts(result)["PASS"], self.counts(before)["PASS"] - 1)
 
+    def observed_again(self, corpus, oid, results):
+        """The append-only life of a row: its current receipt moves into history (an earlier build), then
+        each result is observed in turn, every one but the last becoming history as the next build arrives.
+        Nothing recorded is edited; the row's result follows its latest observation, as restamp writes it."""
+        row = next(r for r in corpus["obligations"] if r["id"] == oid)
+        receipts = row["evaluation"]["receipts"]
+        current = copy.deepcopy(next(r for r in receipts if self.is_current(r, corpus["candidate"])))
+        for n, result in enumerate(results):
+            for receipt in receipts:
+                if self.is_current(receipt, corpus["candidate"]):
+                    receipt["artifact_build"] = "%016X" % n      # this build has gone by
+            receipts.append({**current, "result": result})
+            row["evaluation"]["result"] = result
+        return row
+
+    def test_a_regression_appended_after_a_history_of_pass_is_a_fail_not_corruption(self) -> None:
+        """The ledger must be able to record what it exists to catch. A FAIL appended after every PASS this
+        obligation ever recorded is the current verdict; the PASSes stand, unedited, as history."""
+        corpus = copy.deepcopy(self.corpus)
+        history = len(self.observed_again(corpus, "CY-ART-001", [])["evaluation"]["receipts"])
+        row = self.observed_again(corpus, "CY-ART-001", ["FAIL"])
+        result = self.validate(corpus)
+        self.assertEqual(result["structure"], "VALID", result["errors"])
+        self.assertEqual(result["effective"]["CY-ART-001"], "FAIL")
+        self.assertEqual(self.counts(result)["FAIL"], 1)
+        self.assertEqual(result["projection"], "INVALID")
+        self.assertEqual([r["result"] for r in row["evaluation"]["receipts"]], ["PASS"] * history + ["FAIL"])
+
+    def test_a_fix_appended_after_a_failure_passes_and_the_failure_stands_as_history(self) -> None:
+        corpus = copy.deepcopy(self.corpus)
+        self.observed_again(corpus, "CY-ART-001", ["FAIL", "PASS"])
+        result = self.validate(corpus)
+        self.assertEqual(result["structure"], "VALID", result["errors"])
+        self.assertEqual(result["effective"]["CY-ART-001"], "PASS")
+        self.assertEqual(self.observed(result)["FAIL"], 0)     # the row's result is its latest observation
+
     def test_a_historical_failure_does_not_condemn_a_new_candidate(self) -> None:
         corpus = copy.deepcopy(self.corpus)
-        row = next(r for r in corpus["obligations"] if r["id"] == "CY-ART-001")
-        row["evaluation"]["result"] = "FAIL"
-        for receipt in row["evaluation"]["receipts"]:
-            receipt["result"] = "FAIL"
+        self.observed_again(corpus, "CY-ART-001", ["FAIL"])
+        for receipt in next(r for r in corpus["obligations"] if r["id"] == "CY-ART-001")["evaluation"]["receipts"]:
             if self.is_current(receipt, corpus["candidate"]):
-                receipt["artifact_build"] = "0000000000000000"
+                receipt["artifact_build"] = "FFFFFFFFFFFFFFFF"   # a new build: the FAIL is history
         result = self.validate(corpus)
-        self.assertEqual(result["structure"], "VALID")
+        self.assertEqual(result["structure"], "VALID", result["errors"])
         self.assertEqual(self.observed(result)["FAIL"], 1)
         self.assertEqual(self.counts(result)["FAIL"], 0)
         self.assertIn("CY-ART-001", result["expired_bindings"])
 
-    def test_a_current_failure_is_reported_and_is_not_corruption(self) -> None:
+    @staticmethod
+    def observed_now(corpus, oid, evidence, result="PASS"):
+        """A browser observation of THIS candidate on `oid`, citing a code anchor, appended to a copy: the tests below
+        must hold on a build whose browser receipts have not been recorded yet, when no current one exists."""
+        row = next(r for r in corpus["obligations"] if r["id"] == oid)
+        cand = corpus["candidate"]
+        receipt = {**copy.deepcopy(row["evaluation"]["receipts"][-1]), "artifact_build": cand["build_identity"],
+                   "verification_identity": VAIC.EXTERNAL, "evidence": [evidence], "result": result,
+                   **{k: cand[k] for k in VAIC.IDENTITY_FIELDS}}
+        row["evaluation"]["receipts"] = [r for r in row["evaluation"]["receipts"]
+                                         if r["artifact_build"] != cand["build_identity"]] + [receipt]
+        row["evaluation"]["result"] = result
+        return row, receipt
+
+    def test_two_external_observations_of_one_build_are_two_receipts(self) -> None:
+        """EXTERNAL is not one observer: a WebKit receipt beside the Chromium one is two observations of one
+        build, told apart by what each cites; the same observation cited twice is still a duplicate."""
         corpus = copy.deepcopy(self.corpus)
-        row = next(r for r in corpus["obligations"] if r["id"] == "CY-ART-001")
+        row, first = self.observed_now(corpus, "CY-SEM-003", "js/film.js#still")
+        row["evaluation"]["receipts"].append({**copy.deepcopy(first), "evidence": ["js/film.js#tick"]})
+        self.assertEqual(self.validate(corpus)["structure"], "VALID", self.validate(corpus)["errors"])
+        row["evaluation"]["receipts"].append(copy.deepcopy(first))
+        self.assertTrue(any("duplicate receipt identity" in e for e in self.validate(corpus)["errors"]))
+
+    def test_a_current_failure_is_never_outvoted_and_the_row_may_not_say_otherwise(self) -> None:
+        """Compensatory scoring is false: one current FAIL beside a current PASS is the verdict. A row whose
+        result disagrees with its current receipts, or (with none current) its latest observation, is
+        malformed: the summary may not lie about the observations it summarizes."""
+        corpus = copy.deepcopy(self.corpus)
+        row, passed = self.observed_now(corpus, "CY-SEM-003", "js/film.js#still")
+        row["evaluation"]["receipts"].append({**copy.deepcopy(passed), "result": "FAIL", "evidence": ["js/film.js#tick"]})
+        self.assertTrue(any("not the verdict of its current receipts (FAIL)" in e for e in self.validate(corpus)["errors"]))
         row["evaluation"]["result"] = "FAIL"
-        for receipt in row["evaluation"]["receipts"]:
-            receipt["result"] = "FAIL"
         result = self.validate(corpus)
-        self.assertEqual(result["structure"], "VALID")
-        self.assertEqual(self.counts(result)["FAIL"], 1)
-        self.assertEqual(result["projection"], "INVALID")
+        self.assertEqual(result["structure"], "VALID", result["errors"])
+        self.assertEqual(result["effective"]["CY-SEM-003"], "FAIL")
+        lie = copy.deepcopy(self.corpus)
+        next(r for r in lie["obligations"] if r["id"] == "CY-EPI-001")["evaluation"]["result"] = "FAIL"
+        self.assertTrue(any("latest observation" in e for e in self.validate(lie)["errors"]))
+
+    def test_a_pass_cannot_cite_an_observation_of_a_fail(self) -> None:
+        ledger = json.dumps({"observations": {"seen": {"artifact_build": "IRRELEVANT", "result": "FAIL"}}})
+        reference = "vaic/evidence/current-browser-observations.v0.json#seen"
+        self.assertIn("recorded FAIL", self.anchored(ledger, reference, result="PASS"))
+        self.assertIsNone(self.anchored(ledger, reference, result="FAIL"))
+
+    def test_a_moved_record_or_policy_expires_authority_and_a_moved_build_projection_is_contradiction(self) -> None:
+        """The record and the policy are not served, so they move under an unchanged build: a receipt naming
+        the old one is history, and restamp must be able to append its successor. A build projection
+        (the served set, the grammar) cannot differ under one build: that is contradiction."""
+        for field, structure in (("record_hash", "VALID"), ("policy_hash", "VALID"), ("grammar_hash", "INVALID")):
+            with self.subTest(field):
+                corpus = copy.deepcopy(self.corpus)
+                self.observed_now(corpus, "CY-SEM-003", "js/film.js#still")[1][field] = "0" * 64
+                result = self.validate(corpus)
+                self.assertEqual(result["structure"], structure, result["errors"])
+                if structure == "VALID":
+                    self.assertIn("CY-SEM-003", result["expired_bindings"])
 
     def test_a_receipt_claiming_this_build_must_carry_this_candidates_identity(self) -> None:
         corpus = copy.deepcopy(self.corpus)
@@ -386,14 +495,14 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("another candidate" in error for error in result["errors"]))
 
-    def anchored(self, source: str, reference: str = "js/film.js#settled"):
+    def anchored(self, source: str, reference: str = "js/film.js#settled", result: str | None = None):
         """Resolve a reference against a throwaway tree holding just the cited file."""
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             path = root / reference.partition("#")[0]
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(source, encoding="utf-8")
-            return VAIC.evidence_defect(root, reference, "IRRELEVANT")
+            return VAIC.evidence_defect(root, reference, "IRRELEVANT", result=result)
 
     def test_line_drift_cannot_invalidate_an_anchored_citation(self) -> None:
         body = "function settled() {\n  return intro.on === false;\n}\n"
@@ -511,11 +620,17 @@ class VaicCorpusTests(unittest.TestCase):
             "candidate is not an object": lambda c: c.update(candidate=None),
             "falsification is not an object": lambda c: c.update(falsification=[]),
             "kill ratio is null": lambda c: c["falsification"].update(bespoke_relation_kill_ratio=None),
+            "kill ratio is NaN": lambda c: c["falsification"].update(bespoke_relation_kill_ratio=float("nan")),
+            "scope no release judges": lambda c: first(c).update(scope="artifact"),
             "malformed verdict": lambda c: first(c)["evaluation"].update(result="MAYBE"),
             "receipts is not a list": lambda c: first(c)["evaluation"].update(receipts={}),
             "receipt is not an object": lambda c: first(c)["evaluation"]["receipts"].__setitem__(0, 7),
             "malformed digest": lambda c: receipt(c).update(record_hash="zz"),
             "non-string build reference": lambda c: receipt(c).update(artifact_build=123),
+            "build reference is not a build": lambda c: receipt(c).update(artifact_build="not a build"),
+            "observed_at is not a date": lambda c: receipt(c).update(observed_at="test"),
+            "observation is neither PASS nor FAIL": lambda c: receipt(c).update(result="MAYBE"),
+            "empty anchor": lambda c: receipt(c).update(evidence=["deploy.sh#"]),
             "malformed verifier sentinel": lambda c: receipt(c).update(verification_identity="unrecorded"),
             "unknown evaluator class": lambda c: receipt(c).update(evaluator="NOPE"),
             "evidence is not a list": lambda c: receipt(c).update(evidence="js/ledger.js#mailtoBody"),
@@ -545,6 +660,33 @@ class VaicCorpusTests(unittest.TestCase):
                 self.assertEqual(result["effective_distribution"]["status"], "NOT_LICENSED", label)
                 self.assertEqual(result["observed_distribution"]["status"], "NOT_LICENSED", label)
 
+    def test_unreadable_input_and_deep_structure_are_judgments_not_crashes(self) -> None:
+        """Malformed bytes reach the validator before any schema: each must be INVALID, never INTERNAL_ERROR."""
+        with tempfile.TemporaryDirectory() as tmp:
+            for label, data in (("not UTF-8", b'{"a": "\xe9"}'), ("nested past the parser", b"[" * 100000),
+                                ("an integer past the digit limit", b'{"a": 1' + b"0" * 5000 + b"}"), ("not JSON", b"{")):
+                with self.subTest(label):
+                    path = Path(tmp) / "corpus.json"
+                    path.write_bytes(data)
+                    with self.assertRaises(VAIC.CorpusError):
+                        VAIC.load_json(path)
+            for ledger in ('{"observations": []}', "[]"):
+                with self.subTest(ledger):
+                    self.assertIn("absent observation", self.anchored(ledger, "vaic/evidence/current-browser-observations.v0.json#x"))
+            # a tree missing the files its identities hash is INVALID data, not a FileNotFoundError
+            root = Path(tmp)
+            (root / "index.html").write_text(f'<meta name="build-hash" content="{VAIC.current_build(ROOT)}">', encoding="utf-8")
+            result = VAIC.validate(self.corpus, self.matrix, root)
+            self.assertEqual(result["structure"], "INVALID")
+            self.assertTrue(any("identity file css/film.css is missing" in e for e in result["errors"]))
+
+    def test_the_dependency_walk_is_iterative(self) -> None:
+        chain = {f"N{i}": [f"N{i + 1}"] for i in range(5000)}
+        chain["N5000"] = []
+        self.assertIsNone(VAIC.dependency_cycle(chain))
+        chain["N5000"] = ["N0"]
+        self.assertEqual(len(VAIC.dependency_cycle(chain)), 5002)
+
     def test_a_validator_defect_reports_internal_error_not_a_verdict(self) -> None:
         """The third outcome must exist, or totality is only a claim.
 
@@ -560,7 +702,7 @@ class VaicCorpusTests(unittest.TestCase):
             "sys.argv = ['vaic_validate']\n"
             "raise SystemExit(module.main())\n"
         )
-        run = subprocess.run([sys.executable, "-c", driver], cwd=ROOT, capture_output=True, text=True)
+        run = subprocess.run([sys.executable, "-B", "-c", driver], cwd=ROOT, capture_output=True, text=True)
         self.assertEqual(run.returncode, 2)
         self.assertIn("INTERNAL_ERROR", run.stderr)
         self.assertIn("simulated validator defect", run.stderr)
@@ -675,7 +817,7 @@ class VaicCorpusTests(unittest.TestCase):
             "harness_identity": "negative-control-origin-harness",
             "harness_version": "test",
             "method": {"measurement": "synthetic complete origin closure", "threshold": "all", "units": "boolean"},
-            "evidence": ["deploy.sh#artifact-source-allowlist"], "observed_at": "test",
+            "evidence": ["deploy.sh#artifact-source-allowlist"], "observed_at": "2099-01-01",
         })
         origin["evaluation"] = {
             "result": "PASS",
@@ -717,7 +859,7 @@ class VaicCorpusTests(unittest.TestCase):
             path, before_text = self.scrambled(tmp)
             before = json.loads(before_text)
             self.assertEqual(RESTAMP.stamp(ROOT, path), ["build_identity"])
-            added = RESTAMP.append(ROOT, path, harness={k: ["true"] for k in RESTAMP.HARNESS}, today="2099-01-01")
+            added = RESTAMP.append(ROOT, path, harness=self.harness(), today="2099-01-01")
             text = path.read_text(encoding="utf-8")
         after = json.loads(text)
         self.assertEqual(after["candidate"], self.corpus["candidate"])
@@ -734,9 +876,14 @@ class VaicCorpusTests(unittest.TestCase):
                 continue                                                # the one value stamp rewrites
             self.assertTrue(any(line.rstrip(",") == kept for kept in survivors), line)
 
+    @staticmethod
+    def harness(failing: str = "") -> dict:
+        """RESTAMP.HARNESS with each command replaced by `true`, or `false` for the one named failing"""
+        return {k: {**spec, "command": ["false"] if k == failing else ["true"]} for k, spec in RESTAMP.HARNESS.items()}
+
     def test_restamp_appends_one_current_receipt_per_automated_obligation_with_its_real_result(self) -> None:
         failing = "deploy.sh plus tools/test-site.py"
-        harness = {k: (["false"] if k == failing else ["true"]) for k in RESTAMP.HARNESS}
+        harness = self.harness(failing)
         with tempfile.TemporaryDirectory() as tmp:
             path, before_text = self.scrambled(tmp)
             before = json.loads(before_text)
@@ -768,7 +915,30 @@ class VaicCorpusTests(unittest.TestCase):
             self.assertEqual(receipt["harness_version"], cand["build_identity"])
             self.assertEqual(receipt["observed_at"], "2099-01-01")
             self.assertEqual({k: receipt[k] for k in RESTAMP.RECEIPT_BINDING}, {k: cand[k] for k in RESTAMP.RECEIPT_BINDING})
+            # the receipt says what THIS command observed, never what the previous receipt said
+            spec = RESTAMP.HARNESS[receipt["harness_identity"]]
+            self.assertEqual(receipt["evidence"], spec["evidence"])
+            self.assertIn(f"exactly the {len(VAIC.deploy_paths(ROOT))} deploy.paths files", receipt["method"]["threshold"])
+            self.assertEqual(spec["command"][2:], [f"SiteContractTests.{e.partition('#')[2]}" for e in spec["evidence"] if e.startswith("tools/test-site.py#")],
+                             "the evidence names exactly the tests the command runs")
         self.assertIn("FAIL", added.values())
+
+    def test_a_failing_harness_appended_by_restamp_is_a_valid_fail(self) -> None:
+        """The audit's reproduction (2026-10-18): restamp appended a FAIL after 66 PASS receipts and the validator
+        called the corpus INVALID, so the first real regression would have had no honest record."""
+        corpus = copy.deepcopy(self.corpus)
+        for row in corpus["obligations"]:
+            row["evaluation"]["receipts"] = [r for r in row["evaluation"]["receipts"]
+                                             if not (row["id"] == "CY-ART-001" and self.is_current(r, corpus["candidate"]))]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "corpus.json"
+            path.write_text(json.dumps(corpus, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+            self.assertEqual(RESTAMP.append(ROOT, path, harness=self.harness("deploy.sh plus tools/test-site.py"), today="2099-01-01"),
+                             [("CY-ART-001", "FAIL")])
+            result = self.validate(VAIC.load_json(path))
+        self.assertEqual(result["structure"], "VALID", result["errors"])
+        self.assertEqual(result["effective"]["CY-ART-001"], "FAIL")
+        self.assertEqual(result["release"], "NOT_CERTIFIED")
 
 
 if __name__ == "__main__":

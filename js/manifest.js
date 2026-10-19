@@ -31,7 +31,7 @@ const MANIFEST = {
   systems_disclosed: ["CAD-2024-001", "SIJ-2025-001"],  /* REAL ids · count PROVISIONAL */
   public_records: 14,                         /* PROVISIONAL */
   controlled_references: 3,                   /* PROVISIONAL */
-  external_runtime_calls: 0,                  /* REAL — CL-01 re-derives from Resource Timing */
+  external_runtime_calls: 0,                  /* REAL — every page's CSP and tools/test-site.py hold it (CL-01, the drawing set's runtime check, retired with it) */
   validation_index: ["T2C192-IR-0.00", "GVR-BEAM-100", "GVR-COMP-100", "DIM3-99", "DIM5-97", "MOP-91"], /* REAL (v1.1) */
   not_claimed: [                              /* PROVISIONAL wording */
     "GENERAL TEXT-TO-CAD SEMANTIC PARITY",
@@ -67,16 +67,16 @@ const VALIDATION = [
 ];
 
 /* ================= projections — every manifest fact the pages print =================
-   One function, two consumers. tools/project-manifest.py writes these strings into
-   the marked elements of index.html and pages/brief.html (data-m="name"), so the
-   documents keep their facts as bytes and a reader without scripts still has them;
-   the front door (js/unhappened.js) reads its marks back at runtime against this function.
-   A printed count or figure that is not a projection is a second authority — which
-   is how the strata once stated 06 INDEXED while only the floor derived the count.
-   An unknown name is INVALID, first-class: null, and both consumers refuse it. */
+   tools/project-manifest.py writes these strings into the marked elements of the front
+   doors and pages/brief.html (data-m="name"), so the documents keep their facts as bytes
+   and a reader without scripts still has them; no page reads them back. A printed count
+   or figure that is not a projection is a second authority — which is how the strata once
+   stated 06 INDEXED while only the floor derived the count. An unknown name is INVALID,
+   first-class: null, and the projector refuses it; so is a name with a part too many. */
 const pad2 = n => String(n).padStart(2, "0");
 function project(name) {
-  const [kind, key, field] = name.split(":");
+  const parts = name.split(":"), [kind, key, field] = parts;
+  if (parts.length !== (kind === "validation" ? 3 : 2)) return null;
   if (kind === "count") {
     if (key === "systems_indexed") return pad2(MANIFEST.systems_indexed);
     if (key === "systems_disclosed") return pad2(MANIFEST.systems_disclosed.length);

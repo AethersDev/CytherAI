@@ -17,6 +17,7 @@ import hashlib, http.server, os, struct, subprocess, sys, tempfile, threading
 from functools import partial
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if sys.argv[1:] not in ([], ["ar"]): sys.exit("usage: render-og-film.py [ar]")   # a typo must not render the English card
 AR = sys.argv[1:] == ["ar"]
 OUT = os.path.join(ROOT, "assets/og/og-card-ar.png" if AR else "assets/og/og-card.png")
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
@@ -28,12 +29,14 @@ srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), partial(Quiet, directory
 threading.Thread(target=srv.serve_forever, daemon=True).start()
 url = "http://127.0.0.1:%d/tools/%s" % (srv.server_address[1], "og-card-ar.html" if AR else "og-card.html")
 with tempfile.TemporaryDirectory() as profile:
+    shot = os.path.join(profile, "card.png")   # not OUT: the tracked card exists already, so its presence proves nothing
     run = subprocess.run([CHROME, "--headless=new", "--user-data-dir=" + profile, "--hide-scrollbars", "--force-device-scale-factor=1",
-                          "--window-size=1200,630", "--virtual-time-budget=6000", "--screenshot=" + OUT, url], capture_output=True, text=True)
-srv.shutdown()
-if run.returncode != 0 or not os.path.isfile(OUT): sys.exit("chrome failed: " + run.stderr[-400:])
-data = open(OUT, "rb").read()
-w, h = struct.unpack(">II", data[16:24])
-if data[:8] != b"\x89PNG\r\n\x1a\n" or (w, h) != (1200, 630): sys.exit("not a 1200x630 PNG: %dx%d" % (w, h))
+                          "--window-size=1200,630", "--virtual-time-budget=6000", "--screenshot=" + shot, url], capture_output=True, text=True)
+    srv.shutdown()
+    if run.returncode != 0 or not os.path.isfile(shot): sys.exit("chrome failed: " + run.stderr[-400:])
+    data = open(shot, "rb").read()
+    w, h = struct.unpack(">II", data[16:24])
+    if data[:8] != b"\x89PNG\r\n\x1a\n" or (w, h) != (1200, 630): sys.exit("not a 1200x630 PNG: %dx%d" % (w, h))
+    os.replace(shot, OUT)
 version = subprocess.run([CHROME, "--version"], capture_output=True, text=True).stdout.strip()
 print(os.path.relpath(OUT, ROOT) + "  %dx%d  %s bytes  sha256 %s  (%s)" % (w, h, format(len(data), ","), hashlib.sha256(data).hexdigest(), version))

@@ -108,7 +108,7 @@ h1{font-size:clamp(26px,4vw,40px)}
 .doc-exhibit-header-id{color:var(--ink-mid)}
 .doc-exhibit-body{padding:16px 16px 18px}
 .doc-exhibit-type{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-quiet)}
-.doc-exhibit-title{font-family:var(--font-serif);font-size:20px;font-style:italic;color:var(--ink);margin:8px 0 14px}
+.doc-exhibit-title{font-family:var(--font-serif);font-size:20px;font-style:italic;font-weight:400;letter-spacing:normal;line-height:1.6;color:var(--ink);margin:8px 0 14px}   /* an h2: the exhibit is a section of the brief's outline */
 .doc-exhibit-outcome{border-left:2px solid var(--accent);background:var(--paper-lifted);padding:12px 14px;margin:16px 0}
 .doc-exhibit-outcome-label{font-family:var(--font-mono);font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
 .doc-exhibit-outcome-value{font-family:var(--font-mono);font-size:11px;color:var(--ink);margin-top:6px;line-height:1.6}
@@ -135,13 +135,16 @@ tr:first-child td{border-top:none}
 .form-group{margin-bottom:18px}
 .form-label{display:block;font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ink-quiet);margin-bottom:8px}
-.form-input,.form-textarea{width:100%;background:var(--paper-lifted);border:1px solid var(--rule);
+/* a field's edge holds 3:1 on the field and the page (WCAG 1.4.11); --rule read 1.33:1 */
+.form-input,.form-textarea{width:100%;background:var(--paper-lifted);border:1px solid var(--ink-quiet);
   color:var(--ink);font-family:var(--font-mono);font-size:13px;padding:11px 13px;line-height:1.5}
 .form-textarea{min-height:130px;resize:vertical}
 .form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent)}
 .form-input::placeholder,.form-textarea::placeholder{color:var(--ink-quiet)}
 .form-hint{font-family:var(--font-mono);font-size:10px;color:var(--ink-quiet);margin-top:6px}
 .form-input[aria-invalid="true"],.form-textarea[aria-invalid="true"]{border-color:var(--refuse)}
+/* the refusal's border replaces the focus colour, and the script focuses exactly such a field: it keeps a ring */
+.form-input[aria-invalid="true"]:focus,.form-textarea[aria-invalid="true"]:focus{outline:2px solid var(--accent);outline-offset:2px}
 .form-error{font-family:var(--font-mono);font-size:10px;color:var(--refuse);margin-top:6px}
 
 /* ════════ buttons ════════ */
@@ -178,7 +181,7 @@ tr:first-child td{border-top:none}
 /* Arabic (ar/): the Arabic type in every role, never letter-spaced or upper-cased (spacing breaks the joins), labels a
    size up for its marks; the skip link waits off the right edge, which a right-to-left page cannot scroll to */
 :lang(ar){--font-sans:Arabic,system-ui,sans-serif;--font-mono:'SF Mono',Menlo,Arabic,monospace;--font-serif:Arabic,Georgia,serif}
-:lang(ar) *{letter-spacing:0!important;text-transform:none!important}
+:lang(ar),:lang(ar) *{letter-spacing:0!important;text-transform:none!important}   /* the element itself too: an Arabic link on an English page */
 :lang(ar) [lang=en]{unicode-bidi:isolate;white-space:nowrap}   /* a Latin name in Arabic text stays whole, in its own order */
 :lang(ar) :is(.nav-links,.nav-scope,.hero-stamp,.form-label,.form-hint,.form-error,.btn,.footer-links){font-size:13px}
 [dir=rtl] .skip-link{left:auto;right:-9999px}[dir=rtl] .skip-link:focus{left:auto;right:12px}

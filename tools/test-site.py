@@ -49,19 +49,26 @@ def shell_list(source: str, name: str) -> list[str]:
 
 
 RESOURCES = shell_list(INTEGRITY_SCRIPT, "RESOURCES")
-HTML_FILES = shell_list(INTEGRITY_SCRIPT, "HTML_FILES")
-# the deployable set is DECLARED ONCE and read here, by deploy.sh, and by the
-# artifact identity in tools/vaic_validate.py — never transcribed a second time
+# the deployable set is DECLARED ONCE and read here, by deploy.sh, by generate-integrity.sh (its pages) and by
+# the artifact identity in tools/vaic_validate.py — never transcribed a second time: a page added to deploy.paths
+# is stamped and held to every per-page law below, because no second list exists for it to be missing from
 DEPLOY_FILES = [line.strip() for line in
                 (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if line.strip()]
+DEPLOYED = set(DEPLOY_FILES)
+HTML_FILES = [path for path in DEPLOY_FILES if path.endswith(".html")]
+HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
+# the register rules in CLAUDE.md: the retired gold register, the document register, fake meters and the retired
+# ledger's vocabulary may not reach a served file
+BANNED = re.compile(r"--brass|--gold|DOC-2026-001|CONDUCT RECEIPT|[Aa]ppend-only|1e-12|−\d+\s?M\b")
 # ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its
-# curated gateway, the films and the deck — not the live-MVP tunnel redirect
+# curated gateway and the films — not the live-MVP tunnel redirect, and not the competition deck (the cancelled Alinma
+# plan, withdrawn 2026-10-19 to backup/awc-os-v1/)
 REVIEWED_PUBLICATION = {
     "adii/": {"adii/index.html", "adii/favicon.svg", "adii/fonts/OFL.txt", "adii/fonts/ibm-plex-mono-400.woff2",
               "adii/fonts/newsreader-variable.woff2", "adii/fonts/public-sans-variable.woff2", "adii/poster.jpg",
               "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
     "awc-os/": {"awc-os/index.html", "awc-os/awc-os.js", "awc-os/media/AWC_OS_film_ar.mp4",
-                "awc-os/media/AWC_OS_film_en.mp4", "awc-os/media/AWC_OS_AMAD2026_deck.pptx"},
+                "awc-os/media/AWC_OS_film_en.mp4"},
 }
 
 
@@ -71,13 +78,16 @@ class PageParser(HTMLParser):
         self.tags: list[tuple[str, dict[str, str]]] = []
         self.ids: set[str] = set()
         self.nav_links: list[tuple[str, dict[str, str]]] = []
+        self.styles: list[str] = []      # the text of each <style>, whose url()s are fetched too
         self._in_nav = False
+        self._in_style = False
         self._anchor_attrs: dict[str, str] | None = None
         self._anchor_text: list[str] = []
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         values = {key: value or "" for key, value in attrs}
         self.tags.append((tag, values))
+        self._in_style = tag == "style"
         if values.get("id"):
             self.ids.add(values["id"])
         if tag == "nav" and "nav" in values.get("class", "").split():
@@ -87,10 +97,13 @@ class PageParser(HTMLParser):
             self._anchor_text = []
 
     def handle_data(self, data: str) -> None:
+        if self._in_style:
+            self.styles.append(data)
         if self._anchor_attrs is not None:
             self._anchor_text.append(data)
 
     def handle_endtag(self, tag: str) -> None:
+        self._in_style = False
         if tag == "a" and self._anchor_attrs is not None:
             text = " ".join("".join(self._anchor_text).split())
             self.nav_links.append((text, self._anchor_attrs))
@@ -106,16 +119,42 @@ def parse_page(relative: str) -> PageParser:
     return parser
 
 
-def local_target(page: str, raw_url: str) -> Path | None:
+def local_target(page: str, raw_url: str) -> str | None:
+    """The served path a same-origin URL on `page` names, resolved as a browser resolves it (a directory serves
+    its index; ".." stops at the site's root), or None for another origin. Judged against deploy.paths, never
+    against the source tree: a file in the repository that is not shipped 404s in production."""
     parts = urlsplit(raw_url)
-    if parts.scheme or parts.netloc or not parts.path:
+    if parts.scheme or parts.netloc:
         return None
-    if parts.path == "/":
-        return ROOT / "index.html"
-    path = parts.path + "index.html" if parts.path.endswith("/") else parts.path   # a directory serves its index
-    if path.startswith("/"):
-        return ROOT / path.lstrip("/")
-    return (ROOT / page).parent / path
+    if not parts.path:
+        return page
+    resolved = posixpath.normpath(posixpath.join("/" + posixpath.dirname(page), parts.path))
+    if parts.path.endswith("/"):
+        resolved = posixpath.join(resolved, "index.html")
+    return resolved.lstrip("/")
+
+
+def references(page: str) -> list[tuple[str, str]]:
+    """(kind, url) for every URL `page` names: "fetch" for what a browser requests on its own (src, poster,
+    data-src, srcset, a <link> other than alternate or canonical, a url() in its <style>), "link" for what a
+    reader follows (<a>, alternate, canonical), "site" for the absolute URLs it gives others (og:url, og:image)."""
+    parsed = parse_page(page)
+    found = []
+    for tag, attrs in parsed.tags:
+        found += [("fetch", attrs[key]) for key in ("src", "poster", "data-src") if attrs.get(key)]
+        found += [("fetch", item.split()[0]) for item in attrs.get("srcset", "").split(",") if item.strip()]
+        if tag == "link" and attrs.get("href"):
+            found.append(("link" if set(attrs.get("rel", "").split()) & {"alternate", "canonical"} else "fetch", attrs["href"]))
+        if tag == "a" and attrs.get("href") and not attrs["href"].startswith("#"):
+            found.append(("link", attrs["href"]))
+        if tag == "meta" and attrs.get("property") in ("og:url", "og:image"):
+            found.append(("site", attrs["content"]))
+    found += [("fetch", url) for style in parsed.styles for url in css_urls(style)]
+    return found
+
+
+def css_urls(css: str) -> list[str]:
+    return [m.group(2) for m in re.finditer(r"""url\((['"]?)([^'")]+)\1\)""", css) if not m.group(2).startswith("data:")]
 
 
 def wcag(a: str, b: str) -> float:
@@ -181,24 +220,69 @@ class SiteContractTests(unittest.TestCase):
                 marked = [text for text, attrs in content_links if attrs.get("aria-current") == "page"]
                 self.assertEqual(marked, [current[page]])
 
-    def test_every_local_page_resource_and_link_resolves(self) -> None:
-        fetchable = {("script", "src"), ("img", "src"), ("source", "src")}
+    def test_every_page_reference_resolves_into_the_shipped_set_and_nothing_is_fetched_elsewhere(self) -> None:
+        """Zero external requests, ever: everything a page or a stylesheet makes the browser fetch is a shipped file
+        of this origin. A link a reader follows may leave the site; one that stays must land on a shipped file, as
+        must the absolute URLs a page gives others (its og:url and og:image name this host)."""
+        for page in HTML_FILES:
+            for kind, url in references(page):
+                parts = urlsplit(url)
+                if kind == "fetch":
+                    self.assertFalse(parts.scheme or parts.netloc, f"{page} fetches {url} from another origin")
+                if kind == "site":
+                    self.assertEqual((parts.scheme, parts.netloc), ("https", HOST), f"{page}: {url}")
+                if parts.netloc == HOST or not (parts.scheme or parts.netloc):
+                    target = local_target(page, parts.path if parts.netloc else url)
+                    self.assertIn(target, DEPLOYED, f"{page}: {url} names a file that is not shipped")
+        for sheet in (p for p in DEPLOY_FILES if p.endswith(".css")):
+            for url in css_urls((ROOT / sheet).read_text(encoding="utf-8")):
+                self.assertIn(local_target(sheet, url), DEPLOYED, f"{sheet}: url({url})")
+
+    def test_every_page_pins_a_least_privilege_csp(self) -> None:
+        """Each page's CSP admits its own origin and nothing else (data: images and inline style where named), and
+        its script-src is exactly what the page runs: 'self' if it loads same-origin scripts, a hash per inline
+        script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails."""
         for page in HTML_FILES:
             parsed = parse_page(page)
-            for tag, attrs in parsed.tags:
-                candidates: list[str] = []
-                if (tag, "src") in fetchable and attrs.get("src"):
-                    candidates.append(attrs["src"])
-                if tag == "link" and attrs.get("href"):
-                    rel = set(attrs.get("rel", "").split())
-                    if rel & {"stylesheet", "icon", "manifest", "apple-touch-icon"}:
-                        candidates.append(attrs["href"])
-                if tag == "a" and attrs.get("href") and not attrs["href"].startswith("#"):
-                    candidates.append(attrs["href"])
-                for raw_url in candidates:
-                    target = local_target(page, raw_url)
-                    if target is not None:
-                        self.assertTrue(target.is_file(), f"{page}: unresolved local target {raw_url}")
+            csps = [a["content"] for t, a in parsed.tags if t == "meta" and a.get("http-equiv") == "Content-Security-Policy"]
+            self.assertEqual(len(csps), 1, page)
+            policy = {d.split()[0]: d.split()[1:] for d in csps[0].split(";") if d.strip()}
+            source = (ROOT / page).read_text(encoding="utf-8")
+            inline = re.findall(r"<script>(.*?)</script>", source, re.S)
+            script = (["'self'"] if any(t == "script" and a.get("src") for t, a in parsed.tags) else []) + \
+                ["'sha256-%s'" % base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode() for body in inline]
+            self.assertEqual(policy.get("script-src"), script or ["'none'"], page)
+            for directive, expected in (("default-src", ["'self'"]), ("object-src", ["'none'"]), ("base-uri", ["'self'"]),
+                                        ("connect-src", ["'none'"]), ("frame-src", ["'none'"])):
+                self.assertEqual(policy.get(directive), expected, f"{page} {directive}")
+            extra = {"style-src": {"'unsafe-inline'"}, "img-src": {"data:"}, "script-src": set(script)}
+            for directive, sources in policy.items():
+                self.assertLessEqual(set(sources), {"'self'", "'none'"} | extra.get(directive, set()), f"{page} {directive}")
+
+    def test_the_privacy_policy_names_exactly_what_the_site_stores(self) -> None:
+        """From light mode's release (2026-10-14) to 2026-10-18 the policy described a retired build's sessionStorage
+        key and omitted the localStorage key the front door writes. Every key a served script stores is
+        named in the policy with its storage, and a storage no served script uses is not described there."""
+        stored = set()
+        for path in DEPLOY_FILES:
+            if path.endswith((".js", ".html")):
+                stored |= set(re.findall(r'\b(localStorage|sessionStorage)\.(?:get|set|remove)Item\("([^"]+)"',
+                                         (ROOT / path).read_text(encoding="utf-8")))
+        policy = (ROOT / "pages/privacy.html").read_text(encoding="utf-8")
+        self.assertTrue(stored, "the front door remembers a chosen theme; finding nothing means the scan is blind")
+        for storage, key in stored:
+            self.assertIn(f"<b>{key}</b>", policy, key)
+            self.assertIn(storage, policy, storage)
+        for storage in {"localStorage", "sessionStorage"} - {s for s, _ in stored}:
+            self.assertNotIn(storage, policy, storage)
+
+    def test_no_served_file_carries_a_retired_register(self) -> None:
+        """CLAUDE.md's register rules, which nothing grepped until 2026-10-18."""
+        for path in DEPLOY_FILES:
+            if path.endswith((".html", ".css", ".js", ".webmanifest", ".svg", ".txt")):
+                found = BANNED.findall((ROOT / path).read_text(encoding="utf-8"))
+                self.assertEqual(found, [], path)
+        self.assertTrue(BANNED.search("color:var(--brass)") and BANNED.search("−540 M"), "the pattern has teeth")
 
     def test_homepage_module_order_and_script_posture(self) -> None:
         # each front door reads no module: js/theme.js sets the theme in the head, before the page paints (a remembered
@@ -215,9 +299,7 @@ class SiteContractTests(unittest.TestCase):
             self.assertFalse(contact_scripts[0].get("src"), f"{page} keeps exactly one inline form script")
 
         for page in ("pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html"):
-            source = (ROOT / page).read_text(encoding="utf-8")
             self.assertFalse([attrs for tag, attrs in parse_page(page).tags if tag == "script"], page)
-            self.assertIn("script-src 'none'", source, page)
 
     def test_sri_build_hash_and_cache_identity_are_exact(self) -> None:
         expected_sri = {resource: sri_for(resource) for resource in RESOURCES}
@@ -228,13 +310,7 @@ class SiteContractTests(unittest.TestCase):
                 raw_url = attrs.get("src") if tag == "script" else attrs.get("href") if tag == "link" else None
                 if not raw_url:
                     continue
-                target = local_target(page, raw_url)
-                if target is None:
-                    continue
-                try:
-                    relative = target.resolve().relative_to(ROOT).as_posix()
-                except ValueError:
-                    continue
+                relative = local_target(page, raw_url)
                 if relative in expected_sri:
                     referenced.add(relative)
                     self.assertEqual(attrs.get("integrity"), expected_sri[relative], f"{page}: {relative}")
@@ -262,7 +338,7 @@ class SiteContractTests(unittest.TestCase):
                 raw = attrs.get("src") if tag == "script" else attrs.get("href") if tag == "link" else None
                 if not raw or "integrity" not in attrs:
                     continue
-                resource = local_target(page, raw).resolve().relative_to(ROOT).as_posix()
+                resource = local_target(page, raw)
                 self.assertEqual(urlsplit(raw).query, version[resource], f"{page}: {raw}")
         assets = re.findall(r"'([^']+)'", re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL).group(1))
         for asset in assets:
@@ -327,7 +403,6 @@ class SiteContractTests(unittest.TestCase):
         sw_assets = [a.split("?")[0] for a in re.findall(r"'([^']+)'", assets_block.group(1))]   # ?v= names the bytes, not the path
         self.assertEqual(len(sw_assets), len(set(sw_assets)), "service-worker assets contain duplicates")
         self.assertTrue(set(sw_assets).issubset(DEPLOY_FILES))
-        self.assertTrue(set(HTML_FILES).issubset(DEPLOY_FILES))
 
     def test_service_worker_installs_one_build_or_nothing(self) -> None:
         """A build is atomic only if install cannot precache the previous build's bytes.
@@ -354,6 +429,9 @@ class SiteContractTests(unittest.TestCase):
         # a navigation to a directory reads its precached index: "/" is index.html, "/ar/" is ar/index.html (offline, an Arabic
         # visitor whose worker was installed from the English page reached an error page before this; docs/deploy.md §5q)
         self.assertIn("path.slice(SCOPE.length) + 'index.html'", fetch_handler)
+        # a page it did not precache stays the network's, and nothing is cached from the HTTP cache's copy (SW-1, SW-2)
+        self.assertIn("if (e.request.mode === 'navigate') return fetch(e.request);", fetch_handler)
+        self.assertIn("fetch(new Request(e.request, { cache: 'no-cache' }))", fetch_handler)
         # A new build never takes over a page that may still be loading: in Safari (iOS 26.5 simulator) a worker that skipped
         # waiting answered a returning reader's previous-build page mid-load with this build's modules, and it died of its own
         # SRI check. It waits until a page whose modules have all run asks it in.
@@ -394,19 +472,27 @@ class SiteContractTests(unittest.TestCase):
     def test_every_seal_is_the_computed_one(self) -> None:
         """The Cyther Seal is computed from the company's name, and its identity forbids redrawing the path. Every seal
         inline on a served page, and on the social card's composition, must be exactly the pixel-fitted seal
-        tools/render-seal.py computes at its size and colours; a hand-edited cell, a mirrored path or another colour fails."""
+        tools/render-seal.py computes at its size, in the colours its surface owns: the identity's own (render-seal's
+        INK and GROUND) on the front door and the cards, the subpages' ink and paper (css/cytherai.css) on the cold
+        subpages. Warm is never the seal's colour; a hand-edited cell, a mirrored path or another colour fails."""
         spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
         seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
+        paper = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", (ROOT / "css/cytherai.css").read_text(encoding="utf-8")))
+        dark = ("index.html", "ar/index.html", "tools/og-card.html", "tools/og-card-ar.html")
+        def defect(page: str, svg: str) -> str | None:
+            size = int(re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1))
+            ink, ground = (seal.INK, seal.GROUND) if page in dark else (paper["ink"], paper["paper"])
+            return None if svg == seal.fitted_svg(size, ink, ground, ' class="seal"') else f"{page}: not the computed seal"
         found = 0
         for page in HTML_FILES + ["tools/og-card.html", "tools/og-card-ar.html"]:
             for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
-                size, ink, ground = re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1), re.search(r'<rect[^>]*fill="(#[0-9A-F]{6})"', svg).group(1), \
-                    re.search(r'<path fill="(#[0-9A-F]{6})"', svg).group(1)
-                self.assertEqual(svg, seal.fitted_svg(int(size), ink, ground, ' class="seal"'), page)
+                self.assertIsNone(defect(page, svg))
                 found += 1
         self.assertGreaterEqual(found, 11, "both front doors, both contact pages, five subpages and both cards carry the seal")
-        mirrored = seal.fitted_svg(26).replace('d="M', 'd="m', 1)
-        self.assertNotEqual(mirrored, seal.fitted_svg(26), "the comparison has teeth")
+        # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
+        svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
+        self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
+        self.assertIsNotNone(defect("index.html", svg.replace(f'fill="{seal.INK}"', 'fill="#FFAD57"')))
 
     def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
         """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
@@ -421,6 +507,10 @@ class SiteContractTests(unittest.TestCase):
         inks = {k: tok[k] for k in ("ink", "ink-mid", "ink-quiet", "accent", "refuse")}
         worst = min((wcag(i, g), ik, gk) for ik, i in inks.items() for gk, g in grounds.items())
         self.assertGreaterEqual(worst[0], 4.5, f"{worst[1]} on {worst[2]} is {worst[0]:.2f}:1")
+        # a form field's edge is a component boundary: 3:1 on the field and on the page (WCAG 1.4.11; --rule read 1.33:1)
+        edge = re.search(r"\.form-input,\.form-textarea\{[^}]*border:1px solid var\(--([\w-]+)\)", css).group(1)
+        for ground in ("paper", "paper-lifted"):
+            self.assertGreaterEqual(wcag(tok[edge], tok[ground]), 3, f"the field edge --{edge} on --{ground}")
         self.assertEqual(tok["quiet"], tok["ink-quiet"])
         self.assertEqual(tok["label"], tok["ink-mid"])
 
@@ -429,7 +519,8 @@ class SiteContractTests(unittest.TestCase):
         tokens. Every ink must hold 4.5:1 on its ground in both, tokens read from css/film.css and never restated here.
         (Text over the film itself is measured in a browser: CY-SEM-003.)"""
         css = (ROOT / "css/film.css").read_text(encoding="utf-8")
-        hexes = lambda block: dict(re.findall(r"--([\w-]+):(#[0-9a-f]{6})\b", block))
+        hexes = lambda block: {name: value if len(value) == 7 else "#" + "".join(c * 2 for c in value[1:])
+                               for name, value in re.findall(r"--([\w-]+):(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b", block)}
         themes = {"dark": hexes(re.search(r":root\{([^}]*)\}", css).group(1)),
                   "light": hexes(re.search(r"\[data-theme=light\] :is\([^)]*\)\{([^}]*)\}", css).group(1))}
         for theme, tok in themes.items():
@@ -461,10 +552,9 @@ class SiteContractTests(unittest.TestCase):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)
                               for t, a in tags if t == "link" and a.get("rel") == "alternate"}
-                self.assertEqual(alternates.get("en").resolve(), (ROOT / en).resolve(), page)
-                self.assertEqual(alternates.get("ar").resolve(), (ROOT / ar).resolve(), page)
+                self.assertEqual((alternates.get("en"), alternates.get("ar")), (en, ar), page)
                 visible = [a for t, a in tags if t == "a" and a.get("hreflang") == lang and a.get("lang") == lang
-                           and local_target(page, a["href"]).resolve() == (ROOT / other).resolve()]
+                           and local_target(page, a["href"]) == other]
                 self.assertEqual(len(visible), 1, f"{page} links {other} once, marked {lang}")
 
     @staticmethod
@@ -547,41 +637,32 @@ class SiteContractTests(unittest.TestCase):
         make the failure disappear.
         """
         register = json.loads((ROOT / "vaic/release-dispositions.v0.json").read_text(encoding="utf-8"))
-        disposed = {entry["subject"] for entry in register["dispositions"]}
+        # a current FAIL is disposed by a decision that it stands open or is accepted, never by one that calls it resolved
+        disposed = {entry["subject"] for entry in register["dispositions"]
+                    if entry["kind"] == "OBLIGATION" and entry["disposition"] in ("OPEN_DEFECT", "ACCEPTED_LIMITATION")}
         corpus = VAIC.load_json(ROOT / "vaic/cytherai-obligations.v3.json")
         matrix = VAIC.load_json(ROOT / "vaic/evaluator-matrix.v0.json")
         summary = VAIC.validate(corpus, matrix, ROOT)
         self.assertEqual(summary["structure"], "VALID")
-
         failing = self.effective_failures(corpus, matrix)
         self.assertEqual(sorted(failing - disposed), [], "a current FAIL with no disposition")
 
-        # the gate must actually fire: a synthetic current FAIL with no entry is caught
+        # the gate must actually fire, whatever the live corpus holds: a regression appended to CY-ART-001 (its current
+        # receipt observed again as FAIL, the PASS moved into history) is exactly one new current FAIL, and no entry names it
         mutated = copy.deepcopy(corpus)
         row = next(r for r in mutated["obligations"] if r["id"] == "CY-ART-001")
+        current = next(r for r in row["evaluation"]["receipts"]
+                       if r["artifact_build"] == corpus["candidate"]["build_identity"]
+                       and r["verification_identity"] == corpus["candidate"]["verification_identity"])
+        row["evaluation"]["receipts"].append({**copy.deepcopy(current), "result": "FAIL"})
+        current["artifact_build"] = "0000000000000000"
         row["evaluation"]["result"] = "FAIL"
-        for receipt in row["evaluation"]["receipts"]:
-            receipt["result"] = "FAIL"
-        self.assertEqual(self.effective_failures(mutated, matrix), {"CY-ART-001"})
+        self.assertEqual(self.effective_failures(mutated, matrix) - failing, {"CY-ART-001"})
         self.assertNotIn("CY-ART-001", disposed)
 
     @staticmethod
     def effective_failures(corpus, matrix) -> set[str]:
-        summary = VAIC.validate(corpus, matrix, ROOT)
-        distribution = summary["effective_distribution"]
-        if distribution["status"] != "LICENSED" or not distribution["counts"]["FAIL"]:
-            return set()
-        build = corpus["candidate"]["build_identity"]
-        verifier = corpus["candidate"]["verification_identity"]
-        failing = set()
-        for row in corpus["obligations"]:
-            receipts = row["evaluation"].get("receipts") or []
-            current = any(r.get("artifact_build") == build
-                          and r.get("verification_identity") in (verifier, VAIC.EXTERNAL)
-                          for r in receipts)
-            if current and row["evaluation"]["result"] == "FAIL":
-                failing.add(row["id"])
-        return failing
+        return {oid for oid, verdict in VAIC.validate(corpus, matrix, ROOT)["effective"].items() if verdict == "FAIL"}
 
     def test_every_recorded_failure_is_named_even_when_its_binding_expired(self) -> None:
         """A distinct rule from the current-FAIL gate, and the one with teeth today.

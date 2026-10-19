@@ -19,10 +19,17 @@ M = M_core union M_grammar union M_profile
 M_core union M_grammar is a subset of M for every admissible P and C
 ```
 
-Results are exactly `PASS`, `FAIL`, or `NOT_EVALUATED`. Missing/stale evidence,
-environment mismatch, evaluator overreach, or insufficient coverage is always
-`NOT_EVALUATED`; there is no compensatory score. Projection and origin validity
-remain separate.
+Results are exactly `PASS`, `FAIL`, or `NOT_EVALUATED`. Missing evidence, and
+evidence bound to another build, verifier, record or policy (stale), is
+`NOT_EVALUATED`. A receipt from an evaluator the obligation does not authorize, or
+with coverage it does not license, is malformed data: the corpus is `INVALID`.
+There is no compensatory score: one current `FAIL` is the verdict beside any number of
+current `PASS`es. Projection and origin validity remain separate.
+
+Every observation stands as recorded. A `FAIL` appended after a history of `PASS` is a
+regression on record, and a later `PASS` a fix, never corruption: a row's `result` is the
+verdict of its receipts bound to the current candidate, or, with none current, its latest
+observation.
 
 ## Artifacts
 
@@ -99,7 +106,7 @@ to a `FAIL` for the current build without a current artifact-bound browser recei
 
 ## Corpus coverage
 
-The 18 obligations exercise 17 reusable relation names across semantic,
+The 19 obligations exercise 17 reusable relation names across semantic,
 epistemic, artifact, geometry, state, relational, topological, temporal, resource,
 and origin layers. The bespoke-relation ratio is 0%, below the frozen 25% kill
 criterion. This is evidence that the vocabulary can encode the first corpus; it is

@@ -119,8 +119,12 @@ contributes exactly the directive the meta cannot carry.
 `sw.js` is served from the origin root, so its scope is `/` by default — no
 `Service-Worker-Allowed` header is needed. It must **not** be served with a
 long `Cache-Control` max-age: the worker is the mechanism by which a new build
-reaches returning readers. Serve `sw.js` and `index.html` with
-`Cache-Control: no-cache`; everything else may be cached. A build is atomic
+reaches returning readers. Serve `sw.js` and every page (each `.html` in `deploy.paths`:
+both front doors and every subpage name `?v=` resources by their integrity) with
+`Cache-Control: no-cache`; long caching only for the `?v=` resources and the media, whose
+bytes do not change under one URL. A cached page could otherwise name integrity values for
+bytes the server no longer serves, and a reader who only ever visits a subpage never
+registers the worker that would protect them. A build is atomic
 because the worker makes it so, not because of the headers: install fetches every
 asset past the HTTP cache (`cache: 'reload'`) and commits the set only if
 `index.html`'s build stamp is the cache's own — otherwise install fails and the
@@ -153,6 +157,13 @@ curl -s https://HOST/definitely-missing | grep -q "No record at this path"      
 curl -s -o /dev/null -w '%{http_code}\n' https://HOST/definitely-missing            # AND status 404
 curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://HOST/                # 301 https://HOST/
 ```
+
+The whole check is `tools/probe-origin.py` (committed 2026-10-18; it was a scratch script): every
+`deploy.paths` file over http (301 to the same https path) and over https, byte for byte against a
+`./deploy.sh` build of the admitted commit; `/` against `index.html`; the hidden paths (404, styled body);
+MIME; a byte range on every film; the worker's generation; TLS; the `www` host; the headers on the root; the
+referrer meta on every page as served. `./deploy.sh && python3 tools/probe-origin.py dist <out.json>`; exit 0
+is PASS, and its observation is CY-ORIGIN-001's evidence.
 
 ## 5. Browser matrix — Chrome observed, WebKit residual
 
@@ -219,8 +230,8 @@ about itself, so they are mandatory Safari observations.
 
 | # | Check | Why Chrome cannot settle it |
 |---|---|---|
-| W1 | Inline `<script type="module">` admitted under `script-src 'self' 'unsafe-inline'` | CSP/module interaction is engine-specific; Chrome admits it, WebKit must be confirmed. If it fails, `runner.html` shows the honest 0-test message rather than a false pass |
-| W2 | SRI on **module** fetches | Chrome enforces it (proven above). WebKit's module-script integrity path is a separate implementation |
+| W1 | *Retired 2026-10-16 with the engine's runner* (`backup/trajectory-engine/pages/runner.html`): inline `<script type="module">` under `script-src 'self' 'unsafe-inline'`. No served page has an inline module; the contact pages' one inline script is admitted by its hash | — |
+| W2 | *Retired with the module front doors*: SRI on **module** fetches. The front door's scripts are classic `defer` scripts with SRI | — |
 
 **Class B — platform behaviour.** Observed, but a platform-specific fallback
 here would not invalidate the architecture.
@@ -229,10 +240,10 @@ here would not invalidate the architecture.
 |---|---|---|
 | W3 | `mailto:` form submission actually opening a mail client | No mail client exists in headless Chrome. Chrome confirms only that the submit dispatches and is not CSP-blocked |
 | W4 | `form-action 'self' mailto:` | Deliberately omitted (see the comment in `contact.html`). Decide it on Safari: add it, submit, and keep it only if the mail client still opens |
-| W5 | Continuous `font-weight` kinetics (`.thesis .g`, `[data-wave]`) | Variable-weight animation is a WebKit text-rendering path; correctness here is visual, not measurable over CDP |
+| W5 | *Retired with instrument-v1* (`backup/instrument-v1/`): continuous `font-weight` kinetics (`.thesis .g`, `[data-wave]`) | — |
 | W6 | Service-worker and viewport behaviour where WebKit differs | Notably `100vh`/dynamic viewport on iOS Safari and WebKit's SW update timing |
 | W7 | VoiceOver rotor announcement | The heading DOM is verified; how VoiceOver reads it is AT-specific |
-| W8 | Plate rendering fidelity | Canvas output was screenshotted in Chrome and looks correct; WebKit compositing of `backdrop-filter` + `mask-composite` is its own path |
+| W8 | *Retired with instrument-v1*: plate rendering fidelity (`backdrop-filter` + `mask-composite`) | — |
 
 #### SAFARI 27.0 OBSERVED (2026-08-05, safaridriver against the built artifact, commit ff20fa8)
 
@@ -1194,6 +1205,61 @@ there too; removing the branches themselves waits for the owner's permission.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B76DECC774B9AFBB`), 57 of 57 served paths matching the artifact. Release CERTIFIED.
 
+## 5t. The production audit implemented — 2026-10-18; the Alinma plan withdrawn — 2026-10-19
+
+Build `39E089F84EA28E7D` (`#reading_ink_39E089F84EA28E7D`, `#film_settle_39E089F84EA28E7D`). A structural audit of
+`4d55f21` (82 findings: 6 Medium, 45 Low, 31 Info) was implemented; what follows is what changed for a reader and
+for the record, and what stays open.
+
+**For a reader.** The privacy policy describes what the site stores today: the `theme` key in localStorage (kept only
+when the visitor's choice differs from the device's setting) and the worker's cache, no longer a retired build's
+session key and ledger. ADII's recorded run and both AWC-OS films have their text beside them (a `<details>` under
+each video: WCAG 1.2.1). On AWC-OS, copper status text holds 5.7:1 (it read 3.66:1), the language toggle says which
+language is pressed, fixed English and Arabic text is marked with its language, and the "Measured failure retained"
+callout carries its Arabic without the script. The contact pages refuse with their own messages (the browser's
+validation no longer pre-empts them, so the consent message is reachable), a focused refused field keeps a focus ring,
+field edges hold 3:1, and their one inline script runs under its `sha256-` instead of `'unsafe-inline'`. The brief's
+two exhibits are headings; ADII's page has a `main` landmark; each front door is one `main` (the film's stage, the
+principle, the systems, the close) and a `footer` landmark, pixel-identical in 18 of 24 views measured against
+`B76DECC774B9AFBB` and within raster noise (60–118 dB PSNR) in the other six. The stage's height falls back to
+`100vh` where `svh` is unknown. A sequence whose download fails rests on its poster and frees the download slot: with
+`sys-adii.mp4` missing, the previous build never requested the other two; this one warms them (Chrome 155). The
+worker leaves pages it did not precache to the network and caches nothing from the HTTP cache's copy.
+
+**For the record.** The ledger can now record a regression: a `FAIL` appended after a history of `PASS` is a `FAIL`,
+not an `INVALID` corpus (reproduced with restamp and a failing harness before the fix, `VALID` after). Restamp writes
+what its command observed (the 56 files `deploy.paths` now declares, the two tests it runs, `deploy.sh` included), not
+the previous receipt's text ("27 files", 66 times). A
+record or policy that moves under one build expires its receipts instead of invalidating them; two `EXTERNAL`
+observations of one build are two receipts; a `PASS` cannot cite an observation of a `FAIL`; a row cannot leave
+release judgment by changing its scope; admitted obligation definitions are frozen; malformed input of every kind the
+audit found is `INVALID`, never `INTERNAL_ERROR`. The page list is `deploy.paths` (no second list in
+`generate-integrity.sh`), page references resolve against the shipped set, every page's CSP is pinned to least
+privilege, and the register rules are a test. The browser probes are committed (`tools/probe-ink.py`,
+`tools/probe-settle.py`, rebuilt from their recorded methods and calibrated against `B76DECC774B9AFBB`'s record to the
+sample) and so is the origin's (`tools/probe-origin.py`); `./publish.sh` keeps the artifact it replaces as
+`rollback/<build>` (§7) and refuses any uncommitted change. The film's ten media have receipts (IMG-011, IMG-012).
+
+Observed on this build (Chrome 155.0.8059.82): reading ink over the film on both front doors, dark and light, at three
+viewports, 1,534 element samples, none below 4.5:1, worst 4.86:1, unchanged to the sample from the previous build
+(CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
+**Open, and the owner's.** The AWC-OS and CytherCAD sequences have recorded animation defects (IMG-012): a re-render.
+The ADII CVs publish four people's phone numbers and personal email addresses; whether they consented is not recorded.
+No browser floor is declared; below Safari 15.4 and Chrome 108 the stage now keeps its height, and an engine
+whose wiring throws keeps the statement's no-script unveil.
+
+**AWC-OS, the Alinma plan cancelled (2026-10-19, the owner).** Both AWC-OS films said, under *That's the
+constitution.*, "LIVE ON THIS PHONE · DESIGNED FOR PRODUCTION INSIDE ALINMA'S INFRASTRUCTURE — READY TO LEARN FROM FIVE
+MILLION CUSTOMERS" (in Arabic in the Arabic film), a production claim the page's own text had already withdrawn; the
+transcripts made it visible. The line is masked over its whole path (66.5–72 s; audio unchanged, the rest of each film
+at 53.4–60.4 dB PSNR against the original); the competition deck, whose slides 5 and 11 present the plan, and the link
+to the unmasked 4K film on YouTube are withdrawn, and the deck's URL is among the paths `tools/probe-origin.py`
+requires to 404. The page, its films and the deck as they were: `backup/awc-os-v1/`. Kept, because they happened: the
+hackathon (AMAD 2026, Alinma Bank × Tuwaiq Academy) and the demonstration's halal alternative, a named Alinma product.
+The YouTube video is the owner's to change.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1235,7 +1301,7 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
 | Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route, *Talk to us* and the footer; the focus ring is visible throughout |
 | VoiceOver (macOS and iOS) | the statement is read as the page's heading; the three systems' headings and copy in order; the films are silent and hidden from it |
-| A slow real network | a film that has not started within 3 s gives way to the still composition, and Replay plays it once it can |
+| A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
 | 200% zoom (⌘+) | the statement, the captions and the systems' copy unclipped |
 
 ## 6. Launch gate
@@ -1243,11 +1309,12 @@ What a headless browser cannot stand in for, against the same build, appended as
 All six must hold before the origin is public. Items 3, 4 and 6 are owner
 decisions, not engineering steps.
 
-1. The §5 WEBKIT-SPECIFIC residual (W1–W8) has been run in Safari and recorded.
-   The Chrome pass closed everything else observable in a browser; what remains
-   is genuinely engine-specific, not merely unobserved.
+1. The owner's device checks (§5f) and the WebKit residual that still targets a shipped
+   mechanism (W3, W4, W6, W7; W1, W2, W5 and W8 retired with what they observed) have been
+   run in Safari and recorded. The Chrome pass closes everything else observable in a
+   browser; what remains is genuinely engine-specific, not merely unobserved.
 2. `./deploy.sh` succeeds and `find dist -type f` is exactly the allowlist;
-   the three 404 checks in §4 pass on staging.
+   the §4 checks (`tools/probe-origin.py`) pass on the origin.
 3. The origin sends the §1 headers (`curl -sI` verified), or, on GitHub Pages, exactly the
    limits accepted in §7 and nothing more: every page withholds the referrer, and HTTP
    redirects to HTTPS.
@@ -1331,8 +1398,18 @@ the declared closure, the harness outside the recorded verification set). The re
 NOT_CERTIFIED for one reason only: CY-TEMP-002, the human-reviewed reading of the three
 transitions (§5e), has not been run.
 
-The rollback artifact is the previous `gh-pages` commit, kept as the local branch
-`rollback/9236E6A692F915D4` (`git push --force origin rollback/9236E6A692F915D4:gh-pages`).
+**Rollback.** `./publish.sh` keeps the artifact it replaces: before it force-pushes, it fetches the live `gh-pages`
+and keeps it as the local branch `rollback/<the build it serves>` (from 2026-10-18; until then this section named
+`rollback/9236E6A692F915D4`, the drawing set's build of 2026-09-17, two front doors before the film, and kept no newer artifact).
+To restore the previous build: `git branch --list 'rollback/*'`, then
+`git push --force origin rollback/<build>:gh-pages`, then `tools/probe-origin.py` against a build of that
+commit. Re-running `./publish.sh` from an older release commit is refused: the history guard fails there, because
+receipts admitted since are absent at that commit.
+
+**A fresh clone.** The admission lineage is the local `master` (`CANONICAL_REF`), which tracks `origin/main`; a
+fresh clone has `main` and no `master`, and `./verify.sh` fails until it exists: `git branch master origin/main`.
+`./publish.sh` refuses any uncommitted change to a tracked file, so the `./verify.sh` it runs judges the
+verifiers and the corpus of the commit it names.
 
 ## Next work — external certification and owner attestation
 

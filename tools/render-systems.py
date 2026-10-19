@@ -1,5 +1,6 @@
 # The three system sequences, in the film's materials: one memorable moment each, six seconds, no choices.
-# blender -b -P tools/render-systems.py -- <adii|awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,t2,...]
+# blender -b --factory-startup --python-exit-code 1 -P tools/render-systems.py -- <adii|awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,t2,...]
+# (TL, seconds per frame for Cycles: the published sequences used 10, so their frames depend on the machine.)
 # Behaviour shown is only what each shipped page states (see the premise ledger). The material and key
 # helpers repeat film.py's on purpose: tools/render-film.py is the exact source of the accepted film and is not touched.
 import bpy, math, os, sys
@@ -7,6 +8,7 @@ from mathutils import Vector, Matrix
 
 args = sys.argv[sys.argv.index('--') + 1:]
 WHICH, MODE, OUT = args[0], args[1], args[2]
+if WHICH not in ('adii', 'awcos', 'cad') or MODE not in ('stills', 'anim'): raise SystemExit('usage: -- <adii|awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,...]')
 W, H = (int(x) for x in args[3].split('x'))
 SPP = int(args[4])
 TIMES = [float(x) for x in args[5].split(',')] if MODE == 'stills' else []
