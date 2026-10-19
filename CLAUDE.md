@@ -20,8 +20,12 @@ order, exactly as `verify.sh` lists them (`$JSC js/manifest.js js/instrument.js
 tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `unittest`
 (`python3 tools/test-vaic.py VaicCorpusTests.test_<name>`); the other `tools/test-*.py`
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
-`websocket-client`, for driving Chrome over CDP. `CANONICAL_REF` is local `master`,
-which tracks `origin/main`; there is no local `main`.
+`websocket-client`, for driving Chrome over CDP: the committed browser probes
+`tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
+`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live
+origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `CANONICAL_REF` is local
+`master`, which tracks `origin/main`; there is no local `main`. A fresh clone has no `master`, and the
+guards fail rather than walk nothing: `git branch master origin/main`.
 
 The first VAIC-0 research corpus lives under `vaic/`. `./verify.sh` validates its
 schema, receipt authority/build binding, coverage scope, and negative controls.
@@ -35,9 +39,15 @@ moved. A new build expires the observation's authority, not the observation: a
 receipt naming an older build is `STALE` and derives `NOT_EVALUATED`, so a historical
 `FAIL` condemns a new candidate no more than a historical `PASS` certifies one. Both
 are history until reproduced. Re-running a harness therefore APPENDS a new receipt
-rather than editing an admitted one. `INVALID` is reserved for malformed data (bad digest,
+rather than editing an admitted one, and a `FAIL` appended after a history of `PASS` is a
+regression on record — a later `PASS` a fix — never corruption: a row's `result` is the verdict
+of its receipts bound to the current candidate (one current `FAIL` is never outvoted by a
+current `PASS`), or, with none current, its latest observation. A receipt is identified by
+(build, record, policy, verifier), an `EXTERNAL` one also by the observation it cites, so two
+browsers' observations of one build are two receipts. `INVALID` is reserved for malformed data (bad digest,
 unresolvable evidence pointer, cycle, schema violation, or a receipt that claims the
-current build AND the current verifier while carrying another candidate's digest);
+current build AND the current verifier while carrying another candidate's served-set or grammar
+digest; a moved record or policy under an unchanged build only expires it);
 stale-but-well-formed
 evidence keeps structure `VALID` and reports `current evidence: INCOMPLETE`. Result
 distributions are derived by the validator and never written into a test.
@@ -236,7 +246,8 @@ phone sat on the last frame for seconds, as if frozen (2026-10-13, seen by the o
 sequence downloads at a time (the film is outside that queue): one arriving in view takes the
 slot from a clip warming off screen, which goes back in the queue, never from another in view,
 which it waits behind. A slow
-start is never a failure; refused, or stalled for `STALL` after it has moved, a sequence rests
+start is never a failure; refused, failed to download (which frees the download slot), or
+stalled for `STALL` after it has moved, a sequence rests
 on its poster and tries again the next time it comes into view; scrolling past one before it
 begins is not a failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
 page that names one) is the film's last frame with its statement (`tools/render-og-film.py`;
@@ -292,8 +303,13 @@ the choice. Only the principle, the systems and the close take the light tokens;
 sentences over it are dark in both. Every ink holds 4.5:1 on its ground in both themes (`tools/test-site.py`).
 
 **Subpages** (`contact.html`, `ar/contact.html`, `pages/{brief,privacy,security,terms}.html`) share
-`css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script).
-Their ink law (every ink ≥ 4.5:1 on every ground) is `tools/test-site.py`.
+`css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script, admitted by its
+`sha256-` in the page's CSP, never `'unsafe-inline'`; edit the script and the hash must follow). Their ink law
+(every ink ≥ 4.5:1 on every ground, a form field's edge ≥ 3:1) is `tools/test-site.py`. Every page's CSP is least
+privilege: `script-src` exactly what the page runs, nothing fetched from another origin, and everything a page or
+stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
+`pages/privacy.html` must name exactly what the site stores (today the `theme` key in localStorage, and the worker's
+cache); `tools/test-site.py` holds it to the served scripts.
 
 **The experiment, retired** (2026-10-16, at the owner's direction): THE EXCEPTION, two decisions
 that look right, was published at `/exception/` on 2026-10-04 and linked from no page after
@@ -306,8 +322,11 @@ them, its fonts), which opens from the repository root; `/exception/` now answer
 **Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
 named there. `adii/` keeps every URL its first publication served, the CVs included;
-`awc-os/live/` redirects to an ephemeral tunnel and never ships. Both pages are stamped like
-the subpages; `sw.js` sends media, documents and range requests to the network uncached.
+`awc-os/live/` redirects to an ephemeral tunnel and never ships. The Alinma plan was cancelled (2026-10-19):
+AWC-OS's films have their closing production line masked and its competition deck is withdrawn (the originals:
+`backup/awc-os-v1/`); state no Alinma deployment or pilot. Both pages are stamped like
+the subpages; `sw.js` sends media, documents and range requests to the network uncached, and
+leaves every page it did not precache (`adii/`, `awc-os/`) to the network.
 
 **Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
 or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a new build's
@@ -318,9 +337,11 @@ film is still lets the waiting worker in (`take-over`), so the next load is new)
 `manifest.webmanifest`, `generate-integrity.sh` (SRI over the requested resources, each URL naming its bytes
 (`?v=` the first 12 hex of their SHA-256) in the pages and in the worker's precache alike, so no older build's
 worker can answer a newer page from its cache: it did, to the Arabic front door's first visit, and the page lost its
-stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte), `deploy.sh` (allowlist → `dist/`),
+stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte, stamped into every `.html`
+`deploy.paths` declares: there is no second page list), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
-admitted states only; headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
+admitted states only, from a tree with no uncommitted change; the artifact it replaces is kept as the local
+branch `rollback/<its build>`, the rollback (`docs/deploy.md` §7); headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
 2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them).
 
 **Retired front doors** live whole in `backup/`, each a verbatim snapshot with every verifier
@@ -336,7 +357,7 @@ door. Do not build a `/record` page from it unless asked. **unhappened-v1**
 the shadows and porcelain, the ten scenes; superseded on 2026-10-12 the same way, as
 presentation, preserved as record, nothing of its design carried.
 
-## Register rules (grep-enforced)
+## Register rules (grep-enforced: `tools/test-site.py`, over every served text file)
 
 `var(--brass)`/gold/warm-paper tokens and the document register (`DOC-2026-001`) are retired.
 Accent `#2036C7` marks state only. BANNED in shipped files: fake meters (`−540 M` style),

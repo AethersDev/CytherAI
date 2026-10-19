@@ -11,9 +11,11 @@ Two policies, both tested in tools/test-vaic.py:
   substitution inside the candidate object only). No receipt is touched.
 - append: each automated-set obligation gets ONE new receipt bound to the current
   candidate, carrying its harness's real exit status as the result and mirroring
-  that result into the row. The template is the obligation's latest receipt this
-  tool knows how to re-run; EXTERNAL (browser) receipts are never re-run here.
-  Existing receipts are never edited: re-evaluation appends.
+  that result into the row, with the method and evidence HARNESS declares for what
+  the command observes. Evaluator, coverage and environment come from the obligation's
+  latest receipt this tool knows how to re-run; EXTERNAL (browser) receipts are never
+  re-run here. Existing receipts are never edited: re-evaluation appends, and a FAIL
+  appended after a history of PASS is a regression on record, not corruption.
 
 The corpus is hand-formatted, so both edits are text-level and the file is
 re-parsed against the intended object before it is kept.
@@ -33,15 +35,30 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CORPUS = ROOT / "vaic/cytherai-obligations.v3.json"
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
-# harness_identity, as receipts name it -> the command whose exit status IS the observation
+# harness_identity, as receipts name it -> the command whose exit status IS the observation, and
+# what that command observes. A receipt's method and evidence are written from here, never copied
+# from the receipt before it: until 2026-10-18 every receipt repeated "27 files ... dist closure"
+# while the command ran one static test against 57 and never ran deploy.sh.
 # The world's harnesses (tools/test-ledger.js; tools/test-site.py plus tools/test-motion.py)
 # retired with it to backup/instrument-v1/, and the drawing set's (tools/test-claims.js) to
 # backup/drawing-set-v1/; THE UNHAPPENED's browser observations were never automated harnesses.
 # Their obligations gain no receipt on a build that does not ship the mechanism they observed.
 HARNESS = {
-    "deploy.sh plus tools/test-site.py": [
-        "python3", "tools/test-site.py",
-        "SiteContractTests.test_deploy_allowlist_and_service_worker_cannot_drift"],
+    "deploy.sh plus tools/test-site.py": {
+        "command": ["python3", "tools/test-site.py",
+                    "SiteContractTests.test_declared_deploy_set_is_exactly_what_deploy_ships",
+                    "SiteContractTests.test_deploy_allowlist_and_service_worker_cannot_drift"],
+        "evidence": ["tools/test-site.py#test_declared_deploy_set_is_exactly_what_deploy_ships",
+                     "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+                     "deploy.sh#artifact-source-allowlist"],
+        "method": {
+            "measurement": "deploy.sh builds the artifact into a temporary directory; its files are compared with "
+                           "deploy.paths, each byte for byte with its source; the allowlist is checked for forbidden "
+                           "trees, the project pages' reviewed sets and the worker's precache",
+            "threshold": "exactly the {files} deploy.paths files, each byte-identical to its source; no backup/, docs/ "
+                         "or awc-os/live/; every precached asset shipped",
+            "units": "files and bytes"},
+    },
 }
 RECEIPT_BINDING = ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash", "verification_identity")
 
@@ -102,11 +119,13 @@ def stamp(root: Path = ROOT, corpus: Path = CORPUS) -> list[str]:
     raw = corpus.read_text(encoding="utf-8")
     i, j = _span(raw, raw.index('"candidate"'), "{", "}")
     block, moved = raw[i:j + 1], []
-    before = json.loads(block)
-    for key, value in candidate_identity(root).items():
+    before, identity = json.loads(block), candidate_identity(root)
+    for key, value in identity.items():
         if before.get(key) != value:
             moved.append(key)
         block = _set_value(block, key, value)
+    if json.loads(block) != {**before, **identity}:
+        raise VAIC.CorpusError("candidate rewrite diverged from the intended identity")
     corpus.write_text(raw[:i] + block + raw[j + 1:], encoding="utf-8")
     return moved
 
@@ -131,17 +150,20 @@ def append(root: Path = ROOT, corpus: Path = CORPUS, harness=HARNESS, today: str
         if (row.get("transition") or {}).get("disposition") == "SUPERSEDED":
             continue                            # not owed by this build; its history stands
         receipts = row["evaluation"].get("receipts") or []
-        if any(r.get("artifact_build") == cand["build_identity"]
-               and r.get("verification_identity") == cand["verification_identity"] for r in receipts):
-            continue
+        if any(r.get("artifact_build") == cand["build_identity"] and all(r.get(k) == cand[k] for k in RECEIPT_BINDING)
+               for r in receipts):
+            continue                            # already observed on every coordinate of this candidate
         templates = [r for r in receipts
                      if r.get("harness_identity") in harness and r.get("verification_identity") != VAIC.EXTERNAL]
         if not templates:
             continue
-        receipt = copy.deepcopy(templates[-1])
-        run = subprocess.run(harness[receipt["harness_identity"]], cwd=root, capture_output=True, text=True)
+        receipt = copy.deepcopy(templates[-1])  # evaluator, coverage and environment: the harness's, unchanged
+        spec = harness[receipt["harness_identity"]]
+        run = subprocess.run(spec["command"], cwd=root, capture_output=True, text=True)
         receipt["artifact_build"] = receipt["harness_version"] = cand["build_identity"]
         receipt.update({key: cand[key] for key in RECEIPT_BINDING})
+        receipt["method"] = {k: v.format(files=len(VAIC.deploy_paths(root))) for k, v in spec["method"].items()}
+        receipt["evidence"] = list(spec["evidence"])
         receipt["observed_at"] = today
         receipt["result"] = "PASS" if run.returncode == 0 else "FAIL"
         erow["evaluation"]["receipts"].append(receipt)

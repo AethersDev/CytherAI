@@ -123,11 +123,13 @@ def self_intersects(segs):
     def hit(s, t):
         (ax, ay), (bx, by) = s
         (cx, cy), (dx, dy) = t
-        if ay == by and cy == dy: return ay == cy and max(min(ax,bx),min(cx,dx)) < min(max(ax,bx),max(cx,dx))
-        if ax == bx and cx == dx: return ax == cx and max(min(ay,by),min(cy,dy)) < min(max(ay,by),max(cy,dy))
+        # inclusive: two segments that are not neighbours may not even touch (a T-junction or a revisited vertex
+        # is the path meeting itself)
+        if ay == by and cy == dy: return ay == cy and max(min(ax,bx),min(cx,dx)) <= min(max(ax,bx),max(cx,dx))
+        if ax == bx and cx == dx: return ax == cx and max(min(ay,by),min(cy,dy)) <= min(max(ay,by),max(cy,dy))
         if ay == by: (ax,ay,bx,by),(cx,cy,dx,dy) = (cx,cy,dx,dy),(ax,ay,bx,by)
         # s vertical, t horizontal
-        return min(cx,dx) < ax < max(cx,dx) and min(ay,by) < cy < max(ay,by)
+        return min(cx,dx) <= ax <= max(cx,dx) and min(ay,by) <= cy <= max(ay,by)
     for i in range(len(segs)):
         for j in range(i + 1, len(segs)):
             if j == i + 1 or (i == 0 and j == len(segs) - 1): continue
@@ -175,10 +177,9 @@ def main():
         if any(a[0] != b[0] and a[1] != b[1] for (a, b) in segments_of(pts, False)):
             fails.append("fragment not axis-aligned"); break
         if min(p[0] for p in pts) < LANE: fails.append("fragment enters the label lane"); break
-    for tok in ("<text", "C", "Q", "A "):
-        if tok in svg.replace("Claude", ""):
-            if tok == "<text": fails.append("text element present")
     import re
+    if "<text" in svg: fails.append("text element present")
+    if any(re.search(r"[CcQqSsTtAa]", d) for d in re.findall(r'\sd="([^"]*)"', svg)): fails.append("a curve command in a path")
     for col in set(re.findall(r'#[0-9A-Fa-f]{6}', svg)):
         if col.upper() not in ("#E0E6EF", "#101620", "#2036C7"):
             fails.append("off-palette colour %s" % col)

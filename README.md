@@ -22,6 +22,7 @@ and Arabic (`/ar/`), followed by the three systems.
 ## Working on it
 
 ```sh
+git branch master origin/main # once, in a fresh clone: master is the admission lineage the guards walk
 python3 -m http.server 8000   # serve the tree (it answers no byte ranges, so the films cannot seek)
 ./verify.sh                   # every check that needs no browser
 ```
@@ -29,5 +30,7 @@ python3 -m http.server 8000   # serve the tree (it answers no byte ranges, so th
 After changing a served file: `./generate-integrity.sh`, then `python3 tools/vaic_restamp.py`, then `./verify.sh`.
 The release steps and the browser checks are `docs/deploy.md`; how the parts fit, `docs/architecture.md`; the working
 rules, `CLAUDE.md`. `./verify.sh` needs nothing installed (python3, shasum, openssl and JavaScriptCore ship with
-macOS); the browser observations drive Chrome over CDP with `websocket-client`, in `.venv`. The site makes no
-external request.
+macOS); the browser observations (`tools/probe-ink.py`, `tools/probe-settle.py`) drive Chrome over CDP with
+`websocket-client`, in `.venv`, and `tools/probe-origin.py` checks the live origin. The site makes no external request.
+The repository is public on GitHub: `backup/`, the record and the history are readable there; `deploy.paths` governs
+only what the origin serves.

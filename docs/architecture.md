@@ -72,7 +72,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `docs/` | Deployment contract and release record, asset provenance, architecture, the history rewrite | No | Evidence and operational instructions, never origin content |
 | `backup/` | The record: the retired front doors whole with their verifiers, the design studies (`prototype/`, `newC3/`), the trajectory engine and its runner, the build plan of instrument-v1; indexed in `backup/README.md` | No | Historical record only; retire here, never delete, never deploy, never import from |
 | `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage), the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
-| `awc-os/` | AWC-OS evaluation gateway (curated), its films and deck | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
+| `awc-os/` | AWC-OS evaluation gateway (curated) and its films | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 
 ## Homepage boot and steady state
@@ -158,17 +158,23 @@ The release flow is fail-closed:
 3. Run `./verify.sh`.
 4. `./deploy.sh` deletes and rebuilds `dist/` from `deploy.paths`; it rejects a precached
    asset missing from the artifact and rejects the historical directories.
-5. `./publish.sh` pushes the contents of `dist/` as the single-commit `gh-pages` branch
-   GitHub Pages serves at `cytherai.com` (`CNAME`, `.nojekyll` are in the artifact). It
-   refuses uncommitted served files, a HEAD not on `master`, and a failing `./verify.sh`.
-   The origin contract and Pages' recorded limits are `docs/deploy.md` §1–§4, §7.
+5. Observe the build in a browser: `.venv/bin/python tools/probe-ink.py dist <dir>` (CY-SEM-003) and
+   `.venv/bin/python tools/probe-settle.py dist <dir>` (CY-TEMP-001), and append their receipts.
+6. `./publish.sh` pushes the contents of `dist/` as the single-commit `gh-pages` branch
+   GitHub Pages serves at `cytherai.com` (`CNAME`, `.nojekyll` are in the artifact), keeping the
+   artifact it replaces as the local branch `rollback/<its build>`. It refuses any uncommitted
+   change, a HEAD not on `master`, and a failing `./verify.sh`. Then `python3 tools/probe-origin.py
+   dist <out.json>` observes the live origin (CY-ORIGIN-001). The origin contract and Pages'
+   recorded limits are `docs/deploy.md` §1–§4, §7.
 
 The service worker precaches the pages, the front door's script and stylesheet, the two
 final-frame posters it stands on when the film cannot play (offline included), and the three
 `adii/fonts/` files it draws its type with; films go to the network, never the cache. It
 installs one build or
 nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
-navigation to the scope root to cached `index.html`, and removes older caches on activate.
+navigation to a directory it precached (`/`, `/ar/`) to its cached `index.html`, leaves every
+page it did not precache (`adii/`, `awc-os/`) to the network, caches what else it fetches
+past the HTTP cache too, and removes older caches on activate.
 A new build's worker waits: it never takes over a page that may still be loading. Safari
 checks for the update at the navigation itself, so a worker that skipped waiting answered a
 returning reader's previous-build page, mid-load, with this build's modules, and the page
@@ -187,10 +193,13 @@ the iOS 26.5 simulator (`docs/deploy.md` §5g).
 ```
 
 Module parsing, the public API inventory, the boundary stream, the projection laws,
-page/resource integration (every film the front door names ships, and back),
-SRI/build/cache identity, deployment closure, the subpage ink law, the derived-asset
-receipts, and the VAIC-0 corpus (structure, retired-evidence resolution, every lineage,
-fail-closed controls). The retired front doors: `backup/unhappened-v1/verify.sh`,
+page/resource integration (everything a page or stylesheet fetches is a shipped file of this
+origin, every link that stays on the site lands on one, every film the front door names ships,
+and back), each page's least-privilege CSP, the retired register kept out of served files, the
+privacy policy naming exactly what the site stores, SRI/build/cache identity, deployment
+closure, the subpage ink law, the derived-asset receipts (the film's included), and the VAIC-0
+corpus (structure, retired-evidence resolution, every lineage, frozen obligation definitions,
+fail-closed controls, a regression recordable as a FAIL). The retired front doors: `backup/unhappened-v1/verify.sh`,
 `backup/drawing-set-v1/verify.sh`, `backup/instrument-v1/verify.sh`.
 
 Browser-only validation remains required for: the film as rendered at desktop and phone
@@ -203,8 +212,10 @@ muted inline autoplay and VoiceOver.
 ## Change-impact recipes
 
 - Add or remove a front-door script or stylesheet: `index.html`, `generate-integrity.sh`
-  (RESOURCES), `deploy.paths`, `sw.js`, `tools/test-api.py` (SERVED),
-  `tools/test-site.py` (the script list), `IDENTITY_COVERAGE` (`grammar_hash`), and this guide.
+  (RESOURCES), `deploy.paths`, `sw.js`, `tools/test-site.py` (the script list), `IDENTITY_COVERAGE`
+  (`grammar_hash`), and this guide. Each page's `script-src` is exactly what it runs: `'self'` for its own
+  scripts, a `sha256-` source per inline script (the contact pages' form script: edit it, and the hash
+  `tools/test-site.py` computes must be the one in the page's CSP), `'none'` for none.
 - Change the front door's words: change `index.html` and `ar/index.html` together. A cue, a section, a sequence or a
   figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Re-render
   both cards (`python3 tools/render-og-film.py`, `… ar`) if the statement moves, and record both digests.
@@ -226,8 +237,8 @@ muted inline autoplay and VoiceOver.
   `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
   the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
-  icon/manifest references, `generate-integrity.sh` (HTML_FILES), `deploy.paths`, and
-  decide whether it belongs in `sw.js`.
+  icon/manifest references, `deploy.paths` (which is also the list `generate-integrity.sh` stamps and
+  every per-page law in `tools/test-site.py` reads), and decide whether it belongs in `sw.js`.
 - Add a claim to the front door: only as a shipped source states it, with its condition
   beside it and a link to the source; a figure is a `data-m` projection (add it to
   `HEADLINE` in `tools/test-projection.py`). An unsupported claim is dropped.

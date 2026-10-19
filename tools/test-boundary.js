@@ -1,9 +1,9 @@
 /* tools/test-boundary.js — the boundary engine is one object, and its stream is a law.
-   Same seed, same stream, same admissions — on every machine: the seed-02 audit the
-   homepage boots with, pinned event by event. Every event names the position it was
-   judged from, so a consumer can redraw the run without reaching into the state; the
-   audit() the claims consume equals the streamed engine; the kernel never disagrees
-   with the boundary (INVALID EMITTED 0).
+   Same seed, same stream, same admissions — on every machine: the seed-02 audit, pinned
+   event by event (no page loads the engine since THE EXCEPTION retired, 2026-10-16; it is
+   the record js/instrument.js binds). Every event names the position it was judged from,
+   so a consumer can redraw the run without reaching into the state; audit() equals the
+   streamed engine; the kernel never disagrees with the boundary (INVALID EMITTED 0).
 
    Run: jsc js/manifest.js js/instrument.js tools/test-boundary.js
    Prints PASS lines; throws — nonzero exit — on any failure. */
@@ -38,7 +38,8 @@ var good = [H(2), V(2), Hn(2), Z], j0 = I.judge(good);
 ok(j0.ok && j0.kernel, "a square proposed by hand is admitted: H+2 V+2 H−2 Z");
 ok(I.judge([H(5), V(2), Hn(5), Z]).why === "ARG RANGE" && I.judge([H(5), V(2), Hn(5), Z]).at === 0, "ARG RANGE is named at the token that exceeds 4");
 ok(I.judge([H(2), H(2), V(2), Z]).why === "AXIS ORDER" && I.judge([H(2), H(2), V(2), Z]).at === 1, "AXIS ORDER is named at the second consecutive H");
-ok(I.judge([H(4), V(4), Hn(3), Vn(4), H(2), V(2), Z]).why === "CROSSES", "a self-intersecting proposal is refused as CROSSES where it crosses");
+ok(I.judge([H(4), V(4), Hn(3), Vn(4), H(2), V(2), Z]).why === "CROSSES" && I.judge([H(4), V(4), Hn(3), Vn(4), H(2), V(2), Z]).at === 3,
+   "a self-intersecting proposal is refused as CROSSES at the token that crosses (V−4, back over H+4)");
 ok(I.judge([H(2), V(2)]).why === "CLOSURE" && I.judge([H(2), V(2)]).at === 2, "an unclosed proposal is refused as CLOSURE after its last token");
 ok(I.judge([H(4), Vn(4), H(4), Z]).why === "BOUNDS" && I.judge([H(4), Vn(4), H(4), Z]).at === 2, "BOUNDS is named at the token that leaves the grid");
 var f = I.biEngine(1); for (var j = 0; j < 4000; j++) f.step();

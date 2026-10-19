@@ -16,8 +16,9 @@ set -euo pipefail
 # byte, requested or not.)
 RESOURCES="css/cytherai.css css/film.css js/film.js js/theme.js"
 
-# HTML files to patch (every served page)
-HTML_FILES="index.html ar/index.html contact.html ar/contact.html 404.html pages/brief.html pages/privacy.html pages/security.html pages/terms.html adii/index.html awc-os/index.html"
+# HTML files to patch: every served page, read from the one declaration of what is served (a page added there is
+# stamped, and held to every per-page law in tools/test-site.py, with no second list to forget it in)
+HTML_FILES=$(grep '\.html$' deploy.paths)
 
 echo "[integrity] Computing SRI hashes..."
 
@@ -63,7 +64,7 @@ served_manifest() {
     LC_ALL=C sort deploy.paths | while IFS= read -r P; do
         [ -n "$P" ] || continue
         case "$P" in
-            *.html) H=$(sed -E 's|(<meta name="build-hash" content=")[^"]*(">)|\1\2|' "$P" | shasum -a 256 | awk '{print $1}') ;;
+            *.html) H=$(sed -E 's|(<meta name="build-hash" content=")[^"]*(">)|\1\2|g' "$P" | shasum -a 256 | awk '{print $1}') ;;
             sw.js)  H=$(sed -E "s|(var CACHE = 'cytherai-substrate-)[0-9A-F]*|\1|" "$P" | shasum -a 256 | awk '{print $1}') ;;
             *)      H=$(shasum -a 256 "$P" | awk '{print $1}') ;;
         esac

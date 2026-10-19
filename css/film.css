@@ -5,7 +5,7 @@
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
 :root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff}
 /* light mode (js/theme.js): the sections below the film take light tokens; the film, the header and the sentences over it stay dark */
-[data-theme=light] :is(.principle,.system,.close){--ground:#f3f1ec;--ink:#121118;--dim:#5b5763;--soft:#37343e;--warm:#9a4a00;--rule:#12111826;--hover:#34313b;color:var(--ink)}
+[data-theme=light] :is(.principle,.system,.close,body>footer){--ground:#f3f1ec;--ink:#121118;--dim:#5b5763;--soft:#37343e;--warm:#9a4a00;--rule:#12111826;--hover:#34313b;color:var(--ink)}
 [data-theme=light] .principle{background:var(--ground)}[data-theme=light] .principle::before{display:none}[data-theme=light] .principle h2{text-shadow:none}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
@@ -19,11 +19,12 @@ header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex
 .note{position:absolute;inset-inline-start:5vw;bottom:18px;margin:0;color:var(--dim)}
 .wordmark{display:inline-flex;align-items:center;font-family:Public,sans-serif;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
-main{position:relative;z-index:2;height:100svh;padding:0 5vw;overflow:hidden}
+/* the film's stage, one viewport tall; 100vh first for an engine without svh, which would drop the height and collapse it */
+.stage{position:relative;z-index:2;height:100vh;height:100svh;padding:0 5vw;overflow:hidden}
 .line,.landing{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw);margin:0;opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s}
 .line{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
 header::before{content:"";position:absolute;inset:0 0 -56px;z-index:-1;pointer-events:none;background:linear-gradient(#07070ae6,#07070ab3 55%,transparent)}
-main::after{content:"";position:absolute;inset-inline:0;bottom:0;height:150px;z-index:-1;pointer-events:none;background:linear-gradient(transparent,#07070acc 40%,#07070af7)}
+.stage::after{content:"";position:absolute;inset-inline:0;bottom:0;height:150px;z-index:-1;pointer-events:none;background:linear-gradient(transparent,#07070acc 40%,#07070af7)}
 .principle::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 75% 60% at 28% 50%,#07070ae0,#07070a99 50%,transparent 80%)}
 .line::before,.landing::before{content:"";position:absolute;inset-block:-12vh -14vh;inset-inline:-10vw -28vw;z-index:-1;background:radial-gradient(ellipse at 35% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
 [dir=rtl] .principle::before{background:radial-gradient(ellipse 75% 60% at 72% 50%,#07070ae0,#07070a99 50%,transparent 80%)}
@@ -39,7 +40,7 @@ body[data-state=still] .line{transition:none}
 .plain{font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
 #replay::before{content:"";position:absolute;inset:-12px -18px;z-index:-1;pointer-events:none;background:radial-gradient(farthest-side,#07070af0 55%,#07070a00)}
 #replay{position:absolute;z-index:0;inset-inline-end:5vw;bottom:17vh;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:4px}#replay:hover{color:var(--ink);border-color:var(--ink)}
-@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}main{padding:0 20px}.note{inset-inline-start:20px;bottom:14px}
+@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}.stage{padding:0 20px}.note{inset-inline-start:20px;bottom:14px}
  .line,.landing{inset-inline:20px;bottom:14vh;max-width:none}.line{font-size:28px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
 @media(max-width:480px){.side .to{display:none}}
@@ -53,10 +54,10 @@ body[data-state=still] .line{transition:none}
 .system p{font-size:17px;line-height:1.55;color:var(--soft);margin:0 0 14px;max-width:48ch}
 .system .cond{color:var(--dim);font-size:14px}
 .route{display:inline-block;margin-top:8px;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}.route:hover{color:var(--warm);border-color:var(--warm)}
-.close{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 40px;border-top:1px solid var(--rule)}
+.close{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 0;border-top:1px solid var(--rule)}
 .close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}.close nav .mono{color:var(--dim)}
-.close footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:120px;color:var(--dim)}.close footer a:hover{color:var(--ink)}
-@media(max-width:760px){.principle{padding:0 20px;min-height:60svh}.system{grid-template-columns:1fr;gap:28px;padding:56px 20px}.system h2{font-size:28px}.system p{font-size:16px}.close{padding:80px 20px 32px}.close footer{margin-top:72px}}
+body>footer{position:relative;z-index:2;background:var(--ground);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:120px 5vw 40px;color:var(--dim)}body>footer a:hover{color:var(--ink)}
+@media(max-width:760px){.principle{padding:0 20px;min-height:60svh}.system{grid-template-columns:1fr;gap:28px;padding:56px 20px}.system h2{font-size:28px}.system p{font-size:16px}.close{padding:80px 20px 0}body>footer{padding:72px 20px 32px}}
 /* Arabic (ar/): the Arabic type, never letter-spaced (it breaks the joins), taller lines for its marks; Latin names keep their own */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) .mono{font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
