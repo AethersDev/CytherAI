@@ -1262,6 +1262,29 @@ requires to 404. The page, its films and the deck as they were: `backup/awc-os-v
 hackathon (AMAD 2026, Alinma Bank × Tuwaiq Academy) and the demonstration's halal alternative, a named Alinma product.
 The YouTube video is the owner's to change.
 
+## 5u. Two sequences re-rendered; the ADII CVs kept — 2026-10-19
+
+Build `EAA945BC838E9BBC` (`#reading_ink_EAA945BC838E9BBC`, `#film_settle_EAA945BC838E9BBC`).
+
+**The sequences' recorded defects are fixed** (IMG-012), in `tools/render-systems.py`, and both are re-rendered. In
+AWC-OS's, the refused program, turned back, now also rises out of its lane and steps back from it, so the compliant
+alternative passes in the lane it left: it had stayed in the lane and the alternative passed through it (3.90–4.17 s).
+In CytherCAD's, the three refused tokens now stop on rows of their own, 0.56 apart, stepped back out of the stream,
+and a passing token leaves the ring as it reaches it: two refused tokens had shared a row and merged (the poster showed
+two of the three), later tokens passed through resting refused ones, and consecutive passing tokens clipped at the ring,
+which the audit did not report. A check of every moving slab's and token's box, 96 times a second, finds those
+intersections in the published motion and none in the new. Rendered with Blender 5.1.2 (`--factory-startup`, Cycles on
+the Apple GPU, 48 samples, `TL=10`, about 12.5 minutes a sequence), encoded as before; over the motion they share, 47 dB
+against the 2026-10-12 renders, which stay at `git show baba8d0:film/sys-<name>.mp4`.
+
+**The ADII CVs stay published, contact details included** (the owner, 2026-10-19): they belong to the ADII team's own
+page. The open question of §5t is closed by that decision.
+
+Observed on this build (Chrome 155.0.8059.82): reading ink over the film on both front doors, dark and light, at three
+viewports, 1,534 element samples, none below 4.5:1, worst 4.86:1 (CY-SEM-003 PASS); both pages settle to no frame,
+timer or playing media in every profile, every re-rendered sequence playing to its last frame, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
