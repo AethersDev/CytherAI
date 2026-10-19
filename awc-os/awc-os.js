@@ -5,8 +5,11 @@
 function setLang(l) {
   document.documentElement.lang = l;
   document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
-  document.getElementById("btn-ar").classList.toggle("on", l === "ar");
-  document.getElementById("btn-en").classList.toggle("on", l === "en");
+  for (const b of ["ar", "en"]) {   // the pressed state is said, not only shown
+    const button = document.getElementById("btn-" + b);
+    button.classList.toggle("on", l === b);
+    button.setAttribute("aria-pressed", String(l === b));
+  }
   document.querySelectorAll("[data-ar]").forEach(e => {
     if (e.classList.contains("callout")) e.innerHTML = e.dataset[l];
     else e.textContent = e.dataset[l];

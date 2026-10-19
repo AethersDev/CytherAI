@@ -7,7 +7,6 @@
 (function () {
 "use strict";
 if (typeof document === "undefined") return;
-document.documentElement.classList.remove("no-js");
 
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
 const lines = [...document.querySelectorAll(".line")], landing = document.querySelector(".landing");
@@ -85,6 +84,7 @@ function look() {
 seqs.forEach(s => {
   s.addEventListener("playing", () => { pace.set(s, { t: -1, at: performance.now() }); if (!watch) watch = setInterval(look, 250); });
   s.addEventListener("pause", idle); s.addEventListener("ended", idle);
+  s.addEventListener("error", () => rest(s));   // a failed download rests on its poster, and its emptied frees the slot
 });
 const full = s => { const b = s.buffered; return s.hasAttribute("src") && b.length > 0 && b.end(b.length - 1) >= s.duration - 0.05; };
 /* resolves once the whole clip is buffered, or it is dropped (rest, or giving way to a sequence in view). A clip that
@@ -141,4 +141,6 @@ function enlist() {
     reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });
   }).catch(() => {});   /* insecure context — run online-only */
 }
+/* last: an engine that throws above keeps .no-js, and its CSS unveils the statement on its own */
+document.documentElement.classList.remove("no-js");
 })();
