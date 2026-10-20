@@ -4,15 +4,18 @@
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
 :root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff}
-/* light mode (js/theme.js): the sections below the film take light tokens; the film, the header and the sentences over it stay dark */
-[data-theme=light] :is(.principle,.system,.close,body>footer){--ground:#f3f1ec;--ink:#121118;--dim:#5b5763;--soft:#37343e;--warm:#9a4a00;--rule:#12111826;--hover:#34313b;color:var(--ink)}
-[data-theme=light] .principle{background:var(--ground)}[data-theme=light] .principle::before{display:none}[data-theme=light] .principle h2{text-shadow:none}
+/* light mode (js/theme.js): the sections below the passage take light tokens; the film, the passage, the header and the words over them stay dark */
+[data-theme=light] :is(.system,.close,body>footer){--ground:#f3f1ec;--ink:#121118;--dim:#5b5763;--soft:#37343e;--warm:#9a4a00;--rule:#12111826;--hover:#34313b;color:var(--ink)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
 a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offset:6px}
 .mono{font-family:Plex,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-#film{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
+#film,#passage{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
+/* the passage fades in over the film's frame: the two encodings of one image differ only by their noise, and a late
+   arrival meets a scroll already moving */
+#passage{opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+body.scrub[data-state=still] #passage{opacity:1;visibility:visible;transition:opacity .4s,visibility 0s}
 header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
 .side{display:flex;align-items:center;gap:24px}
 #theme{display:block;padding:4px;color:var(--soft)}#theme:hover{color:var(--warm)}#theme svg{display:block}
@@ -25,10 +28,8 @@ header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex
 .line{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
 header::before{content:"";position:absolute;inset:0 0 -56px;z-index:-1;pointer-events:none;background:linear-gradient(#07070ae6,#07070ab3 55%,transparent)}
 .stage::after{content:"";position:absolute;inset-inline:0;bottom:0;height:150px;z-index:-1;pointer-events:none;background:linear-gradient(transparent,#07070acc 40%,#07070af7)}
-.principle::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 75% 60% at 28% 50%,#07070ae0,#07070a99 50%,transparent 80%)}
-.line::before,.landing::before{content:"";position:absolute;inset-block:-12vh -14vh;inset-inline:-10vw -28vw;z-index:-1;background:radial-gradient(ellipse at 35% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
-[dir=rtl] .principle::before{background:radial-gradient(ellipse 75% 60% at 72% 50%,#07070ae0,#07070a99 50%,transparent 80%)}
-[dir=rtl] .line::before,[dir=rtl] .landing::before{background:radial-gradient(ellipse at 65% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
+:is(.line,.landing)::before{content:"";position:absolute;inset-block:-12vh -14vh;inset-inline:-10vw -28vw;z-index:-1;background:radial-gradient(ellipse at 35% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
+[dir=rtl] :is(.line,.landing)::before{background:radial-gradient(ellipse at 65% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
 .on{opacity:1;visibility:visible;transition:opacity .6s,visibility 0s}
 .landing{visibility:visible}.landing nav{transition:visibility 0s .6s}.landing:not(.on) nav{visibility:hidden}.landing.on nav{transition:visibility 0s}
 .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -44,10 +45,21 @@ body[data-state=still] .line{transition:none}
  .line,.landing{inset-inline:20px;bottom:14vh;max-width:none}.line{font-size:28px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
 @media(max-width:480px){.side .to{display:none}}
-.principle{position:relative;z-index:2;min-height:72svh;display:flex;flex-direction:column;justify-content:center;gap:18px;padding:0 5vw}
-.principle small,.system small{color:var(--warm)}
-.principle h2,.close h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0}
-.principle h2{text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+/* the passage (js/film.js): each beat a stretch of scroll whose words are held near where the film's sentences stood — a
+   box stuck to the top, the words at its foot, 10vh up, below the scene — and shown while the beat holds its moment */
+.beat{position:relative;z-index:2;min-height:123vh;min-height:123svh;overflow-x:clip}.beat.long{min-height:173vh;min-height:173svh}   /* clip, not hidden: the words stay sticky, and their darkening widens no page */
+.hold{position:sticky;top:0;height:90vh;height:90svh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 5vw}   /* vh first, as the stage */
+.say{position:relative;width:fit-content;max-width:min(640px,90vw);transition:opacity .6s}
+/* behind the passage's words, a darkness opaque under them and soft at its edges (a 14 px blur, 99.5 % dark 36 px in): the
+   current runs through the words' band on a phone, and reaches a tall block's first line on a short screen */
+.say::before{content:"";position:absolute;inset:-36px -48px;z-index:-1;pointer-events:none;background:#07070a;filter:blur(14px)}
+html:not(.no-js) .say{opacity:0}html:not(.no-js) :is(.say.on,.say:focus-within){opacity:1}   /* focus never lands on words unseen */
+.say small,.system small{color:var(--warm)}
+.say h2,.say .big{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;margin:0;color:var(--ink);text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+.close h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0}
+.say small+h2{margin-top:16px}
+.say p{font-size:17px;line-height:1.55;color:var(--soft);margin:14px 0 0;max-width:48ch;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
+.say p.big{margin:0}.say .cond{color:var(--dim);font-size:14px}.say .route{margin-top:14px}
 .system{position:relative;z-index:2;background:var(--ground);display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:center;padding:88px 5vw;border-top:1px solid var(--rule)}
 .system .seq{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
 .system h2{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.2vw,48px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 22px}
@@ -57,12 +69,12 @@ body[data-state=still] .line{transition:none}
 .close{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 0;border-top:1px solid var(--rule)}
 .close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}.close nav .mono{color:var(--dim)}
 body>footer{position:relative;z-index:2;background:var(--ground);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:120px 5vw 40px;color:var(--dim)}body>footer a:hover{color:var(--ink)}
-@media(max-width:760px){.principle{padding:0 20px;min-height:60svh}.system{grid-template-columns:1fr;gap:28px;padding:56px 20px}.system h2{font-size:28px}.system p{font-size:16px}.close{padding:80px 20px 0}body>footer{padding:72px 20px 32px}}
+@media(max-width:760px){.hold{padding:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.system{grid-template-columns:1fr;gap:28px;padding:56px 20px}.system h2{font-size:28px}.system p{font-size:16px}.close{padding:80px 20px 0}body>footer{padding:72px 20px 32px}}
 /* Arabic (ar/): the Arabic type, never letter-spaced (it breaks the joins), taller lines for its marks; Latin names keep their own */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) .mono{font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
-:lang(ar) :is(.line,.landing h1,.principle h2,.close h2,.system h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
+:lang(ar) :is(.line,.landing h1,.say h2,.say .big,.close h2,.system h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
 @media(max-width:760px){:lang(ar) .landing h1{font-size:26px}}
-:lang(ar) .system p{line-height:1.85}
+:lang(ar) :is(.system,.say) p:not(.big){line-height:1.85}
 :lang(ar) [lang=en]{unicode-bidi:isolate;white-space:nowrap}   /* a Latin name in Arabic text stays whole, in its own order */
-@media(prefers-reduced-motion:reduce){.line,.landing,.on{transition:none}}
+@media(prefers-reduced-motion:reduce){.line,.landing,.say,.on,#passage{transition:none}}
