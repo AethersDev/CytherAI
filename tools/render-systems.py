@@ -1,6 +1,8 @@
-# The three system sequences, in the film's materials: one memorable moment each, six seconds, no choices.
-# blender -b --factory-startup --python-exit-code 1 -P tools/render-systems.py -- <adii|awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,t2,...]
+# Two system sequences, AWC-OS's and CytherCAD's, in the film's materials: one memorable moment each, six seconds, no choices.
+# blender -b --factory-startup --python-exit-code 1 -P tools/render-systems.py -- <awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,t2,...]
 # (TL, seconds per frame for Cycles: the published sequences used 10, so their frames depend on the machine.)
+# ADII's sequence retired on 2026-10-20 for the passage (tools/render-passage.py); it and its branch of this script are
+# backup/adii-sequence-v1/ and `git show 102fdf9:tools/render-systems.py`.
 # Behaviour shown is only what each shipped page states (see the premise ledger). The material and key
 # helpers repeat film.py's on purpose: tools/render-film.py is the exact source of the accepted film and is not touched.
 import bpy, math, os, sys
@@ -8,7 +10,7 @@ from mathutils import Vector, Matrix
 
 args = sys.argv[sys.argv.index('--') + 1:]
 WHICH, MODE, OUT = args[0], args[1], args[2]
-if WHICH not in ('adii', 'awcos', 'cad') or MODE not in ('stills', 'anim'): raise SystemExit('usage: -- <adii|awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,...]')
+if WHICH not in ('awcos', 'cad') or MODE not in ('stills', 'anim'): raise SystemExit('usage: -- <awcos|cad> <stills|anim> <outdir> <WxH> <samples> [t1,...]')
 W, H = (int(x) for x in args[3].split('x'))
 SPP = int(args[4])
 TIMES = [float(x) for x in args[5].split(',')] if MODE == 'stills' else []
@@ -105,35 +107,8 @@ def light(name, loc, target, energy, size, color=(0.8, 0.86, 1.0)):
 light('key', (-7, -15, 12), (0, 0, 0), 1300, 7); light('fill', (10, 13, 5), (0, 0, 0), 300, 10); light('edge', (6, 12, 7), (0, 0, 0), 2400, 5)
 key(CURRENT.node_tree, 'nodes["T"].outputs[0].default_value', [(t,) for t in times])
 
-def slab(name, w_, h_, x, z, mat=CERAMIC, y=-2.6):
-    """a ceramic slab facing the camera (thin in y), w_ along the axis, h_ tall"""
-    o = add(name, mesh_box(name, w_, 0.05, h_), mat); o.location = (x, y, z); return o
-
-# ---------- 01 ADII: a wrong number is held; the fix is proposed, allowed, checked, applied ----------
-if WHICH == 'adii':
-    heights = [1.6, 1.7, 1.65, 1.75, 1.7, 1.8, 1.72, 0.9, 1.74, 1.78, 1.7]   # the eighth day is the wrong number
-    xs = [-3.5 + 0.7 * i for i in range(11)]
-    for i, (x, h) in enumerate(zip(xs, heights)):
-        if i == 7: continue
-        slab('day%d' % i, 0.5, h, x, -1.2 + h / 2)
-    held = slab('held', 0.5, 0.9, xs[7], -1.2 + 0.45)
-    key(held, 'location', [(xs[7], -2.6 - 0.35 * ss(1.2, 1.8, t), -0.75 + 0.5 * ss(1.2, 1.8, t) * (1 - ss(4.4, 5.0, t)) - 1.6 * ss(4.4, 5.0, t)) for t in times])
-    probe = add('probe', mesh_torus('probe', 0.7, 0.01), RIM); probe.rotation_euler = (math.pi / 2, 0, 0)
-    key(probe, 'location', [(xs[7], -2.95, -0.25) for t in times]); key(probe, 'scale', [(s, s, s) for s in (ss(1.6, 1.9, t) * (1 - ss(4.2, 4.5, t)) for t in times)])
-    fix = slab('fix', 0.5, 1.74, xs[7], 0, PALE)     # the proposed value, from above, held at the authorizer's line, then seated
-    gate = add('gate', mesh_box('gate', 1.1, 0.4, 0.012), GLASS); gate.location = (xs[7], -2.6, 1.55)
-    rim2 = add('gaterim', mesh_torus('gaterim', 0.55, 0.012), RIM); rim2.location = (xs[7], -2.6, 1.55)
-    def fix_z(t):
-        a = 3.9 - 1.26 * ss(2.2, 3.0, t)                 # descends to the gate and waits above it
-        return a - 0.1 * ss(3.0, 3.3, t) - 2.87 * ss(3.5, 4.3, t)   # a fraction short, then allowed and seated
-    key(fix, 'location', [(xs[7], -2.6, fix_z(t)) for t in times])
-    sweep = add('sweep', mesh_torus('sweep', 3.5, 0.012), RIM); sweep.rotation_euler = (0, math.pi / 2, 0)   # the validator's check runs along the row
-    key(sweep, 'location', [(-4.5 + 9.0 * ss(4.5, 5.4, t), 0, 0) for t in times]); key(sweep, 'scale', [(s, s, s) for s in (ss(4.4, 4.6, t) * (1 - ss(5.4, 5.6, t)) for t in times)])
-    key_glow(rim2, [6.0 * ss(2.8, 3.1, t) * (1 - ss(3.6, 4.0, t)) for t in times])
-    CAM = [((-2.5, -9.5, 1.2), (-0.3, 0, 0.1)), ((-1.2, -8.2, 0.9), (-0.2, 0, 0.1))]
-
 # ---------- 02 AWC-OS: three programs at the engine: executed, refused with an alternative, blocked ----------
-elif WHICH == 'awcos':
+if WHICH == 'awcos':
     lanes = (-0.35, -1.25, -2.15)
     def program(name, z, mat=CERAMIC):
         o = add(name, mesh_box(name, 1.1, 0.05, 0.62), mat); o.location = (-6, -2.6, z); return o

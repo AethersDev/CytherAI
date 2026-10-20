@@ -1287,6 +1287,76 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_EAA945BC838E9BBC`), 56 of 56 served paths matching the artifact.
 
+## 5v. The passage: the film opens into ADII — 2026-10-20
+
+Build `86CD52B68E33C36A` (`#reading_ink_86CD52B68E33C36A`, `#film_settle_86CD52B68E33C36A`).
+
+**The owner's direction, *The Shape of Permission*** (2026-10-20, pasted): make the film's strongest moment — the change
+that stops while everything else continues — the organizing idea of the whole site, and produce one complete transition
+first, the opening film into ADII, with its copy, motion, phone composition and route to its real evidence; extend the
+grammar through AWC-OS, CytherCAD and the close only if it succeeds. This build is that first piece; the owner judges it.
+
+**What the visitor sees.** The statement stands over the film's final composition as before. As they scroll, the passage
+(`tools/render-passage.py`, IMG-013), scrubbed by the scroll and never played, continues the film's own scene from its
+last frame: the camera moves into the plane of the ring the refused slab never crossed, so the ring narrows to a single
+line that stays where it stood (it is the ring seen edge on, the camera in its plane); the two halves of the structure
+part around it, the refused slab suspended where it stopped, and a run of the structure's ceramic tiles is left standing
+and comes forward as a row of fifteen values, one visibly wrong — the last, at the line, about half the rest, as the
+recorded run's last day was (*↓51%*). A correction arrives from the proposing side and stops a fraction short of the
+line, where the refused slab stopped; the authorizer's light traces the one slot it may change, the validator's scan
+leaves the line and runs the row, the slot holds, and only then does the correction cross and take the wrong value's
+place, which steps back behind it. Phones get the same scene in the film's portrait composition: the line horizontal,
+the values stacked above it, the correction and the refused slab waiting under it side by side.
+
+**Its words** arrive at the foot of the frame, below the scene, each held while its moment holds (`.beat`, `data-t`): the
+principle; *01 · ADII · A conceptual illustration*, *A number looks wrong.* with the sentence on what ADII answers; *Changing
+it is a separate decision.* as the correction waits; the two programs as the checks run; the condition and *See what
+this is based on →* once it has crossed, to `adii/#run`, the recorded run itself (`tools/test-site.py` now requires a
+link's fragment to name an element of the page it lands on). A screen-reader paragraph describes the illustration. In
+Arabic, the same beats and moments.
+
+**Its mechanics** (`js/film.js`). The passage downloads once the film is still (asked to play and paused at once: iOS
+fetches only then), ahead of the sequences, and shows once whole, under the film's element: its first frame is the film's
+last (the render against the film's final-frame posters: 48.2 dB landscape, 35.7 dB portrait at the poster's size, where
+the film's own last frame reads 37.1 dB; delivered, the two encodings differ by their noise, and the passage fades in
+over 0.4 s), so nothing changes where it takes over. The scroll then names a moment, interpolated through each beat's
+hold, and the passage seeks to it, one seek at a time; a keyframe every six frames keeps every seek short (measured on
+the film's own frames: in headless Chrome each seek landed within one display frame, 18.6 ms at most; in the iOS
+Simulator, 14 ms median and 17 ms at the 90th percentile; at the film's 250-frame interval, 23–36 ms median and up to
+66 ms in Chrome). Until it is whole, under reduced motion, or after a failed download, the film's element stands on the
+final frame, and past the principle on the still of ADII's moment. A visitor who scrolls on past the film ends it, and a page
+that opens past it (an anchor, a restored scroll) never plays it. Nothing runs while the scroll is still (CY-TEMP-001):
+a frame is asked for only as the page scrolls.
+
+**Checked.** No solid piece passes through another in any of its 288 frames: an oriented-box test of every moving piece
+against every other and against every piece of the parting halves, the film's rings tested as rings (the first test,
+treating each as a disc, flagged the tiles in their holes). It found one real defect before the render, now fixed: the
+correction had existed from the first frame at its starting place, inside the film's left half. Rendered with Blender 5.1.2,
+Cycles on the Apple GPU at the film's own settings (64 samples, `TL=24` landscape, `TL=14` portrait); delivered at 1440×810
+and 810×1440, 1,045,732 and 952,673 bytes (0.69 and 0.63 Mbit/s), each with its still of 40 KB.
+
+**Retired.** ADII's six-second sequence, whole, to `backup/adii-sequence-v1/` (IMG-012's ADII outputs moved with it), and
+its branch of `tools/render-systems.py` (`git show 102fdf9:tools/render-systems.py`).
+
+**Open, for the owner.** The creative question the direction asks: does the visitor feel still inside the same world while
+understanding more about the company? AWC-OS, CytherCAD and the close keep their cards until that is answered; the deeper
+pages keep their own design. The device checks (§5f) now include the passage on an iPhone.
+
+**Reading ink over the passage, found and fixed before it was recorded.** The first probe of this build's passage failed
+on phones and in Arabic on the desktop: the current runs through the words' band on a phone, and a tall Arabic block's
+first line reached the current's glow, so the small warm labels and the dim condition fell to 2.18–3.0:1 over its light
+(the film's soft radial darkening was not made for words over a bright line). The passage's words now carry their own
+darkness, opaque under them and soft at its edges, and sit lower, 10vh from the foot of the frame, below the scene.
+
+Observed on this build (Chrome 155.0.8059.85): reading ink over the film and the passage on both front doors, dark and
+light, at three viewports, 1,488 element samples, none below 4.5:1, worst 4.9:1 (the film's statement on a phone; the
+passage's words 6.11:1 at worst) (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every
+profile once the scroll stops, the passage following the scroll to the frame its anchors name (11.782 s at the last beat,
+exactly) and, under reduced motion, never loading while ADII's still stands; every sequence played to its last frame;
+the worker caching this build and serving it offline (CY-TEMP-001 PASS). The settle probe now lets a scroll be answered
+(one frame) before its quiet window, and under reduced motion requires the stimulus to start no media and no timer:
+written before the page answered a scroll at all, it had counted that answer as motion.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1324,10 +1394,10 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Check | What to confirm |
 |---|---|
 | Safari (macOS) | the film autoplays muted and inline; each sentence appears in its window; it ends on the still composition with the statement and Replay; Develop → Console shows no error |
-| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once; each sequence plays as it comes into view |
+| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle ADII's still stands for the passage; scrolling on from the statement moves the passage frame by frame, the line held where the ring stood, with no jump where it takes over from the film; each sequence plays as it comes into view |
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
-| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route, *Talk to us* and the footer; the focus ring is visible throughout |
-| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the three systems' headings and copy in order; the films are silent and hidden from it |
+| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, ADII's *See what this is based on →* (its words shown when it has focus), each other system's route, *Talk to us* and the footer; the focus ring is visible throughout |
+| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle, ADII's beats and the other two systems' headings and copy in order; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
 | 200% zoom (⌘+) | the statement, the captions and the systems' copy unclipped |
 
