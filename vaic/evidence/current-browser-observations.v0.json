@@ -29,7 +29,8 @@
     "B76DECC774B9AFBB",
     "39E089F84EA28E7D",
     "EAA945BC838E9BBC",
-    "86CD52B68E33C36A"
+    "86CD52B68E33C36A",
+    "EB79D2894F4F8A29"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -19926,6 +19927,502 @@
         11
       ],
       "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead"
+    },
+    "reading_ink_EB79D2894F4F8A29": {
+      "artifact_build": "EB79D2894F4F8A29",
+      "observed_at": "2026-10-20",
+      "runtime": "Headless Chrome/155.0.8059.85 (macOS 27.0.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-ink.py (committed 2026-10-18, extended 2026-10-20 to the passage and then to its timed words; sha256 353f01f9f825…)",
+      "surface": "every reading element with text of both front doors, / and /ar/, in both themes: the film's captions, the statement and its links, the header's wordmark and language link, Replay and the conceptual-visualization line over the film and its local darkening (mirrored for right to left); the passage's words (the principle and ADII's four captions) over the passage's frames and the darkness under them, dark in both themes; AWC-OS, CytherCAD, the close and the footer over the page ground, dark or light. The theme switch is an icon with no text and is not measured.",
+      "method": "play() stubbed to resolve without playing and the page reporting itself hidden, so the film holds where it is seeked (no served file edited); for each declared second the video is seeked, the seek confirmed within 0.05 s, then 1.0 s for the cue and the 0.6 s fade, and the page confirmed in its film state showing the cue its own data-from/data-to name; the film is then ended (the still state); once the passage is whole (body.scrub) the scroll is taken to the middle of each of its words' windows and confirmed after 1.3 s: the passage not seeking and within a frame of the moment the page's own stretches (data-t) name for that scroll, those words shown (opacity 1); then each remaining section is scrolled to the viewport centre (the footer's text wholly in view with the close); prefers-color-scheme emulated dark or light (js/theme.js follows it); capture after two frames with every glyph's fill transparent and with every fill #FF00FF (glyph support = pixels differing by ≥ 64 in a channel); WCAG 2.1 contrast of each fully opaque element's computed ink, alpha-composited, against every ground pixel at its glyph support. The page's CSP was bypassed for the probe's own capture style only.",
+      "samples": "film seconds 1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9; the still state; the passage at the middle of each of its five words' windows (3.2, 6.0, 8.0, 9.9 and 12.0 s); #awc-os, #cythercad, .close; each in English and Arabic, dark and light, at three viewports",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "the declared seconds, moments, sections, two languages, two themes and three viewports only; the passage between those moments is not sampled; a finite sweep licenses no universal proposition",
+      "result": "PASS",
+      "elements_measured": 1488,
+      "worst_min": 4.9,
+      "history": "Observed on the build that gives the passage an even pace (the owner, 2026-10-20: it lagged and was not smooth to follow): the scroll moves the scene 2 s a viewport throughout, its words are fixed at the foot of the frame and fade with the scroll in their windows of its seconds, the darkness under them a shadow, not a filter; the passage's media are unchanged (IMG-013).",
+      "profiles": {
+        "/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 129,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.17,
+            "p01": 5.17
+          }
+        },
+        "/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 112,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t11.9",
+            "element": "h1",
+            "text": "Let AI change things.Keep control of wha",
+            "min": 4.9,
+            "p01": 9.5
+          }
+        },
+        "/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 111,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.0",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.39,
+            "p01": 5.49
+          }
+        },
+        "/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 129,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.17,
+            "p01": 5.17
+          }
+        },
+        "/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 112,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t11.9",
+            "element": "h1",
+            "text": "Let AI change things.Keep control of wha",
+            "min": 4.9,
+            "p01": 9.5
+          }
+        },
+        "/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 111,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.0",
+            "element": "p.note",
+            "text": "A conceptual visualization. It measures ",
+            "min": 5.39,
+            "p01": 5.49
+          }
+        },
+        "/ar/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 142,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.8",
+            "element": "p.note",
+            "text": "تصوّر مفاهيمي. لا يقيس أي منتج.",
+            "min": 5.81,
+            "p01": 5.81
+          }
+        },
+        "/ar/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 125,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t5.0",
+            "element": "p.note",
+            "text": "تصوّر مفاهيمي. لا يقيس أي منتج.",
+            "min": 5.59,
+            "p01": 5.59
+          }
+        },
+        "/ar/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 125,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.line",
+            "text": "ليس كل شيء ينبغي أن يُسمح بتغييره.",
+            "min": 5.36,
+            "p01": 6.78
+          }
+        },
+        "/ar/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 142,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#awc-os",
+            "element": "small.mono",
+            "text": "02 · AWC-OS",
+            "min": 5.55,
+            "p01": 5.55
+          }
+        },
+        "/ar/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 125,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "#awc-os",
+            "element": "small.mono",
+            "text": "02 · AWC-OS",
+            "min": 5.55,
+            "p01": 5.55
+          }
+        },
+        "/ar/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 125,
+          "below_4_5": 0,
+          "worst": {
+            "sample": "t4.2",
+            "element": "p.line",
+            "text": "ليس كل شيء ينبغي أن يُسمح بتغييره.",
+            "min": 5.36,
+            "p01": 6.78
+          }
+        }
+      }
+    },
+    "film_settle_EB79D2894F4F8A29": {
+      "artifact_build": "EB79D2894F4F8A29",
+      "build_identity": "EB79D2894F4F8A29",
+      "observed_at": "2026-10-20",
+      "runtime": "Headless Chrome/155.0.8059.85 (macOS 27.0.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-settle.py (committed 2026-10-18, extended 2026-10-20 to the passage and then to its timed words; sha256 386a25af883c…); film_settled_after_s is counted from navigation start (the film is 12.0 s)",
+      "surface": "both front doors, / and /ar/ (index.html, ar/index.html, js/film.js, js/theme.js, css/film.css, film/)",
+      "method": "before any page script, requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire, and a video counts as playing if it played at any moment of the window; autoplay allowed; wait for the film's still state; scroll through the passage, to the middle of each of its words' windows (outside reduced motion, once the passage is whole: at the last words it must show the frame the page's stretches name there, within a frame; under reduced motion it must not load, and the film's element must stand on the still of ADII's moment); scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll to the close and, once that scroll has been answered (0.5 s), reset the counts and wait 3 s; then scroll a sequence back into view (it must play; under reduced motion it starts no media and no timer), wait for every video to stop, reset and count 3 s again. Each page then checks the worker's caches, control after reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).",
+      "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages; the passage follows the scroll (outside reduced motion); a stimulus starts motion (outside reduced motion) and the page settles again; no request leaves the origin and no console error",
+      "result": "PASS",
+      "profiles": {
+        "/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.1,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-landscape.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.04,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-portrait.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 4,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 16,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.05,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-portrait.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 4,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 16,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.02,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 0,
+            "scrub": false,
+            "poster": "passage-landscape.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": false,
+          "#cythercad_played": false,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.12,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-landscape.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 18,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.05,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-portrait.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 12.05,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 12,
+            "scrub": true,
+            "poster": "final-portrait.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": true,
+          "#cythercad_played": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 3,
+            "playing": 1,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 17,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.04,
+          "passage_at_last_words": {
+            "want": 12,
+            "at": 0,
+            "scrub": false,
+            "poster": "passage-landscape.jpg"
+          },
+          "passage_followed": true,
+          "#awc-os_played": false,
+          "#cythercad_played": false,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        }
+      },
+      "worker": {
+        "/": {
+          "caches": [
+            "cytherai-substrate-EB79D2894F4F8A29"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "EB79D2894F4F8A29",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/final-landscape.jpg",
+            "fonts_loaded": "News,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        },
+        "/ar/": {
+          "caches": [
+            "cytherai-substrate-EB79D2894F4F8A29"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "EB79D2894F4F8A29",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/final-landscape.jpg",
+            "fonts_loaded": "Arabic,Arabic,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        }
+      }
     }
   }
 }

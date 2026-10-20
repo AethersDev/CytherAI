@@ -22,7 +22,7 @@ nothing of their design is carried into the front door.
 
 ```mermaid
 flowchart TD
-  I["index.html — the film's sentences, the passage's beats (the principle, ADII), two systems, the close"] --> CSS2["css/film.css"]
+  I["index.html — the film's sentences, the passage's words (the principle, ADII), two systems, the close"] --> CSS2["css/film.css"]
   I --> F["js/film.js — the film, its cues, the passage, the sequences, the worker"]
   F --> MED["film/ — two films, the passage, two sequences, their posters and stills"]
   F --> SW["sw.js registration"]
@@ -50,7 +50,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
-| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through the beats, seeks, the stills that stand in), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
+| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through its stretches, seeks, its words' windows, the stills that stand in), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
 | `js/theme.js` | — | `index.html`, `ar/index.html` (head, not deferred) | The theme: the remembered choice or the device's setting, as `data-theme`; the switch (`#theme`) |
 | `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
@@ -59,7 +59,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
-| `index.html` | The film's sentences, the passage's beats (the principle, ADII), the two other systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
+| `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII), the two other systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
 | `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections, sequences and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
@@ -99,11 +99,12 @@ run them under jsc, the manifest first. Their public surface is an inventory
    without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
    statement and Replay. The film never restarts on its own.
-5. Once the film is still, the passage downloads (asked to play and paused at once, so iOS
-   fetches it) and is shown once whole, under the film's element: its first frame is the
-   film's last. From then on the scroll names a moment (each beat's `data-t`, interpolated
-   through its hold; between beats the scene moves) and the passage seeks to it, one seek at a
-   time; a beat's words are shown while it holds. Until it is whole, under reduced motion or
+5. Once the film is whole (or still), the passage downloads (asked to play and paused at once,
+   so iOS fetches it) and is shown once whole and the film still, under the film's element: its
+   first frame is the film's last. From then on the scroll names a moment, evenly (each stretch,
+   `.passage`, is as tall as its seconds, `data-t`: 2 s a viewport, the stage's own pace), and the
+   passage seeks to it, one seek at a time; each of its words (`.say`) fades in and out with the
+   scroll in its window of those seconds. Until it is whole, under reduced motion or
    after a failed download, the film's element stands on the final frame, and past it on the
    still of ADII's moment (`film/passage-*.jpg`). Scrolling on past the film ends it; a page
    that opens past it (an anchor, a restored scroll) never plays it.
@@ -251,7 +252,8 @@ muted inline autoplay and VoiceOver.
   `ffmpeg -framerate 24 -start_number 288 -i <dir>/f%04d.png -vf scale=1440:810:flags=lanczos` (`810:1440`)
   `-c:v libx264 -preset veryslow -tune film -crf 29 -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p -movflags
   +faststart -an film/passage-<orientation>.mp4`; its still is the frame at 8.0 s (f0480), `film/passage-<orientation>.jpg`.
-  A beat's `data-t` names the passage's seconds: move a moment in the script and the beats move with it, on both pages.
+  The pages' `data-t` name the passage's seconds (a stretch's first and last, a caption's window): move a moment in the
+  script and move them with it, on both pages, keeping each stretch as tall as its seconds (50svh a second).
 - Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
   `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
   the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
