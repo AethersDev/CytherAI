@@ -533,13 +533,13 @@ class SiteContractTests(unittest.TestCase):
                     self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"{theme} --{ink} on --ground")
 
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
-        """ar/index.html carries index.html's film, cues, passage beats, sections, sequences and projected figures, only in
+        """ar/index.html carries index.html's film, cues, the passage's seconds, sections, sequences and projected figures, only in
         Arabic; one added to one page and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
         def shape(page: str):
             tags, base = parse_page(page).tags, posixpath.dirname(page)
             at = lambda u: posixpath.normpath(posixpath.join(base, u))
             return ([(a.get("data-from"), a.get("data-to")) for t, a in tags if {"line", "landing"} & set(a.get("class", "").split())],
-                    [(a.get("class"), a.get("data-t")) for t, a in tags if "beat" in a.get("class", "").split()],
+                    [(t, a.get("id"), a["data-t"]) for t, a in tags if a.get("data-t")],   # the passage's stretches and its words' windows
                     [a["id"] for t, a in tags if t == "section" and a.get("id")],
                     [(at(a["poster"]), at(a["data-src"])) for t, a in tags if t == "video" and "seq" in a.get("class", "")],
                     [a["data-m"] for t, a in tags if a.get("data-m")])

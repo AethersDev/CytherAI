@@ -7,9 +7,9 @@ Serves <dist-dir> as the origin root (byte ranges answered, so the films seek) a
 DevTools Protocol, a fresh profile per page. Before any page script, requestAnimationFrame calls are counted and
 setTimeout/setInterval callbacks are counted when they fire; a video counts as playing if it played at any moment of
 the window. Autoplay is allowed. In each profile: wait for the film's still state (body[data-state=still]); scroll
-through the passage, each beat into its hold (once the passage is whole it must follow the scroll: at the last beat it
-shows the frame the page's anchors name there; under reduced motion it never loads, and the still of ADII's moment
-stands); scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll
+through the passage, to each of its words' windows (once the passage is whole it must follow the scroll: at the last
+words it shows the frame the page's stretches name there; under reduced motion it never loads, and the still of ADII's
+moment stands); scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll
 to the close and, once its scroll has been answered (0.5 s: the page answers a scroll with one frame), reset the counts
 and wait 3 s; then scroll a sequence back into view (it must play), wait for every video to stop, reset and count 3 s
 again. Each page then reads the worker's caches, its control after a reload, and a reload with the server
@@ -45,12 +45,16 @@ PROFILES = {   # label: width, height, device pixel ratio, mobile with touch, re
     "1440x900 · reduced motion": (1440, 900, 1, False, True),
 }
 SEQUENCES = ("#awc-os", "#cythercad")
-# beat i scrolled 0.15 of a viewport into its hold, after 1.5 s: the moment its data-t names there (js/film.js moment),
-# the passage's frame, whether it is shown (body.scrub), and the poster the film's element stands on
-BEAT = """(i => { const b = document.querySelectorAll('.beat')[i], top = b.getBoundingClientRect().top + scrollY;
-  const end = top + b.offsetHeight - b.firstElementChild.offsetHeight; scrollTo(0, top + 0.15 * innerHeight);
-  const [from, to] = b.dataset.t.split(' ').map(Number);
-  return new Promise(done => setTimeout(() => done({want: from + (to - from) * (scrollY - top) / (end - top),
+# the scroll taken to the middle of the window of words i, after 1.5 s: the moment the page's stretches name there (js/film.js
+# measure, moment, place), the passage's frame, whether it is shown (body.scrub), and the poster the film's element stands on
+BEAT = """(i => { const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
+  top = p.getBoundingClientRect().top + scrollY; marks.push([top, a], [top + p.offsetHeight, b]); }
+const moment = y => { for (let k = 1; k < marks.length; k++) { const [y0, t0] = marks[k - 1], [y1, t1] = marks[k];
+  if (y < y1) return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1); } return marks[marks.length - 1][1]; };
+const place = t => { for (let k = 1; k < marks.length; k++) { const [y0, t0] = marks[k - 1], [y1, t1] = marks[k];
+  if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1); } return marks[marks.length - 1][0]; };
+  const [a, b] = document.querySelectorAll('.say')[i].dataset.t.split(' ').map(Number); scrollTo(0, place((a + b) / 2));
+  return new Promise(done => setTimeout(() => done({want: moment(scrollY),
     at: document.getElementById('passage').currentTime, scrub: document.body.classList.contains('scrub'),
     poster: document.getElementById('film').poster.split('/').pop()}), 1500)); })(%d)"""
 # Before any page script: frame requests are counted as they are made, timer callbacks as they fire; every video that
@@ -213,9 +217,9 @@ def observe(tab, origin, page, width, height, dpr, mobile, reduced):
     row["film_settled_after_s"] = None if still is None else round(still / 1000, 2)
     if not reduced:
         until(tab, "document.body.classList.contains('scrub')", 30)
-    beats = [tab.js(BEAT % i) for i in range(tab.js("document.querySelectorAll('.beat').length"))]
-    last = beats[-1]
-    row["passage_at_last_beat"] = last
+    words = [tab.js(BEAT % i) for i in range(tab.js("document.querySelectorAll('.say').length"))]
+    last = words[-1]
+    row["passage_at_last_words"] = last
     row["passage_followed"] = (not last["scrub"] and last["poster"].startswith("passage-")) if reduced else \
         (last["scrub"] and abs(last["at"] - last["want"]) <= 1 / 24)
     for sel in SEQUENCES:
