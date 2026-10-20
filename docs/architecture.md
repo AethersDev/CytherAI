@@ -6,9 +6,11 @@ static site: source HTML, CSS, and JavaScript are served directly. There is no
 framework, package graph, bundle, or server application.
 
 The homepage is **the film** (since 2026-10-12): a twelve-second film, rendered offline and
-silent, with its sentences as HTML over it, then one principle and three systems, each a
-six-second sequence in the film's materials with a headline, two sentences a shipped page
-states and one route into its evidence, then the invitation. Its predecessors are retired
+silent, with its sentences as HTML over it; then **the passage** (since 2026-10-20), which the
+scroll moves through: the film's final composition opens into ADII's scene, its words held at
+its moments; then AWC-OS and CytherCAD, each a six-second sequence in the film's materials with
+a headline, two sentences a shipped page states and one route into its evidence; then the
+invitation. Its predecessors are retired
 whole, each a verbatim snapshot with every verifier that established its laws and its own
 `verify.sh`: **THE UNHAPPENED** to `backup/unhappened-v1/` (commit `011ffd0`; this guide as
 it stood for it is `git show 011ffd0:docs/architecture.md`), **the drawing set** to
@@ -20,11 +22,11 @@ nothing of their design is carried into the front door.
 
 ```mermaid
 flowchart TD
-  I["index.html — the film's sentences, the principle, three systems, the close"] --> CSS2["css/film.css"]
-  I --> F["js/film.js — the film, its cues, the sequences, the worker"]
-  F --> MED["film/ — two films, three sequences, their final-frame posters"]
+  I["index.html — the film's sentences, the passage's beats (the principle, ADII), two systems, the close"] --> CSS2["css/film.css"]
+  I --> F["js/film.js — the film, its cues, the passage, the sequences, the worker"]
+  F --> MED["film/ — two films, the passage, two sequences, their posters and stills"]
   F --> SW["sw.js registration"]
-  RF["tools/render-film.py · tools/render-systems.py (Blender, offline)"] -.-> MED
+  RF["tools/render-film.py · tools/render-passage.py · tools/render-systems.py (Blender, offline)"] -.-> MED
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
 
@@ -48,7 +50,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
-| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
+| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through the beats, seeks, the stills that stand in), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
 | `js/theme.js` | — | `index.html`, `ar/index.html` (head, not deferred) | The theme: the remembered choice or the device's setting, as `data-theme`; the switch (`#theme`) |
 | `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
@@ -57,11 +59,11 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
-| `index.html` | The film's sentences, the principle, the three systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
+| `index.html` | The film's sentences, the passage's beats (the principle, ADII), the two other systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
 | `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections, sequences and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
-| `film/` | The two films, the three sequences, their final-frame posters | Yes | Rendered by `tools/render-film.py` and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
+| `film/` | The two films with their final-frame posters, the passage in both orientations with its stills, two sequences with their posters | Yes | Rendered by `tools/render-film.py`, `tools/render-passage.py` (from the film's own scene) and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
@@ -97,7 +99,15 @@ run them under jsc, the manifest first. Their public surface is an inventory
    without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
    statement and Replay. The film never restarts on its own.
-5. Once the film is still, the three sequences are warmed in turn: each is given its source,
+5. Once the film is still, the passage downloads (asked to play and paused at once, so iOS
+   fetches it) and is shown once whole, under the film's element: its first frame is the
+   film's last. From then on the scroll names a moment (each beat's `data-t`, interpolated
+   through its hold; between beats the scene moves) and the passage seeks to it, one seek at a
+   time; a beat's words are shown while it holds. Until it is whole, under reduced motion or
+   after a failed download, the film's element stands on the final frame, and past it on the
+   still of ADII's moment (`film/passage-*.jpg`). Scrolling on past the film ends it; a page
+   that opens past it (an anchor, a restored scroll) never plays it.
+6. Once the passage is whole, the two sequences are warmed in turn: each is given its source,
    started muted off screen and paused as soon as it plays, so iOS Safari (which downloads a
    clip only when asked to play it, and buffers all of it first) has it ready. When half of a
    sequence is in view it plays once from its first frame and holds its last, which is also
@@ -110,14 +120,14 @@ run them under jsc, the manifest first. Their public surface is an inventory
    tries again the next time it comes into view (a 250 ms watch runs only between a `playing`
    event and the next pause or end). An `AbortError` is not a failure. Reduced motion never
    plays them.
-6. Once the film is still, the service worker registers from the root and is asked to take
+7. Once the film is still, the service worker registers from the root and is asked to take
    over; its cache name carries the build hash. Its install fetches the precache past the HTTP
    cache (0.7 MB), which on a first visit would take the link from the film as it starts.
 
-At steady state nothing runs: no frame is requested (the page never asks for one), no media
-plays and no timer fires (CY-TEMP-001, `docs/deploy.md` §5i). Replay, a sequence scrolled
-back into view, or a turn of the device (the source follows the orientation while still)
-starts motion again.
+At steady state nothing runs: no frame is requested (the page asks for one only while it
+scrolls, to seek the passage), no media plays and no timer fires (CY-TEMP-001, `docs/deploy.md`
+§5i). Replay, a scroll, a sequence scrolled back into view, or a turn of the device (the
+sources follow the orientation while still) starts motion again.
 
 ## State and evidence boundaries
 
@@ -233,6 +243,15 @@ muted inline autoplay and VoiceOver.
   `git show e40fa72:film/film-<orientation>.mp4`. Replace the files under
   `film/`, regenerate integrity, and observe reading ink again: the ground under every caption
   has changed.
+- Re-render the passage: it is rendered from the film's own scene, so its first frame stays the film's last. Build the
+  scene, `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> blend <dir> 1920x1080`
+  (`1080x1920` portrait) `64`, then `TL=24` (`TL=14` portrait) `blender -b --factory-startup <dir>/film-<l|p>.blend
+  --python-exit-code 1 -P tools/render-passage.py -- <l|p> anim <dir> 1920x1080 64`, and encode its frames (f0288 on)
+  with a keyframe every six (a scrubbed video seeks; each seek decodes from the keyframe before it):
+  `ffmpeg -framerate 24 -start_number 288 -i <dir>/f%04d.png -vf scale=1440:810:flags=lanczos` (`810:1440`)
+  `-c:v libx264 -preset veryslow -tune film -crf 29 -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p -movflags
+  +faststart -an film/passage-<orientation>.mp4`; its still is the frame at 8.0 s (f0480), `film/passage-<orientation>.jpg`.
+  A beat's `data-t` names the passage's seconds: move a moment in the script and the beats move with it, on both pages.
 - Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
   `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
   the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.

@@ -222,8 +222,9 @@ class SiteContractTests(unittest.TestCase):
 
     def test_every_page_reference_resolves_into_the_shipped_set_and_nothing_is_fetched_elsewhere(self) -> None:
         """Zero external requests, ever: everything a page or a stylesheet makes the browser fetch is a shipped file
-        of this origin. A link a reader follows may leave the site; one that stays must land on a shipped file, as
-        must the absolute URLs a page gives others (its og:url and og:image name this host)."""
+        of this origin. A link a reader follows may leave the site; one that stays must land on a shipped file, and on
+        an element of it when it names one (the front door's route to ADII's recorded run is adii/#run), as must the
+        absolute URLs a page gives others (its og:url and og:image name this host)."""
         for page in HTML_FILES:
             for kind, url in references(page):
                 parts = urlsplit(url)
@@ -234,6 +235,8 @@ class SiteContractTests(unittest.TestCase):
                 if parts.netloc == HOST or not (parts.scheme or parts.netloc):
                     target = local_target(page, parts.path if parts.netloc else url)
                     self.assertIn(target, DEPLOYED, f"{page}: {url} names a file that is not shipped")
+                    if parts.fragment and target.endswith(".html"):
+                        self.assertIn(parts.fragment, {a.get("id") for t, a in parse_page(target).tags}, f"{page}: {url}")
         for sheet in (p for p in DEPLOY_FILES if p.endswith(".css")):
             for url in css_urls((ROOT / sheet).read_text(encoding="utf-8")):
                 self.assertIn(local_target(sheet, url), DEPLOYED, f"{sheet}: url({url})")
@@ -454,16 +457,17 @@ class SiteContractTests(unittest.TestCase):
 
     def test_every_film_the_front_door_names_ships(self) -> None:
         """The page names its media in three places no resolver above reads: a <video>'s poster, a
-        sequence's data-src (assigned when it comes into view) and the film paths js/film.js picks by
-        orientation. Each must be a deployed file, or the page shows a black frame where the film was.
+        sequence's data-src (assigned when it comes into view) and the paths js/film.js picks by orientation (the
+        film, the passage, and the stills that stand in for them). Each must be a deployed file, or the page shows a
+        black frame where the film was. ADII is the passage; AWC-OS and CytherCAD keep a sequence each.
         (THE UNHAPPENED's scene/section parity law retired with it: backup/unhappened-v1/.)"""
         named = set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))   # resolved at the site's root
         for page in ("index.html", "ar/index.html"):
             index = parse_page(page)
             named |= {posixpath.normpath(posixpath.join(posixpath.dirname(page), attrs[key]))
                       for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
-            self.assertEqual(len([1 for tag, attrs in index.tags if tag == "video" and "seq" in attrs.get("class", "")]), 3,
-                             f"{page}: one sequence per system")
+            self.assertEqual([attrs.get("id") or attrs.get("class") for tag, attrs in index.tags if tag == "video"],
+                             ["film", "passage", "seq", "seq"], f"{page}: the film, the passage, a sequence each for two systems")
         self.assertTrue(named, "the page names no film")
         self.assertEqual(sorted(named - set(DEPLOY_FILES)), [], "named but not shipped")
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
@@ -529,12 +533,13 @@ class SiteContractTests(unittest.TestCase):
                     self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"{theme} --{ink} on --ground")
 
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
-        """ar/index.html carries index.html's film, cues, sections, sequences and projected figures, only in Arabic; a cue,
-        a section, a sequence or a figure added to one and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
+        """ar/index.html carries index.html's film, cues, passage beats, sections, sequences and projected figures, only in
+        Arabic; one added to one page and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
         def shape(page: str):
             tags, base = parse_page(page).tags, posixpath.dirname(page)
             at = lambda u: posixpath.normpath(posixpath.join(base, u))
             return ([(a.get("data-from"), a.get("data-to")) for t, a in tags if {"line", "landing"} & set(a.get("class", "").split())],
+                    [(a.get("class"), a.get("data-t")) for t, a in tags if "beat" in a.get("class", "").split()],
                     [a["id"] for t, a in tags if t == "section" and a.get("id")],
                     [(at(a["poster"]), at(a["data-src"])) for t, a in tags if t == "video" and "seq" in a.get("class", "")],
                     [a["data-m"] for t, a in tags if a.get("data-m")])
