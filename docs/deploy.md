@@ -1395,6 +1395,8 @@ passage at the last words showing exactly the frame they name (12.0 s) and, unde
 ADII's still stands; every sequence played to its last frame; the worker caching this build and serving it offline
 (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_EB79D2894F4F8A29`), 58 of 58 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
