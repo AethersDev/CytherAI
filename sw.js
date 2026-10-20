@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-EAA945BC838E9BBC';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-86CD52B68E33C36A';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -18,12 +18,15 @@ var ASSETS = [
   'pages/security.html',
   'pages/terms.html',
   // the front door: its script, its stylesheet, the final composition it stands on when the film
-  // cannot play (offline included), and the fonts it draws its type with (shared with adii/)
-  'js/film.js?v=256209e162df',
+  // cannot play (offline included), the still that stands in for the passage, and the fonts it draws
+  // its type with (shared with adii/)
+  'js/film.js?v=821af71a2974',
   'js/theme.js?v=0d6f0fa62220',
-  'css/film.css?v=bde14c752567',
+  'css/film.css?v=628e820ab73c',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
+  'film/passage-landscape.jpg',
+  'film/passage-portrait.jpg',
   'adii/fonts/newsreader-variable.woff2',
   'adii/fonts/public-sans-variable.woff2',
   'adii/fonts/ibm-plex-mono-400.woff2',
