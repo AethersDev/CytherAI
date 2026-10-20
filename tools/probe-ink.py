@@ -8,8 +8,8 @@ js/film.js counts the film started (GUARD is cleared) and it holds where it is s
 hidden, whose time the stall rule (STALL) does not count. For each declared second the film is seeked (the seek must
 land within 0.05 s), then 1.0 s for the cue and its 0.6 s fade; the page must still be in its film state, the film at
 that second, showing the cue data-from/data-to name. Then the film is ended (the still state); once the passage is whole
-(body.scrub) each beat is scrolled into its hold, and the passage must show the frame the page's own anchors name for that
-scroll (its data-t, interpolated through the hold, within a frame) under its words, shown; then each remaining section is
+(body.scrub) the scroll is taken to the middle of each of its words' windows, and the passage must show the frame the page's own
+stretches name for that scroll (their data-t, within a frame) under those words, shown; then each remaining section is
 scrolled to the viewport centre. Each sample is captured with every glyph's fill transparent (the ground composited
 beneath it, text-shadow and darkening included) and with every fill #FF00FF: glyph support = pixels differing by >= 64
 in a channel. The page's CSP is bypassed for the probe's capture style only.
@@ -54,12 +54,17 @@ ELEMENTS = r"""JSON.stringify([...document.querySelectorAll('body *')].flatMap(e
   if (cs.visibility !== 'visible' || op < 0.99 || r.width < 1 || r.height < 1 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) return [];
   return [{ element: e.tagName.toLowerCase() + (typeof e.className === 'string' && e.className ? '.' + e.className.split(' ')[0] : ''),
             text: e.textContent.trim().slice(0, 40), ink: cs.color, x: r.left, y: r.top, w: r.width, h: r.height }]; }))"""
-# beat i scrolled 0.15 of a viewport into its hold: the moment its data-t names there, interpolated through the hold
-# (js/film.js measure/moment), the passage's frame, and its words' state
-BEAT = """(i => { const b = document.querySelectorAll('.beat')[i], top = b.getBoundingClientRect().top + scrollY;
-  const end = top + b.offsetHeight - b.firstElementChild.offsetHeight, y = top + 0.15 * innerHeight; scrollTo(0, y);
-  const [from, to] = b.dataset.t.split(' ').map(Number), say = b.querySelector('.say');
-  return new Promise(done => setTimeout(() => done(JSON.stringify({want: from + (to - from) * (scrollY - top) / (end - top),
+# the passage's moments as the page computes them (js/film.js measure, moment, place): each stretch maps its top and foot
+# to its data-t; the scroll taken to the middle of the window of words i, then that moment, the passage's frame, the words' state
+PASSAGE = """const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
+  top = p.getBoundingClientRect().top + scrollY; marks.push([top, a], [top + p.offsetHeight, b]); }
+const moment = y => { for (let i = 1; i < marks.length; i++) { const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
+  if (y < y1) return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1); } return marks[marks.length - 1][1]; };
+const place = t => { for (let i = 1; i < marks.length; i++) { const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
+  if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1); } return marks[marks.length - 1][0]; };"""
+BEAT = """(i => { """ + PASSAGE + """ const say = document.querySelectorAll('.say')[i], [a, b] = say.dataset.t.split(' ').map(Number);
+  scrollTo(0, place((a + b) / 2));
+  return new Promise(done => setTimeout(() => done(JSON.stringify({want: moment(scrollY),
     at: document.getElementById('passage').currentTime, seeking: document.getElementById('passage').seeking,
     on: say.classList.contains('on'), opacity: getComputedStyle(say).opacity, state: document.body.dataset.state})), 1300)); })(%d)"""
 # the footer's text wholly in the viewport (its box may overhang it by a fraction of a pixel): its reading ink is
@@ -231,7 +236,7 @@ def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
         time.sleep(0.1)
     else:
         broken(f"{key}: the passage was not whole 30 s after the film was still")
-    for i in range(js("document.querySelectorAll('.beat').length")):
+    for i in range(js("document.querySelectorAll('.say').length")):
         b = json.loads(js(BEAT % i))
         if b["state"] != "still" or b["seeking"] or abs(b["at"] - b["want"]) > 1 / 24 or not b["on"] or b["opacity"] != "1":
             broken(f"{key} beat {i}: {b}")

@@ -50,6 +50,7 @@ function film() {
   clearInterval(timer); timer = setInterval(tick, 80);
   clearTimeout(guard); guard = setTimeout(still, GUARD);
   v.play().then(() => { clearTimeout(guard); started = true; }, still);
+  whole(v).then(passage);   // the film whole, the passage downloads while it plays: ready by its end, not a beat after
 }
 v.addEventListener("ended", still);
 v.addEventListener("error", still);
@@ -60,28 +61,37 @@ portrait.addEventListener("change", () => {
 });
 
 /* The passage: under the scroll, the film's final composition opens into ADII's scene. The scroll names a moment and the
-   passage shows its frame; it is never played. Each beat holds its words where the film's sentences stood, and its moment
-   while they are read (data-t: the passage's seconds when they arrive and when they leave); between beats the scene
-   moves. It downloads once the film is still, ahead of the sequences, and shows once it is whole: its first frame is the
-   film's last, so nothing changes where it takes over. Until then, under reduced motion, or after a failed download, the
-   film's final frame stands, and past it ADII's part stands on one still of its moment, the correction waiting. */
-const pv = document.getElementById("passage"), beats = [...document.querySelectorAll(".beat")];
-const ADII = +document.querySelector("#adii .beat").dataset.t.split(" ")[0];
+   passage shows its frame; it is never played. The scroll moves it evenly (each stretch, .passage, is as tall as its
+   seconds, data-t), and its words, fixed where the film's sentences stand, are each shown in their window of its seconds,
+   faded in and out over FADE of them by the scroll itself, not by a timed transition. Past its end the seconds run on at
+   the same pace for the words alone (the scene holds its last frame), so the last words leave as the next system rises.
+   It downloads once the film is whole (or still), ahead of the sequences, and shows once it is whole: its first frame is
+   the film's last, so nothing changes where it takes over. Until then, under reduced motion, or after a failed download,
+   the film's final frame stands, and past it ADII's part stands on one still of its moment, the correction waiting. */
+const pv = document.getElementById("passage"), parts = [...document.querySelectorAll(".passage")], says = [...document.querySelectorAll(".say")];
+const span = e => e.dataset.t.split(" ").map(Number), FADE = 0.25;
+const ADII = span(document.getElementById("adii"))[0];
 let marks = [], ready = false, pending = -1, frame = 0;
-/* scroll position → the passage's seconds: from the top through each beat's hold, [its top, arrives], [it leaves, last] */
+/* scroll position ↔ the passage's seconds: from the top through each stretch, [its top, its first], [its foot, its last] */
 function measure() {
   marks = [[0, 0]];
-  for (const b of beats) {
-    const [from, to] = b.dataset.t.split(" ").map(Number), top = b.getBoundingClientRect().top + scrollY;
-    marks.push([top, from], [top + b.offsetHeight - b.firstElementChild.offsetHeight, to]);
+  for (const p of parts) {
+    const [from, to] = span(p), top = p.getBoundingClientRect().top + scrollY;
+    marks.push([top, from], [top + p.offsetHeight, to]);
   }
 }
-function moment(y) {
+function moment(y) {   // past the last stretch, on at its pace
+  let i = 1;
+  while (i < marks.length - 1 && y >= marks[i][0]) i++;
+  const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
+  return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1);
+}
+function place(t) {   // moment's inverse: the scroll that names t
   for (let i = 1; i < marks.length; i++) {
     const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
-    if (y < y1) return t0 + (t1 - t0) * Math.max(0, y - y0) / (y1 - y0);
+    if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1);
   }
-  return marks[marks.length - 1][1];
+  return marks[marks.length - 1][0];
 }
 /* one seek at a time: a scroll that outruns the decoder leaves only its latest moment waiting */
 function seek(t) {
@@ -101,11 +111,16 @@ function scrolled() {
   frame = 0;
   const y = scrollY, t = moment(y);
   if (body.dataset.state === "film" && y > innerHeight / 4) { still(); return; }   // scrolling on is past the film
-  beats.forEach((b, i) => b.querySelector(".say").classList.toggle("on", y >= marks[2 * i + 1][0] - innerHeight / 10 && y <= marks[2 * i + 2][0]));
-  if (body.dataset.state === "still") { if (ready) seek(t); else stand(t); }
+  for (const s of says) {
+    const [a, b] = span(s), o = Math.max(0, Math.min(1, (t - a) / FADE, (b - t) / FADE));
+    s.style.opacity = o; s.classList.toggle("on", o > 0);
+  }
+  if (body.dataset.state === "still") { if (ready) seek(Math.min(t, marks[marks.length - 1][1])); else stand(t); }
 }
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
 addEventListener("resize", () => { measure(); scrolled(); });
+/* a link reached by the keyboard brings its moment with it: the scroll goes to the middle of its words' window */
+says.forEach(s => s.addEventListener("focusin", () => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); }));
 /* the passage downloads (asked to play and paused at once: iOS fetches a clip only then); the sequences warm after it */
 function passage() {
   if (stillMotion || pv.hasAttribute("src")) return;
@@ -213,7 +228,6 @@ measure();
 if (stillMotion) { replay.textContent = replay.dataset.play; still(); }
 else if (location.hash.length > 1 || scrollY > innerHeight / 4) still();
 else { film(); scrolled(); }
-document.fonts.ready.then(() => { measure(); scrolled(); });   // the type sets the beats' places
 
 /* last: an engine that throws above keeps .no-js, and its CSS unveils the statement on its own */
 document.documentElement.classList.remove("no-js");

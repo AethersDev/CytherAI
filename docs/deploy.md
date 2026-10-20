@@ -1359,6 +1359,42 @@ written before the page answered a scroll at all, it had counted that answer as 
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_86CD52B68E33C36A`), 58 of 58 served paths matching the artifact.
 
+## 5w. The passage's pace made even — 2026-10-20
+
+Build `EB79D2894F4F8A29` (`#reading_ink_EB79D2894F4F8A29`, `#film_settle_EB79D2894F4F8A29`).
+
+**The owner, on the live passage:** *it's lagging and not even smooth when scrolling down, which should be smooth and
+easy to follow the rhythm.* Measured before anything changed, by a harness that scrolls the passage at a constant speed
+and records each frame the browser presents (`requestVideoFrameCallback`): the decoder was not the cause. At a viewport a
+second, headless Chrome presented 49.8 frames a second and the iOS Simulator's WebKit 39.8, about a frame behind the
+scroll; encoding every frame as a keyframe, or WebKit's `fastSeek`, changed neither. The cause was the pace: each beat
+held the scene still while its words were read and the 90svh between beats then carried it on, so a viewport of scroll
+moved the scene anywhere from 0.45 s (while *Changing it is a separate decision.* held) to 3.1 s (as the structure
+parted), a sevenfold swing between nothing answering the scroll and a rush.
+
+**Now** a viewport of scroll moves the scene 2 s throughout, the stage's own pace (its 100svh are the passage's first
+two): the principle's stretch and ADII's (`.passage`, `data-t`) are each as tall as their seconds, and each caption
+(`.say`, `data-t`, its window of those seconds) is fixed at the foot of the frame and fades in and out with the scroll.
+The fade is the scroll's, not a timed transition: with a timed fade on those fixed captions WebKit missed 16–24 frames
+(over 25 ms) in a pass of 200–400, without it 1–3; switching the video's seeking off did not remove them, removing the
+fade did. The darkness under the words is a shadow, not a filter. The passage now downloads as soon as
+the film is whole, so it is ready when the statement is; and its last words leave as the next system rises (the
+passage's seconds run on past its end for the words alone, the scene holding its last frame), so nothing stays shown
+under a later section. Measured on this build, a viewport a second: Chrome presents 59.7 frames a second on the desktop
+and on a phone, every display frame, none late; the iOS Simulator 47.6, every frame of the scene, 2 late, the longest
+hold on one frame 46 ms (it was 100). The passage's media are unchanged (IMG-013).
+
+**The probes followed the page.** Each now samples the passage at the middle of each caption's window, the moment the
+page's own stretches name for that scroll; the reading-ink probe first refused a sample 30 % into the last window
+(its fade was not done) and was right to.
+
+Observed on this build (Chrome 155.0.8059.85): reading ink over the film and the passage on both front doors, dark and
+light, at three viewports, 1,488 element samples, none below 4.5:1, worst 4.9:1 (the film's statement on a phone)
+(CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile once the scroll stops, the
+passage at the last words showing exactly the frame they name (12.0 s) and, under reduced motion, never loading while
+ADII's still stands; every sequence played to its last frame; the worker caching this build and serving it offline
+(CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
