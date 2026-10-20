@@ -238,9 +238,12 @@ the row, and only then does it cross; the wrong value steps back behind it, kept
 the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three systems.* · *The model
 proposes. The system decides.*, then
 ADII's headline at its two moments (*A number looks wrong.* · *Changing it is a separate decision.*), the two sentences
-`adii/` states, its condition, and *See what this is based on →* (`adii/#run`, the recorded run). Each beat (`.beat`,
-`data-t`: the passage's seconds when its words arrive and when they leave) holds its moment while its words are read;
-between beats the scene moves. Then AWC-OS and CytherCAD, each a six-second sequence in the film's materials
+`adii/` states, its condition, and *See what this is based on →* (`adii/#run`, the recorded run). The scroll moves the
+scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall as its seconds,
+and the words (`.say`, `data-t`: their window of the passage's seconds) fade in and out with the scroll itself, never
+with a timed transition (with one on these fixed captions WebKit missed 16–24 frames a pass, without it 1–3). The owner found the first version, whose
+beats held the scene still while words were read and then rushed it, lagging and hard to follow (2026-10-20). Then
+AWC-OS and CytherCAD, each a six-second sequence in the film's materials
 (`tools/render-systems.py`), a headline, two sentences a shipped page states, its condition, and one route into the
 evidence (`awc-os/`, `pages/brief.html`); CytherCAD's two figures are the front door's only `data-m` marks. The close is
 *Tell us what must never happen.* with the contact address. AWC-OS, CytherCAD and the close keep this earlier grammar
@@ -251,8 +254,8 @@ motion, a refused or failed play, a film not started within `GUARD` (6 s), or on
 `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition and the whole
 statement (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
-back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is still (asked
-to play and paused at once: iOS fetches a clip only then), ahead of the sequences, and shows once whole: its first frame
+back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
+still: asked to play and paused at once, as iOS fetches a clip only then), ahead of the sequences, and shows once whole: its first frame
 is the film's last, so nothing changes where it takes over. Until then, under reduced motion, or after a failed
 download, the film's final frame stands, and past it ADII's part stands on one still of its moment, the correction
 waiting (`film/passage-*.jpg`). A page that opens past the film (an anchor, a restored scroll) never plays it. Each
@@ -295,7 +298,7 @@ marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the o
 precached); `css/film.css` and two scripts with SRI: `js/theme.js` in the head (it sets the theme before the page
 paints) and `js/film.js` (`defer`).
 `js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the passage (the scroll's
-moment through the beats, one seek at a time), the sequences' IntersectionObserver, and `sw.js` registration once the film is still (its install would take the
+moment through its stretches, one seek at a time, its words' windows), the sequences' IntersectionObserver, and `sw.js` registration once the film is still (its install would take the
 link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
 live in `film/`: two films with their final-frame posters, the passage in both orientations with the still that stands
 in for it, two sequences with their posters;
@@ -309,7 +312,7 @@ corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds 
 the brief, the ADII page and the legal pages stay English and the Arabic pages mark their links to them
 (بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
-exactly the English one's cues, passage beats, sections, sequences and projected figures (the projector writes its two figures too,
+exactly the English one's cues, the passage's seconds, sections, sequences and projected figures (the projector writes its two figures too,
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
 or upper-cased (spacing breaks the joins), gets taller lines, and keeps a Latin name whole and in its own order
 (`[lang=en]`, isolated). Its type is IBM Plex Sans Arabic 300/400 (`fonts/`, OFL, shipped unmodified: the licence
