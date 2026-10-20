@@ -1357,6 +1357,8 @@ the worker caching this build and serving it offline (CY-TEMP-001 PASS). The set
 (one frame) before its quiet window, and under reduced motion requires the stimulus to start no media and no timer:
 written before the page answered a scroll at all, it had counted that answer as motion.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_86CD52B68E33C36A`), 58 of 58 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
