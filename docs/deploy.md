@@ -1571,6 +1571,74 @@ passage is answered with one frame and no media or timer; the worker caches this
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_73B4CD7CEF71A0F3`), 59 of 59 served paths matching the artifact.
 
+## 5z. The first route out of the film: ADII's evidence, the contact page, and back — 2026-10-21
+
+Build `B8E83779898CD5AB` (`#reading_ink_B8E83779898CD5AB`, `#film_settle_B8E83779898CD5AB`).
+
+**The owner's direction** (2026-10-21, pasted): the passage is done, but the paths out of it have not had the same
+treatment. Each evidence destination needs a composed arrival (where the link lands, what appears first, how much there
+is to read, how to return or make contact), its artifact and its limits intact, quieter than the front door and sharing
+its type, identity and care; *Talk to us* needs an arrival that continues *Tell us what must never happen.*, easy to
+describe the system, the proposed use and the unacceptable outcome without a long questionnaire, and then a real
+delivery check; Arabic needs an introduction to each system's evidence before the visitor crosses into English; and the
+site's identity must hold outside the cinematic page (shared-link previews, titles, the contact screen, the missing
+page), with no remnants of an earlier design. First, one complete route, homepage → ADII evidence → contact → return, at
+desktop and phone sizes, in English and Arabic, with the real evidence; then AWC-OS and CytherCAD.
+
+**Found, before anything changed.** *See what this is based on →* landed on `adii/#run`, the recording, 498px (desktop)
+and 623px (phone) below the page's top: past its headline and past its limitation (*A research project … no deployment is
+claimed*). The page kept the light design of its first publication, an ADII logo in place of the company's, and a
+footer reading *ADII · Group 05 · 2026*; *← CytherAI* returned to the top of the front door, not to the passage. *Talk to
+us ↗* opened the mail app directly. The contact page, like the brief, the legal pages and the 404, still spoke the retired
+document register in system fonts: *COMMUNICATION PROTOCOL · Initiate Contact*, a *Transmission Protocol* table, name,
+email, organisation, message and a consent box; *DOC-2026-002 · Capability Brief*; *404 · No Record*.
+
+**Now: the rooms** (`css/room.css`). The pages a visitor reaches from the front door are rooms of it: its type, its tokens
+(the room adds a lifted ground and a field's edge), its seal lockup going home and its footer, dark in either device
+theme, no motion, the artifact the loudest thing in the room.
+
+- **ADII's evidence** (`adii/`) opens on its arrival: *01 · ADII · The recorded run*, *A number looked wrong. Changing it
+  was a separate decision.*, what the run shows in four sentences taken from its own text (the revenue drop, the staging
+  filter ADII traced it to, its answer *Fix it* given only after the authorizer allowed the change and the validator
+  accepted it on a rebuild from a frozen copy, and *The AI that proposed it didn't approve it*), then its limitation,
+  beside the recording; on a phone the headline, the limitation and the recording come first (the recording's foot at
+  557 of 844px; at 568 of 900 on the desktop), and what it shows follows. Under it, *Tell us what must never happen →*
+  and *← Back to the passage* (`../#adii`, where the visitor left); then the run as text and the team with their CVs,
+  verbatim. The *Group 05* footer gives way to the company's.
+- **The Arabic introduction** (`ar/adii.html`): the same arrival in Arabic, the recording (its interface in English, said
+  so), and a marked link to the English text and team; the Arabic front door's route lands here instead of on the English
+  page.
+- **The contact room** (`contact.html`, `ar/contact.html`) continues *Tell us what must never happen.* with three short
+  answers, the system, what AI would do in it, and what must never happen, composed into one readable email for the
+  visitor's own mail app (subject *What must never happen: <the system>*, the three answers labelled in the body). The
+  transport stays `mailto:` by design: nothing passes through the site, which keeps nothing and never says a message was
+  sent (*This page sends nothing and cannot see whether it arrives*); without the script the form posts the three answers
+  to `mailto:`. Name, email, organisation and the consent box are gone (the visitor's own mail account carries who they
+  are, and nothing reaches the site to consent to); the other addresses (security, NDA, a PGP key on request) stay,
+  quietly. *Talk to us →* on both front doors now lands here; *← The three systems* returns to the passage.
+- `pages/privacy.html` describes the contact page as it is now; the ADII poster, named as a link preview from outside
+  `adii/` for the first time, has its receipt (IMG-014). The pages the rooms replaced are `backup/before-rooms/`.
+
+**Checked.** `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's tokens to
+the front door's, and its inks (≥ 4.5:1 on the ground and the lifted ground; a field's edge ≥ 3:1); each fails on its
+mutation in a throwaway copy (a token drifting from the front door's, a field's edge below 3:1, a room without its footer,
+a room on the old stylesheet). The new pages join the seal, language-pair and `lang`/`dir` laws. In a browser, both
+contact rooms composed the email above from three filled answers (English and Arabic), and no room logged an error or
+overflowed at 1440 × 900 or 390 × 844. Mail for cytherai.com is routed (MX `mail.protonmail.ch`, SPF Proton's).
+
+**Open, for the owner.** The real delivery check: send one message from the contact page on your phone and on your Mac,
+in each language, and confirm it arrives at contact@cytherai.com. A very long Arabic answer makes a long link (three
+short ones already make 1,239 characters, every Arabic letter percent-encoded), which some mail apps cut. The review of
+the route itself. The *Group 05* footer is gone from ADII's page: say if it should stay. Next, in rooms: AWC-OS's
+demonstration, CytherCAD's validation record, the legal pages and the 404, with one review of titles, previews and naming
+across them.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting, at three viewports, 1,400 element samples, none below 4.5:1, worst 4.9:1
+(CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile once the scroll stops, and the
+worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' inks are flat colours on flat grounds,
+held by the static law above rather than a capture.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1613,6 +1681,7 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
 | VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
+| The route out of the film | from the passage, *See what this is based on →* opens ADII's evidence with its recording in the first screen (Arabic: its Arabic introduction); *Tell us what must never happen →* opens the contact page; with three answers filled, *Write the email →* opens your mail app holding them: send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); each page's way back returns to the passage |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
 
 ## 6. Launch gate

@@ -27,7 +27,8 @@ flowchart TD
   F --> SW["sw.js registration"]
   RF["tools/render-film.py · tools/render-passage.py (Blender, offline)"] -.-> MED
 
-  P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
+  RM["the rooms: adii/, ar/adii.html, contact.html, ar/contact.html"] --> ROOM["css/room.css"]
+  P["pages/*.html and 404.html"] --> CSS["css/cytherai.css"]
 
   M["js/manifest.js — the record (no page loads it)"] --> B["js/instrument.js — the boundary engine (no page loads it)"]
   B --> TB["tools/test-boundary.js"]
@@ -59,13 +60,14 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
 | `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII, AWC-OS, CytherCAD, the return) and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
-| `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
+| `ar/index.html`, `ar/contact.html`, `ar/adii.html` | The front door, the contact page and the introduction to ADII's evidence, in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
-| `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
-| `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
+| `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
+| `css/cytherai.css` | Shared subpage style system (the legal pages, the brief, the 404, until they become rooms) | Yes | Hashed; its ink law is `tools/test-site.py` |
+| `contact.html` | The contact room: three short answers composed into one email for the visitor's own mail app, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
 | `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators, the film's Blender render scripts and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
@@ -136,8 +138,9 @@ still) starts motion again.
 |---|---|
 | `/` or `/index.html` | The film: `css/film.css` and `js/film.js`, both SRI'd; media from `film/` |
 | `/ar/` | The film in Arabic: the same stylesheet, script and media |
-| `/ar/contact.html` | The contact page in Arabic: shared CSS plus its inline validation/copy script, in Arabic |
-| `/contact.html` | Shared CSS plus one inline validation/copy script |
+| `/ar/contact.html` | The contact room in Arabic: `css/room.css` plus its one inline script, in Arabic |
+| `/contact.html` | The contact room: `css/room.css` plus one inline script that composes the email |
+| `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |
 | `/pages/security.html` | Static disclosure policy |
@@ -248,6 +251,10 @@ muted inline autoplay and VoiceOver.
 - Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
   `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
   the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
+- Make a page a room: link `css/room.css` (with an `integrity` attribute for `generate-integrity.sh` to fill), open with
+  the front door's header (the computed seal lockup going home, the way back, the language link) and end with its
+  footer; add it to `ROOMS` in `tools/test-site.py`, and an Arabic counterpart to the language-pair and `lang`/`dir`
+  laws. Keep what the page carries (an artifact, its limits) verbatim, and retire the version it replaces to `backup/`.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
   icon/manifest references, `deploy.paths` (which is also the list `generate-integrity.sh` stamps and
   every per-page law in `tools/test-site.py` reads), and decide whether it belongs in `sw.js`.

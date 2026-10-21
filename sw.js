@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-73B4CD7CEF71A0F3';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-B8E83779898CD5AB';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -39,6 +39,8 @@ var ASSETS = [
   'fonts/ibm-plex-sans-arabic-400.woff2',
   // subpage stylesheet
   'css/cytherai.css?v=b5e32dbc846e',
+  // the stylesheet of the rooms: the contact pages above draw with it
+  'css/room.css?v=cd6cf598f9b7',
   'manifest.webmanifest',
   'icon.svg'
 ];

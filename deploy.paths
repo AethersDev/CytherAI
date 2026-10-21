@@ -1,6 +1,7 @@
 index.html
 ar/index.html
 ar/contact.html
+ar/adii.html
 CNAME
 .nojekyll
 contact.html
@@ -11,6 +12,7 @@ pages/security.html
 pages/terms.html
 js/film.js
 css/film.css
+css/room.css
 css/cytherai.css
 sw.js
 manifest.webmanifest

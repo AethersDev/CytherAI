@@ -63,6 +63,8 @@ BANNED = re.compile(r"--brass|--gold|DOC-2026-001|CONDUCT RECEIPT|[Aa]ppend-only
 # ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its
 # curated gateway and the films — not the live-MVP tunnel redirect, and not the competition deck (the cancelled Alinma
 # plan, withdrawn 2026-10-19 to backup/awc-os-v1/)
+# the rooms: the pages a visitor reaches from the front door, drawn with css/room.css (2026-10-21)
+ROOMS = ("adii/index.html", "ar/adii.html", "contact.html", "ar/contact.html")
 REVIEWED_PUBLICATION = {
     "adii/": {"adii/index.html", "adii/favicon.svg", "adii/fonts/OFL.txt", "adii/fonts/ibm-plex-mono-400.woff2",
               "adii/fonts/newsreader-variable.woff2", "adii/fonts/public-sans-variable.woff2", "adii/poster.jpg",
@@ -176,17 +178,8 @@ class SiteContractTests(unittest.TestCase):
     maxDiff = None
 
     def test_public_navigation_is_complete_and_marks_current_page(self) -> None:
+        """The cold-paper subpages' bar (the contact pages left it for the rooms on 2026-10-21: test_the_rooms_are_of_the_front_door)."""
         pages = {
-            "contact.html": {
-                "Brief": "pages/brief.html", "Contact": "contact.html",
-                "Security": "pages/security.html", "Privacy": "pages/privacy.html",
-                "Terms": "pages/terms.html", "العربية": "ar/contact.html",
-            },
-            "ar/contact.html": {
-                "الموجز": "../pages/brief.html", "تواصل": "contact.html",
-                "الأمن": "../pages/security.html", "الخصوصية": "../pages/privacy.html",
-                "الشروط": "../pages/terms.html", "English": "../contact.html",
-            },
             "pages/brief.html": {
                 "Brief": "brief.html", "Contact": "../contact.html",
                 "Security": "security.html", "Privacy": "privacy.html", "Terms": "terms.html",
@@ -205,7 +198,7 @@ class SiteContractTests(unittest.TestCase):
             },
         }
         current = {
-            "contact.html": "Contact", "ar/contact.html": "تواصل", "pages/brief.html": "Brief",
+            "pages/brief.html": "Brief",
             "pages/security.html": "Security", "pages/privacy.html": "Privacy",
             "pages/terms.html": "Terms",
         }
@@ -483,7 +476,7 @@ class SiteContractTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
         seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
         paper = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", (ROOT / "css/cytherai.css").read_text(encoding="utf-8")))
-        dark = ("index.html", "ar/index.html", "tools/og-card.html", "tools/og-card-ar.html")
+        dark = ("index.html", "ar/index.html", "tools/og-card.html", "tools/og-card-ar.html") + ROOMS
         def defect(page: str, svg: str) -> str | None:
             size = int(re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1))
             ink, ground = (seal.INK, seal.GROUND) if page in dark else (paper["ink"], paper["paper"])
@@ -493,7 +486,7 @@ class SiteContractTests(unittest.TestCase):
             for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
                 self.assertIsNone(defect(page, svg))
                 found += 1
-        self.assertGreaterEqual(found, 11, "both front doors, both contact pages, five subpages and both cards carry the seal")
+        self.assertGreaterEqual(found, 13, "both front doors, the four rooms, five subpages and both cards carry the seal")
         # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
         svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
         self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
@@ -536,6 +529,29 @@ class SiteContractTests(unittest.TestCase):
             with self.subTest(ink=ink):
                 self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"--{ink} on --ground")
 
+    def test_the_rooms_are_of_the_front_door(self) -> None:
+        """The pages a visitor reaches from the front door (2026-10-21) are rooms of it: each draws with css/room.css, opens
+        with the front door's lockup going home, and ends with its footer; the room's tokens are the front door's, and
+        every ink holds 4.5:1 on the ground and on the lifted ground under a field or an artifact, a field's edge 3:1."""
+        film = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        room = (ROOT / "css/room.css").read_text(encoding="utf-8")
+        hexes = lambda css: dict(re.findall(r"--([\w-]+):(#[0-9a-fA-F]{6})\b", re.search(r":root\{([^}]*)\}", css).group(1)))
+        tok, front = hexes(room), hexes(film)
+        self.assertEqual({k: v for k, v in tok.items() if k in front}, front, "the front door's tokens, unchanged")
+        for ground in ("ground", "lift"):
+            for ink in ("ink", "soft", "dim", "warm"):
+                with self.subTest(ink=ink, ground=ground):
+                    self.assertGreaterEqual(wcag(tok[ink], tok[ground]), 4.5, f"--{ink} on --{ground}")
+            self.assertGreaterEqual(wcag(tok["edge"], tok[ground]), 3, f"a field's edge on --{ground}")
+        for page in ROOMS:
+            tags, base = parse_page(page).tags, posixpath.dirname(page)
+            at = lambda u: posixpath.normpath(posixpath.join(base, urlsplit(u).path))
+            sheets = [at(a["href"]) for t, a in tags if t == "link" and a.get("rel") == "stylesheet"]
+            self.assertEqual(sheets, ["css/room.css"], page)
+            home = next(a for t, a in tags if t == "a" and "wordmark" in a.get("class", "").split())
+            self.assertEqual(local_target(page, home["href"]), "ar/index.html" if page.startswith("ar/") else "index.html", page)
+            self.assertIn(("footer", {}), tags, page)
+
     def test_the_passage_moves_evenly(self) -> None:
         """The scroll moves the passage at the stage's own pace, 2 s of it a viewport: each stretch is as tall as its seconds
         at 50svh a second (css/film.css, vh first), and the stretches run on from one another, so no second is held or
@@ -560,14 +576,15 @@ class SiteContractTests(unittest.TestCase):
                     [a["data-m"] for t, a in tags if a.get("data-m")])
         self.assertEqual(shape("ar/index.html"), shape("index.html"))
         for page, lang, direction in (("index.html", "en", None), ("ar/index.html", "ar", "rtl"),
-                                      ("contact.html", "en", None), ("ar/contact.html", "ar", "rtl")):
+                                      ("contact.html", "en", None), ("ar/contact.html", "ar", "rtl"),
+                                      ("adii/index.html", "en", None), ("ar/adii.html", "ar", "rtl")):
             html = next(a for t, a in parse_page(page).tags if t == "html")
             self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
 
     def test_each_language_names_the_other(self) -> None:
         """Each page and its Arabic counterpart declare both as alternates (hreflang) and link each other visibly, the link
         marked with the language it leads to."""
-        for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html")):
+        for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html")):
             for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)

@@ -247,7 +247,7 @@ the ring with the three systems' work beside it, and the slab the film refused s
 at their moments at the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three
 systems.* · *The model proposes. The system decides.*, then ADII's headline at its two moments (*A number looks wrong.*
 · *Changing it is a separate decision.*), the two sentences `adii/` states, its condition, and *See what this is based
-on →* (`adii/#run`, the recorded run); AWC-OS's headline (*Not every answer is allowed.*) and its explanation (its three
+on →* (`adii/`, the recorded run's arrival); AWC-OS's headline (*Not every answer is allowed.*) and its explanation (its three
 outcomes: the engine runs the program, refuses it with an allowed alternative, or blocks it), with its condition and
 *See the demonstration →* (`awc-os/`) beneath them throughout, quiet but available, in one caption (2026-10-21: as a
 separate closing caption they showed for half a screen of scroll, too fleeting to notice, the owner found); CytherCAD's (*Language in. Valid geometry out.*) with its
@@ -311,8 +311,8 @@ the verifiers) are loaded by no page and not published; they stay at their paths
 corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds their surface.
 
 **Arabic** (`ar/`, 2026-10-14): `ar/index.html` is the front door in Arabic and `ar/contact.html` the contact page;
-the brief, the ADII page and the legal pages stay English and the Arabic pages mark their links to them
-(بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
+ADII's evidence has an Arabic introduction (`ar/adii.html`, 2026-10-21) before its English text; the brief and the legal
+pages stay English and the Arabic pages mark their links to them (بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
 exactly the English one's cues, the passage's seconds, sections and projected figures (the projector writes its two figures too,
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
@@ -330,10 +330,27 @@ the opening (*The three systems ↓*). The subpages keep their own treatment. `t
 to one environment (no switch, no theme on the root, no light tokens or colour-scheme query in `css/film.css`) and
 every ink to 4.5:1 on its ground.
 
-**Subpages** (`contact.html`, `ar/contact.html`, `pages/{brief,privacy,security,terms}.html`) share
-`css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script, admitted by its
-`sha256-` in the page's CSP, never `'unsafe-inline'`; edit the script and the hash must follow). Their ink law
-(every ink ≥ 4.5:1 on every ground, a form field's edge ≥ 3:1) is `tools/test-site.py`. Every page's CSP is least
+**The rooms** (2026-10-21, the owner's direction: finish the visitor's journey after the film, one route first,
+homepage → ADII evidence → contact → return, in both languages; then AWC-OS and CytherCAD): the pages a visitor reaches
+from the front door are rooms of it, `css/room.css` — quieter, with its type, tokens, seal lockup and footer, dark in
+either device theme, no motion. `adii/` opens on its arrival: what the recorded run is, what decision it shows (from the
+run's own text) and what it does not claim, beside the run itself (on a phone: the headline, the limit, the run, then
+what it shows); the run as text and the team with their CVs follow, verbatim. `ar/adii.html` introduces it in Arabic,
+with the run (its interface in English) and a marked link to the English text. The contact pages continue *Tell us what
+must never happen.*: three short answers (the system, what AI would do in it, what must never happen) composed into one
+readable email for the visitor's own mail app (`mailto:` by design: nothing passes through the site, which never says a
+message was sent; without the script the form posts the answers to `mailto:`); each keeps its one inline script, admitted
+by its `sha256-` in the page's CSP, never `'unsafe-inline'` (edit the script and the hash must follow). The routes: *See
+what this is based on →* lands on the arrival, *Talk to us →* on the contact page, and each room returns to the passage
+where the visitor left it (`../#adii`, `./#systems`). `tools/test-site.py` holds each room to its stylesheet, its home
+lockup and its footer, and the room's tokens to the front door's (every ink ≥ 4.5:1 on the ground and on the lifted
+ground, a field's edge ≥ 3:1). The pages they replaced are `backup/before-rooms/`. Still to come in rooms: AWC-OS's
+demonstration, CytherCAD's validation record, the legal pages and the 404, with one review of titles, previews and
+naming across them.
+
+**Subpages** (`pages/{brief,privacy,security,terms}.html`, `404.html`) share `css/cytherai.css` — flat, cold, static,
+no JS, until they become rooms. Their ink law (every ink ≥ 4.5:1 on every ground, a form field's edge ≥ 3:1) is
+`tools/test-site.py`. Every page's CSP is least
 privilege: `script-src` exactly what the page runs, nothing fetched from another origin, and everything a page or
 stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
 `pages/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the
@@ -349,7 +366,7 @@ them, its fonts), which opens from the repository root; `/exception/` now answer
 
 **Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
-named there. `adii/` keeps every URL its first publication served, the CVs included;
+named there. `adii/` keeps every URL its first publication served, the CVs included, and is a room since 2026-10-21;
 `awc-os/live/` redirects to an ephemeral tunnel and never ships. The Alinma plan was cancelled (2026-10-19):
 AWC-OS's films have their closing production line masked and its competition deck is withdrawn (the originals:
 `backup/awc-os-v1/`); state no Alinma deployment or pilot. Both pages are stamped like
