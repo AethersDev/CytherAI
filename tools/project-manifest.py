@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """project-manifest.py — write the manifest's facts into the pages that print them.
 
-Classification: GENERATOR (must reproduce committed bytes). The front doors and
-pages/brief.html print validation figures that js/manifest.js owns. Each printed
+Classification: GENERATOR (must reproduce committed bytes). The front doors, pages/brief.html
+and CytherCAD's rooms (cythercad/, ar/cythercad.html) print validation figures that js/manifest.js owns. Each printed
 fact is a marked element — <span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span>
 — and this tool rewrites every marked element's text to CytherManifest.project(name),
 read by executing js/manifest.js under jsc, never hand-copied. The documents keep
@@ -19,7 +19,7 @@ import json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
-PAGES = ("index.html", "ar/index.html", "pages/brief.html")
+PAGES = ("index.html", "ar/index.html", "pages/brief.html", "cythercad/index.html", "ar/cythercad.html")
 MARK = re.compile(r'(<([a-z][a-z0-9]*)\b[^>]*\bdata-m="([^"]+)"[^>]*>)([^<]*)(</\2>)')
 
 

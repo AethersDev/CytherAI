@@ -38,7 +38,12 @@ details{margin-top:24px;max-width:46rem}summary{cursor:pointer;display:inline-bl
 details h3{font-family:Public,sans-serif;font-size:16px;font-weight:600;color:var(--ink);margin:32px 0 8px}
 details li,details p{font-size:15px;line-height:1.6;color:var(--soft);max-width:none}details ol,details ul{padding-inline-start:22px}
 pre,code,table{font-family:Plex,monospace;font-size:12.5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--soft);background:var(--lift);border:1px solid var(--rule);padding:12px 14px}
-table{display:block;overflow-x:auto;border-collapse:collapse;color:var(--soft);margin:8px 0}th,td{text-align:start;padding:5px 16px 5px 0;border-bottom:1px solid var(--rule)}th{color:var(--dim);font-weight:400}
+table{display:block;overflow-x:auto;border-collapse:collapse;color:var(--soft);margin:8px 0}th,td{text-align:start;padding-block:5px;padding-inline:0 16px;border-bottom:1px solid var(--rule)}th{color:var(--dim);font-weight:400}
+/* an evidence room's record beside its arrival (CytherCAD's figures), on the lifted ground; words set as a table (an
+   engine's verdicts, a record's facts); a section's own numbered list */
+.record{background:var(--lift);border:1px solid var(--rule);padding:16px 20px 14px}.record .outcome{margin:0 0 6px;max-width:none;font-family:Plex,monospace;font-size:12.5px;color:var(--ink)}.record table{display:table;width:100%;margin:0}.record td{color:var(--ink);text-align:end;white-space:nowrap;padding-inline-end:0}
+.words{max-width:46rem;margin-top:24px}.words th{color:var(--ink);vertical-align:top;white-space:nowrap}.words td{font:15px/1.55 Public,sans-serif}
+section>ol{max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(--soft)}section>ol>li{font-size:15px;line-height:1.6;margin-top:8px}
 .team{list-style:none;margin:0;padding:0;max-width:46rem}.team li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule)}
 .team strong{display:block;font-weight:600}.team span{display:block;font-size:15px;color:var(--dim);margin-top:2px}
 /* the ways on: the front door's two, a solid one and a plain one */
@@ -59,5 +64,5 @@ body>footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;m
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
 :lang(ar) :is(h1,h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
-:lang(ar) p{line-height:1.85}:lang(ar) textarea{font-family:Arabic,Public,sans-serif}
+:lang(ar) p{line-height:1.85}:lang(ar) .words td{font-family:Arabic,Public,sans-serif;line-height:1.85}:lang(ar) textarea{font-family:Arabic,Public,sans-serif}
 :lang(ar) [lang=en]{unicode-bidi:isolate}

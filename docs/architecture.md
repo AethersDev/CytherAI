@@ -27,7 +27,7 @@ flowchart TD
   F --> SW["sw.js registration"]
   RF["tools/render-film.py · tools/render-passage.py (Blender, offline)"] -.-> MED
 
-  RM["the rooms: adii/, ar/adii.html, contact.html, ar/contact.html"] --> ROOM["css/room.css"]
+  RM["the rooms: adii/, awc-os/, cythercad/, their ar/ counterparts, contact.html, ar/contact.html"] --> ROOM["css/room.css"]
   P["pages/*.html and 404.html"] --> CSS["css/cytherai.css"]
 
   M["js/manifest.js — the record (no page loads it)"] --> B["js/instrument.js — the boundary engine (no page loads it)"]
@@ -39,7 +39,7 @@ flowchart TD
   DEP --> DIST["dist/ public artifact"]
   DIST --> SW
 
-  M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
+  M --> PM["tools/project-manifest.py"] --> DM["data-m elements on the front doors, the brief and CytherCAD's rooms"]
 ```
 
 The front door loads one stylesheet and one deferred script, both with SRI; `js/film.js` reads no module and publishes
@@ -60,7 +60,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
 | `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII, AWC-OS, CytherCAD, the return) and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
-| `ar/index.html`, `ar/contact.html`, `ar/adii.html` | The front door, the contact page and the introduction to ADII's evidence, in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
+| `ar/index.html`, `ar/contact.html`, `ar/adii.html`, `ar/awc-os.html`, `ar/cythercad.html` | The front door, the contact page and each system's evidence, in Arabic (AWC-OS with its Arabic film and text; ADII's run and CytherCAD's record in their original English) | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
@@ -75,7 +75,8 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `docs/` | Deployment contract and release record, asset provenance, architecture, the history rewrite | No | Evidence and operational instructions, never origin content |
 | `backup/` | The record: the retired front doors whole with their verifiers, the design studies (`prototype/`, `newC3/`), the trajectory engine and its runner, the build plan of instrument-v1; indexed in `backup/README.md` | No | Historical record only; retire here, never delete, never deploy, never import from |
 | `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage), the team's CVs | The reviewed set | Every URL its first publication served stays served; a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
-| `awc-os/` | AWC-OS evaluation gateway (curated) and its films | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; the gateway states no deployment claim the record does not support |
+| `awc-os/` | AWC-OS's evidence as a room (2026-10-21; the evaluation gateway it replaced is `backup/before-rooms/awc-os/`), its films and their posters | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; no deployment is claimed (the Alinma plan, cancelled 2026-10-19) |
+| `cythercad/` | CytherCAD's evidence as a room (2026-10-21): its validation record, every figure a projection of `js/manifest.js` | The reviewed set | As `adii/`; the projector writes its figures and `tools/test-projection.py` holds it to print every validation identifier |
 | `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
 
 ## Homepage boot and steady state
@@ -141,7 +142,9 @@ still) starts motion again.
 | `/ar/contact.html` | The contact room in Arabic: `css/room.css` plus its one inline script, in Arabic |
 | `/contact.html` | The contact room: `css/room.css` plus one inline script that composes the draft, copies it and goes back |
 | `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script; their way back is `#adii-evidence` on the front door, the words that lead to them |
-| `/pages/brief.html` | Static capability brief and promoted exhibits |
+| `/awc-os/`, `/ar/awc-os.html` | AWC-OS's evidence as a room, in English and in Arabic, each with its own film: `css/room.css`, no script; their way back is `#awc-os-evidence` |
+| `/cythercad/`, `/ar/cythercad.html` | CytherCAD's validation record as a room, and its Arabic introduction: `css/room.css`, no script, projected figures; their way back is `#cythercad-evidence` |
+| `/pages/brief.html` | Static capability brief and promoted exhibits (CytherCAD's record is also its own room since 2026-10-21) |
 | `/pages/privacy.html` | Static privacy record |
 | `/pages/security.html` | Static disclosure policy |
 | `/pages/terms.html` | Static terms |

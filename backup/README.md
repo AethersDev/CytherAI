@@ -21,7 +21,7 @@ Everything the site no longer uses lives here, whole: nothing is served, precach
 | `adii-sequence-v1/` | ADII's six-second sequence and its poster, served from 2026-10-12 until 2026-10-20, when the passage (`tools/render-passage.py`) took its place; its own README |
 | `system-sequences-v1/` | AWC-OS's and CytherCAD's six-second sequences, their posters and their generator (`tools/render-systems.py`), served from 2026-10-12 until 2026-10-20, when the passage's extension took their place; its own README |
 | `theme-switch-v1/` | The front door's light mode: `js/theme.js`, the header's switch and the light tokens, served from 2026-10-14 until 2026-10-20, when the owner retired it; its own README |
-| `before-rooms/` | ADII's page and the two contact pages as served until 2026-10-21, when they became rooms of the front door (`css/room.css`); its own README |
+| `before-rooms/` | ADII's page, the two contact pages and AWC-OS's evaluation gateway (with its language toggle) as served until 2026-10-21, when they became rooms of the front door (`css/room.css`); its own README |
 | `exception-v1/` | THE EXCEPTION, published at `/exception/` from 2026-10-04 to 2026-10-16: the page, the two modules as it loaded them (their integrity holds), its fonts with their licence, the icon |
 | `audit/` | The instrument-v1 audit record, 00–08 |
 | `trajectory-engine/` | The engine's `-v2.js` dev source, its prototypes, the v-next design map, and its last source with the browser suite (`engine/`, `pages/runner.html`) |

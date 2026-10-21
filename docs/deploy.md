@@ -1685,7 +1685,8 @@ top replayed the film (the landing's *Talk to us →*, then Back: the film from 
   purposes, as GitHub states (docs.github.com, *About GitHub Pages*, *Data collection*, read 2026-10-21).
 - **The way back.** ADII's route words on both front doors carry an id, `adii-evidence`; both rooms link to it (the
   header's way back, and one under the arrival, in Arabic too), and `js/film.js` brings their moment on arrival, the
-  middle of their window (12 s), as keyboard focus already did: the scroll the visitor had when they left. A reload or a
+  middle of their window (12 s), as keyboard focus already did: the evidence moment, not the exact scroll the visitor
+  left from (corrected 2026-10-21 on the owner's live review, §5ab: left at 4,248 px, back at 4,320 px). A reload or a
   return through the history keeps the scroll the browser restores, and a return through the history never plays the
   film, even to the top. The contact page, reached from many places, goes back through the history when the visitor came
   from this site (`navigation.canGoBack`, which counts only this origin's pages) and otherwise to the three systems. The
@@ -1745,6 +1746,88 @@ by the rooms law in `tools/test-site.py` rather than a capture.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_16109F1BC4218636`), 61 of 61 served paths matching the artifact.
 
+## 5ab. AWC-OS's and CytherCAD's evidence as rooms — 2026-10-21
+
+Build `502593FFB37C9DEE` (`#reading_ink_502593FFB37C9DEE`, `#film_settle_502593FFB37C9DEE`). It replaces build
+`588FDDD6D3EEC588`, never committed, whose CytherCAD pages named `js/manifest.js` in a comment: `tools/test-api.py` holds
+that no served page names the record, and the comments now name `CytherManifest`, as the brief's does; its provisional
+receipts were discarded unadmitted.
+
+**The review** (the owner, 2026-10-21, pasted: an independent live review of build `16109F1BC4218636`, desktop, in an
+in-app browser): the first route works, by clicks at visible coordinates (each system's link, ADII's authorship under its
+headline, ADII to contact, the draft, contact's Back to ADII, ADII's return with its caption shown and the film still);
+keep the design and the corrections. One correction to my report: *the same scroll position as when they left* is
+stronger than the implementation; the reviewer left at 4,248 px and came back at 4,320 px, because the way back lands on
+the middle of the caption's window: describe it as *returns to the evidence moment* (corrected in §5aa, in the return
+law's docstring and in CLAUDE.md). And the remaining work: *the other two destinations have not received this treatment.*
+AWC-OS's link still took an English visitor into the older Arabic-first evaluation page, with its original home link and
+mailto invitation; CytherCAD's still landed at the general brief's cover, before its record: the next bounded extension
+of the chosen design, not a reason to reopen the film or invent another concept. The reviewer did not repeat the
+language and device matrix, the clipboard, contrast, the release suite, real email delivery, a physical iPhone or
+VoiceOver.
+
+**Now.**
+- **AWC-OS** (`awc-os/`, English; `ar/awc-os.html`, Arabic, each with its own film: the page it replaces was bilingual,
+  so both films and both texts are originals). The arrival: *02 · AWC-OS · The demonstration*, *Not every answer was
+  allowed.*, *Developed by Al-Baseera (البصيرة) and presented at the AMAD 2026 FinTech Hackathon (Alinma Bank × Tuwaiq
+  Academy)* (the film's own closing card), what the demonstration shows in three sentences from the page's own text and
+  the film's (the engine runs, refuses with a Sharia-compliant alternative, or blocks; the 5% interest request refused
+  before it reaches the customer; the zakat computed exactly, SAR 4,226.25, its trace opened; the over-promising takaful
+  program BLOCKED and no rule relaxed), and its limit (*A hackathon demonstration: the MVP runs on an evaluation machine,
+  not on deployed hosting, and the iPhone demo runs offline. No deployment is claimed.*), beside its film. Then, verbatim:
+  how it decides (the pipeline, the shared Swift engine, the three verdicts, the measured failure retained, *unauthorized
+  answers fail safely*), the four demonstration paths with the live MVP's note (its live session now asked for through
+  the contact page, not a mailto), the film as text, and its source. The gateway's language toggle (`awc-os.js`) retired
+  with it to `backup/before-rooms/awc-os/`; `noindex` stays, as the gateway had it. The posters (IMG-015) are each film's
+  frame at 52.0 s, the engine's trace marked EXECUTED: the refusal at 34 s was the obvious frame, but its card names the
+  halal alternative's Alinma product, and a poster and a link preview would put that name first (the Alinma plan is
+  cancelled); the films and their text keep it, as the owner decided on 2026-10-19.
+- **CytherCAD** (`cythercad/`, a room of its own; `ar/cythercad.html`, its Arabic introduction with the record in its
+  original English). The arrival: *03 · CytherCAD · The validation record*, *0.00% invalid on an external benchmark,
+  against 10.00% for DeepCAD.* (projected), what CytherCAD does (the brief's own description, and *on-prem, private and
+  air-gapped*), what the figures establish (*Text2CAD-192 is an external, published benchmark that CytherAI does not
+  operate, and DeepCAD's figure is the one published with the Text2CAD benchmark. The invalid rate is the share of
+  generated CAD sequences that are invalid: whether the output builds, not whether it is the part described. The other
+  figures come from CytherAI's own logs.*), beside the validation summary (the key outcome and the six figures, all
+  projections). The meaning of the invalid rate and the source of DeepCAD's figure were checked against the benchmark's
+  paper (Text2CAD, arXiv 2409.17106v1, §5.1: *The Invalidity Ratio (IR) is calculated to measure the proportion of
+  invalid CAD sequences*; Table 1: DeepCAD 10.00, Text2CAD 0.93; read 2026-10-21). Then the record as the brief states it.
+  `tools/project-manifest.py` writes both rooms, and `tools/test-projection.py` holds each to print every validation
+  identifier. The brief keeps its own Exhibit A, unchanged.
+- **The routes and the way back.** *Read the validation record →* lands on `cythercad/`; the Arabic front door's AWC-OS
+  and CytherCAD routes land on their Arabic rooms (no longer on the English gateway and the English brief, marked
+  بالإنجليزية). AWC-OS's and CytherCAD's route words on both front doors carry ids (`awc-os-evidence`,
+  `cythercad-evidence`); each room's way back names them, and `tools/test-site.py` holds all six evidence rooms to it.
+
+**Checked.**
+- `tools/test-site.py` (28 tests), `tools/test-projection.py` and `tools/test-assets.py` pass. The extended laws fail, in a
+  throwaway copy, on five mutations (the Arabic AWC-OS way back to its stretch, not its words; CytherCAD's way back to
+  AWC-OS's words; the Arabic CytherCAD room on the old stylesheet; a validation row dropped from the CytherCAD room; the
+  Arabic AWC-OS room without its marked English link), and pass on a no-op control and on the restored copy.
+- Chrome 155, real input (`elementFromPoint` at each control's centre, a real mouse press on the desktop, a real touch on
+  the phone), at 1440 × 900 and 390 × 844: every link and control a visitor can see on both front doors and in all eight
+  rooms is the one the pointer reaches; the twelve presses on the systems' links open the right rooms (English routes
+  the English rooms, Arabic routes the Arabic rooms); each of the six evidence rooms' *Back to the passage*, pressed,
+  returns to its evidence moment (12.0 s, 14.325 s, 20.3 s), that caption alone shown and the film still.
+- The rooms at 1440 × 900 and 390 × 844: no console error, no sideways overflow (CytherCAD's key outcome first ran 94 px
+  past a phone's width, in a cell that never wrapped, and stands on its own line now); each artifact in the first screen
+  (AWC-OS's film ends at 613 of 900 px and 607 of 844; CytherCAD's record beside its arrival, and after its limit on a
+  phone). ADII's and the contact rooms are the same height as before.
+
+**For the owner.** The posters' frame (the trace, not the refusal) is a choice you may reverse. The CytherCAD record as
+published carries two things worth your eye: *Dimensional Accuracy ±3mm (n=35)* 99% above *±5mm (n=35)* 97% (a wider
+tolerance usually passes at least as many), and *Status: Production-validated*; both are printed as the record states
+them. *DeepCAD's figure is the one published with the Text2CAD benchmark* is my addition from the benchmark's paper; if
+CytherCAD's 0.00% was measured on a different set of prompts from that published figure (a *-192* set, against the
+paper's test set), say so on the page or tell me and I will. Still to come in rooms: the brief, the legal pages and the
+404, with one review of titles, previews and naming.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting, at three viewports, 1,400 element samples, none below 4.5:1, worst 4.9:1
+(CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile once the scroll stops, and the
+worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' inks are flat colours on flat grounds, held
+by the rooms law in `tools/test-site.py` rather than a capture.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1788,7 +1871,7 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Mouse and touch | each link the page shows takes a click on the Mac and a tap on the phone: the statement's, each system's in the passage while its words are shown, the close's and the footer's (keyboard focus and a script's click pass under a covering layer; a pointer does not) |
 | VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
-| The route out of the film | from the passage, *See what this is based on →* opens ADII's evidence with its headline, *Built by Group 05* and the team's names, its limit and its recording in the first screen (Arabic: its Arabic introduction); *← Back to the passage* (and the header's *← The passage*) returns to ADII's words with *See what this is based on →* shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
+| The route out of the film | from the passage, each system's link opens its evidence with its headline, its limit and its artifact in the first screen: *See what this is based on →* ADII's recorded run, with *Built by Group 05* and the team's names; *See the demonstration →* AWC-OS's film, with *Developed by Al-Baseera*; *Read the validation record →* CytherCAD's record, every figure as the record states it (Arabic: each route its Arabic room). Each room's *← Back to the passage* (and the header's *← The passage*) returns to that system's evidence moment, its link shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
 
 ## 6. Launch gate
