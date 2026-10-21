@@ -137,6 +137,24 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
+## AWC-OS-POSTERS — a frame of each AWC-OS film, the engine's trace marked EXECUTED
+
+| | |
+|---|---|
+| Asset ID | IMG-015 |
+| Source | `awc-os/media/AWC_OS_film_en.mp4` and `awc-os/media/AWC_OS_film_ar.mp4`, AWC-OS's films (85 s, music, no speech), with their closing production line masked since 2026-10-19 (`backup/awc-os-v1/`) |
+| Classification | **COMPUTED** — one frame of each fixed input above, at 52.0 s: the engine's trace of the zakat computation, marked EXECUTED (in Arabic, نُفِّذ), above the phone that asked for it. Chosen over the refusal at 34 s, whose card names the halal alternative's Alinma product: a poster and a link preview would put that name first, and the Alinma plan is cancelled (2026-10-19). Every page that shows or names it states its status beside it (a hackathon demonstration; no deployment is claimed) |
+| Command | `ffmpeg -ss 52 -i awc-os/media/AWC_OS_film_<en\|ar>.mp4 -frames:v 1 -q:v 3 awc-os/media/poster-<en\|ar>.jpg` (ffmpeg 9.0.2) |
+| Canonical inputs | None — the films are tracked files. |
+| Output | `awc-os/media/poster-en.jpg` · 1280×720 · 50,354 bytes; `awc-os/media/poster-ar.jpg` · 1280×720 · 49,046 bytes |
+| SHA-256 | poster-en.jpg `daeef2c7e70648b960e65c6b4143515e80be60dd5e8ab3b909a1f69f63c04b95` · poster-ar.jpg `8adc59c94029ebb8b59b72045847c9e7e6f874c4e39f61f1c75d0a3bb68288f0` |
+| Determinism | Reproduced byte for byte by the command above (2026-10-21, ffmpeg 9.0.2). |
+| Acceptance checks | 1280×720 JPEG, the films' own size; each its film's frame at 52.0 s (above). |
+| Deployment | `deploy.sh` allowlist, in AWC-OS's reviewed publication set (`tools/test-site.py`); each film's poster in its room (`awc-os/` English, `ar/awc-os.html` Arabic), and that room's link preview (`og:image`), from 2026-10-21. |
+| Owner sign-off | PENDING |
+
+---
+
 ## OG-CARD-V1 — the derived link-preview plate, retired
 
 | | |

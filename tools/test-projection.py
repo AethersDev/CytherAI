@@ -3,8 +3,8 @@
 
 P1  the committed pages equal their projection (tools/project-manifest.py --check);
 P2  the validation display rows are the checksum-bearing identifiers, in order;
-P3  the brief prints every identifier (a new record cannot be silently omitted); the front
-    door prints exactly its headline figure and the baseline it states it against, and no count;
+P3  the brief and CytherCAD's rooms print every identifier (a new record cannot be silently omitted); the
+    front door prints exactly its headline figure and the baseline it states it against, and no count;
 P4  a projected value corrupted in a page is detected;
 P5  an unknown projection name is refused by the manifest itself, and never written;
 P6  a manifest edit moves every printed site of the value it owns, on every page, and nothing else;
@@ -39,8 +39,9 @@ check(all(PM.project(s, values) == s for s in pages.values()) and run.returncode
 # P2
 check(record["ids"] == record["index"], "P2 VALIDATION rows are validation_index, in order: %s" % record["index"])
 # P3
-printed = {n.split(":")[1] for n in names["pages/brief.html"] if n.startswith("validation:") and n.endswith(":cyther")}
-check(printed == set(record["index"]), "P3 pages/brief.html prints every validation identifier")
+for page in ("pages/brief.html", "cythercad/index.html", "ar/cythercad.html"):
+    printed = {n.split(":")[1] for n in names[page] if n.startswith("validation:") and n.endswith(":cyther")}
+    check(printed == set(record["index"]), "P3 %s prints every validation identifier" % page)
 check(sorted(names["index.html"]) == sorted(HEADLINE),
       "P3 index.html prints exactly the invalid rate and its DeepCAD baseline as projections, and no count")
 check(sorted(names["ar/index.html"]) == sorted(HEADLINE),

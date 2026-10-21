@@ -11,3 +11,13 @@ Superseded on 2026-10-21, at the owner's direction, by rooms of the front door (
 visitor's own mail app. The recorded run, its text and the team with their CVs are carried over verbatim. Their links
 were relative to their served paths, so open them at `fdb58c3` to run them. Not served, precached or named by any served
 page.
+
+**`awc-os/`** (`index.html`, `awc-os.js`), byte for byte as the live build `16109F1BC4218636` served them (commit `727fc7e`):
+AWC-OS's evaluation gateway, curated from its first publication (`backup/project-pages/awc-os/`) and, since 2026-10-19,
+without the Alinma plan (`backup/awc-os-v1/`): Arabic first, an English toggle in `awc-os.js`, its films side by side,
+a *Request a live session* mailto and a route home. Superseded the same day, at the owner's direction (*the other two
+destinations have not received this treatment*), by AWC-OS's room (`awc-os/`, English, with the English film) and its
+Arabic counterpart (`ar/awc-os.html`, with the Arabic film), which carry its text, its verdicts and the films as text
+verbatim; `awc-os.js` is no longer served. CytherCAD's destination moved from the capability brief's cover
+(`pages/brief.html`, unchanged) to a room of its own (`cythercad/`, `ar/cythercad.html`), so nothing of it retires here.
+
