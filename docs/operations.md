@@ -65,6 +65,10 @@ No repository change settles these. Until each is done, the handover is complete
   cd - && git worktree remove /tmp/cytherai-release
   ```
 
+  Right after a publish, Pages can take several minutes to switch every file. A check that finds some files still at
+  the previous build is early, not a defect: wait and run it again. On 2026-10-21 the first check of `9BD0C72EFFCAE053`
+  found 11 of 63 files still the previous build's (the two new files answered with the old 404); minutes later all 63
+  matched.
   A takeover, a stale or partial deploy, a lost HTTPS setting or an expired certificate all fail it. It checks bytes,
   not behaviour. The behaviour of those bytes, including links that take a click and words readable over the film, was
   verified in the browser before release (`docs/deploy.md`). A new browser version is the one thing it cannot see, so
