@@ -244,7 +244,9 @@ a shared principle, not a product connection): AWC-OS's last words stay until it
 opening (15.5 s) and leave as it clears it; CytherCAD's label and its description-to-shape sentence are shown by 16.05 s,
 as the shape comes to rest and before it takes any form (the step at 16.8 s). Then the camera returns to where the film ended: the structure closes back toward
 the ring with the three systems' work beside it, and the slab the film refused still stops short of it. Its words arrive
-at their moments at the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three
+at their moments at the foot of the frame, below the scene, each on a darkness of its own (fixed, with a z-index of
+their own; no stretch makes a stacking context, or the next stretch lies over its words and their link takes no click
+or tap, as from 2026-10-20 to 2026-10-21 while keyboard focus still reached it: `tools/test-site.py`): *One principle. Three
 systems.* · *The model proposes. The system decides.*, then ADII's headline at its two moments (*A number looks wrong.*
 · *Changing it is a separate decision.*), the two sentences `adii/` states, its condition, and *See what this is based
 on →* (`adii/`, the recorded run's arrival); AWC-OS's headline (*Not every answer is allowed.*) and its explanation (its three
@@ -271,7 +273,9 @@ frame), and shows once whole: its first frame is the film's last, so nothing cha
 under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
 on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:
 each changes between two systems' words, never under them). A page that opens past the film (an anchor, a restored
-scroll) never plays it. AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
+scroll, a return through the history even to the top: without its back-forward cache Chrome replayed the film to a visitor
+back from the contact page until 2026-10-21) never plays it; an anchor that names the passage's words (`#adii-evidence`)
+brings their moment, as keyboard focus does. AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
 `tools/render-systems.py` to `backup/system-sequences-v1/` when the passage took their place. The social card
 (`assets/og/og-card.png`, on every page that names one) is the film's last frame with its statement
 (`tools/render-og-film.py`; the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing
@@ -332,19 +336,29 @@ every ink to 4.5:1 on its ground.
 
 **The rooms** (2026-10-21, the owner's direction: finish the visitor's journey after the film, one route first,
 homepage → ADII evidence → contact → return, in both languages; then AWC-OS and CytherCAD): the pages a visitor reaches
-from the front door are rooms of it, `css/room.css` — quieter, with its type, tokens, seal lockup and footer, dark in
-either device theme, no motion. `adii/` opens on its arrival: what the recorded run is, what decision it shows (from the
-run's own text) and what it does not claim, beside the run itself (on a phone: the headline, the limit, the run, then
-what it shows); the run as text and the team with their CVs follow, verbatim. `ar/adii.html` introduces it in Arabic,
-with the run (its interface in English) and a marked link to the English text. The contact pages continue *Tell us what
-must never happen.*: three short answers (the system, what AI would do in it, what must never happen) composed into one
-readable email for the visitor's own mail app (`mailto:` by design: nothing passes through the site, which never says a
-message was sent; without the script the form posts the answers to `mailto:`); each keeps its one inline script, admitted
-by its `sha256-` in the page's CSP, never `'unsafe-inline'` (edit the script and the hash must follow). The routes: *See
-what this is based on →* lands on the arrival, *Talk to us →* on the contact page, and each room returns to the passage
-where the visitor left it (`../#adii`, `./#systems`). `tools/test-site.py` holds each room to its stylesheet, its home
-lockup and its footer, and the room's tokens to the front door's (every ink ≥ 4.5:1 on the ground and on the lifted
-ground, a field's edge ≥ 3:1). The pages they replaced are `backup/before-rooms/`. Still to come in rooms: AWC-OS's
+from the front door are rooms of it, `css/room.css` — quieter, with its type, tokens, seal lockup and footer, no motion,
+and dark in either device theme: an art-direction choice the owner kept in review (2026-10-21), the visitor staying in
+the passage's world while the quiet layout and the stillness give the change of pace. `adii/` opens on its arrival: what
+the recorded run is, whose work it is (*Built by Group 05* and its four names, under the headline: the company's identity
+never hides the team's authorship), what decision it shows (from the run's own text) and what it does not claim, beside
+the run itself (on a phone: the headline, the byline, the limit, the run, then what it shows); the run as text and the
+team with their CVs follow, verbatim. `ar/adii.html` introduces it in Arabic, the team's names in Latin, with the run (its
+interface in English) and a marked link to the English text. The contact pages continue *Tell us what must never
+happen.* with three plain questions (*What system are you working on?* · *What would you want AI to do?* · *What must
+never happen?*), composed into one readable email draft for the visitor's own email app: the button says *Open email
+draft*, never *Send*, with *Your email app will open with these answers. Review the draft and send it there.* beside it,
+and if no app opens, *Copy the message* copies the draft whole, the address beside it. The answers stay in the browser
+until the draft opens; the page sends and stores nothing and never says a message was sent, and `pages/privacy.html`
+describes exactly that, with the host's own logs (GitHub Pages logs every visitor's IP address) as a separate matter
+(`mailto:` by design; without the script the form posts the answers to `mailto:`). Each contact page keeps its one inline
+script, admitted by its `sha256-` in the page's CSP, never `'unsafe-inline'` (edit the script and the hash must follow).
+The routes: *See what this is based on →* lands on the arrival, *Talk to us →* on the contact page. An evidence room
+returns to the passage's words that led to it (`../#adii-evidence`: that `.say`'s id, whose moment `js/film.js` brings;
+until 2026-10-21 it landed on its stretch's first, wordless second); the contact room, reached from many places, returns
+through the history when the visitor came from this site (`navigation.canGoBack` counts only its pages) and otherwise to
+the three systems. `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's
+tokens to the front door's (every ink ≥ 4.5:1 on the ground and on the lifted ground, a field's edge ≥ 3:1), and each
+evidence room's way back to the words whose route leads to it. The pages they replaced are `backup/before-rooms/`. Still to come in rooms: AWC-OS's
 demonstration, CytherCAD's validation record, the legal pages and the 404, with one review of titles, previews and
 naming across them.
 
