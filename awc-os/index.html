@@ -8,18 +8,23 @@
 <meta name="robots" content="noindex">
 <title>AWC-OS, the demonstration — CytherAI</title>
 <meta name="description" content="AWC-OS, a hackathon demonstration: a fine-tuned model writes a financial program, and a separate deterministic engine runs it, refuses it with a Sharia-compliant alternative, or blocks it. No deployment is claimed.">
+<meta property="og:site_name" content="CytherAI">
 <meta property="og:title" content="AWC-OS, the demonstration — CytherAI">
 <meta property="og:description" content="Not every answer was allowed. A hackathon demonstration of AWC-OS; no deployment is claimed.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/awc-os/">
+<link rel="canonical" href="https://cytherai.com/awc-os/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_SA">
 <meta property="og:image" content="https://cytherai.com/awc-os/media/poster-en.jpg">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="720">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="A frame of AWC-OS's film: the engine's trace of a zakat computation, marked EXECUTED, above the phone that asked for it.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/awc-os/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/awc-os.html">
-<meta name="build-hash" content="502593FFB37C9DEE">
+<meta name="build-hash" content="9BD0C72EFFCAE053">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
 <!-- AWC-OS's evidence, a room of the front door (css/room.css): its arrival says what the demonstration is, who built it,
@@ -30,7 +35,7 @@
      backup/awc-os-v1/). The reviewed set is pinned in tools/test-site.py. -->
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-<link rel="stylesheet" href="../css/room.css?v=5896fa5ef786" integrity="sha384-M62k3JfS6UUbpOJDNhlWrOp2khxeGJqv52QYnRHAx1p5N//GamhIPHvdYhf6W2h8" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
 </head>
 <body>
 <header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#awc-os-evidence">← The passage</a><a class="top" href="../ar/awc-os.html" hreflang="ar" lang="ar">العربية</a></nav></header>
@@ -121,6 +126,6 @@ EMIT zakat_result := &lt;object</pre></li>
 <p>The complete browser-MVP runtime is open for review — server, canonical-interpreter bridge (fsl-cli), and the judge-facing UI: <a class="plain" href="https://github.com/CytherAi/aws-os_mvp" target="_blank" rel="noopener">github.com/CytherAi/aws-os_mvp ↗</a></p>
 </section>
 </main>
-<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../pages/brief.html">Brief</a> · <a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
 </body>
 </html>
