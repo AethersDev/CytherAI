@@ -10,7 +10,6 @@ pages/privacy.html
 pages/security.html
 pages/terms.html
 js/film.js
-js/theme.js
 css/film.css
 css/cytherai.css
 sw.js
@@ -50,9 +49,11 @@ film/final-landscape.jpg
 film/final-portrait.jpg
 film/passage-landscape.mp4
 film/passage-portrait.mp4
-film/passage-landscape.jpg
-film/passage-portrait.jpg
-film/sys-awcos.mp4
-film/sys-awcos.jpg
-film/sys-cad.mp4
-film/sys-cad.jpg
+film/passage-adii-landscape.jpg
+film/passage-adii-portrait.jpg
+film/passage-awcos-landscape.jpg
+film/passage-awcos-portrait.jpg
+film/passage-cad-landscape.jpg
+film/passage-cad-portrait.jpg
+film/passage-close-landscape.jpg
+film/passage-close-portrait.jpg

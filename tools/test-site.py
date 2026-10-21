@@ -265,14 +265,15 @@ class SiteContractTests(unittest.TestCase):
     def test_the_privacy_policy_names_exactly_what_the_site_stores(self) -> None:
         """From light mode's release (2026-10-14) to 2026-10-18 the policy described a retired build's sessionStorage
         key and omitted the localStorage key the front door writes. Every key a served script stores is
-        named in the policy with its storage, and a storage no served script uses is not described there."""
+        named in the policy with its storage, and a storage no served script uses is not described there. Since light
+        mode retired (2026-10-20) no served script stores anything."""
+        found = lambda text: set(re.findall(r'\b(localStorage|sessionStorage)\.(?:get|set|remove)Item\("([^"]+)"', text))
+        self.assertEqual(found('try { chosen = localStorage.getItem("theme"); }'), {("localStorage", "theme")}, "the scan has teeth")
         stored = set()
         for path in DEPLOY_FILES:
             if path.endswith((".js", ".html")):
-                stored |= set(re.findall(r'\b(localStorage|sessionStorage)\.(?:get|set|remove)Item\("([^"]+)"',
-                                         (ROOT / path).read_text(encoding="utf-8")))
+                stored |= found((ROOT / path).read_text(encoding="utf-8"))
         policy = (ROOT / "pages/privacy.html").read_text(encoding="utf-8")
-        self.assertTrue(stored, "the front door remembers a chosen theme; finding nothing means the scan is blind")
         for storage, key in stored:
             self.assertIn(f"<b>{key}</b>", policy, key)
             self.assertIn(storage, policy, storage)
@@ -288,13 +289,12 @@ class SiteContractTests(unittest.TestCase):
         self.assertTrue(BANNED.search("color:var(--brass)") and BANNED.search("−540 M"), "the pattern has teeth")
 
     def test_homepage_module_order_and_script_posture(self) -> None:
-        # each front door reads no module: js/theme.js sets the theme in the head, before the page paints (a remembered
-        # choice never flashes the other); the film, its sentences, the sequences and the worker are js/film.js, deferred.
-        # Their CSP forbids inline script.
+        # each front door reads no module and runs one script: the film, its sentences, the passage and the worker are
+        # js/film.js, deferred (js/theme.js retired with light mode, 2026-10-20). Their CSP forbids inline script.
         for page, up in (("index.html", ""), ("ar/index.html", "../")):
             scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
-            self.assertEqual([urlsplit(attrs.get("src")).path for attrs in scripts], [up + "js/theme.js", up + "js/film.js"], page)
-            self.assertEqual([attrs.get("defer") for attrs in scripts], [None, ""], page)
+            self.assertEqual([urlsplit(attrs.get("src")).path for attrs in scripts], [up + "js/film.js"], page)
+            self.assertEqual([attrs.get("defer") for attrs in scripts], [""], page)
 
         for page in ("contact.html", "ar/contact.html"):
             contact_scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
@@ -459,7 +459,8 @@ class SiteContractTests(unittest.TestCase):
         """The page names its media in three places no resolver above reads: a <video>'s poster, a
         sequence's data-src (assigned when it comes into view) and the paths js/film.js picks by orientation (the
         film, the passage, and the stills that stand in for them). Each must be a deployed file, or the page shows a
-        black frame where the film was. ADII is the passage; AWC-OS and CytherCAD keep a sequence each.
+        black frame where the film was. The three systems are the passage (their sequences retired on 2026-10-20:
+        backup/system-sequences-v1/).
         (THE UNHAPPENED's scene/section parity law retired with it: backup/unhappened-v1/.)"""
         named = set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))   # resolved at the site's root
         for page in ("index.html", "ar/index.html"):
@@ -467,7 +468,7 @@ class SiteContractTests(unittest.TestCase):
             named |= {posixpath.normpath(posixpath.join(posixpath.dirname(page), attrs[key]))
                       for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
             self.assertEqual([attrs.get("id") or attrs.get("class") for tag, attrs in index.tags if tag == "video"],
-                             ["film", "passage", "seq", "seq"], f"{page}: the film, the passage, a sequence each for two systems")
+                             ["film", "passage"], f"{page}: the film and the passage")
         self.assertTrue(named, "the page names no film")
         self.assertEqual(sorted(named - set(DEPLOY_FILES)), [], "named but not shipped")
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
@@ -518,30 +519,44 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(tok["quiet"], tok["ink-quiet"])
         self.assertEqual(tok["label"], tok["ink-mid"])
 
-    def test_the_front_door_inks_hold_aa_in_both_themes(self) -> None:
-        """Light mode (js/theme.js) re-tokens the sections below the film; the film and what sits on it keep the dark
-        tokens. Every ink must hold 4.5:1 on its ground in both, tokens read from css/film.css and never restated here.
-        (Text over the film itself is measured in a browser: CY-SEM-003.)"""
+    def test_the_front_door_is_one_dark_environment(self) -> None:
+        """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light
+        mode re-tokened only the footer by then, a promise the page did not keep, and retired): no switch, no theme on the
+        root, no light tokens and no colour-scheme query in css/film.css. Every ink holds 4.5:1 on its ground, tokens read
+        from css/film.css and never restated here. (Text over the film itself is measured in a browser: CY-SEM-003.)"""
         css = (ROOT / "css/film.css").read_text(encoding="utf-8")
-        hexes = lambda block: {name: value if len(value) == 7 else "#" + "".join(c * 2 for c in value[1:])
-                               for name, value in re.findall(r"--([\w-]+):(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b", block)}
-        themes = {"dark": hexes(re.search(r":root\{([^}]*)\}", css).group(1)),
-                  "light": hexes(re.search(r"\[data-theme=light\] :is\([^)]*\)\{([^}]*)\}", css).group(1))}
-        for theme, tok in themes.items():
-            for ink in ("ink", "soft", "dim", "warm"):
-                with self.subTest(theme=theme, ink=ink):
-                    self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"{theme} --{ink} on --ground")
+        for absent in ("data-theme", "prefers-color-scheme", "#theme"):
+            self.assertNotIn(absent, css, absent)
+        for page in ("index.html", "ar/index.html"):
+            self.assertNotIn('id="theme"', (ROOT / page).read_text(encoding="utf-8"), page)
+        self.assertNotIn("data-theme", (ROOT / "js/film.js").read_text(encoding="utf-8"))
+        tok = {name: value if len(value) == 7 else "#" + "".join(c * 2 for c in value[1:])
+               for name, value in re.findall(r"--([\w-]+):(#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3})\b", re.search(r":root\{([^}]*)\}", css).group(1))}
+        for ink in ("ink", "soft", "dim", "warm"):
+            with self.subTest(ink=ink):
+                self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"--{ink} on --ground")
+
+    def test_the_passage_moves_evenly(self) -> None:
+        """The scroll moves the passage at the stage's own pace, 2 s of it a viewport: each stretch is as tall as its seconds
+        at 50svh a second (css/film.css, vh first), and the stretches run on from one another, so no second is held or
+        skipped. The owner found a passage that held, then rushed, lagging (2026-10-20)."""
+        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        stretches = [(a["id"], *map(float, a["data-t"].split())) for t, a in parse_page("index.html").tags
+                     if "passage" in a.get("class", "").split()]
+        self.assertEqual([i for i, _, _ in stretches], ["systems", "adii", "awc-os", "cythercad", "return"])
+        self.assertEqual([b for _, _, b in stretches[:-1]], [a for _, a, _ in stretches[1:]], "each begins where the last ended")
+        for i, a, b in stretches:
+            h = round(50 * (b - a))
+            self.assertIn(f"#{i}{{height:{h}vh;height:{h}svh}}", css, f"#{i}: {b - a:g} s, {h}svh")
 
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
-        """ar/index.html carries index.html's film, cues, the passage's seconds, sections, sequences and projected figures, only in
+        """ar/index.html carries index.html's film, cues, the passage's seconds, sections and projected figures, only in
         Arabic; one added to one page and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
         def shape(page: str):
-            tags, base = parse_page(page).tags, posixpath.dirname(page)
-            at = lambda u: posixpath.normpath(posixpath.join(base, u))
+            tags = parse_page(page).tags
             return ([(a.get("data-from"), a.get("data-to")) for t, a in tags if {"line", "landing"} & set(a.get("class", "").split())],
                     [(t, a.get("id"), a["data-t"]) for t, a in tags if a.get("data-t")],   # the passage's stretches and its words' windows
                     [a["id"] for t, a in tags if t == "section" and a.get("id")],
-                    [(at(a["poster"]), at(a["data-src"])) for t, a in tags if t == "video" and "seq" in a.get("class", "")],
                     [a["data-m"] for t, a in tags if a.get("data-m")])
         self.assertEqual(shape("ar/index.html"), shape("index.html"))
         for page, lang, direction in (("index.html", "en", None), ("ar/index.html", "ar", "rtl"),

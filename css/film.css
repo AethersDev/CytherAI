@@ -3,9 +3,8 @@
 @font-face{font-family:Plex;src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2")}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
+/* one lit environment, dark whatever the device's theme (the owner, 2026-10-20: light mode retired from the front door) */
 :root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff}
-/* light mode (js/theme.js): the sections below the passage take light tokens; the film, the passage, the header and the words over them stay dark */
-[data-theme=light] :is(.system,.close,body>footer){--ground:#f3f1ec;--ink:#121118;--dim:#5b5763;--soft:#37343e;--warm:#9a4a00;--rule:#12111826;--hover:#34313b;color:var(--ink)}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
@@ -18,7 +17,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offse
 body.scrub[data-state=still] #passage{opacity:1;visibility:visible;transition:opacity .4s,visibility 0s}
 header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
 .side{display:flex;align-items:center;gap:24px}
-#theme{display:block;padding:4px;color:var(--soft)}#theme:hover{color:var(--warm)}#theme svg{display:block}
 .note{position:absolute;inset-inline-start:5vw;bottom:18px;margin:0;color:var(--dim)}
 .wordmark{display:inline-flex;align-items:center;font-family:Public,sans-serif;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
@@ -44,40 +42,37 @@ body[data-state=still] .line{transition:none}
 @media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}.stage{padding:0 20px}.note{inset-inline-start:20px;bottom:14px}
  .line,.landing{inset-inline:20px;bottom:14vh;max-width:none}.line{font-size:28px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
-@media(max-width:480px){.side .to{display:none}}
-/* the passage (js/film.js): two stretches of scroll, the principle's and ADII's, each as tall as its seconds at the stage's
-   own pace (50svh a second: the stage's 100svh are the passage's first two), so a scroll moves the scene evenly; vh first,
-   as the stage. Its words are fixed at the foot of the frame, below the scene, each shown in its window of the passage's
+@media(max-width:359px){.side .to{display:none}}   /* the route past the opening stays wherever it fits beside the brand and the language */
+/* the passage (js/film.js): five stretches of scroll, the principle's, ADII's, AWC-OS's, CytherCAD's and the return to the
+   film's world, each as tall as its seconds at the stage's own pace (50svh a second: the stage's 100svh are the passage's
+   first two), so a scroll moves the scene evenly; vh first, as the stage. Its words are fixed at the foot of the frame, below the scene, each shown in its window of the passage's
    seconds (data-t), faded in and out by the scroll itself (js/film.js: with a timed fade on these fixed words WebKit
    missed 16–24 frames a pass, without it 1–3); one not shown takes no pointer */
-.passage{position:relative;z-index:2}#systems{height:150vh;height:150svh}#adii{height:350vh;height:350svh;margin-bottom:140vh;margin-bottom:140svh}   /* the last words read before the next system rises over them */
+.passage{position:relative;z-index:2}#systems{height:150vh;height:150svh}#adii{height:350vh;height:350svh}#awc-os{height:200vh;height:200svh}
+#cythercad{height:250vh;height:250svh}#return{height:200vh;height:200svh}
 .say{position:fixed;z-index:2;inset-inline-start:5vw;bottom:10vh;width:fit-content;max-width:min(640px,90vw);opacity:0;pointer-events:none}
 .say.on{pointer-events:auto}.say:focus-within{opacity:1!important;pointer-events:auto}   /* focus never lands on words unseen, whatever the scroll set */
 .no-js .say{position:relative;inset:auto;margin:0 5vw;opacity:1;pointer-events:auto}
-/* behind the passage's words, a darkness opaque under them and soft at its edges (a shadow, not a filter: nothing to
-   recompute as the page scrolls): the current runs through the words' band on a phone */
-.say::before{content:"";position:absolute;inset:-14px -22px;z-index:-1;pointer-events:none;background:#07070a;box-shadow:0 0 28px 22px #07070a}
-.say small,.system small{color:var(--warm)}
+/* behind the passage's words and the close's, a darkness opaque under them and soft at its edges (a shadow, not a filter:
+   nothing to recompute as the page scrolls): the current runs through the words' band on a phone */
+:is(.say,.close>div)::before{content:"";position:absolute;inset:-14px -22px;z-index:-1;pointer-events:none;background:#07070a;box-shadow:0 0 28px 22px #07070a}
+.say small{color:var(--warm)}
 .say h2,.say .big{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;margin:0;color:var(--ink);text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
 .close h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0}
 .say small+h2{margin-top:16px}
 .say p{font-size:17px;line-height:1.55;color:var(--soft);margin:14px 0 0;max-width:48ch;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
 .say p.big{margin:0}.say .cond{color:var(--dim);font-size:14px}.say .route{margin-top:14px}
-.system{position:relative;z-index:2;background:var(--ground);display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:center;padding:88px 5vw;border-top:1px solid var(--rule)}
-.system .seq{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#000}
-.system h2{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.2vw,48px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 22px}
-.system p{font-size:17px;line-height:1.55;color:var(--soft);margin:0 0 14px;max-width:48ch}
-.system .cond{color:var(--dim);font-size:14px}
 .route{display:inline-block;margin-top:8px;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}.route:hover{color:var(--warm);border-color:var(--warm)}
-.close{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 0;border-top:1px solid var(--rule)}
+/* the close: the invitation over the passage's last frame, the film's world again, where the film's statement stood */
+.close{position:relative;z-index:2;height:100vh;height:100svh;overflow:hidden}.close>div{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw)}
 .close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}.close nav .mono{color:var(--dim)}
 body>footer{position:relative;z-index:2;background:var(--ground);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:120px 5vw 40px;color:var(--dim)}body>footer a:hover{color:var(--ink)}
-@media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.system{grid-template-columns:1fr;gap:28px;padding:56px 20px}.system h2{font-size:28px}.system p{font-size:16px}.close{padding:80px 20px 0}body>footer{padding:72px 20px 32px}}
+@media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}body>footer{padding:72px 20px 32px}}
 /* Arabic (ar/): the Arabic type, never letter-spaced (it breaks the joins), taller lines for its marks; Latin names keep their own */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) .mono{font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
-:lang(ar) :is(.line,.landing h1,.say h2,.say .big,.close h2,.system h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
-@media(max-width:760px){:lang(ar) .landing h1{font-size:26px}}
-:lang(ar) :is(.system,.say) p:not(.big){line-height:1.85}
+:lang(ar) :is(.line,.landing h1,.say h2,.say .big,.close h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
+@media(max-width:760px){:lang(ar) :is(.landing h1,.close h2){font-size:26px}}
+:lang(ar) .say p:not(.big){line-height:1.85}
 :lang(ar) [lang=en]{unicode-bidi:isolate;white-space:nowrap}   /* a Latin name in Arabic text stays whole, in its own order */
 @media(prefers-reduced-motion:reduce){.line,.landing,.on,#passage{transition:none}}

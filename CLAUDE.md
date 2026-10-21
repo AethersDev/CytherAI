@@ -228,26 +228,35 @@ film: its sentences are positioning, and no motion on the page claims to corresp
 system event (CY-TEMP-002 was superseded with THE UNHAPPENED).
 
 Below it, the passage (2026-10-20, from the owner's direction *The Shape of Permission*): under the visitor's scroll
-the film's final composition opens into ADII's scene, twelve seconds rendered from the film's own scene
-(`tools/render-passage.py`, `film/passage-*.mp4`), scrubbed by the scroll and never played. The camera moves into the
-plane of the ring the refused slab never crossed, so the ring narrows to a line that stays where it stood; the
-structure parts around it and leaves a run of its ceramic tiles standing, which come forward as a row of values, one
-visibly wrong (the recorded run's last day). A correction arrives from the proposing side and stops a fraction short of
-the line, as the refused slab did; the authorizer's check lights the one slot it may change, the validator's scan runs
-the row, and only then does it cross; the wrong value steps back behind it, kept. Its words arrive at their moments at
-the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three systems.* · *The model
-proposes. The system decides.*, then
-ADII's headline at its two moments (*A number looks wrong.* · *Changing it is a separate decision.*), the two sentences
-`adii/` states, its condition, and *See what this is based on →* (`adii/#run`, the recorded run). The scroll moves the
-scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall as its seconds,
-and the words (`.say`, `data-t`: their window of the passage's seconds) fade in and out with the scroll itself, never
-with a timed transition (with one on these fixed captions WebKit missed 16–24 frames a pass, without it 1–3). The owner found the first version, whose
-beats held the scene still while words were read and then rushed it, lagging and hard to follow (2026-10-20). Then
-AWC-OS and CytherCAD, each a six-second sequence in the film's materials
-(`tools/render-systems.py`), a headline, two sentences a shipped page states, its condition, and one route into the
-evidence (`awc-os/`, `pages/brief.html`); CytherCAD's two figures are the front door's only `data-m` marks. The close is
-*Tell us what must never happen.* with the contact address. AWC-OS, CytherCAD and the close keep this earlier grammar
-until the owner extends the direction (`docs/deploy.md` §5v).
+the film's final composition opens into the three systems' scenes and returns to the film's world, twenty-five seconds
+rendered from the film's own scene (`tools/render-passage.py`, `film/passage-*.mp4`), scrubbed by the scroll and never
+played. The camera moves into the plane of the ring the refused slab never crossed, so the ring narrows to a line that
+stays where it stood; the structure parts around it and leaves a run of its ceramic tiles standing, which come forward
+as a row of values, one visibly wrong (the recorded run's last day). A correction arrives from the proposing side and
+stops a fraction short of the line, as the refused slab did; the authorizer's check lights the one slot it may change,
+the validator's scan runs the row, and only then does it cross; the wrong value steps back behind it, kept. Then AWC-OS,
+one fixed rule and one changed proposal: the camera rises along the line as ADII's row sinks away, to an opening on it,
+two lit jaws that never move; a program too tall for it stops a fraction short, its light goes out and it is set aside,
+and its alternative, lower, passes through the same opening. Then CytherCAD, the payoff: beyond the line the shape
+becomes a finished part, a block with a step and a bore, which turns while its length, height and bore are drawn; the
+refused program turns back out of the frame. The words make the change of subject unmistakable (the owner, 2026-10-20:
+a shared principle, not a product connection): AWC-OS's last words stay until its alternative is wholly through the
+opening (15.5 s) and leave as it clears it; CytherCAD's label and its description-to-shape sentence are shown by 16.05 s,
+as the shape comes to rest and before it takes any form (the step at 16.8 s). Then the camera returns to where the film ended: the structure closes back toward
+the ring with the three systems' work beside it, and the slab the film refused still stops short of it. Its words arrive
+at their moments at the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three
+systems.* · *The model proposes. The system decides.*, then ADII's headline at its two moments (*A number looks wrong.*
+· *Changing it is a separate decision.*), the two sentences `adii/` states, its condition, and *See what this is based
+on →* (`adii/#run`, the recorded run); AWC-OS's headline (*Not every answer is allowed.*) with its card's explanation,
+then its condition and *See the demonstration →* (`awc-os/`); CytherCAD's (*Language in. Valid geometry out.*) with its
+explanation, then its two figures beside their named benchmark (the front door's only `data-m` marks), its condition and
+*Read the validation record →* (`pages/brief.html`). Each system after ADII is shorter (4 s and 5 s to its 7). The
+scroll moves the scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall
+as its seconds (`tools/test-site.py`), and the words (`.say`, `data-t`: their window of the passage's seconds) fade in
+and out with the scroll itself, never with a timed transition (with one on these fixed captions WebKit missed 16–24
+frames a pass, without it 1–3). The owner found the first version, whose beats held the scene still while words were
+read and then rushed it, lagging and hard to follow (2026-10-20). The close, *Tell us what must never happen.* with the
+contact address, stands over the passage's last frame where the film's statement stood (`docs/deploy.md` §5x).
 
 The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced
 motion, a refused or failed play, a film not started within `GUARD` (6 s), or one that falls
@@ -255,33 +264,25 @@ motion, a refused or failed play, a film not started within `GUARD` (6 s), or on
 statement (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
-still: asked to play and paused at once, as iOS fetches a clip only then), ahead of the sequences, and shows once whole: its first frame
-is the film's last, so nothing changes where it takes over. Until then, under reduced motion, or after a failed
-download, the film's final frame stands, and past it ADII's part stands on one still of its moment, the correction
-waiting (`film/passage-*.jpg`). A page that opens past the film (an anchor, a restored scroll) never plays it. Each
-sequence plays once from its first frame when half of it is in view and holds its
-last frame, which is also its poster. iOS Safari downloads a clip only when asked to play it and
-buffers all of it before the first frame moves, so once the passage is whole the two are warmed
-in turn (started muted off screen, paused as they play) and arrive ready; without that, a
-phone sat on the last frame for seconds, as if frozen (2026-10-13, seen by the owner). One
-sequence downloads at a time (the film is outside that queue): one arriving in view takes the
-slot from a clip warming off screen, which goes back in the queue, never from another in view,
-which it waits behind. A slow
-start is never a failure; refused, failed to download (which frees the download slot), or
-stalled for `STALL` after it has moved, a sequence rests
-on its poster and tries again the next time it comes into view; scrolling past one before it
-begins is not a failure. Reduced motion shows the posters. The social card (`assets/og/og-card.png`, on every
-page that names one) is the film's last frame with its statement (`tools/render-og-film.py`;
-the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing runs:** once the film
-and every sequence in view have ended and the scroll has stopped (the passage seeks only as it scrolls), the page
-requests no frame, plays nothing and fires no timer (CY-TEMP-001). If the script never runs, the statement unveils itself after 6 s
-(`.no-js`, CSS). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by
-localized darkening only: under the header, along the film's lower edge, behind Replay,
-behind each caption and the statement, and under each of the passage's words (opaque there, soft at its edges: on a
-phone the current runs through their band). There is no sound. The
+still: asked to play and paused at once, as iOS fetches a clip only then, and buffers all of it before showing a
+frame), and shows once whole: its first frame is the film's last, so nothing changes where it takes over. Until then,
+under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
+on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:
+each changes between two systems' words, never under them). A page that opens past the film (an anchor, a restored
+scroll) never plays it. AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
+`tools/render-systems.py` to `backup/system-sequences-v1/` when the passage took their place. The social card
+(`assets/og/og-card.png`, on every page that names one) is the film's last frame with its statement
+(`tools/render-og-film.py`; the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing
+runs:** once the film has ended and the scroll has stopped (the passage seeks only as it scrolls, and is never played),
+the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). If the script never runs, the statement
+unveils itself after 6 s (`.no-js`, CSS). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by
+localized darkening only: under the header, along the film's lower edge, behind Replay, behind each caption and the
+statement, and under each of the passage's words and the close's (opaque there, soft at its edges: on a phone the
+current runs through their band). There is no sound. The
 statement is the page's `h1` and is in the accessibility tree from the first moment (only its
 links wait for it, so focus never lands on something invisible); a screen-reader-only
-paragraph (`.sr`) is the silent film's text alternative and carries its three sentences.
+paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; each stretch of the passage
+has its own.
 
 **The mark is the Cyther Seal** (adopted 2026-10-13 from the owner's identity draft): a path
 computed from SHA-256 of the word `CytherAI` — a walk on a 6×6 grid that admits a move only
@@ -295,13 +296,12 @@ path: `tools/test-site.py` requires every inline seal to equal the computed one.
 marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the orbit plate).
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
-precached); `css/film.css` and two scripts with SRI: `js/theme.js` in the head (it sets the theme before the page
-paints) and `js/film.js` (`defer`).
+precached); `css/film.css` and one script with SRI, `js/film.js` (`defer`).
 `js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the passage (the scroll's
-moment through its stretches, one seek at a time, its words' windows), the sequences' IntersectionObserver, and `sw.js` registration once the film is still (its install would take the
+moment through its stretches, one seek at a time, its words' windows, the stills), and `sw.js` registration once the film is still (its install would take the
 link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
-live in `film/`: two films with their final-frame posters, the passage in both orientations with the still that stands
-in for it, two sequences with their posters;
+live in `film/`: two films with their final-frame posters, the passage in both orientations with the stills that stand
+in for it (each system's moment and the return), all precached;
 `tools/test-site.py` holds every file the page names to `deploy.paths`, and back.
 `js/manifest.js` (`CytherManifest`: `project` and the record, for the projector, the verifiers and
 the derived assets) and `js/instrument.js` (`CytherInstrument`: `biEngine`, `audit` and `judge`, for
@@ -312,7 +312,7 @@ corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds 
 the brief, the ADII page and the legal pages stay English and the Arabic pages mark their links to them
 (بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
-exactly the English one's cues, the passage's seconds, sections, sequences and projected figures (the projector writes its two figures too,
+exactly the English one's cues, the passage's seconds, sections and projected figures (the projector writes its two figures too,
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
 or upper-cased (spacing breaks the joins), gets taller lines, and keeps a Latin name whole and in its own order
 (`[lang=en]`, isolated). Its type is IBM Plex Sans Arabic 300/400 (`fonts/`, OFL, shipped unmodified: the licence
@@ -320,10 +320,13 @@ reserves the name "Plex", so it is not subset). The lockup stays left to right. 
 `assets/og/og-card-ar.png` (`tools/render-og-film.py ar`). The copy was drafted in Modern Standard Arabic and
 published for the owner to refine.
 
-**Light mode** (2026-10-14): `js/theme.js` sets `data-theme` on the root from the visitor's remembered choice
-(the header's switch, `#theme`, `aria-pressed`) or else the device's setting; choosing the device's own theme forgets
-the choice. Only the two sequences' sections, the close and the footer take the light tokens; the film, the passage,
-the header and the words over them are dark in both. Every ink holds 4.5:1 on its ground in both themes (`tools/test-site.py`).
+**One lit environment** (2026-10-20, the owner's decision): the front door is dark whatever the device's theme. Light
+mode (2026-10-14: `js/theme.js`, the header's switch `#theme`, light tokens for the sections below the film) retired to
+`backup/theme-switch-v1/` once the systems and the close moved over the passage and the switch changed only the footer,
+a promise of an alternate view the page did not keep. The header holds the brand, the language and a direct route past
+the opening (*The three systems ↓*). The subpages keep their own treatment. `tools/test-site.py` holds the front door
+to one environment (no switch, no theme on the root, no light tokens or colour-scheme query in `css/film.css`) and
+every ink to 4.5:1 on its ground.
 
 **Subpages** (`contact.html`, `ar/contact.html`, `pages/{brief,privacy,security,terms}.html`) share
 `css/cytherai.css` — flat, cold, static, no JS (contact keeps its inline form script, admitted by its
@@ -331,8 +334,8 @@ the header and the words over them are dark in both. Every ink holds 4.5:1 on it
 (every ink ≥ 4.5:1 on every ground, a form field's edge ≥ 3:1) is `tools/test-site.py`. Every page's CSP is least
 privilege: `script-src` exactly what the page runs, nothing fetched from another origin, and everything a page or
 stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
-`pages/privacy.html` must name exactly what the site stores (today the `theme` key in localStorage, and the worker's
-cache); `tools/test-site.py` holds it to the served scripts.
+`pages/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the
+front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds it to the served scripts.
 
 **The experiment, retired** (2026-10-16, at the owner's direction): THE EXCEPTION, two decisions
 that look right, was published at `/exception/` on 2026-10-04 and linked from no page after
@@ -413,7 +416,8 @@ literals.
   directions on 2026-10-11, revised once on a reviewer's critique (the one refused slab, the
   camera holding at the refusal), then extended into the site with three systems and
   published on 2026-10-12; its render sources moved to `tools/render-film.py` and
-  `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header).
+  `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header; the latter retired with
+  the sequences to `backup/system-sequences-v1/` on 2026-10-20, and the passage is `tools/render-passage.py`).
 - **`main`'s history was rewritten once** (2026-10-13, at the owner's request): the `Co-Authored-By:` lines were
   removed from every commit message on `main` and it was force-pushed; trees, order, authors and dates are unchanged.
   The original history, trailers included, remains on the backup branch `history/before-message-rewrite` (local and
@@ -434,6 +438,7 @@ literals.
   generators, replaced on 2026-10-13 by the Cyther Seal and the film's card),
   `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
   snapshot's modules), `project-pages/` (the ADII and AWC-OS pages as first published,
-  before curation), `exception-v1/` (THE EXCEPTION, whole) and `audit/` (the instrument-v1
+  before curation), `exception-v1/` (THE EXCEPTION, whole), `adii-sequence-v1/` and `system-sequences-v1/` (the three
+  systems' six-second sequences, retired on 2026-10-20 for the passage) and `audit/` (the instrument-v1
   audit record, 00–08, formerly `docs/audit/`).
   Supersede, never erase: retire into `backup/`, do not delete.

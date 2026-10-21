@@ -8,17 +8,16 @@ DevTools Protocol, a fresh profile per page. Before any page script, requestAnim
 setTimeout/setInterval callbacks are counted when they fire; a video counts as playing if it played at any moment of
 the window. Autoplay is allowed. In each profile: wait for the film's still state (body[data-state=still]); scroll
 through the passage, to each of its words' windows (once the passage is whole it must follow the scroll: at the last
-words it shows the frame the page's stretches name there; under reduced motion it never loads, and the still of ADII's
-moment stands); scroll each system's sequence to the viewport centre and wait until it has played to its last frame; scroll
-to the close and, once its scroll has been answered (0.5 s: the page answers a scroll with one frame), reset the counts
-and wait 3 s; then scroll a sequence back into view (it must play), wait for every video to stop, reset and count 3 s
-again. Each page then reads the worker's caches, its control after a reload, and a reload with the server
-stopped (from /ar/ the worker registers at the site's root).
+words, CytherCAD's, it shows the frame the page's stretches name there; under reduced motion it never loads, and the
+still of CytherCAD's moment stands); scroll to the close and, once its scroll has been answered (0.5 s: the page
+answers a scroll with one frame), reset the counts and wait 3 s; then scroll back into the passage (the stimulus), wait
+for every video to stop, reset and count 3 s again. Each page then reads the worker's caches, its control after a
+reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).
 
 Bound: 0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages;
-a stimulus starts motion (outside reduced motion, where no sequence plays: it starts no media and no timer, its scroll
-answered by one frame) and the page settles again; the passage follows the scroll once whole (under reduced motion it never loads, and the still stands). No request
-leaves the local origin and the console logs no error. Writes <out-dir>/settle.json, the shape the
+the stimulus is answered (at least one frame, and no media and no timer: the passage is sought, never played) and the
+page settles again; the passage follows the scroll once whole (under reduced motion it never loads, and the still
+stands). No request leaves the local origin and the console logs no error. Writes <out-dir>/settle.json, the shape the
 evidence ledger records; exits 0 on PASS, 1 on FAIL.
 """
 
@@ -44,7 +43,6 @@ PROFILES = {   # label: width, height, device pixel ratio, mobile with touch, re
     "320x844 · dpr 2 · mobile, touch": (320, 844, 2, True, False),
     "1440x900 · reduced motion": (1440, 900, 1, False, True),
 }
-SEQUENCES = ("#awc-os", "#cythercad")
 # the scroll taken to the middle of the window of words i, after 1.5 s: the moment the page's stretches name there (js/film.js
 # measure, moment, place), the passage's frame, whether it is shown (body.scrub), and the poster the film's element stands on
 BEAT = """(i => { const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
@@ -58,9 +56,9 @@ const place = t => { for (let k = 1; k < marks.length; k++) { const [y0, t0] = m
     at: document.getElementById('passage').currentTime, scrub: document.body.classList.contains('scrub'),
     poster: document.getElementById('film').poster.split('/').pop()}), 1500)); })(%d)"""
 # Before any page script: frame requests are counted as they are made, timer callbacks as they fire; every video that
-# plays or ends is kept, and the moment the body first turns still is stamped in page time (from navigation start).
+# plays is kept, and the moment the body first turns still is stamped in page time (from navigation start).
 COUNT = """(() => {
-  const S = window.__settle = {raf: 0, timers: 0, moving: new Set(), ended: new Set(), still: null};
+  const S = window.__settle = {raf: 0, timers: 0, moving: new Set(), still: null};
   const raf = window.requestAnimationFrame;
   window.requestAnimationFrame = function (f) { S.raf++; return raf.call(window, f); };
   for (const name of ["setTimeout", "setInterval"]) {
@@ -70,7 +68,6 @@ COUNT = """(() => {
     };
   }
   addEventListener("playing", e => S.moving.add(e.target), true);
-  addEventListener("ended", e => S.ended.add(e.target), true);
   new MutationObserver(() => { if (S.still === null && document.body.dataset.state === "still") S.still = performance.now(); })
     .observe(document, {subtree: true, attributes: true, attributeFilter: ["data-state"]});
 })();"""
@@ -220,19 +217,12 @@ def observe(tab, origin, page, width, height, dpr, mobile, reduced):
     words = [tab.js(BEAT % i) for i in range(tab.js("document.querySelectorAll('.say').length"))]
     last = words[-1]
     row["passage_at_last_words"] = last
-    row["passage_followed"] = (not last["scrub"] and last["poster"].startswith("passage-")) if reduced else \
+    row["passage_followed"] = (not last["scrub"] and last["poster"].startswith("passage-cad-")) if reduced else \
         (last["scrub"] and abs(last["at"] - last["want"]) <= 1 / 24)
-    for sel in SEQUENCES:
-        v = f"document.querySelector('{sel} video')"
-        tab.js(f"{v}.scrollIntoView({{block: 'center', behavior: 'instant'}}); __settle.at = performance.now();")
-        # played once it ends; one still paused 3 s after it came into view will not play (reduced motion)
-        until(tab, f"__settle.ended.has({v}) || {v}.paused && performance.now() - __settle.at > 3000", 20)
-        row[sel + "_played"] = tab.js(f"__settle.ended.has({v})")
     tab.js("document.querySelector('.close').scrollIntoView({block: 'end', behavior: 'instant'})")
     time.sleep(0.5)   # the scroll is input: the page answers it with one frame, before the settled window begins
     row["settled_3s"] = window(tab, 3)
-    # the close leaves #awc-os out of view, so bringing it back is a crossing its observer answers
-    row["after_stimulus"] = window(tab, 1, "document.querySelector('#awc-os video').scrollIntoView({block: 'center', behavior: 'instant'})")
+    row["after_stimulus"] = window(tab, 1, "document.querySelector('#cythercad').scrollIntoView({block: 'center', behavior: 'instant'})")
     until(tab, f"{PLAYING}.length === 0", 20)
     row["resettled_3s"] = window(tab, 3)
     row["doc_width"] = tab.js("document.documentElement.scrollWidth")
@@ -242,10 +232,8 @@ def observe(tab, origin, page, width, height, dpr, mobile, reduced):
     row["console_errors"] = tab.errors
     quiet = {"raf": 0, "timers": 0, "playing": 0, "state": "still"}
     row["pass"] = (row["settled_3s"] == quiet and row["resettled_3s"] == quiet
-                   and (row["after_stimulus"]["playing"] == row["after_stimulus"]["timers"] == 0 if reduced
-                        else row["after_stimulus"]["playing"] >= 1)
+                   and row["after_stimulus"]["raf"] >= 1 and row["after_stimulus"]["playing"] == row["after_stimulus"]["timers"] == 0
                    and row["state_at_1s"] == ("still" if reduced else "film") and row["no_js_class_removed"] and row["passage_followed"]
-                   and all(row[s + "_played"] != reduced for s in SEQUENCES)
                    and not row["external_requests"] and not row["console_errors"])
     return row
 

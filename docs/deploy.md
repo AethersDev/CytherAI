@@ -1397,6 +1397,128 @@ ADII's still stands; every sequence played to its last frame; the worker caching
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_EB79D2894F4F8A29`), 58 of 58 served paths matching the artifact.
 
+## 5x. The passage through AWC-OS and CytherCAD, and back — 2026-10-20
+
+Build `983A5A948DF4EF1B` (`#reading_ink_983A5A948DF4EF1B`, `#film_settle_983A5A948DF4EF1B`).
+
+**The owner's decision** (2026-10-20, pasted), reviewing `EB79D2894F4F8A29` on the live site at the desktop and at
+390 × 844: keep the passage and extend its visual continuity to the rest of the site, each remaining system a shorter,
+distinct beat. *AWC-OS: one fixed rule, one changed proposal* — the boundary stays as ADII's row recedes; a program is
+refused and its compliant alternative passes through the same opening; the rule visibly unchanged; one headline, one
+concise explanation, then the evidence route; the existing corrected motion supplies the central event. *CytherCAD: the
+payoff* — a permitted construction becomes the finished part, its shape, bore and dimensions clear, the most satisfying
+moment of completion on the site; the validation figure beside its named benchmark, without another sequence of caption
+stops. *The close: return to the opening's wider world* — pull back from the part into a composition that recalls the
+opening; any refused component carried into it must remain visibly refused; then *Tell us what must never happen.* The
+owner also corrected a status (the reviewed build was already committed and served live, `b9af466`) and declined to
+endorse frame-rate figures measured from screenshots and discrete scrolls, or a claim of smoothness on their iPhone or
+Mac Safari: §5w's figures are this repository's harness in headless Chrome and the iOS Simulator, not a device's.
+
+**The owner's two further decisions** (the same day, on the plan before the footage was finished): *remove the theme
+switch from the cinematic homepage* — once the systems and the close moved over the passage it changed only the footer,
+a promise of an alternate view the page did not keep; the passage keeps its deliberately lit environment under either
+device theme, the subpages their own treatment, and the header the brand, the language and a direct route past the
+opening. And *make the change of subject from AWC-OS to CytherCAD unmistakable*: a seamless transformation could imply
+that AWC-OS's financial program feeds CytherCAD, or that the two are stages of one product; the site has established a
+shared principle, not a product connection. So AWC-OS completes its event (the alternative has crossed the unchanged
+opening), CytherCAD is introduced before the shape takes any recognizable geometry, and its description-to-shape
+sentence stands at that transition — by the words' timing, without another render. Caption stops stay reading windows,
+never pauses in the scroll's mapping, and the closing invitation stays available once the scene settles, however fast
+the visitor came. Further creative changes wait for the owner's review of the finished footage: does each system become
+understandable at the moment its action becomes visible, and does the return feel like an ending?
+
+**What the visitor sees.** The passage (IMG-013) is now twenty-five seconds, its first twelve ADII's frames unchanged.
+From ADII's settled row the camera rises along the line, which stays where it stood, and the row sinks out of the frame;
+on the line, an opening: two warm jaws that never move. A program arrives from the proposing side, too tall for the
+opening, and stops a fraction short of it, where the film's slab stopped; its light goes out and it is set aside, up and
+back out of the lane, as AWC-OS's corrected sequence set its refused program aside; its alternative, lower, passes
+through the same opening. Beyond the line the shape comes to rest and, once CytherCAD's words have arrived, is built
+into a part: it thickens into a base, a step grows on its far end, a bore is drilled through it, it turns, and its
+length, its height and the bore's diameter are drawn on it, while the refused program turns back out of the frame. Then the camera returns to where the film ended: the line opens into the ring, the
+structure closes back toward it with ADII's corrected row, the jaws and the part standing beside it, and the slab the
+film refused still stops short of it. The close stands over that last frame, where the film's statement stood. Phones
+get the film's portrait composition: the line horizontal, the proposals rising to it from below; for AWC-OS the frame
+lifts the line to 0.35 of the height so the refused program waits above the words (0.42–0.57 of the frame).
+
+**Its words.** AWC-OS: *02 · AWC-OS · A conceptual illustration*, *Not every answer is allowed.* with the card's
+explanation over the arrival and the refusal (12.95–14.5 s), then its condition and *See the demonstration →*
+(`awc-os/`) as the alternative crosses (14.6–15.7 s: it is wholly through the line at 15.50 s and clear of the jaws at
+15.70, from the script's own motion); the card's second paragraph (*In the demonstration, a proposal was blocked …*) is
+dropped for the one explanation. CytherCAD: *03 · CytherCAD · A conceptual illustration*, *Language in. Valid geometry
+out.* with its description-to-shape sentence from 15.8 s, fully shown at 16.05, as the shape comes to rest and before it
+takes any form (its light goes out from 16.0 and it thickens imperceptibly at first; the step, the first recognizable
+geometry, begins at 16.8); then, as its dimensions are drawn, the figure with its benchmark (*0.00% invalid rate on
+Text2CAD-192, against 10.00% for DeepCAD …*, still the front door's only `data-m` marks), its condition and *Read the
+validation record →* (19.2–21.4 s). Two stops each, against ADII's four; each system's stretch is shorter (4 s and 5 s of
+scroll, two viewports and two and a half, against ADII's seven seconds). Each stretch has its screen-reader description;
+CytherCAD's begins *another application of the principle* and never says the program becomes the part. In Arabic, the
+same windows and words (the cards' Arabic).
+
+**Its mechanics** (`js/film.js`). The sequences and their machinery are gone: no IntersectionObserver, no download slot,
+no warming. The passage is the only scene below the film: it downloads once the film is whole (or still) and is sought
+by the scroll, never played. Under reduced motion, before it is whole, or after a failed download, the film's element
+stands on the still of the moment: the film's final frame, then ADII's, AWC-OS's, CytherCAD's, and the return's (the
+passage's last frame), each changing between two systems' words, never under them (`STILLS`, with the second each
+stands until). The close is a viewport tall, static in the page's flow, its words where the statement stood, on the
+captions' darkness: no window governs it, so it is there whenever the visitor arrives. The header's theme switch and
+`js/theme.js` are retired (`backup/theme-switch-v1/`); the page is dark under either device setting, the privacy policy
+no longer describes a stored theme (a choice saved before is no longer read), and `tools/test-site.py` holds the front
+door to one environment. The header's route past the opening (*The three systems ↓*), hidden below 480px while the switch
+took its room, now shows on any phone 360px wide or more (measured: 40px clear of the wordmark at 360px in English;
+in Arabic it fits at 320).
+
+**Checked before the render.** The script changes nothing before 12.0 s: the scene's evaluated state (every object's
+world matrix and visibility, the camera's shifts and focus, every keyed material value, every light) compared with the
+first render's script at twelve frames from f0288 to f0575, no difference, in both orientations. No solid piece passes
+through another in any of the 600 frames: the oriented-box test now reads the halves' offsets from the scene, covers the
+new pieces (the programs, the step, the jaws and the dimensions while lit), the ring's tube against every solid, and the
+camera's clearance (1.38 landscape and 1.01 portrait at the closest, both from the ring). It found one real defect, fixed
+before the render: as the structure closed, a fin swept through the refused program's resting place (23.25–23.92 s); the
+program is now set aside beyond the fins' reach (radius 3.21 against their 3.08). Previews found three more, fixed: the
+line visibly ended just above the opening (the ring's top in frame: the boundary looked like a post one could go around),
+so the lane sits lower and further back and the line runs out of the frame; in CytherCAD the camera came within 0.3 of
+the ring and its near edge blurred into a band, so the part is larger and the camera stays 1.4 away; on a phone the
+refused program waited in the words' band, so the portrait frame lifts for AWC-OS. Rendered with Blender 5.1.2 at the
+film's settings (64 samples, `TL=24` landscape, `TL=14` portrait).
+
+**Measured on the delivered media** (IMG-013): 1440×810 and 810×1440, 25 s, 100 keyframes in 600 frames, 1,698,659 and
+1,569,783 bytes (0.54 and 0.50 Mbit/s, lighter than the twelve-second passage's 0.69 and 0.63: AWC-OS's and CytherCAD's
+frames are mostly dark ground). Its first frame is pixel-identical to the twelve-second encode's, so the hand-off from the
+film is unchanged; the two renders join at 12.0 s without a seam (46.9 and 48.8 dB across the join, against 47.3 and 49.8
+between neighbouring frames of one render); the line stands at column 683 of 1440 at every sampled moment from 2.58 s to
+21.0 s in landscape, and in portrait on row 749 through ADII, 504 for AWC-OS and 749 again from 19.0 s. The new stills
+weigh 21.5 KB (AWC-OS), 26.6 KB (CytherCAD) and 120.5 KB (the return) in landscape, about the same in portrait; with them
+the worker's precache is 1.29 MB (0.98 MB before; the note in `js/film.js` that said 0.7 MB was already stale).
+
+**Retired.** AWC-OS's and CytherCAD's six-second sequences with their posters, and `tools/render-systems.py`, whole, to
+`backup/system-sequences-v1/` (IMG-012's outputs moved with them); light mode, `js/theme.js` with the switch and the
+light tokens, to `backup/theme-switch-v1/`.
+
+**Open, for the owner.** The review of the finished footage, landscape and portrait: does each system become
+understandable at the moment its action becomes visible, and does the return to the opening feel like an ending? The
+device checks (§5f) now include the whole passage on an iPhone.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting (the page the same in both), at three viewports, 1,400 element samples, none
+below 4.5:1, worst 4.9:1 (the film's statement on a phone, as before); AWC-OS's and CytherCAD's words 6.11:1 at worst,
+the close and the footer 6.11:1 (CY-SEM-003 PASS). Both pages settle to no frame, timer or playing media in every profile
+once the scroll stops; at CytherCAD's figure the passage shows exactly the frame its moment names (20.3 s), and under
+reduced motion it never loads while CytherCAD's still stands; a scroll back into the passage is answered with one frame
+and no media or timer, and the page settles again; nothing overflows sideways at any viewport; the worker caches this
+build and serves it offline (CY-TEMP-001 PASS). The settle probe's stimulus is now that scroll: with no sequence left,
+nothing plays on the page below the film.
+
+Smoothness, re-measured with §5w's harness (the passage scrolled at a constant speed, every presented frame recorded):
+the scene moves 2 s a viewport through all five stretches; headless Chrome presents 59.9 frames a second at a viewport a
+second and 59.7 at two, on the desktop and on a phone, every display frame, none late, the longest hold on one frame
+16.8 ms; the iOS Simulator's WebKit presents 47.7 a second at a viewport a second (the scene's 48: every frame of it), 3
+display frames late in 12.5 s, the longest hold 46 ms as before, and 59.5 at two viewports a second, the longest hold 35
+ms. As the owner noted of §5w's figures, these are the harness's, in headless Chrome and the iOS Simulator, not a
+phone's or a Mac's in hand.
+
+The live origin: not yet observed (CY-ORIGIN-001 is NOT_EVALUATED for this build until it is published and
+`tools/probe-origin.py` reads it).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1434,12 +1556,12 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Check | What to confirm |
 |---|---|
 | Safari (macOS) | the film autoplays muted and inline; each sentence appears in its window; it ends on the still composition with the statement and Replay; Develop → Console shows no error |
-| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle ADII's still stands for the passage; scrolling on from the statement moves the passage frame by frame, the line held where the ring stood, with no jump where it takes over from the film; each sequence plays as it comes into view |
+| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle each system's still stands for the passage; scrolling on from the statement moves the passage frame by frame through ADII, AWC-OS and CytherCAD and back to the film's world, with no jump where it takes over from the film; the close stands over its last frame |
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
-| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, ADII's *See what this is based on →* (its words shown when it has focus), each other system's route, *Talk to us* and the footer; the focus ring is visible throughout |
-| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle, ADII's beats and the other two systems' headings and copy in order; the films and the passage are silent and hidden from it |
+| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
+| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
-| 200% zoom (⌘+) | the statement, the captions and the systems' copy unclipped |
+| 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
 
 ## 6. Launch gate
 

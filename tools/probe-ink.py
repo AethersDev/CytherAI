@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """CY-SEM-003, reading ink over the film and the passage: WCAG 2.1 contrast of each reading element's computed ink against
-every ground pixel at its glyph support, on both front doors (/ and /ar/), dark and light, at three viewports.
+every ground pixel at its glyph support, on both front doors (/ and /ar/), under a dark and a light device setting (the
+front door is dark in both), at three viewports.
 
 The built artifact is served as the origin root by a server that answers byte ranges (the films must seek) and opened in
 headless Chrome over the DevTools Protocol, no served file edited: play() is stubbed to resolve without playing, so
@@ -9,8 +10,8 @@ hidden, whose time the stall rule (STALL) does not count. For each declared seco
 land within 0.05 s), then 1.0 s for the cue and its 0.6 s fade; the page must still be in its film state, the film at
 that second, showing the cue data-from/data-to name. Then the film is ended (the still state); once the passage is whole
 (body.scrub) the scroll is taken to the middle of each of its words' windows, and the passage must show the frame the page's own
-stretches name for that scroll (their data-t, within a frame) under those words, shown; then each remaining section is
-scrolled to the viewport centre. Each sample is captured with every glyph's fill transparent (the ground composited
+stretches name for that scroll (their data-t, within a frame) under those words, shown; then the page is scrolled to
+its end, the close over the passage's last frame with the footer under it. Each sample is captured with every glyph's fill transparent (the ground composited
 beneath it, text-shadow and darkening included) and with every fill #FF00FF: glyph support = pixels differing by >= 64
 in a channel. The page's CSP is bypassed for the probe's capture style only.
 
@@ -31,7 +32,6 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PAGES = (("/", ""), ("/ar/", "ar/"))
 VIEWPORTS = ((1440, 900, 1, False), (390, 844, 3, True), (320, 844, 2, True))
 SECONDS = (1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9)
-SECTIONS = ("#awc-os", "#cythercad", ".close")
 BOUND, SUPPORT, INF = 4.5, 64, float("inf")
 
 HOLD = ("HTMLMediaElement.prototype.play = function () { return Promise.resolve(); };"
@@ -215,7 +215,7 @@ def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
     stem = f"{'ar' if path else 'en'}-{scheme}-{w}x{h}-"
     send("Emulation.setDeviceMetricsOverride", width=w, height=h, deviceScaleFactor=dpr, mobile=mobile)
     send("Emulation.setTouchEmulationEnabled", enabled=mobile)
-    send("Emulation.setEmulatedMedia", features=[{"name": "prefers-color-scheme", "value": scheme}])   # js/theme.js follows it
+    send("Emulation.setEmulatedMedia", features=[{"name": "prefers-color-scheme", "value": scheme}])   # the page must not follow it
     send("Page.navigate", url=origin + path)
     time.sleep(2.5)
     samples = {}
@@ -241,13 +241,12 @@ def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
         if b["state"] != "still" or b["seeking"] or abs(b["at"] - b["want"]) > 1 / 24 or not b["on"] or b["opacity"] != "1":
             broken(f"{key} beat {i}: {b}")
         samples[f"beat{i}"] = measure(f"{stem}beat{i}", w, h, dpr, shots)
-    for sel in SECTIONS:
-        js(f"document.querySelector('{sel}').scrollIntoView({{ block: 'center' }})")
-        time.sleep(1.2)   # the sequence's observer, its poster
-        held(key, sel, INF)
-        if sel == ".close" and not js(FOOTER):
-            broken(f"{key} .close: the footer's text is not wholly in view")
-        samples[sel] = measure(stem + sel.strip("#."), w, h, dpr, shots)
+    js("scrollTo(0, document.documentElement.scrollHeight)")
+    time.sleep(1.2)   # the scroll answered, the passage at its last frame
+    held(key, "close", INF)
+    if not js(FOOTER):
+        broken(f"{key} close: the footer's text is not wholly in view")
+    samples["close"] = measure(stem + "close", w, h, dpr, shots)
     flat = sorted(({"sample": k, **r} for k, rs in samples.items() for r in rs), key=lambda r: r["min"])
     below = [r for r in flat if r["min"] < BOUND]
     print(f"{key}: {len(flat)} elements, worst {flat[0]['min']} ({flat[0]['sample']} {flat[0]['element']} "
@@ -266,7 +265,7 @@ def main():
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Ranges, directory=str(dist)))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     origin = f"http://127.0.0.1:{srv.server_address[1]}/"
-    home = Path(tempfile.mkdtemp(prefix="probe-ink-"))   # a fresh profile: no worker, cache or remembered theme
+    home = Path(tempfile.mkdtemp(prefix="probe-ink-"))   # a fresh profile: no worker or cache
     chrome = subprocess.Popen([CHROME, "--headless=new", "--remote-debugging-port=0", f"--user-data-dir={home}",
                                "--hide-scrollbars", "--disable-background-networking", "about:blank"],
                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

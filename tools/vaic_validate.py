@@ -89,7 +89,7 @@ DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 IDENTITY_COVERAGE = {
     "record_hash": ("js/manifest.js",),
     "kernel_hash": ("js/manifest.js", "js/instrument.js"),
-    "grammar_hash": ("index.html", "ar/index.html", "js/film.js", "js/theme.js", "css/film.css"),
+    "grammar_hash": ("index.html", "ar/index.html", "js/film.js", "css/film.css"),
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
