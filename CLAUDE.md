@@ -247,8 +247,10 @@ the ring with the three systems' work beside it, and the slab the film refused s
 at their moments at the foot of the frame, below the scene, each on a darkness of its own: *One principle. Three
 systems.* · *The model proposes. The system decides.*, then ADII's headline at its two moments (*A number looks wrong.*
 · *Changing it is a separate decision.*), the two sentences `adii/` states, its condition, and *See what this is based
-on →* (`adii/#run`, the recorded run); AWC-OS's headline (*Not every answer is allowed.*) with its card's explanation,
-then its condition and *See the demonstration →* (`awc-os/`); CytherCAD's (*Language in. Valid geometry out.*) with its
+on →* (`adii/#run`, the recorded run); AWC-OS's headline (*Not every answer is allowed.*) and its explanation (its three
+outcomes: the engine runs the program, refuses it with an allowed alternative, or blocks it), with its condition and
+*See the demonstration →* (`awc-os/`) beneath them throughout, quiet but available, in one caption (2026-10-21: as a
+separate closing caption they showed for half a screen of scroll, too fleeting to notice, the owner found); CytherCAD's (*Language in. Valid geometry out.*) with its
 explanation, then its two figures beside their named benchmark (the front door's only `data-m` marks), its condition and
 *Read the validation record →* (`pages/brief.html`). Each system after ADII is shorter (4 s and 5 s to its 7). The
 scroll moves the scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall
