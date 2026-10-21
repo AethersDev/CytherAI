@@ -1641,6 +1641,108 @@ held by the static law above rather than a capture.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B8E83779898CD5AB`), 61 of 61 served paths matching the artifact.
 
+## 5aa. The owner's review of the first route: authorship, the draft, the way back, and links that take a click — 2026-10-21
+
+Build `16109F1BC4218636` (`#reading_ink_16109F1BC4218636`, `#film_settle_16109F1BC4218636`). It replaces build
+`9FB00C1E35255378`, the review's first answer, which was never committed; its provisional receipts were discarded unadmitted.
+
+**The review** (the owner, 2026-10-21, pasted; a decision on the approach §5z describes, not yet an inspection of its
+pages): keep the dark rooms, the three-question contact form and the CytherAI navigation. The darkness is an
+art-direction choice, not a consequence of the retired warm-paper colours (as my report had argued): the visitor keeps
+the passage's world, and the quieter layout and the stillness give the change of pace. The shared identity must keep
+ADII's authorship explicit: the evidence page must make clear whose research and recorded run the visitor is seeing.
+Keep the form free of name, email and organisation (the email gives a reply address, not necessarily a useful name or
+organisation; the conversation can establish those) and free of a consent box, provided the privacy description matches
+what the page does: what it does with the answers and when they leave the browser. §5z's *nothing reaches the site to
+consent to* was too broad: consent is not the only privacy consideration, and the host's logs are separate from the form.
+Plain questions; a button that names the next step, *Open email draft*, not *Send*, with *Your email app will open with
+these answers. Review the draft and send it there.* near it; if no email app opens, the contact address and an easy way to
+copy the composed message. And *Back to the passage* must restore ADII's position without replaying the opening or making
+the visitor find their place. Opening a correctly composed draft and confirming its receipt are separate checks; the
+second stays the owner's.
+
+**Found, before anything changed.** The rooms' way back, `../#adii`, landed on the top of ADII's stretch, passage second
+5, where no words show (its first fade in from 5 s), three and a half screens before the words the visitor had left by
+(*See what this is based on →*, 11.2–12.8 s). Below 400 px the header's way back was hidden, and the Arabic page had no
+other. The browser's own Back was exact while Chrome kept the page in its back-forward cache; without it, a return to the
+top replayed the film (the landing's *Talk to us →*, then Back: the film from 0).
+
+**Now.**
+- **Whose work it is.** Under ADII's headline: *Built by Group 05: Malek Alhazmi, Joorie Alsakran, Ibrahem Altowalah and
+  Nasser Alzaid.* and *Their roles and CVs ↓* (the team section, now `#team`); in Arabic *من بناء فريق Group 05*, the names in
+  Latin, each kept whole on its line. Both come from the page as first published (its *Group 05* label and its *Built by*
+  list); the company's footer stays, and the team section and CVs are unchanged.
+- **The draft.** The review's three questions (in Arabic *على أي نظام تعمل؟* · *ماذا تريد أن يفعل الذكاء الاصطناعي؟* ·
+  *ما الذي يجب ألّا يحدث أبدًا؟*), the first with an example; *Open email draft* with the review's sentence under it; then
+  *If no email app opens, copy the message and send it to contact@cytherai.com from any account.* and *Copy the message*,
+  which copies the draft whole (the address, the subject and the three answers) and says so in a status line. The draft's
+  body is the three questions, each followed by its answer.
+- **Privacy, as implemented.** The contact page says the answers stay in the browser until the draft opens and that it
+  neither sends nor stores them; `pages/privacy.html` says when they leave it (to the visitor's own email app as a draft,
+  and to CytherAI only if the visitor sends it, with the address and name their mail account adds), that *Copy the
+  message* puts them on the device's clipboard and nowhere else, and that loading any page is logged by the host apart
+  from the answers: the site is served by GitHub Pages, which logs and stores each visitor's IP address for security
+  purposes, as GitHub states (docs.github.com, *About GitHub Pages*, *Data collection*, read 2026-10-21).
+- **The way back.** ADII's route words on both front doors carry an id, `adii-evidence`; both rooms link to it (the
+  header's way back, and one under the arrival, in Arabic too), and `js/film.js` brings their moment on arrival, the
+  middle of their window (12 s), as keyboard focus already did: the scroll the visitor had when they left. A reload or a
+  return through the history keeps the scroll the browser restores, and a return through the history never plays the
+  film, even to the top. The contact page, reached from many places, goes back through the history when the visitor came
+  from this site (`navigation.canGoBack`, which counts only this origin's pages) and otherwise to the three systems. The
+  header's way back shows at every phone width (the narrowest gap at 360 px: 58 px).
+
+**Checked.**
+- `tools/test-site.py`: a law that each evidence room's links to its front door name the passage's words whose route
+  leads to the room. In a throwaway copy it fails on each of four mutations (the old `#adii`; a bare `./`; the id moved to
+  ADII's first words; the Arabic id removed) and passes on a no-op control and on the restored copy. 27 tests pass.
+- Chrome 155, headless, English and Arabic at 1440 × 900 and 390 × 844: the rooms' way back lands at 12.0 s, ADII's
+  condition and route shown whole, the film still (before: 5 s, no words). The browser's Back from ADII's evidence
+  restores the same moment with and without the back-forward cache; without it, Back to the top now shows the statement
+  still (before: the film replayed). Keyboard Tab still brings each route's moment, at the same scrolls as the live build.
+  The contact pages composed the draft from three answers in each language; the copied message read back from the
+  clipboard whole, and the status line said so. *← Back* returned through the history to the front door's statement, and
+  to `#systems` when the page was opened directly. `navigation.canGoBack` was false for a page opened directly or from
+  another origin, and true from this one.
+- iOS Simulator (Safari, iOS 26.5; not a phone): the Navigation API is present, `canGoBack` true from this origin and false
+  from another; `/#adii-evidence` and `/ar/#adii-evidence` land on ADII's route words, without the film, at 3 s and 10 s.
+- The rooms at 1440 × 900 and 390 × 844: no console error, no overflow. ADII's recording ends at 610 of 900 px on the
+  desktop and 640 of 844 on the phone, so the headline, the byline, the limit and the run share the first screen.
+
+**Observed, not changed.** In headless Chrome at phone size, opening the Arabic front door at a fragment directly (typed,
+or from another app: `/ar/#systems`, and `/ar/#adii` on the live build) did not scroll to it; following the same link from
+a page did (6 of 6), and the English door and the desktop were unaffected. The rooms' way back does not depend on it
+(`js/film.js` brings the words' moment). Not reproduced on a device.
+
+**The passage's links took no click or tap** (the owner, 2026-10-21, after the review: *in the main page the three system
+links are not clickable*). Found: from build `EB79D2894F4F8A29` (2026-10-20), which fixed the passage's words to the foot
+of the frame inside their stretches, each stretch made a stacking context (`.passage{position:relative;z-index:2}`) that
+held its words inside it, and the next stretch, transparent and later in the page, lay over them. At each link's moment
+the pointer met `section#awc-os` over *See what this is based on →*, `section#cythercad` over *See the demonstration →* and
+`section#return` over *Read the validation record →*, in both languages at 1440 × 900 and 390 × 844, and a real click or
+tap did nothing; ADII's link had been dead to the pointer since 2026-10-20, AWC-OS's and CytherCAD's since they joined the
+passage on 2026-10-21. Keyboard focus reached all three throughout, and every check of mine had followed links by
+keyboard or by script, which no covering layer stops. Now the stretches make no stacking context and the words keep
+their own z-index (`.passage{position:relative}`), and `tools/test-site.py` holds it: a stretch's rules, by class or by id,
+may set nothing that makes one (it fails on the old z-index, on an isolation, on a transform, and on words without their
+own z-index, in a throwaway copy; it passes the control). Checked with real input (Chrome 155: the pointer's target at each
+control's centre, `elementFromPoint`, and a real mouse press on the desktop, a real touch on the phone): every link and
+control a visitor can see on both front doors (the statement, each system's link at its moment, the close, the footer) and
+in the four rooms is the one the pointer reaches, at 1440 × 900 and 390 × 844, and all twelve presses on the systems' links
+open their pages (on the live build's code: 12 covered, 12 presses that did nothing, nothing else covered). The passage
+looks as it did: under reduced motion its screens at seven moments, in both languages at both sizes (28), match the live
+build's to within one level in 255 (the live build against itself varies as much).
+
+**Open, for the owner.** The delivery check, unchanged from §5z: on your phone and on your Mac, in each language, *Open
+email draft*, send, and confirm the message arrives at contact@cytherai.com; on a device with no email app, *Copy the
+message* into webmail. The review of this exact build end to end: attribution, the limitation, the draft and its
+fallback, and the way back to the passage.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting, at three viewports, 1,400 element samples, none below 4.5:1, worst 4.9:1
+(CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile once the scroll stops, and the
+worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' inks are flat colours on flat grounds, held
+by the rooms law in `tools/test-site.py` rather than a capture.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -1681,9 +1783,10 @@ What a headless browser cannot stand in for, against the same build, appended as
 | iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle each system's still stands for the passage; scrolling on from the statement moves the passage frame by frame through ADII, AWC-OS and CytherCAD and back to the film's world, with no jump where it takes over from the film; the close stands over its last frame |
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
 | Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
+| Mouse and touch | each link the page shows takes a click on the Mac and a tap on the phone: the statement's, each system's in the passage while its words are shown, the close's and the footer's (keyboard focus and a script's click pass under a covering layer; a pointer does not) |
 | VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
-| The route out of the film | from the passage, *See what this is based on →* opens ADII's evidence with its recording in the first screen (Arabic: its Arabic introduction); *Tell us what must never happen →* opens the contact page; with three answers filled, *Write the email →* opens your mail app holding them: send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); each page's way back returns to the passage |
+| The route out of the film | from the passage, *See what this is based on →* opens ADII's evidence with its headline, *Built by Group 05* and the team's names, its limit and its recording in the first screen (Arabic: its Arabic introduction); *← Back to the passage* (and the header's *← The passage*) returns to ADII's words with *See what this is based on →* shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
 
 ## 6. Launch gate

@@ -67,7 +67,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
 | `css/cytherai.css` | Shared subpage style system (the legal pages, the brief, the 404, until they become rooms) | Yes | Hashed; its ink law is `tools/test-site.py` |
-| `contact.html` | The contact room: three short answers composed into one email for the visitor's own mail app, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
+| `contact.html` | The contact room: three plain questions composed into one email draft for the visitor's own email app, the draft copied whole when no app opens, and a way back through the history, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
 | `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators, the film's Blender render scripts and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
@@ -139,8 +139,8 @@ still) starts motion again.
 | `/` or `/index.html` | The film: `css/film.css` and `js/film.js`, both SRI'd; media from `film/` |
 | `/ar/` | The film in Arabic: the same stylesheet, script and media |
 | `/ar/contact.html` | The contact room in Arabic: `css/room.css` plus its one inline script, in Arabic |
-| `/contact.html` | The contact room: `css/room.css` plus one inline script that composes the email |
-| `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script |
+| `/contact.html` | The contact room: `css/room.css` plus one inline script that composes the draft, copies it and goes back |
+| `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script; their way back is `#adii-evidence` on the front door, the words that lead to them |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
 | `/pages/privacy.html` | Static privacy record |
 | `/pages/security.html` | Static disclosure policy |
@@ -254,7 +254,11 @@ muted inline autoplay and VoiceOver.
 - Make a page a room: link `css/room.css` (with an `integrity` attribute for `generate-integrity.sh` to fill), open with
   the front door's header (the computed seal lockup going home, the way back, the language link) and end with its
   footer; add it to `ROOMS` in `tools/test-site.py`, and an Arabic counterpart to the language-pair and `lang`/`dir`
-  laws. Keep what the page carries (an artifact, its limits) verbatim, and retire the version it replaces to `backup/`.
+  laws. Keep what the page carries (an artifact, its limits, whose work it is) verbatim, and retire the version it
+  replaces to `backup/`. Its way back: an evidence room returns to the passage's words that lead to it (give that `.say`
+  an id on both front doors, link it as `../#<id>`, and add the room to
+  `test_each_evidence_room_returns_to_the_words_that_led_to_it`); a room with many ways in returns through the history
+  (`navigation.canGoBack`), with a link for a visitor who arrived from elsewhere.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
   icon/manifest references, `deploy.paths` (which is also the list `generate-integrity.sh` stamps and
   every per-page law in `tools/test-site.py` reads), and decide whether it belongs in `sw.js`.

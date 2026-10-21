@@ -124,8 +124,10 @@ function scrolled() {
 }
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
 addEventListener("resize", () => { measure(); scrolled(); });
-/* a link reached by the keyboard brings its moment with it: the scroll goes to the middle of its words' window */
-says.forEach(s => s.addEventListener("focusin", () => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); }));
+/* words bring their moment with them, the scroll to the middle of their window: when a link among them is reached by the
+   keyboard, and when an anchor names them (a room's way back, ../#adii-evidence: the words that led to it) */
+const bring = s => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); };
+says.forEach(s => s.addEventListener("focusin", () => bring(s)));
 /* the passage downloads (asked to play and paused at once: iOS fetches a clip only then) */
 function passage() {
   if (stillMotion || pv.hasAttribute("src")) return;
@@ -160,10 +162,14 @@ function enlist() {
     reg.addEventListener("updatefound", () => { const w = reg.installing; w.addEventListener("statechange", () => { if (w.state === "installed") letIn(w); }); });
   }).catch(() => {});   /* insecure context — run online-only */
 }
-/* the film, unless the page opens past it (an anchor, or a scroll the browser restored): that is not the visitor's moment */
+/* the film, unless the page opens past it (an anchor, a scroll the browser restored, or a return through the history,
+   which restores even the top: Chrome without its back-forward cache replayed the film to a visitor back from the
+   contact page): that is not the visitor's moment. A reload or a return keeps the scroll the browser restores */
+const how = (performance.getEntriesByType("navigation")[0] || {}).type, named = says.find(s => "#" + s.id === location.hash);
 measure();
+if (named && how !== "reload" && how !== "back_forward") bring(named);
 if (stillMotion) { replay.textContent = replay.dataset.play; still(); }
-else if (location.hash.length > 1 || scrollY > innerHeight / 4) still();
+else if (location.hash.length > 1 || scrollY > innerHeight / 4 || how === "back_forward") still();
 else { film(); scrolled(); }
 
 /* last: an engine that throws above keeps .no-js, and its CSS unveils the statement on its own */

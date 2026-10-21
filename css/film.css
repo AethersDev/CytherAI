@@ -47,8 +47,10 @@ body[data-state=still] .line{transition:none}
    film's world, each as tall as its seconds at the stage's own pace (50svh a second: the stage's 100svh are the passage's
    first two), so a scroll moves the scene evenly; vh first, as the stage. Its words are fixed at the foot of the frame, below the scene, each shown in its window of the passage's
    seconds (data-t), faded in and out by the scroll itself (js/film.js: with a timed fade on these fixed words WebKit
-   missed 16–24 frames a pass, without it 1–3); one not shown takes no pointer */
-.passage{position:relative;z-index:2}#systems{height:150vh;height:150svh}#adii{height:350vh;height:350svh}#awc-os{height:200vh;height:200svh}
+   missed 16–24 frames a pass, without it 1–3); one not shown takes no pointer. A stretch is no stacking context: one with
+   a z-index held its fixed words inside it, and the next stretch, transparent and later, lay over them, so from 2026-10-20
+   to 2026-10-21 no system's link took a click or a tap (tools/test-site.py) */
+.passage{position:relative}#systems{height:150vh;height:150svh}#adii{height:350vh;height:350svh}#awc-os{height:200vh;height:200svh}
 #cythercad{height:250vh;height:250svh}#return{height:200vh;height:200svh}
 .say{position:fixed;z-index:2;inset-inline-start:5vw;bottom:10vh;width:fit-content;max-width:min(640px,90vw);opacity:0;pointer-events:none}
 .say.on{pointer-events:auto}.say:focus-within{opacity:1!important;pointer-events:auto}   /* focus never lands on words unseen, whatever the scroll set */
