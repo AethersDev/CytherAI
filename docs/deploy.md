@@ -1569,6 +1569,8 @@ shows exactly the frame its moment names, and under reduced motion CytherCAD's s
 passage is answered with one frame and no media or timer; the worker caches this build and serves it offline
 (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_73B4CD7CEF71A0F3`), 59 of 59 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
