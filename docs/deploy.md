@@ -1639,6 +1639,8 @@ under a dark and a light device setting, at three viewports, 1,400 element sampl
 worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' inks are flat colours on flat grounds,
 held by the static law above rather than a capture.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B8E83779898CD5AB`), 61 of 61 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
