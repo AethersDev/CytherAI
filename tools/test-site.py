@@ -57,16 +57,18 @@ DEPLOY_FILES = [line.strip() for line in
 DEPLOYED = set(DEPLOY_FILES)
 HTML_FILES = [path for path in DEPLOY_FILES if path.endswith(".html")]
 HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
-# the register rules in CLAUDE.md: the retired gold register, the document register, fake meters and the retired
+# the register rules in CLAUDE.md: the retired gold register, the document register (any document number: the brief's
+# DOC-2026-002 retired with the cold-paper pages, 2026-10-21), fake meters and the retired
 # ledger's vocabulary may not reach a served file
-BANNED = re.compile(r"--brass|--gold|DOC-2026-001|CONDUCT RECEIPT|[Aa]ppend-only|1e-12|−\d+\s?M\b")
+BANNED = re.compile(r"--brass|--gold|DOC-20\d\d-\d{3}|CONDUCT RECEIPT|[Aa]ppend-only|1e-12|−\d+\s?M\b")
 # ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its room and its films with their
 # posters — not the live-MVP tunnel redirect, not the competition deck (the cancelled Alinma plan, withdrawn 2026-10-19 to
 # backup/awc-os-v1/), and not the gateway's language toggle, retired with it to backup/before-rooms/awc-os/ (2026-10-21);
 # CytherCAD's record is a page of its own
 # the rooms: the pages a visitor reaches from the front door, drawn with css/room.css (2026-10-21)
 ROOMS = ("adii/index.html", "ar/adii.html", "awc-os/index.html", "ar/awc-os.html", "cythercad/index.html", "ar/cythercad.html",
-         "contact.html", "ar/contact.html")
+         "contact.html", "ar/contact.html", "pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html",
+         "404.html")
 # each evidence room and the front door it returns to
 EVIDENCE = (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html"), ("awc-os/index.html", "index.html"),
             ("ar/awc-os.html", "ar/index.html"), ("cythercad/index.html", "index.html"), ("ar/cythercad.html", "ar/index.html"))
@@ -165,6 +167,21 @@ def css_urls(css: str) -> list[str]:
     return [m.group(2) for m in re.finditer(r"""url\((['"]?)([^'")]+)\1\)""", css) if not m.group(2).startswith("data:")]
 
 
+def image_size(data: bytes) -> tuple[str, str, str]:
+    """(width, height, type) as a page declares them, read from a PNG's header or a JPEG's frame marker."""
+    if data[:8] == b"\x89PNG\r\n\x1a\n":
+        width, height = struct.unpack(">II", data[16:24])
+        return str(width), str(height), "image/png"
+    i = 2
+    while data[i] == 0xFF:
+        marker, length = data[i + 1], struct.unpack(">H", data[i + 2:i + 4])[0]
+        if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+            height, width = struct.unpack(">HH", data[i + 5:i + 9])
+            return str(width), str(height), "image/jpeg"
+        i += 2 + length
+    raise ValueError("neither a PNG nor a JPEG with a frame marker")
+
+
 def wcag(a: str, b: str) -> float:
     """WCAG 2.1 contrast of two #rrggbb colours"""
     def rel(h):
@@ -183,41 +200,19 @@ def sri_for(relative: str) -> str:
 class SiteContractTests(unittest.TestCase):
     maxDiff = None
 
-    def test_public_navigation_is_complete_and_marks_current_page(self) -> None:
-        """The cold-paper subpages' bar (the contact pages left it for the rooms on 2026-10-21: test_the_rooms_are_of_the_front_door)."""
-        pages = {
-            "pages/brief.html": {
-                "Brief": "brief.html", "Contact": "../contact.html",
-                "Security": "security.html", "Privacy": "privacy.html", "Terms": "terms.html",
-            },
-            "pages/security.html": {
-                "Brief": "brief.html", "Contact": "../contact.html",
-                "Security": "security.html", "Privacy": "privacy.html", "Terms": "terms.html",
-            },
-            "pages/privacy.html": {
-                "Brief": "brief.html", "Contact": "../contact.html",
-                "Security": "security.html", "Privacy": "privacy.html", "Terms": "terms.html",
-            },
-            "pages/terms.html": {
-                "Brief": "brief.html", "Contact": "../contact.html",
-                "Security": "security.html", "Privacy": "privacy.html", "Terms": "terms.html",
-            },
-        }
-        current = {
-            "pages/brief.html": "Brief",
-            "pages/security.html": "Security", "pages/privacy.html": "Privacy",
-            "pages/terms.html": "Terms",
-        }
-        for page, expected in pages.items():
+    def test_every_footer_names_the_site_and_marks_the_current_page(self) -> None:
+        """Every page ends with the same way round the site (it replaced the cold-paper pages' bar, which retired with them
+        to backup/cold-paper-v1/ on 2026-10-21): its footer links the brief, the contact page in its own language, and the
+        security, privacy and terms pages, and marks the one it is."""
+        site = ("pages/brief.html", "contact.html", "pages/security.html", "pages/privacy.html", "pages/terms.html")
+        for page in HTML_FILES:
             with self.subTest(page=page):
-                links = parse_page(page).nav_links
-                brand = [(text, attrs) for text, attrs in links if text == "CYTHERAI"]
-                self.assertEqual(len(brand), 1)
-                self.assertEqual(brand[0][1].get("aria-label"), "الصفحة الرئيسية لـ CytherAI" if page.startswith("ar/") else "CytherAI home")
-                content_links = [(text, attrs) for text, attrs in links if text != "CYTHERAI"]
-                self.assertEqual({text: attrs.get("href") for text, attrs in content_links}, expected)
-                marked = [text for text, attrs in content_links if attrs.get("aria-current") == "page"]
-                self.assertEqual(marked, [current[page]])
+                footer = re.search(r"<footer[^>]*>(.*?)</footer>", (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
+                links = re.findall(r'<a href="([^"]+)"([^>]*)>', footer)
+                expected = sorted("ar/contact.html" if p == "contact.html" and page.startswith("ar/") else p for p in site)
+                self.assertEqual(sorted(local_target(page, href) for href, _ in links), expected)
+                marked = [local_target(page, href) for href, rest in links if 'aria-current="page"' in rest]
+                self.assertEqual(marked, [page] if page in expected else [])
 
     def test_every_page_reference_resolves_into_the_shipped_set_and_nothing_is_fetched_elsewhere(self) -> None:
         """Zero external requests, ever: everything a page or a stylesheet makes the browser fetch is a shipped file
@@ -241,7 +236,8 @@ class SiteContractTests(unittest.TestCase):
                 self.assertIn(local_target(sheet, url), DEPLOYED, f"{sheet}: url({url})")
 
     def test_every_page_pins_a_least_privilege_csp(self) -> None:
-        """Each page's CSP admits its own origin and nothing else (data: images and inline style where named), and
+        """Each page's CSP admits its own origin and nothing else (data: images where named; no inline style since the
+        cold-paper pages retired, 2026-10-21), and
         its script-src is exactly what the page runs: 'self' if it loads same-origin scripts, a hash per inline
         script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails."""
         for page in HTML_FILES:
@@ -257,7 +253,7 @@ class SiteContractTests(unittest.TestCase):
             for directive, expected in (("default-src", ["'self'"]), ("object-src", ["'none'"]), ("base-uri", ["'self'"]),
                                         ("connect-src", ["'none'"]), ("frame-src", ["'none'"])):
                 self.assertEqual(policy.get(directive), expected, f"{page} {directive}")
-            extra = {"style-src": {"'unsafe-inline'"}, "img-src": {"data:"}, "script-src": set(script)}
+            extra = {"img-src": {"data:"}, "script-src": set(script)}
             for directive, sources in policy.items():
                 self.assertLessEqual(set(sources), {"'self'", "'none'"} | extra.get(directive, set()), f"{page} {directive}")
 
@@ -477,46 +473,23 @@ class SiteContractTests(unittest.TestCase):
         """The Cyther Seal is computed from the company's name, and its identity forbids redrawing the path. Every seal
         inline on a served page, and on the social card's composition, must be exactly the pixel-fitted seal
         tools/render-seal.py computes at its size, in the colours its surface owns: the identity's own (render-seal's
-        INK and GROUND) on the front door and the cards, the subpages' ink and paper (css/cytherai.css) on the cold
-        subpages. Warm is never the seal's colour; a hand-edited cell, a mirrored path or another colour fails."""
+        INK and GROUND) on every page and both cards (the cold subpages' paper seal retired with them on 2026-10-21).
+        Warm is never the seal's colour; a hand-edited cell, a mirrored path or another colour fails."""
         spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
         seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
-        paper = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", (ROOT / "css/cytherai.css").read_text(encoding="utf-8")))
-        dark = ("index.html", "ar/index.html", "tools/og-card.html", "tools/og-card-ar.html") + ROOMS
         def defect(page: str, svg: str) -> str | None:
             size = int(re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1))
-            ink, ground = (seal.INK, seal.GROUND) if page in dark else (paper["ink"], paper["paper"])
-            return None if svg == seal.fitted_svg(size, ink, ground, ' class="seal"') else f"{page}: not the computed seal"
+            return None if svg == seal.fitted_svg(size, seal.INK, seal.GROUND, ' class="seal"') else f"{page}: not the computed seal"
         found = 0
         for page in HTML_FILES + ["tools/og-card.html", "tools/og-card-ar.html"]:
             for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
                 self.assertIsNone(defect(page, svg))
                 found += 1
-        self.assertGreaterEqual(found, 13, "both front doors, the four rooms, five subpages and both cards carry the seal")
+        self.assertGreaterEqual(found, len(HTML_FILES) + 2, "every page and both cards carry the seal")
         # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
         svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
         self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
         self.assertIsNotNone(defect("index.html", svg.replace(f'fill="{seal.INK}"', 'fill="#FFAD57"')))
-
-    def test_subpage_inks_hold_aa_on_every_subpage_ground(self) -> None:
-        """css/cytherai.css had no ink law until its quiet ink shipped at 4.01:1 on paper.
-
-        Every subpage ink on every subpage ground, tokens read from the stylesheet and
-        never restated here; the two quiet aliases must agree. (Formerly MOT-001 A10 in
-        tools/test-motion.py, which retired with the world; this law is the subpages'.)
-        """
-        css = (ROOT / "css/cytherai.css").read_text(encoding="utf-8")
-        tok = dict(re.findall(r"--([\w-]+):(#[0-9A-Fa-f]{6})", css))
-        grounds = {k: tok[k] for k in ("paper", "paper-lifted", "paper-dense", "panel")}
-        inks = {k: tok[k] for k in ("ink", "ink-mid", "ink-quiet", "accent", "refuse")}
-        worst = min((wcag(i, g), ik, gk) for ik, i in inks.items() for gk, g in grounds.items())
-        self.assertGreaterEqual(worst[0], 4.5, f"{worst[1]} on {worst[2]} is {worst[0]:.2f}:1")
-        # a form field's edge is a component boundary: 3:1 on the field and on the page (WCAG 1.4.11; --rule read 1.33:1)
-        edge = re.search(r"\.form-input,\.form-textarea\{[^}]*border:1px solid var\(--([\w-]+)\)", css).group(1)
-        for ground in ("paper", "paper-lifted"):
-            self.assertGreaterEqual(wcag(tok[edge], tok[ground]), 3, f"the field edge --{edge} on --{ground}")
-        self.assertEqual(tok["quiet"], tok["ink-quiet"])
-        self.assertEqual(tok["label"], tok["ink-mid"])
 
     def test_the_front_door_is_one_dark_environment(self) -> None:
         """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light
@@ -550,9 +523,8 @@ class SiteContractTests(unittest.TestCase):
                     self.assertGreaterEqual(wcag(tok[ink], tok[ground]), 4.5, f"--{ink} on --{ground}")
             self.assertGreaterEqual(wcag(tok["edge"], tok[ground]), 3, f"a field's edge on --{ground}")
         for page in ROOMS:
-            tags, base = parse_page(page).tags, posixpath.dirname(page)
-            at = lambda u: posixpath.normpath(posixpath.join(base, urlsplit(u).path))
-            sheets = [at(a["href"]) for t, a in tags if t == "link" and a.get("rel") == "stylesheet"]
+            tags = parse_page(page).tags
+            sheets = [local_target(page, a["href"]) for t, a in tags if t == "link" and a.get("rel") == "stylesheet"]
             self.assertEqual(sheets, ["css/room.css"], page)
             home = next(a for t, a in tags if t == "a" and "wordmark" in a.get("class", "").split())
             self.assertEqual(local_target(page, home["href"]), "ar/index.html" if page.startswith("ar/") else "index.html", page)
@@ -573,6 +545,52 @@ class SiteContractTests(unittest.TestCase):
                 self.assertIn(fragment, words, f"{room}: {href} names the passage's words")
                 routes = [local_target(door, u) for u in re.findall(r'<a class="route" href="([^"]+)"', words[fragment])]
                 self.assertIn(room, routes, f"{room}: {href} lands on the words whose route leads to it")
+
+    def test_every_page_names_itself_and_previews_deliberately(self) -> None:
+        """One review of titles and link previews (2026-10-21): every page's title is "… — CytherAI" (the front doors lead
+        with the name and their own statement, "CytherAI — …"), its theme is the ground, and every page a link can be
+        shared to previews the same way: the site's name, its title, a description, its own URL, its language, the large
+        card, and an image of this site whose declared size and type are its real ones, with words for it."""
+        for page in HTML_FILES:
+            with self.subTest(page=page):
+                tags = parse_page(page).tags
+                title = re.search(r"<title>(.*?)</title>", (ROOT / page).read_text(encoding="utf-8")).group(1)
+                meta = {a.get("property") or a.get("name"): a.get("content") for t, a in tags if t == "meta"}
+                front = page in ("index.html", "ar/index.html")
+                self.assertTrue(title.startswith("CytherAI — ") if front else title.endswith(" — CytherAI"), title)
+                self.assertEqual(meta.get("theme-color"), "#07070a")
+                self.assertTrue(meta.get("description"))
+                if page == "404.html":
+                    continue   # served at every missing path: a page no one shares
+                lang = next(a for t, a in tags if t == "html")["lang"]
+                url = f"https://{HOST}/" + (page[: -len("index.html")] if page.endswith("index.html") else page)
+                self.assertEqual((meta.get("og:site_name"), meta.get("og:title"), meta.get("og:type"), meta.get("og:url"),
+                                  meta.get("og:locale"), meta.get("twitter:card")),
+                                 ("CytherAI", title, "website", url, "ar_SA" if lang == "ar" else "en_US", "summary_large_image"))
+                self.assertEqual([a["href"] for t, a in tags if t == "link" and a.get("rel") == "canonical"], [url])
+                self.assertTrue(meta.get("og:description") and meta.get("og:image:alt"))
+                image = urlsplit(meta["og:image"])
+                self.assertEqual(image.netloc, HOST)
+                self.assertEqual((meta.get("og:image:width"), meta.get("og:image:height"), meta.get("og:image:type")),
+                                 image_size((ROOT / image.path.lstrip("/")).read_bytes()))
+
+    def test_the_sitemap_names_exactly_the_pages_meant_to_be_found(self) -> None:
+        """Search visibility is a decision (2026-10-21): robots.txt admits every crawler and names the sitemap, and the
+        sitemap lists every page by its canonical URL except the 404 and a page that asks not to be indexed (noindex),
+        so a page cannot be listed and hidden at once, or be added and forgotten."""
+        self.assertIn("robots.txt", DEPLOY_FILES)
+        self.assertIn("sitemap.xml", DEPLOY_FILES)
+        robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
+        self.assertIn(f"Sitemap: https://{HOST}/sitemap.xml", robots.splitlines())
+        self.assertFalse(re.search(r"(?im)^disallow:\s*\S", robots), "nothing is withheld from crawlers")
+        wanted = set()
+        for page in HTML_FILES:
+            meta = {a.get("name"): a.get("content") for t, a in parse_page(page).tags if t == "meta"}
+            if page != "404.html" and "noindex" not in (meta.get("robots") or ""):
+                wanted |= {a["href"] for t, a in parse_page(page).tags if t == "link" and a.get("rel") == "canonical"}
+        listed = re.findall(r"<loc>([^<]+)</loc>", (ROOT / "sitemap.xml").read_text(encoding="utf-8"))
+        self.assertEqual(len(listed), len(set(listed)))
+        self.assertEqual(set(listed), wanted)
 
     def test_the_passage_moves_evenly(self) -> None:
         """The scroll moves the passage at the stage's own pace, 2 s of it a viewport: each stretch is as tall as its seconds

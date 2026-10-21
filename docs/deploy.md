@@ -1820,7 +1820,8 @@ tolerance usually passes at least as many), and *Status: Production-validated*; 
 them. *DeepCAD's figure is the one published with the Text2CAD benchmark* is my addition from the benchmark's paper; if
 CytherCAD's 0.00% was measured on a different set of prompts from that published figure (a *-192* set, against the
 paper's test set), say so on the page or tell me and I will. Still to come in rooms: the brief, the legal pages and the
-404, with one review of titles, previews and naming.
+404, with one review of titles, previews and naming. (Answered in §5ad, 2026-10-21, from the runs' own records: none of
+the three stood as printed, and the record was corrected.)
 
 Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
 under a dark and a light device setting, at three viewports, 1,400 element samples, none below 4.5:1, worst 4.9:1
@@ -1829,6 +1830,267 @@ worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' in
 by the rooms law in `tools/test-site.py` rather than a capture.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_502593FFB37C9DEE`), 65 of 65 served paths matching the artifact.
+
+## 5ac. The brief, the legal pages and the 404 as rooms, and one review of titles and link previews — 2026-10-21
+
+Build `9D49A66EBBC940D3`, superseded before it was admitted by `937C44578B6186B4` (§5ad): its observations below were
+provisional receipts, discarded with the build, and the same probes were run again on its successor.
+
+**The direction** (the owner, 2026-10-21): *do the brief, the legal pages and the 404, then one review of titles and
+link previews.*
+
+**Found, before anything changed.** The five pages still wore the cold-paper design (`css/cytherai.css`): light paper,
+system fonts, a bar of links under a scope line (*PRIVACY · PUBLIC SURFACE*), *LEGAL* stamps and inline styles, which
+their policies admitted with `style-src 'unsafe-inline'`. The brief spoke the retired document register (*DOC-2026-002 ·
+Capability Brief*, section stamps *§01 … 04 / 04*, *EXHIBIT A*, record ids, *Disclosure: Public Surface*) beside two
+illustrative figures; the 404 said *404 · No Record* over an *EMPTY PLATE*. Titles followed three patterns (*X —
+CytherAI*, *X | CytherAI*, *404 · No Record | CytherAI*), and the front doors' title was the film study's working name,
+*CytherAI — Everything changes. One thing holds.*, which the page never said (its statement, its card and its
+description say *Let AI change things. Keep control of what changes.*). Previews differed: the rooms carried no
+`twitter:card`, so a shared link fell back to the small card; ADII's declared no image size; no page named the site
+(`og:site_name`); only the front doors declared their language; the cold pages' theme was paper (`#ECF0F4`). Once the
+evidence routes moved to the rooms, the brief was linked only from the cold pages' bar and the 404.
+
+**Now.**
+- **The legal pages** (`pages/privacy.html`, `security.html`, `terms.html`) are rooms: the front door's lockup, *← The
+  three systems*, their label (*Legal*, *Security*), their title, their dates, and their text word for word (the visible
+  text from the title to the end compared before and after: identical, 550, 224 and 350 words); only the frame changed.
+- **The brief** (`pages/brief.html`) is a room: *Two systems, and the record behind each.*, what it covers and what is
+  under qualified review, the architectural constraints, CytherCAD's record (every row, the validation summary with
+  every figure projected, and a link to its own room for what the figures establish), SijilOS's record (every row), and
+  qualified access (*Request a briefing*, the NDA address). Twenty-two facts of the old brief, each found in the new.
+  The document register and the illustrative figures are gone; the section ids are the document's, so its links land.
+- **The 404** is a room served at any depth (every URL absolute), in English and Arabic: *Nothing is published at this
+  address.*, why that may be, and the ways on (the three systems, the contact page; the Arabic front door and contact).
+- **Retired whole** to `backup/cold-paper-v1/`: the five pages as served, `css/cytherai.css`, the brief's two figures
+  and the 404's plate with their generators (their receipts, IMG-003, IMG-004 and IMG-005, marked retired, their
+  outputs moved with the bytes). `generate-integrity.sh`, `deploy.paths` and `sw.js` no longer name the stylesheet.
+- **The way round.** *← The three systems* now lands on the passage's first words (`#principle`, an id on both front
+  doors that `js/film.js` brings, as with the evidence words), and so does the contact room's fallback, which landed on
+  a wordless second before. Every page's footer names the brief, the contact page, security, privacy and terms (in
+  Arabic: الموجز among the English pages), and marks the one it is.
+- **Titles and link previews, reviewed once.** Every title is *… — CytherAI*; the front doors lead with the name and
+  their own statement (*CytherAI — Let AI change things. Keep control of what changes.*, and in Arabic the Arabic
+  statement). Every shareable page previews with `og:site_name` CytherAI, its title, a description, its own URL, its
+  language (`og:locale`, with the other as alternate where a pair exists), the large card, and an image of this site
+  whose declared size and type are its real ones (ADII's poster now declares 1920 × 1080); every theme is the ground.
+  The 404 carries no preview: it is served at every missing path and is not a page anyone shares.
+
+**Checked.**
+- `tools/test-site.py` (28 tests): the rooms law now covers the brief, the legal pages and the 404; two laws retire with
+  the cold-paper design (the bar's navigation, the subpage inks) and one replaces the bar (every footer names the site
+  and marks its page); the seal law reads every page as dark; the policy law no longer admits inline style; and a new
+  law holds titles and previews (the declared image sizes read from the files). In a throwaway copy, eight mutations
+  fail (the old front-door title; an image size that is not the image's; a page without the large card; an Arabic page
+  previewed as English; a footer without the brief; the privacy page not marking itself; inline style admitted again;
+  the 404 on another stylesheet) and the control and the restored copy pass. `tools/test-projection.py`,
+  `tools/test-assets.py` and `tools/test-api.py` pass.
+- Chrome 155, the five pages at 1440 × 900 and 390 × 844 (the 404 served, as GitHub Pages serves it, at
+  `/no/such/deep/page`): the room's stylesheet and fonts load at any depth, no sideways overflow, no console error
+  besides the 404's own status.
+
+- Chrome 155, real input (a real mouse press on the desktop, a real touch on the phone): from the brief, the three legal
+  pages, the 404 (both its English and its Arabic way) and the contact rooms arrived at directly, *The three systems*
+  lands on the passage's first words (3.2 s, *One principle. Three systems.* shown alone, the film still), in both
+  languages at both sizes; the six evidence rooms still return to their moments; every link and control a visitor can
+  see, on both front doors and all thirteen rooms, is the one the pointer reaches, and the twelve presses on the
+  systems' links open the right rooms.
+- The register law now refuses any document number (`DOC-20xx-nnn`), so the brief's cannot return: it fails on
+  *DOC-2026-002* put back in a throwaway copy and passes the restored one.
+
+**For the owner.** The front doors' title changed from the film study's name to the page's statement: say if the
+study's line should stay. The AWC-OS rooms keep `noindex`, as the evaluation gateway had it; every other page may be
+indexed. Previews are cached by the services that show them (Slack, LinkedIn, iMessage, X): a page shared before this
+build may show its old card until the service refetches it.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting, at three viewports, 1,412 element samples (the footer's *Brief* among them),
+none below 4.5:1, worst 4.9:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile
+once the scroll stops, and the worker caches this build and serves it offline (CY-TEMP-001 PASS). The rooms' inks are
+flat colours on flat grounds, held by the rooms law in `tools/test-site.py` rather than a capture.
+
+## 5ad. The production handover reviewed: the records behind two systems' claims, the journey observed again, load, search and operations — 2026-10-21
+
+Build `9BD0C72EFFCAE053` (`#reading_ink_9BD0C72EFFCAE053`, `#film_settle_9BD0C72EFFCAE053`). It supersedes
+`9D49A66EBBC940D3` (§5ac), which was never admitted.
+
+**The direction.** The owner pasted a review on 2026-10-21. It kept the design and named six things to close before the
+production handover could be called complete:
+1. the strength of CytherCAD's claims;
+2. mail that reaches a person;
+3. device and accessibility evidence on this experience;
+4. a load baseline;
+5. deliberate search visibility;
+6. an operational handover.
+
+Then the candidate is released through the existing process.
+
+**1. CytherCAD's record, checked against its runs' own files.** Read on 2026-10-21, read-only, from two sources:
+- the CytherCAD repositories on the owner's Mac (`~/Desktop/cythercad`, `~/Desktop/cythercad_v1.1`): `docs/v11_status.md` of 2026-04-09, the April result files under `archive/legacy_evals/sprint/` (their checksums of 2026-05-11 match), `CHANGELOG.md`, `eval/`, and `docs/BENCHMARK_LEDGER.md` of 2026-07-19;
+- the Text2CAD paper (arXiv 2409.17106v1, §5 and Table 1).
+
+The six rows came unchanged from the owner's page of 2026-04-16 (`6f61ef5`), and none had been checked against a run
+before. §5ab transcribed them. Its room's *Text2CAD-192 is an external, published benchmark that CytherAI does not
+operate* was my own transcription of the brief's *External · Published · Not operated by CytherAI*.
+
+| As printed until now | What the records show | Now |
+|---|---|---|
+| *0.00% invalid rate on Text2CAD-192, … an external benchmark CytherAI does not operate* | CytherAI chose 192 descriptions from the Text2CAD dataset: 48 for each of four kinds of operation, 12 of each at each of its four levels of detail. CytherAI ran the test on 2026-04-16 (`text2cad_v3_final.json`): one part per description from each of its two ways of reading one. Invalid: 0 of 192 on one way, 1 of 192 on the other (a program left incomplete). Valid meant the program ran and the kernel's topology check passed. Until 2026-05-06 a part whose fillet or boolean step failed kept its earlier shape and counted as valid (`CHANGELOG.md`). Not run again since | *In CytherAI's own test of April 2026, 1 of 384 parts was invalid*, with its conditions beside it, in the rooms and the brief (projected, `T2C192-INV-1-384`; the Arabic room's word order derived from the same string). The front doors print no figure |
+| *against 10.00% for DeepCAD* (and Text2CAD's 0.93%) | The Text2CAD paper's own test: expert-level descriptions only, its own test set (size not given) and its own check, with DeepCAD driven through a layer its authors trained. Copied as constants | Withdrawn. The room says figures published for other systems come from another test and are not compared. The owner's ledger of 2026-07-19 says rows of different protocols are never ranked against each other |
+| *GVR · Constrained Beam (n=100) 100%* | No such run. Beam figures elsewhere are V1.0 runs whose outputs were identical; on v1.1, 0 of 200 valid under beam (2026-05-06) | Withdrawn |
+| *GVR · Completion (n=100) 100%* | No source names the row. The nearest run is 100 of 100 on 100 descriptions CytherAI wrote, after its decoding had been adjusted on failures seen on those same descriptions | Withdrawn |
+| *Dimensional Accuracy ±3mm / ±5mm (n=35) 99% / 97%* | The source reads ≥3 mm and ≥5 mm *compliance*: with a manufacturing minimum of 3 or 5 mm set, 426 of 427 and 416 of 425 generated dimension values met it, over 50 generations without a description each. This is not accuracy against a requested size, and there is no n of 35. A stricter minimum is met less often, hence the inversion the review saw | Withdrawn |
+| *Multi-Op Accuracy · Encoder (n=35) 91%* | 32 of 35 outputs used two or more operations. That is a rate, not an accuracy, and the raw output is not on record | Withdrawn |
+| *Status: Production-validated* | No source uses the phrase. No deployment, customer or pilot is on record; the records of May and August 2026 say none exists | Withdrawn |
+| *Verified: Log + external benchmark* · *Benchmark source: Text2CAD-192 · External · Published · Not operated by CytherAI* | The test is CytherAI's | *Verified: CytherAI's evaluation log* · *Test set: 192 descriptions chosen by CytherAI from the Text2CAD dataset (Khan et al., NeurIPS 2024)* |
+| *Parameters: 16.1M* | That is the S configuration. The test ran the 5.5M XS decoder, which the records name as the production choice | Withdrawn |
+| *Kernel-backed verification confirms dimensional accuracy post-generation* (the front door: *checks the dimensions afterwards*) | The kernel checks that the solid is valid. CytherCAD's own decks say it does not take exact dimensions from free text | *checks the geometry after generation* (the front door: *checks the result afterwards*) |
+
+What the records support is kept: *on-prem, private and air-gapped* (the v1.1 server's air-gap mode, done in April 2026)
+and the methodology line. The six rows as first printed stand in `backup/cold-paper-v1/pages/brief.html`. The record's
+checksum moves from `75D1:89D1` to `5290:7C3B`. No served asset derives from it, and the retired derived assets keep the
+state they record.
+
+**SijilOS's record, checked the same way.** It was not in the review, but the same rule applies. Read on 2026-10-21 in
+`~/Projects/SijilOS`, in the owner's SijilOS documents, and on zatca.gov.sa.
+
+| As printed until now | What the records show | Now |
+|---|---|---|
+| *ZATCA Phase 1 · Kingdom of Saudi Arabia · Certified compliant · April 2025* | ZATCA does not certify Phase 1 solutions. Its e-invoicing FAQ asks *Should my electronic system be certified by ZATCA or a 3rd party for Phase 1?* and answers *No*. The earliest SijilOS code on the owner's Mac is from February 2026, and the owner's deck of May 2026 asks to *initiate ZATCA portal registration* | Withdrawn. In its place: *It produces the QR code that ZATCA's Phase 1 e-invoicing rules require* (the code does) |
+| *Live beta · 2 production environments* | The owner's roadmap of March 2026 says *Phase 1 blocks go-live*, with every audit issue open. The deck of May 2026 asks to *approve Phase A pilot* | Withdrawn. In its place: *No certification, deployment or pilot is claimed* |
+| *Event-Sourced Ledger Engine* · *Event-sourced · Immutable log* · *Stores intent over time rather than current state* · *Financial-grade* | Orders are edited in place and read as the source of truth beside the event log; the roadmap says events and tables are both treated as the source of truth. Nothing enforces the log's immutability, and financial issues are open in the audit tracker | Withdrawn. In its place: *Offline-First Ledger*, *On-device · Offline-first* |
+| *Zero core cloud dependency · Full offline operation* · *On-prem · Offline-first* | The code imports only Apple's frameworks and makes no network call | Kept: *running on the device and fully offline-capable, with no cloud service at its core* |
+
+**2. The visitor's journey, observed again on this build.** Chrome 156, headless, with real input only: CDP mouse, touch
+and key events, and `elementFromPoint` for what a pointer would reach.
+- **The film's stop (WCAG 2.2.2).** The film moves on its own for 12 s, once. The header's *The three systems ↓* is in
+  view and on top from its first frame. It was pressed at 0.3 s, 5 s and 9.5 s, in both languages: by mouse and by
+  keyboard (two Tabs, then Enter) at 1440 × 900, and by touch at 390 × 844, 18 presses in all. Each stopped the film
+  (the still state, nothing playing, its source dropped) and landed on the three systems.
+  - Below 360 px the header drops the route to save room. There a swipe, the wheel, Space or PageDown each stop the film,
+    which yields once the page is a quarter screen down; ArrowDown's 40 px steps take several presses.
+  - Reduced motion never plays it.
+  - Evaluated: a way to stop the film exists throughout playback at every width, so no *Skip film* control was added. The
+    one remaining judgment is that the route names where it goes, not that it stops the film.
+- **Keyboard.** Once the statement stands, each front door has 15 tab stops, each one shown when focused and with a
+  visible focus ring. Every route opens its room on Enter, and its way back returns to its moment with the film still. The
+  contact room's *← Back* returns through the history, from the back-forward cache.
+- **Reduced motion, and autoplay refused** (`play()` rejected, as in Low Power Mode). At both sizes and in both languages,
+  the still state and the whole statement appear at once and Replay is offered (*Play the film* under reduced motion).
+  Past the film, each system's still stands at its moment, with nothing playing.
+- **A phone turned mid-film.** The portrait film plays on in the landscape window and fills it, softer but with its words
+  legible. At its end the landscape composition and the statement stand.
+- **Zoom.** At 200 % (720 × 450) all fifteen pages fit with nothing cut. At 400 % (320 × 256) every page reflows without
+  sideways scroll, but the passage's fixed words reached past the top of the window, where nothing could scroll them back:
+  - AWC-OS's words, by 88 px in English and 94 px in Arabic;
+  - CytherCAD's English words, by 22 px;
+  - and the smallest phone on its side (568 × 270) cut AWC-OS's Arabic words by 12 px.
+
+  Now, in a window at most 300 px tall (or 359 px wide and 360 px tall), the words scroll within themselves on their own
+  ground. At every other size their computed style is unchanged, checked at 1440 × 900, 390 × 844, 844 × 390,
+  667 × 325, 568 × 320 and 360 × 640. The statement and the close are whole at 400 %.
+- **The contact draft.** A realistic message was typed into each field with real input, in English and in Arabic, and
+  again with a middle answer four times as long. The draft that *Open email draft* hands over and the text that *Copy the
+  message* copies are exactly what was typed, subject and body. Pressing the draft leaves the page where it is.
+  - Draft links: 1,262 and 3,218 characters in English, 3,834 and 9,756 in Arabic, since each Arabic letter becomes six
+    characters.
+  - Whether every visitor's email app accepts the longer drafts is for the delivery test to show (§5f). The copy route
+    carries any length.
+- **Not observed here; the owner's (§5f):** native Safari, a physical iPhone, VoiceOver in both languages, a slow real
+  network, and mail arriving.
+
+**3. Load, measured in the lab.** No visitor data is collected, and none is claimed. Chrome 155 ran with Lighthouse's
+presets as DevTools applies them:
+- *desktop*: 10 Mbps, 40 ms, CPU 1×, 1440 × 900;
+- *slow 4G*: 1.47 Mbps, 562 ms, CPU 4×, 390 × 844.
+
+Each was measured on a first visit (empty cache, no worker) and on the return, against this build served locally and
+against the live origin (`502593FFB37C9DEE`, whose film and script are this build's).
+
+| Profile, visit | First paint | Film starts | Statement | LCP (element) | CLS | Longest interaction |
+|---|---|---|---|---|---|---|
+| Desktop, first, this build | 0.24–0.25 s | 0.41 s | 11.0 s | 11.7 s (the statement) | 0 | ≤ 32 ms |
+| Desktop, return, this build | 0.04–0.06 s | 0.14–0.16 s | 10.8 s | 11.4–11.5 s (the statement) | 0 | ≤ 24 ms |
+| Desktop, first, live | 1.3–3.1 s | 1.6–4.1 s | 12.2–14.8 s | 12.8–15.4 s (the statement) | 0 | ≤ 40 ms |
+| Desktop, return, live | 0.06–0.07 s | 0.04–0.06 s | 10.7 s | 11.3 s (the statement) | 0 | 16 ms |
+| Slow 4G, first, this build | 1.5–1.6 s | 3.0–3.1 s | 7.7–8.2 s, the film stalled | 4.3 s (a film sentence) | ≤ 0.0002 | ≤ 32 ms |
+| Slow 4G, return, this build | 0.08–0.10 s | 1.0 s | 6.2 s, the film stalled | 2.1 s (a film sentence) | 0 | ≤ 32 ms |
+| Slow 4G, first, live | 2.6–3.0 s | 4.3–5.6 s | 9.5–10.8 s, the film stalled | 5.5–6.7 s (a film sentence) | 0 | ≤ 32 ms |
+| Slow 4G, return, live | 0.09–0.10 s | 0.08–0.10 s | 9.3–9.8 s, the film stalled | 4.4–9.8 s (a film sentence) | 0 | ≤ 32 ms |
+
+Each range covers both front doors. The longest interaction is the lab's stand-in for INP: two Tabs, then a press on the
+header's route, read from the page's Event Timing entries. A first visit on the desktop receives 6.3 MB in its window
+(the film, then the passage, whole by 5 s on this build).
+
+- **LCP.** By Chrome's measure, LCP is the statement. It appears when the film reaches it (10.6 s of film), or earlier
+  when a stalled film gives way to the still composition. So LCP stays above the 2.5 s mark by design, not by waiting.
+  What a visitor waits for is the film's first frame and the header's route, at the *film starts* column.
+- **Slow 4G.** The film cannot keep pace on slow 4G. The stall rule (`STALL`, 2 s behind) gives way to the still
+  composition and the statement, as designed (§5n). The passage then loads behind the stills.
+- **Field data.** The PageSpeed Insights API refused the query (its shared daily quota, 2026-10-21), so none was read.
+  Search Console's Core Web Vitals report is the owner's (`docs/operations.md`).
+
+**4. Search.**
+- Every shareable page names its canonical URL, which is its `og:url` (the directory for an index page).
+- `robots.txt` admits every crawler and names `sitemap.xml`. The sitemap lists twelve pages; it leaves out the 404 and
+  AWC-OS's two `noindex` rooms, which keep the evaluation gateway's setting (the owner's decision).
+- Language pairs already name each other both ways (`test_each_language_names_the_other`).
+- `tools/test-site.py` holds the canonical link to `og:url`, and the sitemap to the indexable pages.
+
+**5. Operations.** `docs/operations.md` records:
+- the moving parts as observed: GitHub Pages; Namecheap DNS and registration to 2027-08-28, with the transfer lock on; the
+  Let's Encrypt certificate to 2026-12-14; Proton Mail with SPF, DKIM and DMARC; and no GitHub domain-verification record;
+- what only the owner can settle;
+- a monitor that checks the pages' words, not only their status;
+- the origin check after every publish and weekly;
+- the restore.
+
+The restore was rehearsed outside production. `rollback/16109F1BC4218636` was restored from its branch (`git archive`)
+into a local origin and ran as the site: `tools/probe-settle.py` PASS on both front doors, its worker installed and
+serving offline.
+
+**Checked.**
+- `tools/test-site.py` (29 tests: the preview law now requires the canonical link; a new law holds the sitemap and
+  robots.txt). In a throwaway copy, nine mutations fail and the control passes:
+  - a page without its canonical link;
+  - a canonical naming the `index.html` variant;
+  - two canonical links;
+  - the sitemap missing a page;
+  - the sitemap listing a `noindex` page;
+  - the sitemap listing the 404;
+  - a listed page turned `noindex`;
+  - robots.txt without the sitemap;
+  - robots.txt withholding everything.
+- `tools/test-projection.py`. P3 now holds the front doors to no projection. P5 refuses the withdrawn names
+  (`outcome:cad`, `…:deepcad`). P7 now searches for every value the record holds, printed or not. Four mutations fail and
+  the control passes:
+  - a figure put back on a front door;
+  - the withdrawn comparison put back in the room (the projector refuses it);
+  - the Arabic figure typed as a literal (the old P7 missed it);
+  - the English figure typed as a literal in the brief.
+- `tools/test-assets.py` and `tools/test-api.py` pass.
+
+**For the owner.**
+- **Claims.** CytherCAD's and SijilOS's records are corrected to what their own records show. Before any CytherCAD figure
+  returns to the front door, run a current evaluation (the 192 descriptions under today's check, with its protocol
+  published). Restore a withdrawn row only with the run that supports it.
+- **The rest of the review is yours,** in `docs/operations.md`: the mail and its monitoring, the device pass, Search
+  Console and AWC-OS's `noindex`, the domain's verification and renewal, and account recovery.
+
+Observed on this build (Chrome 156.0.8078.48, 2026-10-21):
+- **Reading ink** over the film and the passage on both front doors, under a dark and a light device setting at three
+  viewports: 1,358 element samples, none below 4.5:1, worst 4.9:1 (CY-SEM-003 PASS).
+- **Settling:** both pages settle to no frame, timer or playing media in every profile once the scroll stops, and the
+  worker caches this build and serves it offline (CY-TEMP-001 PASS).
+- **Real input:** 16 landings on the passage's first words; the 12 evidence moments; 50 sweeps of everything a visitor
+  can see, none covered; and the 12 presses on the systems' links, each opening its room.
+- **The pass above:** 18 presses that stop the film; Space and PageDown, typed, stopping it in 8 of 8 cases at 400 % and on
+  the desktop; the keyboard routes; reduced motion and refused autoplay in 8 of 8 cases; 30 page-zooms with nothing cut;
+  the contact drafts.
+- **All fifteen pages** at 1440 × 900 and 390 × 844: no sideways overflow, and no console error besides the 404's own
+  status.
+
+The live origin's check (CY-ORIGIN-001) follows the owner's publish.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
@@ -1871,10 +2133,13 @@ What a headless browser cannot stand in for, against the same build, appended as
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
 | Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
 | Mouse and touch | each link the page shows takes a click on the Mac and a tap on the phone: the statement's, each system's in the passage while its words are shown, the close's and the footer's (keyboard focus and a script's click pass under a covering layer; a pointer does not) |
-| VoiceOver (macOS and iOS) | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
+| VoiceOver (macOS and iOS), in English and in Arabic | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
 | The route out of the film | from the passage, each system's link opens its evidence with its headline, its limit and its artifact in the first screen: *See what this is based on →* ADII's recorded run, with *Built by Group 05* and the team's names; *See the demonstration →* AWC-OS's film, with *Developed by Al-Baseera*; *Read the validation record →* CytherCAD's record, every figure as the record states it (Arabic: each route its Arabic room). Each room's *← Back to the passage* (and the header's *← The passage*) returns to that system's evidence moment, its link shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
+| Link previews | paste a room's link (ADII's, AWC-OS's, CytherCAD's, the brief's) into iMessage or Slack: each shows its own card, its title ending *— CytherAI*, and the large image (a service that saw the link before may show the old card until it refetches) |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
+| 400% zoom (⌘+ to 400% in a 1280 px window) | every page reflows to one column with no sideways scroll; on the front door the passage's longer words scroll within themselves rather than lose their first lines (§5ad) |
+| The mail arrives (`docs/operations.md`) | one realistic English and one realistic Arabic message, each with one long answer, through *Open email draft* on the phone and on the Mac, and once through *Copy the message* into webmail: each arrives at contact@cytherai.com whole, and a reply from there reaches the sender; the same for `nda@` and `security@` |
 
 ## 6. Launch gate
 
@@ -1893,8 +2158,9 @@ decisions, not engineering steps.
 4. **Owner decision — the front-door claims.** Each states only what a shipped source
    states, with its condition beside it: ADII as a research project with no published
    results and no claimed deployment (`adii/`), AWC-OS as a demonstration on an evaluation
-   machine (`awc-os/`), CytherCAD's invalid rate against its DeepCAD baseline on an external
-   benchmark and its on-prem, air-gapped condition (`pages/brief.html`). The film's sentences
+   machine (`awc-os/`), CytherCAD by its on-prem, air-gapped condition, with its record stated as its own runs record
+   it (`cythercad/`, `pages/brief.html`; corrected 2026-10-21, §5ad: the front door prints no figure and nothing is
+   compared with DeepCAD, whose figure, stated until then against an "external benchmark", was another test). The film's sentences
    are positioning beside the line *A conceptual visualization. It measures no product.*
    The owner confirms each source is current before launch. (The epoch-04 commitment left the front door with the drawing set;
    its record is §5c and `backup/drawing-set-v1/`.)
