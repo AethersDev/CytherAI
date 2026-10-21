@@ -6,19 +6,24 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07070a">
 <title>CytherCAD، سجلّ التحقق — CytherAI</title>
-<meta name="description" content="سجلّ التحقق من CytherCAD: نسبة مخرجاته غير الصالحة على Text2CAD-192، وهو معيار خارجي، مقابل نسبة DeepCAD، وما تُثبته الأرقام.">
+<meta name="description" content="سجلّ التحقق من CytherCAD: ما قاسه اختبار CytherAI نفسها، وعلى أيّ أوصاف، وما لا يُظهره.">
+<meta property="og:site_name" content="CytherAI">
 <meta property="og:title" content="CytherCAD، سجلّ التحقق — CytherAI">
-<meta property="og:description" content="من وصفٍ لغوي إلى شكلٍ هندسي صالح: سجلّ التحقق من CytherCAD، على معيار خارجي.">
+<meta property="og:description" content="من وصفٍ لغوي إلى شكلٍ هندسي صالح: سجلّ التحقق من CytherCAD، وما يُظهره اختباره.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/ar/cythercad.html">
+<link rel="canonical" href="https://cytherai.com/ar/cythercad.html">
+<meta property="og:locale" content="ar_SA">
+<meta property="og:locale:alternate" content="en_US">
 <meta property="og:image" content="https://cytherai.com/film/passage-cad-landscape.jpg">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="810">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:alt" content="رسم توضيحي مفاهيمي من فيلم CytherAI: كتلة ذات درجة وثقب، وعليها طولها وارتفاعها وقطر الثقب.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/cythercad/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/cythercad.html">
-<meta name="build-hash" content="502593FFB37C9DEE">
+<meta name="build-hash" content="9BD0C72EFFCAE053">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
 <!-- CytherCAD's evidence in Arabic, a room of the front door (css/room.css): its arrival in Arabic beside the record in its
@@ -26,7 +31,7 @@
      CytherManifest (tools/project-manifest.py), in Western digits as on the Arabic front door. -->
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-<link rel="stylesheet" href="../css/room.css?v=5896fa5ef786" integrity="sha384-M62k3JfS6UUbpOJDNhlWrOp2khxeGJqv52QYnRHAx1p5N//GamhIPHvdYhf6W2h8" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
 </head>
 <body>
 <header><a class="wordmark" href="./" aria-label="الصفحة الرئيسية لـ CytherAI" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="الموقع"><a class="top back" href="./#cythercad-evidence">→ العودة إلى المقطع</a><a class="top" href="../cythercad/" hreflang="en" lang="en">English</a></nav></header>
@@ -34,22 +39,17 @@
 <div class="arrival">
 <div class="head">
 <span class="label">03 · <span lang="en">CytherCAD</span> · سجلّ التحقق</span>
-<h1>نسبة المخرجات غير الصالحة <span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> على معيار خارجي، مقابل <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> لدى <span lang="en">DeepCAD</span>.</h1>
+<h1>في اختبار أجرته <span lang="en">CytherAI</span> نفسها في أبريل 2026، كانت <span data-m="validation:T2C192-INV-1-384:ar">1 من 384</span> قطعة غير صالحة.</h1>
 </div>
-<p class="body">صِف قطعةً، فيكتب <span lang="en">CytherCAD</span> البرنامج الذي يبنيها: نموذجٌ توليدي مُدمَج يُنتج برامج إنشاء بارامترية قابلة للتنفيذ، ويفرض التوليد المُقيَّد صلاحيةَ الهندسة أثناء التوليد، ثم يؤكّد تحقّقٌ مستندٌ إلى نواة النمذجة دقّةَ الأبعاد بعده. ويعمل داخل المنشأة، في بيئة خاصة ومعزولة عن الشبكات الخارجية.</p>
-<p class="limit"><span lang="en">Text2CAD-192</span> معيار خارجي منشور لا تشغّله <span lang="en">CytherAI</span>، ونسبة <span lang="en">DeepCAD</span> هي المنشورة مع معيار <span lang="en">Text2CAD</span>. ونسبة المخرجات غير الصالحة هي حصّة تسلسلات <span lang="en">CAD</span> المولَّدة غير الصالحة: تقيس هل يُبنى الناتج، لا هل هو القطعة الموصوفة. أما الأرقام الأخرى فمن سجلّات <span lang="en">CytherAI</span> نفسها.</p>
-<figure class="record" id="summary" lang="en" dir="ltr"><p class="outcome">Key outcome · <span data-m="outcome:cad">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span></p><table>
+<p class="body">صِف قطعةً، فيكتب <span lang="en">CytherCAD</span> البرنامج الذي يبنيها: نموذجٌ توليدي مُدمَج يُنتج برامج إنشاء بارامترية قابلة للتنفيذ، ويحدّ التوليد المُقيَّد من الهندسة غير الصالحة أثناء التوليد، ثم تتحقّق نواةُ النمذجة الهندسية من النتيجة بعده. ويعمل داخل المنشأة، في بيئة خاصة ومعزولة عن الشبكات الخارجية.</p>
+<p class="limit">اختارت <span lang="en">CytherAI</span> الأوصاف الـ192 من مجموعة بيانات <span lang="en">Text2CAD</span> (48 لكلّ نوع من أنواع العمليات الأربعة، موزّعة على مستويات التفصيل الأربعة فيها)، وأجرت الاختبار بنفسها: قطعة لكلّ وصف من كلّ طريقة من طريقتَي <span lang="en">CytherCAD</span> في قراءته. وتكون القطعة غير صالحة إن لم تُبنَ أو لم تجتز فحص النواة؛ والقطعة الصالحة ليست بالضرورة القطعة الموصوفة. وفي مايو 2026 شُدِّد الفحص ليَعُدّ إخفاقَ خطوة تدوير الحواف أو العملية البوليانية غيرَ صالح، ولم يُجرَ الاختبار مجددًا منذ ذلك الحين. أمّا الأرقام المنشورة لأنظمة أخرى على مجموعة بيانات <span lang="en">Text2CAD</span> فمن اختبار مؤلّفيها أنفسهم، على أوصاف أخرى وبفحص آخر، فلا نقارن بها هنا.</p>
+<figure class="record" id="summary" lang="en" dir="ltr"><table>
 <!-- projections of CytherManifest (data-m), written by tools/project-manifest.py -->
-<tr><th data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</th><td data-m="validation:T2C192-IR-0.00:cyther">0.00%</td></tr>
-<tr><th data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</th><td data-m="validation:GVR-BEAM-100:cyther">100%</td></tr>
-<tr><th data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</th><td data-m="validation:GVR-COMP-100:cyther">100%</td></tr>
-<tr><th data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</th><td data-m="validation:DIM3-99:cyther">99%</td></tr>
-<tr><th data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</th><td data-m="validation:DIM5-97:cyther">97%</td></tr>
-<tr><th data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</th><td data-m="validation:MOP-91:cyther">91%</td></tr>
-</table><figcaption lang="ar" dir="rtl">ملخّص التحقق بالإنجليزية · الإصدار 1.1 · نسبة المخرجات غير الصالحة على معيار خارجي، والبقية من سجلّات <span lang="en">CytherAI</span></figcaption></figure>
+<tr><th data-m="validation:T2C192-INV-1-384:metric">Invalid parts · CytherAI’s test, April 2026 · 192 descriptions from the Text2CAD dataset, two parts each</th><td data-m="validation:T2C192-INV-1-384:cyther">1 of 384</td></tr>
+</table><figcaption lang="ar" dir="rtl">سجلّ التحقق بالإنجليزية · الإصدار 1.1 · اختبار <span lang="en">CytherAI</span> نفسها، من سجلّها</figcaption></figure>
 </div>
 <nav class="next" aria-label="من هنا"><a class="solid" href="contact.html">أخبرنا بما يجب ألّا يحدث أبدًا ←</a><a class="plain" href="./#cythercad-evidence">→ العودة إلى المقطع</a><a class="plain" href="../cythercad/#record" hreflang="en">السجلّ كاملًا (بالإنجليزية) ←</a></nav>
 </main>
-<footer><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="contact.html">تواصل</a> · بالإنجليزية: <a href="../pages/security.html" hreflang="en">الأمن</a> · <a href="../pages/privacy.html" hreflang="en">الخصوصية</a> · <a href="../pages/terms.html" hreflang="en">الشروط</a></span></footer>
+<footer><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="contact.html">تواصل</a> · بالإنجليزية: <a href="../pages/brief.html" hreflang="en">الموجز</a> · <a href="../pages/security.html" hreflang="en">الأمن</a> · <a href="../pages/privacy.html" hreflang="en">الخصوصية</a> · <a href="../pages/terms.html" hreflang="en">الشروط</a></span></footer>
 </body>
 </html>

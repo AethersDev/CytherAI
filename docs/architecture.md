@@ -27,8 +27,7 @@ flowchart TD
   F --> SW["sw.js registration"]
   RF["tools/render-film.py · tools/render-passage.py (Blender, offline)"] -.-> MED
 
-  RM["the rooms: adii/, awc-os/, cythercad/, their ar/ counterparts, contact.html, ar/contact.html"] --> ROOM["css/room.css"]
-  P["pages/*.html and 404.html"] --> CSS["css/cytherai.css"]
+  RM["the rooms: adii/, awc-os/, cythercad/, their ar/ counterparts, the contact pages, pages/*.html, 404.html"] --> ROOM["css/room.css"]
 
   M["js/manifest.js — the record (no page loads it)"] --> B["js/instrument.js — the boundary engine (no page loads it)"]
   B --> TB["tools/test-boundary.js"]
@@ -39,7 +38,7 @@ flowchart TD
   DEP --> DIST["dist/ public artifact"]
   DIST --> SW
 
-  M --> PM["tools/project-manifest.py"] --> DM["data-m elements on the front doors, the brief and CytherCAD's rooms"]
+  M --> PM["tools/project-manifest.py"] --> DM["data-m elements on the brief and CytherCAD's rooms"]
 ```
 
 The front door loads one stylesheet and one deferred script, both with SRI; `js/film.js` reads no module and publishes
@@ -59,14 +58,13 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
-| `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII, AWC-OS, CytherCAD, the return) and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
+| `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII, AWC-OS, CytherCAD, the return) and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; it prints no projected figure since 2026-10-21 (`tools/test-projection.py`) |
 | `ar/index.html`, `ar/contact.html`, `ar/adii.html`, `ar/awc-os.html`, `ar/cythercad.html` | The front door, the contact page and each system's evidence, in Arabic (AWC-OS with its Arabic film and text; ADII's run and CytherCAD's record in their original English) | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
-| `css/cytherai.css` | Shared subpage style system (the legal pages, the brief, the 404, until they become rooms) | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | The contact room: three plain questions composed into one email draft for the visitor's own email app, the draft copied whole when no app opens, and a way back through the history, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
 | `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
@@ -123,8 +121,9 @@ still) starts motion again.
 
 ## State and evidence boundaries
 
-- Canonical facts come from `CytherManifest`: the two front-door figures and the brief's
-  validation figures are projections, written into the pages by the projector.
+- Canonical facts come from `CytherManifest`: the validation figures of the brief and CytherCAD's rooms are
+  projections, written into the pages by the projector; the record states what its run's own files show (corrected
+  2026-10-21, `docs/deploy.md` §5ad), and the front doors print no figure.
 - The film and the passage are pre-rendered illustrations. The page says so under the
   film (*A conceptual visualization. It measures no product.*); no motion on the front door
   claims to correspond to a system event, and nothing on it is computed in the browser.
@@ -144,11 +143,12 @@ still) starts motion again.
 | `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script; their way back is `#adii-evidence` on the front door, the words that lead to them |
 | `/awc-os/`, `/ar/awc-os.html` | AWC-OS's evidence as a room, in English and in Arabic, each with its own film: `css/room.css`, no script; their way back is `#awc-os-evidence` |
 | `/cythercad/`, `/ar/cythercad.html` | CytherCAD's validation record as a room, and its Arabic introduction: `css/room.css`, no script, projected figures; their way back is `#cythercad-evidence` |
-| `/pages/brief.html` | Static capability brief and promoted exhibits (CytherCAD's record is also its own room since 2026-10-21) |
-| `/pages/privacy.html` | Static privacy record |
-| `/pages/security.html` | Static disclosure policy |
-| `/pages/terms.html` | Static terms |
-| `/404.html` | Host-configured styled error body; the host must still return status 404 |
+| `/pages/brief.html` | The capability brief as a room: CytherCAD's and SijilOS's records and qualified access (CytherCAD's record is also its own room) |
+| `/pages/privacy.html` | The privacy policy as a room, its text as written |
+| `/pages/security.html` | The security and disclosure policy as a room, its text as written |
+| `/pages/terms.html` | The terms of service as a room, its text as written |
+| `/404.html` | Host-configured error body, a room in English and Arabic with absolute URLs (served at any depth); the host must still return status 404 |
+| `/robots.txt`, `/sitemap.xml` | For crawlers: every crawler admitted, and the pages meant to be found, by their canonical URLs (not the 404, nor AWC-OS's `noindex` rooms) |
 
 ## Integrity, deployment, and offline behavior
 
@@ -202,7 +202,7 @@ page/resource integration (everything a page or stylesheet fetches is a shipped 
 origin, every link that stays on the site lands on one, every film the front door names ships,
 and back), each page's least-privilege CSP, the retired register kept out of served files, the
 privacy policy naming exactly what the site stores, SRI/build/cache identity, deployment
-closure, the subpage ink law, the derived-asset receipts (the film's included), and the VAIC-0
+closure, the rooms law, the footers and the link previews, the derived-asset receipts (the film's included), and the VAIC-0
 corpus (structure, retired-evidence resolution, every lineage, frozen obligation definitions,
 fail-closed controls, a regression recordable as a FAIL). The retired front doors: `backup/unhappened-v1/verify.sh`,
 `backup/drawing-set-v1/verify.sh`, `backup/instrument-v1/verify.sh`.
@@ -263,11 +263,12 @@ muted inline autoplay and VoiceOver.
   `test_each_evidence_room_returns_to_the_words_that_led_to_it`); a room with many ways in returns through the history
   (`navigation.canGoBack`), with a link for a visitor who arrived from elsewhere.
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
-  icon/manifest references, `deploy.paths` (which is also the list `generate-integrity.sh` stamps and
-  every per-page law in `tools/test-site.py` reads), and decide whether it belongs in `sw.js`.
+  icon/manifest references, its preview and canonical URL, `deploy.paths` (which is also the list
+  `generate-integrity.sh` stamps and every per-page law in `tools/test-site.py` reads), `sitemap.xml` unless it asks
+  not to be indexed (the sitemap law fails either way it drifts), and decide whether it belongs in `sw.js`.
 - Add a claim to the front door: only as a shipped source states it, with its condition
-  beside it and a link to the source; a figure is a `data-m` projection (add it to
-  `HEADLINE` in `tools/test-projection.py`). An unsupported claim is dropped.
+  beside it and a link to the source, and only as the source's own run records it; a figure is a `data-m`
+  projection (P3 in `tools/test-projection.py` names what each front door prints). An unsupported claim is dropped.
 - Change manifest facts: review every `PROVISIONAL` marker, run the projector, regenerate
   integrity, and treat a genuine commitment as an owner-custody decision.
 - Change an obligation: a new corpus version that supersedes the live one and carries every
