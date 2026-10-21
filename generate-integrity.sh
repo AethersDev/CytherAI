@@ -14,7 +14,7 @@ set -euo pipefail
 # the front door's scripts and stylesheet (the film) + the subpage stylesheet: every resource a served page requests
 # with an integrity attribute. (The build identity below is a different projection: it covers every deploy.paths
 # byte, requested or not.)
-RESOURCES="css/cytherai.css css/film.css js/film.js"
+RESOURCES="css/cytherai.css css/film.css css/room.css js/film.js"
 
 # HTML files to patch: every served page, read from the one declaration of what is served (a page added there is
 # stamped, and held to every per-page law in tools/test-site.py, with no second list to forget it in)
