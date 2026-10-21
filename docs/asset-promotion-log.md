@@ -119,6 +119,24 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 ---
 
+## ADII-POSTER — the recorded run's last frame
+
+| | |
+|---|---|
+| Asset ID | IMG-014 |
+| Source | `adii/replay.mp4`, ADII's recorded run: a screen recording of its interface, 68 seconds, without sound, served with `adii/` since its first reviewed publication (`1fca6ae`, 2026-10-04) |
+| Classification | **COMPUTED** — a frame taken from the fixed input above, the recording's last; every page that shows or names it states its status beside it (a research project; one recorded run) |
+| Command | Not recorded when it was first published; it is the recording's last frame, the answer *Fix it* and the sign-off of the investigator, the authorizer and the validator |
+| Canonical inputs | None — the recording is a tracked file. |
+| Output | `adii/poster.jpg` · 1920×1080 · 101,602 bytes |
+| SHA-256 | `128222d879b66d1f8a5ba23f50ebb41b48ae1e34073eba18d073d087f44b205e` |
+| Determinism | **Not reproducible byte for byte**: its extraction command was not kept. Against the recording's decoded last frame it reads 47.6 dB (2026-10-21); the receipt binds these bytes. |
+| Acceptance checks | 1920×1080 JPEG; the recording's last frame (above). |
+| Deployment | `deploy.sh` allowlist, in ADII's reviewed publication set (`tools/test-site.py`); the recording's poster on `adii/` and on its Arabic introduction (`ar/adii.html`), and both pages' link preview (`og:image`), receipted from 2026-10-21 when a page outside `adii/` first named it. |
+| Owner sign-off | PENDING |
+
+---
+
 ## OG-CARD-V1 — the derived link-preview plate, retired
 
 | | |
