@@ -2092,6 +2092,8 @@ Observed on this build (Chrome 156.0.8078.48, 2026-10-21):
 
 The live origin's check (CY-ORIGIN-001) follows the owner's publish.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_9BD0C72EFFCAE053`), 63 of 63 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
