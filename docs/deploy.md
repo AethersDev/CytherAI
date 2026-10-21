@@ -1518,6 +1518,57 @@ phone's or a Mac's in hand.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_983A5A948DF4EF1B`), 59 of 59 served paths matching the artifact.
 
+## 5y. AWC-OS's condition and route held with its words — 2026-10-21
+
+Build `73B4CD7CEF71A0F3` (`#reading_ink_73B4CD7CEF71A0F3`, `#film_settle_73B4CD7CEF71A0F3`).
+
+**The owner's review** (2026-10-21, pasted), of the live `983A5A948DF4EF1B` at the desktop and at 390 × 844 (a review of
+the composition and its scroll-linked presentation, not a device's smoothness): the completed passage works as one
+continuous world, and the return feels like an ending; keep the footage, the transitions and the ending. AWC-OS says its
+idea (the opening fixed, the oversized proposal set aside, the smaller alternative through the same opening);
+CytherCAD's name and description arrive before the shape develops, and the bore and dimensions make the result
+concrete; the return gives *Tell us what must never happen.* a conclusion to sit beneath. One correction: AWC-OS's
+condition-and-route caption (14.6–15.7 s) showed for 0.55 of a screen of scroll and was fully opaque for 0.30 — too
+little to notice the qualification, read it, recognize the link and stop. Keep the condition and the evidence link
+present throughout AWC-OS's explanation, a stable, subordinate pair beneath the main copy; keep the even pace and the
+shorter treatment; no new frames, no new scene, no longer passage; if the copy grows too tall on a phone, shorten the
+explanation, keeping its three outcomes, never the type.
+
+**Now** AWC-OS's words are one caption for its whole window, 12.95–15.7 s (1.375 screens of scroll, 1.125 fully shown):
+the label, the headline and the explanation, then the condition and *See the demonstration →* beneath them, quiet. The
+pair alone would have pushed the caption's darkness over the refused program where it waits below the opening (by 61px
+at 390 × 844, 28px at 1440 × 900, measured), so:
+
+- the explanation is shorter, its three outcomes kept: *The AI proposes a financial program; a separate engine runs
+  it, refuses it with an allowed alternative, or blocks it.* (the card's was *The AI proposes a financial program. A
+  separate engine checks it against the rules: it can run, be refused with an allowed alternative, or be blocked.*).
+  `awc-os/` states each part: the model's program goes to *AWCOSCore (canonical interpreter …) → EXECUTED · REFUSED ·
+  BLOCKED*, and *the engine returned BLOCKED*. The Arabic follows it in the reviewers' words: *يقترح الذكاء الاصطناعي
+  برنامجًا ماليًا، فيُنفّذه محرّك مستقل، أو يرفضه مع بديل مسموح به، أو يحجبه.*
+- on a phone 360px wide or more the headline takes one line (*Not every answer is allowed.* fits at its 28px from 360
+  to 430px, in both languages); narrower, it keeps its designed break rather than split *is / allowed*;
+- a condition and its link sit 8px apart instead of 14, one quiet unit (ADII's and CytherCAD's pairs too).
+
+No type is smaller, and nothing else on the page moved; the stills still change between two systems' words (AWC-OS's
+until 15.75 s).
+
+**Measured** (the caption's solid darkness, its box grown by its 14/22px inset and 22px shadow spread, against the refused
+program where it waits at the opening, its place in the frame from the render's own camera mapped through
+`object-fit: cover`): at 1440 × 900 clear by 4px, and at 390 × 844 clear by 1px in English and 12px over its lower edge
+in Arabic, both within the darkness's soft edge; the old first caption alone was clear there by 66px and 34px. On screens
+shorter or narrower than the frame was composed for, the caption sits over the program's lower part, the opening and the
+gap it stops short of still in view: 1280 × 720 by 52px (the old first caption was clear by 10px), 375 × 667 by 58px (the
+old one already covered it by 25px), 320 × 844 by 76px (the old one was clear by 34px). The words' window is 2.75 s of
+the scene where the condition and route had 1.1 s: 1.375 screens of scroll, 1.125 fully shown, against 0.55 and 0.30.
+
+Observed on this build (Chrome 155.0.8059.85, 2026-10-21): reading ink over the film and the passage on both front doors,
+under a dark and a light device setting, at three viewports, 1,400 element samples, none below 4.5:1, worst 4.9:1 (the
+film's statement on a phone, as before); AWC-OS's caption 6.11:1 at worst, its condition (CY-SEM-003 PASS). Both pages
+settle to no frame, timer or playing media in every profile once the scroll stops; at CytherCAD's figure the passage
+shows exactly the frame its moment names, and under reduced motion CytherCAD's still stands; a scroll back into the
+passage is answered with one frame and no media or timer; the worker caches this build and serves it offline
+(CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
