@@ -201,12 +201,12 @@ identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI
 the VAIC candidate, appends the automated-set receipts; existing receipts are never edited).
 
 The figures the pages print — the CytherCAD invalid rate and the DeepCAD baseline it is
-stated against on `index.html`, the validation figures on `pages/brief.html` — are
-projections of `js/manifest.js`: marked elements (`data-m="name"`) that
+stated against on `index.html`, the validation figures on `pages/brief.html` and in CytherCAD's rooms (`cythercad/`,
+`ar/cythercad.html`) — are projections of `js/manifest.js`: marked elements (`data-m="name"`) that
 `python3 tools/project-manifest.py` rewrites from `CytherManifest.project` (no page reads
 them back at runtime: no page loads the record). After a manifest
 edit, run the projector before the integrity step; `tools/test-projection.py` fails on a
-stale page, an unknown name, an identifier the brief does not print, or any mark on the
+stale page, an unknown name, an identifier the brief or a CytherCAD room does not print, or any mark on the
 front door other than those two.
 
 The architecture and change-impact guide is `docs/architecture.md`.
@@ -254,7 +254,7 @@ outcomes: the engine runs the program, refuses it with an allowed alternative, o
 *See the demonstration →* (`awc-os/`) beneath them throughout, quiet but available, in one caption (2026-10-21: as a
 separate closing caption they showed for half a screen of scroll, too fleeting to notice, the owner found); CytherCAD's (*Language in. Valid geometry out.*) with its
 explanation, then its two figures beside their named benchmark (the front door's only `data-m` marks), its condition and
-*Read the validation record →* (`pages/brief.html`). Each system after ADII is shorter (4 s and 5 s to its 7). The
+*Read the validation record →* (`cythercad/`, CytherCAD's room). Each system after ADII is shorter (4 s and 5 s to its 7). The
 scroll moves the scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall
 as its seconds (`tools/test-site.py`), and the words (`.say`, `data-t`: their window of the passage's seconds) fade in
 and out with the scroll itself, never with a timed transition (with one on these fixed captions WebKit missed 16–24
@@ -315,8 +315,9 @@ the verifiers) are loaded by no page and not published; they stay at their paths
 corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds their surface.
 
 **Arabic** (`ar/`, 2026-10-14): `ar/index.html` is the front door in Arabic and `ar/contact.html` the contact page;
-ADII's evidence has an Arabic introduction (`ar/adii.html`, 2026-10-21) before its English text; the brief and the legal
-pages stay English and the Arabic pages mark their links to them (بالإنجليزية); AWC-OS's page is already bilingual. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
+each system's evidence has an Arabic room (2026-10-21): `ar/adii.html` and `ar/cythercad.html` introduce ADII's run and
+CytherCAD's record, which stay in their original English, and `ar/awc-os.html` carries AWC-OS's own Arabic film and text;
+the brief and the legal pages stay English and the Arabic pages mark their links to them (بالإنجليزية). Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
 exactly the English one's cues, the passage's seconds, sections and projected figures (the projector writes its two figures too,
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
@@ -352,15 +353,28 @@ until the draft opens; the page sends and stores nothing and never says a messag
 describes exactly that, with the host's own logs (GitHub Pages logs every visitor's IP address) as a separate matter
 (`mailto:` by design; without the script the form posts the answers to `mailto:`). Each contact page keeps its one inline
 script, admitted by its `sha256-` in the page's CSP, never `'unsafe-inline'` (edit the script and the hash must follow).
-The routes: *See what this is based on →* lands on the arrival, *Talk to us →* on the contact page. An evidence room
-returns to the passage's words that led to it (`../#adii-evidence`: that `.say`'s id, whose moment `js/film.js` brings;
-until 2026-10-21 it landed on its stretch's first, wordless second); the contact room, reached from many places, returns
+`awc-os/` (2026-10-21, at the owner's direction: *the other two destinations have not received this treatment*) opens
+on *Not every answer was allowed.*, who built it (*Developed by Al-Baseera*, presented at the AMAD 2026 FinTech
+Hackathon, as its film's closing card says), what the demonstration shows (the engine runs a program, refuses it with a
+Sharia-compliant alternative, or blocks it; the measured failure kept), and its limit (a hackathon demonstration, an
+evaluation machine, no deployment claimed), beside its English film; how it decides, its paths, the film as text and its
+source follow, verbatim from the evaluation gateway it replaced (`backup/before-rooms/awc-os/`, whose language toggle
+retired with it). Its posters are the films' frame of the engine's trace marked EXECUTED, not the refusal, whose card
+names an Alinma product (IMG-015). `cythercad/` opens on its validation result, the named benchmark and the comparison
+(*0.00% invalid on an external benchmark, against 10.00% for DeepCAD*, projected) and what they establish (Text2CAD-192
+is external and not operated by CytherAI; DeepCAD's figure is the one published with the Text2CAD benchmark; the invalid
+rate, *the proportion of invalid CAD sequences* in the benchmark's own words, says whether an output builds, not
+whether it is the part described; the other figures are CytherAI's logs), beside the record; the record follows as the
+brief states it. The routes: *See what this is based on →* lands on ADII's arrival, *See the demonstration →* on
+AWC-OS's, *Read the validation record →* on CytherCAD's, each Arabic route on its Arabic room, and *Talk to us →* on the
+contact page. An evidence room returns to the evidence moment, the passage's words that led to it (`#adii-evidence`,
+`#awc-os-evidence`, `#cythercad-evidence`: that `.say`'s id, whose moment `js/film.js` brings, the middle of its window,
+not the exact scroll the visitor left from; until 2026-10-21 ADII's landed on its stretch's first, wordless second); the contact room, reached from many places, returns
 through the history when the visitor came from this site (`navigation.canGoBack` counts only its pages) and otherwise to
 the three systems. `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's
 tokens to the front door's (every ink ≥ 4.5:1 on the ground and on the lifted ground, a field's edge ≥ 3:1), and each
-evidence room's way back to the words whose route leads to it. The pages they replaced are `backup/before-rooms/`. Still to come in rooms: AWC-OS's
-demonstration, CytherCAD's validation record, the legal pages and the 404, with one review of titles, previews and
-naming across them.
+evidence room's way back to the words whose route leads to it. The pages they replaced are `backup/before-rooms/`. Still to come in rooms: the
+brief, the legal pages and the 404, with one review of titles, previews and naming across them.
 
 **Subpages** (`pages/{brief,privacy,security,terms}.html`, `404.html`) share `css/cytherai.css` — flat, cold, static,
 no JS, until they become rooms. Their ink law (every ink ≥ 4.5:1 on every ground, a form field's edge ≥ 3:1) is
@@ -378,14 +392,14 @@ refused at operation 6 (CROSSES), then a valid alternative admitted by the kerne
 said. It is preserved whole in `backup/exception-v1/` (the page, the two modules as it loaded
 them, its fonts), which opens from the repository root; `/exception/` now answers 404.
 
-**Project pages** (`adii/`, `awc-os/`) ship only their reviewed publication set, pinned in
+**Project pages** (`adii/`, `awc-os/`, `cythercad/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
-named there. `adii/` keeps every URL its first publication served, the CVs included, and is a room since 2026-10-21;
+named there. `adii/` keeps every URL its first publication served, the CVs included; all three are rooms since 2026-10-21;
 `awc-os/live/` redirects to an ephemeral tunnel and never ships. The Alinma plan was cancelled (2026-10-19):
 AWC-OS's films have their closing production line masked and its competition deck is withdrawn (the originals:
-`backup/awc-os-v1/`); state no Alinma deployment or pilot. Both pages are stamped like
+`backup/awc-os-v1/`); state no Alinma deployment or pilot. They are stamped like
 the subpages; `sw.js` sends media, documents and range requests to the network uncached, and
-leaves every page it did not precache (`adii/`, `awc-os/`) to the network.
+leaves every page it did not precache (`adii/`, `awc-os/`, `cythercad/` and the Arabic evidence rooms) to the network.
 
 **Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
 or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a new build's
@@ -422,7 +436,7 @@ presentation, preserved as record, nothing of its design carried.
 Accent `#2036C7` marks state only. BANNED in shipped files: fake meters (`−540 M` style),
 `CONDUCT RECEIPT` (the retired ledger was a `READING SELF-REPORT`), `Append-only`,
 `1e-12`. A front-door claim ships only as a shipped source states it, with its condition
-beside it and a link to that source (`pages/brief.html`, `adii/`, `awc-os/`); a claim no
+beside it and a link to that source (`adii/`, `awc-os/`, `cythercad/`, `pages/brief.html`); a claim no
 shipped source supports is dropped, not softened. Figures are projections (`data-m`), never
 literals.
 
