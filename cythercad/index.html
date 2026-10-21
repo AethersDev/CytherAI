@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07070a">
+<title>CytherCAD, the validation record — CytherAI</title>
+<meta name="description" content="CytherCAD's validation record: its invalid rate on Text2CAD-192, an external benchmark, against DeepCAD's, and what the figures establish.">
+<meta property="og:title" content="CytherCAD, the validation record — CytherAI">
+<meta property="og:description" content="Language in. Valid geometry out: CytherCAD's validation record, against an external benchmark.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/cythercad/">
+<meta property="og:image" content="https://cytherai.com/film/passage-cad-landscape.jpg">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="810">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="A conceptual illustration from CytherAI's film: a block with a step and a bore, its length, height and bore drawn on it.">
+<link rel="alternate" hreflang="en" href="https://cytherai.com/cythercad/">
+<link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/cythercad.html">
+<meta name="build-hash" content="502593FFB37C9DEE">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+<!-- CytherCAD's evidence, a room of the front door (css/room.css): its arrival says what the validation record shows, against
+     which benchmark and which comparison, and what the figures establish, beside the record itself; the record follows as
+     the capability brief states it (pages/brief.html, Exhibit A, which keeps it too). Every figure is a projection of
+     CytherManifest (tools/project-manifest.py, tools/test-projection.py). The invalid rate's meaning is the benchmark's own
+     (Text2CAD, arXiv 2409.17106, §5.1: "the proportion of invalid CAD sequences"; DeepCAD's 10.00 is its Table 1). -->
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
+<link rel="stylesheet" href="../css/room.css?v=5896fa5ef786" integrity="sha384-M62k3JfS6UUbpOJDNhlWrOp2khxeGJqv52QYnRHAx1p5N//GamhIPHvdYhf6W2h8" crossorigin="anonymous">
+</head>
+<body>
+<header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#cythercad-evidence">← The passage</a><a class="top" href="../ar/cythercad.html" hreflang="ar" lang="ar">العربية</a></nav></header>
+<main>
+<div class="arrival">
+<div class="head">
+<span class="label">03 · CytherCAD · The validation record</span>
+<h1><span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> invalid on an external benchmark, against <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> for DeepCAD.</h1>
+</div>
+<p class="body">Describe a part, and CytherCAD writes the program that builds it: a compact autoregressive model produces executable parametric construction programs, constrained decoding enforces geometric validity as it generates, and kernel-backed verification confirms the dimensions afterwards. It runs on-prem, private and air-gapped.</p>
+<p class="limit">Text2CAD-192 is an external, published benchmark that CytherAI does not operate, and DeepCAD’s figure is the one published with the Text2CAD benchmark. The invalid rate is the share of generated CAD sequences that are invalid: whether the output builds, not whether it is the part described. The other figures come from CytherAI’s own logs.</p>
+<figure class="record" id="summary"><p class="outcome">Key outcome · <span data-m="outcome:cad">IR 0.00% vs 10.00% (DeepCAD) · Text2CAD-192</span></p><table>
+<!-- projections of CytherManifest (data-m), written by tools/project-manifest.py -->
+<tr><th data-m="validation:T2C192-IR-0.00:metric">Invalid Rate (↓ better)</th><td data-m="validation:T2C192-IR-0.00:cyther">0.00%</td></tr>
+<tr><th data-m="validation:GVR-BEAM-100:metric">GVR · Constrained Beam (n=100)</th><td data-m="validation:GVR-BEAM-100:cyther">100%</td></tr>
+<tr><th data-m="validation:GVR-COMP-100:metric">GVR · Completion (n=100)</th><td data-m="validation:GVR-COMP-100:cyther">100%</td></tr>
+<tr><th data-m="validation:DIM3-99:metric">Dimensional Accuracy ±3mm (n=35)</th><td data-m="validation:DIM3-99:cyther">99%</td></tr>
+<tr><th data-m="validation:DIM5-97:metric">Dimensional Accuracy ±5mm (n=35)</th><td data-m="validation:DIM5-97:cyther">97%</td></tr>
+<tr><th data-m="validation:MOP-91:metric">Multi-Op Accuracy · Encoder (n=35)</th><td data-m="validation:MOP-91:cyther">91%</td></tr>
+</table><figcaption>Validation summary · v1.1 · the invalid rate on an external benchmark, the others from CytherAI’s logs</figcaption></figure>
+</div>
+<nav class="next" aria-label="From here"><a class="solid" href="../contact.html">Tell us what must never happen →</a><a class="plain" href="../#cythercad-evidence">← Back to the passage</a></nav>
+<section id="record" aria-labelledby="record-h">
+<h2 id="record-h">The record</h2>
+<p>CytherCAD — Controlled Generative CAD. Compact autoregressive model producing executable parametric construction programs. Constrained decoding enforces geometric validity at generation time. Kernel-backed verification confirms dimensional accuracy post-generation.</p>
+<table class="words">
+<tr><th>Status</th><td>Production-validated</td></tr>
+<tr><th>Verified</th><td>Log + external benchmark</td></tr>
+<tr><th>Context</th><td>On-prem · Private · Air-gapped</td></tr>
+<tr><th>Parameters</th><td>16.1M</td></tr>
+<tr><th>Methodology</th><td>Autoregressive generation · constrained decoding · kernel-backed geometric verification</td></tr>
+<tr><th>Benchmark source</th><td>Text2CAD-192 · External · Published · Not operated by CytherAI</td></tr>
+<tr><th>Disclosure</th><td>Public surface</td></tr>
+</table>
+<p>Kernel architecture, training methodology, deployment specifications and engagement scoping are available under qualified review, with identity and an NDA: <a class="plain" href="mailto:nda@cytherai.com">nda@cytherai.com</a>.</p>
+</section>
+</main>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
+</body>
+</html>

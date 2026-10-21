@@ -60,17 +60,23 @@ HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 # the register rules in CLAUDE.md: the retired gold register, the document register, fake meters and the retired
 # ledger's vocabulary may not reach a served file
 BANNED = re.compile(r"--brass|--gold|DOC-2026-001|CONDUCT RECEIPT|[Aa]ppend-only|1e-12|−\d+\s?M\b")
-# ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its
-# curated gateway and the films — not the live-MVP tunnel redirect, and not the competition deck (the cancelled Alinma
-# plan, withdrawn 2026-10-19 to backup/awc-os-v1/)
+# ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its room and its films with their
+# posters — not the live-MVP tunnel redirect, not the competition deck (the cancelled Alinma plan, withdrawn 2026-10-19 to
+# backup/awc-os-v1/), and not the gateway's language toggle, retired with it to backup/before-rooms/awc-os/ (2026-10-21);
+# CytherCAD's record is a page of its own
 # the rooms: the pages a visitor reaches from the front door, drawn with css/room.css (2026-10-21)
-ROOMS = ("adii/index.html", "ar/adii.html", "contact.html", "ar/contact.html")
+ROOMS = ("adii/index.html", "ar/adii.html", "awc-os/index.html", "ar/awc-os.html", "cythercad/index.html", "ar/cythercad.html",
+         "contact.html", "ar/contact.html")
+# each evidence room and the front door it returns to
+EVIDENCE = (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html"), ("awc-os/index.html", "index.html"),
+            ("ar/awc-os.html", "ar/index.html"), ("cythercad/index.html", "index.html"), ("ar/cythercad.html", "ar/index.html"))
 REVIEWED_PUBLICATION = {
     "adii/": {"adii/index.html", "adii/favicon.svg", "adii/fonts/OFL.txt", "adii/fonts/ibm-plex-mono-400.woff2",
               "adii/fonts/newsreader-variable.woff2", "adii/fonts/public-sans-variable.woff2", "adii/poster.jpg",
               "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
-    "awc-os/": {"awc-os/index.html", "awc-os/awc-os.js", "awc-os/media/AWC_OS_film_ar.mp4",
-                "awc-os/media/AWC_OS_film_en.mp4"},
+    "awc-os/": {"awc-os/index.html", "awc-os/media/AWC_OS_film_ar.mp4", "awc-os/media/AWC_OS_film_en.mp4",
+                "awc-os/media/poster-ar.jpg", "awc-os/media/poster-en.jpg"},
+    "cythercad/": {"cythercad/index.html"},
 }
 
 
@@ -553,10 +559,11 @@ class SiteContractTests(unittest.TestCase):
             self.assertIn(("footer", {}), tags, page)
 
     def test_each_evidence_room_returns_to_the_words_that_led_to_it(self) -> None:
-        """An evidence room's way back to the passage lands where the visitor left it: every link from the room to its front
-        door names the passage's words (a .say, by id) that hold the route to this room, and js/film.js brings their moment.
-        It landed on its stretch's first second, before any words, until 2026-10-21 (the owner: restore the ADII position)."""
-        for room, door in (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html")):
+        """An evidence room's way back to the passage returns to the evidence moment: every link from the room to its front
+        door names the passage's words (a .say, by id) that hold the route to this room, and js/film.js brings their moment,
+        the middle of their window (not the exact scroll the visitor left from). It landed on its stretch's first second,
+        before any words, until 2026-10-21 (the owner: restore the ADII position)."""
+        for room, door in EVIDENCE:
             words = dict(re.findall(r'<div class="say" id="([\w-]+)"[^>]*>(.*?)</div>', (ROOT / door).read_text(encoding="utf-8"), re.S))
             backs = [a["href"] for t, a in parse_page(room).tags
                      if t == "a" and "wordmark" not in a.get("class", "") and local_target(room, a["href"]) == door]
@@ -607,14 +614,17 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(shape("ar/index.html"), shape("index.html"))
         for page, lang, direction in (("index.html", "en", None), ("ar/index.html", "ar", "rtl"),
                                       ("contact.html", "en", None), ("ar/contact.html", "ar", "rtl"),
-                                      ("adii/index.html", "en", None), ("ar/adii.html", "ar", "rtl")):
+                                      ("adii/index.html", "en", None), ("ar/adii.html", "ar", "rtl"),
+                                      ("awc-os/index.html", "en", None), ("ar/awc-os.html", "ar", "rtl"),
+                                      ("cythercad/index.html", "en", None), ("ar/cythercad.html", "ar", "rtl")):
             html = next(a for t, a in parse_page(page).tags if t == "html")
             self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
 
     def test_each_language_names_the_other(self) -> None:
         """Each page and its Arabic counterpart declare both as alternates (hreflang) and link each other visibly, the link
         marked with the language it leads to."""
-        for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html")):
+        for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html"),
+                       ("awc-os/index.html", "ar/awc-os.html"), ("cythercad/index.html", "ar/cythercad.html")):
             for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)
