@@ -4,12 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
-<title>CytherAI — كل شيء يتغيّر. شيء واحد يثبت.</title>
+<title>CytherAI — دع الذكاء الاصطناعي يغيّر الأشياء. واحتفظ بزمام ما يتغيّر.</title>
 <meta name="description" content="تبني CytherAI الجزء من الذكاء الاصطناعي الذي يقرّر ما يُسمح بحدوثه.">
-<meta property="og:title" content="CytherAI — كل شيء يتغيّر. شيء واحد يثبت.">
+<meta property="og:site_name" content="CytherAI">
+<meta property="og:title" content="CytherAI — دع الذكاء الاصطناعي يغيّر الأشياء. واحتفظ بزمام ما يتغيّر.">
 <meta property="og:description" content="تبني CytherAI الجزء من الذكاء الاصطناعي الذي يقرّر ما يُسمح بحدوثه.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/ar/">
+<link rel="canonical" href="https://cytherai.com/ar/">
 <meta property="og:locale" content="ar_SA">
 <meta property="og:locale:alternate" content="en_US">
 <!-- The Arabic front door: the same film, passage and claims as index.html, in Arabic. The card is ILLUSTRATIVE:
@@ -21,7 +23,7 @@
 <meta property="og:image:alt" content="الإطار الأخير من فيلم CytherAI، وهو تصوّر مفاهيمي: بنية من الزجاج والسيراميك تشطرها حلقة مضيئة رفيعة ويسري فيها تيار دافئ، وإلى جانبها العبارة: دع الذكاء الاصطناعي يغيّر الأشياء، واحتفظ بزمام ما يتغيّر.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#07070a">
-<meta name="build-hash" content="502593FFB37C9DEE">
+<meta name="build-hash" content="9BD0C72EFFCAE053">
 <meta name="referrer" content="no-referrer">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/">
@@ -32,7 +34,7 @@
 <link rel="preload" href="../fonts/ibm-plex-sans-arabic-300.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../fonts/ibm-plex-sans-arabic-400.woff2" as="font" type="font/woff2" crossorigin>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
-<link rel="stylesheet" href="../css/film.css?v=6369e59df772" integrity="sha384-MgiBOlxF4flVMWXqphIascvaCUuwHM2bWd14qLjOLNK3pqXkwop39PYsJpaas8g+" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/film.css?v=ce56b6fb0b6a" integrity="sha384-LpboO/pwYNG4N7kZfUItTDx0Cnen9JN/I6ZsqOe1QFVVCsIlM9olNFjfWXZpqkN9" crossorigin="anonymous">
 <script src="../js/film.js?v=0391e2e848d3" defer integrity="sha384-lL+0r5Mb2wTzndJLSQxHbhKTDaZwD34yP6/LBaGa0oiaByUHL+QSH4TokOHDDhQx" crossorigin="anonymous"></script>
 </head>
 <body data-state="film">
@@ -49,7 +51,7 @@
 <button id="replay" class="mono" data-play="شغّل الفيلم" hidden>إعادة العرض</button>
 <p class="note mono">تصوّر مفاهيمي. لا يقيس أي منتج.</p>
 </div>
-<section class="passage" id="systems" data-t="2 5"><div class="say" data-t="2 4.4"><small class="mono">مبدأ واحد. ثلاثة أنظمة.</small><h2>النموذج يقترح.<br>والنظام يقرّر.</h2></div></section>
+<section class="passage" id="systems" data-t="2 5"><div class="say" id="principle" data-t="2 4.4"><small class="mono">مبدأ واحد. ثلاثة أنظمة.</small><h2>النموذج يقترح.<br>والنظام يقرّر.</h2></div></section>
 <section class="passage" id="adii" data-t="5 12">
 <p class="sr">الرسم التوضيحي بلا صوت: تنفرج بنية الفيلم حول الخط الذي ترسمه حلقته، وتترك صفًّا من القيم قائمًا، آخرها نحو نصف ما سواه. يأتي تصحيح من الجهة الأخرى من الخط ويتوقف قبيله؛ يضيء ضوءٌ الموضعَ الوحيد الذي يجوز له تغييره، ويمسح فحصٌ الصفَّ كله، وعندها فقط يعبر ويأخذ مكان القيمة الخاطئة.</p>
 <div class="say" data-t="5 7"><small class="mono">01 · ADII · رسم توضيحي مفاهيمي</small><h2>رقمٌ يبدو خاطئًا.</h2>
@@ -69,9 +71,8 @@
 <section class="passage" id="cythercad" data-t="16 21">
 <p class="sr">الرسم التوضيحي بلا صوت: تطبيقٌ آخر للمبدأ نفسه. فيما وراء الخط، يُبنى شكلٌ قطعةً، كتلةً ذات درجة وثقب، وتُرسم عليها أبعادها: طولها وارتفاعها وقطر الثقب.</p>
 <div class="say" data-t="15.8 19"><small class="mono">03 · CytherCAD · رسم توضيحي مفاهيمي</small><h2>من وصفٍ لغوي<br>إلى شكلٍ هندسي صالح.</h2>
-<p>صِف قطعةً، فيحوّل <span lang="en">CytherCAD</span> الوصف إلى تعليمات تبنيها، ويمنع الهندسة غير الصالحة أثناء التوليد، ثم يتحقّق من الأبعاد بعد ذلك.</p></div>
-<div class="say" id="cythercad-evidence" data-t="19.2 21.4"><p>نسبة المخرجات غير الصالحة <span data-m="validation:T2C192-IR-0.00:cyther">0.00%</span> على <span lang="en">Text2CAD-192</span>، وهو معيار خارجي لا تشغّله <span lang="en">CytherAI</span>، مقابل <span data-m="validation:T2C192-IR-0.00:deepcad">10.00%</span> لدى <span lang="en">DeepCAD</span>.</p>
-<p class="cond">يعمل داخل المنشأة، في بيئة خاصة ومعزولة عن الشبكات الخارجية.</p>
+<p>صِف قطعةً، فيحوّل <span lang="en">CytherCAD</span> الوصف إلى تعليمات تبنيها، ويمنع الهندسة غير الصالحة أثناء التوليد، ثم يتحقّق من النتيجة بعد ذلك.</p></div>
+<div class="say" id="cythercad-evidence" data-t="19.2 21.4"><p>يعمل داخل المنشأة، في بيئة خاصة ومعزولة عن الشبكات الخارجية.</p>
 <a class="route" href="cythercad.html">اقرأ سجلّ التحقق ←</a></div>
 </section>
 <section class="passage" id="return" data-t="21 25">
@@ -79,5 +80,5 @@
 </section>
 <section class="close"><div><h2>أخبرنا بما يجب<br>ألّا يحدث أبدًا.</h2><nav><a class="solid" href="contact.html">تحدّث معنا ←</a><span class="mono">contact@cytherai.com</span></nav></div></section>
 </main>
-<footer class="mono"><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="contact.html">تواصل</a> · بالإنجليزية: <a href="../pages/security.html" hreflang="en">الأمن</a> · <a href="../pages/privacy.html" hreflang="en">الخصوصية</a> · <a href="../pages/terms.html" hreflang="en">الشروط</a></span></footer>
+<footer class="mono"><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="contact.html">تواصل</a> · بالإنجليزية: <a href="../pages/brief.html" hreflang="en">الموجز</a> · <a href="../pages/security.html" hreflang="en">الأمن</a> · <a href="../pages/privacy.html" hreflang="en">الخصوصية</a> · <a href="../pages/terms.html" hreflang="en">الشروط</a></span></footer>
 </body></html>

@@ -1,120 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Security Policy | CytherAI</title>
-    <meta name="description" content="CytherAI security policy and vulnerability disclosure process.">
-    <meta property="og:title" content="Security Policy | CytherAI">
-    <meta property="og:description" content="CytherAI security policy and vulnerability disclosure process.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://cytherai.com/pages/security.html">
-    <meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:alt" content="The last frame of CytherAI’s film, a conceptual visualization: a structure of glass and ceramic split by a thin luminous ring, a warm current running through it, beside the line Let AI change things. Keep control of what changes.">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#ECF0F4">
-    <meta name="build-hash" content="502593FFB37C9DEE">
-    <meta name="referrer" content="no-referrer">
-    <link rel="manifest" href="../manifest.webmanifest">
-    <link rel="icon" href="../icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self';">
-    <link rel="stylesheet" href="../css/cytherai.css?v=b5e32dbc846e" integrity="sha384-B97/mAs46sMfkcaRM3fnrydy+hbjU5kvjJ1Aqsjn/qk9MN16Jg/3kURN7q1lqyel" crossorigin="anonymous">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07070a">
+<title>Security Policy — CytherAI</title>
+<meta name="description" content="CytherAI security policy and vulnerability disclosure process.">
+<meta property="og:site_name" content="CytherAI">
+<meta property="og:title" content="Security Policy — CytherAI">
+<meta property="og:description" content="CytherAI security policy and vulnerability disclosure process.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/pages/security.html">
+<link rel="canonical" href="https://cytherai.com/pages/security.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="The last frame of CytherAI’s film, a conceptual visualization: a structure of glass and ceramic split by a thin luminous ring, a warm current running through it, beside the line Let AI change things. Keep control of what changes.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="build-hash" content="9BD0C72EFFCAE053">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+<!-- A room of the front door (css/room.css): the text as it stood on the cold-paper page it replaces
+     (backup/cold-paper-v1/), word for word; only the frame changed. -->
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
+<link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
 </head>
 <body>
-
-<a class="skip-link" href="#main-content">Skip to main content</a>
-
-        <nav class="nav" role="navigation" aria-label="Site">
-        <div class="nav-container">
-            <a href="../index.html" class="nav-brand" aria-label="CytherAI home"><svg class="seal" viewBox="0 0 16 16" width="16" height="16" shape-rendering="crispEdges" aria-hidden="true"><rect width="16" height="16" fill="#101620"/><path fill="#ECF0F4" d="M2 2h1v1h-1zM2 3h1v1h-1zM2 4h1v1h-1zM2 6h1v1h-1zM2 7h1v1h-1zM2 8h1v1h-1zM2 9h1v1h-1zM2 10h1v1h-1zM2 11h1v1h-1zM2 12h1v1h-1zM3 4h1v1h-1zM3 6h1v1h-1zM3 12h1v1h-1zM4 4h1v1h-1zM4 6h1v1h-1zM4 8h1v1h-1zM4 9h1v1h-1zM4 10h1v1h-1zM4 12h1v1h-1zM5 4h1v1h-1zM5 6h1v1h-1zM5 8h1v1h-1zM5 10h1v1h-1zM5 12h1v1h-1zM6 2h1v1h-1zM6 3h1v1h-1zM6 4h1v1h-1zM6 6h1v1h-1zM6 8h1v1h-1zM6 10h1v1h-1zM6 12h1v1h-1zM7 2h1v1h-1zM7 6h1v1h-1zM7 10h1v1h-1zM7 12h1v1h-1zM8 2h1v1h-1zM8 6h1v1h-1zM8 7h1v1h-1zM8 8h1v1h-1zM8 10h1v1h-1zM8 11h1v1h-1zM8 12h1v1h-1zM9 2h1v1h-1zM9 8h1v1h-1zM10 2h1v1h-1zM10 8h1v1h-1zM10 9h1v1h-1zM10 10h1v1h-1zM11 2h1v1h-1zM11 10h1v1h-1zM12 2h1v1h-1zM12 3h1v1h-1zM12 4h1v1h-1zM12 5h1v1h-1zM12 6h1v1h-1zM12 7h1v1h-1zM12 8h1v1h-1zM12 9h1v1h-1zM12 10h1v1h-1z"/></svg>CYTHERAI</a>
-            <span class="nav-scope">SECURITY &middot; <b>PUBLIC SURFACE</b></span>
-            <ul class="nav-links">
-                <li><a href="brief.html">Brief</a></li>
-                <li><a href="../contact.html">Contact</a></li>
-                <li><a href="security.html" aria-current="page">Security</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-                <li><a href="terms.html">Terms</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <main id="main-content">
-        <article class="section">
-            <div style="max-width: 700px; margin: 0 auto; padding: 0 1.5rem;">
-                <div class="hero-stamp">SECURITY</div>
-                <h1 style="margin-bottom: 2rem;">Security Policy</h1>
-                <p style="color: var(--ink-quiet); font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; margin-bottom: 3rem;">
-                    Effective: 1 January 2025 &middot; Last updated: 1 January 2025
-                </p>
-
-                <div style="color: var(--ink-mid); line-height: 1.85; font-size: .9rem;">
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Security Posture</h2>
-                    <p>Security is a first principle at CytherAI, not a compliance checkbox. Our public-facing properties are designed with minimal attack surface: no third-party scripts, no client-side tracking, no external dependencies beyond the hosting provider.</p>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Vulnerability Disclosure</h2>
-                    <p>If you discover a security vulnerability in any CytherAI property, we ask that you disclose it responsibly.</p>
-
-                    <div style="background: var(--paper-lifted); border: 1px solid var(--rule); padding: 1.5rem; margin: 1.5rem 0;">
-                        <p style="margin-bottom: .75rem;"><strong style="color: var(--ink);">Report to:</strong> <a href="mailto:security@cytherai.com" style="color: var(--accent);">security@cytherai.com</a></p>
-                        <p style="margin-bottom: .75rem;"><strong style="color: var(--ink);">Encryption:</strong> PGP key available upon request</p>
-                        <p><strong style="color: var(--ink);">Response time:</strong> Initial acknowledgement within 48 hours</p>
-                    </div>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">What to Include</h2>
-                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
-                        <li>Description of the vulnerability and its potential impact</li>
-                        <li>Steps to reproduce</li>
-                        <li>Affected URL, endpoint, or component</li>
-                        <li>Your contact information for follow-up</li>
-                    </ul>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Our Commitments</h2>
-                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
-                        <li>We will acknowledge receipt within 48 hours</li>
-                        <li>We will provide an assessment and expected remediation timeline</li>
-                        <li>We will not take legal action against good-faith security researchers</li>
-                        <li>We will credit reporters (with permission) once the issue is resolved</li>
-                    </ul>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">What We Ask</h2>
-                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
-                        <li>Do not access or modify data belonging to other users</li>
-                        <li>Do not degrade the availability of our services</li>
-                        <li>Allow reasonable time for remediation before public disclosure</li>
-                        <li>Do not use automated scanning tools against production systems without prior coordination</li>
-                    </ul>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Scope</h2>
-                    <p>This policy applies to:</p>
-                    <ul style="padding-left: 1.5rem; margin-top: .75rem;">
-                        <li>cytherai.com and all subdomains</li>
-                        <li>Public-facing APIs and services operated by CytherAI</li>
-                    </ul>
-                    <p style="margin-top: .75rem;">Client-specific systems deployed under engagement agreements are covered by separate security terms within those agreements.</p>
-
-                    <h2 style="font-size: 1.1rem; color: var(--ink); margin: 2.5rem 0 1rem;">Contact</h2>
-                    <p>Security issues: <a href="mailto:security@cytherai.com" style="color: var(--accent);">security@cytherai.com</a></p>
-                    <p style="margin-top: .5rem;">General inquiries: <a href="mailto:contact@cytherai.com" style="color: var(--accent);">contact@cytherai.com</a></p>
-                </div>
-            </div>
-        </article>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-text">&copy; <span class="js-year">2026</span> CytherAI</div>
-            <ul class="footer-links">
-                <li><a href="security.html" aria-current="page">Security</a></li>
-                <li><a href="privacy.html">Privacy</a></li>
-                <li><a href="terms.html">Terms</a></li>
-            </ul>
-        </div>
-    </footer>
-
+<header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#principle">← The three systems</a></nav></header>
+<main>
+<article class="legal">
+<span class="label">Security</span>
+<h1>Security Policy</h1>
+<p class="dates">Effective: 1 January 2025 &middot; Last updated: 1 January 2025</p>
+<h2>Security Posture</h2>
+<p>Security is a first principle at CytherAI, not a compliance checkbox. Our public-facing properties are designed with minimal attack surface: no third-party scripts, no client-side tracking, no external dependencies beyond the hosting provider.</p>
+<h2>Vulnerability Disclosure</h2>
+<p>If you discover a security vulnerability in any CytherAI property, we ask that you disclose it responsibly.</p>
+<div class="box">
+<p><strong>Report to:</strong> <a href="mailto:security@cytherai.com">security@cytherai.com</a></p>
+<p><strong>Encryption:</strong> PGP key available upon request</p>
+<p><strong>Response time:</strong> Initial acknowledgement within 48 hours</p>
+</div>
+<h2>What to Include</h2>
+<ul>
+<li>Description of the vulnerability and its potential impact</li>
+<li>Steps to reproduce</li>
+<li>Affected URL, endpoint, or component</li>
+<li>Your contact information for follow-up</li>
+</ul>
+<h2>Our Commitments</h2>
+<ul>
+<li>We will acknowledge receipt within 48 hours</li>
+<li>We will provide an assessment and expected remediation timeline</li>
+<li>We will not take legal action against good-faith security researchers</li>
+<li>We will credit reporters (with permission) once the issue is resolved</li>
+</ul>
+<h2>What We Ask</h2>
+<ul>
+<li>Do not access or modify data belonging to other users</li>
+<li>Do not degrade the availability of our services</li>
+<li>Allow reasonable time for remediation before public disclosure</li>
+<li>Do not use automated scanning tools against production systems without prior coordination</li>
+</ul>
+<h2>Scope</h2>
+<p>This policy applies to:</p>
+<ul>
+<li>cytherai.com and all subdomains</li>
+<li>Public-facing APIs and services operated by CytherAI</li>
+</ul>
+<p>Client-specific systems deployed under engagement agreements are covered by separate security terms within those agreements.</p>
+<h2>Contact</h2>
+<p>Security issues: <a href="mailto:security@cytherai.com">security@cytherai.com</a></p>
+<p>General inquiries: <a href="mailto:contact@cytherai.com">contact@cytherai.com</a></p>
+</article>
+</main>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="brief.html">Brief</a> · <a href="../contact.html">Contact</a> · <a href="security.html" aria-current="page">Security</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></footer>
 </body>
 </html>

@@ -6,6 +6,8 @@ ar/awc-os.html
 ar/cythercad.html
 CNAME
 .nojekyll
+robots.txt
+sitemap.xml
 contact.html
 404.html
 pages/brief.html
@@ -15,7 +17,6 @@ pages/terms.html
 js/film.js
 css/film.css
 css/room.css
-css/cytherai.css
 sw.js
 manifest.webmanifest
 icon.svg
@@ -25,9 +26,6 @@ assets/icons/icon-180.png
 assets/icons/icon-192.png
 assets/icons/icon-512.png
 assets/icons/icon-512-maskable.png
-assets/brief/exhibit-a-boundary.svg
-assets/brief/exhibit-b-strata.png
-assets/error/plate-empty.svg
 adii/index.html
 adii/favicon.svg
 adii/fonts/OFL.txt

@@ -219,17 +219,18 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## EXHIBIT-A — the constraint boundary
+## EXHIBIT-A — the constraint boundary, retired
 
 | | |
 |---|---|
+| Retired | 2026-10-21: served as `assets/brief/exhibit-a-boundary.svg` until the cold-paper pages became rooms of the front door (`css/room.css`), at the owner's direction (*do the brief, the legal pages and the 404*); the bytes and their generator moved whole to `backup/cold-paper-v1/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-003 |
 | Source study | `docs/audit/generation-studies/img/IMG-003-exhibit-a-composition-study.png` (visual-work, round 1) — composition reference only; no study pixel ships |
 | Classification | **ILLUSTRATIVE** — the adjacent caption states it: `FIGURE — ILLUSTRATIVE · NOT A MEASUREMENT` |
 | Command | `python3 tools/gen-exhibit-a.py` (LCG seed 11, grid 32px) |
 | Canonical inputs | None — a fixed algorithm and seed; the SVG is a pure function of the script. |
 | Method | SVG, 2560×800 (16:5): `#E0E6EF` ground; 1px hairline grid at ink opacity 0.12; eight open rejected rectilinear fragments (ink, opacity 0.14–0.25) thinning toward the left; exactly one closed axis-aligned cobalt ring — a rectangle with non-overlapping castellation notches, simple by construction. SVG chosen over PNG: rectilinear hairlines are resolution-independent, the file is 3 KB against ~100 KB raster, CSP `img-src 'self'` admits it, and `.svg` MIME is already in the deployment contract. |
-| Output | `assets/brief/exhibit-a-boundary.svg` · displayed in `pages/brief.html` §02 Exhibit A above the record type line |
+| Output | `backup/cold-paper-v1/assets/brief/exhibit-a-boundary.svg` · displayed in `pages/brief.html` §02 Exhibit A above the record type line |
 | SHA-256 | `ab3dbd18f85403eafce10c070ffd461e17c248c0d936d2a87fef34b6ad0335ca` |
 | Determinism | Pure text generation, no clock, no environment; two runs byte-identical. |
 | Acceptance checks | Exactly one accent element; the ring is closed, axis-aligned, spur-free and non-self-intersecting (segment-pair receipt); ring bbox inside the right 40% and clear of the top/bottom 15%; 8 fragments (window 8–12), all open, all axis-aligned, none left of x=640 — the left 25% label lane carries grid only; palette closed over {`#E0E6EF`, `#101620`, `#2036C7`}; no text, no curve commands, no arrows. |
@@ -239,17 +240,18 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## EXHIBIT-B — the event strata
+## EXHIBIT-B — the event strata, retired
 
 | | |
 |---|---|
+| Retired | 2026-10-21: served as `assets/brief/exhibit-b-strata.png` until the cold-paper pages became rooms of the front door (`css/room.css`), at the owner's direction (*do the brief, the legal pages and the 404*); the bytes and their generator moved whole to `backup/cold-paper-v1/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-004 |
 | Source study | `docs/audit/generation-studies/img/IMG-004-exhibit-b-composition-study.png` (visual-work, round 1) — composition reference only; no study pixel ships |
 | Classification | **ILLUSTRATIVE** — captioned `FIGURE — ILLUSTRATIVE · NOT A MEASUREMENT` |
 | Command | `python3 tools/gen-exhibit-b.py` (integer-hash stipple, seed 5) |
 | Canonical inputs | None — fixed algorithm and seed. |
 | Method | PNG, 2560×800: nine horizontal strata of per-pixel Bernoulli stipple under a deterministic integer hash — accumulation, not gradient; every pixel is exactly one of four colours. Coverage ramp 0.015 → 0.92 top-to-bottom; boundaries are piecewise-linear deposition lines (±9px, control points every 160px); stratum 8 of 9 is thin (48px nominal) and cobalt. |
-| Output | `assets/brief/exhibit-b-strata.png` · 247,669 bytes · displayed in `pages/brief.html` §03 Exhibit B above the record type line |
+| Output | `backup/cold-paper-v1/assets/brief/exhibit-b-strata.png` · 247,669 bytes · displayed in `pages/brief.html` §03 Exhibit B above the record type line |
 | SHA-256 | `ff344466b0cfb4c48c8326144e4687012bc9b83d25165c0736316feb85c72149` |
 | Determinism | Pure integer arithmetic, no clock; two runs byte-identical. |
 | Acceptance checks | Nine strata, ink coverage strictly increasing downward (0.015 / 0.040 / 0.089 / 0.159 / 0.259 / 0.399 / 0.549 / 0.698 / 0.921); accent pixels 86,305 in the lower third and **0** above it; every stratum present at both 64px edge columns at ≥ 40% of its interior coverage (no truncation); palette exactly {`#E0E6EF`, `#3A4658`, `#101620`, `#2036C7`} — 4 colours total, which also proves stipple-not-gradient. |
@@ -259,17 +261,18 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## EMPTY-PLATE — the 404 emblem
+## EMPTY-PLATE — the 404 emblem, retired
 
 | | |
 |---|---|
+| Retired | 2026-10-21: served as `assets/error/plate-empty.svg` until the cold-paper pages became rooms of the front door (`css/room.css`), at the owner's direction (*do the brief, the legal pages and the 404*); the bytes and their generator moved whole to `backup/cold-paper-v1/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-005 |
 | Source study | `docs/audit/generation-studies/img/IMG-005-empty-plate-candidate.png` (visual-work, round 1) — reference only; the 1024px study is not upscaled and does not ship |
 | Classification | **ILLUSTRATIVE** — decorative on `404.html` (`alt=""`); the explanation is live HTML |
 | Command | `python3 tools/gen-empty-plate.py` (LCG seed 3) |
 | Canonical inputs | None — fixed algorithm and seed. |
 | Method | Transparent SVG, 1200×1200: one square hairline frame (720×720 = 60%, ink at 0.16, 2px stroke) and 200 fixed-seed stipple deposits entering from the frame's lower-left corner and dying out before the center. No accent — nothing is verified on an empty plate. CSS supplies the cold-paper ground. |
-| Output | `assets/error/plate-empty.svg` · displayed on the new `404.html` |
+| Output | `backup/cold-paper-v1/assets/error/plate-empty.svg` · displayed on the new `404.html` |
 | SHA-256 | `274b9c7ef354b50a50e8c840a9a03558b8ffad5b85019d9d88dad93f6641ab65` |
 | Determinism | Pure LCG; two runs byte-identical. |
 | Acceptance checks | 200 deposits (window 180–220), all inside the frame; nearest deposit 133px from center (floor 110) — the center is genuinely empty; drift density strictly decreasing (95/54/51 per band); one stroked element (the frame); no accent; no opaque ground. |

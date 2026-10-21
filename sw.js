@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-502593FFB37C9DEE';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-9BD0C72EFFCAE053';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -21,7 +21,7 @@ var ASSETS = [
   // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
   // its type with (shared with adii/)
   'js/film.js?v=0391e2e848d3',
-  'css/film.css?v=6369e59df772',
+  'css/film.css?v=ce56b6fb0b6a',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'film/passage-adii-landscape.jpg',
@@ -37,10 +37,8 @@ var ASSETS = [
   'adii/fonts/ibm-plex-mono-400.woff2',
   'fonts/ibm-plex-sans-arabic-300.woff2',
   'fonts/ibm-plex-sans-arabic-400.woff2',
-  // subpage stylesheet
-  'css/cytherai.css?v=b5e32dbc846e',
-  // the stylesheet of the rooms: the contact pages above draw with it
-  'css/room.css?v=5896fa5ef786',
+  // the stylesheet of the rooms: the contact pages, the brief and the legal pages above draw with it
+  'css/room.css?v=f8162f3f3b69',
   'manifest.webmanifest',
   'icon.svg'
 ];
