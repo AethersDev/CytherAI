@@ -1,6 +1,9 @@
-# The passage: under the visitor's scroll, the film's final composition opens into ADII's scene. Twelve seconds,
-# scrubbed by scrolling on the front door (js/film.js), never played.
+# The passage: under the visitor's scroll, the film's final composition opens into ADII's scene, then AWC-OS's and
+# CytherCAD's, and returns to the film's own view. Twenty-five seconds, scrubbed by scrolling on the front door
+# (js/film.js), never played. Its first twelve, ADII's, were rendered first (2026-10-20) and are kept: nothing here
+# changes a frame before 12.0 s, so the rest is rendered from there on (FROM) and joined to them.
 # blender -b --factory-startup <dir>/film-<l|p>.blend --python-exit-code 1 -P tools/render-passage.py -- <l|p> <stills|anim> <outdir> <WxH> <samples> [t1,t2,...]
+# (Environment: FROM, the passage second an anim render starts at: 12 renders what followed ADII's, frames 576 on.)
 # The .blend is the film's own scene, written by `tools/render-film.py -- <l|p> blend <dir> <film's WxH> <samples>`, so the
 # passage begins on the film's last frame (288) and continues one world; the film's script is not touched.
 # (Environment: TL, seconds per frame for Cycles, as the film's.)
@@ -12,6 +15,14 @@
 # the line, as the refused slab did. Two separate checks examine it, as adii/ states: the authorizer's (the change is
 # within what ADII may change: the slot lights) and the validator's (the data rebuilt with the change: a scan runs the
 # row and the slot holds). Only then does it cross; the wrong value steps back behind it, kept, not erased.
+# AWC-OS (awc-os/: EXECUTED · REFUSED · BLOCKED; a refusal with a permitted alternative; no rule relaxed): the camera
+# rises along the line and ADII's row sinks away; the rule is an opening on the line, two lit jaws that never move; a
+# program too tall for it stops a fraction short, its light goes out and it is set aside, and its alternative, lower,
+# passes through the same opening. CytherCAD (pages/brief.html): that shape, come to rest, is built into a part, a block
+# with a step and a bore, which turns to show them while its dimensions settle; the refused program turns back out of the
+# frame. The page introduces CytherCAD before the shape takes any form: a shared principle, not a pipeline.
+# Then the camera returns to where the film ended, out of the plane, so the line is the ring again; the structure closes
+# back toward it with the three systems' work between, and what was refused stays short of it.
 import bpy, math, os, sys
 from mathutils import Vector, Matrix, Quaternion
 
@@ -23,7 +34,7 @@ SPP = int(args[4])
 TIMES = [float(x) for x in args[5].split(',')] if MODE == 'stills' else []
 PORTRAIT = ORIENT == 'p'
 scn = bpy.context.scene
-FPS, F0, DUR = 24, 288, 12.0          # F0: the film's last frame, the passage's first
+FPS, F0, DUR = 24, 288, 25.0          # F0: the film's last frame, the passage's first
 NP = int(DUR * FPS)
 times = [n / FPS for n in range(NP)]  # passage seconds of frames F0 .. F0 + NP - 1
 if scn.frame_end != F0 or bpy.data.objects.get('hero') is None: raise SystemExit('open the film\'s own scene: tools/render-film.py -- <l|p> blend …')
@@ -74,8 +85,9 @@ for o in list(ROOT.children):              # the ordered side and the group that
     o.parent = RIGHT if o is ORDER or (TO_ROOT @ o.matrix_world).translation.x >= 0.5 else LEFT
 for o in TILES:                              # left standing: out of ORDER, at the place the film left them
     m = TO_ROOT @ o.matrix_world; o.parent = ROOT; o.matrix_basis = m
-key(LEFT, 'location', [(-SPREAD * ss(*PART, t), 0, 0) for t in times])
-key(RIGHT, 'location', [(SPREAD * ss(*PART, t), 0, 0) for t in times])
+CLOSE = (21.5, 24.5)                         # the close: the halves come back toward the line, short of the work between
+key(LEFT, 'location', [(-SPREAD * ss(*PART, t) + 7.0 * ss(*CLOSE, t), 0, 0) for t in times])
+key(RIGHT, 'location', [(SPREAD * ss(*PART, t) - 1.5 * ss(*CLOSE, t), 0, 0) for t in times])
 
 # ---------- the row of values ----------
 X0, DX, BW, Y_ROW, Z_B = 0.45, 0.5, 0.28, -2.2, 0.5   # the row stands above the current, which runs below it
@@ -156,16 +168,86 @@ def scan_x(t):                                # steady across the values in view
 key(scan, 'location', [(scan_x(t), YL - 0.03, Z_B + HC / 2) for t in times])   # in front of the slot's frame: lines of light pass, never meet
 light_up(smat, [6.0 * ss(VAL[0] - 0.1, VAL[0] + 0.05, t) * (1 - ss(VAL[1] - 0.15, VAL[1], t)) for t in times])
 
+# ---------- 02 AWC-OS: one fixed rule, one changed proposal ----------
+YA, ZA, OPEN = 1.0, 2.3, 0.5                   # the lane: behind the axis, above ADII's row, inside the ring (r < 2.8 at the line), low
+                                               # enough that the line runs out of the frame above the opening
+def ease_out(a, b, t): x = min(1.0, max(0.0, (t - a) / (b - a))); return 1 - (1 - x) ** 3
+for n, z in enumerate((ZA - OPEN / 2, ZA + OPEN / 2)):   # the rule: an opening on the line, lit as the camera reaches it
+    jaw, jm = glow('rule%d' % n, WARM_LIGHT, 0.5, 2 * R, 2 * R); jaw.location = (0, YA, z)
+    light_up(jm, [4.0 * ss(12.0, 12.4, t) for t in times])
+def program(name, mat):                        # a proposed program: a plate with its light along its face
+    o = box(name, 1, 1, 1, mat)
+    strip, sm = glow(name + '-light', WARM_LIGHT, 1, 1, 1); strip.parent = o
+    strip.location = (0, -0.6, 0.3); strip.scale = (0.75, 0.24, 0.06)   # in the plate's unit frame: its upper face
+    return o, sm
+P1W, P1H = 0.9, 0.72                           # refused: taller than the opening
+p1, p1m = program('refused-program', bpy.data.materials['ceramic'])
+P1STOP = -0.25 - 0.14 - P1W / 2                 # a fraction short of the jaws, as the refused slab stopped short of the plane
+ASIDE = (0.0, 0.9, 0.75) if PORTRAIT else (0.8, 0.9, 0.65)   # back along the lane, away, up: set aside out of the lane as AWC-OS's
+                                               # sequence set its refused program aside (on a phone back is down, into the words), and
+                                               # beyond the reach of the structure's fins (r 3.08) when it closes
+def p1_at(t):
+    a = ss(14.2, 14.8, t)
+    x = -7.0 + (P1STOP + 7.0) * ease_out(12.9, 13.9, t) - ASIDE[0] * a - 2.6 * ss(16.0, 17.6, t)   # then turned back,
+    return (x, YA + ASIDE[1] * a, ZA + ASIDE[2] * a)                                               # out of the part's frame
+key(p1, 'location', [p1_at(t) for t in times])
+key(p1, 'scale', [((P1W, 0.05, P1H) if t >= 12.8 else (0, 0, 0)) for t in times])   # it exists from its arrival
+light_up(p1m, [3.0 * (1 - ss(13.9, 14.2, t)) for t in times])    # refused: its light goes out
+
+# ---------- 03 CytherCAD: the permitted shape becomes a part ----------
+PX, PZ = 0.95, ZA + 0.15                       # the part's pivot: it turns about it to show the bore and the step
+part = bpy.data.objects.new('PART', None); part.parent = ROOT; part.location = (PX, YA, PZ); scn.collection.objects.link(part)
+part.rotation_mode = 'XYZ'
+key(part, 'rotation_euler', [(0, 0, math.radians(28) * ss(18.4, 19.4, t)) for t in times])
+P2W, P2H = 1.1, 0.34                           # permitted: lower than the opening, so it passes; then the part's base
+BD, BH, SL, SH = 0.6, 0.4, 0.45, 0.32          # the base it becomes (as long as the program, deeper and taller), the step on its far end
+BR, BX = 0.11, -0.25                           # the bore: its radius, and where it goes through the base
+p2, p2m = program('permitted-program', bpy.data.materials['hero'])
+p2.parent = part
+def p2_at(t):                                  # local to the part: from far left, through the opening, to its place
+    x = -7.0 + (PX + 7.0) * ease_out(14.3, 16.2, t)
+    return (x - PX, 0, ZA - PZ)
+key(p2, 'location', [p2_at(t) for t in times])
+key(p2, 'scale', [((P2W, 0.05 + (BD - 0.05) * ss(16.0, 16.8, t), P2H + (BH - P2H) * ss(16.0, 16.8, t)) if t >= 14.2 else (0, 0, 0)) for t in times])
+light_up(p2m, [3.0 * (1 - ss(16.0, 16.4, t)) for t in times])    # a plate no longer: its light gives way to the part
+step = box('step', 1, 1, 1, bpy.data.materials['hero']); step.parent = part
+for v in step.data.vertices: v.co.z += 0.5                         # it grows up from the base's top
+key(step, 'location', [(P2W / 2 - SL / 2, 0, ZA + BH / 2 - PZ) for t in times])   # at the base's far end
+key(step, 'scale', [((SL, BD, SH * max(1e-3, ss(16.8, 17.6, t))) if t >= 16.8 else (0, 0, 0)) for t in times])
+bpy.ops.mesh.primitive_cylinder_add(radius=BR, depth=1.2, vertices=64); tmp = bpy.context.object; bore_mesh = tmp.data; bpy.data.objects.remove(tmp)
+cutter = bpy.data.objects.new('bore', bore_mesh); cutter.parent = part; scn.collection.objects.link(cutter)
+cutter.rotation_euler = (math.pi / 2, 0, 0); cutter.hide_render = True   # the drill: unseen, its cut seen
+key(cutter, 'location', [(BX, -1.0 + 1.0 * ss(17.6, 18.4, t), ZA - PZ) for t in times])   # it drills the bore along y
+bore = p2.modifiers.new('bore', 'BOOLEAN'); bore.operation = 'DIFFERENCE'; bore.object = cutter; bore.solver = 'EXACT'
+COOL = (0.8, 0.86, 1.0, 1)
+def dimension(name, a, b, at):                 # a measured span: a line with end ticks, drawn from its middle at t = at
+    (xa, za), (xb, zb) = a, b
+    flat = abs(zb - za) < 1e-6; L = math.hypot(xb - xa, zb - za)
+    parts = [(((xa + xb) / 2, (za + zb) / 2), (L, 2 * R, 2 * R) if flat else (2 * R, 2 * R, L))]
+    for (x, z) in (a, b):                      # the ticks, across the line
+        parts.append(((x, z), (2 * R, 2 * R, 0.08) if flat else (0.08, 2 * R, 2 * R)))
+    for k, ((x, z), size) in enumerate(parts):
+        o, m = glow('%s%d' % (name, k), COOL, 1, 1, 1); o.parent = part
+        o.location = (x - PX, -BD / 2 - 0.03, z - PZ)
+        grow = [ss(at, at + 0.45, t) for t in times]
+        key(o, 'scale', [tuple(max(1e-4, c * (g if (k == 0 and c == max(size)) else min(1.0, g * 2))) for c in size) for g in grow])
+        light_up(m, [4.0 * g for g in grow])
+base_lo, base_hi = PX - P2W / 2, PX + P2W / 2   # the base's span along the axis
+dimension('length', (base_lo, ZA - BH / 2 - 0.1), (base_hi, ZA - BH / 2 - 0.1), 19.0)
+dimension('height', (base_hi + 0.08, ZA - BH / 2), (base_hi + 0.08, ZA + BH / 2 + SH), 19.4)   # base and step
+dimension('bore', (PX + BX - BR, ZA), (PX + BX + BR, ZA), 19.8)
+
 # ---------- the world keeps time; the ring keeps its light ----------
 key(bpy.data.materials['current'].node_tree, 'nodes["T"].outputs[0].default_value', [((F0 - 1 + n) / FPS,) for n in range(NP)])
-key(bpy.data.materials['rim'].node_tree, 'nodes["Emission"].inputs[1].default_value', [(0.71 + 1.3 * ss(0.4, 2.6, t),) for t in times])
+key(bpy.data.materials['rim'].node_tree, 'nodes["Emission"].inputs[1].default_value', [(0.71 + 1.3 * ss(0.4, 2.6, t) * (1 - ss(*CLOSE, t)),) for t in times])
 cnt = bpy.data.materials['current'].node_tree
 pulse = next(n for n in cnt.nodes if n.type == 'MATH' and n.operation == 'MULTIPLY_ADD' and abs(n.inputs[1].default_value - 16.0) < 1e-6)
-dim = [1 - 0.4 * ss(2.0, 5.0, t) for t in times]   # the current's strength, 16 per pulse over 4, dims once it is seen bare
+dim = [1 - 0.4 * ss(2.0, 5.0, t) * (1 - ss(*CLOSE, t)) for t in times]   # the current's strength, 16 per pulse over 4, dims
+                                                                         # once it is seen bare, and is the film's again at the close
 key(cnt, 'nodes["%s"].inputs[1].default_value' % pulse.name, [(16.0 * d,) for d in dim])
 key(cnt, 'nodes["%s"].inputs[2].default_value' % pulse.name, [(4.0 * d,) for d in dim])
 
-# ---------- the camera: into the ring's plane, then in, the line held where the ring stood ----------
+# ---------- the camera: into the ring's plane, then in, the line held where the ring stood; up it, in, and back out ----------
 cam = bpy.data.objects['cam']; camd = cam.data
 C0, Q0 = cam.matrix_world.to_translation(), cam.matrix_world.to_quaternion()
 def project(c, q, p):
@@ -178,39 +260,54 @@ U0 = project(C0, Q0, CENTRE)                 # where the ring stood when the fil
 if PORTRAIT:
     KEYS = [(0, None, None), (2.6, (0, -14.5, 0), (0, 0, 0)), (4.6, (-0.1, -10.0, 0), (-0.1, 0, 0)), (6.2, (-0.2, -7.0, 0), (-0.2, 0, 0)),
             (7.8, (-0.15, -6.7, 0), (-0.15, 0, 0)), (12, (-0.15, -6.7, 0), (-0.15, 0, 0))]
+    LATER = [(12, (-0.15, -6.7, 0), (-0.15, 0, 0), 0), (13.2, (-2.35, -4.0, 0), (-2.35, 0, 0), 0), (16.0, (-2.35, -4.0, 0), (-2.35, 0, 0), 0),
+             (18.0, (-3.2, -3.25, 0), (-2.6, 1.0, 0), 0), (21.0, (-3.2, -3.2, 0), (-2.6, 1.0, 0), 0)]
 else:
     KEYS = [(0, None, None), (2.6, (0, -15.5, 2.6), (0, 0, 0.3)), (4.6, (0, -11.0, 1.6), (0, 0, 0.9)), (6.2, (0, -6.5, 1.0), (0, 0, 1.0)),
             (7.8, (0, -5.95, 1.0), (0, 0, 1.0)), (12, (0, -5.65, 1.0), (0, 0, 1.0))]
+    LATER = [(12, (0, -5.65, 1.0), (0, 0, 1.0), 0), (13.2, (0, -4.4, 2.46), (0, 0, 2.46), 0), (16.0, (0, -4.4, 2.46), (0, 0, 2.46), 0),
+             (18.0, (0, -3.75, 3.2), (0, 1.0, 2.6), 0), (21.0, (0, -3.7, 3.2), (0, 1.0, 2.6), 0)]
 L0 = C0 + Q0 @ Vector((0, 0, -(camd.dof.focus_distance)))
 KEYS[0] = (0, tuple(C0), tuple(L0))
-def spline(t, idx):
-    ts = [k[0] for k in KEYS]; ps = [Vector(k[idx]) for k in KEYS]
+LATER += [(CLOSE[1], tuple(C0), tuple(L0), 0), (DUR, tuple(C0), tuple(L0), 0)]   # the close: back where the film ended
+def spline(t, idx, keys):
+    """Catmull-Rom through the keys; a key's fourth value is its tension (0: the camera stops there; else 1)"""
+    ts = [k[0] for k in keys]; ps = [Vector(k[idx]) for k in keys]; tn = [k[3] if len(k) > 3 else 1.0 for k in keys]
     i = max(0, min(len(ts) - 2, next((n for n in range(len(ts) - 1) if t < ts[n + 1]), len(ts) - 2)))
     h = ts[i + 1] - ts[i]; u = min(1.0, max(0.0, (t - ts[i]) / h))
-    m0 = (ps[i + 1] - ps[i - 1]) / (ts[i + 1] - ts[i - 1]) * h if i > 0 else Vector((0, 0, 0))
-    m1 = (ps[i + 2] - ps[i]) / (ts[i + 2] - ts[i]) * h if i + 2 < len(ts) else Vector((0, 0, 0))
+    m0 = (ps[i + 1] - ps[i - 1]) / (ts[i + 1] - ts[i - 1]) * h * tn[i] if i > 0 else Vector((0, 0, 0))
+    m1 = (ps[i + 2] - ps[i]) / (ts[i + 2] - ts[i]) * h * tn[i + 1] if i + 2 < len(ts) else Vector((0, 0, 0))
     return (2 * u**3 - 3 * u**2 + 1) * ps[i] + (u**3 - 2 * u**2 + u) * m0 + (-2 * u**3 + 3 * u**2) * ps[i + 1] + (u**3 - u**2) * m1
 IN = (0.25, 2.6)                             # held a moment on the film's last frame, then into the plane
 locs, quats, shifts, focus, prev = [], [], [], [], None
 for t in times:
-    w = 1 - ss(*IN, t)                       # the camera's distance from the plane, as a fraction of where the film left it
-    p, tg = spline(t, 1), spline(t, 2)
-    if PORTRAIT: p.z, tg.z = C0.z * w, L0.z * w + (1 - w) * p.z   # level, and in the plane z = 0
-    else: p.x, tg.x = C0.x * w, L0.x * w
+    if t <= 12:                              # ADII's, as first rendered
+        w = 1 - ss(*IN, t)                   # the camera's distance from the plane, as a fraction of where the film left it
+        p, tg = spline(t, 1, KEYS), spline(t, 2, KEYS)
+        if PORTRAIT: p.z, tg.z = C0.z * w, L0.z * w + (1 - w) * p.z   # level, and in the plane z = 0
+        else: p.x, tg.x = C0.x * w, L0.x * w
+    else:                                    # on from rest: in the plane until the close takes it back out
+        p, tg = spline(t, 1, LATER), spline(t, 2, LATER)
     q = (tg - p).to_track_quat('-Z', 'Y')
     if prev is not None and prev.dot(q) < 0: q = -q
     prev = q
     u, v = project(p, q, CENTRE)             # the lens shift that keeps the ring's centre where it stood
-    rise = 0.0 if PORTRAIT else -0.085 * ss(3.0, 6.0, t)   # the frame lowered: the row above the band the words take
-    shifts.append(((u - U0[0]) if not PORTRAIT else 0.0, (v - U0[1]) if PORTRAIT else rise))
+    rise = 0.0 if PORTRAIT else -0.085 * ss(3.0, 6.0, t) * (1 - ss(21.0, CLOSE[1], t))   # the frame lowered: the scene above the
+                                                                                         # band the words take, the film's again at the close
+    lift = -0.17 * ss(12.0, 13.2, t) * (1 - ss(16.0, 18.0, t))                 # on a phone the line rises for AWC-OS: the refused
+                                                                               # program waits below it, above the words
+    shifts.append(((u - U0[0]) if not PORTRAIT else 0.0, (v - U0[1] + lift) if PORTRAIT else rise))
     f_row = (ROOT.matrix_world @ Vector((X0, Y_ROW, 0.6)) - p).length
-    locs.append(tuple(p)); quats.append(tuple(q)); focus.append(((tg - p).length + (f_row - (tg - p).length) * ss(3.0, 5.0, t),))
+    f = (tg - p).length + (f_row - (tg - p).length) * ss(3.0, 5.0, t)            # ADII's row
+    f += ((ROOT.matrix_world @ Vector((0.5, YA, ZA)) - p).length - f) * ss(12.0, 13.0, t)   # the lane, the part
+    f += ((tg - p).length - f) * ss(21.0, CLOSE[1], t)                         # where the film looked
+    locs.append(tuple(p)); quats.append(tuple(q)); focus.append((f,))
 key(cam, 'location', locs); key(cam, 'rotation_quaternion', quats)
 near0 = None; thin = []
 for p in locs:                               # the ring seen edge on is its nearest arc: thinned along its axis as the camera
     ps = TO_ROOT @ Vector(p)                 # nears it, so the line keeps the width it had when the film ended
     near = math.hypot(math.hypot(ps.y, ps.z) - 3.5, ps.x)
-    near0 = near0 or near; thin.append((1, 1, max(0.08, min(1.0, near / near0))))
+    near0 = near0 or near; thin.append((1, 1, max(0.03, min(1.0, near / near0))))
 key(bpy.data.objects['rim'], 'scale', thin)
 axis0 = None; narrow = []
 for p in locs:                               # so do the current and its glass: thinned about the axis as the camera nears
@@ -234,5 +331,6 @@ scn.cycles.time_limit = float(os.environ.get('TL', 0))
 if MODE == 'stills':
     for t in TIMES:
         scn.frame_set(F0 + int(round(t * FPS))); scn.render.filepath = '%s/t%05.2f.png' % (OUT, t); bpy.ops.render.render(write_still=True)
-else:
+else:                                       # FROM: render from that second on (the frames before it are kept)
+    scn.frame_start = F0 + int(round(float(os.environ.get('FROM', 0)) * FPS))
     scn.render.filepath = OUT + '/f'; bpy.ops.render.render(animation=True)

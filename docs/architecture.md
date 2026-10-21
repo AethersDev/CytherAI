@@ -7,10 +7,9 @@ framework, package graph, bundle, or server application.
 
 The homepage is **the film** (since 2026-10-12): a twelve-second film, rendered offline and
 silent, with its sentences as HTML over it; then **the passage** (since 2026-10-20), which the
-scroll moves through: the film's final composition opens into ADII's scene, its words held at
-its moments; then AWC-OS and CytherCAD, each a six-second sequence in the film's materials with
-a headline, two sentences a shipped page states and one route into its evidence; then the
-invitation. Its predecessors are retired
+scroll moves through: the film's final composition opens into ADII's scene, then AWC-OS's and
+CytherCAD's, each with its words at its moments and one route into its evidence, and returns to
+the film's world; then the invitation, over its last frame. Its predecessors are retired
 whole, each a verbatim snapshot with every verifier that established its laws and its own
 `verify.sh`: **THE UNHAPPENED** to `backup/unhappened-v1/` (commit `011ffd0`; this guide as
 it stood for it is `git show 011ffd0:docs/architecture.md`), **the drawing set** to
@@ -22,11 +21,11 @@ nothing of their design is carried into the front door.
 
 ```mermaid
 flowchart TD
-  I["index.html — the film's sentences, the passage's words (the principle, ADII), two systems, the close"] --> CSS2["css/film.css"]
-  I --> F["js/film.js — the film, its cues, the passage, the sequences, the worker"]
-  F --> MED["film/ — two films, the passage, two sequences, their posters and stills"]
+  I["index.html — the film's sentences, the passage's words (the principle, the three systems), the close"] --> CSS2["css/film.css"]
+  I --> F["js/film.js — the film, its cues, the passage, its stills, the worker"]
+  F --> MED["film/ — two films, the passage, their posters and stills"]
   F --> SW["sw.js registration"]
-  RF["tools/render-film.py · tools/render-passage.py · tools/render-systems.py (Blender, offline)"] -.-> MED
+  RF["tools/render-film.py · tools/render-passage.py (Blender, offline)"] -.-> MED
 
   P["contact.html and pages/*.html"] --> CSS["css/cytherai.css"]
 
@@ -42,16 +41,16 @@ flowchart TD
   M --> PM["tools/project-manifest.py"] --> DM["data-m elements on index.html and the brief"]
 ```
 
-The front door loads one stylesheet, `js/theme.js` in the head and one deferred script, all with SRI; `js/film.js`
-reads no module and publishes nothing. No page loads the two record modules (THE EXCEPTION, the
+The front door loads one stylesheet and one deferred script, both with SRI; `js/film.js` reads no module and publishes
+nothing. It is dark whatever the device's theme: light mode (`js/theme.js` and the header's switch) retired on
+2026-10-20 to `backup/theme-switch-v1/`. No page loads the two record modules (THE EXCEPTION, the
 last that did, retired on 2026-10-16 to `backup/exception-v1/`): the projector and the verifiers
 run them under jsc, the manifest first. Their public surface is an inventory
 (`tools/test-api.py`): every symbol is used by a tool, and a symbol with no caller fails.
 
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
-| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through its stretches, seeks, its words' windows, the stills that stand in), the sequences' IntersectionObserver, `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
-| `js/theme.js` | — | `index.html`, `ar/index.html` (head, not deferred) | The theme: the remembered choice or the device's setting, as `data-theme`; the switch (`#theme`) |
+| `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through its stretches, seeks, its words' windows, the stills that stand in), `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
 | `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
 
@@ -59,11 +58,11 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 | Path | Role | Public artifact? | Change rule |
 |---|---|---|---|
-| `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII), the two other systems and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
-| `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections, sequences and figures (`tools/test-site.py`) |
+| `index.html` | The film's sentences, the passage's stretches and words (the principle, ADII, AWC-OS, CytherCAD, the return) and the close | Yes | Every HTML byte moves the build identity: re-stamp after any edit; the invalid rate and its baseline are projector-owned (`data-m`) |
+| `ar/index.html`, `ar/contact.html` | The front door and the contact page in Arabic | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
-| `css/film.css`, `js/film.js`, `js/theme.js` | The front door's style and its scripts | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
-| `film/` | The two films with their final-frame posters, the passage in both orientations with its stills, two sequences with their posters | Yes | Rendered by `tools/render-film.py`, `tools/render-passage.py` (from the film's own scene) and `tools/render-systems.py`; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
+| `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
+| `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/cytherai.css` | Shared subpage style system | Yes | Hashed; its ink law is `tools/test-site.py` |
 | `contact.html` | Contact surface with the repository's one inline form script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes |
@@ -104,37 +103,26 @@ run them under jsc, the manifest first. Their public surface is an inventory
    first frame is the film's last. From then on the scroll names a moment, evenly (each stretch,
    `.passage`, is as tall as its seconds, `data-t`: 2 s a viewport, the stage's own pace), and the
    passage seeks to it, one seek at a time; each of its words (`.say`) fades in and out with the
-   scroll in its window of those seconds. Until it is whole, under reduced motion or
-   after a failed download, the film's element stands on the final frame, and past it on the
-   still of ADII's moment (`film/passage-*.jpg`). Scrolling on past the film ends it; a page
-   that opens past it (an anchor, a restored scroll) never plays it.
-6. Once the passage is whole, the two sequences are warmed in turn: each is given its source,
-   started muted off screen and paused as soon as it plays, so iOS Safari (which downloads a
-   clip only when asked to play it, and buffers all of it first) has it ready. When half of a
-   sequence is in view it plays once from its first frame and holds its last, which is also
-   its poster; leaving view pauses it. One sequence downloads at a time (the slot; the film is
-   outside it): a free slot goes to the first sequence in view still waiting for it, else to
-   the next to warm; one arriving takes it from a clip warming off screen (which drops its
-   download and goes back in the queue), never from another in view, which it waits behind.
-   A slow start is never a failure. Refused, or stopped for
-   `STALL` after it has moved while visible, it drops its source and rests on its poster, and
-   tries again the next time it comes into view (a 250 ms watch runs only between a `playing`
-   event and the next pause or end). An `AbortError` is not a failure. Reduced motion never
-   plays them.
-7. Once the film is still, the service worker registers from the root and is asked to take
+   scroll in its window of those seconds. Past its end it holds its last frame, under the
+   close. Until it is whole, under reduced motion or after a failed download, the film's
+   element stands on the final frame, and past it on the still of each system's moment and of
+   the return (`film/passage-*.jpg`, `STILLS`: each changes between two systems' words).
+   Scrolling on past the film ends it; a page that opens past it (an anchor, a restored
+   scroll) never plays it.
+6. Once the film is still, the service worker registers from the root and is asked to take
    over; its cache name carries the build hash. Its install fetches the precache past the HTTP
-   cache (0.7 MB), which on a first visit would take the link from the film as it starts.
+   cache (1.3 MB, the passage's stills among it), which on a first visit would take the link from the film as it starts.
 
 At steady state nothing runs: no frame is requested (the page asks for one only while it
 scrolls, to seek the passage), no media plays and no timer fires (CY-TEMP-001, `docs/deploy.md`
-§5i). Replay, a scroll, a sequence scrolled back into view, or a turn of the device (the
-sources follow the orientation while still) starts motion again.
+§5i). Replay, a scroll, or a turn of the device (the sources follow the orientation while
+still) starts motion again.
 
 ## State and evidence boundaries
 
 - Canonical facts come from `CytherManifest`: the two front-door figures and the brief's
   validation figures are projections, written into the pages by the projector.
-- The film and the sequences are pre-rendered illustrations. The page says so under the
+- The film and the passage are pre-rendered illustrations. The page says so under the
   film (*A conceptual visualization. It measures no product.*); no motion on the front door
   claims to correspond to a system event, and nothing on it is computed in the browser.
 - Each system's sentences are ones its shipped page states, with its condition beside them
@@ -146,8 +134,8 @@ sources follow the orientation while still) starts motion again.
 
 | Route | Runtime |
 |---|---|
-| `/` or `/index.html` | The film: `css/film.css`, `js/theme.js` and `js/film.js`, all SRI'd; media from `film/` |
-| `/ar/` | The film in Arabic: the same stylesheet, scripts and media |
+| `/` or `/index.html` | The film: `css/film.css` and `js/film.js`, both SRI'd; media from `film/` |
+| `/ar/` | The film in Arabic: the same stylesheet, script and media |
 | `/ar/contact.html` | The contact page in Arabic: shared CSS plus its inline validation/copy script, in Arabic |
 | `/contact.html` | Shared CSS plus one inline validation/copy script |
 | `/pages/brief.html` | Static capability brief and promoted exhibits |
@@ -227,13 +215,13 @@ muted inline autoplay and VoiceOver.
   (`grammar_hash`), and this guide. Each page's `script-src` is exactly what it runs: `'self'` for its own
   scripts, a `sha256-` source per inline script (the contact pages' form script: edit it, and the hash
   `tools/test-site.py` computes must be the one in the page's CSP), `'none'` for none.
-- Change the front door's words: change `index.html` and `ar/index.html` together. A cue, a section, a sequence or a
+- Change the front door's words: change `index.html` and `ar/index.html` together. A cue, a section, a window or a
   figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Re-render
   both cards (`python3 tools/render-og-film.py`, `… ar`) if the statement moves, and record both digests.
-- Add a theme token: give it a value in `:root` and in the light block of `css/film.css`; the ink law reads both.
-- Re-render a film or a sequence: `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> anim <dir> …`
-  or `tools/render-systems.py` (usage in each script's header; the published films used 64
-  samples with `TL=24`/`TL=14` landscape/portrait, the sequences 48 with `TL=10`), encode with
+- Add a token: give it a value in `:root` in `css/film.css`; the ink law reads it. The front door has one theme.
+- Re-render a film: `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> anim <dir> …`
+  (usage in the script's header; the published films used 64
+  samples with `TL=24`/`TL=14` landscape/portrait), encode with
   `ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p
   -movflags +faststart <out>.mp4` (the master) and the last frame as its poster. The films are
   delivered lighter than their masters, because Safari starts a film only once it expects to play
@@ -247,11 +235,14 @@ muted inline autoplay and VoiceOver.
 - Re-render the passage: it is rendered from the film's own scene, so its first frame stays the film's last. Build the
   scene, `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> blend <dir> 1920x1080`
   (`1080x1920` portrait) `64`, then `TL=24` (`TL=14` portrait) `blender -b --factory-startup <dir>/film-<l|p>.blend
-  --python-exit-code 1 -P tools/render-passage.py -- <l|p> anim <dir> 1920x1080 64`, and encode its frames (f0288 on)
+  --python-exit-code 1 -P tools/render-passage.py -- <l|p> anim <dir> 1920x1080 64` (`FROM=12` renders only what follows
+  ADII's twelve seconds, which the script never changes), and encode its frames (f0288–f0887)
   with a keyframe every six (a scrubbed video seeks; each seek decodes from the keyframe before it):
   `ffmpeg -framerate 24 -start_number 288 -i <dir>/f%04d.png -vf scale=1440:810:flags=lanczos` (`810:1440`)
   `-c:v libx264 -preset veryslow -tune film -crf 29 -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p -movflags
-  +faststart -an film/passage-<orientation>.mp4`; its still is the frame at 8.0 s (f0480), `film/passage-<orientation>.jpg`.
+  +faststart -an film/passage-<orientation>.mp4`; its stills, `film/passage-<moment>-<orientation>.jpg`, are the frames
+  at 8.0 s (adii, f0480), 15.42 s (awcos, f0658), 20.58 s (cad, f0782) and its last (close, f0887), named in `STILLS`
+  (`js/film.js`) with the second each stands until.
   The pages' `data-t` name the passage's seconds (a stretch's first and last, a caption's window): move a moment in the
   script and move them with it, on both pages, keeping each stretch as tall as its seconds (50svh a second).
 - Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
