@@ -1519,6 +1519,8 @@ phone's or a Mac's in hand.
 The live origin: not yet observed (CY-ORIGIN-001 is NOT_EVALUATED for this build until it is published and
 `tools/probe-origin.py` reads it).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_983A5A948DF4EF1B`), 59 of 59 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
