@@ -552,6 +552,21 @@ class SiteContractTests(unittest.TestCase):
             self.assertEqual(local_target(page, home["href"]), "ar/index.html" if page.startswith("ar/") else "index.html", page)
             self.assertIn(("footer", {}), tags, page)
 
+    def test_each_evidence_room_returns_to_the_words_that_led_to_it(self) -> None:
+        """An evidence room's way back to the passage lands where the visitor left it: every link from the room to its front
+        door names the passage's words (a .say, by id) that hold the route to this room, and js/film.js brings their moment.
+        It landed on its stretch's first second, before any words, until 2026-10-21 (the owner: restore the ADII position)."""
+        for room, door in (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html")):
+            words = dict(re.findall(r'<div class="say" id="([\w-]+)"[^>]*>(.*?)</div>', (ROOT / door).read_text(encoding="utf-8"), re.S))
+            backs = [a["href"] for t, a in parse_page(room).tags
+                     if t == "a" and "wordmark" not in a.get("class", "") and local_target(room, a["href"]) == door]
+            self.assertTrue(backs, f"{room} has a way back to the passage")
+            for href in backs:
+                fragment = urlsplit(href).fragment
+                self.assertIn(fragment, words, f"{room}: {href} names the passage's words")
+                routes = [local_target(door, u) for u in re.findall(r'<a class="route" href="([^"]+)"', words[fragment])]
+                self.assertIn(room, routes, f"{room}: {href} lands on the words whose route leads to it")
+
     def test_the_passage_moves_evenly(self) -> None:
         """The scroll moves the passage at the stage's own pace, 2 s of it a viewport: each stretch is as tall as its seconds
         at 50svh a second (css/film.css, vh first), and the stretches run on from one another, so no second is held or
@@ -564,6 +579,21 @@ class SiteContractTests(unittest.TestCase):
         for i, a, b in stretches:
             h = round(50 * (b - a))
             self.assertIn(f"#{i}{{height:{h}vh;height:{h}svh}}", css, f"#{i}: {b - a:g} s, {h}svh")
+
+    def test_no_stretch_holds_its_words_beneath_the_next(self) -> None:
+        """The passage's words are fixed at the foot of the frame inside their stretch, with a z-index of their own. A
+        stretch that makes a stacking context holds them inside it, and the next stretch, transparent and later in the
+        page, lies over them: from 2026-10-20 to 2026-10-21 no system's link took a click or a tap, though keyboard focus
+        reached each one. So no rule for a stretch, by its class or its id, may make one."""
+        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        ids = [a["id"] for t, a in parse_page("index.html").tags if "passage" in a.get("class", "").split()]
+        stacking = re.compile(r"(?<![\w-])(z-index|transform|filter|opacity|isolation|contain|will-change|mix-blend-mode|perspective|clip-path|mask)\s*:")
+        rules = re.findall(r"(?<![\w#-])(\.passage|#(?:%s))\{([^}]*)\}" % "|".join(map(re.escape, ids)), css)
+        self.assertEqual({s for s, _ in rules}, {".passage"} | {"#" + i for i in ids}, "every stretch's rules are read")
+        for selector, body in rules:
+            self.assertIsNone(stacking.search(body), f"{selector}{{{body}}} makes a stacking context")
+        say = re.search(r"(?<![\w-])\.say\{([^}]*)\}", css).group(1)
+        self.assertTrue("position:fixed" in say and re.search(r"z-index:\d", say), "the words stand above the scene on their own")
 
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
         """ar/index.html carries index.html's film, cues, the passage's seconds, sections and projected figures, only in
