@@ -2094,6 +2094,90 @@ The live origin's check (CY-ORIGIN-001) follows the owner's publish.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_9BD0C72EFFCAE053`), 63 of 63 served paths matching the artifact.
 
+## 5ae. The passage downloaded whole, and its place kept when the viewport changes — 2026-10-22
+
+Build `5F31ACE5CE649983` (`#reading_ink_5F31ACE5CE649983`, `#film_settle_5F31ACE5CE649983`). It follows the live
+`9BD0C72EFFCAE053` (§5ad).
+
+**The review.** The owner pasted it on 2026-10-22. It measured the live build and a local copy of it, and it withdrew
+the earlier implication that the front door's performance was settled:
+1. Turning the viewport skips part of the story. The resize handler re-measured the stretches and re-read the moment
+   from the unchanged scroll offset. This was confirmed on the live site, at phone size.
+2. In two portrait runs of the local copy, the passage stayed on its stills. Its paused video had stopped downloading
+   at 17.743 of 25 s with readyState 4, while the loader waited for the whole clip. This was not established on the live
+   origin.
+3. Desktop scrolling was responsive.
+4. Full-file transfer times from the live site: portrait film 1.97 s, portrait passage 2.08 s, desktop film 2.73 s.
+
+**Reproduced before anything changed,** by a new regression probe, `tools/probe-passage.py`, on `9BD0C72EFFCAE053`:
+- **Loading.** The probe's server answers the video element's own requests for the passage with its first 60 %, then
+  nothing more. In all four cases (both front doors, a phone upright and on its side) the passage never became active:
+  15 of 25 s buffered, readyState 3 or 4, no `scrub`.
+- **Place.**
+  - A phone-sized window turned at ADII's, AWC-OS's or CytherCAD's words landed at 25.9 s, past the passage (the close).
+    Turned back, it landed at ADII's words, wherever it had started.
+  - A desktop window resized from 1440 × 900 to 1100 × 700 moved the visitor from ADII to AWC-OS (12 → 15.4 s), from
+    AWC-OS to CytherCAD (14.3 → 18.4 s), and from CytherCAD to the end (20.3 → 25.5 s).
+  - A phone turned under Chrome's mobile emulation kept its moment without the page's help: Chrome anchors a turned
+    mobile page itself. A window has no such anchor.
+
+**Now (`js/film.js`).**
+- **Loading.** The passage downloads whole, by a request of its own (`fetch`), and the video plays it from memory
+  (`blob:`). As before, it is asked to play and paused at once, since iOS shows a clip's frames only then. It is ready
+  once the download has ended and its first frame has arrived; the video element's buffering no longer decides. A
+  failed download leaves the stills, as before. The front doors' CSP admits exactly this, `connect-src 'self'` and
+  `media-src 'self' blob:`; every other page still connects nowhere (`tools/test-site.py`).
+- **Place.** The page remembers the moment the scroll last named. A resize that changes the stretches scrolls back to it
+  (`place`, which now carries on past the last stretch at its pace, as `moment` does). A resize that moves no stretch
+  moves nothing (a phone's bars, under `svh`).
+- **A turned phone** stands on the moment's still in the new orientation until that orientation's clip is whole.
+
+**Checked.**
+- **`tools/probe-passage.py` on this build: 22 of 22.**
+  - Loading: 4 of 4, from memory, 25 of 25 s.
+  - Place: 18 of 18. Every moment held within 0.005 s with its words shown, and once the turned clip was whole, its frame
+    was within 0.002 s of the moment.
+  - On `9BD0C72EFFCAE053` the same probe fails 16 of 22, as above. The proof came before the fix.
+- **iOS Simulator** (iOS 26.5 Safari; an instrumented copy of this build, where a same-origin script scrolls and reports).
+  - On both front doors the passage became active from memory (`blob:`, readyState 4) within 0.24–0.41 s of the page's
+    script starting, in the order play, `loadeddata`, pause.
+  - It followed the scroll to 12, 14.324 and 20.299 s, with the right words, and the frame is painted (screenshot).
+  - The simulator cannot be turned from the command line, so rotation was not checked there.
+- **Sustained touch scrolling** through the active portrait passage: Chrome 156 headless, 390 × 844, a 6.4 s swipe, in
+  both languages, at CPU 1× and 4×.
+  - 417 frames. Intervals were 16.7 ms median and 16.8 ms at worst, none over 33 ms.
+  - The passage's frame trails the scroll's moment by 0.055 s of the passage (0.071 s at worst), about one frame of real
+    time. At rest it equals the moment.
+  - The 4× runs were identical. The page's own per-frame work is small, and video decoding runs outside the throttled
+    thread, so this stands in for no slow phone's decoder.
+- **`tools/probe-settle.py`** failed on this build at first: it counted the passage's `blob:` URL as a request leaving the
+  origin. A `blob:` of the origin is memory the page made, so the rule now admits exactly that. A look-alike origin, a
+  `blob:` from another origin and a `data:` URL still count as external.
+- **The CSP law:** three mutations are caught and the control passes:
+  - a room connecting to its origin;
+  - a room admitting `blob:` media;
+  - a front door without its passage's connection.
+- **The suites:** `tools/test-site.py` (29), `tools/test-projection.py`, `tools/test-assets.py` and `tools/test-api.py`
+  pass.
+- **The journey, on this build:** 16 landings on the passage's first words, the 12 evidence moments, 50 sweeps with
+  nothing covered, and the 12 presses on the systems' links. Also:
+  - 18 presses that stop the film, and typed Space and PageDown in 8 of 8 cases;
+  - the keyboard pass;
+  - reduced motion and refused autoplay in 8 of 8 cases;
+  - 30 page-zooms with nothing cut;
+  - no console error on either front door.
+- **Lab load** is unchanged but for the passage. A returning visitor now has it ready from the browser's cache: 3.3 s
+  on the desktop and 6.2 s on slow 4G, where before the video element downloaded it again in pieces.
+
+**Not observed here, and the owner's:** a physical phone turned; Safari's first visit on a real network; physical touch
+scrolling.
+
+Observed on this build (Chrome 156.0.8078.48, 2026-10-22):
+- **Reading ink** over the film and the passage on both front doors, under a dark and a light device setting at three
+  viewports: 1,358 element samples, none below 4.5:1, worst 4.9:1 (CY-SEM-003 PASS).
+- **Settling:** both pages settle to no frame, timer or playing media in every profile once the scroll stops. The
+  passage follows the scroll from memory, and the worker caches this build and serves it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

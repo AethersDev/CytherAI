@@ -99,9 +99,12 @@ run them under jsc, the manifest first. Their public surface is an inventory
    without a fade, so it never lies under the statement.
 4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
    statement and Replay. The film never restarts on its own.
-5. Once the film is whole (or still), the passage downloads (asked to play and paused at once,
-   so iOS fetches it) and is shown once whole and the film still, under the film's element: its
-   first frame is the film's last. From then on the scroll names a moment, evenly (each stretch,
+5. Once the film is whole (or still), the passage downloads whole by a request of its own (`fetch`;
+   the front doors' CSP admits `connect-src 'self'` for it), the video plays it from memory (`blob:`,
+   asked to play and paused at once, as iOS shows a clip's frames only then), and it is shown once
+   whole and the film still, under the film's element: its first frame is the film's last. (Asked
+   of the video element, a paused clip's download is the browser's to defer: 2026-10-22,
+   `tools/probe-passage.py`.) From then on the scroll names a moment, evenly (each stretch,
    `.passage`, is as tall as its seconds, `data-t`: 2 s a viewport, the stage's own pace), and the
    passage seeks to it, one seek at a time; each of its words (`.say`) fades in and out with the
    scroll in its window of those seconds. Past its end it holds its last frame, under the
@@ -109,7 +112,9 @@ run them under jsc, the manifest first. Their public surface is an inventory
    element stands on the final frame, and past it on the still of each system's moment and of
    the return (`film/passage-*.jpg`, `STILLS`: each changes between two systems' words).
    Scrolling on past the film ends it; a page that opens past it (an anchor, a restored
-   scroll) never plays it.
+   scroll) never plays it. A new viewport (a phone turned, a window resized) keeps the
+   visitor's moment, not their offset: the page re-measures its stretches and scrolls to the
+   moment the scroll last named.
 6. Once the film is still, the service worker registers from the root and is asked to take
    over; its cache name carries the build hash. Its install fetches the precache past the HTTP
    cache (1.3 MB, the passage's stills among it), which on a first visit would take the link from the film as it starts.
