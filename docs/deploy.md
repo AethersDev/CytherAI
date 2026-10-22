@@ -2178,6 +2178,27 @@ Observed on this build (Chrome 156.0.8078.48, 2026-10-22):
 - **Settling:** both pages settle to no frame, timer or playing media in every profile once the scroll stops. The
   passage follows the scroll from memory, and the worker caches this build and serves it offline (CY-TEMP-001 PASS).
 
+**Published, certified and reviewed independently, 2026-10-22.** The owner published this build and the live origin
+passed (`f84a3ef`, release CERTIFIED). The reviewer then checked it again, on the live site and on an instrumented copy
+of this build, and accepted both fixes, finding no remaining blocker in the cases checked:
+- **The live site.** The Arabic passage, turned from 390 × 844 to 844 × 390 and back, held AWC-OS's moment (14.220379 s
+  to 14.220512 s and back) and CytherCAD's (20.220379 s to 20.220512 s), each with its words, condition and link, with no
+  sideways overflow. The portrait passage played from `blob:`, 25 of 25 s buffered, and advanced through AWC-OS and
+  CytherCAD as the page scrolled.
+- **The instrumented copy** (390 × 844, Arabic, stepped scrolling on a Mac). Every figure below was recomputed here from
+  the reviewer's raw samples (2026-10-22) and reproduces exactly:
+  - 763 frame intervals while moving: 16.7 ms median, 17.6 ms at the 95th percentile, 34.3 ms at most, 2 over 33.4 ms;
+  - 93 seeks, completing in 6.5 ms at the 95th percentile and 8.1 ms at most;
+  - presented video frames within 0.0417 s of the moment asked for (one frame of the 24 fps footage, at the passage's
+    end), so this was not a smooth page over a frozen image;
+  - no long task, no layout shift and no script error.
+- **The reviewer's limits.** Stepped scrolling on a Mac says nothing of a physical iPhone's touch, or of Safari on a
+  constrained device.
+- **A tab already open stays on its build.** Its first load after the publish came from the previous build's cache, and a
+  reload brought this one. That is the worker's designed path (`sw.js`): a new build's worker waits and never takes over
+  a page that may still be loading; once the film is still, the page lets it in, and the next load is the new build.
+  No page is changed mid-visit.
+
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_5F31ACE5CE649983`), 63 of 63 served paths matching the artifact.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
