@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07070a">
+<title>The capability brief — CytherAI</title>
+<meta name="description" content="CytherAI’s capability brief: CytherCAD’s validation record, SijilOS’s design, and what is available under qualified review.">
+<meta property="og:site_name" content="CytherAI">
+<meta property="og:title" content="The capability brief — CytherAI">
+<meta property="og:description" content="Two systems, and the record behind each: CytherCAD’s validation and SijilOS’s design.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/pages/brief.html">
+<link rel="canonical" href="https://cytherai.com/pages/brief.html">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cytherai.com/assets/og/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:alt" content="The last frame of CytherAI’s film, a conceptual visualization: a structure of glass and ceramic split by a thin luminous ring, a warm current running through it, beside the line Let AI change things. Keep control of what changes.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="build-hash" content="5F31ACE5CE649983">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+<!-- The capability brief, a room of the front door (css/room.css): the same two records and the same access, as the
+     cold-paper document stated them (backup/cold-paper-v1/pages/brief.html), without its document register (its number,
+     section stamps and exhibit labels) or its illustrative figures. CytherCAD's figures are projections of CytherManifest
+     (tools/project-manifest.py), and the brief prints every validation identifier (tools/test-projection.py); the record
+     with the conditions of its test is CytherCAD's own room. Both records were corrected on 2026-10-21 against the systems'
+     own records (docs/deploy.md §5ad). The section ids are the document's, so its links still land. -->
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
+<link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
+</head>
+<body>
+<header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#principle">← The three systems</a></nav></header>
+<main class="brief">
+<span class="label">Capability brief</span>
+<h1>Two systems, and the record behind each.</h1>
+<p>This brief summarises CytherAI’s technical position across two systems, CytherCAD and SijilOS: what each is, and what is on record. Detailed architecture, training methodology and deployment specifications are available under qualified review.</p>
+<p class="limit">Architectural constraints, applied to every deliverable (CytherCAD, SijilOS, NTP): zero external dependencies at the execution path; measurable correctness with defined acceptance gates; deployment-aware design from day one.</p>
+<section id="cythercad" aria-labelledby="cad-h">
+<h2 id="cad-h">CytherCAD — Controlled Generative CAD</h2>
+<p>Compact autoregressive model producing executable parametric construction programs. Constrained decoding restricts invalid geometry at generation time. Kernel-backed verification checks the geometry after generation.</p>
+<table class="words">
+<tr><th>Verified</th><td>CytherAI’s evaluation log</td></tr>
+<tr><th>Context</th><td>On-prem · Private · Air-gapped</td></tr>
+<tr><th>Methodology</th><td>Autoregressive generation · constrained decoding · kernel-backed geometric verification</td></tr>
+<tr><th>Test set</th><td>192 descriptions chosen by CytherAI from the Text2CAD dataset (Khan et al., NeurIPS 2024)</td></tr>
+</table>
+<figure class="record"><table>
+<!-- projections of CytherManifest (data-m), written by tools/project-manifest.py -->
+<tr><th data-m="validation:T2C192-INV-1-384:metric">Invalid parts · CytherAI’s test, April 2026 · 192 descriptions from the Text2CAD dataset, two parts each</th><td data-m="validation:T2C192-INV-1-384:cyther">1 of 384</td></tr>
+</table><figcaption>Validation record · v1.1 · CytherAI’s own test, from its log</figcaption></figure>
+<p><a class="plain" href="../cythercad/">CytherCAD’s validation record, and what its test shows →</a></p>
+</section>
+<section id="sijilos" aria-labelledby="sij-h">
+<h2 id="sij-h">SijilOS — Offline-First Ledger</h2>
+<p>Transactional ledger for the Saudi market, running on the device and fully offline-capable, with no cloud service at its core. It produces the QR code that ZATCA’s Phase 1 e-invoicing rules require. No certification, deployment or pilot is claimed.</p>
+<table class="words">
+<tr><th>Architecture</th><td>On-device · Offline-first</td></tr>
+<tr><th>Cloud dependency</th><td>None at its core</td></tr>
+<tr><th>E-invoicing</th><td>ZATCA Phase 1 QR code, produced on the device</td></tr>
+<tr><th>Status</th><td>No certification, deployment or pilot claimed</td></tr>
+</table>
+</section>
+<section id="clearance" aria-labelledby="access-h">
+<h2 id="access-h">Qualified access</h2>
+<p>Kernel architecture, training methodology, deployment specifications, and engagement scoping are available under qualified review. Identity and NDA required.</p>
+<nav class="next" aria-label="From here"><a class="solid" href="mailto:nda@cytherai.com?subject=Capability%20Review%20Request">Request a briefing</a><a class="plain" href="../contact.html">Tell us what must never happen →</a></nav>
+</section>
+</main>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="brief.html" aria-current="page">Brief</a> · <a href="../contact.html">Contact</a> · <a href="security.html">Security</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></span></footer>
+</body>
+</html>
