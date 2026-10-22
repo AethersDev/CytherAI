@@ -239,7 +239,10 @@ class SiteContractTests(unittest.TestCase):
         """Each page's CSP admits its own origin and nothing else (data: images where named; no inline style since the
         cold-paper pages retired, 2026-10-21), and
         its script-src is exactly what the page runs: 'self' if it loads same-origin scripts, a hash per inline
-        script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails."""
+        script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails. The one
+        connection a page makes is the front door's to its own passage, which js/film.js downloads whole and plays from
+        memory (connect-src 'self', media-src blob:): asked of the video element, a paused clip's download is the
+        browser's to defer, and Chrome left one short of its end for good (2026-10-22); every other page connects nowhere."""
         for page in HTML_FILES:
             parsed = parse_page(page)
             csps = [a["content"] for t, a in parsed.tags if t == "meta" and a.get("http-equiv") == "Content-Security-Policy"]
@@ -250,10 +253,11 @@ class SiteContractTests(unittest.TestCase):
             script = (["'self'"] if any(t == "script" and a.get("src") for t, a in parsed.tags) else []) + \
                 ["'sha256-%s'" % base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode() for body in inline]
             self.assertEqual(policy.get("script-src"), script or ["'none'"], page)
+            film = any(t == "script" and (a.get("src") or "").split("?")[0].endswith("js/film.js") for t, a in parsed.tags)
             for directive, expected in (("default-src", ["'self'"]), ("object-src", ["'none'"]), ("base-uri", ["'self'"]),
-                                        ("connect-src", ["'none'"]), ("frame-src", ["'none'"])):
+                                        ("connect-src", ["'self'"] if film else ["'none'"]), ("frame-src", ["'none'"])):
                 self.assertEqual(policy.get(directive), expected, f"{page} {directive}")
-            extra = {"img-src": {"data:"}, "script-src": set(script)}
+            extra = {"img-src": {"data:"}, "script-src": set(script), "media-src": {"blob:"} if film else set()}
             for directive, sources in policy.items():
                 self.assertLessEqual(set(sources), {"'self'", "'none'"} | extra.get(directive, set()), f"{page} {directive}")
 

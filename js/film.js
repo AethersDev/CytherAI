@@ -57,7 +57,8 @@ v.addEventListener("error", still);
 replay.addEventListener("click", film);
 portrait.addEventListener("change", () => {
   if (body.dataset.state === "still") source(false);
-  if (pv.hasAttribute("src")) { rest(); if (body.dataset.state === "still") passage(); }   // the other orientation's
+  if (wanted) { rest(); if (body.dataset.state === "still") passage(); }   // the other orientation's
+  scrolled();   // the moment's still, turned, until the other clip is whole
 });
 
 /* The passage: under the scroll, the film's final composition opens into ADII's scene, then AWC-OS's and CytherCAD's,
@@ -71,7 +72,7 @@ portrait.addEventListener("change", () => {
 const pv = document.getElementById("passage"), parts = [...document.querySelectorAll(".passage")], says = [...document.querySelectorAll(".say")];
 const span = e => e.dataset.t.split(" ").map(Number), FADE = 0.25;
 const ADII = span(document.getElementById("adii"))[0];
-let marks = [], ready = false, pending = -1, frame = 0;
+let marks = [], ready = false, pending = -1, frame = 0, now = 0;   // now: the moment the scroll last named
 /* scroll position ↔ the passage's seconds: from the top through each stretch, [its top, its first], [its foot, its last] */
 function measure() {
   marks = [[0, 0]];
@@ -86,12 +87,11 @@ function moment(y) {   // past the last stretch, on at its pace
   const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
   return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1);
 }
-function place(t) {   // moment's inverse: the scroll that names t
-  for (let i = 1; i < marks.length; i++) {
-    const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
-    if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1);
-  }
-  return marks[marks.length - 1][0];
+function place(t) {   // moment's inverse: the scroll that names t, past the last stretch on at its pace
+  let i = 1;
+  while (i < marks.length - 1 && t > marks[i][1]) i++;
+  const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
+  return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1);
 }
 /* one seek at a time: a scroll that outruns the decoder leaves only its latest moment waiting */
 function seek(t) {
@@ -114,7 +114,7 @@ function stand(t) {   // no passage: the film's element shows the still of the m
 }
 function scrolled() {
   frame = 0;
-  const y = scrollY, t = moment(y);
+  const y = scrollY, t = now = moment(y);
   if (body.dataset.state === "film" && y > innerHeight / 4) { still(); return; }   // scrolling on is past the film
   for (const s of says) {
     const [a, b] = span(s), o = Math.max(0, Math.min(1, (t - a) / FADE, (b - t) / FADE));
@@ -123,27 +123,41 @@ function scrolled() {
   if (body.dataset.state === "still") { if (ready) seek(Math.min(t, marks[marks.length - 1][1])); else stand(t); }
 }
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
-addEventListener("resize", () => { measure(); scrolled(); });
+/* a new viewport (a phone turned, a window resized) gives every stretch a new height, and the same offset names another
+   moment: the visitor keeps their moment, not their offset (until 2026-10-22 a turned window landed past the passage).
+   A change that moves no stretch (svh: a phone's bars coming and going as it scrolls) moves nothing */
+addEventListener("resize", () => { const was = String(marks); measure(); if (String(marks) !== was) scrollTo(0, place(now)); scrolled(); });
 /* words bring their moment with them, the scroll to the middle of their window: when a link among them is reached by the
    keyboard, and when an anchor names them (a room's way back, ../#adii-evidence: the words that led to it) */
 const bring = s => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); };
 says.forEach(s => s.addEventListener("focusin", () => bring(s)));
-/* the passage downloads (asked to play and paused at once: iOS fetches a clip only then) */
+/* the passage downloads whole by a request of its own, and the video plays it from memory. Asked of the video element, a
+   paused clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s (2026-10-22), it never became
+   whole, and the stills stood for good. Asked to play and paused at once, as iOS shows a clip's frames only then */
+let wanted = "";   // the clip asked for, until it is dropped
 function passage() {
-  if (stillMotion || pv.hasAttribute("src")) return;
-  const src = new URL(portrait.matches ? "film/passage-portrait.mp4" : "film/passage-landscape.mp4", root).href;
-  pv.preload = "auto"; pv.src = src;
-  pv.play().then(() => { if (pv.src === src) pv.pause(); },
-                 err => { if (pv.src === src && err.name !== "AbortError") rest(); });   // refused: the stills stand
-  whole(pv).then(() => { if (pv.src === src) { ready = true; body.classList.add("scrub"); scrolled(); } });
+  if (stillMotion || wanted) return;
+  const file = wanted = new URL(portrait.matches ? "film/passage-portrait.mp4" : "film/passage-landscape.mp4", root).href;
+  const mine = () => wanted === file;
+  fetch(file).then(r => r.ok ? r.blob() : Promise.reject(r.status)).then(clip => {
+    if (!mine()) return;
+    pv.preload = "auto"; pv.src = URL.createObjectURL(clip);
+    pv.addEventListener("loadeddata", () => { if (mine()) { ready = true; body.classList.add("scrub"); scrolled(); } }, { once: true });
+    pv.play().then(() => { if (mine()) pv.pause(); },
+                   err => { if (mine() && err.name !== "AbortError") { rest(); scrolled(); } });   // refused: the stills stand
+  }, () => { if (mine()) { rest(); scrolled(); } });   // not downloaded: the stills stand
 }
 pv.addEventListener("error", () => { rest(); scrolled(); });
-function rest() { ready = false; body.classList.remove("scrub"); pv.pause(); pv.removeAttribute("src"); pv.load(); }
+function rest() {
+  const src = pv.src;
+  ready = false; wanted = ""; body.classList.remove("scrub"); pv.pause(); pv.removeAttribute("src"); pv.load();
+  if (src.startsWith("blob:")) URL.revokeObjectURL(src);
+}
 
 const full = s => { const b = s.buffered; return s.hasAttribute("src") && b.length > 0 && b.end(b.length - 1) >= s.duration - 0.05; };
-/* resolves once the whole clip is buffered, or it is dropped (rest, or a film stopped short of its end). A clip that
-   arrives in one piece may report its progress before it is parsed, buffered still empty, and never again; its
-   canplaythrough comes after the parse */
+/* resolves once the whole film is buffered, or it is dropped (stopped short of its end): the passage then downloads. A
+   film plays, so the browser buffers it on; this is not asked of a paused clip. A clip that arrives in one piece may
+   report its progress before it is parsed, buffered still empty, and never again; its canplaythrough comes after the parse */
 const WHOLE = ["progress", "canplaythrough", "emptied"];
 const whole = s => new Promise(done => {
   const check = () => { if (!s.hasAttribute("src") || full(s)) { WHOLE.forEach(t => s.removeEventListener(t, check)); done(); } };

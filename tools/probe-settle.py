@@ -17,7 +17,8 @@ reload, and a reload with the server stopped (from /ar/ the worker registers at 
 Bound: 0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages;
 the stimulus is answered (at least one frame, and no media and no timer: the passage is sought, never played) and the
 page settles again; the passage follows the scroll once whole (under reduced motion it never loads, and the still
-stands). No request leaves the local origin and the console logs no error. Writes <out-dir>/settle.json, the shape the
+stands). No request leaves the local origin (a blob: of the origin is memory the page made, not a request) and the
+console logs no error. Writes <out-dir>/settle.json, the shape the
 evidence ledger records; exits 0 on PASS, 1 on FAIL.
 """
 
@@ -228,7 +229,8 @@ def observe(tab, origin, page, width, height, dpr, mobile, reduced):
     row["doc_width"] = tab.js("document.documentElement.scrollWidth")
     row["overflow_x"] = max(0, row["doc_width"] - width)   # the emulated width: mobile emulation widens innerWidth to the content
     row["requests_observed"] = len(tab.requests)
-    row["external_requests"] = [u for u in tab.requests if not u.startswith(origin + "/")]
+    # a blob: of this origin is memory the page made (the passage, downloaded whole: js/film.js), never a request out
+    row["external_requests"] = [u for u in tab.requests if not u.startswith((origin + "/", "blob:" + origin + "/"))]
     row["console_errors"] = tab.errors
     quiet = {"raf": 0, "timers": 0, "playing": 0, "state": "still"}
     row["pass"] = (row["settled_3s"] == quiet and row["resettled_3s"] == quiet

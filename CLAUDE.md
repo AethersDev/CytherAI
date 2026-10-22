@@ -24,7 +24,10 @@ are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
 `tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
 `.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live
-origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `CANONICAL_REF` is local
+origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-passage.py` (the same way; no
+obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
+2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
+turned or a window resized keeps the passage's moment, its words and its frame. `CANONICAL_REF` is local
 `master`, which tracks `origin/main`; there is no local `main`. A fresh clone has no `master`, and the
 guards fail rather than walk nothing: `git branch master origin/main`.
 
@@ -273,8 +276,13 @@ motion, a refused or failed play, a film not started within `GUARD` (6 s), or on
 statement (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
-still: asked to play and paused at once, as iOS fetches a clip only then, and buffers all of it before showing a
-frame), and shows once whole: its first frame is the film's last, so nothing changes where it takes over. Until then,
+still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused
+at once, as iOS shows a clip's frames only then; until 2026-10-22 the video element downloaded it itself, and a paused
+clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. It shows
+once whole: its first frame is the film's last, so nothing changes where it takes over. A new viewport (a phone
+turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll
+offset (until 2026-10-22 a turned window landed past the passage), and a turned phone stands on the moment's still
+until the other orientation's clip is whole. Until then,
 under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
 on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:
 each changes between two systems' words, never under them). A page that opens past the film (an anchor, a restored
@@ -399,8 +407,9 @@ description, its own URL and language, the large card, and an image whose declar
 `robots.txt` admits every crawler and names `sitemap.xml`, which lists every page by its canonical URL except the 404 and
 a page that asks not to be indexed (AWC-OS's rooms keep the `noindex` of the evaluation gateway they replaced, pending the
 owner's decision); `tools/test-site.py` holds the two to each other. Every page's CSP is least
-privilege: `script-src` exactly what the page runs, nothing fetched from another origin, and everything a page or
-stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
+privilege: `script-src` exactly what the page runs, nothing fetched from another origin (the one connection any page
+makes is the front door's to its own passage: `connect-src 'self'` and `media-src blob:` on the two front doors alone,
+`connect-src 'none'` everywhere else), and everything a page or stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
 `pages/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the
 front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds it to the served scripts.
 
