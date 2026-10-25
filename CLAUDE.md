@@ -413,6 +413,49 @@ makes is the front door's to its own passage: `connect-src 'self'` and `media-sr
 `pages/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the
 front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds it to the served scripts.
 
+**Both looked flat** (`flat/`, `ar/flat.html`; 2026-10-25, a candidate on the branch `both-looked-flat` until the owner
+reviews it): the front door's principle shown in physics. Two blocks of lapped steel that look the same are each tested
+with an optical flat under sodium light: the first shows straight fringes, the second concentric rings around a rise of
+1.2 micrometres, hidden until the glass revealed it; *Both looked flat. Only one is.*, then the close, the front door's own
+*The model proposes. The system decides.* The scene is the script (`tools/render-flat.py`, Blender 5.1, Cycles on the Apple
+GPU, nothing imported): every fringe is computed, never drawn, as the reflectance of the stack glass | 15 nm silver |
+air gap | steel (characteristic matrices, every internal reflection) for the sodium D lines (D2 twice D1), at the gap the
+scene's own timeline sets, its phase taken at the camera ray's own angle, averaged over a half-frame shutter; the camera's
+aperture washes the fringes out at large gaps by itself, and within 0.2 mm the stack takes over from the silvered
+underside's semi-mirror (R 0.575, T 0.395, from the same matrices). Optical constants: fused silica (Malitson 1965), iron
+(Johnson and Christy 1974), silver (Johnson and Christy 1972), from the refractiveindex.info database; for an unsilvered flat
+the Airy sum and the matrices agree (0.382 to 0.640). The flats are partially silvered, as gauge interferometers' were,
+which sharpens the fringes; the blocks, the dome and the wedges are the scene's, and the page says so. Landscape and
+portrait are separately composed (the blocks side by side; one beyond the other), 12 frames a second, joined by
+`tools/encode-flat.py`, which reads the stills' names and seconds from `js/flat.js`. The scroll moves the sequence at one
+pace, 4 s a viewport (`css/flat.css`, held by `tools/test-site.py`), its last stretch a viewport past the sequence's 32 s
+with the last frame held, so its conclusion is read before the instrument rises over the film (until 2026-10-25 it lay
+under it; `tools/probe-flat.py` now finds words that anything covers); its words fade with the scroll in their windows, and
+*Rings.* comes only once the second flat's wedge is shallower than its dome's steepest slope, where a fringe can first close,
+and is up in full as that flat settles (held by `tools/test-site.py`; until the review of 2026-10-25 it came over open bands
+and faded as the rings closed); a new viewport keeps the visitor's moment in the film and, past it, their place (the block at
+the top of the view, and how far into it); it
+downloads whole and plays from memory as the passage does (beside the front doors', its CSP is the only one that admits
+`connect-src 'self'` and `media-src blob:`), and its stills stand in until then, under reduced motion or after a failed
+download. After the film, before the principle, the instrument (`#bench`, *Lift the glass. Press it back.*): both flats at
+rest from above, as pressed as they go, so the first gesture it invites lifts (until the review of 2026-10-25 it invited a
+press that could not move them); the visitor lifts either one and presses it back (up lifts, down presses, across turns it;
+the arrow keys and Enter do the same)
+and the page computes every fringe in the browser, WebGL2, drawing only when pressed: each pixel's ray traced through the
+glass slab to the steel with the plates' own camera (`flat/media/plate.json`), the stack's reflectance computed there from
+the same constants, and five plates Blender rendered at constant reflectances (0, 0.25, 0.5, 0.75, 1) blended at it, so the
+film's own light and tone carry the fringes; its plates load only as it comes near, and without WebGL2, or when the GPU refuses its shader or takes
+its context back, the film's last still stands, with words saying so. `tools/test-site.py` holds the page's optical constants, sodium lines and dome to the
+renderer's and runs the page's own reflectance under jsc against the renderer's (1e-9); every figure
+either page states (the dome's 1.2 µm, a fringe's 0.29 µm, the 15 nm film) is the scene's, and every one of the scene's is stated. `tools/probe-flat.py` is its browser
+check: the frame each scroll names, reading ink (by `tools/probe-ink.py`'s method), and the place a new viewport keeps, from
+the film and from the instrument, the close and the notes. Its method states the model's approximations (the stack at normal
+incidence, only its phase at the camera's angle; iron's constants for the steel; the page's agreement with the film checks the
+computation, not the model), and its limits that straight fringes show a block flat only to the reference flat's own accuracy.
+The front doors route to it from their close only, under the invitation (*Both looked flat. See why →*), so a visitor meets the
+company and its three systems first; the film's conclusion routes back to the three systems before the instrument, which
+stays optional (both on review, 2026-10-25).
+
 **The experiment, retired** (2026-10-16, at the owner's direction): THE EXCEPTION, two decisions
 that look right, was published at `/exception/` on 2026-10-04 and linked from no page after
 2026-10-12. *Draw* released a drawing to the real boundary engine (`CytherInstrument.judge`):

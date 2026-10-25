@@ -7,7 +7,9 @@ and the statement in the front door's own type. Headless Chrome renders it at 12
 the repository root by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes
 assets/og/og-card.png. The pages' og:image:alt states what it shows and that it is a conceptual visualization.
 
-`render-og-film.py ar` renders the Arabic card the same way: tools/og-card-ar.html to assets/og/og-card-ar.png.
+`render-og-film.py ar` renders the Arabic card the same way: tools/og-card-ar.html to assets/og/og-card-ar.png; `flat` and
+`flat-ar` Both looked flat's (tools/og-card-flat.html, tools/og-card-flat-ar.html), a still of its sequence with its title,
+to assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png.
 
 Run twice; the output SHA-256 must be identical (same Chrome, same machine): the script prints the digest, size and
 the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero if Chrome fails or the
@@ -17,9 +19,11 @@ import hashlib, http.server, os, struct, subprocess, sys, tempfile, threading
 from functools import partial
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if sys.argv[1:] not in ([], ["ar"]): sys.exit("usage: render-og-film.py [ar]")   # a typo must not render the English card
-AR = sys.argv[1:] == ["ar"]
-OUT = os.path.join(ROOT, "assets/og/og-card-ar.png" if AR else "assets/og/og-card.png")
+CARDS = {"": "og-card", "ar": "og-card-ar", "flat": "og-card-flat", "flat-ar": "og-card-flat-ar"}
+if len(sys.argv) > 2 or "".join(sys.argv[1:]) not in CARDS:   # a typo must not render the English card
+    sys.exit("usage: render-og-film.py [ar|flat|flat-ar]")
+CARD = CARDS["".join(sys.argv[1:])]
+OUT = os.path.join(ROOT, "assets/og/%s.png" % CARD)
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
@@ -27,7 +31,7 @@ class Quiet(http.server.SimpleHTTPRequestHandler):
 
 srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), partial(Quiet, directory=ROOT))
 threading.Thread(target=srv.serve_forever, daemon=True).start()
-url = "http://127.0.0.1:%d/tools/%s" % (srv.server_address[1], "og-card-ar.html" if AR else "og-card.html")
+url = "http://127.0.0.1:%d/tools/%s.html" % (srv.server_address[1], CARD)
 with tempfile.TemporaryDirectory() as profile:
     shot = os.path.join(profile, "card.png")   # not OUT: the tracked card exists already, so its presence proves nothing
     run = subprocess.run([CHROME, "--headless=new", "--user-data-dir=" + profile, "--hide-scrollbars", "--force-device-scale-factor=1",

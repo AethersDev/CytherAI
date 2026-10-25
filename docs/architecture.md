@@ -29,6 +29,12 @@ flowchart TD
 
   RM["the rooms: adii/, awc-os/, cythercad/, their ar/ counterparts, the contact pages, pages/*.html, 404.html"] --> ROOM["css/room.css"]
 
+  FN["flat/index.html, ar/flat.html — Both looked flat"] --> CSS2
+  FN --> ECSS["css/flat.css"]
+  FN --> EJS["js/flat.js — the sequence under the scroll, its words, its stills"]
+  EJS --> EMED["flat/media/ — the sequence by orientation, its stills, the instrument's plates"]
+  RE["tools/render-flat.py · tools/encode-flat.py (Blender and ffmpeg, offline; every fringe computed)"] -.-> EMED
+
   M["js/manifest.js — the record (no page loads it)"] --> B["js/instrument.js — the boundary engine (no page loads it)"]
   B --> TB["tools/test-boundary.js"]
 
@@ -51,6 +57,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
 | `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through its stretches, seeks, its words' windows, the stills that stand in), `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
+| `js/flat.js` | — | `flat/index.html`, `ar/flat.html` | Both looked flat: the scroll's moment through its stretches, one seek at a time, its words' windows, a new viewport keeping the moment in the film and the reader's place past it, the sequence downloaded whole, the stills that stand in; the instrument (WebGL2): each pixel's ray traced through the glass to the steel, the stack's reflectance computed there (the renderer's constants and matrices, held to it under jsc), five plates blended at it, drawn only when pressed; DOM wiring behind `typeof document`, so it loads under jsc |
 | `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
 
@@ -63,6 +70,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
 | `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
+| `flat/`, `css/flat.css`, `js/flat.js` | Both looked flat (2026-10-25): its page, its sequence in both orientations, the stills that stand in for it and the instrument's plates; the Arabic page is `ar/flat.html` | Yes (the reviewed set) | Rendered by `tools/render-flat.py` (the scene is the script) and joined by `tools/encode-flat.py`, which reads the stills from `js/flat.js`; a new file under `flat/` ships once named in `REVIEWED_PUBLICATION`, and every media file the script names ships, and back (`tools/test-site.py`); the stylesheet and the script are hashed (SRI); `tools/probe-flat.py` is its browser check |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
 | `contact.html` | The contact room: three plain questions composed into one email draft for the visitor's own email app, the draft copied whole when no app opens, and a way back through the history, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |

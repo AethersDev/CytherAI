@@ -11,6 +11,7 @@ and Arabic (`/ar/`), followed by the three systems.
 | `index.html`, `ar/`, `contact.html`, `404.html`, `pages/` | The pages |
 | `css/`, `js/`, `fonts/`, `film/`, `assets/` | What the pages load (except `js/manifest.js` and `js/instrument.js`, the record and the boundary engine, which only the tools read) |
 | `adii/`, `awc-os/` | The project pages |
+| `flat/` | *Both looked flat*: two steel blocks tested with optical flats, every fringe computed; its sequence, stills and the instrument's plates |
 | `sw.js`, `manifest.webmanifest`, `icon.svg`, `CNAME`, `.nojekyll` | The offline worker, the app manifest, the icon, the domain |
 | `deploy.paths` | The served set, one file per line: nothing else is ever published |
 | `verify.sh`, `generate-integrity.sh`, `deploy.sh`, `publish.sh` | Verify, stamp, build, publish |
