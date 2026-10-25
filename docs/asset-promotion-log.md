@@ -119,6 +119,64 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 ---
 
+## FLAT — Both looked flat: the sequence, its stills and the instrument's plates
+
+| | |
+|---|---|
+| Asset ID | IMG-016 |
+| Source | `tools/render-flat.py` (Blender 5.1.2, Cycles on the Apple GPU): the scene is the script, nothing imported |
+| Classification | **ILLUSTRATIVE** — a rendering, and the page says so beside it (*A rendering. Every fringe in it is computed, not drawn.*); its fringes are computed from published optical constants (the stack glass, 15 nm silver, air gap, steel, by characteristic matrices, for the sodium D lines), while the blocks, the dome and the wedges are the scene's, which the page's notes state |
+| Command | `blender -b --factory-startup --python-exit-code 1 -P tools/render-flat.py -- l <dir> 40 12 1-384` and `-- p <dir> 40 12 1-384` (the portrait composed on its own: one block beyond the other); `-- plates <dir> 64` for the instrument's five plates and `plate.json`; then `python3 tools/encode-flat.py <l-dir> <p-dir> 12 <plates-dir>` (H.264, CRF 23, a keyframe each second, faststart; each still the frame at its second in `js/flat.js`; the plates as JPEG at q 2) |
+| Canonical inputs | None from the repository — the scene is the script. The optical constants are cited in it: fused silica (Malitson 1965), iron (Johnson and Christy 1974), silver (Johnson and Christy 1972), from the refractiveindex.info database (CC0). |
+| Outputs | `flat/media/flat-landscape.mp4` · 1440×810 · 3,220,863 bytes · `flat/media/flat-portrait.mp4` · 810×1440 · 3,359,645 bytes · `flat/media/still-open-landscape.jpg` · 1440×810 · 30,662 bytes · `flat/media/still-open-portrait.jpg` · 810×1440 · 27,701 bytes · `flat/media/still-lines-landscape.jpg` · 1440×810 · 78,288 bytes · `flat/media/still-lines-portrait.jpg` · 810×1440 · 76,895 bytes · `flat/media/still-rings-landscape.jpg` · 1440×810 · 78,963 bytes · `flat/media/still-rings-portrait.jpg` · 810×1440 · 76,984 bytes · `flat/media/still-both-landscape.jpg` · 1440×810 · 69,678 bytes · `flat/media/still-both-portrait.jpg` · 810×1440 · 64,995 bytes · `flat/media/plate-000.jpg` · 1440×810 · 69,296 bytes · `flat/media/plate-025.jpg` · 1440×810 · 92,280 bytes · `flat/media/plate-050.jpg` · 1440×810 · 92,886 bytes · `flat/media/plate-075.jpg` · 1440×810 · 93,077 bytes · `flat/media/plate-100.jpg` · 1440×810 · 93,638 bytes; `flat/media/plate.json` (the plates' camera and planes) |
+| SHA-256 | flat-landscape.mp4 `ce39d38394a20a32ad06164bf4e77e06e73ac866828e9cf990ac2b9293e7f1dd` · flat-portrait.mp4 `44d508abcd2b1cea1bd4b06faf94da32d6d1a70fe061d6fbc2ce3d6ddbd18065` · still-open-landscape.jpg `251f7f31134e274047f0feae64331df405123d026bb625f55534b77f3641bcdf` · still-open-portrait.jpg `f0ef8b26d5b0ecf4090791edc13b5c86043eceed24f1742a304a2682b57dc682` · still-lines-landscape.jpg `c6136b7c20a384db3c5f232fd67cad87cebb71855c936830fa45b4b494f82a27` · still-lines-portrait.jpg `e82e539f3ace5a3e8996d59a264a1762961f594aa6d0431571143aeec3a0816a` · still-rings-landscape.jpg `c5d9bb5dba25b0c1051f22d39755f479ccd965b140195697af0ee58e84ef502f` · still-rings-portrait.jpg `1fe3fece42e2cd8618cb2610d64b673148d83dd8c4178443dcd8b8fb9c04c3fd` · still-both-landscape.jpg `8241d98aa6a283e70f00b764e76befc7822bedd20f6566ef2007c6407f365a5a` · still-both-portrait.jpg `e7bfc2ce291489125948dc47828f57a3daa98f6a8b6b337fc35ac2f96c8d5989` · plate-000.jpg `813b6d588a83537017e991d6bc54b0d47d81fba063bd5c2132356514bb0578f9` · plate-025.jpg `84221a33bce19863cdd2c1f7f33d600f8f2a1a47ec2796f4dfdd450bce59511c` · plate-050.jpg `aa01a3702669266e69553646bc0de065e4e055c850c095f40408fa6fb6a9e260` · plate-075.jpg `ce0a828318f3285968bd794bf54ed78c9d85bab329d1a4c56343b213a158da37` · plate-100.jpg `e2a20d3448baedf185bc6ca6f415a41e5b59aad40cca7ed875861f4050f14278` |
+| Determinism | **Not reproducible byte for byte**: Cycles sampling and its denoiser on one machine; the receipt binds these bytes, not the renderer. The physics is: `tools/test-site.py` holds the page's constants to the renderer's and runs the page's own reflectance against the renderer's under jsc (1e-9). |
+| Acceptance checks | Faststart; 384 frames an orientation at 12 a second (32 s); each still the frame its second names. The fringes stop at the flat's footprint (the bare steel beyond it is the steel's own reflectance); the silver film is a semi-mirror until a flat is within 0.2 mm of its block (R 0.575, T 0.395, from the same matrices). The stack's phase average (0.6918) equals the semi-mirror over bare steel (0.6917), so nothing jumps where the stack takes over. Under the flat at rest the second block shows about four rings, as its dome predicts: 1.06 µm of rise inside the flat, 2 × 1.06 / 0.589 = 3.6 fringes from centre to edge. Browser: `tools/probe-flat.py` (the frame each scroll names, reading ink). |
+| Deployment | `deploy.sh` allowlist; named by `js/flat.js` (the sequence by orientation, each still) and by `flat/media/plate.json` (each plate); `tools/test-site.py` holds the named set to the shipped set, and back. Not precached; media go to the network. |
+| Commit | candidate on the branch `both-looked-flat` (2026-10-25), not yet admitted |
+| Owner sign-off | PENDING |
+
+---
+
+## OG-CARD-FLAT — Both looked flat's link-preview plate
+
+| | |
+|---|---|
+| Asset ID | IMG-017 |
+| Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second |
+| Classification | **ILLUSTRATIVE** — a frame of the rendering; the page that names it says what it shows in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py flat` (headless Chrome renders `tools/og-card-flat.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the still and the fonts are tracked files. |
+| Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *Both looked flat.* in Newsreader 300, 60 px, with *A demonstration in light* in Plex Mono above it, `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card-flat.png` · 1200×630 · 276,299 bytes |
+| SHA-256 | `de9e5d2e8d6a6814607bce7cc27a5f9d45ea70a64791c4f6215837fed06b4f5f` |
+| Determinism | Rendered on Google Chrome 156.0.8078.48 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
+| Deployment | `deploy.sh` allowlist only; named by `flat/index.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | Nothing; added 2026-10-25 with Both looked flat. |
+| Owner sign-off | PENDING |
+
+---
+## OG-CARD-FLAT-AR — Both looked flat's link-preview plate, in Arabic
+
+| | |
+|---|---|
+| Asset ID | IMG-018 |
+| Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second |
+| Classification | **ILLUSTRATIVE** — a frame of the rendering; the page that names it says what it shows in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py flat-ar` (headless Chrome renders `tools/og-card-flat-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the still and the fonts are tracked files. |
+| Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *كلتاهما بدت مستوية.* in IBM Plex Sans Arabic 300, 58 px, line height 1.4, with *عرضٌ بالضوء* in IBM Plex Sans Arabic 300, 22 px, above it (the lockup stays left to right, as the identity draws it), `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card-flat-ar.png` · 1200×630 · 276,671 bytes |
+| SHA-256 | `6123073cfdd74aaf146fcba55b3589b4d36e7a6ef2ab43ab5329dc8b9a0a3a34` |
+| Determinism | Rendered on Google Chrome 156.0.8078.48 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
+| Deployment | `deploy.sh` allowlist only; named by `ar/flat.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | Nothing; added 2026-10-25 with Both looked flat. |
+| Owner sign-off | PENDING |
+
+---
+
 ## ADII-POSTER — the recorded run's last frame
 
 | | |

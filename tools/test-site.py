@@ -79,6 +79,11 @@ REVIEWED_PUBLICATION = {
     "awc-os/": {"awc-os/index.html", "awc-os/media/AWC_OS_film_ar.mp4", "awc-os/media/AWC_OS_film_en.mp4",
                 "awc-os/media/poster-ar.jpg", "awc-os/media/poster-en.jpg"},
     "cythercad/": {"cythercad/index.html"},
+    # Both looked flat (2026-10-25): its page, its sequence in both orientations and the stills that stand in for it
+    # (tools/render-flat.py, tools/encode-flat.py)
+    "flat/": {"flat/index.html", "flat/media/flat-landscape.mp4", "flat/media/flat-portrait.mp4", "flat/media/plate.json",
+              *(f"flat/media/still-{n}-{o}.jpg" for n in ("open", "lines", "rings", "both") for o in ("landscape", "portrait")),
+              *(f"flat/media/plate-{r:03d}.jpg" for r in (0, 25, 50, 75, 100))},
 }
 
 
@@ -240,9 +245,10 @@ class SiteContractTests(unittest.TestCase):
         cold-paper pages retired, 2026-10-21), and
         its script-src is exactly what the page runs: 'self' if it loads same-origin scripts, a hash per inline
         script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails. The one
-        connection a page makes is the front door's to its own passage, which js/film.js downloads whole and plays from
+        connections pages make are the front door's to its own passage, which js/film.js downloads whole and plays from
         memory (connect-src 'self', media-src blob:): asked of the video element, a paused clip's download is the
-        browser's to defer, and Chrome left one short of its end for good (2026-10-22); every other page connects nowhere."""
+        browser's to defer, and Chrome left one short of its end for good (2026-10-22); and Both looked flat's to its own
+        sequence, the same way (js/flat.js, 2026-10-25). Every other page connects nowhere."""
         for page in HTML_FILES:
             parsed = parse_page(page)
             csps = [a["content"] for t, a in parsed.tags if t == "meta" and a.get("http-equiv") == "Content-Security-Policy"]
@@ -253,7 +259,7 @@ class SiteContractTests(unittest.TestCase):
             script = (["'self'"] if any(t == "script" and a.get("src") for t, a in parsed.tags) else []) + \
                 ["'sha256-%s'" % base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode() for body in inline]
             self.assertEqual(policy.get("script-src"), script or ["'none'"], page)
-            film = any(t == "script" and (a.get("src") or "").split("?")[0].endswith("js/film.js") for t, a in parsed.tags)
+            film = any(t == "script" and (a.get("src") or "").split("?")[0].endswith(("js/film.js", "js/flat.js")) for t, a in parsed.tags)
             for directive, expected in (("default-src", ["'self'"]), ("object-src", ["'none'"]), ("base-uri", ["'self'"]),
                                         ("connect-src", ["'self'"] if film else ["'none'"]), ("frame-src", ["'none'"])):
                 self.assertEqual(policy.get(directive), expected, f"{page} {directive}")
@@ -485,11 +491,12 @@ class SiteContractTests(unittest.TestCase):
             size = int(re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1))
             return None if svg == seal.fitted_svg(size, seal.INK, seal.GROUND, ' class="seal"') else f"{page}: not the computed seal"
         found = 0
-        for page in HTML_FILES + ["tools/og-card.html", "tools/og-card-ar.html"]:
+        cards = ["tools/og-card.html", "tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]
+        for page in HTML_FILES + cards:
             for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
                 self.assertIsNone(defect(page, svg))
                 found += 1
-        self.assertGreaterEqual(found, len(HTML_FILES) + 2, "every page and both cards carry the seal")
+        self.assertGreaterEqual(found, len(HTML_FILES) + len(cards), "every page and every card carries the seal")
         # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
         svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
         self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
@@ -624,6 +631,98 @@ class SiteContractTests(unittest.TestCase):
         say = re.search(r"(?<![\w-])\.say\{([^}]*)\}", css).group(1)
         self.assertTrue("position:fixed" in say and re.search(r"z-index:\d", say), "the words stand above the scene on their own")
 
+    def test_both_looked_flat_moves_evenly_and_ships_what_it_names(self) -> None:
+        """Both looked flat (flat/, 2026-10-25) moves its sequence at one pace, 4 s a viewport: the stage's 100svh are its first
+        4 s, each stretch is as tall as its seconds at 25svh a second (css/flat.css, vh first) and begins where the last
+        ended, and none makes a stacking context (the front door's lesson: its fixed words would lie under the next
+        stretch). ar/flat.html carries the same stretches, words' windows and sections. Every file js/flat.js names ships
+        under flat/media/ (the sequence by orientation, each still by name and orientation, the instrument's plate.json and
+        every plate it lists), and every file shipped there is named: a stray file is caught, as a missing one is."""
+        css = (ROOT / "css/flat.css").read_text(encoding="utf-8")
+        js = (ROOT / "js/flat.js").read_text(encoding="utf-8")
+        def shape(page: str):
+            tags = parse_page(page).tags
+            return ([(t, a.get("id"), a["data-t"]) for t, a in tags if a.get("data-t")],
+                    [a["id"] for t, a in tags if t == "section" and a.get("id")])
+        self.assertEqual(shape("ar/flat.html"), shape("flat/index.html"))
+        stretches = [(a["id"], *map(float, a["data-t"].split())) for t, a in parse_page("flat/index.html").tags
+                     if "passage" in a.get("class", "").split()]
+        self.assertEqual(stretches[0][1], 4.0, "the stage's 100svh are the sequence's first 4 s")
+        self.assertEqual([b for _, _, b in stretches[:-1]], [a for _, a, _ in stretches[1:]], "each begins where the last ended")
+        stacking = re.compile(r"(?<![\w-])(z-index|transform|filter|opacity|isolation|contain|will-change|mix-blend-mode|perspective|clip-path|mask)\s*:")
+        for i, a, b in stretches:
+            h = round(25 * (b - a))
+            self.assertIn(f"#{i}{{height:{h}vh;height:{h}svh}}", css, f"#{i}: {b - a:g} s, {h}svh")
+            for body in re.findall(r"(?<![\w#-])#%s\{([^}]*)\}" % re.escape(i), css):
+                self.assertIsNone(stacking.search(body), f"#{i}{{{body}}} makes a stacking context")
+        stills = re.findall(r'"(\w+)", [\d.]+\]', re.search(r"const STILLS = (\[.*?\]);", js).group(1))
+        plates = json.loads((ROOT / "flat/media/plate.json").read_text(encoding="utf-8"))["plates"]
+        named = {f"flat/media/flat-{o}.mp4" for o in ("landscape", "portrait")} \
+            | {f"flat/media/still-{n}-{o}.jpg" for n in stills for o in ("landscape", "portrait")} \
+            | {"flat/media/plate.json"} | {f"flat/media/plate-{n:03d}.jpg" for n in plates}
+        self.assertIn('new URL("plate.json", media)', js)
+        self.assertIn('"plate-" + String(n).padStart(3, "0") + ".jpg"', js)
+        for o in ("landscape", "portrait"):
+            self.assertIn(f'"flat-{o}.mp4"', js)
+        self.assertIn('"still-" + STILLS.find(s => t < s[0])[1] + (portrait.matches ? "-portrait.jpg" : "-landscape.jpg")', js)
+        self.assertEqual(named, {p for p in DEPLOY_FILES if p.startswith("flat/media/")})
+
+    def test_the_instrument_computes_what_the_film_computed(self) -> None:
+        """Both looked flat's instrument draws its fringes in the visitor's browser (js/flat.js); the film's were computed by
+        tools/render-flat.py. The page says they come from the same physics, so: the same optical constants, the same
+        sodium lines and dome, and the page's own reflectance of glass | silver | air gap | steel, run under jsc, equal to a
+        reference evaluation of the renderer's at every phase across a fringe; and every figure the pages state is the scene's.
+        Its words name what its frames show: *Rings.* comes only once the second flat's wedge is shallower than its dome's
+        steepest slope, before which no fringe can close, and is up in full as that flat settles (until 2026-10-25 it came
+        over open bands and faded as the rings closed)."""
+        import ast, cmath, math
+        js = (ROOT / "js/flat.js").read_text(encoding="utf-8")
+        py = (ROOT / "tools/render-flat.py").read_text(encoding="utf-8")
+        num = r"(-?[\d.]+(?:e-?\d+)?)"
+        jc = re.search(r"const N_GLASS = %s, N_STEEL = \[%s, %s\], N_SILVER = \[%s, %s\], COAT = %s, LAMBDA = %s;" % ((num,) * 7), js)
+        pc = [re.search(r"^N_GLASS = %s" % num, py, re.M), re.search(r"^N_STEEL = complex\(%s, %s\)" % (num, num), py, re.M),
+              re.search(r"^N_SILVER = complex\(%s, %s\)" % (num, num), py, re.M), re.search(r"^COAT = %s" % num, py, re.M),
+              re.search(r"def stack\(u, lam=%s\)" % num, py)]
+        self.assertTrue(jc and all(pc), "the constants are where both files state them")
+        constants = [float(v) for v in jc.groups()]
+        self.assertEqual(constants, [float(v) for m in pc for v in m.groups()], "the page's optical constants are the film's")
+        for line in ("589.0e-9", "589.6e-9"):
+            self.assertIn(line, js); self.assertIn(line, py)
+        self.assertIn("2.0 / 3.0 *", js); self.assertIn("(589.0e-9, 2 / 3)", py)
+        self.assertIn("2.0 * 0.014 * 0.014", js); self.assertIn("-2 * 0.014 ** 2", py)   # the dome's width
+        self.assertIn("stateB, 1.2e-6", js); self.assertIn("'B': 1.2e-6", py)               # and its height
+        n_glass, s_re, s_im, a_re, a_im, coat, lam = constants
+        def stack(u):   # the renderer's characteristic matrices, as tools/render-flat.py writes them
+            M = [[1, 0], [0, 1]]
+            for n, t in ((complex(a_re, a_im), coat), (1.0, u * lam / 2)):
+                dl = 2 * math.pi * n * t / lam; c, s_ = cmath.cos(dl), cmath.sin(dl)
+                A = [[c, 1j * s_ / n], [1j * n * s_, c]]
+                M = [[M[0][0] * A[0][0] + M[0][1] * A[1][0], M[0][0] * A[0][1] + M[0][1] * A[1][1]],
+                     [M[1][0] * A[0][0] + M[1][1] * A[1][0], M[1][0] * A[0][1] + M[1][1] * A[1][1]]]
+            B, C = M[0][0] + M[0][1] * complex(s_re, s_im), M[1][0] + M[1][1] * complex(s_re, s_im)
+            return abs((n_glass * B - C) / (n_glass * B + C)) ** 2
+        phases = [i / 64 for i in range(64)]
+        body = js[js.index("const N_GLASS = "):js.index("const SHADER = `")]
+        run = subprocess.run(["/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc", "-e",
+                              body + "print(JSON.stringify(%s.map(stack)));" % json.dumps(phases)], capture_output=True, text=True)
+        page = json.loads(run.stdout)
+        self.assertEqual(len(page), len(phases), run.stderr)
+        self.assertLess(max(abs(a - stack(u)) for a, u in zip(page, phases)), 1e-9)
+        self.assertLess(min(page), 0.05, "the silvered flat's fringes are dark")
+        dome = float(re.search(r"'B': %s" % num, py).group(1))   # and the figures each page states are the scene's, all of them
+        for name, micro, nano in (("flat/index.html", r"([\d.]+) micrometre", r"(\d+)-nanometre"), ("ar/flat.html", r"([\d.]+) ميكرومتر", r"(\d+) نانومتر")):
+            text = (ROOT / name).read_text(encoding="utf-8")
+            self.assertEqual(set(re.findall(micro, text)), {"%.1f" % (dome * 1e6), "%.2f" % (lam / 2 * 1e6)}, name)
+            self.assertEqual(set(re.findall(nano, text)), {"%d" % round(coat * 1e9)}, name)
+        _, reach, settled = ast.literal_eval(re.search(r"^SETTLE = (\{.*?\})", py, re.M).group(1))["B"]
+        hi, lo = ast.literal_eval(re.search(r"^TILT = (\{.*?\})", py, re.M).group(1))["B"]
+        steepest = dome / 0.014 * math.exp(-0.5)   # the dome's flank, where its slope is greatest
+        x = next(i / 1000 for i in range(1001) if hi + (lo - hi) * (i / 1000) ** 2 * (3 - 2 * i / 1000) <= steepest)
+        closes, fade = reach + (settled - reach) * x, float(re.search(r"FADE = ([\d.]+)", js).group(1))
+        a, b = map(float, next(t["data-t"] for _, t in parse_page("flat/index.html").tags if t.get("id") == "rings").split())
+        self.assertGreater(a, closes, "Rings. comes before any fringe can close (%.2f s)" % closes)
+        self.assertTrue(a + fade <= settled <= b - fade, "Rings. is up in full as the second flat settles (%g s)" % settled)
+
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
         """ar/index.html carries index.html's film, cues, the passage's seconds, sections and projected figures, only in
         Arabic; one added to one page and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
@@ -638,7 +737,8 @@ class SiteContractTests(unittest.TestCase):
                                       ("contact.html", "en", None), ("ar/contact.html", "ar", "rtl"),
                                       ("adii/index.html", "en", None), ("ar/adii.html", "ar", "rtl"),
                                       ("awc-os/index.html", "en", None), ("ar/awc-os.html", "ar", "rtl"),
-                                      ("cythercad/index.html", "en", None), ("ar/cythercad.html", "ar", "rtl")):
+                                      ("cythercad/index.html", "en", None), ("ar/cythercad.html", "ar", "rtl"),
+                                      ("flat/index.html", "en", None), ("ar/flat.html", "ar", "rtl")):
             html = next(a for t, a in parse_page(page).tags if t == "html")
             self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
 
@@ -646,7 +746,8 @@ class SiteContractTests(unittest.TestCase):
         """Each page and its Arabic counterpart declare both as alternates (hreflang) and link each other visibly, the link
         marked with the language it leads to."""
         for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html"),
-                       ("awc-os/index.html", "ar/awc-os.html"), ("cythercad/index.html", "ar/cythercad.html")):
+                       ("awc-os/index.html", "ar/awc-os.html"), ("cythercad/index.html", "ar/cythercad.html"),
+                       ("flat/index.html", "ar/flat.html")):
             for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)

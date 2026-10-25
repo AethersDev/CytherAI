@@ -11,10 +11,10 @@
 set -euo pipefail
 
 # Files to hash (paths relative to project root)
-# the front door's script and stylesheet (the film) + the rooms' stylesheet: every resource a served page requests
+# the front door's script and stylesheet (the film) + the rooms' stylesheet + Both looked flat's (flat/): every resource a served page requests
 # with an integrity attribute. (The build identity below is a different projection: it covers every deploy.paths
 # byte, requested or not.)
-RESOURCES="css/film.css css/room.css js/film.js"
+RESOURCES="css/film.css css/room.css js/film.js css/flat.css js/flat.js"
 
 # HTML files to patch: every served page, read from the one declaration of what is served (a page added there is
 # stamped, and held to every per-page law in tools/test-site.py, with no second list to forget it in)

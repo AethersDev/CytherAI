@@ -1,0 +1,35 @@
+/* Both looked flat (flat/, ar/flat.html), over the front door's stage, words, close and footer (css/film.css): a sequence
+   the scroll moves (js/flat.js) through three stretches at one pace, 4 s of it a viewport (25svh a second; the stage's
+   100svh are its first 4), each as tall as its seconds; the last runs a viewport past the sequence's 32 s, its last frame
+   held, so its words are read before the instrument rises over the film (until 2026-10-25 they lay under it); then the
+   notes on the ground. No stretch makes a stacking context
+   (as the front door's: tools/test-site.py), and the words carry their own darkness (css/film.css). */
+#scene{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
+#lay{height:225vh;height:225svh}#other{height:325vh;height:325svh}#both{height:250vh;height:250svh}
+/* the opening, over the first frame */
+.landing small{display:block;color:var(--warm);margin-bottom:18px}
+.landing p{font-size:17px;line-height:1.55;color:var(--soft);max-width:44ch;margin:20px 0 0;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
+/* the instrument: in the page's flow, on the ground; the plates blended at the computed reflectance (js/flat.js) */
+#bench{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 96px}
+#bench small{display:block;color:var(--warm)}
+#bench h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:16px 0 0}
+#bench p{font-size:17px;line-height:1.55;color:var(--soft);max-width:52ch;margin:18px 0 0}#bench .cond{font-size:14px;color:var(--dim)}
+#bench figure{margin:40px 0 0;max-width:1180px}
+#press,#bench .fallback{display:block;width:100%;aspect-ratio:16/9;background:var(--lift,#111118);touch-action:none;cursor:grab}
+#press:active{cursor:grabbing}#bench .fallback{display:none;height:auto}
+.no-press #press{display:none}.no-press #bench .fallback{display:block}
+#bench figcaption{margin-top:14px;color:var(--soft);font-size:12px;text-transform:none;letter-spacing:.02em}   /* never upper-cased: µm is not MM */
+/* the close carries a sentence before its statement and one after it */
+.close p{font-size:17px;line-height:1.55;color:var(--soft);max-width:50ch;margin:0}.close p+h2{margin-top:22px}.close h2+p{margin-top:20px}
+.lost{display:none}.no-press .lost{display:inline}
+/* how it was made and what it is not: on the ground, a reading measure */
+.notes{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 0;display:flow-root}   /* its last margin stays on the ground */
+.notes section{max-width:46rem;margin:0 0 72px}
+.notes h2{font-family:News,serif;font-weight:300;font-size:clamp(26px,2.4vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0 0 6px}
+.notes p{font-size:16px;line-height:1.7;color:var(--soft);margin:14px 0 0}
+@media(max-width:760px){#bench{padding:80px 20px 64px}#bench h2{font-size:30px}#bench p{font-size:16px}.landing p,.close p{font-size:16px}.notes{padding:80px 20px 0}.notes section{margin-bottom:56px}}
+/* Arabic: its type and taller lines (css/film.css sets the stage's and the words') */
+:lang(ar) :is(.landing p,.close p,.notes p,#bench p){line-height:1.85}
+:lang(ar) #bench h2{font-family:Arabic,sans-serif;letter-spacing:0;line-height:1.45}
+:lang(ar) #bench figcaption{font-size:12px}
+:lang(ar) .notes h2{font-family:Arabic,sans-serif;letter-spacing:0;line-height:1.45}
