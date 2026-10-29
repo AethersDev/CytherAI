@@ -1,0 +1,77 @@
+/* The rooms: the pages a visitor reaches from the front door (an evidence page, the contact page). Quieter than the
+   front door and of the same company: its type, its tokens, its seal lockup, its footer. Dark in either device theme, an
+   art-direction choice the owner kept (2026-10-21): the visitor stays in the passage's world after leaving it, and the
+   quiet layout and the stillness give the change of pace. No motion; the artifact is the loudest thing in the room. */
+@font-face{font-family:Public;src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:News;src:url(../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800}
+@font-face{font-family:Plex;src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2")}
+@font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
+@font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
+/* the front door's tokens, and two of the room's own: a lifted ground under a field or an artifact, and a field's edge */
+:root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff;--lift:#111118;--edge:#6c6976}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--warm);outline-offset:6px}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* the front door's header and lockup, in the page's flow */
+header{height:92px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 5vw}
+.side{display:flex;align-items:center;gap:24px}
+.wordmark{display:inline-flex;align-items:center;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
+.top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
+main{max-width:1180px;margin:0 auto;padding:48px 5vw 0}
+.label{display:block;font-family:Plex,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
+h1{font-family:News,serif;font-weight:300;font-size:clamp(32px,3.2vw,46px);line-height:1.06;letter-spacing:-.02em;margin:18px 0 0}
+.by{font-size:15px;margin-top:14px}.by a,.by [lang=en]{white-space:nowrap}   /* whose work the evidence is, under its headline; a name or its link kept whole */
+h2{font-family:News,serif;font-weight:300;font-size:clamp(26px,2.4vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0 0 20px}
+p{font-size:17px;line-height:1.55;color:var(--soft);margin:18px 0 0;max-width:48ch}
+.limit{font-size:14px;color:var(--dim);border-top:1px solid var(--rule);padding-top:14px;margin-top:24px}
+/* the arrival: what the evidence is, what it shows and its limit, beside the evidence itself; on a phone the evidence
+   comes straight after its headline and its limit, and what it shows follows it */
+.arrival{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"head fig" "body fig" "limit fig";column-gap:56px;align-items:start}
+.arrival .head{grid-area:head}.arrival .body{grid-area:body}.arrival .limit{grid-area:limit}.arrival figure{grid-area:fig;align-self:center}
+figure{margin:0}video{display:block;width:100%;aspect-ratio:16/9;background:var(--lift);border:1px solid var(--rule)}
+figcaption{margin-top:12px;font-family:Plex,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+section{margin-top:96px;padding-top:40px;border-top:1px solid var(--rule)}
+/* the artifact as text, verbatim: quiet, opened on request */
+details{margin-top:24px;max-width:46rem}summary{cursor:pointer;display:inline-block;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}summary:hover{color:var(--warm);border-color:var(--warm)}
+details h3{font-family:Public,sans-serif;font-size:16px;font-weight:600;color:var(--ink);margin:32px 0 8px}
+details li,details p{font-size:15px;line-height:1.6;color:var(--soft);max-width:none}details ol,details ul{padding-inline-start:22px}
+pre,code,table{font-family:Plex,monospace;font-size:12.5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--soft);background:var(--lift);border:1px solid var(--rule);padding:12px 14px}
+table{display:block;overflow-x:auto;border-collapse:collapse;color:var(--soft);margin:8px 0}th,td{text-align:start;padding-block:5px;padding-inline:0 16px;border-bottom:1px solid var(--rule)}th{color:var(--dim);font-weight:400}
+/* an evidence room's record beside its arrival (CytherCAD's figures), on the lifted ground; words set as a table (an
+   engine's verdicts, a record's facts); a section's own numbered list */
+.record{background:var(--lift);border:1px solid var(--rule);padding:16px 20px 14px}.record .outcome{margin:0 0 6px;max-width:none;font-family:Plex,monospace;font-size:12.5px;color:var(--ink)}.record table{display:table;width:100%;margin:0}.record td{color:var(--ink);text-align:end;white-space:nowrap;padding-inline-end:0}
+.words{max-width:46rem;margin-top:24px}.words th{color:var(--ink);vertical-align:top;white-space:nowrap}.words td{font:15px/1.55 Public,sans-serif}
+section>ol{max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(--soft)}section>ol>li{font-size:15px;line-height:1.6;margin-top:8px}
+.team{list-style:none;margin:0;padding:0;max-width:46rem}.team li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.team strong{display:block;font-weight:600}.team span{display:block;font-size:15px;color:var(--dim);margin-top:2px}
+/* the ways on: the front door's two, a solid one and a plain one */
+.next{display:flex;flex-wrap:wrap;align-items:center;gap:28px;margin-top:40px}
+.solid{display:inline-flex;align-items:center;background:var(--ink);color:var(--ground);font-size:15px;padding:16px 22px;min-height:52px}.solid:hover{background:var(--hover)}
+.plain{font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
+/* a legal page's text as written, at a reading measure, with quiet headings; the brief's sections; the missing page */
+.legal{max-width:46rem}
+.legal h2{font:600 17px/1.4 Public,sans-serif;letter-spacing:0;color:var(--ink);margin:40px 0 0}
+.legal p,.legal li{font-size:16px;line-height:1.7;color:var(--soft);max-width:none}.legal p{margin-top:12px}
+.legal .dates{font-family:Plex,monospace;font-size:12px;color:var(--dim);margin-top:14px}.legal ul{margin:12px 0 0;padding-inline-start:22px}.legal li{margin-top:6px}.legal strong{color:var(--ink);font-weight:600}
+.legal a{border-bottom:1px solid var(--rule)}.legal a:hover{color:var(--warm);border-color:var(--warm)}
+.box{background:var(--lift);border:1px solid var(--rule);padding:6px 20px 18px;margin-top:20px}
+.brief .record{max-width:46rem;margin-top:24px}.brief section>p{max-width:46rem}
+.missing section{margin-top:64px}
+/* the contact page: three short answers, handed to the visitor's own mail app */
+.ask{max-width:640px}.ask p{max-width:none}
+.field{display:block;margin-top:32px}.field b{display:block;font-weight:600;font-size:16px}.field i{display:block;font-style:normal;font-size:14px;color:var(--dim);margin-top:4px}
+textarea{display:block;width:100%;min-height:96px;margin-top:12px;padding:12px 14px;background:var(--lift);color:var(--ink);border:1px solid var(--edge);font:16px/1.5 Public,sans-serif;resize:vertical}
+textarea:focus-visible{outline-offset:2px}
+.note{font-size:14px;color:var(--dim);margin-top:16px}
+.also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--rule)}.also a:hover{color:var(--warm);border-color:var(--warm)}
+body>footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a:hover{color:var(--ink)}
+@media(max-width:860px){.arrival{grid-template-columns:1fr;grid-template-areas:"head" "limit" "fig" "body"}.arrival figure{margin-top:28px}}
+@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
+/* Arabic: its type, never letter-spaced, taller lines; a Latin name keeps its own order */
+:lang(ar) body{font-family:Arabic,Public,sans-serif}
+:lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
+:lang(ar) :is(h1,h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
+:lang(ar) p{line-height:1.85}:lang(ar) .words td{font-family:Arabic,Public,sans-serif;line-height:1.85}:lang(ar) textarea{font-family:Arabic,Public,sans-serif}
+:lang(ar) [lang=en]{unicode-bidi:isolate}

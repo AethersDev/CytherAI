@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#07070a">
+<meta name="robots" content="noindex">
+<title>AWC-OS, the demonstration — CytherAI</title>
+<meta name="description" content="AWC-OS, a hackathon demonstration: a fine-tuned model writes a financial program, and a separate deterministic engine runs it, refuses it with a Sharia-compliant alternative, or blocks it. No deployment is claimed.">
+<meta property="og:site_name" content="CytherAI">
+<meta property="og:title" content="AWC-OS, the demonstration — CytherAI">
+<meta property="og:description" content="Not every answer was allowed. A hackathon demonstration of AWC-OS; no deployment is claimed.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/awc-os/">
+<link rel="canonical" href="https://cytherai.com/awc-os/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_SA">
+<meta property="og:image" content="https://cytherai.com/awc-os/media/poster-en.jpg">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="720">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="A frame of AWC-OS's film: the engine's trace of a zakat computation, marked EXECUTED, above the phone that asked for it.">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" hreflang="en" href="https://cytherai.com/awc-os/">
+<link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/awc-os.html">
+<meta name="build-hash" content="21274C6BC7C41E15">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+<!-- AWC-OS's evidence, a room of the front door (css/room.css): its arrival says what the demonstration is, who built it,
+     what it shows and what it does not claim, beside its film; how the engine decides, the demonstration's paths, the film
+     as text and its source follow, verbatim from the page they replace (backup/before-rooms/awc-os/, the Arabic-first
+     evaluation gateway with its language toggle). Its Arabic counterpart is ar/awc-os.html, with the Arabic film. The
+     films' closing production line stays masked and no deployment is claimed (the Alinma plan, cancelled 2026-10-19:
+     backup/awc-os-v1/). The reviewed set is pinned in tools/test-site.py. -->
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
+<link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
+</head>
+<body>
+<header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#awc-os-evidence">← The passage</a><a class="top" href="../ar/awc-os.html" hreflang="ar" lang="ar">العربية</a></nav></header>
+<main>
+<div class="arrival">
+<div class="head">
+<span class="label">02 · AWC-OS · The demonstration</span>
+<h1>Not every answer was allowed.</h1>
+<p class="by">Developed by Al-Baseera (<span lang="ar">البصيرة</span>) and presented at the AMAD 2026 FinTech Hackathon (Alinma Bank × Tuwaiq Academy).</p>
+</div>
+<p class="body">A fine-tuned model writes a program for each financial question; a separate, deterministic engine runs it, refuses it with a Sharia-compliant alternative, or blocks it. In the film, a request for a savings account paying 5% interest is refused before it reaches the customer, and a halal alternative is offered; a zakat question is computed exactly, SAR 4,226.25, and its trace is opened step by step. One savings prompt produced an over-promising takaful program: its assertion failed, the engine returned BLOCKED, and no rule was relaxed to force a successful demonstration.</p>
+<p class="limit">A hackathon demonstration: the MVP runs on an evaluation machine, not on deployed hosting, and the iPhone demo runs offline. No deployment is claimed.</p>
+<figure id="film"><video controls playsinline preload="metadata" poster="media/poster-en.jpg"><source src="media/AWC_OS_film_en.mp4" type="video/mp4"></video><figcaption>The film · 85 seconds · music, no speech</figcaption></figure>
+</div>
+<nav class="next" aria-label="From here"><a class="solid" href="../contact.html">Tell us what must never happen →</a><a class="plain" href="../#awc-os-evidence">← Back to the passage</a></nav>
+<section aria-labelledby="how-h">
+<h2 id="how-h">How it decides</h2>
+<pre>question + financial state
+  → fine-tuned model (live synthesis, greedy decoding)
+  → FSL program
+  → Swift fsl-cli → AWCOSCore   (canonical interpreter — same engine as the iPhone app)
+  → EXECUTED · REFUSED · BLOCKED   + replayable receipt</pre>
+<p>The browser MVP and the native iPhone application execute generated programs through the same Swift AWCOSCore engine — the rule layer is not reimplemented and not simulated.</p>
+<table class="words">
+<tr><th>EXECUTED</th><td>The program parsed, every predicate and assertion passed, execution completed.</td></tr>
+<tr><th>REFUSED</th><td>The request violated a constitutional predicate; a policy decision — refused, with an attested Sharia-compliant alternative.</td></tr>
+<tr><th>BLOCKED</th><td>The proposal failed an assertion or could not establish execution conditions; no result is authorized.</td></tr>
+</table>
+<p><strong>Measured failure retained:</strong> one savings prompt generated an over-promising takaful program whose assertion failed; the engine returned BLOCKED. No rule was relaxed and no output was rewritten to force a successful demonstration — the prompt remains reachable through free-form input.</p>
+<p>AWC-OS does not measure success by whether the model always produces an answer; it measures success by whether unauthorized answers fail safely.</p>
+</section>
+<section aria-labelledby="paths-h">
+<h2 id="paths-h">The demonstration paths</h2>
+<ol>
+<li>Zakat — exact numerical execution (SAR 4,226.25): correct computation</li>
+<li>Portfolio audit — attestations and execution trace: explainability</li>
+<li>Planning — job-loss cashflow scenario: forward recommendation</li>
+<li>Adversarial — constitutional refusal with compliant alternative and AAOIFI citation: constitutional refusal</li>
+</ol>
+<p>The live MVP runs on a real evaluation machine, not on always-on cloud hosting: live synthesis from the fine-tuned model (4–8s per question), executed through the same deterministic Swift engine that runs on the iPhone. The demo runs offline on an iPhone 16 Pro Max. A live session can be requested through the contact page.</p>
+</section>
+<section aria-labelledby="text-h">
+<h2 id="text-h">The film as text</h2>
+<details id="text">
+<summary>The English film, in the order it appears</summary>
+        <p>85 seconds; music, no speech. What is on screen, in order:</p>
+        <p>Every financial decision made about you today… …happened somewhere you can’t see.</p>
+        <p>You get the outcome. Never the reasoning.</p>
+        <p>Your bank says: «Trust us.» AI says: «Trust me.»</p>
+        <p>What if every decision had to leave a receipt?</p>
+        <p>[A question is typed into a chat box.] What’s the best savings account with 5% interest?</p>
+        <p>[A card.] Try to break it. Force a Riba-bearing recommendation. Watch the constitution refuse it before it reaches the customer. — What’s the best savings account with 5% interest? — <b>REFUSED</b>. Halal alternative: Alinma Wakala Investment Deposit. No Riba · Qur’an 2:275.</p>
+        <p>It can’t. Not won’t — can’t. § ITS CONSTITUTION FORBIDS RIBA · QUR’AN 2:275</p>
+        <p>[A phone: the Financial Assistant, for a customer named Ahmad, with 3.9 months runway, income stability 96%, and three small bars too small to read with certainty. The customer asks:] How do I calculate my Zakat this year? [The reply:] Your Zakat for this year: Zakat-eligible assets total SAR 169,050, above the nisab threshold of SAR 21,080, so Zakat is due. At 2.5% that is SAR 4,226.25. Sharia reference: Al-Nawawi, Al-Majmu‘ 6/7.</p>
+        <p>«Prove it.»</p>
+        <p>[The reply opens its trace, one checked card after another:]</p>
+        <ul>
+          <li>01 Customer state: أحمد · Ahmad. Monthly income SAR 22,000 · Cash runway 3.9 months. Accounts: 4 · Nisab basis: gold.</li>
+          <li>03 FSL program emitted:<pre>PROGRAM compute_zakat:
+  CONSTRAINT zakat_allocation
+  LET eligible := sum(accounts WHERE zakatable = true)
+  ASSERT hawl_satisfied
+  IF eligible &gt; nisab_threshold THEN
+    LET zakat_due := round(eligible * 0.025, 2)
+    EMIT zakat_result, eligible_assets_sar = eligible, nisab_threshold_sar = nisab_threshold, zakat_due_sar = zakat_due, hijri_year = hijri_year, status = "due", sharia_ref = "Al-Nawawi, Al-Majmu‘ 6/7"
+  ELSE
+    LET zakat_due := 0
+    EMIT zakat_result, eligible_assets_sar = eligible, nisab_threshold_sar = nisab_threshold, zakat_due_sar = zakat_due, hijri_year = hijri_year, status = "below_nisab", sharia_ref = "Al-Nawawi, Al-Majmu‘ 6/7"
+  ENDIF</pre></li>
+          <li>02 Active constraint set: zakat_allocation, Al-Nawawi, Al-Majmu’ 6/7.</li>
+          <li>04 Symbolic engine output (its last line fades out):<pre>zakat_result   &lt;obj keys=["eligible_assets_sar", "hijri_year", "nisab_threshold_sar", "sharia_ref", "status", "zakat_due_sar"]&gt;
+
+CONSTRAINT zakat_allocation fired
+LET eligible := 169050
+ASSERT true = true ✓
+IF true → then
+LET zakat_due := 4226.25
+EMIT zakat_result := &lt;object</pre></li>
+        </ul>
+        <p>EXECUTED · Interpreter · 1ms · Rules fired: 1 — fsl://trace/58e1f5c0d1d80dc8</p>
+        <p>«Trust us.» «Trust me.» «Check me.»</p>
+        <p>§ That’s the constitution.</p>
+        <p>AWC ▪ OS · FINANCIAL INTELLIGENCE LAYER. DEVELOPED BY Al-Baseera (البصيرة). PRESENTED AT AMAD 2026 FINTECH HACKATHON · alinma · Tuwaiq Academy. ONE STEP AHEAD — AND ABLE TO PROVE IT.</p>
+</details>
+</section>
+<section aria-labelledby="source-h">
+<h2 id="source-h">Source</h2>
+<p>The complete browser-MVP runtime is open for review — server, canonical-interpreter bridge (fsl-cli), and the judge-facing UI: <a class="plain" href="https://github.com/CytherAi/aws-os_mvp" target="_blank" rel="noopener">github.com/CytherAi/aws-os_mvp ↗</a></p>
+</section>
+</main>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../pages/brief.html">Brief</a> · <a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
+</body>
+</html>

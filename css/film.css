@@ -1,0 +1,88 @@
+@font-face{font-family:Public;src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900}
+@font-face{font-family:News;src:url(../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800}
+@font-face{font-family:Plex;src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2")}
+@font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
+@font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
+/* one lit environment, dark whatever the device's theme (the owner, 2026-10-20: light mode retired from the front door) */
+:root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
+a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offset:6px}
+.mono{font-family:Plex,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+#film,#passage{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
+/* the passage fades in over the film's frame: the two encodings of one image differ only by their noise, and a late
+   arrival meets a scroll already moving */
+#passage{opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+body.scrub[data-state=still] #passage{opacity:1;visibility:visible;transition:opacity .4s,visibility 0s}
+header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+.side{display:flex;align-items:center;gap:24px}
+.note{position:absolute;inset-inline-start:5vw;bottom:18px;margin:0;color:var(--dim)}
+.wordmark{display:inline-flex;align-items:center;font-family:Public,sans-serif;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
+.top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
+/* the film's stage, one viewport tall; 100vh first for an engine without svh, which would drop the height and collapse it */
+.stage{position:relative;z-index:2;height:100vh;height:100svh;padding:0 5vw;overflow:hidden}
+.line,.landing{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw);margin:0;opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s}
+.line{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+header::before{content:"";position:absolute;inset:0 0 -56px;z-index:-1;pointer-events:none;background:linear-gradient(#07070ae6,#07070ab3 55%,transparent)}
+.stage::after{content:"";position:absolute;inset-inline:0;bottom:0;height:150px;z-index:-1;pointer-events:none;background:linear-gradient(transparent,#07070acc 40%,#07070af7)}
+:is(.line,.landing)::before{content:"";position:absolute;inset-block:-12vh -14vh;inset-inline:-10vw -28vw;z-index:-1;background:radial-gradient(ellipse at 35% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
+[dir=rtl] :is(.line,.landing)::before{background:radial-gradient(ellipse at 65% 55%,#07070ab8,#07070a66 45%,transparent 72%)}
+.on{opacity:1;visibility:visible;transition:opacity .6s,visibility 0s}
+.landing{visibility:visible}.landing nav{transition:visibility 0s .6s}.landing:not(.on) nav{visibility:hidden}.landing.on nav{transition:visibility 0s}
+.sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+body[data-state=still] .line{transition:none}
+.no-js .landing{animation:unveil .6s 6s forwards}@keyframes unveil{to{opacity:1;visibility:visible}}
+.landing h1{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0;text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+.landing nav{display:flex;gap:28px;align-items:center;margin-top:28px;flex-wrap:wrap}
+.solid{display:inline-flex;align-items:center;background:var(--ink);color:var(--ground);font-size:15px;padding:16px 22px;min-height:52px}.solid:hover{background:var(--hover)}
+.plain{font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
+#replay::before{content:"";position:absolute;inset:-12px -18px;z-index:-1;pointer-events:none;background:radial-gradient(farthest-side,#07070af0 55%,#07070a00)}
+#replay{position:absolute;z-index:0;inset-inline-end:5vw;bottom:17vh;color:var(--dim);border-bottom:1px solid var(--rule);padding-bottom:4px}#replay:hover{color:var(--ink);border-color:var(--ink)}
+@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}.stage{padding:0 20px}.note{inset-inline-start:20px;bottom:14px}
+ .line,.landing{inset-inline:20px;bottom:14vh;max-width:none}.line{font-size:28px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
+ #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
+@media(max-width:359px){.side .to{display:none}}   /* the route past the opening stays wherever it fits beside the brand and the language */
+/* the passage (js/film.js): five stretches of scroll, the principle's, ADII's, AWC-OS's, CytherCAD's and the return to the
+   film's world, each as tall as its seconds at the stage's own pace (50svh a second: the stage's 100svh are the passage's
+   first two), so a scroll moves the scene evenly; vh first, as the stage. Its words are fixed at the foot of the frame, below the scene, each shown in its window of the passage's
+   seconds (data-t), faded in and out by the scroll itself (js/film.js: with a timed fade on these fixed words WebKit
+   missed 16–24 frames a pass, without it 1–3); one not shown takes no pointer. A stretch is no stacking context: one with
+   a z-index held its fixed words inside it, and the next stretch, transparent and later, lay over them, so from 2026-10-20
+   to 2026-10-21 no system's link took a click or a tap (tools/test-site.py) */
+.passage{position:relative}#systems{height:150vh;height:150svh}#adii{height:350vh;height:350svh}#awc-os{height:200vh;height:200svh}
+#cythercad{height:250vh;height:250svh}#return{height:200vh;height:200svh}
+.say{position:fixed;z-index:2;inset-inline-start:5vw;bottom:10vh;width:fit-content;max-width:min(640px,90vw);opacity:0;pointer-events:none}
+.say.on{pointer-events:auto}.say:focus-within{opacity:1!important;pointer-events:auto}   /* focus never lands on words unseen, whatever the scroll set */
+.no-js .say{position:relative;inset:auto;margin:0 5vw;opacity:1;pointer-events:auto}
+/* behind the passage's words and the close's, a darkness opaque under them and soft at its edges (a shadow, not a filter:
+   nothing to recompute as the page scrolls): the current runs through the words' band on a phone */
+:is(.say,.close>div)::before{content:"";position:absolute;inset:-14px -22px;z-index:-1;pointer-events:none;background:#07070a;box-shadow:0 0 28px 22px #07070a}
+.say small{color:var(--warm)}
+.say h2,.say .big{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;margin:0;color:var(--ink);text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+.close h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0}
+.say small+h2{margin-top:16px}
+.say p{font-size:17px;line-height:1.55;color:var(--soft);margin:14px 0 0;max-width:48ch;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
+.say p.big{margin:0}.say .cond{color:var(--dim);font-size:14px}.say .route{margin-top:14px}.say .cond+.route{margin-top:8px}
+.route{display:inline-block;margin-top:8px;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}.route:hover{color:var(--warm);border-color:var(--warm)}
+/* the close: the invitation over the passage's last frame, the film's world again, where the film's statement stood */
+.close{position:relative;z-index:2;height:100vh;height:100svh;overflow:hidden}.close>div{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw)}
+.close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}.close nav .mono{color:var(--dim)}.close nav+.route{margin-top:36px;font-size:14px;color:var(--soft)}   /* Both looked flat (flat/), after the invitation */
+body>footer{position:relative;z-index:2;background:var(--ground);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:120px 5vw 40px;color:var(--dim)}body>footer a:hover{color:var(--ink)}
+/* AWC-OS's words hold its condition and route throughout (the owner, 2026-10-21): on a phone wide enough, its headline
+   takes one line so the words stay below the program waiting at the opening */
+@media(min-width:360px) and (max-width:760px){#awc-os .say h2 br{display:none}}
+@media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}body>footer{padding:72px 20px 32px}}
+/* a window too short for a system's words (400% zoom; a small phone on its side): they scroll within themselves rather than
+   reach past the top, where no scroll could bring their first lines back; their ground moves onto them, so the scroll clips none.
+   The close, in the page's flow, grows to its words instead: Both looked flat's are taller than such a window, and the fixed
+   box cut its first sentence and its statement (the audit of 2026-10-29) */
+@media(max-height:300px),(max-width:359px) and (max-height:360px){html:not(.no-js) .say{max-height:calc(90vh - 14px);max-height:calc(90svh - 14px);overflow-y:auto;background:#07070a;box-shadow:0 0 28px 22px #07070a}html:not(.no-js) .say::before{display:none}.close{height:auto;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end}.close>div{position:relative;inset:auto;margin:14px max(20px,5vw) 14vh}}
+/* Arabic (ar/): the Arabic type, never letter-spaced (it breaks the joins), taller lines for its marks; Latin names keep their own */
+:lang(ar) body{font-family:Arabic,Public,sans-serif}
+:lang(ar) .mono{font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
+:lang(ar) :is(.line,.landing h1,.say h2,.say .big,.close h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
+@media(max-width:760px){:lang(ar) :is(.landing h1,.close h2){font-size:26px}}
+:lang(ar) .say p:not(.big){line-height:1.85}
+:lang(ar) [lang=en]{unicode-bidi:isolate;white-space:nowrap}   /* a Latin name in Arabic text stays whole, in its own order */
+@media(prefers-reduced-motion:reduce){.line,.landing,.on,#passage{transition:none}}
