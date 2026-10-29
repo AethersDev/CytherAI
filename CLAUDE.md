@@ -356,7 +356,7 @@ the passage's world while the quiet layout and the stillness give the change of 
 the recorded run is, whose work it is (*Built by Group 05* and its four names, under the headline: the company's identity
 never hides the team's authorship), what decision it shows (from the run's own text) and what it does not claim, beside
 the run itself (on a phone: the headline, the byline, the limit, the run, then what it shows); the run as text and the
-team with their CVs follow, verbatim. `ar/adii.html` introduces it in Arabic, the team's names in Latin, with the run (its
+team follow, verbatim (their CVs withdrawn by the owner, 2026-10-30). `ar/adii.html` introduces it in Arabic, the team's names in Latin, with the run (its
 interface in English) and a marked link to the English text. The contact pages continue *Tell us what must never
 happen.* with three plain questions (*What system are you working on?* · *What would you want AI to do?* · *What must
 never happen?*), composed into one readable email draft for the visitor's own email app: the button says *Open email
@@ -466,7 +466,8 @@ them, its fonts), which opens from the repository root; `/exception/` now answer
 
 **Project pages** (`adii/`, `awc-os/`, `cythercad/`) ship only their reviewed publication set, pinned in
 `REVIEWED_PUBLICATION` (`tools/test-site.py`): a new file is served once it is reviewed and
-named there. `adii/` keeps every URL its first publication served, the CVs included; all three are rooms since 2026-10-21;
+named there. `adii/` keeps every URL its first publication served but the team's CVs, withdrawn by the owner on 2026-10-30 and
+required to 404 (`tools/probe-origin.py`); all three are rooms since 2026-10-21;
 `awc-os/live/` redirects to an ephemeral tunnel and never ships. The Alinma plan was cancelled (2026-10-19):
 AWC-OS's films have their closing production line masked and its competition deck is withdrawn (the originals:
 `backup/awc-os-v1/`); state no Alinma deployment or pilot. They are stamped like

@@ -3,7 +3,8 @@
    event by event (no page loads the engine since THE EXCEPTION retired, 2026-10-16; it is
    the record js/instrument.js binds). Every event names the position it was judged from,
    so a consumer can redraw the run without reaching into the state; audit() equals the
-   streamed engine; the kernel never disagrees with the boundary (INVALID EMITTED 0).
+   streamed engine; the kernel never disagrees with the boundary (INVALID EMITTED 0), and, asked directly, refuses a
+   program that breaks any one of its rules.
 
    Run: jsc js/manifest.js js/instrument.js tools/test-boundary.js
    Prints PASS lines; throws — nonzero exit — on any failure. */
@@ -42,6 +43,16 @@ ok(I.judge([H(4), V(4), Hn(3), Vn(4), H(2), V(2), Z]).why === "CROSSES" && I.jud
    "a self-intersecting proposal is refused as CROSSES at the token that crosses (V−4, back over H+4)");
 ok(I.judge([H(2), V(2)]).why === "CLOSURE" && I.judge([H(2), V(2)]).at === 2, "an unclosed proposal is refused as CLOSURE after its last token");
 ok(I.judge([H(4), Vn(4), H(4), Z]).why === "BOUNDS" && I.judge([H(4), Vn(4), H(4), Z]).at === 2, "BOUNDS is named at the token that leaves the grid");
+/* the kernel only ever meets programs biAdmit has closed, so it is asked directly: each program breaks one of its rules
+   and no other, and the kernel must refuse it on its own (a kernel that admitted everything passed every check above) */
+var V0 = { k: "V", sg: 1, mg: 0, s: "V+0" }, kernelRefuses = {
+  "over range": [H(5), V(2), Hn(5), Z], "axis order": [H(1), H(1), V(1), V(1), Hn(2), Z], "out of bounds": [H(2), V(4), H(2), V(4), Hn(4), Z],
+  "crossing": [H(4), V(2), Hn(2), Vn(4), Hn(2), Z], "closing cross": [H(2), V(2), H(2), Vn(2), Z], "closing axis": [H(2), V(4), Hn(2), Vn(2), Z],
+  "closing off both axes": [Hn(2), V(4), H(4), Vn(2), Z], "fewer than three segments": [H(1), V0, Z], "a token after the close": [H(2), V(2), Hn(2), Z, V(1)],
+  "never closed": [H(2), V(2)] };
+var admittedByKernel = Object.keys(kernelRefuses).filter(function (n) { return I.biKernel(kernelRefuses[n]) !== false; });
+ok(admittedByKernel.length === 0, "the kernel refuses, on its own, each rule broken alone: " + Object.keys(kernelRefuses).join(" · ") +
+   (admittedByKernel.length ? " — admitted: " + admittedByKernel.join(" · ") : ""));
 var f = I.biEngine(1); for (var j = 0; j < 4000; j++) f.step();
 ok(f.st.inv === 0 && f.st.adm > 0, "seed 01 (the RUN PROPOSER stream), 4,000 proposals: admitted " + f.st.adm + ", invalid emitted 0");
 if (fails) throw new Error(fails + " boundary regression(s) failed");

@@ -61,7 +61,7 @@ HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 # DOC-2026-002 retired with the cold-paper pages, 2026-10-21), fake meters and the retired
 # ledger's vocabulary may not reach a served file
 BANNED = re.compile(r"--brass|--gold|DOC-20\d\d-\d{3}|CONDUCT RECEIPT|[Aa]ppend-only|1e-12|−\d+\s?M\b")
-# ADII keeps every URL its first publication served (the CVs included); AWC-OS ships its room and its films with their
+# ADII keeps every URL its first publication served but the team's CVs (withdrawn by the owner, 2026-10-30); AWC-OS ships its room and its films with their
 # posters — not the live-MVP tunnel redirect, not the competition deck (the cancelled Alinma plan, withdrawn 2026-10-19 to
 # backup/awc-os-v1/), and not the gateway's language toggle, retired with it to backup/before-rooms/awc-os/ (2026-10-21);
 # CytherCAD's record is a page of its own
@@ -75,7 +75,7 @@ EVIDENCE = (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html")
 REVIEWED_PUBLICATION = {
     "adii/": {"adii/index.html", "adii/favicon.svg", "adii/fonts/OFL.txt", "adii/fonts/ibm-plex-mono-400.woff2",
               "adii/fonts/newsreader-variable.woff2", "adii/fonts/public-sans-variable.woff2", "adii/poster.jpg",
-              "adii/replay.mp4", "adii/cv/ibrahem.pdf", "adii/cv/jorie.pdf", "adii/cv/malek.pdf", "adii/cv/nasser.pdf"},
+              "adii/replay.mp4"},
     "awc-os/": {"awc-os/index.html", "awc-os/media/AWC_OS_film_ar.mp4", "awc-os/media/AWC_OS_film_en.mp4",
                 "awc-os/media/poster-ar.jpg", "awc-os/media/poster-en.jpg"},
     "cythercad/": {"cythercad/index.html"},

@@ -3,9 +3,10 @@
 # gh-pages branch of origin, which GitHub Pages serves at cytherai.com (CNAME).
 #
 # What it refuses, and why:
-#   · any uncommitted change to a tracked file — the origin would carry bytes no commit
-#     records, or ./verify.sh would judge a verifier or a corpus no commit records: either
-#     way the build would name a state nobody can check out and re-verify;
+#   · any uncommitted change to a tracked file, or a deploy.paths file git does not track
+#     (untracked or ignored: deploy.sh would ship it all the same) — the origin would carry
+#     bytes no commit records, or ./verify.sh would judge a verifier or a corpus no commit
+#     records: either way the build would name a state nobody can check out and re-verify;
 #   · a HEAD that is not on the canonical lineage (master) — merging is the act of
 #     admission, and the public origin serves admitted states only;
 #   · a failing ./verify.sh — the artifact must be the one the corpus was stamped for.
@@ -28,6 +29,8 @@ unset DIST   # deploy.sh's test override: the artifact built is the one pushed, 
 
 dirty=$(git status --porcelain --untracked-files=no)
 [ -z "$dirty" ] || { echo "[publish] REFUSED: uncommitted changes:"; echo "$dirty"; exit 1; }
+git ls-files --error-unmatch -- $(cat deploy.paths) >/dev/null || {
+    echo "[publish] REFUSED: deploy.paths names a file no commit records (above)"; exit 1; }
 git merge-base --is-ancestor HEAD "$CANONICAL_REF" || {
     echo "[publish] REFUSED: HEAD $(git rev-parse --short HEAD) is not admitted (not reachable from $CANONICAL_REF)"; exit 1; }
 

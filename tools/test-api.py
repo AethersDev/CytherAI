@@ -27,7 +27,7 @@ def check(cond, name):
 MODULES = {"CytherManifest": "js/manifest.js", "CytherInstrument": "js/instrument.js"}
 INVENTORY = {
     "CytherManifest": ["project", "MANIFEST", "VALIDATION", "CANON", "ADMISSION_NONCE", "CHECKSUM"],
-    "CytherInstrument": ["judge", "biEngine", "audit"],
+    "CytherInstrument": ["judge", "biEngine", "biKernel", "audit"],
 }
 JSC = "/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc"
 SERVED = [line.strip() for line in open(os.path.join(ROOT, "deploy.paths"), encoding="utf-8") if line.strip()]

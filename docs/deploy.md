@@ -2201,6 +2201,53 @@ of this build, and accepted both fixes, finding no remaining blocker in the case
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_5F31ACE5CE649983`), 63 of 63 served paths matching the artifact.
 
+## 5af. The audit of 2026-10-29: five findings fixed; the ADII CVs withdrawn — 2026-10-30
+
+Build `21274C6BC7C41E15` (`#reading_ink_21274C6BC7C41E15`, `#film_settle_21274C6BC7C41E15`). It follows the live
+`3FFE3B0DA1273F4B` (Both looked flat, 2026-10-25), which was published without its browser observations: the corpus read
+`release: NOT_CERTIFIED`, its ink, settle and origin receipts naming `5F31ACE5CE649983`, and `publish.sh` does not read
+the corpus.
+
+**The audit.** A production-readiness audit of `a37a750` (2026-10-29; the owner pasted its summary on 2026-10-30)
+confirmed 40 findings: five medium, 31 low and four informational. The five medium are fixed here, each reproduced
+first and its check shown to fail without its fix:
+- **`publish.sh` could publish a served file no commit records.** Since `5553a23` (2026-10-19) its dirty-tree check
+  skipped untracked files, and `deploy.sh` ships any working-tree file `deploy.paths` names. It now also refuses a
+  `deploy.paths` file git does not track, ignored ones included (`git ls-files --error-unmatch`). In a scratch
+  repository an untracked served file passed the old check; the new one refuses it and passes it once committed.
+- **A severity relabel took a row out of the release judgment.** `tools/vaic_validate.py` checked severity only on core
+  and grammar rows and chose a scope's judged rows by severity, so CY-SEM-003 relabelled `Mandatory` left the projection
+  with the corpus VALID. Each judged scope now has one severity (projection `mandatory`, origin `release_mandatory`), and
+  any other is INVALID (`test_a_row_cannot_leave_judgment_by_a_severity_relabel`).
+- **The boundary test could not see the kernel.** `biKernel` only ever met programs `biAdmit` had already closed, so a
+  kernel that admitted everything passed every check. `CytherInstrument` now publishes it, and `tools/test-boundary.js`
+  asks it directly about ten programs, each breaking one of its rules and no other: removing any one of its nine checks,
+  or making it admit everything, fails the test, each by the one program it alone refuses.
+- **The contact draft went stale on an emoji.** The subject cut the first answer at 60 UTF-16 units; an emoji across the
+  cut made `encodeURIComponent` throw on every keystroke, and *Open email draft* kept an older draft without the later
+  answers. Both contact pages cut by character now, their CSP hashes following. In headless Chrome (59 letters, an
+  emoji, then a later answer) the previous build kept the stale draft and threw two `URIError`s on each page; this one
+  carries the later answer and throws none.
+- **Both looked flat's close was cut at 400% zoom.** In a 320 × 256 window its words (342 px, 360 in Arabic) overflowed a
+  fixed box that clips: the first sentence and *The model proposes. The system decides.* lay above its top, and no
+  scroll reached them. In a window that short the close now grows to its words in the page's flow (`css/film.css`):
+  392 px (410 in Arabic), its words 14 px from its top, nothing outside it and no sideways scroll. The front doors'
+  close, which fit, is unchanged there to the pixel, and every close is unchanged at 1280 × 1024 and 390 × 844.
+
+The 31 low and four informational findings are not addressed in this build.
+
+**The ADII CVs withdrawn (the owner, 2026-10-30).** The team's four CVs, with their phone numbers and personal email
+addresses (§5t; kept by decision in §5u), are no longer published: removed from `adii/`, `deploy.paths` and the
+reviewed set, the room's links to them gone (*Their roles ↓*), the Arabic room's link no longer promising them, and their
+four URLs among the paths `tools/probe-origin.py` requires to 404. They are deleted rather than retired to `backup/`, at
+the owner's direction; every earlier commit, the local rollback branches and the published repository's history still
+hold them.
+
+Observed on this build (Chrome 156.0.8078.49): reading ink over the film and the passage on both front doors, dark and
+light, at three viewports, 1,370 element samples, none below 4.5:1, worst 4.9:1 (CY-SEM-003 PASS); both pages settle to
+no frame, timer or playing media in every profile, the worker caching this build and serving it offline (CY-TEMP-001
+PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -2247,7 +2294,7 @@ What a headless browser cannot stand in for, against the same build, appended as
 | The route out of the film | from the passage, each system's link opens its evidence with its headline, its limit and its artifact in the first screen: *See what this is based on →* ADII's recorded run, with *Built by Group 05* and the team's names; *See the demonstration →* AWC-OS's film, with *Developed by Al-Baseera*; *Read the validation record →* CytherCAD's record, every figure as the record states it (Arabic: each route its Arabic room). Each room's *← Back to the passage* (and the header's *← The passage*) returns to that system's evidence moment, its link shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
 | Link previews | paste a room's link (ADII's, AWC-OS's, CytherCAD's, the brief's) into iMessage or Slack: each shows its own card, its title ending *— CytherAI*, and the large image (a service that saw the link before may show the old card until it refetches) |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
-| 400% zoom (⌘+ to 400% in a 1280 px window) | every page reflows to one column with no sideways scroll; on the front door the passage's longer words scroll within themselves rather than lose their first lines (§5ad) |
+| 400% zoom (⌘+ to 400% in a 1280 px window) | every page reflows to one column with no sideways scroll; on the front door the passage's longer words scroll within themselves rather than lose their first lines (§5ad); on Both looked flat the close grows to its words, its first sentence and its statement whole (§5af) |
 | The mail arrives (`docs/operations.md`) | one realistic English and one realistic Arabic message, each with one long answer, through *Open email draft* on the phone and on the Mac, and once through *Copy the message* into webmail: each arrives at contact@cytherai.com whole, and a reply from there reaches the sender; the same for `nda@` and `security@` |
 
 ## 6. Launch gate
