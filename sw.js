@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-3FFE3B0DA1273F4B';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-21274C6BC7C41E15';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -21,7 +21,7 @@ var ASSETS = [
   // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
   // its type with (shared with adii/)
   'js/film.js?v=2986bf951e8f',
-  'css/film.css?v=ef5dbe060697',
+  'css/film.css?v=375f03d6bc18',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'film/passage-adii-landscape.jpg',

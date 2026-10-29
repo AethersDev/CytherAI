@@ -41,7 +41,7 @@ function biAdmit(at, tk) {
   for (const p of pts) { if (at.cov.has(p)) return { ok: false, why: "CROSSES" }; }
   return { ok: true, pts, nx, ny };
 }
-function biKernel(toks) {   /* independent rebuild — the second opinion every program gets */
+function biKernel(toks) {   /* independent rebuild (it shares biRas and the grid with biAdmit, no state) — the second opinion every program gets */
   let x = BI_O, y = BI_O, axis = "H", nseg = 0; const cov = new Set([BI_O+","+BI_O]); let closed = false;
   for (const tk of toks) {
     if (closed) return false;
@@ -117,8 +117,9 @@ function audit(count, seed) { const e = biEngine(seed); for (let i = 0; i < coun
 
 /* biEngine is the one boundary engine: the audit runs it, and any surface that demonstrates
    the boundary consumes this export rather than a copy — a copy is a silent drift path from
-   the mechanism it claims to show. tools/test-boundary.js pins the stream and judge. */
-const API = { audit, biEngine, judge };
+   the mechanism it claims to show. tools/test-boundary.js pins the stream and judge, and asks the kernel itself to refuse
+   a program for each of its rules: behind biAdmit, a kernel that admitted everything would change neither. */
+const API = { audit, biEngine, biKernel, judge };
 
 root.CytherInstrument = API;
 if (typeof module !== "undefined" && module.exports) module.exports = API;

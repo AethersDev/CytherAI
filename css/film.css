@@ -74,8 +74,10 @@ body>footer{position:relative;z-index:2;background:var(--ground);display:flex;ju
 @media(min-width:360px) and (max-width:760px){#awc-os .say h2 br{display:none}}
 @media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}body>footer{padding:72px 20px 32px}}
 /* a window too short for a system's words (400% zoom; a small phone on its side): they scroll within themselves rather than
-   reach past the top, where no scroll could bring their first lines back; their ground moves onto them, so the scroll clips none */
-@media(max-height:300px),(max-width:359px) and (max-height:360px){html:not(.no-js) .say{max-height:calc(90vh - 14px);max-height:calc(90svh - 14px);overflow-y:auto;background:#07070a;box-shadow:0 0 28px 22px #07070a}html:not(.no-js) .say::before{display:none}}
+   reach past the top, where no scroll could bring their first lines back; their ground moves onto them, so the scroll clips none.
+   The close, in the page's flow, grows to its words instead: Both looked flat's are taller than such a window, and the fixed
+   box cut its first sentence and its statement (the audit of 2026-10-29) */
+@media(max-height:300px),(max-width:359px) and (max-height:360px){html:not(.no-js) .say{max-height:calc(90vh - 14px);max-height:calc(90svh - 14px);overflow-y:auto;background:#07070a;box-shadow:0 0 28px 22px #07070a}html:not(.no-js) .say::before{display:none}.close{height:auto;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end}.close>div{position:relative;inset:auto;margin:14px max(20px,5vw) 14vh}}
 /* Arabic (ar/): the Arabic type, never letter-spaced (it breaks the joins), taller lines for its marks; Latin names keep their own */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) .mono{font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}

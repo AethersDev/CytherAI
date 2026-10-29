@@ -63,8 +63,9 @@ DEFAULT_CORPUS = ROOT / "vaic/cytherai-obligations.v3.json"
 DEFAULT_MATRIX = ROOT / "vaic/evaluator-matrix.v0.json"
 
 RESULTS = {"PASS", "FAIL", "NOT_EVALUATED"}
-# the release judges these scopes and nothing else, so a row cannot leave judgment by being relabelled
-SCOPES = {"projection", "origin"}
+# the release judges these scopes and nothing else, each at its one severity, so a row cannot leave judgment by being
+# relabelled, in its scope or its severity (until the audit of 2026-10-29 a profile row's severity went unchecked)
+SCOPES = {"projection": "mandatory", "origin": "release_mandatory"}
 # A successor corpus (one that names what it `supersedes`) carries a transition record on
 # every row: CARRIED_FORWARD — the requirement is unchanged and re-bound to the successor
 # surface — or SUPERSEDED — the mechanism it governed retired. A superseded obligation is
@@ -126,7 +127,6 @@ RETIRED = frozenset((
 # recorded; UNRECORDED can never speak for the current candidate
 EXTERNAL, UNRECORDED = "EXTERNAL", "UNRECORDED"
 MANDATORY_SOURCES = {"core", "grammar", "profile", "origin"}
-PROJECTION_MANDATORY = {"mandatory"}
 # Shape is declared once, as types rather than names, so the SHAPE stage can hand
 # later stages objects they may index without checking.
 ROW_TYPES = {
@@ -523,12 +523,13 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         oid = row["id"]
         if row["mandatory_source"] not in MANDATORY_SOURCES:
             errors.append(f"{oid}: invalid mandatory_source {row['mandatory_source']!r}")
-        if row["mandatory_source"] in {"core", "grammar"} and row["severity"] != "mandatory":
-            errors.append(f"{oid}: inherited core/grammar obligation must be mandatory")
         if row["scope"] not in SCOPES:
             errors.append(f"{oid}: scope {row['scope']!r} is none the release judges")
-        elif row["mandatory_source"] in {"core", "grammar"} and row["scope"] != "projection":
-            errors.append(f"{oid}: inherited core/grammar obligation must be judged in the projection")
+        else:
+            if row["severity"] != SCOPES[row["scope"]]:
+                errors.append(f"{oid}: severity {row['severity']!r} is not the {row['scope']} scope's {SCOPES[row['scope']]!r}")
+            if row["mandatory_source"] in {"core", "grammar"} and row["scope"] != "projection":
+                errors.append(f"{oid}: inherited core/grammar obligation must be judged in the projection")
         if row["relation"] not in declared_relations:
             errors.append(f"{oid}: undeclared relation {row['relation']!r}")
         if row["relation"] in forbidden:
@@ -694,10 +695,8 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
     observed = Counter(row["evaluation"]["result"] for row in shaped)
     counts = Counter(effective.values())
     binding = [row for row in shaped if row["id"] not in superseded]
-    projection_rows = [row for row in binding
-                       if row["scope"] == "projection" and row["severity"] in PROJECTION_MANDATORY]
-    origin_rows = [row for row in binding
-                   if row["scope"] == "origin" and row["severity"] == "release_mandatory"]
+    projection_rows = [row for row in binding if row["scope"] == "projection"]
+    origin_rows = [row for row in binding if row["scope"] == "origin"]
     projection_valid = licensed and bool(projection_rows) and \
         all(effective.get(row["id"]) == "PASS" for row in projection_rows)
     origin_valid = licensed and bool(origin_rows) and \

@@ -791,6 +791,16 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["structure"], "INVALID")
         self.assertTrue(any("must not remove" in error for error in result["errors"]))
 
+    def test_a_row_cannot_leave_judgment_by_a_severity_relabel(self) -> None:
+        # until the audit of 2026-10-29 only core and grammar rows had their severity checked: CY-SEM-003 relabelled
+        # 'Mandatory' left the projection's judgment and the corpus stayed VALID
+        for oid, severity in (("CY-SEM-003", "Mandatory"), ("CY-ORIGIN-001", "mandatory")):
+            corpus = copy.deepcopy(self.corpus)
+            next(row for row in corpus["obligations"] if row["id"] == oid)["severity"] = severity
+            result = self.validate(corpus)
+            self.assertEqual(result["structure"], "INVALID", oid)
+            self.assertTrue(any(error.startswith(oid) and "severity" in error for error in result["errors"]), oid)
+
     def test_not_evaluated_cannot_carry_pass_receipt(self) -> None:
         corpus = copy.deepcopy(self.corpus)
         pending = next(row for row in corpus["obligations"] if row["evaluation"]["result"] == "NOT_EVALUATED")

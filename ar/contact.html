@@ -23,11 +23,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/contact.html">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/contact.html">
-<meta name="build-hash" content="3FFE3B0DA1273F4B">
+<meta name="build-hash" content="21274C6BC7C41E15">
 <meta name="referrer" content="no-referrer">
 <!-- form-action is deliberately absent: without a script the form posts to mailto:, and browser handling of a mailto:
      source in form-action is inconsistent enough that adding it could break that path. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-DuNuYj9XFCVHmeu0dCSMcdWkMDPNVEFtmtZZSvn3n0M='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-1/pXqChp/47hlYZTtq5n38yFTooxXMwAHT+EiBc2t+Y='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self';">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
 <link rel="stylesheet" href="../css/room.css?v=f8162f3f3b69" integrity="sha384-qvwObbSu9f7FCYfZwGi2MC9I1CLfrGSpN0MRNf9qSiDD0UFkKKLjzspF3a++2Qxo" crossorigin="anonymous">
@@ -75,7 +75,7 @@
   var status = document.getElementById("status"), to = "contact@cytherai.com", subject = "", body = "";
   var asked = [["system", "على أي نظام تعمل؟"], ["use", "ماذا تريد أن يفعل الذكاء الاصطناعي؟"], ["never", "ما الذي يجب ألّا يحدث أبدًا؟"]];
   function compose() {
-    var system = form.elements.system.value.trim().split("\n")[0].slice(0, 60);
+    var system = Array.from(form.elements.system.value.trim().split("\n")[0]).slice(0, 60).join("");   /* by character: half an emoji cannot be encoded */
     subject = "ما يجب ألّا يحدث أبدًا" + (system ? ": " + system : "");
     body = asked.map(function (a) { return a[1] + "\n" + (form.elements[a[0]].value.trim() || "—"); }).join("\n\n");
     write.href = "mailto:" + to + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);

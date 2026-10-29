@@ -22,7 +22,7 @@ DIST, OUT = Path(sys.argv[1]), Path(sys.argv[2])
 HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 BUST = f"origin-check-{int(time.time())}"
 paths = [p.strip() for p in (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if p.strip()]
-# what must never be served: the record, the retired front doors and their modules, the tools, the studies
+# what must never be served: the record, the retired front doors and their modules, the tools, the studies, what was withdrawn
 HIDDEN = ("backup/newC3/epoch04-preimage.txt", "backup/graphite-v2/index.html", "backup/drawing-set-v1/index.html",
           "backup/unhappened-v1/index.html", "backup/exception-v1/exception/index.html", "backup/PRODUCTION_PLAN.md",
           "backup/trajectory-engine/pages/runner.html", "backup/og-card-v1/og-card.png", "backup/icon-v1/icon.svg",
@@ -30,7 +30,8 @@ HIDDEN = ("backup/newC3/epoch04-preimage.txt", "backup/graphite-v2/index.html", 
           "exception/", "exception/index.html", "exception/exception.js", "js/manifest.js", "js/instrument.js",
           "js/drawing-set.js", "js/unhappened.js", "js/trace.js", "tools/render-film.py", "tools/render-seal.py",
           "tools/probe-origin.py", "vaic/cytherai-obligations.v3.json", "docs/deploy.md", "cyther-film/index.html",
-          "cyther-seal-identity.html", "awc-os/live/", "awc-os/media/AWC_OS_AMAD2026_deck.pptx", "README.md", "CLAUDE.md",
+          "cyther-seal-identity.html", "awc-os/live/", "awc-os/media/AWC_OS_AMAD2026_deck.pptx", "adii/cv/malek.pdf", "adii/cv/jorie.pdf",
+          "adii/cv/ibrahem.pdf", "adii/cv/nasser.pdf", "README.md", "CLAUDE.md",
           "definitely-missing")
 
 
