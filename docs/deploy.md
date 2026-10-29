@@ -2248,6 +2248,8 @@ light, at three viewports, 1,370 element samples, none below 4.5:1, worst 4.9:1 
 no frame, timer or playing media in every profile, the worker caching this build and serving it offline (CY-TEMP-001
 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_21274C6BC7C41E15`), 81 of 81 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
