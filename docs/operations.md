@@ -40,21 +40,53 @@ No repository change settles these. Until each is done, the handover is complete
    (`git remote -v`).
 7. **Monitoring with alerts**: choose a monitor and point its alerts at the operator (below).
 8. **Search Console**: verify `https://cytherai.com/` (a DNS TXT record at Namecheap), submit `sitemap.xml`, and confirm the
-   pages it lists are indexed. Decide whether AWC-OS's rooms stay `noindex`. Its field data (Core Web Vitals) appears
+   pages it lists are indexed. AWC-OS's rooms stay `noindex` until you confirm the team's and the hackathon's permissions and item 10 is done (the owner, 2026-11-06): then it is a two-line change and the sitemap, and the Alinma references on those pages become searchable. `noindex` is no security boundary. Its field data (Core Web Vitals) appears
    there once enough visitors have come; until then there is none, and none is claimed.
-9. **A way to reach you that needs no email app** (the audit of 2026-11-05 asks for one): a booking link needs only its address;
-   a form service or a function needs an account, a reply-address field the contact page deliberately does not have, and
-   a rewrite of the privacy policy's *the page neither sends nor stores them*. The page's part today: it says what should be
-   happening, carries the draft to Gmail and Outlook on the web, and copies it whole (`docs/deploy.md` §5ag).
+9. **A booking link, as a second way to reach you** (the owner, 2026-11-06: keep the email composer, build no form backend, add
+   *Schedule a technical discussion* as a secondary action). It needs the link and the provider's name: the visitor's details
+   reach that provider once they follow it, so both privacy policies must name it (`tools/test-site.py` holds the two to the
+   same providers).
 10. **AWC-OS's public repository**, `cytheraii/aws-os_mvp`, which this account can read and not write: its README still calls
     `cytherai.com/awc-os/` a *live instance* while the site says the MVP runs on an evaluation machine, lists an
-    `OPERATIONS.md` it does not contain, and the repository has no description (§5ag gives the exact change).
-11. **Whether to put a proxy in front of Pages.** It would send the §1 headers (`docs/deploy.md`: HSTS, `frame-ancestors`), allow
-    long caching of the versioned files (Pages sends `max-age=600`), and count visitors with no script on the page. Pages'
-    limits are accepted as they stand (§7, 2026-10-04); moving needs no new contract, and the privacy policy would have to
-    name what the proxy logs. Analytics by a script or a beacon would break *zero external requests*, and is not offered here.
-12. **Arabic legal pages.** The Arabic site links to the English privacy policy and terms, and says so. A legal text in another
-    language is for whoever answers for it to write or approve, not for a release to draft.
+    `OPERATIONS.md` it does not contain, and the repository has no description (`docs/deploy.md` §5ag gives the exact change).
+    Do this before item 8's indexing, which sends readers to it.
+11. **Cloudflare: approved in principle (the owner, 2026-11-06), not cleared to switch on.** Keep the records DNS only until
+    both of these are settled. Read 2026-11-06; observe again before relying on them.
+    - *The certificate.* Pages issues and renews its own Let's Encrypt certificate; the current one expires **2026-12-14**.
+      GitHub's documentation says nothing about proxies. Two community reports of September and October 2026 describe this
+      exact setup ([#208641](https://github.com/orgs/community/discussions/208641), [#210196](https://github.com/orgs/community/discussions/210196)):
+      renewal stuck in `bad_authz`, HTTP 526 for every visitor under Full (strict), no answer from GitHub staff, and in one
+      still stuck about 13 hours after returning to DNS only. They are users' reports, not GitHub's statement. Cloudflare's
+      Free plan cannot override the host, SNI or DNS to route around it (Origin Rules). Full, not strict, keeps a site up on an
+      expired certificate and stops authenticating the origin.
+    - *Video.* Cloudflare's CDN terms (last updated 2026-09-28): unless you are an Enterprise customer, specific Paid Services
+      are what "you must use in order to serve video and other large files via the CDN", and it may "disable or limit" the CDN
+      if it suspects otherwise. Video is 90% of this site's served bytes (30.7 of 34.1 MB).
+    - *The next step that risks nothing:* put `dist/` on a Cloudflare Workers or Pages preview, with no DNS change, and test it
+      (`curl -r 100-199`, the iOS Simulator). Those have no origin certificate, take headers from a `_headers` file in the
+      repository, and the terms say the Developer Platform "can be used to host content" and name it as how to serve video. Open
+      questions: an open Workers SDK report says static assets answer no byte ranges, which iOS needs for the film, and
+      the terms do not say whether the free tier counts.
+    - *Whichever way it goes:* the free plan moves the nameservers from Namecheap, so Proton's MX, SPF, DKIM and DMARC records
+      must be copied first, and any verification TXT records (Cloudflare's scan "is not guaranteed to find all"). Use Zone
+      Analytics, from edge logs with no script ("at least the last 30 days"; it counts crawlers and threats too), and set Web
+      Analytics to Disable: its automatic setup is "enabled by default" and injects a script. Turn off Email Address Obfuscation
+      (on by default; it rewrites addresses and injects a script) and do not use Bot Fight Mode (its JavaScript detections insert
+      a script and cannot be disabled). The headers are §1's (`docs/deploy.md`), with HSTS's max-age raised in steps.
+      `tools/probe-origin.py` fails on any byte a proxy changes. Before the switch, both privacy policies must drop *no analytics*
+      and name Cloudflare, which processes visitors' network metadata at its edge: one release, ahead of the switch.
+12. **Legal review of the privacy policy and terms, in both languages.** `ar/privacy.html`, `ar/terms.html` and the terms' new
+    section 4 were drafted on 2026-11-06 and no lawyer has read them. Have a Saudi lawyer review them and decide whether a clause
+    should say which language governs (none does). **Neither language yet holds what SDAIA's own documents ask of a notice**
+    (read 2026-11-06: Article 4 of the PDPL's Implementing Regulation; *Elaboration and Developing Privacy Policy Guideline*,
+    v1.0, August 2024). The policy does not give: the controller's legal name, phone number and postal address; the legal basis
+    for processing; whether giving the data is mandatory or optional; how to withdraw consent; who receives the data and where
+    it is stored, inside or outside the Kingdom (mail is at Proton, and *we do not share* sits beside the host's logs); how it is
+    destroyed; the rights to a copy, to withdraw, to complain to SDAIA and to compensation; a complaints mechanism. Several of these
+    are facts only you hold, and none is filled in here. On language, the guideline says a policy "shall be designed in a language
+    suitable for the target audience"; Article 4(7)'s "appropriate language" concerns a data subject who lacks legal capacity;
+    neither says Arabic is mandatory. The terms' section 5 also cites "model accuracy, parameter counts", which this site no
+    longer prints. Nothing on this site claims compliance with the PDPL.
 
 ## How to tell the site is broken
 
