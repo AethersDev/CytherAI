@@ -5,15 +5,17 @@ Classification: ILLUSTRATIVE. The composition is tools/og-card.html: film/final-
 front door's film, a conceptual visualization), the darkening the front door sets behind its statement, the wordmark
 and the statement in the front door's own type. Headless Chrome renders it at 1200×630, device scale 1, served from
 the repository root by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes
-assets/og/og-card.png. The pages' og:image:alt states what it shows and that it is a conceptual visualization.
+assets/og/og-card.jpg, through sips: as a PNG this photographic frame was 612 KB, and link previews are commonly reported
+to drop an image over about 300 KB (the audit of 2026-11-05). The pages' og:image:alt states what it shows and that it
+is a conceptual visualization.
 
-`render-og-film.py ar` renders the Arabic card the same way: tools/og-card-ar.html to assets/og/og-card-ar.png; `flat` and
+`render-og-film.py ar` renders the Arabic card the same way: tools/og-card-ar.html to assets/og/og-card-ar.jpg; `flat` and
 `flat-ar` Both looked flat's (tools/og-card-flat.html, tools/og-card-flat-ar.html), a still of its sequence with its title,
-to assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png.
+to assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png, which stay PNGs: they are dark, and under that size.
 
 Run twice; the output SHA-256 must be identical (same Chrome, same machine): the script prints the digest, size and
-the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero if Chrome fails or the
-output is not a 1200×630 PNG.
+the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero if Chrome or sips fails or
+Chrome's output is not a 1200×630 PNG.
 """
 import hashlib, http.server, os, struct, subprocess, sys, tempfile, threading
 from functools import partial
@@ -23,7 +25,7 @@ CARDS = {"": "og-card", "ar": "og-card-ar", "flat": "og-card-flat", "flat-ar": "
 if len(sys.argv) > 2 or "".join(sys.argv[1:]) not in CARDS:   # a typo must not render the English card
     sys.exit("usage: render-og-film.py [ar|flat|flat-ar]")
 CARD = CARDS["".join(sys.argv[1:])]
-OUT = os.path.join(ROOT, "assets/og/%s.png" % CARD)
+OUT = os.path.join(ROOT, "assets/og/%s.%s" % (CARD, "png" if "flat" in CARD else "jpg"))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
@@ -41,6 +43,11 @@ with tempfile.TemporaryDirectory() as profile:
     data = open(shot, "rb").read()
     w, h = struct.unpack(">II", data[16:24])
     if data[:8] != b"\x89PNG\r\n\x1a\n" or (w, h) != (1200, 630): sys.exit("not a 1200x630 PNG: %dx%d" % (w, h))
+    if OUT.endswith(".jpg"):
+        png, shot = shot, os.path.join(profile, "card.jpg")
+        run = subprocess.run(["sips", "-s", "format", "jpeg", "-s", "formatOptions", "88", png, "--out", shot], capture_output=True, text=True)
+        if run.returncode != 0 or not os.path.isfile(shot): sys.exit("sips failed: " + run.stderr[-400:])
+        data = open(shot, "rb").read()
     os.replace(shot, OUT)
 version = subprocess.run([CHROME, "--version"], capture_output=True, text=True).stdout.strip()
 print(os.path.relpath(OUT, ROOT) + "  %dx%d  %s bytes  sha256 %s  (%s)" % (w, h, format(len(data), ","), hashlib.sha256(data).hexdigest(), version))

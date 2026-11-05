@@ -73,7 +73,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `flat/`, `css/flat.css`, `js/flat.js` | Both looked flat (2026-10-25): its page, its sequence in both orientations, the stills that stand in for it and the instrument's plates; the Arabic page is `ar/flat.html` | Yes (the reviewed set) | Rendered by `tools/render-flat.py` (the scene is the script) and joined by `tools/encode-flat.py`, which reads the stills from `js/flat.js`; a new file under `flat/` ships once named in `REVIEWED_PUBLICATION`, and every media file the script names ships, and back (`tools/test-site.py`); the stylesheet and the script are hashed (SRI); `tools/probe-flat.py` is its browser check |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
-| `contact.html` | The contact room: three plain questions composed into one email draft for the visitor's own email app, the draft copied whole when no app opens, and a way back through the history, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
+| `contact.html` | The contact room: three plain questions composed into one email draft for the visitor's own email app, the draft copied whole when no app opens or carried to Gmail or Outlook on the web by a link the visitor follows, and a way back through the history, in the page's one inline script | Yes | Preserve the explicit `mailto:`/no-backend semantics unless hosting changes; never claim a message was sent; edit the script and its CSP hash follows |
 | `pages/` | Brief and legal pages | Yes | Share navigation and CSS |
 | `assets/` | Promoted deterministic images and icons | Selected files | Record provenance in `docs/asset-promotion-log.md`; add to `deploy.paths`; precache only if offline-critical |
 | `tools/` | Generators, the film's Blender render scripts and zero-dependency test programs | No | Generators must reproduce committed bytes; tests must fail nonzero; a new harness file is added to `IDENTITY_COVERAGE` |
@@ -89,27 +89,23 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 `js/film.js` runs once the document is parsed.
 
-1. It removes `no-js` (without the script, `.no-js` unveils the statement after 6 s, CSS). The
-   statement is the `h1` and is exposed to assistive technology from the start, invisible but
-   present; its links stay `visibility: hidden` until it appears. The film's text alternative is
+1. It removes `no-js`. The statement and its two links need no script: the markup shows them (`.landing.on`) from the first paint, over the film, the `h1` and its links exposed to everyone from the start (until 2026-11-05 they waited for the film's 10.6th second). The film's text alternative is
    a `.sr` paragraph before it. The header's mark is the Cyther Seal, inline SVG, pixel-fitted at
    26 px (`tools/render-seal.py`); `tools/test-site.py` holds every inline seal to the computed one.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
-   `film/film-portrait.mp4`) and plays it muted. Reduced motion skips straight to the still
-   state with *Play the film* and downloads no film; a refused play, a media error, or no
+   `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G, skip straight to the still state with *Play the film* and download no film (the latter two no passage and no worker either: never "3g", `docs/deploy.md` §5ag); a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
-   window (`data-from`/`data-to`); the statement appears at 10.6 s. It also adds up how far
+   window (`data-from`/`data-to`), as subtitles under the statement. It also adds up how far
    the film has fallen behind real time since it started, while the page is visible (a hidden
    page's time does not count), so short pauses count together; past `STALL` (2 s) the film
    gives way to the still state at once: it drops its source, so the poster
    — its final frame — stands, and a late download cannot restart it; its caption leaves
    without a fade, so it never lies under the statement.
-4. At the end (`ended`) `still()` stops the interval, holds the last frame, shows the whole
-   statement and Replay. The film never restarts on its own.
+4. At the end (`ended`) `still()` stops the interval, holds the last frame and shows Replay. The film never restarts on its own.
 5. Once the film is whole (or still), the passage downloads whole by a request of its own (`fetch`;
    the front doors' CSP admits `connect-src 'self'` for it), the video plays it from memory (`blob:`,
-   asked to play and paused at once, as iOS shows a clip's frames only then), and it is shown once
+   asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment, which stops the layer that in the iOS Simulator otherwise ran on), and it is shown once
    whole and the film still, under the film's element: its first frame is the film's last. (Asked
    of the video element, a paused clip's download is the browser's to defer: 2026-10-22,
    `tools/probe-passage.py`.) From then on the scroll names a moment, evenly (each stretch,

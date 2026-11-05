@@ -297,7 +297,8 @@ class SiteContractTests(unittest.TestCase):
         # each front door reads no module and runs one script: the film, its sentences, the passage and the worker are
         # js/film.js, deferred (js/theme.js retired with light mode, 2026-10-20). Their CSP forbids inline script.
         for page, up in (("index.html", ""), ("ar/index.html", "../")):
-            scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script"]
+            # (the Organization block is data, which no browser runs and script-src does not govern)
+            scripts = [attrs for tag, attrs in parse_page(page).tags if tag == "script" and attrs.get("type") != "application/ld+json"]
             self.assertEqual([urlsplit(attrs.get("src")).path for attrs in scripts], [up + "js/film.js"], page)
             self.assertEqual([attrs.get("defer") for attrs in scripts], [""], page)
 
@@ -371,7 +372,7 @@ class SiteContractTests(unittest.TestCase):
         mutations = {
             "index.html": lambda b: b.replace(b"Keep control of what changes.", b"Keep control of what changes (counterfactual).", 1),
             "sw.js": lambda b: b.replace(b"var ASSETS = [", b"var ASSETS = [ /* counterfactual */", 1),
-            "assets/og/og-card.png": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
+            "assets/og/og-card.jpg": lambda b: b[:-1] + bytes([b[-1] ^ 1]),
         }
         for relative, mutate in mutations.items():
             with tempfile.TemporaryDirectory() as tmp:
@@ -497,6 +498,7 @@ class SiteContractTests(unittest.TestCase):
                 self.assertIsNone(defect(page, svg))
                 found += 1
         self.assertGreaterEqual(found, len(HTML_FILES) + len(cards), "every page and every card carries the seal")
+        self.assertEqual((ROOT / "favicon.ico").read_bytes(), seal.favicon(), "favicon.ico is the computed seal")
         # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
         svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
         self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
@@ -518,6 +520,66 @@ class SiteContractTests(unittest.TestCase):
         for ink in ("ink", "soft", "dim", "warm"):
             with self.subTest(ink=ink):
                 self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"--{ink} on --ground")
+
+    def test_the_statement_stands_from_the_first_paint(self) -> None:
+        """A visitor learns what the page says, and has its two links, at the first paint: the markup shows the statement, no
+        cue names a moment for it, and neither script nor stylesheet can hide it. It waited for the film's 10.6th second until
+        the audit of 2026-11-05 (LCP 11.3 s, by design: docs/deploy.md §5ad)."""
+        for page in ("index.html", "ar/index.html"):
+            landing = next(a for _, a in parse_page(page).tags if "landing" in a.get("class", "").split())
+            self.assertIn("on", landing["class"].split(), page)
+            self.assertNotIn("data-from", landing, page)
+        self.assertNotIn("landing", (ROOT / "js/film.js").read_text(encoding="utf-8"))
+        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        for absent in (".landing:not(.on)", "unveil"):
+            self.assertNotIn(absent, css, absent)
+
+    def test_the_front_door_keeps_a_way_to_talk_in_view(self) -> None:
+        """Its header stays in view, and names the contact page of its own language (the audit of 2026-11-05: the next way
+        to talk after the first screen was ten screens down)."""
+        self.assertIn(".bar{position:fixed", (ROOT / "css/film.css").read_text(encoding="utf-8"))
+        for page in ("index.html", "ar/index.html"):
+            header = re.search(r'<header class="bar">(.*?)</header>', (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
+            self.assertRegex(header, r'<a class="top talk" href="contact\.html">', page)
+
+    def test_every_same_page_link_lands_where_it_names(self) -> None:
+        """A link to a place on its own page names an element of that page, and on a front door the passage's words: their
+        moment is what js/film.js brings. A stretch's own top is its first second, before any words, and that is where the
+        front door's first link landed until the audit of 2026-11-05."""
+        for page in HTML_FILES:
+            parsed = parse_page(page)
+            for target in (a["href"][1:] for t, a in parsed.tags if t == "a" and a.get("href", "").startswith("#")):
+                self.assertIn(target, parsed.ids, f"{page}: #{target}")
+                if page in ("index.html", "ar/index.html"):
+                    element = next(a for _, a in parsed.tags if a.get("id") == target)
+                    self.assertEqual(element.get("class"), "say", f"{page}: #{target}")
+
+    def test_every_address_a_page_prints_is_a_link(self) -> None:
+        """An address on a page opens a draft to it (the audit of 2026-11-05 found the front door's was plain text)."""
+        for page in HTML_FILES:
+            text = re.sub(r"<(head|script|style)\b.*?</\1>", "", (ROOT / page).read_text(encoding="utf-8"), flags=re.S)
+            text = re.sub(r'<a\b[^>]*href="mailto:([^"]+)"[^>]*>\1</a>', "", text)
+            self.assertNotRegex(re.sub(r"<[^>]+>", " ", text), r"[\w.-]+@cytherai\.com", page)
+
+    def test_the_front_doors_name_the_organization(self) -> None:
+        """Each front door, and no other page, carries one Organization block, and what it says is what the pages say: the
+        name, the address its footer prints in Riyadh, the contact address, a shipped mark."""
+        for page in HTML_FILES:
+            blocks = re.findall(r'<script type="application/ld\+json">(.*?)</script>', (ROOT / page).read_text(encoding="utf-8"), re.S)
+            self.assertEqual(len(blocks), 1 if page in ("index.html", "ar/index.html") else 0, page)
+            for block in blocks:
+                org = json.loads(block)
+                self.assertEqual((org["@type"], org["name"], org["url"], org["email"], org["address"]["addressLocality"], org["address"]["addressCountry"]),
+                                 ("Organization", "CytherAI", f"https://{HOST}/", "contact@cytherai.com", "Riyadh", "SA"), page)
+                self.assertIn(urlsplit(org["logo"]).path.lstrip("/"), DEPLOYED, page)
+
+    def test_no_type_is_set_below_12px(self) -> None:
+        """The audit of 2026-11-05 found the footer's links, the address, the film's note and Replay at 10 px."""
+        for sheet in (p for p in DEPLOY_FILES if p.endswith(".css")):
+            css = (ROOT / sheet).read_text(encoding="utf-8")
+            sizes = re.findall(r"font-size:(?:clamp\()?([\d.]+)px", css) + re.findall(r"(?<![-\w])font:(?:\d+ )?([\d.]+)px", css)
+            self.assertTrue(sizes, sheet)
+            self.assertGreaterEqual(min(map(float, sizes)), 12, sheet)
 
     def test_the_rooms_are_of_the_front_door(self) -> None:
         """The pages a visitor reaches from the front door (2026-10-21) are rooms of it: each draws with css/room.css, opens
@@ -630,6 +692,20 @@ class SiteContractTests(unittest.TestCase):
             self.assertIsNone(stacking.search(body), f"{selector}{{{body}}} makes a stacking context")
         say = re.search(r"(?<![\w-])\.say\{([^}]*)\}", css).group(1)
         self.assertTrue("position:fixed" in say and re.search(r"z-index:\d", say), "the words stand above the scene on their own")
+        self.assertIn("transition:none", say, "the scroll fades the words, not a clock: .on's transition reached them until 2026-11-05")
+
+    def test_a_browsers_own_anchor_to_a_stretch_lands_on_its_first_words(self) -> None:
+        """A stretch's top is its first second, before any words. WebKit runs its anchor after the load, past the page's own
+        placing of the visitor (js/film.js), so each stretch's scroll-margin, at the stage's pace of 50svh a second, takes that
+        anchor to the middle of its first words' window (observed in the iOS Simulator, 2026-11-05)."""
+        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
+        tags = parse_page("index.html").tags
+        stretches = [i for i, (t, a) in enumerate(tags) if "passage" in a.get("class", "").split()]
+        for at, end in zip(stretches, stretches[1:]):   # the return has no words of its own, and no margin
+            stretch, words = tags[at][1], next(a for _, a in tags[at:end] if a.get("class") == "say")
+            start, (a, b) = float(stretch["data-t"].split()[0]), map(float, words["data-t"].split())
+            margin = "%g" % (50 * ((a + b) / 2 - start))
+            self.assertIn("#%s{scroll-margin-top:-%svh;scroll-margin-top:-%ssvh}" % (stretch["id"], margin, margin), css, stretch["id"])
 
     def test_both_looked_flat_moves_evenly_and_ships_what_it_names(self) -> None:
         """Both looked flat (flat/, 2026-10-25) moves its sequence at one pace, 4 s a viewport: the stage's 100svh are its first

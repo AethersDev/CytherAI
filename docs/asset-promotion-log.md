@@ -12,7 +12,7 @@ canonical parameters must equal the current manifest's, and every served file un
 `assets/` and `film/`, the icon, and every icon and card the web manifest and the pages
 name must have an entry.
 
-An entry is the record of a promotion. Those of retired assets (OG-CARD-V1, ICON-V1,
+An entry is the record of a promotion. Those of retired assets (OG-CARD-V1, OG-CARD-V2, OG-CARD-AR-V2, ICON-V1,
 SURFACE-TERMINAL, MOT-001/002) stand as written: the tools they name retired with them
 (`backup/README.md` maps every path that moved), a retired DERIVED entry stays bound to the
 state it records, and their Deployment lines describe the build identity of their day; since
@@ -24,13 +24,52 @@ state it records, and their Deployment lines describe the build identity of thei
 
 | | |
 |---|---|
+| Asset ID | IMG-019 |
+| Source | The film's card as IMG-008 composed it: `tools/og-card.html`, `film/final-landscape.jpg` and the statement, unchanged |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1; `sips` makes the JPEG, quality 88) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
+| Output | `assets/og/og-card.jpg` · 1200×630 · 186,426 bytes |
+| SHA-256 | `965fa4cd87c656b4e6be802dbb7798328d6efef4c54b394255b73d60dd388440` |
+| Determinism | Run twice on Google Chrome 156.0.8078.80 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-008's bytes. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 JPEG under 300 KB (the audit of 2026-11-05: IMG-008 was 612 KB, and link previews are commonly reported to drop an image over about 300 KB; that limit is reported, not documented by the services); the statement's edges clean on the dark frame at 100%, by eye. |
+| Deployment | `deploy.sh` allowlist only; named by the English pages that previewed IMG-008. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-008, the same card as a PNG, retired to `backup/og-card-v2/` on 2026-11-05 (below) |
+| Owner sign-off | PENDING |
+
+---
+
+## OG-CARD-AR — the Arabic link-preview plate
+
+| | |
+|---|---|
+| Asset ID | IMG-020 |
+| Source | The Arabic card as IMG-010 composed it: `tools/og-card-ar.html`, unchanged |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py ar` (as IMG-019) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
+| Output | `assets/og/og-card-ar.jpg` · 1200×630 · 181,170 bytes |
+| SHA-256 | `ab72a67c060fde3460896e759162f80ea385d89bf79675b3a6401ef672b6d67d` |
+| Determinism | Run twice on Google Chrome 156.0.8078.80 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-010's bytes. |
+| Acceptance checks | As IMG-019; the Arabic joined and its marks unclipped. |
+| Deployment | `deploy.sh` allowlist only; named by `ar/index.html` and `ar/contact.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-010, the same card as a PNG, retired to `backup/og-card-v2/` on 2026-11-05 (below) |
+| Owner sign-off | PENDING |
+
+---
+
+## OG-CARD-V2 — the film's card as a PNG, retired
+
+| | |
+|---|---|
+| Retired | 2026-11-05: served as `assets/og/og-card.png` until the same card as a JPEG (IMG-019) replaced it, at 612 KB against 186 KB; the bytes moved to `backup/og-card-v2/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-008 |
 | Source | The front door's film: its final frame, `film/final-landscape.jpg` (the last frame of `tools/render-film.py`'s landscape render), and the statement it ends on |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
 | Method | The frame covers the card (centred, 45 px cropped top and bottom); the darkening the front door sets behind its statement (a top band and a radial veil, lower left); the identity's primary lockup: the Cyther Seal pixel-fitted at 34 px (`tools/render-seal.py`) left of the wordmark (Public Sans 720/340); *Let AI change things. Keep control of what changes.* in Newsreader 300, 60 px, `#ece7dc` with the front door's text-shadow. Until 2026-10-13 the wordmark carried a warm ✳ instead of the seal (612,765 bytes, `ade67c693e77d62263acea0e230e9cd3b0c09d640ec74abfb11a38c43abc7d15`). |
-| Output | `assets/og/og-card.png` · 1200×630 · 612,212 bytes |
+| Output | `backup/og-card-v2/og-card.png` · 1200×630 · 612,212 bytes |
 | SHA-256 | `7433e5b37b8a91b40ec86a5f3878b3dad7ce2214c323257a814432c7e8e18e6e` |
 | Determinism | Run twice on Google Chrome 155.0.8059.40 (macOS, Apple Silicon); byte-identical output both runs. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame; the ring and the current visible right of the statement. A square centre crop keeps the ring and the current and cuts the statement's left edge. |
@@ -40,17 +79,18 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## OG-CARD-AR — the Arabic link-preview plate
+## OG-CARD-AR-V2 — the Arabic card as a PNG, retired
 
 | | |
 |---|---|
+| Retired | 2026-11-05: served as `assets/og/og-card-ar.png` until the same card as a JPEG (IMG-020) replaced it; the bytes moved to `backup/og-card-v2/`. The receipt below stands as written, its output path moved with the bytes. |
 | Asset ID | IMG-010 |
 | Source | The English card's composition (IMG-008) with the Arabic front door's statement (`ar/index.html`) |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py ar` (headless Chrome renders `tools/og-card-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
 | Method | IMG-008's frame, darkening and lockup (the lockup stays left to right, as the identity draws it); *دع الذكاء الاصطناعي يغيّر الأشياء. واحتفظ بزمام ما يتغيّر.* in IBM Plex Sans Arabic 300, 58 px, line height 1.4, right-aligned, kept over the frame's dark left side where it reads, `#ece7dc` with the front door's text-shadow. |
-| Output | `assets/og/og-card-ar.png` · 1200×630 · 606,626 bytes |
+| Output | `backup/og-card-v2/og-card-ar.png` · 1200×630 · 606,626 bytes |
 | SHA-256 | `b0c7765545a846d0a2bff8062e7eb615a160d419518a70e69635b4875fcfc3af` |
 | Determinism | Run twice on Google Chrome 155.0.8059.40 (macOS, Apple Silicon); byte-identical output both runs. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 PNG; the statement and the wordmark whole inside the 1.91:1 frame, the Arabic joined and its marks unclipped; the ring and the current visible right of the statement. |
@@ -245,9 +285,9 @@ state it records, and their Deployment lines describe the build identity of thei
 | Command | `python3 tools/render-seal.py` |
 | Fixed input | The word `CytherAI`: SHA-256 `9db0cc58ca67af9c2f718a3fe85403455c16cda52e4f49f73f2a3d7eba07befe`, read two bits at a time; a constrained walk on a 6×6 grid: 77 proposals, 29 admitted, 48 refused; the published path `00 01 11 21 20 30 40 50 51 52 53 54 44 43 33 32 22 12 02 03 04 05 15 25 35 34 24 14 13 23`, which the script refuses to run without. |
 | Method | `icon.svg`: the identity's pixel-fitted seal on a 32-unit grid (u = 2, crispEdges), so it is sharp at 16 and 32 px. The PNGs: the seal full-bleed in ink `#ECE7DC` with its path in ground `#07070A`, a square-capped, mitred polyline on whole pixels at the vector seal's proportions (180: stroke 10, spacing 22; 192: 11, 24; 512: 28, 64); the maskable 512 keeps its path inside the central 80% circle (stroke 23, spacing 53). No warm: the identity keeps warm for the end cell of the open line only. |
-| Outputs | `icon.svg` · `assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web manifest, `any`), `icon-512-maskable.png` (web manifest, `maskable`) |
-| SHA-256 | svg `0e293384f3f81f6a68ea8deb2d1a51ea2b03dee30f2b9385bf777343f394a2f2` · 180 `3525ea646b48ba55ef4fa8ae86c0ef588150def4a39b529590cbb636eb786b07` · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469` · 512 `f23ff1cb401544e819a354aec0c15acb43ff41af1697adf990f2ded44ca686c1` · maskable `988f49c2a82743262a2e9021a9cfd19137fa2f39d028387c10f01bae397b8352` |
-| Determinism | Run twice; all five outputs byte-identical (no anti-aliased pixel, fixed zlib through `tools/pngout.py`). |
+| Outputs | `favicon.ico` (the fitted seal at 16 and 32 px, uncompressed DIBs; added 2026-11-05: browsers and crawlers ask for that path whatever a page names) · `icon.svg` · `assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web manifest, `any`), `icon-512-maskable.png` (web manifest, `maskable`) |
+| SHA-256 | ico `9d0f3cd1a4991d3cd350d9e3ac1ca9d6ec68a92d92c103c87ab9f8a4d05056ba` · svg `0e293384f3f81f6a68ea8deb2d1a51ea2b03dee30f2b9385bf777343f394a2f2` · 180 `3525ea646b48ba55ef4fa8ae86c0ef588150def4a39b529590cbb636eb786b07` · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469` · 512 `f23ff1cb401544e819a354aec0c15acb43ff41af1697adf990f2ded44ca686c1` · maskable `988f49c2a82743262a2e9021a9cfd19137fa2f39d028387c10f01bae397b8352` |
+| Determinism | Run twice; all six outputs byte-identical (no anti-aliased pixel, fixed zlib through `tools/pngout.py`). |
 | Acceptance checks | The computed path equals the published one (the script exits otherwise); 512 maskable: half-diagonal of the path 203.6 px ≤ 204.8 px (40% of the side); every seal inline on a page equals the computed one (`tools/test-site.py`). |
 | Deployment | `deploy.sh` allowlist (`icon-512-maskable.png` added). `sw.js` ASSETS keeps `icon.svg`, the favicon every page links; the rasters are fetched by the OS at install or pin time. |
 | Supersedes | IMG-002, the derived orbit filament, retired whole to `backup/icon-v1/` on 2026-10-13 (below) |

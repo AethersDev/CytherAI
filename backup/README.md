@@ -16,6 +16,7 @@ Everything the site no longer uses lives here, whole: nothing is served, precach
 | `dossier-v3/` | The old shared subpage CSS and the dossier modules |
 | `brand-studies/` | The identity and dossier drafts of July 2026 (commit `517070b`) |
 | `icon-v1/`, `og-card-v1/` | The orbit icon family and social plate, with their generators (replaced by the Cyther Seal and the film's card, 2026-10-13) |
+| `og-card-v2/` | The film's two cards as PNGs, 612 KB and 607 KB (replaced by the same cards as JPEGs, 2026-11-05) |
 | `project-pages/` | The ADII and AWC-OS pages as first published, before curation |
 | `awc-os-v1/` | The AWC-OS page, its script, its two films and its competition deck as served until 2026-10-19, when the Alinma plan was cancelled: the films then lost their closing production line and the deck left the site; its own README |
 | `adii-sequence-v1/` | ADII's six-second sequence and its poster, served from 2026-10-12 until 2026-10-20, when the passage (`tools/render-passage.py`) took its place; its own README |

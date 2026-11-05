@@ -23,8 +23,9 @@ css/flat.css
 sw.js
 manifest.webmanifest
 icon.svg
-assets/og/og-card.png
-assets/og/og-card-ar.png
+favicon.ico
+assets/og/og-card.jpg
+assets/og/og-card-ar.jpg
 assets/og/og-card-flat.png
 assets/og/og-card-flat-ar.png
 assets/icons/icon-180.png
