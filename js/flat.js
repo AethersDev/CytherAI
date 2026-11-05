@@ -64,26 +64,31 @@ function scrolled() {
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
 /* a new viewport gives every stretch a new height: in the film the visitor keeps their moment, not their offset (as
    js/film.js); past it, their place in what follows: the block at the top of the view and how far into it (until 2026-10-25
-   every place past the film became the film's end, the instrument's top). A change that moves nothing scrolls nothing */
+   every place past the film became the film's end, the instrument's top). A change that moves nothing scrolls nothing. The
+   window first, and the boxes, as svh can settle with no resize event (js/film.js, 2026-11-05) */
 function keep() {
   if (scrollY < marks[marks.length - 1][0]) return null;
   const b = after.findLast(e => e.getBoundingClientRect().top <= 0) || after[0], top = b.getBoundingClientRect().top + scrollY;
   return [b, top, scrollY - top];
 }
-addEventListener("resize", () => {
+function replace() {
   const was = String(marks), k = kept;
   measure();
   if (k) { const top = k[0].getBoundingClientRect().top + scrollY; if (top !== k[1]) scrollTo(0, top + k[2]); }
   else if (String(marks) !== was) scrollTo(0, place(now));
   scrolled();
-});
+}
+addEventListener("resize", replace);
+const watch = new ResizeObserver(replace);
+[document.querySelector(".stage"), parts[0]].forEach(box => watch.observe(box));
 portrait.addEventListener("change", () => { if (wanted) { rest(); download(); } scrolled(); });
 /* words bring their moment with them: when the keyboard reaches a link among them, and when an anchor names them */
 const bring = s => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); };
 says.forEach(s => s.addEventListener("focusin", () => bring(s)));
 
 /* the sequence downloads whole by a request of its own and plays from memory, asked to play and paused at once (iOS shows
-   a clip's frames only then); a paused clip's own download is the browser's to defer (js/film.js, 2026-10-22) */
+   a clip's frames only then) and then sought, or in the iOS Simulator it can run on while reporting itself paused (js/film.js,
+   2026-11-05); a paused clip's own download is the browser's to defer (js/film.js, 2026-10-22) */
 function download() {
   if (stillMotion || wanted) return;
   const file = wanted = new URL(portrait.matches ? "flat-portrait.mp4" : "flat-landscape.mp4", media).href;
@@ -92,7 +97,7 @@ function download() {
     if (!mine()) return;
     scene.preload = "auto"; scene.src = URL.createObjectURL(clip);
     scene.addEventListener("loadeddata", () => { if (mine()) { ready = true; body.classList.add("scrub"); scrolled(); } }, { once: true });
-    scene.play().then(() => { if (mine()) scene.pause(); }, err => { if (mine() && err.name !== "AbortError") { rest(); scrolled(); } });
+    scene.play().then(() => { if (mine()) { scene.pause(); scene.addEventListener("seeked", scrolled, { once: true }); scene.currentTime = now + 0.04; } }, err => { if (mine() && err.name !== "AbortError") { rest(); scrolled(); } });
   }, () => { if (mine()) { rest(); scrolled(); } });
 }
 scene.addEventListener("error", () => { if (scene.hasAttribute("src")) { rest(); scrolled(); } });

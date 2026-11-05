@@ -23,8 +23,7 @@ tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `uni
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
 `tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
-`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live
-origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-passage.py` (the same way; no
+`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
 obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
 2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
 turned or a window resized keeps the passage's moment, its words and its frame. `CANONICAL_REF` is local
@@ -188,8 +187,7 @@ documentation may explain a failure differently, but may not make it disappear. 
 `NOT_EVALUATED` is **not** folded into either rule: missing evidence and a tested defect
 may both block release, but under different clauses.
 
-Zero external requests, ever. The homepage CSP forbids inline `<script>`
-(`script-src 'self'`); all homepage JS is in external modules. No node — verify JS with
+Zero external requests, ever. The homepage CSP forbids inline `<script>` (`script-src 'self'`); all homepage JS is in external modules (its one data block, the Organization's JSON-LD, runs nothing). No node — verify JS with
 `jsc`: `/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Helpers/jsc`.
 `./verify.sh` parses every served script (each `.js` in `deploy.paths`) with jsc's `checkSyntax`, which parses
 without running, so a browser global is no failure there; a SyntaxError is. The record and the engine
@@ -219,12 +217,7 @@ the mailboxes, monitoring, restoring a build, and what only the owner can settle
 
 ## Architecture — the film
 
-The homepage is a twelve-second film, rendered offline in Blender (Cycles on the Apple GPU,
-`tools/render-film.py`), silent, with its sentences as HTML over it: *AI can change
-everything.* · *Not everything should be allowed to change.* · *CytherAI builds the part of AI
-that decides what is allowed to happen.* · then the statement *Let AI change things. Keep
-control of what changes.* with **The three systems ↓** and **Talk to us ↗**. One continuous
-shot: an exact structure of glass fins, ceramic plates and machined frames around a warm
+The homepage opens on its statement, *Let AI change things. Keep control of what changes.*, with **The three systems ↓** and **Talk to us →**: they stand from the first paint, where they stand at the film's end (the audit of 2026-11-05; until then they waited for its 10.6th second, LCP 11.3 s: `docs/deploy.md` §5ad, §5ag). Behind them plays a twelve-second film, rendered offline in Blender (Cycles on the Apple GPU, `tools/render-film.py`), silent, with its sentences as HTML subtitles in the dark band under the statement: *AI can change everything.* · *Not everything should be allowed to change.* · *CytherAI builds the part of AI that decides what is allowed to happen.* One continuous shot: an exact structure of glass fins, ceramic plates and machined frames around a warm
 current rebuilds itself; a wave of change runs to a hairline plane; one pale slab stops a
 fraction short of it and stays while the current runs on through the plane; a fitting group
 passes, then the rest settle and pass; the camera emerges to a still composition, which stays
@@ -270,37 +263,21 @@ frames a pass, without it 1–3). The owner found the first version, whose beats
 read and then rushed it, lagging and hard to follow (2026-10-20). The close, *Tell us what must never happen.* with the
 contact address, stands over the passage's last frame where the film's statement stood (`docs/deploy.md` §5x).
 
-The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced
-motion, a refused or failed play, a film not started within `GUARD` (6 s), or one that falls
-`STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition and the whole
-statement (`still()`); a film stopped short of its end drops its source, so its poster — the
+The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced motion, a request to save data or a connection the browser calls 2G (these two fetch no film, no passage and no worker either, under 1 MB; never "3g", which Chrome reports on a loopback server: §5ag), a refused or failed play, a film not started within `GUARD` (6 s), or one that falls `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
-still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused
-at once, as iOS shows a clip's frames only then; until 2026-10-22 the video element downloaded it itself, and a paused
+still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment (without that, in the iOS Simulator, 8 of 10 loads reported it paused at 0 while the screen went on showing it run, behind the statement; a seek to where it says it is does nothing: §5ag); until 2026-10-22 the video element downloaded it itself, and a paused
 clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. It shows
-once whole: its first frame is the film's last, so nothing changes where it takes over. A new viewport (a phone
-turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll
-offset (until 2026-10-22 a turned window landed past the passage), and a turned phone stands on the moment's still
+once whole: its first frame is the film's last, so nothing changes where it takes over. A new viewport (a phone turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll offset (until 2026-10-22 a turned window landed past the passage), by the window's `resize` and by the boxes themselves (`ResizeObserver`: in the iOS Simulator `svh` settled with no `resize` event, and every moment stood 8% early until 2026-11-05; both, since an observer alone answers after the frame's scroll has named the moment by the old map), and a turned phone stands on the moment's still
 until the other orientation's clip is whole. Until then,
 under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
 on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:
 each changes between two systems' words, never under them). A page that opens past the film (an anchor, a restored
 scroll, a return through the history even to the top: without its back-forward cache Chrome replayed the film to a visitor
-back from the contact page until 2026-10-21) never plays it; an anchor that names the passage's words (`#adii-evidence`)
-brings their moment, as keyboard focus does. AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
-`tools/render-systems.py` to `backup/system-sequences-v1/` when the passage took their place. The social card
-(`assets/og/og-card.png`, on every page that names one) is the film's last frame with its statement
-(`tools/render-og-film.py`; the orbit plate it replaced is `backup/og-card-v1/`). **When nothing is changing, nothing
+back from the contact page until 2026-10-21) never plays it; an anchor that names the passage's words (`#adii-evidence`), or their stretch (`#adii`: its first words, a stretch's own top being a wordless second), brings their moment, as keyboard focus does and as a link on the page does, pressed again or not: the page goes there itself as it opens, since Chrome lost its own anchor on the Arabic page under mobile emulation, and each stretch's `scroll-margin` takes WebKit's, which runs after the load, to the same words (*The three systems* names `#principle`; until 2026-11-05 it named `#systems` and landed on no words). AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
+`tools/render-systems.py` to `backup/system-sequences-v1/` when the passage took their place. The social card (`assets/og/og-card.jpg`, on every page that names one) is the film's last frame with its statement (`tools/render-og-film.py`; the orbit plate it replaced is `backup/og-card-v1/`, its own PNG of 612 KB `backup/og-card-v2/`). **When nothing is changing, nothing
 runs:** once the film has ended and the scroll has stopped (the passage seeks only as it scrolls, and is never played),
-the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). If the script never runs, the statement
-unveils itself after 6 s (`.no-js`, CSS). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by
-localized darkening only: under the header, along the film's lower edge, behind Replay, behind each caption and the
-statement, and under each of the passage's words and the close's (opaque there, soft at its edges: on a phone the
-current runs through their band). There is no sound. The
-statement is the page's `h1` and is in the accessibility tree from the first moment (only its
-links wait for it, so focus never lands on something invisible); a screen-reader-only
-paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; each stretch of the passage
+the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by localized darkening only: under the header, along the film's lower edge (the same darkness going away past the stage's foot, and the scene going away into the footer's ground, so neither meets a hard line), behind Replay, behind the statement, and under each of the passage's words and the close's (opaque there, soft at its edges: on a phone the current runs through their band, and while its words fade by the scroll their darkness fades with them). There is no sound. The statement is the page's `h1`, shown by its markup whatever the film or a script does; a screen-reader-only paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; each stretch of the passage
 has its own.
 
 **The mark is the Cyther Seal** (adopted 2026-10-13 from the owner's identity draft): a path
@@ -336,15 +313,13 @@ exactly the English one's cues, the passage's seconds, sections and projected fi
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
 or upper-cased (spacing breaks the joins), gets taller lines, and keeps a Latin name whole and in its own order
 (`[lang=en]`, isolated). Its type is IBM Plex Sans Arabic 300/400 (`fonts/`, OFL, shipped unmodified: the licence
-reserves the name "Plex", so it is not subset). The lockup stays left to right. The Arabic card is
-`assets/og/og-card-ar.png` (`tools/render-og-film.py ar`). The copy was drafted in Modern Standard Arabic and
+reserves the name "Plex", so it is not subset). The lockup stays left to right. The Arabic card is `assets/og/og-card-ar.jpg` (`tools/render-og-film.py ar`). The copy was drafted in Modern Standard Arabic and
 published for the owner to refine.
 
 **One lit environment** (2026-10-20, the owner's decision): the front door is dark whatever the device's theme. Light
 mode (2026-10-14: `js/theme.js`, the header's switch `#theme`, light tokens for the sections below the film) retired to
 `backup/theme-switch-v1/` once the systems and the close moved over the passage and the switch changed only the footer,
-a promise of an alternate view the page did not keep. The header holds the brand, the language and a direct route past
-the opening (*The three systems ↓*). The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
+a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on its own darkness (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand, *The three systems* (above 480 px wide), *Talk to us*, the language. The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
 to one environment (no switch, no theme on the root, no light tokens or colour-scheme query in `css/film.css`) and
 every ink to 4.5:1 on its ground.
 
@@ -361,9 +336,7 @@ interface in English) and a marked link to the English text. The contact pages c
 happen.* with three plain questions (*What system are you working on?* · *What would you want AI to do?* · *What must
 never happen?*), composed into one readable email draft for the visitor's own email app: the button says *Open email
 draft*, never *Send*, with *Your email app will open with these answers. Review the draft and send it there.* beside it,
-and if no app opens, *Copy the message* copies the draft whole, the address beside it. The answers stay in the browser
-until the draft opens; the page sends and stores nothing and never says a message was sent, and `pages/privacy.html`
-describes exactly that, with the host's own logs (GitHub Pages logs every visitor's IP address) as a separate matter
+and if no app opens, *Copy the message* copies the draft whole, the address beside it, or a link carries the draft to Gmail or Outlook on the web, the visitor's to follow (neither link is documented by its service, and only the owner can check one signed in: `docs/deploy.md` §5f; a draft too long for Gmail, which refused 9,800 characters, drops them). A press with nothing answered opens nothing and asks again; any other says what should be happening, since where no app answers `mailto:` nothing else shows (the audit of 2026-11-05). The answers stay in the browser until the draft opens; the page sends and stores nothing and never says a message was sent, and `pages/privacy.html` describes exactly that, with the host's own logs (GitHub Pages logs every visitor's IP address) as a separate matter
 (`mailto:` by design; without the script the form posts the answers to `mailto:`). Each contact page keeps its one inline
 script, admitted by its `sha256-` in the page's CSP, never `'unsafe-inline'` (edit the script and the hash must follow).
 `awc-os/` (2026-10-21, at the owner's direction: *the other two destinations have not received this treatment*) opens
@@ -452,8 +425,7 @@ check: the frame each scroll names, reading ink (by `tools/probe-ink.py`'s metho
 the film and from the instrument, the close and the notes. Its method states the model's approximations (the stack at normal
 incidence, only its phase at the camera's angle; iron's constants for the steel; the page's agreement with the film checks the
 computation, not the model), and its limits that straight fringes show a block flat only to the reference flat's own accuracy.
-The front doors route to it from their close only, under the invitation (*Both looked flat. See why →*), so a visitor meets the
-company and its three systems first; the film's conclusion routes back to the three systems before the instrument, which
+The front doors route to it from their close only, under the invitation (*Looking right is not a test: a demonstration in light →*, its own page's words; until 2026-11-05 *Both looked flat. See why →*, which told a first-time visitor nothing at the page's main click), so a visitor meets the company and its three systems first; the film's conclusion routes back to the three systems before the instrument, which
 stays optional (both on review, 2026-10-25).
 
 **The experiment, retired** (2026-10-16, at the owner's direction): THE EXCEPTION, two decisions

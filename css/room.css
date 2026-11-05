@@ -18,9 +18,9 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 header{height:92px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 5vw}
 .side{display:flex;align-items:center;gap:24px}
 .wordmark{display:inline-flex;align-items:center;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
-.top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-bottom:4px}.top:hover{color:var(--warm);border-color:var(--warm)}
+.top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
 main{max-width:1180px;margin:0 auto;padding:48px 5vw 0}
-.label{display:block;font-family:Plex,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
+.label{display:block;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
 h1{font-family:News,serif;font-weight:300;font-size:clamp(32px,3.2vw,46px);line-height:1.06;letter-spacing:-.02em;margin:18px 0 0}
 .by{font-size:15px;margin-top:14px}.by a,.by [lang=en]{white-space:nowrap}   /* whose work the evidence is, under its headline; a name or its link kept whole */
 h2{font-family:News,serif;font-weight:300;font-size:clamp(26px,2.4vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0 0 20px}
@@ -31,7 +31,7 @@ p{font-size:17px;line-height:1.55;color:var(--soft);margin:18px 0 0;max-width:48
 .arrival{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"head fig" "body fig" "limit fig";column-gap:56px;align-items:start}
 .arrival .head{grid-area:head}.arrival .body{grid-area:body}.arrival .limit{grid-area:limit}.arrival figure{grid-area:fig;align-self:center}
 figure{margin:0}video{display:block;width:100%;aspect-ratio:16/9;background:var(--lift);border:1px solid var(--rule)}
-figcaption{margin-top:12px;font-family:Plex,monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+figcaption{margin-top:12px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 section{margin-top:96px;padding-top:40px;border-top:1px solid var(--rule)}
 /* the artifact as text, verbatim: quiet, opened on request */
 details{margin-top:24px;max-width:46rem}summary{cursor:pointer;display:inline-block;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}summary:hover{color:var(--warm);border-color:var(--warm)}
@@ -64,14 +64,14 @@ section>ol{max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(-
 .field{display:block;margin-top:32px}.field b{display:block;font-weight:600;font-size:16px}.field i{display:block;font-style:normal;font-size:14px;color:var(--dim);margin-top:4px}
 textarea{display:block;width:100%;min-height:96px;margin-top:12px;padding:12px 14px;background:var(--lift);color:var(--ink);border:1px solid var(--edge);font:16px/1.5 Public,sans-serif;resize:vertical}
 textarea:focus-visible{outline-offset:2px}
-.note{font-size:14px;color:var(--dim);margin-top:16px}
+.note{font-size:14px;color:var(--dim);margin-top:16px}.note a{color:var(--soft);border-bottom:1px solid var(--rule)}.note a:hover{color:var(--warm);border-color:var(--warm)}
 .also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--rule)}.also a:hover{color:var(--warm);border-color:var(--warm)}
-body>footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a:hover{color:var(--ink)}
+body>footer{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--ink)}
 @media(max-width:860px){.arrival{grid-template-columns:1fr;grid-template-areas:"head" "limit" "fig" "body"}.arrival figure{margin-top:28px}}
 @media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
 /* Arabic: its type, never letter-spaced, taller lines; a Latin name keeps its own order */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
-:lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;font-size:12px;letter-spacing:0;text-transform:none}
+:lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;letter-spacing:0;text-transform:none}
 :lang(ar) :is(h1,h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
 :lang(ar) p{line-height:1.85}:lang(ar) .words td{font-family:Arabic,Public,sans-serif;line-height:1.85}:lang(ar) textarea{font-family:Arabic,Public,sans-serif}
 :lang(ar) [lang=en]{unicode-bidi:isolate}

@@ -2250,6 +2250,109 @@ PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_21274C6BC7C41E15`), 81 of 81 served paths matching the artifact.
 
+## 5ag. The audit of 2026-11-05: the statement from the first paint, a way to talk in view, the page's edges — 2026-11-05
+
+Build `1E9D8B04B52FE24F` (`#reading_ink_1E9D8B04B52FE24F`, `#film_settle_1E9D8B04B52FE24F`). It follows the live
+`21274C6BC7C41E15`.
+
+**The direction.** The owner pasted a production-readiness audit of the live site (2026-11-05; desktop Chrome at
+1470 × 779 and 1200 × 665, no phone, Safari or cold-cache timing). Its verdict: technically production-grade, not yet as a
+lead-generation site, for three reasons: the headline waits for the film, there is one weak path to a conversation, and
+a public repository contradicts the site. Every claim was checked against the build before anything changed:
+
+| The audit | Observed on `21274C6BC7C41E15` | Now |
+|---|---|---|
+| H1: statement and links hidden until the film's end; LCP 11.4 s | Until 10.6 s, not its end; LCP 11,280 ms, the `h1`. §5ad recorded this as by design; this audit reverses it | They stand from the first paint where they stood at the film's end. LCP 360 ms on the desktop preset, 1,568 ms on slow 4G (324 and 1,600 in Arabic), the `h1`; CLS at most 0.0004. Served locally: the live origin's first paint was 1.3–3.1 s on the owner's link (§5ad), so measure it again once published |
+| H2: the header scrolls away | Confirmed | `.bar`, fixed and slim, with *Talk to us*: what a pointer reaches at every one of the page's moments. Below 480 px tall it scrolls away again |
+| H2: the address a 10 px `<span>` | Confirmed, with two more on the contact pages | Every address a page prints is a `mailto:` link |
+| H2: no reaction where no email app answers | Confirmed in the code | The press says what should be happening. Gmail and Outlook links carry the draft, the visitor's to follow, and `pages/privacy.html` says so |
+| H2: a real endpoint or a booking link | A form service needs an account and a reply field the contact page deliberately lacks, and breaks what the privacy policy says | Not done: the owner's (`docs/operations.md`, 9) |
+| H2: *Both looked flat. See why →* tells a first-time visitor nothing | Confirmed | *Looking right is not a test: a demonstration in light →*, its own page's words |
+| H3: the repository calls `cytherai.com/awc-os/` a live instance; no description; a redirecting link | Confirmed; its README also lists an `OPERATIONS.md` it does not contain. This account has `push: false` | The rooms link `cytheraii/aws-os_mvp` directly. The rest is the owner's (below) |
+| M1: 6.2 MB; stills on Save-Data or 2G/3G | The sizes are right. **`3g` is not a signal:** Chrome reported it (rtt 400, 1.5 Mbit/s) on a loopback server, and to the audit on a link that played the film, so that rule would take the film from healthy links | Save-Data and 2G: the stills, no film, no passage, no worker, 527 KB (544 in Arabic). `3g` keeps the film, whose `GUARD` and `STALL` measure the link itself |
+| M1: re-encode, or add AV1/HEVC | The film is CRF 29 at `ref=16 subme=10` already. Against its CRF 23 master at the served size (SSIM): H.264 4.08 MB at 0.9689, HEVC 3.76 MB at 0.9704 (CRF 30), AV1 4.22 MB at 0.9754 (CRF 38): by interpolation about 12% and 20% at equal fidelity | Not done: 0.5–0.8 MB is not worth two more files, a codec branch and a new look on a certified film. Reported, not decided against: the owner's eye |
+| M1: a CDN in front of Pages | Pages' limits are accepted (§7) | Not done: the owner's (`docs/operations.md`, 11) |
+| M2: `#adii` and `#awc-os` land at 0 | **Not in English** at either of its viewports: five paths on the live origin landed exactly on the audit's own targets. **On the Arabic page under mobile emulation, on every load:** y 0, with no script involved. Bisected on copies, it took `dir=rtl`, the fixed words and the preloaded fonts together: the browser's own anchor is lost. Why the audit saw it in English was not found | The page goes there itself as it opens, which also ends the browser's anchor, and as the address changes, to the stretch's first words, since a stretch's own top is a wordless second. WebKit runs its anchor after the load all the same, so each stretch's `scroll-margin` takes that one to the same words |
+| M3: *The three systems ↓* lands on an empty frame | Confirmed: opacity 0 at 779 px | It names `#principle`, at the bar too, and a press again from anywhere returns there |
+| M4: hard video edges | Confirmed: neighbouring pixel rows jump 12 levels at the stage's foot, 19 at the footer's top | Gradients; at most 1.14 levels |
+| M5: the *g.* over a slab; the opening sentence across one | The second confirmed. The first only in mid-fade (opacity 0.4, about 100 px of scroll): at rest the words' opaque darkness hides the slab, and it fades with them | The film's sentences are subtitles in the frame's darkest band. The fade is unchanged |
+| Low: 10 px type, 34 × 13 px targets | Confirmed, and the rooms' footers and labels too | A 12 px floor (a law); every link outside a sentence at least 24 × 24 |
+| Low: `/favicon.ico` 404 | Confirmed | The fitted seal at 16 and 32 px, computed (`tools/render-seal.py`) |
+| Low: no structured data | Confirmed | One Organization block on each front door; a data block runs nothing, and no page logged a violation of its `script-src 'self'` |
+| Low: AWC-OS missing from the sitemap | **Refuted as a defect:** both rooms are `noindex`, and `tools/test-site.py` requires exactly that omission | Unchanged. Whether they stay `noindex` is the owner's (`docs/operations.md`, 8) |
+| Low: a 612 KB card | Confirmed | JPEGs, 186 KB and 181 KB, byte-identical on two runs; the PNGs in `backup/og-card-v2/`. The 300 KB limit is reported, not documented, by the services |
+| Low: an empty draft | Confirmed | Nothing answered opens nothing and asks again |
+| Low: Arabic legal pages; analytics | Both owner's: a legal text is for whoever answers for it, and a beacon breaks *zero external requests* | Not done (`docs/operations.md`, 11 and 12) |
+
+**The creative change, for the owner's eye.** The statement could not simply stand where it stands: above it runs the
+film's current, and stacking the three sentences there would cover the subject. So they became subtitles in the band
+under the links, the frame's darkest, at about 40% of their old size. The statement's own place is unchanged, so the film's
+end is the composition the owner approved; what is new is that the film plays behind it. The memory of *type is never
+shrunk* concerned fitting a caption; this is a change of hierarchy, and it is the owner's to keep or reverse.
+
+**The statement over every frame, at every size.** A statement that waits for the film's end meets one frame; one that stands
+from the first paint meets them all, and each window crops them differently. `tools/probe-ink.py` sampled three viewports and
+found nothing, so ten more were tried first, and its bound failed at three: the English statement at 4.13:1 on a short phone
+(360 × 640), 2.26:1 on a phone on its side (844 × 390), and the Arabic at 4.02:1 on a laptop (1280 × 720), where the film's glare
+lies behind its right-aligned text. Each is answered where it occurs, by darkness alone: across the film's width on a phone, a
+band on a short window, a shade more behind the Arabic. The English composition above 760 px is unchanged. The probe now
+samples 1280 × 720, 844 × 390 and 375 × 667 for good. On a phone's first screen the lower half of the film is therefore darker
+through its whole length than it was.
+
+**Two bugs the audit could not have seen, in the iOS Simulator, on the live build's bytes.** It is WebKit, not a phone: whether a
+physical iPhone does either is not known, and the first is in §5f.
+- **The passage moving behind the statement.** At rest after the film, the page reports the passage paused at 0, and the screen
+  shows it running in real time: AWC-OS's jaws at 14 s, CytherCAD's part at 18 s, behind the statement. No script can see it. Asked
+  to play and paused at once (§5ae), the clip's layer can go on, until a seek stops it; and a seek to where it says it is does
+  nothing, so it now goes a frame past its moment, and the scroll names the moment once that lands. Screenshots tied to the page's
+  own clock, in turn on one harness: **unfixed, 8 of 10 loads still moving; fixed, 0 of 10.** Both looked flat, which downloads and
+  holds its sequence the same way, had the same bug, its fringes forming on their own: **5 of 10; fixed, 0 of 10.**
+- **Every moment 8% early.** On these loads `svh` settled after the page's first measure (8.58 px to 7.96), with no `resize` event, so
+  its map of scroll to moment stayed wrong for the visit: words dim where they should be whole, and the page's foot short of the
+  passage's end. The pages watch the boxes now as well as the window (`ResizeObserver`). Both, because a `resize` comes before the
+  frame's scroll answer and an observer after it: with the observer alone a turned phone lost its moment, which `tools/probe-passage.py` caught.
+
+`tools/probe-ios.py` holds both, with three looks a language, since one load can miss the first.
+
+**Found on the way.** The flat page shares the stage's rules, and raising the statement for the subtitles' band put its Arabic
+label at 2.11:1 at 320 × 640: `tools/probe-flat.py` caught it and the raise is the front door's alone now.
+The passage's words had a timed fade. `.say.on` took `.on`'s `transition: opacity .6s`, against this
+repository's own law that the scroll alone fades them (with a timed fade on these words WebKit missed 16–24 frames a pass, §5w).
+It surfaced as a probe that read a computed opacity below 1 half a second after a press. `.say` now sets `transition: none`
+(`test_no_stretch_holds_its_words_beneath_the_next`). What it did to WebKit's frames on the live site was not measured.
+
+**For the owner: the repository's change** (`cytheraii/aws-os_mvp`, which this account cannot write). In the README, replace
+*Live instance: https://cytherai.com/awc-os/* with *Demonstration: https://cytherai.com/awc-os/ (the film and its record).
+This MVP runs on an evaluation machine, not on deployed hosting, so there is no public live instance; a live session can
+be requested through https://cytherai.com/contact.html.*, remove the `OPERATIONS.md` row, and give the repository a
+description. Renaming it to match the product is the owner's choice; GitHub redirects the old name, and the rooms' two
+links should then follow.
+
+**Checked.**
+- `./verify.sh` passes. `tools/test-site.py` has seven new laws and two widened. In a throwaway copy, 20 mutations each fail the law they
+  should and the control passes: the statement given a cue, the bar not fixed, the first link naming a stretch, an address
+  as plain text, a link to the wrong address, no Organization block, another city, a logo that does not ship, 10 px type
+  (three ways), a timed fade on the words, a stretch's margin missing or wrong, a favicon that is not the computed seal, a card's declared type wrong.
+- `tools/probe-arrival.py`, new, real input throughout: 98 rows, all PASS. In throwaway copies of the artifact, 18 mutations each
+  fail the step they should and 9 controls pass: each gradient removed, no arrival as the page opens (the audit's y 0 returns), a first press or a press again doing nothing,
+  the bar scrolling away or under the words, a draft of nothing opening, the press saying nothing, a long draft keeping
+  its links, subtitles over the statement, the stage cutting it at 400%, the footer's links unpadded, the statement waiting
+  for the film, Save-Data ignored, `3g` counted as lean, the worker registering anyway.
+- `tools/probe-passage.py`: 22 rows, PASS. `tools/probe-flat.py`, for the stylesheet it shares: PASS.
+- `tools/probe-ios.py`, new, the iOS Simulator's WebKit (iOS 26.5, an iPhone 16 Pro Max image; not a phone): 32 rows, all PASS: the statement and the bar from the first report, the film at real time behind them, the frame holding at rest on both pages, the words shown at every anchor, the foot at the passage's last second, in both languages. Run on the builds without each fix, its `rest`, `flat`, `words` and `foot` rows failed.
+- Gmail's link, signed out, keeps its parameters through its sign-in redirect. Outlook's app loads at its address and
+  receives them; its sign-in then runs in the page, so what it does with them cannot be seen from outside. Gmail answered 302
+  to a link of 8,060 characters and 400 to one of 9,860, hence the 8,000 at which they give way. Neither link is documented
+  by its service. **Signed in, the draft filling in is not observed: §5f.**
+
+**Not observed here; the owner's (§5f):** native Safari, a physical iPhone or Android (the resting frame above all), VoiceOver, a slow real network, a real
+visitor on Save-Data, the webmail links signed in, and mail arriving.
+
+Observed on this build (Chrome 156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light,
+at six viewports, 4,462 element samples, none below 4.5:1, worst 4.91:1 (CY-SEM-003 PASS), the statement now measured at every one of the film's twelve seconds; both
+pages settle to no frame, timer or playing media in every profile, the film taking its 12 s, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -2286,18 +2389,18 @@ What a headless browser cannot stand in for, against the same build, appended as
 
 | Check | What to confirm |
 |---|---|
-| Safari (macOS) | the film autoplays muted and inline; each sentence appears in its window; it ends on the still composition with the statement and Replay; Develop → Console shows no error |
-| iPhone Safari | the vertical film plays inline (not full screen); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle each system's still stands for the passage; scrolling on from the statement moves the passage frame by frame through ADII, AWC-OS and CytherCAD and back to the film's world, with no jump where it takes over from the film; the close stands over its last frame |
+| Safari (macOS) | the statement and its links stand at the first paint; the film autoplays muted and inline behind them; each sentence appears in its window under them; it ends on the still composition with Replay; Develop → Console shows no error |
+| iPhone Safari | the statement and its links stand at the first paint; the vertical film plays inline (not full screen) behind them; once it ends, watch the frame for ten seconds: it must stay the final composition and not move, and on Both looked flat the first screen must not form fringes on its own (in the Simulator both ran on until §5ag; whether a phone did is what this looks for); in Low Power Mode, where autoplay is refused, the still composition and the whole statement stand at once, and past the principle each system's still stands for the passage; scrolling on from the statement moves the passage frame by frame through ADII, AWC-OS and CytherCAD and back to the film's world, with no jump where it takes over from the film; the close stands over its last frame |
 | Android Chrome | as iPhone; the statement's links are reachable with the thumb |
-| Keyboard only | Tab reaches *The three systems ↓*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
-| Mouse and touch | each link the page shows takes a click on the Mac and a tap on the phone: the statement's, each system's in the passage while its words are shown, the close's and the footer's (keyboard focus and a script's click pass under a covering layer; a pointer does not) |
+| Keyboard only | Tab reaches the bar's *The three systems* and *Talk to us*, the statement's links, Replay, each system's route in the passage (*See what this is based on →*, *See the demonstration →*, *Read the validation record →*: its words shown when it has focus), *Talk to us* and the footer; the focus ring is visible throughout |
+| Mouse and touch | each link the page shows takes a click on the Mac and a tap on the phone: the statement's, the bar's *Talk to us* at every moment down the page, each system's in the passage while its words are shown, the close's and the footer's (keyboard focus and a script's click pass under a covering layer; a pointer does not) |
 | VoiceOver (macOS and iOS), in English and in Arabic | the statement is read as the page's heading; the principle and each system's description, headings and copy in order, then the close; the films and the passage are silent and hidden from it |
 | A slow real network | a film that has not started within 6 s (`GUARD`), or falls 2 s behind real time (`STALL`), gives way to the still composition, and Replay plays it once it can |
 | The route out of the film | from the passage, each system's link opens its evidence with its headline, its limit and its artifact in the first screen: *See what this is based on →* ADII's recorded run, with *Built by Group 05* and the team's names; *See the demonstration →* AWC-OS's film, with *Developed by Al-Baseera*; *Read the validation record →* CytherCAD's record, every figure as the record states it (Arabic: each route its Arabic room). Each room's *← Back to the passage* (and the header's *← The passage*) returns to that system's evidence moment, its link shown, the film not replayed; *Tell us what must never happen →* opens the contact page; with three answers filled, *Open email draft* opens your email app with a draft holding them: review it, send it, and confirm it arrives at contact@cytherai.com (once from the phone, once from the Mac, once in Arabic); where no email app opens, *Copy the message* and paste it into a new email from any account; the contact page's *← Back* returns where you came from, and the browser's Back returns to the passage without replaying the film |
 | Link previews | paste a room's link (ADII's, AWC-OS's, CytherCAD's, the brief's) into iMessage or Slack: each shows its own card, its title ending *— CytherAI*, and the large image (a service that saw the link before may show the old card until it refetches) |
 | 200% zoom (⌘+) | the statement, the captions, the passage's words and the close unclipped |
 | 400% zoom (⌘+ to 400% in a 1280 px window) | every page reflows to one column with no sideways scroll; on the front door the passage's longer words scroll within themselves rather than lose their first lines (§5ad); on Both looked flat the close grows to its words, its first sentence and its statement whole (§5af) |
-| The mail arrives (`docs/operations.md`) | one realistic English and one realistic Arabic message, each with one long answer, through *Open email draft* on the phone and on the Mac, and once through *Copy the message* into webmail: each arrives at contact@cytherai.com whole, and a reply from there reaches the sender; the same for `nda@` and `security@` |
+| The mail arrives (`docs/operations.md`) | one realistic English and one realistic Arabic message, each with one long answer, through *Open email draft* on the phone and on the Mac, and once through *Copy the message* into webmail: each arrives at contact@cytherai.com whole, and a reply from there reaches the sender; the same for `nda@` and `security@`. Signed in to each, the contact page's *Gmail* and *Outlook* links open a compose window holding the draft (neither link is documented by its service, and §5ag could check only that each keeps its parameters signed out) |
 
 ## 6. Launch gate
 

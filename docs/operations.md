@@ -42,6 +42,19 @@ No repository change settles these. Until each is done, the handover is complete
 8. **Search Console**: verify `https://cytherai.com/` (a DNS TXT record at Namecheap), submit `sitemap.xml`, and confirm the
    pages it lists are indexed. Decide whether AWC-OS's rooms stay `noindex`. Its field data (Core Web Vitals) appears
    there once enough visitors have come; until then there is none, and none is claimed.
+9. **A way to reach you that needs no email app** (the audit of 2026-11-05 asks for one): a booking link needs only its address;
+   a form service or a function needs an account, a reply-address field the contact page deliberately does not have, and
+   a rewrite of the privacy policy's *the page neither sends nor stores them*. The page's part today: it says what should be
+   happening, carries the draft to Gmail and Outlook on the web, and copies it whole (`docs/deploy.md` §5ag).
+10. **AWC-OS's public repository**, `cytheraii/aws-os_mvp`, which this account can read and not write: its README still calls
+    `cytherai.com/awc-os/` a *live instance* while the site says the MVP runs on an evaluation machine, lists an
+    `OPERATIONS.md` it does not contain, and the repository has no description (§5ag gives the exact change).
+11. **Whether to put a proxy in front of Pages.** It would send the §1 headers (`docs/deploy.md`: HSTS, `frame-ancestors`), allow
+    long caching of the versioned files (Pages sends `max-age=600`), and count visitors with no script on the page. Pages'
+    limits are accepted as they stand (§7, 2026-10-04); moving needs no new contract, and the privacy policy would have to
+    name what the proxy logs. Analytics by a script or a beacon would break *zero external requests*, and is not offered here.
+12. **Arabic legal pages.** The Arabic site links to the English privacy policy and terms, and says so. A legal text in another
+    language is for whoever answers for it to write or approve, not for a release to draft.
 
 ## How to tell the site is broken
 

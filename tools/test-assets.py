@@ -53,7 +53,7 @@ def receipts(log):
         rows = dict(re.findall(r"^\| ([^|]+?) \| (.*?) \|$", sec, re.M))
         if not {"SHA-256", "Output", "Outputs"} & rows.keys(): continue
         rows.setdefault("SHA-256", "")
-        paths = re.findall(r"`((?:[\w.-]+/)*[\w-]+\.(?:png|svg|jpg|mp4))`", rows.get("Output", rows.get("Outputs", "")))
+        paths = re.findall(r"`((?:[\w.-]+/)*[\w-]+\.(?:png|svg|jpg|mp4|ico))`", rows.get("Output", rows.get("Outputs", "")))
         # bare names in an Outputs row (`icon-192.png`) live beside the previous full path
         resolved, last_dir = [], ""
         for p in paths:
@@ -107,7 +107,7 @@ paths = sorted({p for r in receipts(log) for p in r["outputs"]})
 files = {p: open(os.path.join(ROOT, p), "rb").read() for p in paths if os.path.isfile(os.path.join(ROOT, p))}
 CANON, _, CHECKSUM = canon_from_source()
 served = [line.strip() for line in open(os.path.join(ROOT, "deploy.paths"), encoding="utf-8") if line.strip()]
-required = {p for p in served if p.startswith(("assets/", "film/")) or p == "icon.svg"}
+required = {p for p in served if p.startswith(("assets/", "film/")) or p in ("icon.svg", "favicon.ico")}
 required |= {i["src"] for i in json.load(open(os.path.join(ROOT, "manifest.webmanifest")))["icons"]}
 class Named(HTMLParser):
     """the icons and cards a page names, resolved as a browser resolves them"""
@@ -124,10 +124,10 @@ for page in (p for p in served if p.endswith(".html") and not p.startswith(("adi
 
 d = audit(log, files, CANON, CHECKSUM, required)
 check(not d, "D1 every promoted asset matches its receipt and every DERIVED asset is bound to %s (%d receipts, %d files)%s" % (CHECKSUM, len(receipts(log)), len(paths), "" if not d else " — " + "; ".join(d)))
-mut = dict(files); og = "assets/og/og-card.png"; mut[og] = files[og][:-1] + bytes([files[og][-1] ^ 1])
-check(any("og-card.png digest" in x for x in audit(log, mut, CANON, CHECKSUM, required)), "D2 a one-byte change to the OG card is a digest defect")
+mut = dict(files); og = "assets/og/og-card.jpg"; mut[og] = files[og][:-1] + bytes([files[og][-1] ^ 1])
+check(any("og-card.jpg digest" in x for x in audit(log, mut, CANON, CHECKSUM, required)), "D2 a one-byte change to the OG card is a digest defect")
 mut = dict(files); mut[og] = files["assets/icons/icon-512.png"]
-check(any("og-card.png digest" in x for x in audit(log, mut, CANON, CHECKSUM, required)), "D3 a valid image substituted for the OG card is a digest defect")
+check(any("og-card.jpg digest" in x for x in audit(log, mut, CANON, CHECKSUM, required)), "D3 a valid image substituted for the OG card is a digest defect")
 # a live DERIVED receipt, made from the retired card's (its bytes at a served path), for D4 and D5 to move
 v1 = "\n## " + next(s for s in log.split("\n## ") if s.startswith("OG-CARD-V1"))
 live = v1.replace("OG-CARD-V1", "LIVE-DERIVED").replace("backup/og-card-v1/og-card.png", "assets/og/live-derived.png")
@@ -141,7 +141,7 @@ check([x for x in d if "other canonical parameters" in x] == ["LIVE-DERIVED — 
 dropped = log.replace(" · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469`", "")
 check(dropped != log and any("icon-192.png is named" in x for x in audit(dropped, files, CANON, CHECKSUM, required)), "D6 an output dropped from the icon receipt is a coverage defect")
 bad = log.replace("bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d", "not-a-digest")
-dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.png` |\n"
+dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.jpg` |\n"
 undigested = log.replace("\n| SHA-256 | `ff344466b0cfb4c48c8326144e4687012bc9b83d25165c0736316feb85c72149` |", "", 1)   # EXHIBIT-B keeps its Output row, loses its digest row
 check(any("not a sha256" in x for x in audit(bad, files, CANON, CHECKSUM, required)) and any("duplicated" in x for x in audit(dup, files, CANON, CHECKSUM, required))
       and undigested != log and any("EXHIBIT-B" in x and "no digest" in x for x in audit(undigested, files, CANON, CHECKSUM, required)),

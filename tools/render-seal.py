@@ -17,8 +17,9 @@ u = floor(size / 13) px, centred, so every edge falls on a pixel at any integer 
 Outputs: icon.svg (the 32-unit fitted seal, crisp at 16 and 32 px); assets/icons/icon-180.png (apple-touch),
 icon-192.png, icon-512.png (`any`), icon-512-maskable.png (`maskable`: the path inside the central 80% circle). The
 rasters are pixel-aligned at the vector seal's proportions (stroke : spacing ≈ 0.44), so no pixel is anti-aliased.
+favicon.ico: the fitted seal at 16 and 32 px, for what asks for that path whatever a page names (no page does).
 """
-import hashlib, os, sys
+import hashlib, os, struct, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -85,9 +86,28 @@ def raster(size, spacing, stroke):
     return [bytes(c for p in row for c in p) for row in px], span
 
 
+def favicon():
+    """favicon.ico's bytes: the fitted seal at 16 and 32 px, as uncompressed 32-bit DIBs (the bottom row first, an empty AND
+    mask), the form every reader of the format takes"""
+    bgra = lambda h: bytes((int(h[5:7], 16), int(h[3:5], 16), int(h[1:3], 16), 255))
+    head, images = struct.pack("<HHH", 0, 1, 2), []
+    for size in (16, 32):
+        u = max(1, size // 13); off = (size - 11 * u) // 2
+        path = {(off + a * u + i, off + b * u + j) for a, b in lattice() for i in range(u) for j in range(u)}
+        xor = b"".join(bgra(GROUND if (x, y) in path else INK) for y in reversed(range(size)) for x in range(size))
+        images.append(struct.pack("<IiiHHIIiiII", 40, size, size * 2, 1, 32, 0, len(xor), 0, 0, 0, 0) + xor + bytes(4 * size))
+    at = len(head) + 16 * len(images)
+    for size, image in zip((16, 32), images):
+        head += struct.pack("<BBBBHHII", size, size, 0, 0, 1, 32, len(image), at)
+        at += len(image)
+    return head + b"".join(images)
+
+
 def main():
     from pngout import write_png
     os.makedirs(os.path.join(ROOT, "assets/icons"), exist_ok=True)
+    with open(os.path.join(ROOT, "favicon.ico"), "wb") as f:
+        f.write(favicon())
     with open(os.path.join(ROOT, "icon.svg"), "w") as f:
         f.write(fitted_svg(32).replace("<svg", '<svg xmlns="http://www.w3.org/2000/svg"', 1).replace(' width="32" height="32"', "", 1)
                 .replace(' aria-hidden="true"', "", 1) + "\n")
@@ -97,7 +117,7 @@ def main():
         if "maskable" in name and span / 2 * 2 ** 0.5 > 0.4 * size:
             raise SystemExit("the maskable seal leaves the central 80% circle")
         write_png(os.path.join(ROOT, "assets/icons", name), size, size, rows)
-    for rel in ("icon.svg", "assets/icons/icon-180.png", "assets/icons/icon-192.png", "assets/icons/icon-512.png",
+    for rel in ("favicon.ico", "icon.svg", "assets/icons/icon-180.png", "assets/icons/icon-192.png", "assets/icons/icon-512.png",
                 "assets/icons/icon-512-maskable.png"):
         data = open(os.path.join(ROOT, rel), "rb").read()
         print(f"{rel:36} {len(data):>8,} bytes  sha256 {hashlib.sha256(data).hexdigest()}")

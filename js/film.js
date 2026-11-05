@@ -1,17 +1,22 @@
-/* The front door: a twelve-second film, offline-rendered (tools/render-film.py), with its sentences as HTML over
-   it; then the passage, which the scroll moves through the three systems' scenes and back into the film's world
-   (tools/render-passage.py). The film plays once, muted; reduced motion, a refused or failed play, a film not started
-   within GUARD, a film that falls STALL behind real time while the page is visible, or a visitor who scrolls on past it
-   show the final composition and the complete statement, and stay: nothing restarts on its own, and a late download
-   cannot pull the visitor back into the film. Replay is theirs. DOM wiring only: under jsc (verify.sh) it parses and
-   returns. */
+/* The front door: the statement and its links stand from the first paint, in the page's own markup, and nothing here
+   waits on them (until 2026-11-05 they waited 10.6 s for the film); behind them a twelve-second film, offline-rendered
+   (tools/render-film.py), with its sentences as HTML subtitles; then the passage, which the scroll moves through the three
+   systems' scenes and back into the film's world (tools/render-passage.py). The film plays once, muted; reduced motion, a
+   request to save data, a refused or failed play, a film not started within GUARD, a film that falls STALL behind real
+   time while the page is visible, or a visitor who scrolls on past it show the final composition, and stay: nothing
+   restarts on its own, and a late download cannot pull the visitor back into the film. Replay is theirs. DOM wiring only:
+   under jsc (verify.sh) it parses and returns. */
 (function () {
 "use strict";
 if (typeof document === "undefined") return;
 
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
-const lines = [...document.querySelectorAll(".line")], landing = document.querySelector(".landing");
-const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lines = [...document.querySelectorAll(".line")], portrait = matchMedia("(orientation: portrait)");
+/* a visitor who asks to save data, or whom the browser calls 2G, gets the stills and no worker: under 1 MB, not 6 (Chromium
+   alone reports these). Never "3g": Chrome reported it, rtt 400, on a loopback server with nothing to estimate from, and to
+   the audit of 2026-11-05 on a link that played the film; the film's own GUARD and STALL measure what the link does */
+const link = navigator.connection || {}, lean = link.saveData || /2g/.test(link.effectiveType);
+const stillMotion = lean || matchMedia("(prefers-reduced-motion: reduce)").matches;
 const root = new URL("../", document.currentScript.src);   // the site's root: the films and the worker are the same from ar/
 const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play
                      // through, about 4 s in on a 2.4–3.2 Mbit/s link
@@ -28,7 +33,6 @@ function source(load) {
 }
 function cue(t) {
   for (const l of lines) l.classList.toggle("on", t >= +l.dataset.from && t < +l.dataset.to);
-  landing.classList.toggle("on", t >= +landing.dataset.from);
 }
 /* an ended film keeps its last frame; one stopped short of its end gives way to the poster, the same composition */
 function still(e) {
@@ -125,15 +129,36 @@ function scrolled() {
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
 /* a new viewport (a phone turned, a window resized) gives every stretch a new height, and the same offset names another
    moment: the visitor keeps their moment, not their offset (until 2026-10-22 a turned window landed past the passage).
-   A change that moves no stretch (svh: a phone's bars coming and going as it scrolls) moves nothing */
-addEventListener("resize", () => { const was = String(marks); measure(); if (String(marks) !== was) scrollTo(0, place(now)); scrolled(); });
-/* words bring their moment with them, the scroll to the middle of their window: when a link among them is reached by the
-   keyboard, and when an anchor names them (a room's way back, ../#adii-evidence: the words that led to it) */
+   A change that moves no stretch (svh: a phone's bars coming and going as it scrolls) moves nothing. The window first: a resize
+   comes before the frame's scroll answer, which would name the moment by the old map. And the boxes: in the iOS Simulator svh
+   settled after the first measure with no resize event (8.58 px to 7.96, 2026-11-05), and every moment stood 8% early, the page's
+   foot short of the passage's end; once a resize has measured, they find nothing changed */
+function kept() { const was = String(marks); measure(); if (String(marks) !== was) scrollTo(0, place(now)); scrolled(); }
+addEventListener("resize", kept);
+const watch = new ResizeObserver(kept);
+[document.querySelector(".stage"), parts[0]].forEach(box => watch.observe(box));
+/* words bring their moment with them, the scroll to the middle of their window, when a link among them is reached by the
+   keyboard, and when the address names them (a room's way back, ../#adii-evidence: the words that led to it) or their
+   stretch (#adii: a stretch's own top is a wordless second, where the front door's first link landed until 2026-11-05).
+   Fixed words give the browser nothing to scroll to, so the page goes there: as the address changes, as a link to the same
+   place is pressed again (no new fragment, no event), and as it opens, which also ends the browser's own anchor: Chrome lost
+   that one altogether on the Arabic page under mobile emulation (2026-11-05: y 0, with no script of ours involved; it took the
+   right-to-left layout, the fixed words and the preloaded fonts together). WebKit runs its own after the load all the same:
+   each stretch's scroll-margin (css/film.css) takes it to the same words */
 const bring = s => { const [a, b] = span(s); scrollTo(0, place((a + b) / 2)); };
 says.forEach(s => s.addEventListener("focusin", () => bring(s)));
+function arrive() {
+  const e = document.getElementById(location.hash.slice(1)), s = e && (e.matches(".say") ? e : e.matches(".passage") && e.querySelector(".say"));
+  if (s) bring(s);
+}
+addEventListener("hashchange", arrive);
+document.addEventListener("click", e => { const a = e.target.closest('a[href^="#"]'); if (a && a.hash === location.hash) arrive(); });
 /* the passage downloads whole by a request of its own, and the video plays it from memory. Asked of the video element, a
    paused clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s (2026-10-22), it never became
-   whole, and the stills stood for good. Asked to play and paused at once, as iOS shows a clip's frames only then */
+   whole, and the stills stood for good. Asked to play and paused at once, as iOS shows a clip's frames only then; and then
+   sought, since in the iOS Simulator a clip paused so can report itself paused at 0 and go on showing frames, behind the
+   statement on a page at rest, until a seek stops it (2026-11-05: AWC-OS's at 14 s, CytherCAD's at 18 s, on 8 of 10 loads). A seek to
+   where it says it is does nothing, so it goes a frame past the moment, and the scroll names the moment once it lands */
 let wanted = "";   // the clip asked for, until it is dropped
 function passage() {
   if (stillMotion || wanted) return;
@@ -143,7 +168,7 @@ function passage() {
     if (!mine()) return;
     pv.preload = "auto"; pv.src = URL.createObjectURL(clip);
     pv.addEventListener("loadeddata", () => { if (mine()) { ready = true; body.classList.add("scrub"); scrolled(); } }, { once: true });
-    pv.play().then(() => { if (mine()) pv.pause(); },
+    pv.play().then(() => { if (mine()) { pv.pause(); pv.addEventListener("seeked", scrolled, { once: true }); pv.currentTime = now + 0.04; } },
                    err => { if (mine() && err.name !== "AbortError") { rest(); scrolled(); } });   // refused: the stills stand
   }, () => { if (mine()) { rest(); scrolled(); } });   // not downloaded: the stills stand
 }
@@ -168,7 +193,7 @@ const whole = s => new Promise(done => {
    still loading. This page's script has run, so it asks a waiting worker in, now or once it has installed; the next load
    is the new build */
 function enlist() {
-  if (enlisted || !("serviceWorker" in navigator)) return;
+  if (enlisted || lean || !("serviceWorker" in navigator)) return;
   enlisted = true;
   navigator.serviceWorker.register(new URL("sw.js", root)).then(reg => {
     const letIn = w => w && w.postMessage("take-over");
@@ -179,13 +204,13 @@ function enlist() {
 /* the film, unless the page opens past it (an anchor, a scroll the browser restored, or a return through the history,
    which restores even the top: Chrome without its back-forward cache replayed the film to a visitor back from the
    contact page): that is not the visitor's moment. A reload or a return keeps the scroll the browser restores */
-const how = (performance.getEntriesByType("navigation")[0] || {}).type, named = says.find(s => "#" + s.id === location.hash);
+const how = (performance.getEntriesByType("navigation")[0] || {}).type;
 measure();
-if (named && how !== "reload" && how !== "back_forward") bring(named);
+if (how !== "reload" && how !== "back_forward") arrive();
 if (stillMotion) { replay.textContent = replay.dataset.play; still(); }
 else if (location.hash.length > 1 || scrollY > innerHeight / 4 || how === "back_forward") still();
 else { film(); scrolled(); }
 
-/* last: an engine that throws above keeps .no-js, and its CSS unveils the statement on its own */
+/* last: an engine that throws above keeps .no-js, and its CSS lays the passage's words out in the page's flow */
 document.documentElement.classList.remove("no-js");
 })();

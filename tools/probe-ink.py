@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """CY-SEM-003, reading ink over the film and the passage: WCAG 2.1 contrast of each reading element's computed ink against
 every ground pixel at its glyph support, on both front doors (/ and /ar/), under a dark and a light device setting (the
-front door is dark in both), at three viewports.
+front door is dark in both), at six viewports: the statement stands over every frame, and each frame's crop differs (a laptop's, a
+short phone's and a phone on its side each put it over something bright, 2026-11-05).
 
 The built artifact is served as the origin root by a server that answers byte ranges (the films must seek) and opened in
 headless Chrome over the DevTools Protocol, no served file edited: play() is stubbed to resolve without playing, so
@@ -30,7 +31,7 @@ import websocket   # websocket-client, the one module outside the standard libra
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PAGES = (("/", ""), ("/ar/", "ar/"))
-VIEWPORTS = ((1440, 900, 1, False), (390, 844, 3, True), (320, 844, 2, True))
+VIEWPORTS = ((1440, 900, 1, False), (1280, 720, 1, False), (844, 390, 2, True), (390, 844, 3, True), (375, 667, 2, True), (320, 844, 2, True))
 SECONDS = (1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9)
 BOUND, SUPPORT, INF = 4.5, 64, float("inf")
 
@@ -41,10 +42,10 @@ SEEK = """new Promise(done => { const v = document.getElementById('film');
   const go = () => { v.addEventListener('seeked', () => done(v.currentTime), { once: true }); v.currentTime = %s; };
   v.readyState >= 2 ? go() : v.addEventListener('loadeddata', go, { once: true }); })"""
 # the page's state, where the film stands, the cue the page's own data names for second T (film.js cue(): a line
-# from <= T < to, the landing from T on) and the cue shown, as each one's computed opacity
+# from <= T < to; the statement names no moment, and stands at every one) and the cue shown, as each one's computed opacity
 CUE = """(T => { const cues = [...document.querySelectorAll('.line'), document.querySelector('.landing')];
   return JSON.stringify([document.body.dataset.state, document.getElementById('film').currentTime,
-    cues.map(c => T >= +c.dataset.from && (c.dataset.to === undefined || T < +c.dataset.to) ? '1' : '0'),
+    cues.map(c => c.dataset.from === undefined || (T >= +c.dataset.from && T < +c.dataset.to) ? '1' : '0'),
     cues.map(c => getComputedStyle(c).opacity)]); })(%s)"""
 # leaf reading elements: their own text, visible, fully opaque through every ancestor, in the viewport (CSS px)
 ELEMENTS = r"""JSON.stringify([...document.querySelectorAll('body *')].flatMap(e => {
