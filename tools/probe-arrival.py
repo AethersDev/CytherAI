@@ -261,7 +261,7 @@ def targets(tab, origin):
     front = ".top, .solid, .plain, .route, .mail, #replay, body>footer a, .wordmark"
     room = ".top, .solid, .plain, body>footer a, .wordmark"
     for spec in (DESK, PHONE):
-        for path, what in (("/#return", front), ("/ar/#return", front), ("/contact.html", room), ("/ar/contact.html", room), ("/pages/brief.html", room)):
+        for path, what in (("/#return", front), ("/ar/#return", front), ("/contact.html", room), ("/ar/contact.html", room), ("/pages/brief.html", room), ("/ar/privacy.html", room), ("/ar/terms.html", room)):
             fresh(tab, spec, origin + path)
             small = tab.js(size % json.dumps(what))
             record("targets", not small, page=path, width=spec[0], below_24=small)

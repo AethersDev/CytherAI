@@ -307,7 +307,7 @@ corpus binds them (`record_hash`, `kernel_hash`), and `tools/test-api.py` holds 
 **Arabic** (`ar/`, 2026-10-14): `ar/index.html` is the front door in Arabic and `ar/contact.html` the contact page;
 each system's evidence has an Arabic room (2026-10-21): `ar/adii.html` and `ar/cythercad.html` introduce ADII's run and
 CytherCAD's record, which stay in their original English, and `ar/awc-os.html` carries AWC-OS's own Arabic film and text;
-the brief and the legal pages stay English and the Arabic pages mark their links to them (بالإنجليزية). Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
+the brief and the security policy stay English and the Arabic pages mark their links to them (بالإنجليزية); the privacy policy and the terms have Arabic versions, `ar/privacy.html` and `ar/terms.html` (2026-11-06, drafted from the English and not yet reviewed by a lawyer; neither says which governs, the owner's decision), held by `tools/test-site.py` to the English's blocks, numbers, addresses and named providers. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
 exactly the English one's cues, the passage's seconds, sections and projected figures (the projector writes its two figures too,
 Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
@@ -365,7 +365,7 @@ evidence room's way back to the words whose route leads to it. The pages they re
 and the 404, then one review of titles and link previews*). The cold-paper design they shared (`css/cytherai.css`, its
 bar of links, *LEGAL* stamps, the document register's *DOC-2026-002*, section stamps and exhibit labels, the brief's
 illustrative figures and the 404's empty plate) retired whole to `backup/cold-paper-v1/` with their generators. The
-legal pages keep their text word for word; the brief keeps its two records and its access, each record as the system's
+legal pages kept their text word for word then (since changed: the privacy policy for the contact page's webmail links, and the terms' section 4 on 2026-11-06, since a notice on a public website is no confidentiality agreement); the brief keeps its two records and its access, each record as the system's
 own records state it (corrected 2026-10-21, `docs/deploy.md` §5ad: SijilOS's certification, production environments and
 event-sourcing were not what its records show, and are withdrawn; CytherCAD's figure projected, every validation identifier
 printed); the 404, served at any depth (every URL absolute), says
@@ -383,8 +383,7 @@ owner's decision); `tools/test-site.py` holds the two to each other. Every page'
 privilege: `script-src` exactly what the page runs, nothing fetched from another origin (the one connection any page
 makes is the front door's to its own passage: `connect-src 'self'` and `media-src blob:` on the two front doors alone,
 `connect-src 'none'` everywhere else), and everything a page or stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
-`pages/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the
-front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds it to the served scripts.
+`pages/privacy.html` and `ar/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds them to the served scripts.
 
 **Both looked flat** (`flat/`, `ar/flat.html`; 2026-10-25, a candidate on the branch `both-looked-flat` until the owner
 reviews it): the front door's principle shown in physics. Two blocks of lapped steel that look the same are each tested

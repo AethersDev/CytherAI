@@ -2353,6 +2353,53 @@ at six viewports, 4,462 element samples, none below 4.5:1, worst 4.91:1 (CY-SEM-
 pages settle to no frame, timer or playing media in every profile, the film taking its 12 s, the worker caching this
 build and serving it offline (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_1E9D8B04B52FE24F`), 82 of 82 served paths matching the artifact.
+
+## 5ah. The owner's decisions of 2026-11-06: Arabic privacy and terms; Cloudflare held on two findings
+
+Build `7F5250D087FF0962` (`#reading_ink_7F5250D087FF0962`, `#film_settle_7F5250D087FF0962`). It follows the live `1E9D8B04B52FE24F`, whose origin
+check passed the same day.
+
+**The direction.** The owner pasted a review of the decisions §5ag left them: keep the email composer and add a booking link; put
+Cloudflare in front of Pages for headers and edge analytics, with Web Analytics off; publish Arabic privacy and terms; review the
+terms' blanket confidentiality; index AWC-OS's pages once publication rights are clear. Its order: Arabic legal, Cloudflare,
+edge analytics, indexing, the booking link. It corrected §5ag, which said Cloudflare could count visitors "with no script": true of
+one of its two analytics products. Each claim was checked first (primary sources, read 2026-11-06):
+
+| The review | Observed | Now |
+|---|---|---|
+| Keep the composer; no form backend | The contact page and both privacy policies describe exactly that | Unchanged |
+| A booking link as a secondary action | Needs a link and a provider's name, which only the owner has | Not added (`docs/operations.md`, 9) |
+| Arabic privacy and terms, *high*; links lead to English | Confirmed. SDAIA's guideline (v1.0, August 2024): a policy "shall be designed in a language suitable for the target audience". Article 4(7) of the Implementing Regulation's "appropriate language" concerns a data subject who lacks legal capacity, which law-firm summaries blur. Neither says Arabic is mandatory, as the review said | `ar/privacy.html` and `ar/terms.html`, in every Arabic footer, in the sitemap and the worker's precache. **Drafted from the English; no lawyer has read them; neither says which language governs (the owner's decision).** No compliance is claimed |
+| (Not in the review) Consistent rights, retention and providers | Consistent between the languages, which a law now holds. **Not yet what SDAIA asks of a notice, in either language:** the legal name, phone and postal address, legal basis, mandatory or optional, withdrawing consent, recipients and storage locations, destruction, the rights to a copy, to complain to SDAIA and to compensation, a complaints mechanism | Listed for the owner and a lawyer (`docs/operations.md`, 12): several are facts only the owner holds, and none is invented here |
+| The terms' blanket confidentiality | Section 4 declared whatever is shared "confidential", and a notice cannot do that | Section 4 now says the terms and the site create no such agreement, one exists only if separately signed, and not to send confidential information before one is in place. Unreviewed, in both languages |
+| Index AWC-OS once rights are clear | The page is as described, with its canonical and `hreflang`, and Google does advise against `noindex` for canonicalization. Rights are not visible from here. Indexing makes *Alinma Bank × Tuwaiq Academy* and *Alinma Wakala Investment Deposit* searchable, and the linked README still says *Live instance* | Stays `noindex` (the owner: not yet) |
+| Zone Analytics needs no script; Web Analytics injects one | Both confirmed. Stronger than the review: Web Analytics' automatic setup "is enabled by default" | Nothing enabled |
+| Response headers by Transform Rules; HTML not cached by default | Confirmed. The Transform Rules page does not state Free-plan availability. MP4 is cached by default | Nothing enabled |
+| Full (strict) once the origin's certificate is verified; keep Pages as the origin | **It holds on the day and is the risk at renewal.** The certificate expires 2026-12-14. Discussions #208641 and #210196 (Sept–Oct 2026) report this setup stuck in `bad_authz`, with 526 for every visitor, no staff answer, and one still stuck after 13 hours on DNS only. Users' reports; GitHub's documentation says nothing about proxies. Free-plan Origin Rules cannot route around it | **Held.** Keep the records DNS only |
+| CDN caching, selectively | **Cloudflare's CDN terms (2026-09-28):** non-Enterprise customers "must use" specific Paid Services "to serve video and other large files via the CDN". Video is 30.7 of the 34.1 MB this site serves. Not caching it does not change that it is served through the CDN | **Held.** `docs/operations.md`, 11, has the risk-free next step |
+
+Also new since the review, all from Cloudflare's own pages: Email Address Obfuscation is on by default and rewrites addresses with an
+injected script, and Bot Fight Mode's JavaScript detections insert a script and cannot be disabled. Each would break these pages'
+CSP or their byte identity, which `tools/probe-origin.py` would catch on HTML. Before any switch, both privacy policies must drop
+*no analytics* and name Cloudflare; shipping that now would state a provider the site does not use.
+
+**Checked.**
+- `./verify.sh` passes. `tools/test-site.py` has a new law, `test_the_legal_pages_say_the_same_in_both_languages`, and five widened.
+  In a throwaway copy, 16 mutations fail and the control passes: a paragraph, a list item or a section missing, a date differing
+  either way, an address differing, a provider in one language only, a Latin word the English lacks, an Arabic footer back on
+  the English policy, a page unmarked in its footer, a lost language link or `hreflang`, the page out of the sitemap or `noindex`, a script.
+- `tools/probe-arrival.py`: 102 rows, all PASS, its targets now covering both new pages. `tools/probe-flat.py`: PASS, for the Arabic
+  footer it shares. `js/film.js` is unchanged, so `tools/probe-passage.py` and `tools/probe-ios.py` were not run again.
+- By eye, both new pages on the desktop, the privacy page on a phone, and the new footer: right to left, Latin names whole, no overflow.
+
+**Not observed here; the owner's:** a Saudi lawyer's reading of the Arabic and of section 4, and whether a clause should say which
+language governs (`docs/operations.md`, 12); the README (10).
+
+Observed on this build (Chrome 156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+4,462 element samples, none below 4.5:1, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

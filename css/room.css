@@ -74,4 +74,5 @@ body>footer{display:flex;justify-content:space-between;align-items:center;gap:16
 :lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;letter-spacing:0;text-transform:none}
 :lang(ar) :is(h1,h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
 :lang(ar) p{line-height:1.85}:lang(ar) .words td{font-family:Arabic,Public,sans-serif;line-height:1.85}:lang(ar) textarea{font-family:Arabic,Public,sans-serif}
+:lang(ar) .legal h2{font-size:18px;font-weight:400}:lang(ar) .legal .dates{font-family:Plex,Arabic,monospace}:lang(ar) .legal li{line-height:1.85}:lang(ar) .legal strong{font-weight:400}
 :lang(ar) [lang=en]{unicode-bidi:isolate}

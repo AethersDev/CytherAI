@@ -68,7 +68,7 @@ BANNED = re.compile(r"--brass|--gold|DOC-20\d\d-\d{3}|CONDUCT RECEIPT|[Aa]ppend-
 # the rooms: the pages a visitor reaches from the front door, drawn with css/room.css (2026-10-21)
 ROOMS = ("adii/index.html", "ar/adii.html", "awc-os/index.html", "ar/awc-os.html", "cythercad/index.html", "ar/cythercad.html",
          "contact.html", "ar/contact.html", "pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html",
-         "404.html")
+         "ar/privacy.html", "ar/terms.html", "404.html")
 # each evidence room and the front door it returns to
 EVIDENCE = (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html"), ("awc-os/index.html", "index.html"),
             ("ar/awc-os.html", "ar/index.html"), ("cythercad/index.html", "index.html"), ("ar/cythercad.html", "ar/index.html"))
@@ -207,14 +207,15 @@ class SiteContractTests(unittest.TestCase):
 
     def test_every_footer_names_the_site_and_marks_the_current_page(self) -> None:
         """Every page ends with the same way round the site (it replaced the cold-paper pages' bar, which retired with them
-        to backup/cold-paper-v1/ on 2026-10-21): its footer links the brief, the contact page in its own language, and the
-        security, privacy and terms pages, and marks the one it is."""
+        to backup/cold-paper-v1/ on 2026-10-21): its footer links the brief, the security page, and the contact, privacy and
+        terms pages in its own language (Arabic privacy and terms since 2026-11-06), and marks the one it is."""
         site = ("pages/brief.html", "contact.html", "pages/security.html", "pages/privacy.html", "pages/terms.html")
+        arabic = {"contact.html": "ar/contact.html", "pages/privacy.html": "ar/privacy.html", "pages/terms.html": "ar/terms.html"}
         for page in HTML_FILES:
             with self.subTest(page=page):
                 footer = re.search(r"<footer[^>]*>(.*?)</footer>", (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
                 links = re.findall(r'<a href="([^"]+)"([^>]*)>', footer)
-                expected = sorted("ar/contact.html" if p == "contact.html" and page.startswith("ar/") else p for p in site)
+                expected = sorted(arabic.get(p, p) if page.startswith("ar/") else p for p in site)
                 self.assertEqual(sorted(local_target(page, href) for href, _ in links), expected)
                 marked = [local_target(page, href) for href, rest in links if 'aria-current="page"' in rest]
                 self.assertEqual(marked, [page] if page in expected else [])
@@ -278,12 +279,36 @@ class SiteContractTests(unittest.TestCase):
         for path in DEPLOY_FILES:
             if path.endswith((".js", ".html")):
                 stored |= found((ROOT / path).read_text(encoding="utf-8"))
-        policy = (ROOT / "pages/privacy.html").read_text(encoding="utf-8")
-        for storage, key in stored:
-            self.assertIn(f"<b>{key}</b>", policy, key)
-            self.assertIn(storage, policy, storage)
-        for storage in {"localStorage", "sessionStorage"} - {s for s, _ in stored}:
-            self.assertNotIn(storage, policy, storage)
+        for page in ("pages/privacy.html", "ar/privacy.html"):
+            policy = (ROOT / page).read_text(encoding="utf-8")
+            for storage, key in stored:
+                self.assertIn(f"<b>{key}</b>", policy, key)
+                self.assertIn(storage, policy, storage)
+            for storage in {"localStorage", "sessionStorage"} - {s for s, _ in stored}:
+                self.assertNotIn(storage, policy, storage)
+
+    def test_the_legal_pages_say_the_same_in_both_languages(self) -> None:
+        """Arabic privacy and terms (2026-11-06) are the English pages in Arabic, not a summary of them: the same headings,
+        paragraphs and list items in the same order, the same numbers (dates, sections, retention) in the same order, the same
+        addresses, and the same named providers, so one cannot be disclosed in one language and not in the other. No Latin word
+        reaches the Arabic that the English does not have. Whether the Arabic says the same thing in words a lawyer would accept
+        is not something a test can hold (docs/operations.md)."""
+        providers = ("GitHub Pages", "Gmail", "Outlook", "Cloudflare", "PGP")
+        def read(page):
+            article = re.search(r'<article class="legal">(.*?)</article>', (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
+            text = re.sub(r"<[^>]+>", " ", article)
+            return (re.findall(r"<(h1|h2|p|ul|li)\b", article), re.findall(r"\d+", text),
+                    re.findall(r'href="mailto:([^"]+)"', article), text)
+        for en, ar in (("pages/privacy.html", "ar/privacy.html"), ("pages/terms.html", "ar/terms.html")):
+            with self.subTest(page=ar):
+                (eshape, enumbers, email, etext), (ashape, anumbers, amail, atext) = read(en), read(ar)
+                self.assertEqual(ashape, eshape, "the same blocks in the same order")
+                self.assertEqual(anumbers, enumbers, "the same numbers in the same order")
+                self.assertEqual(amail, email, "the same addresses")
+                for name in providers:
+                    self.assertEqual(name in atext, name in etext, name)
+                latin = lambda t: {w.lower() for w in re.findall(r"[A-Za-z]+", t)}
+                self.assertLessEqual(latin(atext), latin(etext), "a Latin word the English does not have")
 
     def test_no_served_file_carries_a_retired_register(self) -> None:
         """CLAUDE.md's register rules, which nothing grepped until 2026-10-18."""
@@ -307,7 +332,7 @@ class SiteContractTests(unittest.TestCase):
             self.assertEqual(len(contact_scripts), 1, page)
             self.assertFalse(contact_scripts[0].get("src"), f"{page} keeps exactly one inline form script")
 
-        for page in ("pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html"):
+        for page in ("pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html", "ar/privacy.html", "ar/terms.html"):
             self.assertFalse([attrs for tag, attrs in parse_page(page).tags if tag == "script"], page)
 
     def test_sri_build_hash_and_cache_identity_are_exact(self) -> None:
@@ -814,7 +839,9 @@ class SiteContractTests(unittest.TestCase):
                                       ("adii/index.html", "en", None), ("ar/adii.html", "ar", "rtl"),
                                       ("awc-os/index.html", "en", None), ("ar/awc-os.html", "ar", "rtl"),
                                       ("cythercad/index.html", "en", None), ("ar/cythercad.html", "ar", "rtl"),
-                                      ("flat/index.html", "en", None), ("ar/flat.html", "ar", "rtl")):
+                                      ("flat/index.html", "en", None), ("ar/flat.html", "ar", "rtl"),
+                                      ("pages/privacy.html", "en", None), ("ar/privacy.html", "ar", "rtl"),
+                                      ("pages/terms.html", "en", None), ("ar/terms.html", "ar", "rtl")):
             html = next(a for t, a in parse_page(page).tags if t == "html")
             self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
 
@@ -823,7 +850,7 @@ class SiteContractTests(unittest.TestCase):
         marked with the language it leads to."""
         for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html"),
                        ("awc-os/index.html", "ar/awc-os.html"), ("cythercad/index.html", "ar/cythercad.html"),
-                       ("flat/index.html", "ar/flat.html")):
+                       ("flat/index.html", "ar/flat.html"), ("pages/privacy.html", "ar/privacy.html"), ("pages/terms.html", "ar/terms.html")):
             for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)
