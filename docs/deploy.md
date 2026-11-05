@@ -2400,6 +2400,8 @@ Observed on this build (Chrome 156.0.8078.80): reading ink over the film and the
 4,462 element samples, none below 4.5:1, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
 build and serving it offline (CY-TEMP-001 PASS).
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_7F5250D087FF0962`), 84 of 84 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
