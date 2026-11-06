@@ -49,15 +49,15 @@ body[data-state=still] .line{transition:none}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
 @media(max-width:359px){.side .to{display:none}}   /* the route past the opening stays wherever it fits beside the brand and the language */
 /* the front door's header stays, slim, on its own darkness: a way to talk at every moment of a page ten screens long (the
-   audit of 2026-11-05: it scrolled away with the first). Where the window is too short to spare it, it scrolls away again,
+   audit of 2026-11-05: it scrolled away with the first), and Both looked flat's, as long (2026-11-06). Where the window is too short to spare it, it scrolls away again,
    and the subtitles give way: the statement holds their sense, and .sr their words */
-.bar{position:fixed;height:64px}.bar::before{inset:0 0 -40px;background:linear-gradient(#07070af2,#07070ad9 60%,transparent)}
+.bar{position:fixed;height:64px}.bar::before{inset:0 0 -40px;background:linear-gradient(#07070a calc(100% - 40px),transparent)}
 .talk{color:var(--ink);border:1px solid #ffffff66;padding:6px 12px}
 @media(max-width:760px){.bar{height:56px}.bar .side{gap:12px}
  /* on the front door alone: the subtitles' band; and on a phone the statement crosses the whole width of the film, so its darkness does too */
- .bar~main .stage{--foot:max(14vh,104px)}.bar~main .landing::before{inset-block:-6vh -14vh;inset-inline:-20px;background:linear-gradient(transparent,#07070ab8 18%)}}
+ #film~main .stage{--foot:max(14vh,104px)}#film~main .landing::before{inset-block:-6vh -14vh;inset-inline:-20px;background:linear-gradient(transparent,#07070ab8 18%)}}
 @media(max-width:480px){.bar .to{display:none}}
-@media(max-height:480px){.bar{position:absolute}.line{display:none}.bar~main .landing::before{inset-block:-48px -20vh;inset-inline:-5vw -100vw;background:linear-gradient(transparent,#07070ac4 48px)}}   /* on its side a phone's statement takes up the frame, whatever runs behind it */
+@media(max-height:480px){.bar{position:absolute}.line{display:none}#film~main .landing::before{inset-block:-48px -20vh;inset-inline:-5vw -100vw;background:linear-gradient(transparent,#07070ac4 48px)}}   /* on its side a phone's statement takes up the frame, whatever runs behind it */
 @media(max-width:359px) and (max-height:700px){.line{display:none}}
 html{scroll-padding-top:72px}   /* what focus or an anchor brings in view stands clear of the bar */
 /* the passage (js/film.js): five stretches of scroll, the principle's, ADII's, AWC-OS's, CytherCAD's and the return to the

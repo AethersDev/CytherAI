@@ -2402,6 +2402,86 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_7F5250D087FF0962`), 84 of 84 served paths matching the artifact.
 
+## 5ai. The re-check of 2026-11-06: one portfolio story, ADII's paper, a founder named, the bar, the slow link and Both looked flat
+
+Build `37DF4B7A5EBD6205` (`#reading_ink_37DF4B7A5EBD6205`, `#film_settle_37DF4B7A5EBD6205`). It follows the live `7F5250D087FF0962`, whose origin
+check passed the same day.
+
+**The direction.** The owner pasted a re-check of the audit of 2026-11-05, re-ranked for investors and candidates: *not yet
+production-ready as a site for investors and candidates*, for three reasons, of which the headline (§5ag) had since been fixed.
+Each claim was checked against the live pages and the repositories first. The owner then answered three questions, and their answers
+replaced the options offered: *adii need too much updates check the repo it's more production than we credit*, with the
+text the room now carries; *go to my github repo and any repo is public and worth showing in the website then it goes and i agree
+with leading with what i build excluded from teams since this cytherai*; *minimal and put my linkedin and github*.
+
+| The re-check | Observed | Now |
+|---|---|---|
+| H5: the line-up differs between the home page (ADII, AWC-OS, CytherCAD), the brief (CytherCAD, SijilOS, NTP) and the repositories | Confirmed. SijilOS and NTP appeared on the brief alone; ADII and AWC-OS were absent from it. NTP's only sources are retired pages (`backup/newC3/`), so it is dropped, not softened | The brief is the one story: CytherCAD, CytherAI's lead product (the owner's business plan and investor decks are all CytherCAD), then SijilOS, the founder's public repositories, then the two team projects, credited. A new law holds each system's status to one sentence: the front door's, the head of its room's limit, the brief's Status row |
+| (Not in the re-check) ADII's status | **The site's own sentence was false.** *No evaluation results are published*, written on 2026-10-04 (`c8dbf70`), and the paper and its results are public in `AethersDev/adii_team` since 2026-10-02 (`122ff98`, *the pre-submission note goes now that the repository is public*). *From CytherAI* had no source either: the repository names neither CytherAI nor Group 05, and its copyright is the four authors' | The status now reads as the README does, and the room carries the paper, what ADII is in the repository's own words, and the licence. *More production than we credit* is stated in those words and never as deployed: *we have not deployed it into a production customer environment* |
+| H4: no people, no About or careers page | Half right. `/about/`, `/team/` and `/careers/` answer 404, and no founder was named anywhere; but ADII's room names four people and AWC-OS's credits its team | `pages/about.html` and `ar/about.html`, minimal at the owner's direction: Malek Alhazmi, founder, Riyadh, LinkedIn and GitHub, from every footer. No photo, stage, registration or careers, which only the owner can give (`docs/operations.md`, 13). Not in the header, as the re-check asked: the owner asked for minimal |
+| Which product is the bet | The film's order, ADII, AWC-OS, then CytherCAD, cannot change without rendering the passage again | Stated in words: each system's status says whose it is. The order is the owner's to change (`docs/operations.md`, 14) |
+| The repositories | Five are public. `adii_team` and `aws-os_mvp` are team work; `menumind` and `barker-quotient` are the owner's alone (every commit); `CytherAI` is this site | `menumind` and `barker-quotient` go on the brief, each with its status from its own README, and `adii_team` on the brief and in the room. `aws-os_mvp` stays linked from its room alone until its README's *live instance* is fixed (`docs/operations.md`, 10). This site's own repository is not listed: it is public, but its `docs/` are the owner's working notes, the owner's to decide |
+| M1: fixed in code, not tested under throttling | Tested with `Network.emulateNetworkConditions`. The statement always stood and the film gave way, but both films were still requested on Slow 3G and on 2G: **Chrome reports `3g` at 50 kbit/s**, so `/2g/` never fires under its own presets | `link.downlink < 1` as well: Chrome's estimate was 1.25 to 1.3 on Slow 4G, 1.65 on Fast 3G, 1.45 unthrottled and 1.5 on a loopback server, against 0.35 to 0.4 on Slow 3G and 0.05 on 2G. An absent estimate (Safari, Firefox) compares false. `tools/probe-arrival.py`'s new `slow` step holds it, throttled for real |
+| New minor: the H1 shows faintly through the fixed header | Confirmed. By the same scroll with the statement shown and hidden, confined to the columns above the statement: 40 levels of 255 on a desktop, 33 to 34 on a phone. My first measure read a desktop's overlay scrollbar as show-through, and the probe's first run failed on it at 34. The review's *slightly more opaque* was tried first, at 97%: 8 levels, which the eye still found over the flat page's bright text | The bar is opaque for its whole height, then fades: 0 levels. `tools/probe-arrival.py`'s new `ghost` step, bound 1 |
+| Sitemap: AWC-OS's pages missing | True, and the owner's decision of 2026-11-06 (*keep noindex*) | Unchanged: a page cannot be listed and hidden at once (`tools/test-site.py`) |
+
+**The figures in ADII's room, against the paper (`AethersDev/adii_team`, `paper/paper.md`, read 2026-11-06).** Every number in the owner's
+text stands, and the room states what each one is beneath it:
+
+| The owner's text | The paper |
+|---|---|
+| One agent proposed 27 bad repairs; the gates caught all 27 | §6: Qwen3-4B, *27 proposed repairs: the authorizer permitted all 27, the validator rejected all 27*: 9 cases, 3 repeats, chosen *as the likeliest to propose a wrong fix*. §8 says to count cases, not runs, so the room says nine cases three times each |
+| Other agents made seven wrong decisions not to act | §4, §7.6: gpt-4.1's 3 and gpt-6-luna's 4; gpt-6-sol made none |
+| A counterexample corrupted every order amount, preserved every total, passed in all 18 worlds | §7.1: a scripted probe, *outside any pack*, *authorized, accepted and admitted in all 18 live worlds* |
+| 18 cases, one domain | 12 benchmark and 6 held out, *in one domain*; the README: *synthetic incidents the team generated and labelled* |
+| Enough to break a criterion, not to certify an agent | §7.6: *too small to qualify any subject* and *large enough to refute a criterion* |
+
+The bootcamp (*Saudi Digital Academy Agentic AI Bootcamp × WeCloudData*) is the owner's statement: the repository does not name it.
+
+**The other printed claims.** MenuMind's, from its README (*Evidence with a real model*, *Limitations, stated plainly*): 197 tests, 42 of
+42 and 75 turns on 2026-10-13, *counts, not rates*, the app changed since. The Barker papers', from `PUBLIC_STATEMENT.md`, *the
+public-language boundary*: 421 at size at most 6 over the first 80 hard primes, *public and frozen for review*, no solution and no new
+obstruction. The brief's architectural constraints now name CytherCAD and SijilOS alone: MenuMind and ADII call a hosted model.
+
+**The review of `/flat/`, pasted the same day, went into the same build, unpublished.** It called the page the site's strongest, and tested it
+in desktop Chrome only. Each claim was checked by real input, a finger's swipes through Chrome's own touch pipeline (`Input.synthesizeScrollGesture`, which `touch-action` governs):
+
+| The review | Observed | Now |
+|---|---|---|
+| High: *likely* a scroll trap on phones, not verified on a device | **Half.** A swipe that starts on the glass never moved the page, at any window, by design. Upright it is no trap: the canvas is 350×197 in an 844 px window, and a swipe in the 359 px above it moved the page. **On its side it was one:** 760×427 in a 390 px window with 42 px beside it, and 528×297 in 320 px. The trap was the canvas's height, not its width | The glass is never taller than the window less 140 px (floor 280 px wide, for 400% zoom): 444×250 with 200 px beside it, where a swipe moves the page. Of the review's three remedies this is the third. **`pan-y` was tried by mutation and takes the page's own gesture away:** the page moved 142 px under a swipe on the glass, and the words ask for *Drag up*. Horizontal drag or tap-to-activate mean new words and a state to explain, for a problem the height alone caused |
+| Medium: the header is absolute, with no *Talk to us*, on a 10,170 px page | Confirmed: 10,167 px at 1470×779 | The front door's `.bar` with *Talk to us*. Its phone rules for the front door's statement stayed the front door's (`#film~main`): on the flat page they put the Arabic label at 3.29:1, which a mutation shows. New `clear` rows: at sixteen windows no words under the bar |
+| Medium: the video fetched whole, no slow-link path | Confirmed: 3.2 MB and 3.4 MB by `fetch`, and no check | The same `lean` as `js/film.js`, a law holding the two equal: the stills stand and no sequence is fetched, 764 KB in all (782 KB in Arabic) with the instrument's plates. Not on `3g` by itself, for the reason in §5ag. The instrument's plates still load as it comes near: they are the page's point, and 441 KB |
+| Low: the readout off-screen while dragging, *top at 828 px* at 779 | Under that window its place depends on the scroll: in view with the glass framed under the header (750 to 765), 7 px short with it centred. 828 not reproduced. **Worse elsewhere:** at 1200×665 and on a phone on its side it was out of view with the glass whole | `position:sticky`, on its own ground: in view and uncovered wherever the whole glass stands in the window, at eight windows, by hit test |
+| Low: the canvas off-centre, 73 and 217 px | Confirmed: 74 and 216 at 1470 | Centred. The headline and text keep their left edge |
+| Low: a screen reader may skip an `aria-label` on a canvas with no role | **Not reproduced in Chrome's accessibility tree:** role `Canvas`, named, focusable. HTML-AAM gives `<canvas>` no corresponding role, so other engines and screen readers are not vouched for. *Default focus outline:* confirmed, `auto 1px` | `role="application"`, whose definition in WAI-ARIA 1.2 is this (keyboard or gesture events that follow no widget's pattern; its name required, and it has one), and the front door's ring |
+
+**Checked.**
+- `./verify.sh` passes. `tools/test-site.py` has a new law, `test_each_system_states_one_status_everywhere`, and four widened: the
+  footers (the About page, and the 404's links absolute), the rooms, the languages and their pairs. In a throwaway copy, 24 mutations fail and
+  both controls pass: each system's status moving alone on the front door, the room, the Arabic pages or the brief, the brief dropping a system or
+  its row, a second status in a stretch, a footer without About or with it pointing at the other language, the 404's link relative, the
+  page unmarked in its own footer, a lost language link or `hreflang`, another stylesheet, out of the sitemap, not shipped. For the flat page, two more
+  laws, the bar's widened, and 8 more mutations with 3 more controls: the `lean` rule drifting in either script, the canvas with no role in either language, the ring differing, the bar's
+  class or its way to talk gone.
+- `tools/probe-arrival.py`: PASS, 128 rows, with its two new steps and its targets now covering both ADII rooms and both About pages. By
+  mutation on the built artifact: 9 mutations fail and 3 controls pass (the bar as it was, or at 97%; the estimate ignored or its bound too high, throttled and not; Save-Data ignored; `3g` counted; the worker registering anyway). `tools/probe-settle.py`, `tools/probe-passage.py`, `tools/probe-flat.py`: all PASS (the passage 22 rows).
+  `tools/probe-ios.py` (`js/film.js` changed): PASS, 34 rows, with a new `glass` step: on WebKit the glass is ready, on `touch-action:none`, under the fixed bar,
+  the reading in view with the glass at the window's foot. On the built flat page, 14 mutations fail and 6 controls pass: `pan-y`, no cap, off centre, the
+  reading in the flow, the `lean` rule unread or short of a clause, `3g` counted, no role, the default ring, the bar's link elsewhere, words under the bar, the
+  header as it was, the front door's phone rules on the flat page.
+- By eye: the ADII rooms, the brief and the About pages on a desktop and a phone, the status lines over the passage in both languages, the bar
+  with the statement under it. An Arabic button lost the spaces around its Latin name, since `.solid` is a flex box: fixed by wrapping its text.
+
+**Not observed.** A finger on WebKit or on a real phone: the Simulator takes no scripted touch and cannot be turned by a script, so on its side the page was
+measured in Chrome's emulation alone. A screen reader. The owner should try the glass and a scroll past it, upright and on its side, on their phone.
+
+**The owner's.** LinkedIn answered a script with 999, as it does, so the owner should press that link once; every GitHub address answered 200. The Arabic of the
+new pages is a draft to refine, and `مؤسِّس` is the conventional form of the title. The rest: `docs/operations.md`, 10, 13 and 14.
+
+Observed on this build (Chrome/156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+4,534 samples, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

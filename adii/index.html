@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07070a">
-<title>ADII, the recorded run — CytherAI</title>
-<meta name="description" content="One recorded run of ADII, a research project from CytherAI: a number looked wrong, a fix was proposed, and two programs outside the model decided whether it was allowed and whether it held.">
+<title>ADII, the paper and the recorded run — CytherAI</title>
+<meta name="description" content="ADII, a data-incident agent whose fixes must pass an authorizer and an independent validator, built by Group 05; the paper Permission Is Not Justification, whose result is that guardrails can hide a bad agent; and one recorded run.">
 <meta property="og:site_name" content="CytherAI">
-<meta property="og:title" content="ADII, the recorded run — CytherAI">
-<meta property="og:description" content="A number looked wrong. Changing it was a separate decision. One recorded run of a research project.">
+<meta property="og:title" content="ADII, the paper and the recorded run — CytherAI">
+<meta property="og:description" content="Guardrails don’t only protect you from a bad agent. They can hide it. ADII, the paper Permission Is Not Justification, and one recorded run.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/adii/">
 <link rel="canonical" href="https://cytherai.com/adii/">
@@ -23,31 +23,61 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/adii/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/adii.html">
-<meta name="build-hash" content="7F5250D087FF0962">
+<meta name="build-hash" content="37DF4B7A5EBD6205">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
 <!-- ADII's evidence, a room of the front door (css/room.css): its arrival says what the recorded run is, what decision it
-     shows and what it does not claim, beside the run itself; the run as text and the team follow, verbatim from the page
-     as first published (backup/project-pages/adii/). Every URL that publication served is kept but the team's CVs, which the owner
-     withdrew on 2026-10-30; the reviewed set is pinned in tools/test-site.py. -->
+     shows and what it is, beside the run itself. The paper follows in the owner's words of 2026-11-06, each figure checked
+     against the paper, and what ADII is in its repository's own (AethersDev/adii_team, README, read 2026-11-06). The run as
+     text and the team follow, verbatim from the page as first published (backup/project-pages/adii/). Every URL that
+     publication served is kept but the team's CVs, which the owner withdrew on 2026-10-30; the reviewed set is pinned in
+     tools/test-site.py. -->
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-<link rel="stylesheet" href="../css/room.css?v=f99795cd6a61" integrity="sha384-QERTISWheeO1N4NFI60Kpr3ql6bL0WOGDyITLS4FIKlxKJvIgfLV/cSADgbNYltP" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/room.css?v=e9130d601192" integrity="sha384-Y4sTW6TqlVVydR2FcyAbC3U+nNQr/NXJ74oOp7wOpAVKGtIDUAKi9SzGJhqsekey" crossorigin="anonymous">
 </head>
 <body>
 <header><a class="wordmark" href="../" aria-label="CytherAI home" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="Site"><a class="top back" href="../#adii-evidence">← The passage</a><a class="top" href="../ar/adii.html" hreflang="ar" lang="ar">العربية</a></nav></header>
 <main>
 <div class="arrival">
 <div class="head">
-<span class="label">01 · ADII · The recorded run</span>
+<span class="label">01 · ADII · The paper and the recorded run</span>
 <h1>A number looked wrong. Changing it was a separate decision.</h1>
-<p class="by">Built by Group 05: Malek Alhazmi, Joorie Alsakran, Ibrahem Altowalah and Nasser Alzaid. <a class="plain" href="#team">Their roles ↓</a></p>
+<p class="by">Built by Group 05: Malek Alhazmi, Joorie Alsakran, Ibrahem Altowalah and Nasser Alzaid. <a class="plain" href="#paper">The paper ↓</a> <a class="plain" href="#team">Their roles ↓</a></p>
 </div>
 <p class="body">Daily revenue for 18 August had fallen by about half. ADII traced the drop to a staging filter that left out two distributors’ orders, and proposed removing it. Its answer, <em>Fix it</em>, came only after the authorizer allowed the change and the validator accepted it, having rebuilt the data from a frozen copy with the change applied. The AI that proposed it didn’t approve it.</p>
-<p class="limit">A research project from CytherAI. No evaluation results are published and no deployment is claimed. This is one recorded run.</p>
+<p class="limit">Team research: a paper and a complete reference implementation that runs locally, not deployed in production. This is one recorded run.</p>
 <figure id="run"><video controls playsinline muted preload="metadata" poster="poster.jpg"><source src="replay.mp4" type="video/mp4"></video><figcaption>ADII’s interface · 68 seconds · without sound</figcaption></figure>
 </div>
 <nav class="next" aria-label="From here"><a class="solid" href="../contact.html">Tell us what must never happen →</a><a class="plain" href="../#adii-evidence">← Back to the passage</a></nav>
+<section id="paper" aria-labelledby="paper-h">
+<span class="label">The paper · In the team’s words</span>
+<h2 id="paper-h">Guardrails don’t only protect you from a bad agent. They can hide it.</h2>
+<p>We set out to build an AI agent capstone. We came out with a research paper on how AI agents earn the right to act, and with that result, which should matter to anyone deploying AI agents behind guardrails.</p>
+<p>It started at the Saudi Digital Academy Agentic AI Bootcamp × WeCloudData with one question: what should an agent have to prove before it earns the right to act on its own? That became our paper, <cite>Permission Is Not Justification: Evaluating the Decision to Act in Data-Incident Agents</cite>.</p>
+<p>One agent proposed 27 bad repairs. The gates caught all 27. Other agents made seven wrong decisions not to act. Those mistakes never reached a gate at all. Different failures, the same reassuring evidence: a clean admission record. So if you promote an agent based on that record, you may be measuring the guardrails rather than the agent. An action-only record cannot see an omission.</p>
+<p>We also built a counterexample that corrupted every order amount while preserving every total our validator checked. It passed in all 18 worlds.</p>
+<ul>
+<li>Permission is not justification.</li>
+<li>Validator acceptance is not correctness.</li>
+<li>A clean record is not competence.</li>
+</ul>
+<p>18 cases. One domain. Enough to break a criterion. Not enough to certify an agent.</p>
+<nav class="next" aria-label="The evidence"><a class="solid" href="https://github.com/AethersDev/adii_team/blob/main/paper/permission-is-not-justification.pdf" target="_blank" rel="noopener">Read the paper →</a><a class="plain" href="https://github.com/AethersDev/adii_team" target="_blank" rel="noopener">Code, frozen evaluation packs, counterexamples and run records, on GitHub →</a></nav>
+<p class="limit">What the numbers are: the 27 are nine cases run three times each by one local model, Qwen3-4B, chosen as the likeliest to propose a wrong fix. The seven are two hosted models’ errors on the 12 benchmark cases. The 18 cases are synthetic incidents the team generated and labelled, 12 benchmark and 6 held out. The counterexample is a scripted patch, run through the real system with no model, outside the evaluation packs.</p>
+</section>
+<section id="system" aria-labelledby="system-h">
+<h2 id="system-h">What ADII is</h2>
+<p>A complete, locally running reference implementation. We engineered and qualified the authority boundaries as if they mattered in production; we have not deployed it into a production customer environment. It claims no high availability, single sign-on, managed secrets, enterprise connectors, operations or data-residency story.</p>
+<table class="words">
+<tr><th>Investigator</th><td>Reaches the data only through a read-only tool layer, never imports the validator or the evaluation, and submits a decision: fix it, leave it, or escalate it.</td></tr>
+<tr><th>Authorizer</th><td>Decides whether the change is permitted here.</td></tr>
+<tr><th>Validator</th><td>Rebuilds the data from a frozen copy with the change applied, and checks it against the data’s own invariants.</td></tr>
+<tr><th>Record</th><td>Every run writes a receipt before anything is spent, a trace as it happens, and a record at the end.</td></tr>
+<tr><th>Evaluation</th><td>Registered, and the system frozen by digest, before the final runs: 66 hosted runs and 36 local ones, published. With its tools, gpt-6-sol was right on all 12 benchmark and all 6 held-out cases; shown only the alert, it scored 4 of 12, what a rule that always escalates scores.</td></tr>
+<tr><th>Check it</th><td>One script recomputes every result in the paper from the published runs, in a few minutes, with no API key, and a test suite holds the boundaries.</td></tr>
+</table>
+</section>
 <section aria-labelledby="text-h">
 <h2 id="text-h">The run as text</h2>
 <details id="text">
@@ -173,8 +203,9 @@ WHERE o.line_no &lt;= l.rows_loaded
     <li><div><strong>Ibrahem Altowalah</strong><span>The investigator: the agent loop</span></div></li>
     <li><div><strong>Nasser Alzaid</strong><span>The read-only tool layer</span></div></li>
 </ul>
+<p class="limit">The copyright is the four authors’: the code under the AGPL-3.0, the data under CC BY-SA 4.0, the manuscript theirs.</p>
 </section>
 </main>
-<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../pages/brief.html">Brief</a> · <a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
+<footer><span>© 2026 CytherAI · Riyadh</span><span><a href="../pages/about.html">About</a> · <a href="../pages/brief.html">Brief</a> · <a href="../contact.html">Contact</a> · <a href="../pages/security.html">Security</a> · <a href="../pages/privacy.html">Privacy</a> · <a href="../pages/terms.html">Terms</a></span></footer>
 </body>
 </html>

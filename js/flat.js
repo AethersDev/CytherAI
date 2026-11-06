@@ -2,7 +2,7 @@
    visitor's scroll. The scroll names a moment of the sequence (tools/render-flat.py: every fringe computed) and the page
    shows its frame; it is never played. Its words fade in and out with the scroll in their windows. The sequence downloads
    whole and plays from memory, as the front door's passage does (js/film.js, which found why); until then, under reduced
-   motion, or after a failed download, a still of each part stands. Nothing runs while the scroll is still. DOM wiring
+   motion, on a lean link, or after a failed download, a still of each part stands. Nothing runs while the scroll is still. DOM wiring
    only: under jsc (verify.sh) it parses and returns. */
 (function () {
 "use strict";
@@ -11,7 +11,9 @@ if (typeof document === "undefined") return;
 const body = document.body, scene = document.getElementById("scene");
 const parts = [...document.querySelectorAll(".passage")], says = [...document.querySelectorAll(".say")];
 const after = [...document.querySelectorAll("#bench, .close, .notes section, body > footer")];   // what follows the film
-const portrait = matchMedia("(orientation: portrait)"), stillMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* a visitor who asks to save data, or on a link too slow for the sequence, keeps the stills: js/film.js's rule and its reasons */
+const link = navigator.connection || {}, lean = link.saveData || /2g/.test(link.effectiveType) || link.downlink < 1;
+const portrait = matchMedia("(orientation: portrait)"), stillMotion = lean || matchMedia("(prefers-reduced-motion: reduce)").matches;
 const media = new URL("../flat/media/", document.currentScript.src);   // the same from flat/ and from ar/
 const span = e => e.dataset.t.split(" ").map(Number), FADE = 0.5;    // the words fade over half a second of the sequence
 const END = span(parts[parts.length - 1])[1];   // a viewport past the sequence's end, its last frame held (css/flat.css)

@@ -12,10 +12,12 @@ if (typeof document === "undefined") return;
 
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
 const lines = [...document.querySelectorAll(".line")], portrait = matchMedia("(orientation: portrait)");
-/* a visitor who asks to save data, or whom the browser calls 2G, gets the stills and no worker: under 1 MB, not 6 (Chromium
-   alone reports these). Never "3g": Chrome reported it, rtt 400, on a loopback server with nothing to estimate from, and to
-   the audit of 2026-11-05 on a link that played the film; the film's own GUARD and STALL measure what the link does */
-const link = navigator.connection || {}, lean = link.saveData || /2g/.test(link.effectiveType);
+/* a visitor who asks to save data, whom the browser calls 2G or whose link it estimates under 1 Mbit/s gets the stills and no
+   worker: under 1 MB, not 6 (Chromium alone reports these). Never "3g" by itself: Chrome reported it, rtt 400, on a loopback
+   server with nothing to estimate from, and to the audit of 2026-11-05 on a link that played the film, but it reported it
+   at 50 kbit/s too. The estimate tells them apart: loopback 1.5, Slow 4G 1.3, Fast 3G 1.65; Slow 3G 0.4, 2G 0.05 (2026-11-06,
+   throttled). Above it the film's own GUARD and STALL measure what the link does */
+const link = navigator.connection || {}, lean = link.saveData || /2g/.test(link.effectiveType) || link.downlink < 1;
 const stillMotion = lean || matchMedia("(prefers-reduced-motion: reduce)").matches;
 const root = new URL("../", document.currentScript.src);   // the site's root: the films and the worker are the same from ar/
 const GUARD = 6000;  // ms the film may take to start before its final frame stands in: Safari starts it only once it expects to play

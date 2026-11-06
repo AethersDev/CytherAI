@@ -11,8 +11,12 @@ route    *The three systems*, pressed while the film plays (0.3 s and 5 s in) an
          shows the passage's first words. It landed on a wordless frame until this audit.
 anchor   An address naming a stretch (#systems, #adii, #awc-os, #cythercad) opens on that stretch's first words, shown, and so does the address changing on the open page: at y 0 on the Arabic page under mobile emulation until this audit, the browser's own anchor lost.
 bar      At the top, at every words' moment and at the foot, *Talk to us* is what a pointer reaches, and pressing it opens the contact page.
-lean     Save-Data, and a connection the browser calls 2G, fetch no film and no worker, and each system's still stands; "3g",
-         which Chrome reports on a loopback server, still plays the film.
+ghost    The statement scrolling under the bar does not show through it: the same scroll with the statement shown and hidden, at
+         most GHOST levels of 255 apart. It showed by 40 until the re-check of 2026-11-06.
+lean     Save-Data, a connection the browser calls 2G, and one it estimates under 1 Mbit/s fetch no film and no worker, and each
+         system's still stands; "3g", which Chrome reports on a loopback server, still plays the film.
+slow     The same under real throttling, where Chrome itself names the link and calls even 50 kbit/s "3g": Slow 3G and 2G fetch no
+         film, Slow 4G does, and the statement stands on all three. Both films were fetched on the first two until 2026-11-06.
 edges    The scene meets the stage's foot and the footer's top with no hard line: the mean brightness of neighbouring pixel rows
          stays within EDGE levels. It jumped there until this audit.
 contact  A draft of nothing opens nothing and asks again; a draft says what should be happening; a long one drops the links to
@@ -33,7 +37,7 @@ def module(name, file):
     return m
 ps, ink = module("settle", "probe-settle.py"), module("ink", "probe-ink.py")   # the server, Chrome and tab; the PNG reader
 DIST, OUT = Path(sys.argv[1]).resolve(), Path(sys.argv[2])
-GOOD, EDGE = 2500, 4
+GOOD, EDGE, GHOST = 2500, 4, 1
 DESK, PHONE = (1440, 900, 1, False), (390, 844, 2, True)
 LANGS = (("/", "contact.html"), ("/ar/", "contact.html"))
 FIRST = """window.__p = {lcp: [], cls: 0};
@@ -165,10 +169,56 @@ def bar(tab, origin):
             record("bar", not missed and tab.js("location.pathname").endswith(contact), page=lang, device=name, moments=n + 2, covered_at=missed, opened=tab.js("location.pathname"))
 
 
+def ghost(tab, origin):
+    shot = lambda: ink.pixels(base64.b64decode(tab.send("Page.captureScreenshot", format="png", optimizeForSpeed=True)["data"]))
+    for lang, _ in LANGS:
+        for name, spec in (("desktop", DESK), ("phone", PHONE)):
+            fresh(tab, spec, origin + lang + "#systems")
+            ps.until(tab, "document.body.classList.contains('scrub')", 30)
+            tab.js("scrollTo(0, 0)"); time.sleep(0.6)
+            bar, left, right, top, bottom = tab.js("(g => { g.selectNodeContents(document.querySelector('.landing')); const b = g.getBoundingClientRect(); return [Math.round(document.querySelector('.bar').getBoundingClientRect().bottom), Math.floor(b.left), Math.ceil(b.right), Math.round(b.top), Math.round(b.bottom)]; })(document.createRange())")
+            worst, d = 0, spec[2]
+            for y in range(top - bar + 4, bottom, 32):   # the statement and its links passing under the bar
+                tab.js(f"scrollTo(0, {y})"); time.sleep(0.25)
+                w, _, shown = shot()
+                tab.js("document.querySelector('.landing').style.visibility = 'hidden'"); time.sleep(0.1)
+                hidden = shot()[2]
+                tab.js("document.querySelector('.landing').style.visibility = ''")
+                for row in range(bar * d):   # above the statement alone: the scrollbar, a desktop's overlay, comes and goes at the edge
+                    a, b = (row * w + left * d) * 3, (row * w + right * d) * 3
+                    worst = max(worst, max(abs(p - q) for p, q in zip(shown[a:b], hidden[a:b])))
+            record("ghost", worst <= GHOST, page=lang, device=name, show_through=worst, bound=GHOST)
+
+
+def slow(origin):
+    for lang, _ in LANGS:
+        for name, net, plays in (("Slow 4G", dict(latency=562, downloadThroughput=1.47e6 / 8, uploadThroughput=675e3 / 8), True),
+                                 ("Slow 3G", dict(latency=400, downloadThroughput=400e3 / 8, uploadThroughput=400e3 / 8, connectionType="cellular3g"), False),
+                                 ("2G", dict(latency=800, downloadThroughput=50e3 / 8, uploadThroughput=20e3 / 8, connectionType="cellular2g"), False)):
+            with tempfile.TemporaryDirectory() as profile:
+                proc, _, url = ps.chrome(profile)
+                tab = ps.Tab(url)
+                view(tab, DESK)
+                tab.send("Network.setCacheDisabled", cacheDisabled=True)
+                tab.send("Network.emulateNetworkConditions", offline=False, **net)
+                tab.requests = []
+                tab.send("Page.navigate", url=origin + lang)
+                for _ in range(240):
+                    if tab.js("document.readyState") == "complete":
+                        break
+                    time.sleep(0.25)
+                time.sleep(3)
+                films = sorted({u.rsplit("/", 1)[-1] for u in tab.requests if u.endswith(".mp4")})
+                seen, stands = tab.js("[navigator.connection.effectiveType, navigator.connection.downlink]"), tab.js("getComputedStyle(document.querySelector('.landing')).opacity === '1'")
+                record("slow", stands and bool(films) == plays, page=lang, link=name, chrome_reports=seen, statement=stands, films=films)
+                proc.terminate(); proc.wait()
+
+
 def lean(origin):
     for lang, _ in LANGS:
         for name, link, plays in (("Save-Data", "{saveData: true, effectiveType: '4g'}", False), ("2g", "{saveData: false, effectiveType: '2g'}", False),
-                                  ("slow-2g", "{saveData: false, effectiveType: 'slow-2g'}", False), ("3g", "{saveData: false, effectiveType: '3g'}", True)):
+                                  ("slow-2g", "{saveData: false, effectiveType: 'slow-2g'}", False), ("under 1 Mbit/s", "{saveData: false, effectiveType: '3g', downlink: 0.4}", False),
+                                  ("3g", "{saveData: false, effectiveType: '3g'}", True), ("3g at 1.65 Mbit/s", "{saveData: false, effectiveType: '3g', downlink: 1.65}", True)):
             with tempfile.TemporaryDirectory() as profile:
                 proc, _, url = ps.chrome(profile)
                 tab = ps.Tab(url)
@@ -261,7 +311,7 @@ def targets(tab, origin):
     front = ".top, .solid, .plain, .route, .mail, #replay, body>footer a, .wordmark"
     room = ".top, .solid, .plain, body>footer a, .wordmark"
     for spec in (DESK, PHONE):
-        for path, what in (("/#return", front), ("/ar/#return", front), ("/contact.html", room), ("/ar/contact.html", room), ("/pages/brief.html", room), ("/ar/privacy.html", room), ("/ar/terms.html", room)):
+        for path, what in (("/#return", front), ("/ar/#return", front), ("/contact.html", room), ("/ar/contact.html", room), ("/pages/brief.html", room), ("/ar/privacy.html", room), ("/ar/terms.html", room), ("/pages/about.html", room), ("/ar/about.html", room), ("/adii/", room), ("/ar/adii.html", room), ("/flat/", front), ("/ar/flat.html", front)):
             fresh(tab, spec, origin + path)
             small = tab.js(size % json.dumps(what))
             record("targets", not small, page=path, width=spec[0], below_24=small)
@@ -272,10 +322,11 @@ origin = f"http://127.0.0.1:{httpd.server_address[1]}"
 with tempfile.TemporaryDirectory() as profile:
     proc, _, url = ps.chrome(profile)
     tab = ps.Tab(url)
-    for step in (paint, route, anchor, bar, edges, contact, layout, targets):
+    for step in (paint, route, anchor, bar, ghost, edges, contact, layout, targets):
         step(tab, origin)
     proc.terminate(); proc.wait()
 lean(origin)
+slow(origin)
 httpd.shutdown()
 OUT.mkdir(parents=True, exist_ok=True)
 build = re.search(r'name="build-hash" content="(\w+)"', (DIST / "index.html").read_text(encoding="utf-8"))[1]
