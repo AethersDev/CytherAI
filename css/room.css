@@ -43,7 +43,7 @@ table{display:block;overflow-x:auto;border-collapse:collapse;color:var(--soft);m
    engine's verdicts, a record's facts); a section's own numbered list */
 .record{background:var(--lift);border:1px solid var(--rule);padding:16px 20px 14px}.record .outcome{margin:0 0 6px;max-width:none;font-family:Plex,monospace;font-size:12.5px;color:var(--ink)}.record table{display:table;width:100%;margin:0}.record td{color:var(--ink);text-align:end;white-space:nowrap;padding-inline-end:0}
 .words{max-width:46rem;margin-top:24px}.words th{color:var(--ink);vertical-align:top;white-space:nowrap}.words td{font:15px/1.55 Public,sans-serif}
-section>ol{max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(--soft)}section>ol>li{font-size:15px;line-height:1.6;margin-top:8px}
+section>:is(ol,ul){max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(--soft)}section>:is(ol,ul)>li{font-size:15px;line-height:1.6;margin-top:8px}
 .team{list-style:none;margin:0;padding:0;max-width:46rem}.team li{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule)}
 .team strong{display:block;font-weight:600}.team span{display:block;font-size:15px;color:var(--dim);margin-top:2px}
 /* the ways on: the front door's two, a solid one and a plain one */
@@ -57,7 +57,7 @@ section>ol{max-width:46rem;padding-inline-start:22px;margin:16px 0 0;color:var(-
 .legal .dates{font-family:Plex,monospace;font-size:12px;color:var(--dim);margin-top:14px}.legal ul{margin:12px 0 0;padding-inline-start:22px}.legal li{margin-top:6px}.legal strong{color:var(--ink);font-weight:600}
 .legal a{border-bottom:1px solid var(--rule)}.legal a:hover{color:var(--warm);border-color:var(--warm)}
 .box{background:var(--lift);border:1px solid var(--rule);padding:6px 20px 18px;margin-top:20px}
-.brief .record{max-width:46rem;margin-top:24px}.brief section>p{max-width:46rem}
+.brief .record{max-width:46rem;margin-top:24px}.brief section>p{max-width:46rem}section>.label{margin-bottom:14px}cite{font-style:normal;color:var(--ink)}
 .missing section{margin-top:64px}
 /* the contact page: three short answers, handed to the visitor's own mail app */
 .ask{max-width:640px}.ask p{max-width:none}

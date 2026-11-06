@@ -20,6 +20,8 @@ press    *The three systems ↓* shows the first words, and the close's address 
 foot     At the page's foot the passage stands at its last second. svh settled after the page's first measure with no resize event
          until 2026-11-05, and every moment stood 8% early, the foot short of the end.
 flat     Both looked flat's frame holds at rest, as the film's does.
+glass    Its instrument, upright (the Simulator cannot be turned by a script, and takes no scripted finger, so this is geometry and style): ready, on
+         touch-action none, under the fixed bar, *Talk to us* what a pointer reaches, and the reading in view with the glass at the window's foot.
 
 Writes <out-dir>/ios.json and the screenshots; exits 0 on PASS, 1 on FAIL.
 """
@@ -52,6 +54,20 @@ DIAG = r"""(function () {
     if (q.get('foot')) setTimeout(function () { scrollTo(0, document.documentElement.scrollHeight); setTimeout(function () { post('foot'); }, 1500); }, 2500);
   });
 })();"""
+GLASS = r"""addEventListener('load', function () {
+  var q = new URLSearchParams(location.search), c = document.getElementById('press'), tries = 0;
+  if (!q.get('glass')) return;
+  (function wait() {
+    c.scrollIntoView({block: 'end'});
+    if (!document.body.classList.contains('pressable') && tries++ < 60) return setTimeout(wait, 500);
+    setTimeout(function () {
+      var at = function (e) { var r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!h && (h === e || e.contains(h)); };
+      var x = new XMLHttpRequest(); x.open('POST', '/__report', false); x.setRequestHeader('Content-Type', 'application/json');
+      x.send(JSON.stringify({tag: q.get('t'), step: 'glass', ready: document.body.classList.contains('pressable'), touch: getComputedStyle(c).touchAction, bar: getComputedStyle(document.querySelector('.bar')).position,
+        talk: at(document.querySelector('.talk')), reading: at(document.getElementById('reading')), foot: Math.round(document.getElementById('reading').getBoundingClientRect().bottom), window: innerHeight, overflow: document.documentElement.scrollWidth - innerWidth}));
+    }, 700);
+  })();
+});"""
 
 
 class Reports(ps.Files):
@@ -101,6 +117,10 @@ with tempfile.TemporaryDirectory() as t:
     for page in ("index.html", "ar/index.html"):
         s = (d / page).read_text(encoding="utf-8")
         (d / page).write_text(s.replace('<script src="', '<script src="/__diag.js"></script>\n<script src="', 1), encoding="utf-8")
+    (d / "__glass.js").write_text(GLASS, encoding="utf-8")
+    for page in ("flat/index.html", "ar/flat.html"):
+        s = (d / page).read_text(encoding="utf-8")
+        (d / page).write_text(s.replace('<script src="', '<script src="/__glass.js"></script>\n<script src="', 1), encoding="utf-8")
     (d / "sw.js").write_text("", encoding="utf-8")
     httpd = ThreadingHTTPServer(("127.0.0.1", 0), partial(Reports, directory=str(d)))
     httpd.daemon_threads = True
@@ -137,6 +157,8 @@ with tempfile.TemporaryDirectory() as t:
             sim("io", device["udid"], "screenshot", str(a)); time.sleep(4); sim("io", device["udid"], "screenshot", str(b))
             moved = drift(a, b)
             record("flat", moved <= HOLD, page=path, trial=trial, moved_levels=moved, bound=HOLD)
+        a = visit(origin, device["udid"], f"{path}?t={lang}-glass&glass=1", f"{lang}-glass", ("glass",)).get("glass")
+        record("glass", a and a["ready"] and a["touch"] == "none" and a["bar"] == "fixed" and a["talk"] and a["reading"] and a["foot"] <= a["window"] and a["overflow"] <= 0, page=path, **(a or {}))
     sim("terminate", device["udid"], "com.apple.mobilesafari")
     sim("shutdown", device["udid"])
     httpd.shutdown()

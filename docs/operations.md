@@ -46,10 +46,14 @@ No repository change settles these. Until each is done, the handover is complete
    *Schedule a technical discussion* as a secondary action). It needs the link and the provider's name: the visitor's details
    reach that provider once they follow it, so both privacy policies must name it (`tools/test-site.py` holds the two to the
    same providers).
-10. **AWC-OS's public repository**, `cytheraii/aws-os_mvp`, which this account can read and not write: its README still calls
+10. **The public repositories, which the site now sends readers to** (the re-check of 2026-11-06, `docs/deploy.md` §5ai).
+    `cytheraii/aws-os_mvp`, which this account can read and not write: its README still calls
     `cytherai.com/awc-os/` a *live instance* while the site says the MVP runs on an evaluation machine, lists an
     `OPERATIONS.md` it does not contain, and the repository has no description (`docs/deploy.md` §5ag gives the exact change).
-    Do this before item 8's indexing, which sends readers to it.
+    Do this before item 8's indexing, which sends readers to it. `cytheraii/barker-quotient`: its GitHub description still
+    carries the superseded title and *first minimal k=6 covering set*, which its own README withdraws. `AethersDev/menumind`:
+    no licence file, and its README answers a brief (2.3, 2.4) a reader will not know. `AethersDev/adii_team`: it names
+    neither CytherAI nor Group 05, and the bootcamp the site names is your statement, not the repository's.
 11. **Cloudflare: approved in principle (the owner, 2026-11-06), not cleared to switch on.** Keep the records DNS only until
     both of these are settled. Read 2026-11-06; observe again before relying on them.
     - *The certificate.* Pages issues and renews its own Let's Encrypt certificate; the current one expires **2026-12-14**.
@@ -87,6 +91,14 @@ No repository change settles these. Until each is done, the handover is complete
     suitable for the target audience"; Article 4(7)'s "appropriate language" concerns a data subject who lacks legal capacity;
     neither says Arabic is mandatory. The terms' section 5 also cites "model accuracy, parameter counts", which this site no
     longer prints. Nothing on this site claims compliance with the PDPL.
+13. **What the About page leaves out, by your direction** (2026-11-06): a photo, the company's stage and registration, and a
+    careers section. An investor or candidate will ask for them, and only you can give them. The legal name also fills the
+    first gap in item 12.
+14. **The film's order.** It shows ADII, AWC-OS, then CytherCAD, while the brief leads with CytherCAD. The page says which is
+    which in words (each system's status); changing the order means rendering the passage again.
+15. **Both looked flat under your own finger** (`docs/deploy.md` §5ai). Nothing here has swiped it on WebKit or a real phone: try
+    the glass, and a scroll past it, upright and on its side. A swipe that starts on the glass lifts it by design, and one beside it
+    scrolls. If that catches people in practice, the alternatives are in §5ai; each costs new words on the page.
 
 ## How to tell the site is broken
 

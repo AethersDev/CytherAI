@@ -14,11 +14,15 @@
 #bench small{display:block;color:var(--warm)}
 #bench h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:16px 0 0}
 #bench p{font-size:17px;line-height:1.55;color:var(--soft);max-width:52ch;margin:18px 0 0}#bench .cond{font-size:14px;color:var(--dim)}
-#bench figure{margin:40px 0 0;max-width:1180px}
+/* centred, and never taller than the window less 140 px: the glass takes a finger's every swipe that starts on it (touch-action,
+   since the gesture its words ask for is up and down), so there is always a margin to scroll the page by. On a phone on its
+   side it stood 427 px tall in a 390 px window, with 42 px beside it (the review of 2026-11-06). 280 px: a floor at 400% zoom */
+#bench figure{margin:40px auto 0;width:min(100%,1180px,max(280px,(100vh - 140px)*16/9));width:min(100%,1180px,max(280px,(100svh - 140px)*16/9))}
 #press,#bench .fallback{display:block;width:100%;aspect-ratio:16/9;background:var(--lift,#111118);touch-action:none;cursor:grab}
-#press:active{cursor:grabbing}#bench .fallback{display:none;height:auto}
+#press:active{cursor:grabbing}#press:focus-visible{outline:2px solid var(--warm);outline-offset:6px}#bench .fallback{display:none;height:auto}
 .no-press #press{display:none}.no-press #bench .fallback{display:block}
-#bench figcaption{margin-top:14px;color:var(--soft);font-size:12px;text-transform:none;letter-spacing:.02em}   /* never upper-cased: µm is not MM */
+/* the reading stays in view while any of the glass does, over its foot on its own ground; never upper-cased: µm is not MM */
+#bench figcaption{position:sticky;bottom:0;margin-top:4px;padding-block:10px;background:var(--ground);color:var(--soft);font-size:12px;text-transform:none;letter-spacing:.02em}
 /* the close carries a sentence before its statement and one after it */
 .close p{font-size:17px;line-height:1.55;color:var(--soft);max-width:50ch;margin:0}.close p+h2{margin-top:22px}.close h2+p{margin-top:20px}
 .lost{display:none}.no-press .lost{display:inline}

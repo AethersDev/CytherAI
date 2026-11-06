@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#07070a">
-<title>ADII، التشغيل المسجَّل — CytherAI</title>
-<meta name="description" content="تشغيلٌ مسجَّل واحد لمشروع ADII البحثي من CytherAI: رقمٌ بدا خاطئًا، واقتُرح تصحيحه، وقرّر برنامجان خارج النموذج ما إذا كان التغيير مسموحًا وما إذا كان يجتاز التحقق.">
+<title>ADII، الورقة والتشغيل المسجَّل — CytherAI</title>
+<meta name="description" content="ADII وكيلٌ لحوادث البيانات يجب أن تجتاز تصحيحاته مُجيزًا ومدقّقًا مستقلًا، من بناء فريق Group 05؛ وورقة Permission Is Not Justification، ونتيجتها أن ضوابط الحماية قد تخفي الوكيل السيئ؛ وتشغيلٌ مسجَّل واحد.">
 <meta property="og:site_name" content="CytherAI">
-<meta property="og:title" content="ADII، التشغيل المسجَّل — CytherAI">
-<meta property="og:description" content="رقمٌ بدا خاطئًا، وكان تغييره قرارًا مستقلًا. تشغيلٌ مسجَّل واحد لمشروع بحثي.">
+<meta property="og:title" content="ADII، الورقة والتشغيل المسجَّل — CytherAI">
+<meta property="og:description" content="ضوابط الحماية لا تحميك من الوكيل السيئ فحسب، بل قد تخفيه. ADII، وورقة Permission Is Not Justification، وتشغيلٌ مسجَّل واحد.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://cytherai.com/ar/adii.html">
 <link rel="canonical" href="https://cytherai.com/ar/adii.html">
@@ -23,31 +23,60 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/adii/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/adii.html">
-<meta name="build-hash" content="7F5250D087FF0962">
+<meta name="build-hash" content="37DF4B7A5EBD6205">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
-<!-- ADII's evidence introduced in Arabic (css/room.css): what the recorded run is, what decision it shows and what it does
-     not claim, with the run itself (its interface is in English); the run as text and its team stay on the English page
-     (adii/), linked and marked. -->
+<!-- ADII's evidence introduced in Arabic (css/room.css): what the recorded run is, what decision it shows and what it is,
+     with the run itself (its interface is in English); then the paper and what ADII is, as adii/ states them, drafted in
+     Arabic on 2026-11-06 for the owner to refine. The run as text and its team stay on the English page, linked and marked. -->
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-<link rel="stylesheet" href="../css/room.css?v=f99795cd6a61" integrity="sha384-QERTISWheeO1N4NFI60Kpr3ql6bL0WOGDyITLS4FIKlxKJvIgfLV/cSADgbNYltP" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/room.css?v=e9130d601192" integrity="sha384-Y4sTW6TqlVVydR2FcyAbC3U+nNQr/NXJ74oOp7wOpAVKGtIDUAKi9SzGJhqsekey" crossorigin="anonymous">
 </head>
 <body>
 <header><a class="wordmark" href="./" aria-label="الصفحة الرئيسية لـ CytherAI" dir="ltr"><svg class="seal" viewBox="0 0 26 26" width="26" height="26" shape-rendering="crispEdges" aria-hidden="true"><rect width="26" height="26" fill="#ECE7DC"/><path fill="#07070A" d="M2 2h2v2h-2zM2 4h2v2h-2zM2 6h2v2h-2zM2 10h2v2h-2zM2 12h2v2h-2zM2 14h2v2h-2zM2 16h2v2h-2zM2 18h2v2h-2zM2 20h2v2h-2zM2 22h2v2h-2zM4 6h2v2h-2zM4 10h2v2h-2zM4 22h2v2h-2zM6 6h2v2h-2zM6 10h2v2h-2zM6 14h2v2h-2zM6 16h2v2h-2zM6 18h2v2h-2zM6 22h2v2h-2zM8 6h2v2h-2zM8 10h2v2h-2zM8 14h2v2h-2zM8 18h2v2h-2zM8 22h2v2h-2zM10 2h2v2h-2zM10 4h2v2h-2zM10 6h2v2h-2zM10 10h2v2h-2zM10 14h2v2h-2zM10 18h2v2h-2zM10 22h2v2h-2zM12 2h2v2h-2zM12 10h2v2h-2zM12 18h2v2h-2zM12 22h2v2h-2zM14 2h2v2h-2zM14 10h2v2h-2zM14 12h2v2h-2zM14 14h2v2h-2zM14 18h2v2h-2zM14 20h2v2h-2zM14 22h2v2h-2zM16 2h2v2h-2zM16 14h2v2h-2zM18 2h2v2h-2zM18 14h2v2h-2zM18 16h2v2h-2zM18 18h2v2h-2zM20 2h2v2h-2zM20 18h2v2h-2zM22 2h2v2h-2zM22 4h2v2h-2zM22 6h2v2h-2zM22 8h2v2h-2zM22 10h2v2h-2zM22 12h2v2h-2zM22 14h2v2h-2zM22 16h2v2h-2zM22 18h2v2h-2z"/></svg>cyther<span>ai</span></a><nav class="side" aria-label="الموقع"><a class="top back" href="./#adii-evidence">→ العودة إلى المقطع</a><a class="top" href="../adii/" hreflang="en" lang="en">English</a></nav></header>
 <main>
 <div class="arrival">
 <div class="head">
-<span class="label">01 · <span lang="en">ADII</span> · التشغيل المسجَّل</span>
+<span class="label">01 · <span lang="en">ADII</span> · الورقة والتشغيل المسجَّل</span>
 <h1>رقمٌ بدا خاطئًا، وكان تغييره قرارًا مستقلًا.</h1>
-<p class="by">من بناء فريق <span lang="en">Group 05</span>: <span lang="en">Malek Alhazmi</span>، <span lang="en">Joorie Alsakran</span>، <span lang="en">Ibrahem Altowalah</span>، <span lang="en">Nasser Alzaid</span>.</p>
+<p class="by">من بناء فريق <span lang="en">Group 05</span>: <span lang="en">Malek Alhazmi</span>، <span lang="en">Joorie Alsakran</span>، <span lang="en">Ibrahem Altowalah</span>، <span lang="en">Nasser Alzaid</span>. <a class="plain" href="#paper">الورقة ↓</a></p>
 </div>
 <p class="body">انخفضت الإيرادات اليومية ليوم 18 أغسطس إلى نحو النصف. تتبّع <span lang="en">ADII</span> الانخفاض إلى مُرشِّح في مرحلة تجهيز البيانات استبعد طلبات موزّعَين اثنين، واقترح إزالته. ولم يصدر جوابه، «صحّحه»، إلا بعد أن أجاز برنامجٌ خارج النموذج التغيير، وقبِله برنامجٌ ثانٍ أعاد بناء البيانات من نسخة مجمّدة مع تطبيق التغيير. والذكاء الاصطناعي الذي اقترح التصحيح لم يعتمده.</p>
-<p class="limit">مشروع بحثي من <span lang="en">CytherAI</span>: لم تُنشر نتائج تقييم، ولا ندّعي أنه قيد التشغيل. هذا تشغيلٌ واحدٌ مسجَّل.</p>
+<p class="limit">بحثٌ لفريق: ورقة علمية وتطبيق مرجعي كامل يعمل محليًا، ولم يُطلق في بيئة إنتاج. هذا تشغيلٌ واحدٌ مسجَّل.</p>
 <figure id="run"><video controls playsinline muted preload="metadata" poster="../adii/poster.jpg"><source src="../adii/replay.mp4" type="video/mp4"></video><figcaption>واجهة <span lang="en">ADII</span> بالإنجليزية · 68 ثانية · بلا صوت</figcaption></figure>
 </div>
 <nav class="next" aria-label="من هنا"><a class="solid" href="contact.html">أخبرنا بما يجب ألّا يحدث أبدًا ←</a><a class="plain" href="./#adii-evidence">→ العودة إلى المقطع</a><a class="plain" href="../adii/#text" hreflang="en">التشغيل نصًّا، والفريق (بالإنجليزية) ←</a></nav>
+<section id="paper" aria-labelledby="paper-h">
+<span class="label">الورقة · بكلمات الفريق</span>
+<h2 id="paper-h">ضوابط الحماية لا تحميك من الوكيل السيئ فحسب، بل قد تخفيه.</h2>
+<p>شرعنا في بناء مشروع تخرّج لوكيل ذكاء اصطناعي، فخرجنا بورقة بحثية عن الكيفية التي يستحقّ بها وكلاء الذكاء الاصطناعي حقّ التصرّف، وبهذه النتيجة التي تهمّ كلّ من يشغّل وكلاء ذكاء اصطناعي خلف ضوابط حماية.</p>
+<p>بدأ الأمر في <span lang="en">Agentic AI Bootcamp</span> من الأكاديمية السعودية الرقمية × <span lang="en">WeCloudData</span>، بسؤال واحد: ما الذي يجب أن يثبته الوكيل قبل أن يستحقّ حقّ التصرّف وحده؟ وصار ذلك ورقتنا: <cite lang="en">Permission Is Not Justification: Evaluating the Decision to Act in Data-Incident Agents</cite>.</p>
+<p>اقترح أحد الوكلاء 27 إصلاحًا سيئًا، فأوقفت البوّابات الـ27 كلّها. واتّخذ وكلاء آخرون سبعة قرارات خاطئة بعدم التصرّف، فلم تبلغ تلك الأخطاء أيّ بوّابة أصلًا. إخفاقان مختلفان، والدليل المطمئن واحد: سجلّ قبول نظيف. فإن منحتَ وكيلًا صلاحيات أوسع بناءً على ذلك السجلّ، فقد تكون تقيس ضوابط الحماية لا الوكيل. فالسجلّ الذي لا يرصد إلا الأفعال لا يرى الامتناع عنها.</p>
+<p>وبنينا كذلك مثالًا مضادًّا أفسد مبلغ كلّ طلب، وأبقى كلّ مجموع يفحصه المدقّق لدينا على حاله، فاجتاز في العوالم الـ18 كلّها.</p>
+<ul>
+<li>الإذن ليس مبرّرًا.</li>
+<li>قبول المدقّق ليس صحة.</li>
+<li>السجلّ النظيف ليس كفاءة.</li>
+</ul>
+<p>18 حالة. مجال واحد. يكفي ذلك لإسقاط معيار، ولا يكفي لاعتماد وكيل.</p>
+<nav class="next" aria-label="الأدلة"><a class="solid" href="https://github.com/AethersDev/adii_team/blob/main/paper/permission-is-not-justification.pdf" hreflang="en" target="_blank" rel="noopener">اقرأ الورقة (بالإنجليزية) ←</a><a class="plain" href="https://github.com/AethersDev/adii_team" hreflang="en" target="_blank" rel="noopener">الشيفرة وحِزم التقييم المجمّدة والأمثلة المضادة وسجلات التشغيل، على <span lang="en">GitHub</span> ←</a></nav>
+<p class="limit">ما تعنيه الأرقام: الـ27 هي تسع حالات شُغّلت كلٌّ منها ثلاث مرات على نموذج محلي واحد، <span lang="en">Qwen3-4B</span>، اختير لأنه الأرجح أن يقترح إصلاحًا خاطئًا. والسبعة هي أخطاء نموذجَين مستضافَين في حالات المقارنة الـ12. والحالات الـ18 حوادث اصطناعية أنشأها الفريق وصنّفها بنفسه: 12 للمقارنة و6 محجوبة. والمثال المضاد تعديل مكتوب شُغّل عبر النظام الحقيقي بلا نموذج، خارج حِزم التقييم.</p>
+</section>
+<section id="system" aria-labelledby="system-h">
+<h2 id="system-h">ما هو <span lang="en">ADII</span></h2>
+<p>تطبيق مرجعي كامل يعمل محليًا. صمّمنا حدود الصلاحيات وأهّلناها كما لو كانت تعمل في بيئة إنتاج، ولم نُطلقه في بيئة إنتاج لدى عميل. ولا يدّعي توفّرًا عاليًا، ولا دخولًا موحّدًا، ولا إدارة أسرار، ولا موصّلات مؤسسية، ولا تشغيلًا، ولا حلًّا لإقامة البيانات.</p>
+<table class="words">
+<tr><th>المحقّق</th><td>لا يبلغ البيانات إلا عبر طبقة أدوات للقراءة فقط، ولا يستورد المدقّق ولا التقييم، ويقدّم قرارًا: صحّحه، أو اتركه كما هو، أو أحِل المسألة للمراجعة.</td></tr>
+<tr><th>المُجيز</th><td>يقرّر ما إذا كان التغيير مسموحًا هنا.</td></tr>
+<tr><th>المدقّق</th><td>يعيد بناء البيانات من نسخة مجمّدة مع تطبيق التغيير، ويفحصها وفق ثوابت البيانات نفسها.</td></tr>
+<tr><th>السجلّ</th><td>يكتب كلّ تشغيل إيصالًا قبل إنفاق أي شيء، وأثرًا أثناء حدوثه، وسجلًّا في نهايته.</td></tr>
+<tr><th>التقييم</th><td>سُجّل، وجُمّد النظام ببصمته، قبل التشغيلات النهائية: 66 تشغيلًا مستضافًا و36 محليًا، منشورة. وبأدواته أصاب <span lang="en">gpt-6-sol</span> في حالات المقارنة الـ12 كلّها وفي الحالات المحجوبة الست كلّها؛ وحين لم يُعرض عليه إلا التنبيه أصاب في 4 من 12، وهو ما تحقّقه قاعدة تُحيل كلّ شيء للمراجعة.</td></tr>
+<tr><th>تحقّق بنفسك</th><td>يعيد برنامج واحد حساب كلّ نتيجة في الورقة من التشغيلات المنشورة، في دقائق، بلا مفتاح <span lang="en">API</span>، وتحفظ مجموعة اختبارات تلك الحدود.</td></tr>
+</table>
+<p class="limit">حقوق النشر للمؤلفين الأربعة: الشيفرة بترخيص <span lang="en">AGPL-3.0</span>، والبيانات بترخيص <span lang="en">CC BY-SA 4.0</span>، والمخطوطة لهم.</p>
+</section>
 </main>
-<footer><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="contact.html">تواصل</a> · <a href="privacy.html">الخصوصية</a> · <a href="terms.html">الشروط</a> · بالإنجليزية: <a href="../pages/brief.html" hreflang="en">الموجز</a> · <a href="../pages/security.html" hreflang="en">الأمن</a></span></footer>
+<footer><span>© 2026 <span lang="en">CytherAI</span> · الرياض</span><span><a href="about.html">من نحن</a> · <a href="contact.html">تواصل</a> · <a href="privacy.html">الخصوصية</a> · <a href="terms.html">الشروط</a> · بالإنجليزية: <a href="../pages/brief.html" hreflang="en">الموجز</a> · <a href="../pages/security.html" hreflang="en">الأمن</a></span></footer>
 </body>
 </html>

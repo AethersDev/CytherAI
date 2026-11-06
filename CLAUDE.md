@@ -23,7 +23,7 @@ tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `uni
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
 `tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
-`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
+`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05 and its re-check of 2026-11-06, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
 obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
 2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
 turned or a window resized keeps the passage's moment, its words and its frame. `CANONICAL_REF` is local
@@ -254,7 +254,7 @@ on →* (`adii/`, the recorded run's arrival); AWC-OS's headline (*Not every ans
 outcomes: the engine runs the program, refuses it with an allowed alternative, or blocks it), with its condition and
 *See the demonstration →* (`awc-os/`) beneath them throughout, quiet but available, in one caption (2026-10-21: as a
 separate closing caption they showed for half a screen of scroll, too fleeting to notice, the owner found); CytherCAD's (*Language in. Valid geometry out.*) with its
-explanation, then *It runs on-prem, private and air-gapped.* and *Read the validation record →* (`cythercad/`, CytherCAD's
+explanation, then *It runs on-prem, private and air-gapped.*, its status and *Read the validation record →* (`cythercad/`, CytherCAD's
 room; until 2026-10-21 its comparison with DeepCAD stood there, withdrawn with the record's correction). Each system after ADII is shorter (4 s and 5 s to its 7). The
 scroll moves the scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall
 as its seconds (`tools/test-site.py`), and the words (`.say`, `data-t`: their window of the passage's seconds) fade in
@@ -263,7 +263,7 @@ frames a pass, without it 1–3). The owner found the first version, whose beats
 read and then rushed it, lagging and hard to follow (2026-10-20). The close, *Tell us what must never happen.* with the
 contact address, stands over the passage's last frame where the film's statement stood (`docs/deploy.md` §5x).
 
-The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced motion, a request to save data or a connection the browser calls 2G (these two fetch no film, no passage and no worker either, under 1 MB; never "3g", which Chrome reports on a loopback server: §5ag), a refused or failed play, a film not started within `GUARD` (6 s), or one that falls `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition (`still()`); a film stopped short of its end drops its source, so its poster — the
+The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced motion, a request to save data, or a connection the browser calls 2G or estimates under 1 Mbit/s (these three fetch no film, no passage and no worker either, under 1 MB; never "3g" by itself, which Chrome reports on a loopback server and at 50 kbit/s alike: §5ag, §5ai), a refused or failed play, a film not started within `GUARD` (6 s), or one that falls `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition (`still()`); a film stopped short of its end drops its source, so its poster — the
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
 still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment (without that, in the iOS Simulator, 8 of 10 loads reported it paused at 0 while the screen went on showing it run, behind the statement; a seek to where it says it is does nothing: §5ag); until 2026-10-22 the video element downloaded it itself, and a paused
@@ -319,7 +319,7 @@ published for the owner to refine.
 **One lit environment** (2026-10-20, the owner's decision): the front door is dark whatever the device's theme. Light
 mode (2026-10-14: `js/theme.js`, the header's switch `#theme`, light tokens for the sections below the film) retired to
 `backup/theme-switch-v1/` once the systems and the close moved over the passage and the switch changed only the footer,
-a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on its own darkness (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand, *The three systems* (above 480 px wide), *Talk to us*, the language. The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
+a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on its own darkness, opaque under the statement as it scrolls by (it showed through by 40 levels of 255 until 2026-11-06: `tools/probe-arrival.py`) (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand, *The three systems* (above 480 px wide), *Talk to us*, the language. The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
 to one environment (no switch, no theme on the root, no light tokens or colour-scheme query in `css/film.css`) and
 every ink to 4.5:1 on its ground.
 
@@ -330,8 +330,8 @@ and dark in either device theme: an art-direction choice the owner kept in revie
 the passage's world while the quiet layout and the stillness give the change of pace. `adii/` opens on its arrival: what
 the recorded run is, whose work it is (*Built by Group 05* and its four names, under the headline: the company's identity
 never hides the team's authorship), what decision it shows (from the run's own text) and what it does not claim, beside
-the run itself (on a phone: the headline, the byline, the limit, the run, then what it shows); the run as text and the
-team follow, verbatim (their CVs withdrawn by the owner, 2026-10-30). `ar/adii.html` introduces it in Arabic, the team's names in Latin, with the run (its
+the run itself (on a phone: the headline, the byline, the limit, the run, then what it shows); the paper follows (*Permission Is Not Justification*, in the owner's words of 2026-11-06, every figure checked against it, with what the numbers are beneath: its repository is `AethersDev/adii_team`, and until that day the site said no results were published, false since 2026-10-02: `docs/deploy.md` §5ai), then what ADII is, in its repository's own words (a complete, locally running reference implementation, not deployed into a production customer environment; never *from CytherAI*: the copyright is the four authors'), then the run as text and the
+team, verbatim (their CVs withdrawn by the owner, 2026-10-30). `ar/adii.html` introduces it in Arabic, with the paper and what ADII is, the team's names in Latin, with the run (its
 interface in English) and a marked link to the English text. The contact pages continue *Tell us what must never
 happen.* with three plain questions (*What system are you working on?* · *What would you want AI to do?* · *What must
 never happen?*), composed into one readable email draft for the visitor's own email app: the button says *Open email
@@ -365,13 +365,13 @@ evidence room's way back to the words whose route leads to it. The pages they re
 and the 404, then one review of titles and link previews*). The cold-paper design they shared (`css/cytherai.css`, its
 bar of links, *LEGAL* stamps, the document register's *DOC-2026-002*, section stamps and exhibit labels, the brief's
 illustrative figures and the 404's empty plate) retired whole to `backup/cold-paper-v1/` with their generators. The
-legal pages kept their text word for word then (since changed: the privacy policy for the contact page's webmail links, and the terms' section 4 on 2026-11-06, since a notice on a public website is no confidentiality agreement); the brief keeps its two records and its access, each record as the system's
+legal pages kept their text word for word then (since changed: the privacy policy for the contact page's webmail links, and the terms' section 4 on 2026-11-06, since a notice on a public website is no confidentiality agreement); the brief is the site's one portfolio story since the re-check of 2026-11-06 (the owner: lead with what they build; every public repository worth showing goes on the site): CytherCAD, CytherAI's lead product, then SijilOS, then the founder's public repositories (MenuMind, the Barker papers), then the two team projects the film also shows, credited to their teams, and its access; each record as the system's
 own records state it (corrected 2026-10-21, `docs/deploy.md` §5ad: SijilOS's certification, production environments and
 event-sourcing were not what its records show, and are withdrawn; CytherCAD's figure projected, every validation identifier
 printed); the 404, served at any depth (every URL absolute), says
 in English and Arabic that nothing is published at the address. Each heads back with *← The three systems* to
 `#principle`, the passage's first words (their `.say`'s id on both front doors, as the contact room's fallback does),
-and every page's footer names the brief, the contact page, security, privacy and terms, marking the one it is
+and every page's footer names the About page, the brief, the contact page, security, privacy and terms, marking the one it is (About, `pages/about.html` and `ar/about.html`, 2026-11-06, is minimal at the owner's direction: the founder's name, Riyadh, LinkedIn and GitHub, and no photo, stage, registration or careers). Each system's status is one sentence (2026-11-06, `tools/test-site.py`): its `.cond` on the front door, word for word at the head of its room's limit and in the brief's Status row
 (`tools/test-site.py`). One review of titles and link previews followed: every title is *… — CytherAI*, the front
 doors' *CytherAI — * and their own statement (until 2026-10-21 the film study's working name, *Everything changes. One
 thing holds.*, which the page never said); every shareable page previews with the site's name, its title, a
@@ -408,7 +408,7 @@ and is up in full as that flat settles (held by `tools/test-site.py`; until the 
 and faded as the rings closed); a new viewport keeps the visitor's moment in the film and, past it, their place (the block at
 the top of the view, and how far into it); it
 downloads whole and plays from memory as the passage does (beside the front doors', its CSP is the only one that admits
-`connect-src 'self'` and `media-src blob:`), and its stills stand in until then, under reduced motion or after a failed
+`connect-src 'self'` and `media-src blob:`), and its stills stand in until then, under reduced motion, on a lean link or after a failed
 download. After the film, before the principle, the instrument (`#bench`, *Lift the glass. Press it back.*): both flats at
 rest from above, as pressed as they go, so the first gesture it invites lifts (until the review of 2026-10-25 it invited a
 press that could not move them); the visitor lifts either one and presses it back (up lifts, down presses, across turns it;
@@ -417,10 +417,10 @@ and the page computes every fringe in the browser, WebGL2, drawing only when pre
 glass slab to the steel with the plates' own camera (`flat/media/plate.json`), the stack's reflectance computed there from
 the same constants, and five plates Blender rendered at constant reflectances (0, 0.25, 0.5, 0.75, 1) blended at it, so the
 film's own light and tone carry the fringes; its plates load only as it comes near, and without WebGL2, or when the GPU refuses its shader or takes
-its context back, the film's last still stands, with words saying so. `tools/test-site.py` holds the page's optical constants, sodium lines and dome to the
+its context back, the film's last still stands, with words saying so. The review of 2026-11-06: the page wears the front door's fixed `.bar` with *Talk to us* (what stays the front door's alone on a phone is named by `#film~main`), a lean link keeps the stills (`lean`, one rule with `js/film.js`, `tools/test-site.py`), and the instrument is centred and never taller than the window less 140 px, since the glass takes every swipe that starts on it (`touch-action:none`: the gesture its words ask for is up and down, so the review's `pan-y` would take that away), which leaves a margin to scroll by even on a phone on its side; its reading stays in view (`position:sticky`) wherever the glass stands in the window, and the canvas is an `application` with the front door's focus ring. `tools/test-site.py` holds the page's optical constants, sodium lines and dome to the
 renderer's and runs the page's own reflectance under jsc against the renderer's (1e-9); every figure
 either page states (the dome's 1.2 µm, a fringe's 0.29 µm, the 15 nm film) is the scene's, and every one of the scene's is stated. `tools/probe-flat.py` is its browser
-check: the frame each scroll names, reading ink (by `tools/probe-ink.py`'s method), and the place a new viewport keeps, from
+check: a finger's swipes on the glass and beside it by Chrome's own touch pipeline, the frame each scroll names, reading ink (by `tools/probe-ink.py`'s method), and the place a new viewport keeps, from
 the film and from the instrument, the close and the notes. Its method states the model's approximations (the stack at normal
 incidence, only its phase at the camera's angle; iron's constants for the steel; the page's agreement with the film checks the
 computation, not the model), and its limits that straight fringes show a block flat only to the reference flat's own accuracy.

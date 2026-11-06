@@ -68,7 +68,7 @@ BANNED = re.compile(r"--brass|--gold|DOC-20\d\d-\d{3}|CONDUCT RECEIPT|[Aa]ppend-
 # the rooms: the pages a visitor reaches from the front door, drawn with css/room.css (2026-10-21)
 ROOMS = ("adii/index.html", "ar/adii.html", "awc-os/index.html", "ar/awc-os.html", "cythercad/index.html", "ar/cythercad.html",
          "contact.html", "ar/contact.html", "pages/brief.html", "pages/privacy.html", "pages/security.html", "pages/terms.html",
-         "ar/privacy.html", "ar/terms.html", "404.html")
+         "ar/privacy.html", "ar/terms.html", "pages/about.html", "ar/about.html", "404.html")
 # each evidence room and the front door it returns to
 EVIDENCE = (("adii/index.html", "index.html"), ("ar/adii.html", "ar/index.html"), ("awc-os/index.html", "index.html"),
             ("ar/awc-os.html", "ar/index.html"), ("cythercad/index.html", "index.html"), ("ar/cythercad.html", "ar/index.html"))
@@ -207,14 +207,16 @@ class SiteContractTests(unittest.TestCase):
 
     def test_every_footer_names_the_site_and_marks_the_current_page(self) -> None:
         """Every page ends with the same way round the site (it replaced the cold-paper pages' bar, which retired with them
-        to backup/cold-paper-v1/ on 2026-10-21): its footer links the brief, the security page, and the contact, privacy and
-        terms pages in its own language (Arabic privacy and terms since 2026-11-06), and marks the one it is."""
-        site = ("pages/brief.html", "contact.html", "pages/security.html", "pages/privacy.html", "pages/terms.html")
-        arabic = {"contact.html": "ar/contact.html", "pages/privacy.html": "ar/privacy.html", "pages/terms.html": "ar/terms.html"}
+        to backup/cold-paper-v1/ on 2026-10-21): its footer links the brief, the security page, and the About, contact, privacy
+        and terms pages in its own language (Arabic privacy and terms since 2026-11-06), and marks the one it is."""
+        site = ("pages/about.html", "pages/brief.html", "contact.html", "pages/security.html", "pages/privacy.html", "pages/terms.html")
+        arabic = {"pages/about.html": "ar/about.html", "contact.html": "ar/contact.html", "pages/privacy.html": "ar/privacy.html", "pages/terms.html": "ar/terms.html"}
         for page in HTML_FILES:
             with self.subTest(page=page):
                 footer = re.search(r"<footer[^>]*>(.*?)</footer>", (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
                 links = re.findall(r'<a href="([^"]+)"([^>]*)>', footer)
+                if page == "404.html":   # served at any depth, so every URL it names is absolute
+                    self.assertTrue(all(href.startswith("/") for href, _ in links), links)
                 expected = sorted(arabic.get(p, p) if page.startswith("ar/") else p for p in site)
                 self.assertEqual(sorted(local_target(page, href) for href, _ in links), expected)
                 marked = [local_target(page, href) for href, rest in links if 'aria-current="page"' in rest]
@@ -561,11 +563,17 @@ class SiteContractTests(unittest.TestCase):
 
     def test_the_front_door_keeps_a_way_to_talk_in_view(self) -> None:
         """Its header stays in view, and names the contact page of its own language (the audit of 2026-11-05: the next way
-        to talk after the first screen was ten screens down)."""
+        to talk after the first screen was ten screens down), and so does Both looked flat's (the review of 2026-11-06)."""
         self.assertIn(".bar{position:fixed", (ROOT / "css/film.css").read_text(encoding="utf-8"))
-        for page in ("index.html", "ar/index.html"):
+        for page, contact in (("index.html", "contact.html"), ("ar/index.html", "ar/contact.html"), ("flat/index.html", "contact.html"), ("ar/flat.html", "ar/contact.html")):
             header = re.search(r'<header class="bar">(.*?)</header>', (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
-            self.assertRegex(header, r'<a class="top talk" href="contact\.html">', page)
+            self.assertEqual(local_target(page, re.search(r'<a class="top talk" href="([^"]+)">', header).group(1)), contact, page)
+
+    def test_a_lean_link_is_one_rule(self) -> None:
+        """The film and Both looked flat give way on the same links: a request to save data, a connection the browser calls 2G, or
+        one it estimates under 1 Mbit/s. The flat page had no such rule until the review of 2026-11-06, and fetched 3.2 MB whole."""
+        rule = lambda path: re.search(r"\blean = ([^;]+);", (ROOT / path).read_text(encoding="utf-8")).group(1)
+        self.assertEqual(rule("js/flat.js"), rule("js/film.js"))
 
     def test_every_same_page_link_lands_where_it_names(self) -> None:
         """A link to a place on its own page names an element of that page, and on a front door the passage's words: their
@@ -627,6 +635,27 @@ class SiteContractTests(unittest.TestCase):
             home = next(a for t, a in tags if t == "a" and "wordmark" in a.get("class", "").split())
             self.assertEqual(local_target(page, home["href"]), "ar/index.html" if page.startswith("ar/") else "index.html", page)
             self.assertIn(("footer", {}), tags, page)
+
+    def test_each_system_states_one_status_everywhere(self) -> None:
+        """A reader holds the home page, the brief and a room side by side (the re-check of 2026-11-06 found their line-ups
+        differed, and ADII's status false): each system's status is the one sentence its words on the front door carry, word
+        for word at the head of its room's limit and, in English, in the brief's Status row for it."""
+        page = lambda path: (ROOT / path).read_text(encoding="utf-8")
+        words = lambda html: " ".join(re.sub(r"<[^>]+>", "", html).split())
+        def status(door: str, system: str) -> str:
+            stretch = re.search(rf'<section class="passage" id="{system}".*?</section>', page(door), re.S).group(0)
+            found = re.findall(r'<p class="cond">(.*?)</p>', stretch, re.S)
+            self.assertEqual(len(found), 1, (door, system))
+            return words(found[0])
+        limit = lambda room: words(re.search(r'<p class="limit">(.*?)</p>', page(room), re.S).group(1))
+        for system, room, arabic in (("adii", "adii/index.html", "ar/adii.html"), ("awc-os", "awc-os/index.html", "ar/awc-os.html"),
+                                     ("cythercad", "cythercad/index.html", "ar/cythercad.html")):
+            with self.subTest(system=system):
+                english = status("index.html", system)
+                self.assertTrue(limit(room).startswith(english), room)
+                self.assertTrue(limit(arabic).startswith(status("ar/index.html", system)), arabic)
+                row = re.search(rf'<section id="{system}".*?<tr><th>Status</th><td>(.*?)</td>', page("pages/brief.html"), re.S)
+                self.assertEqual(words(row.group(1)), english, f"the brief's #{system}")
 
     def test_each_evidence_room_returns_to_the_words_that_led_to_it(self) -> None:
         """An evidence room's way back to the passage returns to the evidence moment: every link from the room to its front
@@ -768,6 +797,16 @@ class SiteContractTests(unittest.TestCase):
         self.assertIn('"still-" + STILLS.find(s => t < s[0])[1] + (portrait.matches ? "-portrait.jpg" : "-landscape.jpg")', js)
         self.assertEqual(named, {p for p in DEPLOY_FILES if p.startswith("flat/media/")})
 
+    def test_the_instrument_takes_the_keyboard_as_a_named_application(self) -> None:
+        """Arrow keys and Enter do not follow any widget's pattern, and <canvas> has no role of its own (HTML-AAM): each page's
+        canvas is focusable, an application (WAI-ARIA 1.2, whose name is required) and has the front door's focus ring."""
+        for page in ("flat/index.html", "ar/flat.html"):
+            canvas = next(a for t, a in parse_page(page).tags if t == "canvas")
+            self.assertEqual((canvas.get("role"), canvas.get("tabindex")), ("application", "0"), page)
+            self.assertTrue(canvas.get("aria-label"), page)
+        ring = re.search(r"a:focus-visible,button:focus-visible\{([^}]+)\}", (ROOT / "css/film.css").read_text(encoding="utf-8")).group(1)
+        self.assertIn("#press:focus-visible{" + ring + "}", (ROOT / "css/flat.css").read_text(encoding="utf-8"))
+
     def test_the_instrument_computes_what_the_film_computed(self) -> None:
         """Both looked flat's instrument draws its fringes in the visitor's browser (js/flat.js); the film's were computed by
         tools/render-flat.py. The page says they come from the same physics, so: the same optical constants, the same
@@ -841,7 +880,8 @@ class SiteContractTests(unittest.TestCase):
                                       ("cythercad/index.html", "en", None), ("ar/cythercad.html", "ar", "rtl"),
                                       ("flat/index.html", "en", None), ("ar/flat.html", "ar", "rtl"),
                                       ("pages/privacy.html", "en", None), ("ar/privacy.html", "ar", "rtl"),
-                                      ("pages/terms.html", "en", None), ("ar/terms.html", "ar", "rtl")):
+                                      ("pages/terms.html", "en", None), ("ar/terms.html", "ar", "rtl"),
+                                      ("pages/about.html", "en", None), ("ar/about.html", "ar", "rtl")):
             html = next(a for t, a in parse_page(page).tags if t == "html")
             self.assertEqual((html.get("lang"), html.get("dir")), (lang, direction), page)
 
@@ -850,7 +890,8 @@ class SiteContractTests(unittest.TestCase):
         marked with the language it leads to."""
         for en, ar in (("index.html", "ar/index.html"), ("contact.html", "ar/contact.html"), ("adii/index.html", "ar/adii.html"),
                        ("awc-os/index.html", "ar/awc-os.html"), ("cythercad/index.html", "ar/cythercad.html"),
-                       ("flat/index.html", "ar/flat.html"), ("pages/privacy.html", "ar/privacy.html"), ("pages/terms.html", "ar/terms.html")):
+                       ("flat/index.html", "ar/flat.html"), ("pages/privacy.html", "ar/privacy.html"), ("pages/terms.html", "ar/terms.html"),
+                       ("pages/about.html", "ar/about.html")):
             for page, other, lang in ((en, ar, "ar"), (ar, en, "en")):
                 tags = parse_page(page).tags
                 alternates = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path)

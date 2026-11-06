@@ -3,7 +3,7 @@
  * No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-7F5250D087FF0962';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-37DF4B7A5EBD6205';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -13,6 +13,8 @@ var ASSETS = [
   'ar/index.html',
   'contact.html',
   'ar/contact.html',
+  'pages/about.html',
+  'ar/about.html',
   'pages/brief.html',
   'pages/privacy.html',
   'pages/security.html',
@@ -22,8 +24,8 @@ var ASSETS = [
   // the front door: its script, its stylesheet, the final composition it stands on when the film
   // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
   // its type with (shared with adii/)
-  'js/film.js?v=24076ab2cc23',
-  'css/film.css?v=5b4a6dcd1acf',
+  'js/film.js?v=d243bf8147ca',
+  'css/film.css?v=b2e29da9ae13',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'film/passage-adii-landscape.jpg',
@@ -39,8 +41,8 @@ var ASSETS = [
   'adii/fonts/ibm-plex-mono-400.woff2',
   'fonts/ibm-plex-sans-arabic-300.woff2',
   'fonts/ibm-plex-sans-arabic-400.woff2',
-  // the stylesheet of the rooms: the contact pages, the brief and the legal pages above draw with it
-  'css/room.css?v=f99795cd6a61',
+  // the stylesheet of the rooms: the contact pages, the About pages, the brief and the legal pages above draw with it
+  'css/room.css?v=e9130d601192',
   'manifest.webmanifest',
   'icon.svg'
 ];

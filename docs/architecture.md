@@ -57,7 +57,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | Module | Public API | Loaded by | Responsibility |
 |---|---|---|---|
 | `js/film.js` | — | `index.html`, `ar/index.html` | The film (source by orientation, cues, `still()`, `GUARD`), the passage (the scroll's moment through its stretches, seeks, its words' windows, the stills that stand in), `sw.js` registration and `take-over`; the films and the worker resolve against the site's root, so `ar/` shares them; DOM wiring behind `typeof document` |
-| `js/flat.js` | — | `flat/index.html`, `ar/flat.html` | Both looked flat: the scroll's moment through its stretches, one seek at a time, its words' windows, a new viewport keeping the moment in the film and the reader's place past it, the sequence downloaded whole, the stills that stand in; the instrument (WebGL2): each pixel's ray traced through the glass to the steel, the stack's reflectance computed there (the renderer's constants and matrices, held to it under jsc), five plates blended at it, drawn only when pressed; DOM wiring behind `typeof document`, so it loads under jsc |
+| `js/flat.js` | — | `flat/index.html`, `ar/flat.html` | Both looked flat: the scroll's moment through its stretches, one seek at a time, its words' windows, stills on a lean link (`lean`, as `js/film.js`), a new viewport keeping the moment in the film and the reader's place past it, the sequence downloaded whole, the stills that stand in; the instrument (WebGL2): each pixel's ray traced through the glass to the steel, the stack's reflectance computed there (the renderer's constants and matrices, held to it under jsc), five plates blended at it, drawn only when pressed; DOM wiring behind `typeof document`, so it loads under jsc |
 | `js/manifest.js` | `CytherManifest` | no page (jsc) | The public manifest: `project` (the `data-m` facts, for the projector), `MANIFEST`, `VALIDATION`, `CANON`, `ADMISSION_NONCE`, `CHECKSUM` for the verifiers and the derived assets (`tools/canon.py`) |
 | `js/instrument.js` | `CytherInstrument` | no page (jsc) | The boundary engine: `biEngine`, `audit` and `judge`, for the verifiers. Pure, DOM-free; `tools/test-boundary.js` pins the seed-02 stream |
 
@@ -93,7 +93,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
    a `.sr` paragraph before it. The header's mark is the Cyther Seal, inline SVG, pixel-fitted at
    26 px (`tools/render-seal.py`); `tools/test-site.py` holds every inline seal to the computed one.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
-   `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G, skip straight to the still state with *Play the film* and download no film (the latter two no passage and no worker either: never "3g", `docs/deploy.md` §5ag); a refused play, a media error, or no
+   `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G or estimates under 1 Mbit/s, skip straight to the still state with *Play the film* and download no film (the latter three no passage and no worker either: never "3g" by itself, `docs/deploy.md` §5ag, §5ai); a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
    window (`data-from`/`data-to`), as subtitles under the statement. It also adds up how far
@@ -149,10 +149,11 @@ still) starts motion again.
 | `/ar/` | The film in Arabic: the same stylesheet, script and media |
 | `/ar/contact.html` | The contact room in Arabic: `css/room.css` plus its one inline script, in Arabic |
 | `/contact.html` | The contact room: `css/room.css` plus one inline script that composes the draft, copies it and goes back |
-| `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: `css/room.css`, no script; their way back is `#adii-evidence` on the front door, the words that lead to them |
+| `/adii/`, `/ar/adii.html` | ADII's evidence as a room, and its Arabic introduction: its recorded run, its paper and what it is; `css/room.css`, no script; their way back is `#adii-evidence` on the front door, the words that lead to them |
 | `/awc-os/`, `/ar/awc-os.html` | AWC-OS's evidence as a room, in English and in Arabic, each with its own film: `css/room.css`, no script; their way back is `#awc-os-evidence` |
 | `/cythercad/`, `/ar/cythercad.html` | CytherCAD's validation record as a room, and its Arabic introduction: `css/room.css`, no script, projected figures; their way back is `#cythercad-evidence` |
-| `/pages/brief.html` | The capability brief as a room: CytherCAD's and SijilOS's records and qualified access (CytherCAD's record is also its own room) |
+| `/pages/brief.html` | The capability brief as a room, the site's one portfolio story: CytherCAD's and SijilOS's records, the founder's public repositories, the two team projects, credited, and qualified access (CytherCAD's record is also its own room) |
+| `/pages/about.html`, `/ar/about.html` | Who is behind the company, minimal: the founder's name, Riyadh, LinkedIn and GitHub; `css/room.css`, no script |
 | `/pages/privacy.html` | The privacy policy as a room, its text as written |
 | `/pages/security.html` | The security and disclosure policy as a room, its text as written |
 | `/pages/terms.html` | The terms of service as a room, its text as written |
