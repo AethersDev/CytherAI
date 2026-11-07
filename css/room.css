@@ -14,8 +14,11 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
 :focus-visible{outline:2px solid var(--warm);outline-offset:6px}
 .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-/* the front door's header and lockup, in the page's flow */
-header{height:92px;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 5vw}
+/* the front door's header and lockup, the same links on every page (2026-11-07), kept in view on its own ground; where its links do not fit
+   beside the brand they take a second row, and in a window too short to spare it, it scrolls away */
+header{position:sticky;top:0;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:24px;row-gap:10px;padding:10px 5vw;background:var(--ground)}
+html{scroll-padding-top:80px}@media(max-width:440px){html{scroll-padding-top:104px}}@media(max-height:480px){header{position:static}}
+.talk{color:var(--ink);border:1px solid #ffffff66;padding:6px 12px}.top[aria-current]{color:var(--ink);border-color:var(--ink)}
 .side{display:flex;align-items:center;gap:24px}
 .wordmark{display:inline-flex;align-items:center;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
@@ -68,7 +71,7 @@ textarea:focus-visible{outline-offset:2px}
 .also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--rule)}.also a:hover{color:var(--warm);border-color:var(--warm)}
 body>footer{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--ink)}
 @media(max-width:860px){.arrival{grid-template-columns:1fr;grid-template-areas:"head" "limit" "fig" "body"}.arrival figure{margin-top:28px}}
-@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
+@media(max-width:760px){header{min-height:56px;padding:10px 20px}.side{gap:12px}.wordmark{font-size:22px}.top{font-size:13px;padding-block:4px 5px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
 /* Arabic: its type, never letter-spaced, taller lines; a Latin name keeps its own order */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;letter-spacing:0;text-transform:none}
