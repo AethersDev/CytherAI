@@ -266,13 +266,13 @@ muted inline autoplay and VoiceOver.
   `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
   the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
 - Make a page a room: link `css/room.css` (with an `integrity` attribute for `generate-integrity.sh` to fill), open with
-  the front door's header (the computed seal lockup going home, the way back, the language link) and end with its
+  the one header (the computed seal lockup going home, What we build, About, Talk to us, the language: `tools/test-site.py`) and end with its
   footer; add it to `ROOMS` in `tools/test-site.py`, and an Arabic counterpart to the language-pair and `lang`/`dir`
   laws. Keep what the page carries (an artifact, its limits, whose work it is) verbatim, and retire the version it
   replaces to `backup/`. Its way back: an evidence room returns to the passage's words that lead to it (give that `.say`
   an id on both front doors, link it as `../#<id>`, and add the room to
-  `test_each_evidence_room_returns_to_the_words_that_led_to_it`); a room with many ways in returns through the history
-  (`navigation.canGoBack`), with a link for a visitor who arrived from elsewhere.
+  `test_each_evidence_room_returns_to_the_words_that_led_to_it`); a room with many ways in leaves by the browser's Back
+  and the one header (until 2026-11-07 the contact room's header returned through the history, `navigation.canGoBack`).
 - Add a public page: navigation links/current-page state, build-hash meta, CSP, local
   icon/manifest references, its preview and canonical URL, `deploy.paths` (which is also the list
   `generate-integrity.sh` stamps and every per-page law in `tools/test-site.py` reads), `sitemap.xml` unless it asks

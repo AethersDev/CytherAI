@@ -2589,6 +2589,47 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_C426DC8BB34C16D1`), 86 of 86 served paths matching the artifact.
 
+## 5al. One header on every page — 2026-11-07
+
+Build `135A1B7B7DBCBA40` (`#reading_ink_135A1B7B7DBCBA40`, `#film_settle_135A1B7B7DBCBA40`). It follows the live `C426DC8BB34C16D1`, whose origin
+check passed the same day.
+
+**The question.** The owner, after browsing Anthropic's, OpenAI's and Apple's sites, saw a problem and asked whether it could be named. Compared on a desktop
+and a phone, at the top and a screen down (2026-11-07; OpenAI's About page refused a headless browser): each of those sites opens every page with one
+header naming its sections, the same on every page, with a menu on a phone. Here the front doors named *The three systems*, *Talk to us* and the language;
+every other page only a way back (*← The three systems*, *← The passage*, the contact page's *← Back*) and the language, and on a room it scrolled away. The
+brief and About were in the footers alone, on the front door about fourteen screens down. The owner's reviewer confirmed it and set the test: *a visitor
+arriving on any page, without scrolling or knowing the website beforehand, can identify and reach What we build, About, and Contact*. Not to change: the film,
+its length, its imagery.
+
+**Now.** Every page opens with the same header: the brand going home, *What we build* (the brief), *About*, *Talk to us* (the contact page), the other
+language (a page with no counterpart offers the other front door), the page itself marked. In Arabic *What we build* is marked `(EN)`, the brief being English. It stays
+in view: fixed over the films, as the front door's already did, and sticky on the rooms' ground; in a window at most 480 px tall it scrolls away, as before.
+
+**On a phone.** Measured with the site's own type: the five items need 386 px in one row in English (312 with the seal alone), and a phone 320 to 414 px wide offers
+280 to 374. Two layouts were mocked on the real pages: a *Menu* (`<details>`, no script) beside *Talk to us*, 56 px tall, and a second row with every link
+shown, 82 to 91 px. The second was chosen: nothing waits behind a tap, which is the test as written, and it needs no newer browser feature. Its cost is about 30 px of header.
+
+**What went.** *The three systems* left the front door's header; the opening keeps its own button to the three systems. The rooms' ways back left their headers:
+an evidence room keeps its *← Back to the passage* in its page, which the law on evidence rooms requires, and the contact pages' header link, with the three
+lines of script that sent it back through the history, gave way to the browser's own Back (each page's script hash follows).
+
+**Checked.**
+- `tools/test-site.py`: `test_every_page_has_the_one_header` (replacing the front doors' law on a way to talk): every page's header, its destinations in order, its
+  way to talk, the page marked. On the live build it fails. `./verify.sh` passes.
+- `tools/probe-arrival.py`'s new `nav` step: every page, on a desktop and on phones 390 and 320 px wide, at its top, halfway and at its foot: the three links are what a
+  pointer reaches and lead where they say, and pressing each opens it. On the live build all 87 of its rows fail (60 page rows, 27 presses); on this build all pass, and the whole probe passes, 213 rows.
+- The battery's first run found two defects of this change, fixed before this build: at 400% zoom (320×256) the two-row header lay over the statement, the stage's
+  padding having assumed one row (104 px now); and on a phone *What we build* and *About* were 23 px tall (4 px of padding now). `tools/probe-flat.py`: PASS.
+- By eye: the front doors, About, the brief scrolled, the Arabic pages, at 1440, 390 and 320 px.
+
+**Not observed.** A real phone; a screen reader. `js/` and `sw.js`'s logic are unchanged, so `tools/probe-passage.py`, `tools/probe-return.py` and `tools/probe-ios.py`
+were not run again on this build (`tools/probe-ios.py` passed on its first, with the header in place).
+
+Observed on this build (Chrome/156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+5,536 samples (the header's new links among them), worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

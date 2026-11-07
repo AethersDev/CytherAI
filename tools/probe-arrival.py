@@ -11,6 +11,9 @@ route    *The three systems*, pressed while the film plays (0.3 s and 5 s in) an
          shows the passage's first words. It landed on a wordless frame until this audit.
 anchor   An address naming a stretch (#systems, #adii, #awc-os, #cythercad) opens on that stretch's first words, shown, and so does the address changing on the open page: at y 0 on the Arabic page under mobile emulation until this audit, the browser's own anchor lost.
 bar      At the top, at every words' moment and at the foot, *Talk to us* is what a pointer reaches, and pressing it opens the contact page.
+nav      Every page, arriving at its top, then halfway and at its foot, on a desktop and two phones: What we build, About and Talk to us are
+         what a pointer reaches, and pressing each opens the brief, About and the contact page of its language. Until 2026-11-07 only the
+         front doors named a way to talk, and no page's header named the brief or About (the owner's success test, 2026-11-07).
 ghost    The statement scrolling under the bar does not show through it: the same scroll with the statement shown and hidden, at
          most GHOST levels of 255 apart. It showed by 40 until the re-check of 2026-11-06.
 lean     Save-Data, a connection the browser calls 2G, and one it estimates under 1 Mbit/s fetch no film and no worker, and each
@@ -129,12 +132,6 @@ def route(tab, origin):
                 hit = press(tab, ".landing .solid", touch); time.sleep(0.7)
                 words, state = tab.js(WORDS), tab.js("document.body.dataset.state")
                 record("route", hit and words == [0] and state == "still", page=lang, device=name, pressed_at=at, hit=hit, words=words, state=state)
-        fresh(tab, DESK, origin + lang)
-        time.sleep(0.3)
-        press(tab, ".bar .to", False); time.sleep(0.5)
-        tab.js("scrollTo(0, document.documentElement.scrollHeight)"); time.sleep(0.5)
-        hit = press(tab, ".bar .to", False); time.sleep(0.5)   # the same fragment again: the browser sees nothing new
-        record("route", hit and tab.js(WORDS) == [0], page=lang, device="desktop", pressed="the bar's, again from the foot", hit=hit, words=tab.js(WORDS))
 
 
 def anchor(tab, origin):
@@ -212,6 +209,41 @@ def slow(origin):
                 seen, stands = tab.js("[navigator.connection.effectiveType, navigator.connection.downlink]"), tab.js("getComputedStyle(document.querySelector('.landing')).opacity === '1'")
                 record("slow", stands and bool(films) == plays, page=lang, link=name, chrome_reports=seen, statement=stands, films=films)
                 proc.terminate(); proc.wait()
+
+
+NAV_PAGES = [p for p in (HERE.parent / "deploy.paths").read_text(encoding="utf-8").split() if p.endswith(".html") and p != "404.html"]
+
+
+def nav(tab, origin):
+    want = lambda page: ["/pages/brief.html", "/ar/about.html" if page.startswith("ar/") else "/pages/about.html", "/ar/contact.html" if page.startswith("ar/") else "/contact.html"]
+    for spec in (DESK, PHONE, (320, 568, 2, True)):
+        for page in NAV_PAGES:
+            path = "/" + (page[: -len("index.html")] if page.endswith("index.html") else page)
+            fresh(tab, spec, origin + path); time.sleep(0.3)
+            if tab.js("document.querySelectorAll('.bar .side a').length") < 3:
+                record("nav", False, page=path, width=spec[0], links=tab.js("[...document.querySelectorAll('header a')].map(a => a.textContent.trim())"))
+                continue
+            missed = []
+            for at in ("top", "half", "foot"):
+                tab.js("scrollTo(0, 0)" if at == "top" else "scrollTo(0, document.documentElement.scrollHeight / 2)" if at == "half" else "scrollTo(0, document.documentElement.scrollHeight)")
+                time.sleep(0.3)
+                for i in range(3):
+                    if not tab.js(HIT % json.dumps(f".bar .side a:nth-child({i + 1})"))["on"]:
+                        missed.append(f"{at}:{i}")
+            leads = [tab.js(f"new URL(document.querySelector('.bar .side a:nth-child({i + 1})').href).pathname") for i in range(3)]
+            record("nav", not missed and leads == want(page), page=path, width=spec[0], covered=missed, leads=leads)
+        for path in ("/", "/pages/about.html", "/ar/cythercad.html"):   # and a press takes the visitor there
+            for i in range(3):
+                fresh(tab, spec, origin + path); time.sleep(0.3)
+                if not tab.js(f"!!document.querySelector('.bar .side a:nth-child({i + 1})')"):
+                    record("nav", False, page=path, width=spec[0], pressed=i, missing="no such link in a header")
+                    continue
+                press(tab, f".bar .side a:nth-child({i + 1})", spec[3])
+                for _ in range(40):
+                    if tab.js("location.pathname") == want(path.lstrip("/") or "index.html")[i]:
+                        break
+                    time.sleep(0.1)
+                record("nav", tab.js("location.pathname") == want(path.lstrip("/") or "index.html")[i], page=path, width=spec[0], pressed=i, opened=tab.js("location.pathname"))
 
 
 def lean(origin):
@@ -322,7 +354,7 @@ origin = f"http://127.0.0.1:{httpd.server_address[1]}"
 with tempfile.TemporaryDirectory() as profile:
     proc, _, url = ps.chrome(profile)
     tab = ps.Tab(url)
-    for step in (paint, route, anchor, bar, ghost, edges, contact, layout, targets):
+    for step in (paint, route, anchor, bar, nav, ghost, edges, contact, layout, targets):
         step(tab, origin)
     proc.terminate(); proc.wait()
 lean(origin)

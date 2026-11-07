@@ -566,13 +566,28 @@ class SiteContractTests(unittest.TestCase):
         for absent in (".landing:not(.on)", "unveil"):
             self.assertNotIn(absent, css, absent)
 
-    def test_the_front_door_keeps_a_way_to_talk_in_view(self) -> None:
-        """Its header stays in view, and names the contact page of its own language (the audit of 2026-11-05: the next way
-        to talk after the first screen was ten screens down), and so does Both looked flat's (the review of 2026-11-06)."""
+    def test_every_page_has_the_one_header(self) -> None:
+        """One header on every page (the owner, 2026-11-07, after comparing the site with Anthropic's, OpenAI's and Apple's): the brand
+        going home, then What we build (the brief), About, Talk to us (the contact page) and the other language, in that order, in the
+        page's own language, the page itself marked. Until then the front doors named the three systems and a way to talk (the audit of
+        2026-11-05: the next way to talk was ten screens down), every other page only a way back, and the brief and About were in the
+        footers alone. It stays in view, fixed over the films and sticky in the rooms."""
         self.assertIn(".bar{position:fixed", (ROOT / "css/film.css").read_text(encoding="utf-8"))
-        for page, contact in (("index.html", "contact.html"), ("ar/index.html", "ar/contact.html"), ("flat/index.html", "contact.html"), ("ar/flat.html", "ar/contact.html")):
-            header = re.search(r'<header class="bar">(.*?)</header>', (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
-            self.assertEqual(local_target(page, re.search(r'<a class="top talk" href="([^"]+)">', header).group(1)), contact, page)
+        self.assertIn("header{position:sticky;top:0", (ROOT / "css/room.css").read_text(encoding="utf-8"))
+        for page in HTML_FILES:
+            with self.subTest(page=page):
+                ar, tags = page.startswith("ar/"), parse_page(page).tags
+                header = re.search(r'<header class="bar">(.*?)</header>', (ROOT / page).read_text(encoding="utf-8"), re.S).group(1)
+                home = re.search(r'<a class="wordmark" href="([^"]+)"', header).group(1)
+                self.assertEqual(local_target(page, home), "ar/index.html" if ar else "index.html")
+                pair = {a["hreflang"]: local_target(page, urlsplit(a["href"]).path) for t, a in tags if t == "link" and a.get("rel") == "alternate"}
+                other = pair.get("en" if ar else "ar") or ("index.html" if ar else "ar/index.html")
+                links = re.findall(r'<a class="(top[^"]*)" href="([^"]+)"([^>]*)>', header)
+                self.assertEqual([local_target(page, h) for _, h, _ in links],
+                                 ["pages/brief.html", "ar/about.html" if ar else "pages/about.html", "ar/contact.html" if ar else "contact.html", other])
+                self.assertEqual(links[2][0], "top talk")
+                self.assertEqual([local_target(page, h) for _, h, rest in links if 'aria-current="page"' in rest],
+                                 [page] if page in {local_target(page, h) for _, h, _ in links} else [])
 
     def test_a_lean_link_is_one_rule(self) -> None:
         """The film and Both looked flat give way on the same links: a request to save data, a connection the browser calls 2G, or

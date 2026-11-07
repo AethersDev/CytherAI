@@ -321,7 +321,7 @@ published for the owner to refine.
 **One lit environment** (2026-10-20, the owner's decision): the front door is dark whatever the device's theme. Light
 mode (2026-10-14: `js/theme.js`, the header's switch `#theme`, light tokens for the sections below the film) retired to
 `backup/theme-switch-v1/` once the systems and the close moved over the passage and the switch changed only the footer,
-a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on its own darkness, opaque under the statement as it scrolls by (it showed through by 40 levels of 255 until 2026-11-06: `tools/probe-arrival.py`) (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand, *The three systems* (above 480 px wide), *Talk to us*, the language. The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
+a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on its own darkness, opaque under the statement as it scrolls by (it showed through by 40 levels of 255 until 2026-11-06: `tools/probe-arrival.py`) (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand going home, *What we build* (the brief), *About*, *Talk to us*, the language. It is every page's one header since 2026-11-07 (the owner, after comparing the site with Anthropic's, OpenAI's and Apple's: the brief and About were found in the footers alone), in view on every page (sticky on the rooms' ground), its links in a second row where they do not fit beside the brand, as on a phone; *The three systems* stays the opening's own link; `tools/test-site.py` holds the destinations, `tools/probe-arrival.py` (`nav`) that a pointer reaches them on every page, at its top and as it scrolls. The rooms share its ground (`css/room.css`). `tools/test-site.py` holds the front door
 to one environment (no switch, no theme on the root, no light tokens or colour-scheme query in `css/film.css`) and
 every ink to 4.5:1 on its ground.
 
@@ -356,9 +356,8 @@ are another test and not compared), beside the record; the record follows as the
 AWC-OS's, *Read the validation record →* on CytherCAD's, each Arabic route on its Arabic room, and *Talk to us →* on the
 contact page. An evidence room returns to the evidence moment, the passage's words that led to it (`#adii-evidence`,
 `#awc-os-evidence`, `#cythercad-evidence`: that `.say`'s id, whose moment `js/film.js` brings, the middle of its window,
-not the exact scroll the visitor left from; until 2026-10-21 ADII's landed on its stretch's first, wordless second); the contact room, reached from many places, returns
-through the history when the visitor came from this site (`navigation.canGoBack` counts only its pages) and otherwise to
-the three systems' first words (`#principle`). `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's
+not the exact scroll the visitor left from; until 2026-10-21 ADII's landed on its stretch's first, wordless second); the contact room, reached from many places, is left by the browser's own Back or the one header (until 2026-11-07 its
+header's way back returned through the history, `navigation.canGoBack`, or to `#principle`). `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's
 tokens to the front door's (every ink ≥ 4.5:1 on the ground and on the lifted ground, a field's edge ≥ 3:1), and each
 evidence room's way back to the words whose route leads to it. The pages they replaced are `backup/before-rooms/` and
 `backup/cold-paper-v1/`.
@@ -371,9 +370,8 @@ legal pages kept their text word for word then (since changed: the privacy polic
 own records state it (corrected 2026-10-21, `docs/deploy.md` §5ad: SijilOS's certification, production environments and
 event-sourcing were not what its records show, and are withdrawn; CytherCAD's figure projected, every validation identifier
 printed); the 404, served at any depth (every URL absolute), says
-in English and Arabic that nothing is published at the address. Each heads back with *← The three systems* to
-`#principle`, the passage's first words (their `.say`'s id on both front doors, as the contact room's fallback does),
-and every page's footer names the About page, the brief, the contact page, security, privacy and terms, marking the one it is (About, `pages/about.html` and `ar/about.html`: since 2026-11-07, at the owner's direction, what CytherAI is first, in sentences the site already states, then a Team section with the founder's name, role, LinkedIn and GitHub; no photo, stage, registration or careers). Each system's status is one sentence (2026-11-06, `tools/test-site.py`): its `.cond` on the front door, word for word at the head of its room's limit and in the brief's Status row
+in English and Arabic that nothing is published at the address. Each opens with the one header (2026-11-07), where until then it headed back with *← The three systems* to
+`#principle`, and every page's footer names the About page, the brief, the contact page, security, privacy and terms, marking the one it is (About, `pages/about.html` and `ar/about.html`: since 2026-11-07, at the owner's direction, what CytherAI is first, in sentences the site already states, then a Team section with the founder's name, role, LinkedIn and GitHub; no photo, stage, registration or careers). Each system's status is one sentence (2026-11-06, `tools/test-site.py`): its `.cond` on the front door, word for word at the head of its room's limit and in the brief's Status row
 (`tools/test-site.py`). One review of titles and link previews followed: every title is *… — CytherAI*, the front
 doors' *CytherAI — * and their own statement (until 2026-10-21 the film study's working name, *Everything changes. One
 thing holds.*, which the page never said); every shareable page previews with the site's name, its title, a
