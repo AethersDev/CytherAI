@@ -2549,6 +2549,44 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_CE139B3015FF2E15`), 86 of 86 served paths matching the artifact.
 
+## 5ak. About: what CytherAI is, then its team — 2026-11-07
+
+Build `C426DC8BB34C16D1` (`#reading_ink_C426DC8BB34C16D1`, `#film_settle_C426DC8BB34C16D1`). It follows the live `CE139B3015FF2E15`, whose origin check
+passed the same day. The only served change is the text of `pages/about.html` and `ar/about.html`; every other page changes by its stamp alone.
+
+**The direction.** The owner: *the about page need changing, first make the about on cytherai and move my info to team section in same page*. The page opened on their name. It now opens
+on the company, and a Team section holds their name, role, LinkedIn and GitHub, in the list ADII's room already uses (no new style).
+
+**Where each sentence comes from.** Nothing about the company is new to the site:
+
+| About says | Already stated by |
+|---|---|
+| CytherAI builds the part of AI that decides what is allowed to happen | The film's third sentence |
+| AI makes answers, numbers and parts that look right. Looking right is not a test | Both looked flat's close, word for word |
+| Checks that stand outside the model | Both looked flat's close |
+| The model proposes, the system decides | The passage's first words and the flat page's close |
+| Based in Riyadh | Every footer, and the front doors' Organization block |
+| Its lead product is CytherCAD, its second system SijilOS | The brief (§5ai), its wording the owner's to confirm |
+| Describe a part, and it turns that description into instructions that build it, restricts invalid geometry during generation, and checks the result afterwards | CytherCAD's words on the front door |
+| SijilOS, a transactional ledger for the Saudi market that runs on the device and works offline | The brief |
+| No deployment is claimed for either | The brief's Status rows, its condition beside its claim |
+
+Still not on the page, as only the owner can give them: a photo, the company's stage and registration, careers (`docs/operations.md`, 13). The Arabic is `ar/flat.html`'s and `ar/index.html`'s sentences where they
+exist, and the rest a draft for the owner to refine.
+
+**Checked.**
+- `./verify.sh` passes. No law changed: the footers, the rooms, the language pair and the sitemap already hold these two pages.
+- By eye, both pages at 1440, 390 and 320 px wide: no sideways scroll. Every link in the page's main is what a pointer reaches, by hit test, at each of those widths, and at least 24 × 24 px (`tools/probe-arrival.py`, `targets`).
+- `js/`, `css/` and `sw.js`'s logic are unchanged, so the other probes were not run again, nor `tools/probe-return.py`: its question is what the next paragraph puts to the real site.
+
+**The first real test of §5aj.** This is the first publish under the worker that build shipped. A visitor who has already had it should read this page on their first load after the publish, with nothing to clear.
+
+**A release tool out of the scratchpad.** The script that appends the ink and settle receipts lived in a session's scratchpad, which went when the session restarted, as an earlier lesson had warned: the browser probes had been lost with an old scratchpad before they were committed in October. Recovered from the session's transcript and committed as `tools/vaic_record.py`: it takes the build's own words as an argument and carries forward the latest observation of each kind, where the script named one by hand.
+
+Observed on this build (Chrome/156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+4,534 samples, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

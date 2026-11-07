@@ -153,7 +153,7 @@ still) starts motion again.
 | `/awc-os/`, `/ar/awc-os.html` | AWC-OS's evidence as a room, in English and in Arabic, each with its own film: `css/room.css`, no script; their way back is `#awc-os-evidence` |
 | `/cythercad/`, `/ar/cythercad.html` | CytherCAD's validation record as a room, and its Arabic introduction: `css/room.css`, no script, projected figures; their way back is `#cythercad-evidence` |
 | `/pages/brief.html` | The capability brief as a room, the site's one portfolio story: CytherCAD's and SijilOS's records, the founder's public repositories, the two team projects, credited, and qualified access (CytherCAD's record is also its own room) |
-| `/pages/about.html`, `/ar/about.html` | Who is behind the company, minimal: the founder's name, Riyadh, LinkedIn and GitHub; `css/room.css`, no script |
+| `/pages/about.html`, `/ar/about.html` | What CytherAI is, then its team: the founder's name, role, LinkedIn and GitHub; `css/room.css`, no script |
 | `/pages/privacy.html` | The privacy policy as a room, its text as written |
 | `/pages/security.html` | The security and disclosure policy as a room, its text as written |
 | `/pages/terms.html` | The terms of service as a room, its text as written |

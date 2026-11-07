@@ -199,7 +199,9 @@ blocks every module).
 After changing any served file (anything in `deploy.paths`, HTML included — the build
 identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI + the
 `build-hash` meta + the worker cache name), then `python3 tools/vaic_restamp.py` (re-stamps
-the VAIC candidate, appends the automated-set receipts; existing receipts are never edited).
+the VAIC candidate, appends the automated-set receipts; existing receipts are never edited). Once `tools/probe-ink.py` and
+`tools/probe-settle.py` pass on that candidate, `python3 tools/vaic_record.py <ink.json> <settle.json> <day> "<what changed>"` appends their
+observations and receipts (the origin's follow the publish: `tools/probe-origin.py --record`). A scratchpad goes with its session, so a release tool lives in `tools/`.
 
 The figures the pages print — CytherCAD's validation record on `pages/brief.html` and in CytherCAD's rooms
 (`cythercad/`, `ar/cythercad.html`; the front doors print none since 2026-10-21) — are projections of `js/manifest.js`:
@@ -371,7 +373,7 @@ event-sourcing were not what its records show, and are withdrawn; CytherCAD's fi
 printed); the 404, served at any depth (every URL absolute), says
 in English and Arabic that nothing is published at the address. Each heads back with *← The three systems* to
 `#principle`, the passage's first words (their `.say`'s id on both front doors, as the contact room's fallback does),
-and every page's footer names the About page, the brief, the contact page, security, privacy and terms, marking the one it is (About, `pages/about.html` and `ar/about.html`, 2026-11-06, is minimal at the owner's direction: the founder's name, Riyadh, LinkedIn and GitHub, and no photo, stage, registration or careers). Each system's status is one sentence (2026-11-06, `tools/test-site.py`): its `.cond` on the front door, word for word at the head of its room's limit and in the brief's Status row
+and every page's footer names the About page, the brief, the contact page, security, privacy and terms, marking the one it is (About, `pages/about.html` and `ar/about.html`: since 2026-11-07, at the owner's direction, what CytherAI is first, in sentences the site already states, then a Team section with the founder's name, role, LinkedIn and GitHub; no photo, stage, registration or careers). Each system's status is one sentence (2026-11-06, `tools/test-site.py`): its `.cond` on the front door, word for word at the head of its room's limit and in the brief's Status row
 (`tools/test-site.py`). One review of titles and link previews followed: every title is *… — CytherAI*, the front
 doors' *CytherAI — * and their own statement (until 2026-10-21 the film study's working name, *Everything changes. One
 thing holds.*, which the page never said); every shareable page previews with the site's name, its title, a
