@@ -131,7 +131,8 @@ asset past the HTTP cache (`cache: 'reload'`) and commits the set only if
 previous build keeps serving — and the fetch handler reads this build's cache alone.
 Without that, a returning reader's browser hands the new worker the previous build's
 modules as fresh, and the new `index.html`'s SRI refuses them on every load until
-the HTTP cache expires (reproduced in Chrome 151 before the fix).
+the HTTP cache expires (reproduced in Chrome 151 before the fix). What a returning reader reads is the
+worker's as well: it fetches every page past the HTTP cache (§5aj).
 
 ## 3. Redirects and error pages
 
@@ -2484,6 +2485,68 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_37DF4B7A5EBD6205`), 86 of 86 served paths matching the artifact.
 
+## 5aj. A returning visitor reads what is published: pages from the network, kept bytes checked — 2026-11-06
+
+Build `CE139B3015FF2E15` (`#reading_ink_CE139B3015FF2E15`, `#film_settle_CE139B3015FF2E15`). It follows the live `37DF4B7A5EBD6205`, whose
+origin check passed the same day. The only served change is `sw.js`; every page changes by its stamp alone.
+
+**The question.** The owner: *what about the cache problem that users need to clear them manually otherwise they may still seeing old versions
+from last time they visit*. Nothing here had tested it: `tools/probe-settle.py` holds one build and offline, and §7 stated an answer no one had measured.
+`tools/probe-return.py`, new, is a returning visitor with a publish between two visits: one origin serving a build and then the build after it, every
+stylesheet and script differing, under Pages' own `Cache-Control: max-age=600`.
+
+**Observed on the live worker, before anything changed** (Chrome 156; in the iOS Simulator, on `/`, the first load old and the next visit new):
+
+| A returning visitor | First load after a publish | A reload | Every tab of the site closed |
+|---|---|---|---|
+| The front doors | the old build | the old build; the new one once the film has ended (`take-over`) | the new build |
+| The contact pages, the brief, About, the legal pages | the old build | the old build, however many times | the new build |
+| `adii/`, `flat/`, the Arabic rooms the worker does not hold | the old build (the HTTP cache) | the new build | the new build |
+
+So nothing had to be cleared, but to a visitor it looked as if it did: a reload changed nothing. §7's *at most ten minutes of the previous build* was false for
+anyone the worker held, for as long as a tab stayed open. Cause: pages were cache-first, and a new build's worker waits.
+
+**The one case that did need a clear.** Pages' CDN answers any `?v=` from its one copy of the path: three random values on `css/film.css` each answered
+`x-cache: HIT` with the same bytes (2026-11-06). So part way through a publish, a new name can answer with the old bytes. Install checked one stamp, `index.html`'s, and kept
+them. Reproduced, in Chrome and in the Simulator's WebKit: new pages and worker, old bytes at the stylesheets' and scripts' paths; the visitor returned; the worker kept the old bytes under the new names; and
+once the publish had finished the page failed its integrity check on every load, its stylesheet and script refused, until the next publish or until
+that visitor cleared the site's data. **Whether it reached a real visitor is not known.** How long that moment lasts on Pages was not measured; the origin check of
+2026-10-22 ran before every file had switched and failed, and its re-run passed.
+
+**The fix, in `sw.js`.**
+- A page comes from the network, past the HTTP cache (`no-cache`: Pages' `max-age=600` would otherwise keep it ten minutes), and from the cache only when the network
+  fails. A redirect (`/adii` to `/adii/`) stays the browser's to follow (`redirect: 'manual'`), as a navigation's must.
+- What it keeps is checked first: a page by its stamp, a `?v=` file by the SHA-256 its name states, at install (any failure, and the previous build keeps
+  serving and the browser tries again at the next navigation) and when it keeps a file it fetched.
+- Nothing else changes. Files named by their bytes stay cache-first: a new page names new files, which this cache misses and fetches. The new worker still waits, which now
+  holds back only the offline copy; the waiting rule itself came from a page that died of its own integrity check in iOS (§5g).
+
+**Decided against.** Stale-while-revalidate: it shows the last build again, the complaint itself. `skipWaiting`, which is what §5g removed, and no longer needed. A timeout falling back to the
+cache: on a poor link a visitor would read the last build again; they wait for the network instead, as on a first visit. `Clear-Site-Data`: a header Pages cannot send.
+
+**The cost.** A returning visitor's page now takes a round trip to the host, where it took none. Not measured beyond that: its files stay cached. Offline is unchanged.
+
+**What stays true.** Anyone whose browser holds a worker from before this build sees one more old page, whole, because that worker cannot be changed from here: once a front door's film has
+ended, or every tab is closed, they are on this one, and after that they read each publish on their first load (the probe's `upgrade`, from `37DF4B7A5EBD6205`). A visitor with no worker yet
+keeps the HTTP cache's ten minutes. A page loaded in the moment of a switch can fail for that load, as anyone's would; nothing of it is kept. A tab left open stays what it loaded.
+
+**Checked.**
+- `tools/probe-return.py` on the live worker: 22 of 31 rows fail, as above, the negative control. On this build: PASS, 34 rows, with `upgrade` and the iOS Simulator's eight: the first load after a publish, and a return during a publish part way and after it.
+- On the built artifact, by mutation: 7 mutations fail and 4 controls pass, in Chrome: pages cache-first as on the live worker; pages from the HTTP cache's copy; a redirect followed by the worker; no copy when the
+  network fails; install keeping bytes unchecked; a fetched file kept unchecked; a page's stamp unchecked. On the Simulator's WebKit the live worker fails the first load on `/` and all three rows after a publish part way, the page unstyled and its script refused. **One mutation survives there:** a fetched file kept
+  unchecked. Both engines now give the worker `request.integrity`, so a fetch of the wrong bytes rejects and nothing is kept (measured on the Simulator, 2026-11-06; on 2026-10-04 its WebKit gave none, §5g). The check stays, three lines, for an engine that
+  still does not, since what it prevents is the worst of these; Chrome holds it, through a fetch with no integrity.
+- `./verify.sh` passes; `tools/test-site.py`'s law on the worker now holds a page to the network, install and keeping to the check. `tools/probe-settle.py` PASS, offline included. `js/film.js` and the stylesheets
+  are unchanged, so `tools/probe-arrival.py`, `tools/probe-passage.py`, `tools/probe-flat.py` and `tools/probe-ios.py` were not run again.
+- Two faults of the harness itself, kept out of the result: file times to the second answered a build made a moment after another with 304, and a socket Chrome opened ahead of its
+  request carried the directory it was accepted under across the publish, which looked like the worker failing on some first loads and not others. `--disable-background-networking` also held Chrome's update check back by many seconds, so this probe runs without it.
+
+**Not observed.** A real phone, and the real CDN during a real publish: the next publish is the first. Whatever the Simulator's relaunch does not share with a real return.
+
+Observed on this build (Chrome/156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+4,534 samples, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -2598,7 +2661,7 @@ accepted.** Recorded in `vaic/release-dispositions.v0.json` (subject `CY-ORIGIN-
 | send `X-Content-Type-Options: nosniff` | every script is same-origin and pinned by SRI; there are no user uploads to reinterpret |
 | send `Permissions-Policy` | nothing on the site requests camera, microphone or location |
 | send `Strict-Transport-Security` for a custom domain | it serves a valid certificate (Let's Encrypt, renewed by Pages); HTTP must redirect to HTTPS instead — not accepted as absent |
-| serve `no-cache` for `index.html` and `sw.js` (it sends `max-age=600`) | the worker installs one build or nothing; a returning reader sees at most ten minutes of the previous build, never a mixed one |
+| serve `no-cache` for `index.html` and `sw.js` (it sends `max-age=600`) | browsers fetch a worker's script past the HTTP cache, and the worker fetches every page past it (§5aj); a visitor with no worker yet sees at most ten minutes of the previous build. A page loaded part way through a publish can be mixed, and fail, for that load; nothing of it is kept. Until 2026-11-06 this row said *at most ten minutes, never a mixed one*, which was false on both counts |
 | serve `.js` as `text/javascript` (it sends `application/javascript`) | both are JavaScript MIME types every browser executes, module scripts included |
 
 `Referrer-Policy` is not accepted as absent: every page withholds the referrer itself, pinned

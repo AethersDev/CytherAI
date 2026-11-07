@@ -23,7 +23,7 @@ tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `uni
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
 `tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
-`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05 and its re-check of 2026-11-06, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
+`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05 and its re-check of 2026-11-06, `tools/probe-return.py` (the same way; no obligation, run after any change to `sw.js`, to how `js/film.js` registers it or to how a page names its resources) holds a returning visitor with a publish between two visits, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
 obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
 2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
 turned or a window resized keeps the passage's moment, its words and its frame. `CANONICAL_REF` is local
@@ -443,11 +443,13 @@ required to 404 (`tools/probe-origin.py`); all three are rooms since 2026-10-21;
 AWC-OS's films have their closing production line masked and its competition deck is withdrawn (the originals:
 `backup/awc-os-v1/`); state no Alinma deployment or pilot. They are stamped like
 every page; `sw.js` sends media, documents and range requests to the network uncached, and
-leaves every page it did not precache (`adii/`, `awc-os/`, `cythercad/` and the Arabic evidence rooms) to the network.
+every page to the network first (`adii/`, `awc-os/`, `cythercad/` and the Arabic evidence rooms with no copy of their own for when it fails).
 
-**Infra:** `sw.js` (cache-first; install fetches past the HTTP cache and commits one build
-or nothing; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a new build's
-worker **waits** and never takes over a page that may still be loading: Safari checks for the
+**Infra:** `sw.js` (a page from the network, past the HTTP cache, and from the cache only when the network fails, so a returning visitor reads what is
+published: until 2026-11-06 pages were cache-first, and the first load after a publish was the last build, as was every reload until a front door's film
+ended or every tab of the site closed, `docs/deploy.md` §5aj; everything else cache-first, each `?v=` file named by its bytes; install fetches past the HTTP cache and commits one build
+or nothing, each page by its stamp and each `?v=` file by its digest, as the fetch handler does before it keeps anything, since Pages' CDN answers any `?v=` from its one copy of the path and old bytes kept under a new name failed every load until the next publish; `CACHE` carries the build hash stamped by `generate-integrity.sh`; a new build's
+worker **waits**, which holds back only a visitor's offline copy, and never takes over a page that may still be loading: Safari checks for the
 update at the navigation itself, and a worker that skipped waiting answered a returning
 reader's previous-build page with this build's modules, which then failed SRI. A page whose
 film is still lets the waiting worker in (`take-over`), so the next load is new),
