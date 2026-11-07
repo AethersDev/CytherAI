@@ -100,6 +100,13 @@ No repository change settles these. Until each is done, the handover is complete
     the glass, and a scroll past it, upright and on its side. A swipe that starts on the glass lifts it by design, and one beside it
     scrolls. If that catches people in practice, the alternatives are in §5ai; each costs new words on the page.
 
+## After a publish
+
+A visitor reads the new build on their first load, with nothing to clear (`docs/deploy.md` §5aj), and so do you. A reader caught in the
+moment of the switch can see one broken page, and a reload after it is whole. One exception, once: anyone whose browser holds a worker
+from before build `CE139B3015FF2E15` sees one more old page, since that worker cannot be changed from here; once a front door's film has
+ended, or every tab of the site is closed, they are on the new one.
+
 ## How to tell the site is broken
 
 - **Every few minutes (availability)**: a hosted uptime monitor that fetches pages and matches their words, not only a

@@ -447,27 +447,32 @@ class SiteContractTests(unittest.TestCase):
         no-cache, modules max-age): addAll's default fetch took the old module from
         the HTTP cache, paired it with the new index.html whose SRI names the new
         one, and every load failed until the HTTP cache expired. Install therefore
-        fetches past the HTTP cache, commits only when index.html's build stamp is
-        this cache's own, and the fetch handler reads this build's cache alone.
+        fetches past the HTTP cache, commits only when each page's build stamp is
+        this cache's own and each ?v= file's bytes are what its name says (2026-11-06:
+        Pages switches files one by one, and the old bytes kept under a new name failed
+        every load until the next publish), and the fetch handler reads this build's cache alone.
         """
-        install = SW_SOURCE[SW_SOURCE.index("addEventListener('install'"):SW_SOURCE.index("addEventListener('message'")]
+        install = SW_SOURCE[SW_SOURCE.index("function ours("):SW_SOURCE.index("addEventListener('message'")]
         self.assertIn("new Request(a, { cache: 'reload' })", install, "install must bypass the HTTP cache")
         self.assertNotIn("addAll", install, "addAll consults the HTTP cache")
         self.assertIn('/<meta name="build-hash" content="([0-9A-F]+)">/', install)
-        self.assertLess(install.index("CACHE.indexOf(m[1]) < 0"), install.index("caches.open(CACHE)"),
-                        "the stamp is checked before any byte is committed to the cache")
+        self.assertIn("crypto.subtle.digest('SHA-256', bytes)", install)
+        self.assertLess(install.index("return ours(ASSETS[i], r)"), install.index("caches.open(CACHE)"),
+                        "each file is checked before any byte is committed to the cache")
         self.assertEqual(re.findall(r"'([^']+)'", re.search(r"var ASSETS = \[(.*?)\n\];", SW_SOURCE, re.DOTALL).group(1))[0],
                          "index.html", "the stamp is read from ASSETS[0]")
         fetch_handler = SW_SOURCE[SW_SOURCE.index("addEventListener('fetch'"):]
-        self.assertIn("caches.open(CACHE).then(function (cache) {\n      return cache.match(key)", fetch_handler,
-                      "the handler reads this build's cache only, never a sibling's")
+        self.assertEqual(len(re.findall(r"caches\.open\(CACHE\)\.then\(function \(cache\) \{\n\s+return cache\.match\(key\)", fetch_handler)), 2,
+                         "the handler reads this build's cache only, never a sibling's")
         self.assertNotIn("caches.match(", fetch_handler)
         # a navigation to a directory reads its precached index: "/" is index.html, "/ar/" is ar/index.html (offline, an Arabic
         # visitor whose worker was installed from the English page reached an error page before this; docs/deploy.md §5q)
         self.assertIn("path.slice(SCOPE.length) + 'index.html'", fetch_handler)
-        # a page it did not precache stays the network's, and nothing is cached from the HTTP cache's copy (SW-1, SW-2)
-        self.assertIn("if (e.request.mode === 'navigate') return fetch(e.request);", fetch_handler)
+        # a page is the network's first and the cache's only when that fails, past the HTTP cache, so a returning visitor reads what
+        # is published (2026-11-06, tools/probe-return.py); nothing is kept from the HTTP cache's copy (SW-1, SW-2) or unverified
+        self.assertIn("fetch(e.request.url, { cache: 'no-cache', redirect: 'manual' }).catch(", fetch_handler)
         self.assertIn("fetch(new Request(e.request, { cache: 'no-cache' }))", fetch_handler)
+        self.assertLess(fetch_handler.index("return ours(e.request.url, response)"), fetch_handler.index("cache.put(e.request"))
         # A new build never takes over a page that may still be loading: in Safari (iOS 26.5 simulator) a worker that skipped
         # waiting answered a returning reader's previous-build page mid-load with this build's modules, and it died of its own
         # SRI check. It waits until a page whose modules have all run asks it in.

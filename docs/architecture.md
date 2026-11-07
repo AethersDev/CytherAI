@@ -184,13 +184,14 @@ The release flow is fail-closed:
 
 The service worker precaches the pages, the front door's script and stylesheet, the two
 final-frame posters it stands on when the film cannot play (offline included), and the three
-`adii/fonts/` files it draws its type with; films go to the network, never the cache. It
-installs one build or
-nothing (every fetch past the HTTP cache, the build stamp checked before commit), maps a
-navigation to a directory it precached (`/`, `/ar/`) to its cached `index.html`, leaves every
-page it did not precache (`adii/`, `awc-os/`) to the network, caches what else it fetches
-past the HTTP cache too, and removes older caches on activate.
-A new build's worker waits: it never takes over a page that may still be loading. Safari
+`adii/fonts/` files it draws its type with; films go to the network, never the cache. Every
+page comes from the network, past the HTTP cache, and from its copy only when the network fails
+(a navigation to a directory it precached, `/` or `/ar/`, reads its cached `index.html`), so a
+returning visitor reads what is published (`docs/deploy.md` §5aj, `tools/probe-return.py`). It installs one build or
+nothing (every fetch past the HTTP cache; each page's build stamp and each `?v=` file's digest checked before commit, since
+Pages' CDN answers any `?v=` from its one copy of the path), caches what else it fetches
+past the HTTP cache too, once its bytes are what their name says, and removes older caches on activate.
+A new build's worker waits, which holds back only the offline copy: it never takes over a page that may still be loading. Safari
 checks for the update at the navigation itself, so a worker that skipped waiting answered a
 returning reader's previous-build page, mid-load, with this build's modules, and the page
 died of its own SRI check; Safari's script requests carry no integrity a worker could read,
