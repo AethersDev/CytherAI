@@ -301,9 +301,9 @@ def contact(tab, origin):
         tab.js("document.getElementById('write').scrollIntoView({block: 'center'})")   # the focus took the page up to the first question
         press(tab, "#write", False); time.sleep(0.2)
         said, opened = tab.js("document.getElementById('status').textContent"), tab.js("window.__opened")
-        links = tab.js("[...document.querySelectorAll('#gmail, #outlook')].map(a => [a.href.split('?')[0], a.target, a.rel, a.href.includes('payments%20ledger')])")
+        links = tab.js("[...document.querySelectorAll('#gmail, #outlook, #outlook-live')].map(a => [a.href.split('?')[0], a.target, a.rel, a.href.includes('payments%20ledger')])")
         shown = tab.js("!document.getElementById('webmail').hidden")
-        record("contact", opened is True and said and said != asked and shown and all(l[1:] == ["_blank", "noopener", True] for l in links),
+        record("contact", opened is True and said and said != asked and shown and len(links) == 3 and all(l[1:] == ["_blank", "noopener", True] for l in links),
                page=page, draft_opened=opened, status=said, webmail_shown=shown, links=[l[0] for l in links])
         tab.js("(f => { f.value = 'x'.repeat(8000); f.dispatchEvent(new Event('input', {bubbles: true})); })(document.getElementById('never'))")
         record("contact", tab.js("document.getElementById('webmail').hidden"), page=page, long_draft="the links to webmail give way; copy remains",

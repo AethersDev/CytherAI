@@ -2632,6 +2632,38 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_135A1B7B7DBCBA40`), 86 of 86 served paths matching the artifact.
 
+## 5am. A review of the live site: the Outlook link for personal accounts; /flat/ on its side not reproduced; how dark the front door is — 2026-11-08
+
+Build `C60A95AED2B10F6C` (`#reading_ink_C60A95AED2B10F6C`, `#film_settle_C60A95AED2B10F6C`). It follows the live `135A1B7B7DBCBA40`, whose origin
+check passed the day before. The only served change is the contact pages' third web link; every other page changes by its stamp alone.
+
+**The review** called the site ready for production and named two defects. Each was checked on the live site.
+
+| The review | Observed | Now |
+|---|---|---|
+| /flat/ traps scrolling on a phone on its side; the canvas has no height cap | **Not reproduced** on the live site at eleven sideways sizes from 932×430 to 568×320, in both languages, by Chrome's own touch pipeline: the glass is 56 to 67% of the window's height, 124 to 208 px lie beside it, and a swipe there moved the page every time. The cap since §5ai is set through the width (`(100svh - 140px)*16/9`), which a search for `max-height` misses | Unchanged |
+| The Outlook link goes to `outlook.office.com`, the work and school host, and may fail for a personal account | The host split is as stated (Mozilla's bug 1643922, Microsoft's community answers; nothing official documents either link). Signed out, the work host asks for a sign-in that takes personal accounts too, and the personal host shows Microsoft's product page with the draft still in its address. What a signed-in personal account gets at the work host cannot be seen from here | A third link, *Outlook.com*, to `outlook.live.com`, beside *Outlook for work or school*. `tools/probe-arrival.py`'s contact rows now require three links carrying the draft; on the previous build they fail. The Arabic privacy policy's dual *the two links* became the plural; the English says *the links* already |
+| Deploys reach visitors cleanly | The reviewer's own Chrome held the old build and took the new one on its first load: the first observation of §5aj outside this machine | |
+| Page weight on cellular not re-measured | A first visit to the live front door: 6.1 MB on a desktop and 5.3 MB on a phone, nearly all of it the film and the passage (5.6 and 5.0 MB); a lean link stays under 1 MB (§5ai) | |
+| iOS autoplay and Low Power Mode | Not observable here. A refused or failed play shows the final composition within `GUARD` (6 s), by design; the iOS Simulator plays the film at real time (§5ag) | |
+
+**Then a reply on readability, pasted the same day:** the front door is too dark to read comfortably. Measured on this build at every 0.1 s of the passage, on a desktop
+and a phone: every block of words fully shown holds at least 6.08:1 at its glyphs (372 samples each; the dim status lines lowest); its *4.1:1 on ADII's line* is
+not reproduced on words fully shown, and contrast that low occurs only within the half-second fades (1.16:1 at 20% opacity). The rest stands: about 80% of the
+screen is near-black and the mean brightness about 11% of white; 45 of 121 positions down the page show no words in full; the seven darkening layers, the
+headings at weight 300 and the 14 px dim status lines are as described. Its proposals (brighter type; the words in a column of their own beside the film; words
+held for a whole scene; a light theme for the reading pages) were mocked on the real pages for the owner. Several reverse decisions on record (one dark
+environment, 2026-10-20; the rooms dark, 2026-10-21; the film left as it is, 2026-11-07), so none is built until the owner chooses.
+
+**Checked.** `./verify.sh` passes. The contact rows of `tools/probe-arrival.py` pass on this build, in both languages, and fail on the last. By eye, the contact
+pages at 1440 and 390 px, both languages.
+
+**Not observed.** The three web links signed in (`docs/operations.md`, 3); a real phone.
+
+Observed on this build (Chrome/156.0.8078.80): reading ink over the film and the passage on both front doors, dark and light, at six viewports,
+5,536 samples, worst 4.91:1 (CY-SEM-003 PASS); both pages settle to no frame, timer or playing media in every profile, the worker caching this
+build and serving it offline (CY-TEMP-001 PASS).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
