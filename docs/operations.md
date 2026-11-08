@@ -31,6 +31,8 @@ No repository change settles these. Until each is done, the handover is complete
    into webmail. Confirm that each arrives whole and that a reply reaches the sender. The page's part is verified
    (§5ad): the draft and the copied text are exactly what was typed. A realistic Arabic message makes a draft link of
    about 3,800 characters, a long one about 9,800, so test the clients visitors use. The copy route has no length limit.
+   And the three web links once each, signed in: *Gmail*, *Outlook.com* with a personal Microsoft account, *Outlook for work or
+   school* with a work account. Each should open a draft with the answers; none is documented by its service (§5am).
 4. **Verify the domain on GitHub**: Settings → Pages → *Add a domain* → `cytherai.com`, then add the TXT record GitHub
    gives at Namecheap, and keep it there.
 5. **Renewal**: turn on auto-renew at Namecheap with a payment method that will still work in August 2027. The domain's
