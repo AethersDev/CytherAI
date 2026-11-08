@@ -11796,6 +11796,35 @@
               "vaic/evidence/current-browser-observations.v0.json#origin_closure_135A1B7B7DBCBA40"
             ],
             "observed_at": "2026-11-07"
+          },
+          {
+            "evaluator": "ORIGIN_HARNESS",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "C60A95AED2B10F6C",
+            "artifact_manifest_hash": "5a369b0adc9905ce24e8863cea932bc0ec1d79d783490965869d7bcf22856699",
+            "record_hash": "224319ec7b35cedce85f9a3ac5b885b6c28b708f365e7b2eb635880be61cd8cc",
+            "grammar_hash": "246a93a30ea183467761715e38219dce235e7eae7e52a8ba7f84cfc6690749fa",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "EXTERNAL",
+            "environment": {
+              "capability_profile": "production_origin",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "curl 8.7.1 (system trust store), against https://cytherai.com/",
+              "accessibility_mode": null
+            },
+            "harness_identity": "tools/probe-origin.py",
+            "harness_version": "fe7bd172738a",
+            "method": {
+              "measurement": "every served path of the artifact over http (301 to the same https path) and https (sha256 against deploy.sh's build, cache-busted); the declared hidden paths; MIME, byte ranges on the films, worker generation, TLS, the www host; headers against the contract as amended in §7",
+              "threshold": "86 of 86 redirect and match; every hidden path 404 with the styled body; every film answers a byte range; no header beyond the accepted limits missing",
+              "units": "paths"
+            },
+            "result": "PASS",
+            "evidence": [
+              "vaic/evidence/current-browser-observations.v0.json#origin_closure_C60A95AED2B10F6C"
+            ],
+            "observed_at": "2026-11-08"
           }
         ]
       },
