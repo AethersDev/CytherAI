@@ -90,8 +90,8 @@ run them under jsc, the manifest first. Their public surface is an inventory
 `js/film.js` runs once the document is parsed.
 
 1. It removes `no-js`. The statement and its two links need no script: the markup shows them (`.landing.on`) from the first paint, over the film, the `h1` and its links exposed to everyone from the start (until 2026-11-05 they waited for the film's 10.6th second). The film's text alternative is
-   a `.sr` paragraph before it. The header's mark is the Cyther Seal, inline SVG, pixel-fitted at
-   26 px (`tools/render-seal.py`); `tools/test-site.py` holds every inline seal to the computed one.
+   a `.sr` paragraph before it. The header's mark is the CytherAI logo, one image of
+   `assets/logo/cytherai.svg` (`tools/render-mark.py`); `tools/test-site.py` holds every header to it and it to the computed mark.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
    `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G or estimates under 1 Mbit/s, skip straight to the still state with *Play the film* and download no film (the latter three no passage and no worker either: never "3g" by itself, `docs/deploy.md` §5ag, §5ai); a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.
@@ -262,11 +262,11 @@ muted inline autoplay and VoiceOver.
   (`js/film.js`) with the second each stands until.
   The pages' `data-t` name the passage's seconds (a stretch's first and last, a caption's window): move a moment in the
   script and move them with it, on both pages, keeping each stretch as tall as its seconds (50svh a second).
-- Change the mark: never by hand. `python3 tools/render-seal.py` writes the icons;
-  `python3 tools/render-seal.py svg SIZE INK GROUND` prints the inline seal for a page; record
-  the digests in `docs/asset-promotion-log.md` (IMG-009) and re-render the social card.
+- Change the mark: never by hand. `python3 tools/render-mark.py` writes the logo, the icon, the favicon and the app icons
+  (and stops unless the computed mark is the drawn one); record the digests in `docs/asset-promotion-log.md` (IMG-021,
+  IMG-022), re-render the four cards (`tools/render-og-film.py`, `ar`, `flat`, `flat-ar`) and run `generate-integrity.sh`.
 - Make a page a room: link `css/room.css` (with an `integrity` attribute for `generate-integrity.sh` to fill), open with
-  the one header (the computed seal lockup going home, What we build, About, Talk to us, the language: `tools/test-site.py`) and end with its
+  the one header (the logo going home, What we build, About, Talk to us, the language: `tools/test-site.py`) and end with its
   footer; add it to `ROOMS` in `tools/test-site.py`, and an Arabic counterpart to the language-pair and `lang`/`dir`
   laws. Keep what the page carries (an artifact, its limits, whose work it is) verbatim, and retire the version it
   replaces to `backup/`. Its way back: an evidence room returns to the passage's words that lead to it (give that `.say`

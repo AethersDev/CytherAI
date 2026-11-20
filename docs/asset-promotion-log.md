@@ -20,16 +20,133 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
+## ICON — the CytherAI mark as the site's icon
+
+| | |
+|---|---|
+| Asset ID | IMG-021 |
+| Source | The owner's sheet "A mark that counts itself" (`~/Desktop/cyther-studies/sheet.html`, kept outside the repository), adopted 2026-11-21: its icon, the mark at 0.74 on a Night square with corners of radius 22 |
+| Classification | **COMPUTED** |
+| Command | `python3 tools/render-mark.py` |
+| Fixed input | The number eight: of the 8**8 = 16,777,216 fillings of eight positions with 0 to 7, the one in which position n is as thick as the number of positions n thick, `4 2 1 0 1 0 0 0` (found by enumeration). Drawn from the top, anticlockwise, 45° a position, on a 100-unit square: outer radius 46, 6.5 a unit, every end cut along a ray from the centre. Ink `#f0ece2`, Night `#09090b`, the sheet's. |
+| Method | `icon.svg`: the computed mark, byte-identical to the sheet's icon. The rasters: each pixel the shapes' exact area where it lies wholly in or out, 8 by 8 samples where an edge is within reach; `icon-192.png`, `icon-512.png` the icon with transparent corners (`any`); `icon-180.png` (apple-touch) and `icon-512-maskable.png` the mark at 0.74 on Night to the edges (the platform rounds them), the mark inside the central 80% circle (radius 34 of 40). `favicon.ico`: the icon at 16 and 32 px, 32-bit DIBs. |
+| Outputs | `favicon.ico` · 5,430 bytes · `icon.svg` · 530 bytes · `assets/icons/icon-180.png` · 1,838 bytes · `icon-192.png` · 2,763 bytes · `icon-512.png` · 8,827 bytes · `icon-512-maskable.png` · 6,245 bytes |
+| SHA-256 | ico `b7efc5a9703590f0fc501563b4ef72c088ed488c53f80e2684ae101d7ecb4164` · svg `60ff285f4e60a4673c9c4056ba201dddff25ebe4feb67e9b66c9ac8061e48004` · 180 `96d56581528d824180e568171f7d5c6307e4314a47dc15d548ec9bc5459143a0` · 192 `a247d382e5ca7f8ad7a6eb4ff40dcb1d856313965a79fb7b322dbc20f88e131f` · 512 `f4cf4bdcc37d7f1e5bef643ae8a33321c3f3bd2ce631085a548fd9829f38e545` · maskable `ef7c9fcdbf8f082db37e803c9820c1ad01d61b03d9ddb77632f0f41af9fe6002` |
+| Determinism | Run twice; all outputs byte-identical (fixed zlib through `tools/pngout.py`). |
+| Acceptance checks | The generator stops unless the computed mark is the drawn one; the logo, the icon and the favicon are what it writes, every page's header shows the logo, and two positions swapped is refused (`tools/test-site.py`). At 16 px a unit is 0.77 px and the thinnest bands show grey: the sheet's icon at its own scale. |
+| Deployment | `deploy.sh` allowlist (paths unchanged). `sw.js` ASSETS keeps `icon.svg`, the favicon every page links; the rasters are fetched by the OS at install or pin time. |
+| Supersedes | IMG-009, the Cyther Seal, retired whole to `backup/seal-v1/` on 2026-11-21 (below) |
+| Owner sign-off | The owner, 2026-11-21: "here the new logo" (the sheet); trademark registration later, when it is needed |
+
+---
+
+## LOGO — the CytherAI logo
+
+| | |
+|---|---|
+| Asset ID | IMG-022 |
+| Source | The owner's sheet, its horizontal logo: the mark and the name beside it, the mark twice the capitals' height (92 units against 45.5) |
+| Classification | **COMPUTED** (the mark) with the name **drawn**: the letters are the sheet's own drawing, carried verbatim in `tools/render-mark.py` (`NAME`), on the mark's terms (one stroke a unit wide), not computed |
+| Command | `python3 tools/render-mark.py` |
+| Fixed input | As IMG-021. |
+| Method | The computed mark and the drawn name in one SVG, Ink `#f0ece2`, viewBox 384.18 by 100; byte-identical to the sheet's horizontal logo. Every served page's header shows it as an image in the home link (34 px high, 30 px under 760 px wide), the four cards at 42 px. |
+| Output | `assets/logo/cytherai.svg` · 384.18×100 units · 19,912 bytes |
+| SHA-256 | `b6d98fce2e04827c5042b7b09a5c8efbd494bde093d43a583451599a7476bc2d` |
+| Determinism | Run twice; byte-identical. |
+| Acceptance checks | As IMG-021. |
+| Deployment | `deploy.sh` allowlist; precached by `sw.js`; its URL names its bytes (`?v=`, `generate-integrity.sh`) in every page and in the precache. |
+| Supersedes | The typed wordmark (`cyther<span>ai</span>` in Public) beside the Seal in every header (IMG-009, retired) |
+| Owner sign-off | As IMG-021 |
+
+---
+
 ## OG-CARD — the link-preview plate
 
 | | |
+|---|---|
+| Asset ID | IMG-023 |
+| Source | The film's card as IMG-008 composed it: `tools/og-card.html`, `film/final-landscape.jpg` and the statement, unchanged; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1; `sips` makes the JPEG, quality 88) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
+| Output | `assets/og/og-card.jpg` · 1200×630 · 186,363 bytes |
+| SHA-256 | `48a78f293f81d39925bb1e4ae35d4c6480df3b01abc98e4e300b47afe4d6ee18` |
+| Determinism | Run twice on Google Chrome 157.0.8103.50 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-008's bytes. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 JPEG under 300 KB (the audit of 2026-11-05: IMG-008 was 612 KB, and link previews are commonly reported to drop an image over about 300 KB; that limit is reported, not documented by the services); the statement's edges clean on the dark frame at 100%, by eye. |
+| Deployment | `deploy.sh` allowlist only; named by the English pages that previewed IMG-008. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-019, the same card with the Cyther Seal, retired to `backup/seal-v1/` on 2026-11-21 (below) |
+| Owner sign-off | PENDING |
+
+---
+## OG-CARD-AR — the Arabic link-preview plate
+
+| | |
+|---|---|
+| Asset ID | IMG-024 |
+| Source | The Arabic card as IMG-010 composed it: `tools/og-card-ar.html`, unchanged; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
+| Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py ar` (as IMG-019) |
+| Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
+| Output | `assets/og/og-card-ar.jpg` · 1200×630 · 181,107 bytes |
+| SHA-256 | `b9dd9d74f159ffa9bd4be1396e26813306d28bc5425c275b9877150304ceeb34` |
+| Determinism | Run twice on Google Chrome 157.0.8103.50 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-010's bytes. |
+| Acceptance checks | As IMG-019; the Arabic joined and its marks unclipped. |
+| Deployment | `deploy.sh` allowlist only; named by `ar/index.html` and `ar/contact.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-020, the same card with the Cyther Seal, retired to `backup/seal-v1/` on 2026-11-21 (below) |
+| Owner sign-off | PENDING |
+
+---
+## OG-CARD-FLAT — Both looked flat's link-preview plate
+
+| | |
+|---|---|
+| Asset ID | IMG-025 |
+| Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
+| Classification | **ILLUSTRATIVE** — a frame of the rendering; the page that names it says what it shows in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py flat` (headless Chrome renders `tools/og-card-flat.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the still and the fonts are tracked files. |
+| Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *Both looked flat.* in Newsreader 300, 60 px, with *A demonstration in light* in Plex Mono above it, `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card-flat.png` · 1200×630 · 274,611 bytes |
+| SHA-256 | `e8882946e86c907ab2de74a5dfeedc2f703d350747ac4a87c0fcf9dab255d0af` |
+| Determinism | Rendered on Google Chrome 157.0.8103.50 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
+| Deployment | `deploy.sh` allowlist only; named by `flat/index.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-017, the same card with the Cyther Seal, retired to `backup/seal-v1/` on 2026-11-21 (below) |
+| Owner sign-off | PENDING |
+
+---
+
+## OG-CARD-FLAT-AR — Both looked flat's link-preview plate, in Arabic
+
+| | |
+|---|---|
+| Asset ID | IMG-026 |
+| Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
+| Classification | **ILLUSTRATIVE** — a frame of the rendering; the page that names it says what it shows in `og:image:alt` |
+| Command | `python3 tools/render-og-film.py flat-ar` (headless Chrome renders `tools/og-card-flat-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
+| Canonical inputs | None — the composition, the still and the fonts are tracked files. |
+| Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *كلتاهما بدت مستوية.* in IBM Plex Sans Arabic 300, 58 px, line height 1.4, with *عرضٌ بالضوء* in IBM Plex Sans Arabic 300, 22 px, above it (the lockup stays left to right, as the identity draws it), `#ece7dc` with the front door's text-shadow. |
+| Output | `assets/og/og-card-flat-ar.png` · 1200×630 · 274,961 bytes |
+| SHA-256 | `9551876f70b1e19bb3bd527e2e656c97dd30aaf07b1be39a0c472e2cefce0b44` |
+| Determinism | Rendered on Google Chrome 157.0.8103.50 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
+| Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
+| Deployment | `deploy.sh` allowlist only; named by `ar/flat.html`. Not precached, not in the SRI fingerprint; no page requests it. |
+| Supersedes | IMG-018, the same card with the Cyther Seal, retired to `backup/seal-v1/` on 2026-11-21 (below) |
+| Owner sign-off | PENDING |
+
+---
+## OG-CARD-V3 — the film's card with the Seal, retired
+
+| | |
+|---|---|
+| Retired | 2026-11-21: served as `assets/og/og-card.jpg` until IMG-023, the same card with the CytherAI logo, replaced it; the bytes moved to `backup/seal-v1/` at the paths they had, when the CytherAI mark replaced the Cyther Seal. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-019 |
 | Source | The film's card as IMG-008 composed it: `tools/og-card.html`, `film/final-landscape.jpg` and the statement, unchanged |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1; `sips` makes the JPEG, quality 88) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
-| Output | `assets/og/og-card.jpg` · 1200×630 · 186,426 bytes |
+| Output | `backup/seal-v1/assets/og/og-card.jpg` · 1200×630 · 186,426 bytes |
 | SHA-256 | `965fa4cd87c656b4e6be802dbb7798328d6efef4c54b394255b73d60dd388440` |
 | Determinism | Run twice on Google Chrome 156.0.8078.80 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-008's bytes. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 JPEG under 300 KB (the audit of 2026-11-05: IMG-008 was 612 KB, and link previews are commonly reported to drop an image over about 300 KB; that limit is reported, not documented by the services); the statement's edges clean on the dark frame at 100%, by eye. |
@@ -38,17 +155,18 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
-## OG-CARD-AR — the Arabic link-preview plate
+## OG-CARD-AR-V3 — the Arabic card with the Seal, retired
 
 | | |
+|---|---|
+| Retired | 2026-11-21: served as `assets/og/og-card-ar.jpg` until IMG-024, the same card with the CytherAI logo, replaced it; the bytes moved to `backup/seal-v1/` at the paths they had, when the CytherAI mark replaced the Cyther Seal. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-020 |
 | Source | The Arabic card as IMG-010 composed it: `tools/og-card-ar.html`, unchanged |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py ar` (as IMG-019) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
-| Output | `assets/og/og-card-ar.jpg` · 1200×630 · 181,170 bytes |
+| Output | `backup/seal-v1/assets/og/og-card-ar.jpg` · 1200×630 · 181,170 bytes |
 | SHA-256 | `ab72a67c060fde3460896e759162f80ea385d89bf79675b3a6401ef672b6d67d` |
 | Determinism | Run twice on Google Chrome 156.0.8078.80 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-010's bytes. |
 | Acceptance checks | As IMG-019; the Arabic joined and its marks unclipped. |
@@ -57,7 +175,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## OG-CARD-V2 — the film's card as a PNG, retired
 
 | | |
@@ -78,7 +195,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## OG-CARD-AR-V2 — the Arabic card as a PNG, retired
 
 | | |
@@ -99,7 +215,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## FILM — the front door's film and its final composition
 
 | | |
@@ -118,7 +233,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## SYSTEMS — the three sequences
 
 | | |
@@ -138,7 +252,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## PASSAGE — the film's final composition through the three systems and back
 
 | | |
@@ -158,7 +271,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Supersedes | ADII's sequence (IMG-012's `sys-adii`), retired whole to `backup/adii-sequence-v1/`; AWC-OS's and CytherCAD's (IMG-012's `sys-awcos`, `sys-cad`), retired whole with their generator to `backup/system-sequences-v1/` |
 | Owner sign-off | PENDING |
 ---
-
 ## FLAT — Both looked flat: the sequence, its stills and the instrument's plates
 
 | | |
@@ -177,10 +289,11 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
-## OG-CARD-FLAT — Both looked flat's link-preview plate
+## OG-CARD-FLAT-V1 — Both looked flat's card with the Seal, retired
 
 | | |
+|---|---|
+| Retired | 2026-11-21: served as `assets/og/og-card-flat.png` until IMG-025, the same card with the CytherAI logo, replaced it; the bytes moved to `backup/seal-v1/` at the paths they had, when the CytherAI mark replaced the Cyther Seal. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-017 |
 | Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second |
@@ -188,7 +301,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Command | `python3 tools/render-og-film.py flat` (headless Chrome renders `tools/og-card-flat.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
 | Canonical inputs | None — the composition, the still and the fonts are tracked files. |
 | Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *Both looked flat.* in Newsreader 300, 60 px, with *A demonstration in light* in Plex Mono above it, `#ece7dc` with the front door's text-shadow. |
-| Output | `assets/og/og-card-flat.png` · 1200×630 · 276,299 bytes |
+| Output | `backup/seal-v1/assets/og/og-card-flat.png` · 1200×630 · 276,299 bytes |
 | SHA-256 | `de9e5d2e8d6a6814607bce7cc27a5f9d45ea70a64791c4f6215837fed06b4f5f` |
 | Determinism | Rendered on Google Chrome 156.0.8078.48 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
@@ -197,9 +310,12 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-## OG-CARD-FLAT-AR — Both looked flat's link-preview plate, in Arabic
+
+## OG-CARD-FLAT-AR-V1 — Both looked flat's Arabic card with the Seal, retired
 
 | | |
+|---|---|
+| Retired | 2026-11-21: served as `assets/og/og-card-flat-ar.png` until IMG-026, the same card with the CytherAI logo, replaced it; the bytes moved to `backup/seal-v1/` at the paths they had, when the CytherAI mark replaced the Cyther Seal. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-018 |
 | Source | The sequence's last still (`flat/media/still-both-landscape.jpg`, IMG-016): both blocks under their flats, straight fringes on the first, rings on the second |
@@ -207,7 +323,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Command | `python3 tools/render-og-film.py flat-ar` (headless Chrome renders `tools/og-card-flat-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1) |
 | Canonical inputs | None — the composition, the still and the fonts are tracked files. |
 | Method | The still covers the card; the darkening the pages set behind their words (a top band and a foot band); the identity's primary lockup (the Cyther Seal pixel-fitted at 34 px, left of the wordmark); *كلتاهما بدت مستوية.* in IBM Plex Sans Arabic 300, 58 px, line height 1.4, with *عرضٌ بالضوء* in IBM Plex Sans Arabic 300, 22 px, above it (the lockup stays left to right, as the identity draws it), `#ece7dc` with the front door's text-shadow. |
-| Output | `assets/og/og-card-flat-ar.png` · 1200×630 · 276,671 bytes |
+| Output | `backup/seal-v1/assets/og/og-card-flat-ar.png` · 1200×630 · 276,671 bytes |
 | SHA-256 | `6123073cfdd74aaf146fcba55b3589b4d36e7a6ef2ab43ab5329dc8b9a0a3a34` |
 | Determinism | Rendered on Google Chrome 156.0.8078.48 ; another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 PNG; the title and the wordmark whole inside the 1.91:1 frame; the lines and the rings visible beside the title. |
@@ -216,7 +332,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## ADII-POSTER — the recorded run's last frame
 
 | | |
@@ -234,7 +349,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## AWC-OS-POSTERS — a frame of each AWC-OS film, the engine's trace marked EXECUTED
 
 | | |
@@ -252,7 +366,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## OG-CARD-V1 — the derived link-preview plate, retired
 
 | | |
@@ -274,10 +387,11 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
-## ICON — the Cyther Seal
+## ICON-SEAL — the Cyther Seal, retired
 
 | | |
+|---|---|
+| Retired | 2026-11-21: served as `favicon.ico`, `icon.svg` and `assets/icons/icon-{180,192,512,512-maskable}.png` until IMG-021 replaced them, and `tools/render-seal.py` with them; the bytes moved to `backup/seal-v1/` at the paths they had, when the CytherAI mark replaced the Cyther Seal. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-009 |
 | Source | The Cyther Seal identity (`cyther-seal-identity.html`, a draft the owner adopted on 2026-10-13: "for the seal chose what ever version that is more aligned with the whole website then apply it"): the principal mark, the solid seal |
@@ -285,7 +399,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Command | `python3 tools/render-seal.py` |
 | Fixed input | The word `CytherAI`: SHA-256 `9db0cc58ca67af9c2f718a3fe85403455c16cda52e4f49f73f2a3d7eba07befe`, read two bits at a time; a constrained walk on a 6×6 grid: 77 proposals, 29 admitted, 48 refused; the published path `00 01 11 21 20 30 40 50 51 52 53 54 44 43 33 32 22 12 02 03 04 05 15 25 35 34 24 14 13 23`, which the script refuses to run without. |
 | Method | `icon.svg`: the identity's pixel-fitted seal on a 32-unit grid (u = 2, crispEdges), so it is sharp at 16 and 32 px. The PNGs: the seal full-bleed in ink `#ECE7DC` with its path in ground `#07070A`, a square-capped, mitred polyline on whole pixels at the vector seal's proportions (180: stroke 10, spacing 22; 192: 11, 24; 512: 28, 64); the maskable 512 keeps its path inside the central 80% circle (stroke 23, spacing 53). No warm: the identity keeps warm for the end cell of the open line only. |
-| Outputs | `favicon.ico` (the fitted seal at 16 and 32 px, uncompressed DIBs; added 2026-11-05: browsers and crawlers ask for that path whatever a page names) · `icon.svg` · `assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web manifest, `any`), `icon-512-maskable.png` (web manifest, `maskable`) |
+| Outputs | `backup/seal-v1/favicon.ico` (the fitted seal at 16 and 32 px, uncompressed DIBs; added 2026-11-05: browsers and crawlers ask for that path whatever a page names) · `backup/seal-v1/icon.svg` · `backup/seal-v1/assets/icons/icon-180.png` (apple-touch) · `icon-192.png`, `icon-512.png` (web manifest, `any`), `icon-512-maskable.png` (web manifest, `maskable`) |
 | SHA-256 | ico `9d0f3cd1a4991d3cd350d9e3ac1ca9d6ec68a92d92c103c87ab9f8a4d05056ba` · svg `0e293384f3f81f6a68ea8deb2d1a51ea2b03dee30f2b9385bf777343f394a2f2` · 180 `3525ea646b48ba55ef4fa8ae86c0ef588150def4a39b529590cbb636eb786b07` · 192 `5b35146f6a916a44285c8f1068c2e8fe5c1c5b16474d76ab4736ab5e7f630469` · 512 `f23ff1cb401544e819a354aec0c15acb43ff41af1697adf990f2ded44ca686c1` · maskable `988f49c2a82743262a2e9021a9cfd19137fa2f39d028387c10f01bae397b8352` |
 | Determinism | Run twice; all six outputs byte-identical (no anti-aliased pixel, fixed zlib through `tools/pngout.py`). |
 | Acceptance checks | The computed path equals the published one (the script exits otherwise); 512 maskable: half-diagonal of the path 203.6 px ≤ 204.8 px (40% of the side); every seal inline on a page equals the computed one (`tools/test-site.py`). |
@@ -294,7 +408,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | The adoption above |
 
 ---
-
 ## ICON-V1 — the derived mark, retired
 
 | | |
@@ -316,7 +429,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## EXHIBIT-A — the constraint boundary, retired
 
 | | |
@@ -337,7 +449,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## EXHIBIT-B — the event strata, retired
 
 | | |
@@ -358,7 +469,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## EMPTY-PLATE — the 404 emblem, retired
 
 | | |
@@ -379,7 +489,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## SURFACE-TERMINAL — the promoted terminal exposure
 
 | | |
@@ -406,7 +515,6 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
-
 ## MOT-001 / MOT-002 — motion conformance (no asset; no implementation change)
 
 The two accepted motion studies are verification references. The shipped

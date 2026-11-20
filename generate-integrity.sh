@@ -15,6 +15,9 @@ set -euo pipefail
 # with an integrity attribute. (The build identity below is a different projection: it covers every deploy.paths
 # byte, requested or not.)
 RESOURCES="css/film.css css/room.css js/film.js css/flat.css js/flat.js"
+# what a served page requests with no integrity attribute but by a URL that names its bytes all the same (?v=), in the pages
+# and in the worker's precache: the logo in every header (an <img> cannot carry an integrity attribute)
+NAMED="assets/logo/cytherai.svg"
 
 # HTML files to patch: every served page, read from the one declaration of what is served (a page added there is
 # stamped, and held to every per-page law in tools/test-site.py, with no second list to forget it in)
@@ -22,7 +25,7 @@ HTML_FILES=$(grep '\.html$' deploy.paths)
 
 echo "[integrity] Computing SRI hashes..."
 
-for FILE in $RESOURCES; do
+for FILE in $RESOURCES $NAMED; do
     if [ ! -f "$FILE" ]; then
         echo "  ERROR: $FILE not found" >&2
         exit 1
@@ -49,6 +52,18 @@ for FILE in $RESOURCES; do
         sed -i '' -E "s#((href|src)=\"[^\"]*${BASENAME})(\?v=[0-9a-f]*)?\"#\1?v=${VERSION}\"#g" "$HTML"
         sed -i '' -E "s|(href=\"[^\"]*${BASENAME}\?v=${VERSION}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
         sed -i '' -E "s|(src=\"[^\"]*${BASENAME}\?v=${VERSION}\"[^>]*) integrity=\"[^\"]*\"|\1 integrity=\"${SRI}\"|g" "$HTML"
+    done
+    sed -i '' -E "s#'${FILE}(\?v=[0-9a-f]*)?'#'${FILE}?v=${VERSION}'#" sw.js
+done
+
+for FILE in $NAMED; do
+    VERSION=$(shasum -a 256 "$FILE" | cut -c1-12)
+    BASENAME=$(basename "$FILE")
+    echo "  $FILE → ?v=${VERSION}"
+    for HTML in $HTML_FILES; do
+        if [ -f "$HTML" ]; then
+            sed -i '' -E "s#((href|src)=\"[^\"]*${BASENAME})(\?v=[0-9a-f]*)?\"#\1?v=${VERSION}\"#g" "$HTML"
+        fi
     done
     sed -i '' -E "s#'${FILE}(\?v=[0-9a-f]*)?'#'${FILE}?v=${VERSION}'#" sw.js
 done

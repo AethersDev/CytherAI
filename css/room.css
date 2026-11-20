@@ -1,5 +1,5 @@
 /* The rooms: the pages a visitor reaches from the front door (an evidence page, the contact page). Quieter than the
-   front door and of the same company: its type, its tokens, its seal lockup, its footer. Dark in either device theme, an
+   front door and of the same company: its type, its tokens, its logo, its footer. Dark in either device theme, an
    art-direction choice the owner kept (2026-10-21): the visitor stays in the passage's world after leaving it, and the
    quiet layout and the stillness give the change of pace. No motion; the artifact is the loudest thing in the room. */
 @font-face{font-family:Public;src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900}
@@ -20,7 +20,7 @@ header{position:sticky;top:0;z-index:5;min-height:64px;display:flex;flex-wrap:wr
 html{scroll-padding-top:80px}@media(max-width:440px){html{scroll-padding-top:104px}}@media(max-height:480px){header{position:static}}
 .talk{color:var(--ink);border:1px solid #ffffff66;padding:6px 12px}.top[aria-current]{color:var(--ink);border-color:var(--ink)}
 .side{display:flex;align-items:center;gap:24px}
-.wordmark{display:inline-flex;align-items:center;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
+.wordmark{display:inline-flex;align-items:center}.logo{display:block;height:34px;width:auto}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
 main{max-width:1180px;margin:0 auto;padding:48px 5vw 0}
 .label{display:block;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
@@ -71,7 +71,7 @@ textarea:focus-visible{outline-offset:2px}
 .also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--rule)}.also a:hover{color:var(--warm);border-color:var(--warm)}
 body>footer{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--ink)}
 @media(max-width:860px){.arrival{grid-template-columns:1fr;grid-template-areas:"head" "limit" "fig" "body"}.arrival figure{margin-top:28px}}
-@media(max-width:760px){header{min-height:56px;padding:10px 20px}.side{gap:12px}.wordmark{font-size:22px}.top{font-size:13px;padding-block:4px 5px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
+@media(max-width:760px){header{min-height:56px;padding:10px 20px}.side{gap:12px}.logo{height:30px}.top{font-size:13px;padding-block:4px 5px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}
 /* Arabic: its type, never letter-spaced, taller lines; a Latin name keeps its own order */
 :lang(ar) body{font-family:Arabic,Public,sans-serif}
 :lang(ar) :is(.label,figcaption,body>footer){font-family:Plex,Arabic,monospace;letter-spacing:0;text-transform:none}

@@ -3,7 +3,7 @@
  * reads what is published; a file named by its bytes (?v=) from the cache. No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-C60A95AED2B10F6C';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-27F82D15E3D706F0';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -25,7 +25,7 @@ var ASSETS = [
   // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
   // its type with (shared with adii/)
   'js/film.js?v=d243bf8147ca',
-  'css/film.css?v=e656df324609',
+  'css/film.css?v=ee7ff29674b8',
   'film/final-landscape.jpg',
   'film/final-portrait.jpg',
   'film/passage-adii-landscape.jpg',
@@ -42,8 +42,10 @@ var ASSETS = [
   'fonts/ibm-plex-sans-arabic-300.woff2',
   'fonts/ibm-plex-sans-arabic-400.woff2',
   // the stylesheet of the rooms: the contact pages, the About pages, the brief and the legal pages above draw with it
-  'css/room.css?v=f6c16c7dc540',
+  'css/room.css?v=4a32bbee190d',
   'manifest.webmanifest',
+  // the logo in every header (tools/render-mark.py), named by its bytes like the stylesheets
+  'assets/logo/cytherai.svg?v=b6d98fce2e04',
   'icon.svg'
 ];
 
