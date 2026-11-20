@@ -2666,6 +2666,46 @@ build and serving it offline (CY-TEMP-001 PASS).
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_C60A95AED2B10F6C`), 86 of 86 served paths matching the artifact.
 
+## 5an. The CytherAI mark replaces the Cyther Seal — 2026-11-21
+
+Build `27F82D15E3D706F0` (`#reading_ink_27F82D15E3D706F0`, `#film_settle_27F82D15E3D706F0`). The owner's reviewer approved the design the same day:
+the sheet's ink, the 34/30 px header and the 42 px cards; the drawing kept as supplied at 16 px. It follows the live `C60A95AED2B10F6C`.
+
+**The direction.** The owner, 2026-11-21: *here the new logo*, the sheet *A mark that counts itself* (`~/Desktop/cyther-studies/sheet.html`, outside the
+repository), and on trademark: registration when it is needed, not now. No clearance search has been made either; the sheet lists both among what it does
+not establish.
+
+**What it is, checked here.** A C of eight positions round a ring, each 0 to 7 units thick, filled with the one sequence of 8⁸ = 16,777,216 in which
+position n is as thick as the number of positions n thick: 4 2 1 0 1 0 0 0 (found by enumeration; of the 840 orders of its parts one is true). The sheet's
+`verify.py` was not found beside it; the figure was checked independently. `tools/render-mark.py` computes the mark from the figure and stops unless it is the
+sheet's drawing to the byte; the horizontal logo and the icon it writes are byte-identical to the sheet's. The name's letters are the sheet's drawing, carried
+verbatim (1,286 straight segments): drawn, not computed. The mark is 92 units to the capitals' 45.5.
+
+**Now.** Every page's header shows the logo as one image in the home link (`assets/logo/cytherai.svg`, 34 px high, 30 under 760 px), where the Seal and the
+typed `cyther<span>ai</span>` stood; one shared file, 19.9 KB, rather than 20 KB inline on 21 pages. Its URL names its bytes (`generate-integrity.sh`'s new
+`NAMED`: an `<img>` carries no integrity attribute) and the worker precaches it. `icon.svg`, `favicon.ico` and the app icons are the sheet's icon (the mark at
+0.74 on Night, corners of radius 22; the apple-touch and maskable icons to the edges, the mark inside the central 80% circle). The four cards carry the logo at
+42 px and were re-rendered. Colours are the sheet's, Ink `#f0ece2` on Night `#09090b`; the site's own ink stays `#ECE7DC` (4 to 6 levels apart).
+
+**What went.** The Cyther Seal: `tools/render-seal.py`, its icons and favicon, and the four cards that carried its lockup moved whole to `backup/seal-v1/`; their
+receipts (IMG-009, IMG-017 to IMG-020) stand with their paths moved, new ones are IMG-021 to IMG-026. The corpus declares `backup/seal-v1` an archive and the
+generator retired; `tools/render-mark.py` takes its place in the verification set.
+
+**Checked.**
+- `tools/test-site.py`: `test_every_mark_is_the_computed_one` (replacing the Seal's law): the figure, the computed mark equal to the drawn one, the logo, icon and
+  favicon what the generator writes, every page's home link and every card the logo at its URL naming its bytes, no Seal anywhere; two positions swapped is
+  refused, and the Seal put back, or the logo dropped, fails. On the live build's front door it fails. The reviewer found it passed a Seal whose class was
+  one of two (`class="seal decorative"` beside a correct logo): it now reads each class name, and that case is kept. `./verify.sh` passes; `tools/test-assets.py`
+  all pass.
+- `tools/render-mark.py` and `tools/render-og-film.py` run twice: byte-identical.
+- `tools/probe-arrival.py`: PASS, 213 rows, 0 failed; among them the header's links reached by a real pointer on every page at 1440, 390 and 320 px.
+- `tools/probe-ink.py`: PASS, 4,552 element samples over 24 profiles, worst 4.91:1 (Chrome/157.0.8103.79), as the live build's worst; fewer samples than its 5,536 because the typed wordmark's letters are gone.
+- `tools/probe-settle.py`: PASS, both front doors settle to no frame, timer or playing media in every profile; the worker caches this build, the logo among its precache, and serves it offline.
+- By eye: the header on the front doors, About, ADII's room and the 404 at 1440 and 390 px, in both languages; the four cards; the icons at 16, 32, 180, 192 and 512 px on light and dark ground.
+
+**Not observed.** A real phone; a screen reader (the home link keeps its label, *CytherAI home*, the image is `alt=""`). At 16 px the favicon's one-unit bands are
+0.77 px and show grey: the sheet's icon at its own scale.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

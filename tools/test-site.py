@@ -49,6 +49,7 @@ def shell_list(source: str, name: str) -> list[str]:
 
 
 RESOURCES = shell_list(INTEGRITY_SCRIPT, "RESOURCES")
+NAMED = shell_list(INTEGRITY_SCRIPT, "NAMED")   # named by their bytes (?v=) with no integrity attribute: the logo
 # the deployable set is DECLARED ONCE and read here, by deploy.sh, by generate-integrity.sh (its pages) and by
 # the artifact identity in tools/vaic_validate.py — never transcribed a second time: a page added to deploy.paths
 # is stamped and held to every per-page law below, because no second list exists for it to be missing from
@@ -367,8 +368,9 @@ class SiteContractTests(unittest.TestCase):
         visit) came new from the network, an English-only build's worker answered its stylesheet and script with the old
         bytes, which the page's integrity refused: no style, Times, 1288 px wide at 390 (docs/deploy.md §5r). So every
         integrity-checked URL names its bytes (?v= the first 12 hex of their SHA-256), in the pages and in the precache
-        alike, and no older worker has ever cached a newer one."""
-        version = {r: "v=" + hashlib.sha256((ROOT / r).read_bytes()).hexdigest()[:12] for r in RESOURCES}
+        alike, and no older worker has ever cached a newer one. So does what a page requests with no integrity attribute
+        (NAMED: the logo, an <img>), its URL checked where it is drawn (test_every_mark_is_the_computed_one)."""
+        version = {r: "v=" + hashlib.sha256((ROOT / r).read_bytes()).hexdigest()[:12] for r in RESOURCES + NAMED}
         for page in HTML_FILES:
             for tag, attrs in parse_page(page).tags:
                 raw = attrs.get("src") if tag == "script" else attrs.get("href") if tag == "link" else None
@@ -512,29 +514,41 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
                          "shipped but named by nothing")
 
-    def test_every_seal_is_the_computed_one(self) -> None:
-        """The Cyther Seal is computed from the company's name, and its identity forbids redrawing the path. Every seal
-        inline on a served page, and on the social card's composition, must be exactly the pixel-fitted seal
-        tools/render-seal.py computes at its size, in the colours its surface owns: the identity's own (render-seal's
-        INK and GROUND) on every page and both cards (the cold subpages' paper seal retired with them on 2026-10-21).
-        Warm is never the seal's colour; a hand-edited cell, a mirrored path or another colour fails."""
-        spec = importlib.util.spec_from_file_location("render_seal", ROOT / "tools/render-seal.py")
-        seal = importlib.util.module_from_spec(spec); spec.loader.exec_module(seal)
-        def defect(page: str, svg: str) -> str | None:
-            size = int(re.search(r'viewBox="0 0 (\d+) \1"', svg).group(1))
-            return None if svg == seal.fitted_svg(size, seal.INK, seal.GROUND, ' class="seal"') else f"{page}: not the computed seal"
-        found = 0
+    def test_every_mark_is_the_computed_one(self) -> None:
+        """The CytherAI mark is computed (tools/render-mark.py, adopted 2026-11-21 from the owner's sheet): the one filling of
+        eight positions in which position n is as thick as the number of positions that are n thick, 4 2 1 0 1 0 0 0, drawn as
+        a C. The generator stops unless its mark is the drawn one; here the logo, the icon and the favicon must be exactly what
+        it writes, and every served page's header and every card must show the logo file and nothing else for the mark: one
+        <img class="logo"> in the home link (the cards: in their .mark), no other drawing of it and no Seal. The law has
+        teeth: two positions swapped is a mark the generator refuses, and a page with the Seal back, or with the logo dropped,
+        fails."""
+        spec = importlib.util.spec_from_file_location("render_mark", ROOT / "tools/render-mark.py")
+        mark = importlib.util.module_from_spec(spec); spec.loader.exec_module(mark)
+        self.assertEqual(mark.SEQ, (4, 2, 1, 0, 1, 0, 0, 0), "the figure that describes itself")
+        self.assertEqual(mark.mark_path(), mark.DRAWN, "the computed mark is the drawn one")
+        self.assertEqual((ROOT / "assets/logo/cytherai.svg").read_text(encoding="utf-8"), mark.logo_svg(), "the logo is the computed one")
+        self.assertEqual((ROOT / "icon.svg").read_text(encoding="utf-8"), mark.icon_svg(), "the icon is the computed one")
+        self.assertEqual((ROOT / "favicon.ico").read_bytes(), mark.favicon(), "favicon.ico is the computed icon")
+        named = hashlib.sha256((ROOT / "assets/logo/cytherai.svg").read_bytes()).hexdigest()[:12]   # generate-integrity.sh's NAMED
+        logo = re.compile(r'<img class="logo" src="(?:\.\./|/)?assets/logo/cytherai\.svg\?v=' + named + r'" width="131" height="34" alt="">')
+        card = re.compile(r'<div class="mark"><img src="\.\./assets/logo/cytherai\.svg" width="162" height="42" alt=""></div>')
+        def defect(page: str, html: str) -> str | None:
+            if any("seal" in names.split() for names in re.findall(r'class=["\']([^"\']*)["\']', html)) or "cyther<span>ai</span>" in html:
+                return f"{page}: the retired Seal lockup"     # a class among others counts: class="seal decorative" (the review of 2026-11-21)
+            home = re.findall(r'<a class="wordmark"[^>]*>(.*?)</a>', html, re.S)
+            if page.startswith("tools/"): return None if len(card.findall(html)) == 1 else f"{page}: the card shows no logo"
+            return None if len(home) == 1 and logo.fullmatch(home[0]) else f"{page}: the home link is not the logo"
         cards = ["tools/og-card.html", "tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]
         for page in HTML_FILES + cards:
-            for svg in re.findall(r'<svg class="seal".*?</svg>', (ROOT / page).read_text(encoding="utf-8"), re.S):
-                self.assertIsNone(defect(page, svg))
-                found += 1
-        self.assertGreaterEqual(found, len(HTML_FILES) + len(cards), "every page and every card carries the seal")
-        self.assertEqual((ROOT / "favicon.ico").read_bytes(), seal.favicon(), "favicon.ico is the computed seal")
-        # the law has teeth on a real page: a mirrored path, and the seal in the film's warm, each fail
-        svg = re.search(r'<svg class="seal".*?</svg>', (ROOT / "index.html").read_text(encoding="utf-8"), re.S).group(0)
-        self.assertIsNotNone(defect("index.html", svg.replace('d="M', 'd="m', 1)))
-        self.assertIsNotNone(defect("index.html", svg.replace(f'fill="{seal.INK}"', 'fill="#FFAD57"')))
+            self.assertIsNone(defect(page, (ROOT / page).read_text(encoding="utf-8")))
+        swapped = list(mark.SEQ); swapped[1], swapped[2] = swapped[2], swapped[1]
+        self.assertNotEqual(mark.mark_path(tuple(swapped)), mark.DRAWN, "two positions swapped is not the mark")
+        index = (ROOT / "index.html").read_text(encoding="utf-8"); seal = (ROOT / "backup/seal-v1/icon.svg").read_text(encoding="utf-8")
+        self.assertIsNotNone(defect("index.html", re.sub(r'<img class="logo"[^>]*>', '<svg class="seal"></svg>cyther<span>ai</span>', index)))
+        self.assertIsNotNone(defect("index.html", re.sub(r'<img class="logo"[^>]*>', '', index)))
+        about = (ROOT / "ar/about.html").read_text(encoding="utf-8")   # the Seal beside a correct logo, its class one of two
+        self.assertIsNotNone(defect("ar/about.html", about.replace("</header>", '<svg class="seal decorative"></svg></header>', 1)))
+        self.assertIn("rect", seal, "the retired Seal stands in backup/seal-v1/")
 
     def test_the_front_door_is_one_dark_environment(self) -> None:
         """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light

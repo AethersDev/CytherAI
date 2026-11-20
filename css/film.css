@@ -18,7 +18,7 @@ body.scrub[data-state=still] #passage{opacity:1;visibility:visible;transition:op
 header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
 .side{display:flex;align-items:center;gap:24px}
 .note{position:absolute;inset-inline-start:5vw;bottom:18px;margin:0;color:var(--dim)}
-.wordmark{display:inline-flex;align-items:center;font-family:Public,sans-serif;font-size:26px;font-weight:720;letter-spacing:-1.5px}.wordmark span{font-weight:340}.seal{flex:none;display:block;margin-right:12px}
+.wordmark{display:inline-flex;align-items:center}.logo{display:block;height:34px;width:auto}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
 /* the film's stage, one viewport tall; 100vh first for an engine without svh, which would drop the height and collapse it.
    --foot: how far above the frame's foot the statement stands, and below it the band its film's subtitles and the note share */
@@ -44,7 +44,7 @@ body[data-state=still] .line{transition:none}
 .plain{font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
 #replay::before{content:"";position:absolute;inset:-12px -18px;z-index:-1;pointer-events:none;background:radial-gradient(farthest-side,#07070af0 55%,#07070a00)}
 #replay{position:absolute;z-index:0;inset-inline-end:5vw;bottom:17vh;color:var(--dim);border-bottom:1px solid var(--rule);padding-block:6px 4px}#replay:hover{color:var(--ink);border-color:var(--ink)}
-@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.wordmark{font-size:22px}.top{font-size:13px;padding-block:4px 5px}.stage{--foot:14vh;padding:0 20px}.note{inset-inline-start:20px;max-width:calc(100% - 40px);bottom:14px}
+@media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.logo{height:30px}.top{font-size:13px;padding-block:4px 5px}.stage{--foot:14vh;padding:0 20px}.note{inset-inline-start:20px;max-width:calc(100% - 40px);bottom:14px}
  .line,.landing{inset-inline:20px;max-width:none}.line{--note:44px;font-size:17px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
 /* the front door's header stays, slim, on its own darkness: a way to talk at every moment of a page ten screens long (the

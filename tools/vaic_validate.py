@@ -96,7 +96,7 @@ IDENTITY_COVERAGE = {
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
         "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
-        "tools/test-api.py", "tools/test-boundary.js", "tools/render-seal.py", "tools/canon.py",
+        "tools/test-api.py", "tools/test-boundary.js", "tools/render-mark.py", "tools/canon.py",
     ),
     "evidence_ledger": ("vaic/evidence/current-browser-observations.v0.json",),
 }
@@ -113,8 +113,9 @@ COVERED = frozenset(path for paths in IDENTITY_COVERAGE.values() for path in pat
 # way: the live file first, then the snapshot, and the first file that defines the anchor
 # must define it exactly once. The drawing set retired the same way on 2026-10-04, and THE
 # UNHAPPENED on 2026-10-12: each one's modules and the verifiers only it needed moved whole
-# into its own snapshot.
-ARCHIVES = ("backup/instrument-v1", "backup/drawing-set-v1", "backup/unhappened-v1")
+# into its own snapshot. The Cyther Seal's generator retired the same way on 2026-11-21, when the CytherAI mark replaced it
+# (tools/render-mark.py): it and every byte it wrote are backup/seal-v1, at the paths they had.
+ARCHIVES = ("backup/instrument-v1", "backup/drawing-set-v1", "backup/unhappened-v1", "backup/seal-v1")
 RETIRED = frozenset((
     "js/substrate.js", "js/ledger.js", "js/site.js", "js/develop-worker.js",
     "tools/test-motion.py", "tools/test-ledger.js", "tools/test-develop.js",
@@ -122,6 +123,7 @@ RETIRED = frozenset((
     "js/claims.js", "js/drawing-set.js", "tools/test-claims.js", "tools/test-drawing-set.js",
     "tools/test-projection.js", "tools/project-obligations.py",
     "js/trace.js", "js/unhappened.js", "tools/test-trace.js",
+    "tools/render-seal.py",
 ))
 # a verifier that is not the declared set, and a receipt issued before verifiers were
 # recorded; UNRECORDED can never speak for the current candidate

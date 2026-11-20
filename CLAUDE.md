@@ -282,16 +282,20 @@ runs:** once the film has ended and the scroll has stopped (the passage seeks on
 the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by localized darkening only: under the header, along the film's lower edge (the same darkness going away past the stage's foot, and the scene going away into the footer's ground, so neither meets a hard line), behind Replay, behind the statement, and under each of the passage's words and the close's (opaque there, soft at its edges: on a phone the current runs through their band, and while its words fade by the scroll their darkness fades with them). There is no sound. The statement is the page's `h1`, shown by its markup whatever the film or a script does; a screen-reader-only paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; each stretch of the passage
 has its own.
 
-**The mark is the Cyther Seal** (adopted 2026-10-13 from the owner's identity draft): a path
-computed from SHA-256 of the word `CytherAI` — a walk on a 6×6 grid that admits a move only
-inside the grid on an unused cell (77 proposals, 29 admitted, 48 refused). `tools/render-seal.py`
-computes it, writes the favicon and app icons, and prints the inline seal for a page; below 48
-px every seal is pixel-fitted (u = ⌊size/13⌋ px, so its edges fall on whole pixels). The front
-door and every room use the primary lockup, the seal left of the wordmark, ink `#ECE7DC` with its path in
-ground (the cold-paper subpages' paper-ink seal before `CYTHERAI` retired with them, 2026-10-21); the social card
-carries the same lockup. Warm is never the seal's colour. Never redraw, rotate or mirror the
-path: `tools/test-site.py` requires every inline seal to equal the computed one. The retired
-marks are `backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the orbit plate).
+**The mark is the CytherAI mark** (adopted 2026-11-21 from the owner's sheet *A mark that counts itself*, kept outside
+the repository in `~/Desktop/cyther-studies/sheet.html`): a C of eight positions round a ring, from the top anticlockwise,
+each 0 to 7 units thick, filled with the one sequence of the 8⁸ = 16,777,216 in which position n is as thick as the number
+of positions n thick, 4 2 1 0 1 0 0 0 (its 840 orders hold one true one). `tools/render-mark.py` finds it by enumeration,
+draws it (outer radius 46 of 100, 6.5 a unit, every end cut along a ray from the centre), stops unless that is the sheet's
+drawing to the byte, and writes the logo (`assets/logo/cytherai.svg`: the mark beside the name, whose letters are the sheet's
+drawing carried verbatim, the mark twice the capitals' height), `icon.svg`, `favicon.ico` and the app icons. Every page's
+header shows the logo as one image in the home link (`<img class="logo">`, 34 px high, 30 under 760 px; its URL names its
+bytes, `generate-integrity.sh`), and the social cards carry it at 42 px. The logo is only ever Ink `#f0ece2` on Night
+`#09090b` or the reverse (the sheet's); amber and red are states, never its colour. Never redraw it: `tools/test-site.py`
+holds the logo, the icon and the favicon to what the generator writes and every header and card to the logo file. No
+trademark search or registration has been made (the owner, 2026-11-21: registration when it is needed). The retired marks
+are `backup/seal-v1/` (the Cyther Seal, 2026-10-13 to 2026-11-21, with its generator, icons and cards),
+`backup/icon-v1/` (the orbit filament) and `backup/og-card-v1/` (the orbit plate).
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
 precached); `css/film.css` and one script with SRI, `js/film.js` (`defer`).
@@ -327,7 +331,7 @@ every ink to 4.5:1 on its ground.
 
 **The rooms** (2026-10-21, the owner's direction: finish the visitor's journey after the film, one route first,
 homepage → ADII evidence → contact → return, in both languages; then AWC-OS and CytherCAD): the pages a visitor reaches
-from the front door are rooms of it, `css/room.css` — quieter, with its type, tokens, seal lockup and footer, no motion,
+from the front door are rooms of it, `css/room.css` — quieter, with its type, tokens, logo and footer, no motion,
 and dark in either device theme: an art-direction choice the owner kept in review (2026-10-21), the visitor staying in
 the passage's world while the quiet layout and the stillness give the change of pace. `adii/` opens on its arrival: what
 the recorded run is, whose work it is (*Built by Group 05* and its four names, under the headline: the company's identity
