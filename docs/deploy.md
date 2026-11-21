@@ -2706,6 +2706,8 @@ generator retired; `tools/render-mark.py` takes its place in the verification se
 **Not observed.** A real phone; a screen reader (the home link keeps its label, *CytherAI home*, the image is `alt=""`). At 16 px the favicon's one-unit bands are
 0.77 px and show grey: the sheet's icon at its own scale.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_27F82D15E3D706F0`), 87 of 87 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
