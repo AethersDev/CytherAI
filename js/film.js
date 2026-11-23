@@ -1,17 +1,10 @@
-/* The front door: the statement and its links stand from the first paint, in the page's own markup, and nothing here
-   waits on them (until 2026-11-05 they waited 10.6 s for the film); behind them a twelve-second film, offline-rendered
-   (tools/render-film.py), with its sentences as HTML subtitles; then the passage, which the scroll moves through the three
-   systems' scenes and back into the film's world (tools/render-passage.py). The film plays once, muted; reduced motion, a
-   request to save data, a refused or failed play, a film not started within GUARD, a film that falls STALL behind real
-   time while the page is visible, or a visitor who scrolls on past it show the final composition, and stay: nothing
-   restarts on its own, and a late download cannot pull the visitor back into the film. Replay is theirs. DOM wiring only:
-   under jsc (verify.sh) it parses and returns. */
+/* Nightfall plays once behind the statement. The systems passage follows the scroll. */
 (function () {
 "use strict";
 if (typeof document === "undefined") return;
 
 const v = document.getElementById("film"), replay = document.getElementById("replay"), body = document.body;
-const lines = [...document.querySelectorAll(".line")], portrait = matchMedia("(orientation: portrait)");
+const portrait = matchMedia("(orientation: portrait)");
 /* a visitor who asks to save data, whom the browser calls 2G or whose link it estimates under 1 Mbit/s gets the stills and no
    worker: under 1 MB, not 6 (Chromium alone reports these). Never "3g" by itself: Chrome reported it, rtt 400, on a loopback
    server with nothing to estimate from, and to the audit of 2026-11-05 on a link that played the film, but it reported it
@@ -29,18 +22,15 @@ let timer = 0, guard = 0, last = 0, at = 0, behind = 0, started = false, enliste
 /* the poster is the film's final frame. Without a film (load false) it stands, and nothing downloads */
 function source(load) {
   const p = portrait.matches;
-  v.poster = new URL(p ? "film/final-portrait.jpg" : "film/final-landscape.jpg", root).href;
-  if (load) v.src = new URL(p ? "film/film-portrait.mp4" : "film/film-landscape.mp4", root).href;
+  v.poster = new URL(p ? "film/nightfall-portrait.jpg" : "film/nightfall-landscape.jpg", root).href;
+  if (load) v.src = new URL(p ? "film/nightfall-portrait.mp4" : "film/nightfall-landscape.mp4", root).href;
   else if (v.hasAttribute("src")) { v.removeAttribute("src"); v.load(); }
-}
-function cue(t) {
-  for (const l of lines) l.classList.toggle("on", t >= +l.dataset.from && t < +l.dataset.to);
 }
 /* an ended film keeps its last frame; one stopped short of its end gives way to the poster, the same composition */
 function still(e) {
   clearInterval(timer); clearTimeout(guard); v.pause();
   if (!(e && e.type === "ended")) source(false);
-  body.dataset.state = "still"; cue(Infinity); replay.hidden = false;
+  body.dataset.state = "still"; replay.hidden = false;
   passage(); enlist(); scrolled();
 }
 function tick() {
@@ -48,11 +38,10 @@ function tick() {
   if (started && !document.hidden) behind = Math.max(0, behind + (now - at) - (t - last) * 1000);   // a hidden page's time does not count
   last = t; at = now;
   if (behind > STALL) { still(); return; }
-  cue(t);
 }
 function film() {
   if (v.hasAttribute("src")) v.currentTime = 0; else source(true);
-  body.dataset.state = "film"; replay.hidden = true; started = false; behind = 0; last = v.currentTime; at = performance.now(); cue(0);
+  body.dataset.state = "film"; replay.hidden = true; started = false; behind = 0; last = v.currentTime; at = performance.now();
   clearInterval(timer); timer = setInterval(tick, 80);
   clearTimeout(guard); guard = setTimeout(still, GUARD);
   v.play().then(() => { clearTimeout(guard); started = true; }, still);
@@ -72,8 +61,7 @@ portrait.addEventListener("change", () => {
    scroll moves it evenly (each stretch, .passage, is as tall as its seconds, data-t), and its words, fixed where the
    film's sentences stand, are each shown in their window of its seconds, faded in and out over FADE of them by the scroll
    itself, not by a timed transition. Past its end the scene holds its last frame, under the close. It downloads once the
-   film is whole (or still), and shows once it is whole: its first frame is the film's last, so nothing changes where it
-   takes over. Until then, under reduced motion, or after a failed download, the film's final frame stands, and past it
+   film is whole (or still), and shows once it is whole: the page blends it over the rooftop as the visitor scrolls. Until then, under reduced motion, or after a failed download, the film's final frame stands, and past it
    each system's part stands on one still of its moment (STILLS), and the return on the passage's last frame. */
 const pv = document.getElementById("passage"), parts = [...document.querySelectorAll(".passage")], says = [...document.querySelectorAll(".say")];
 const span = e => e.dataset.t.split(" ").map(Number), FADE = 0.25;
@@ -107,7 +95,7 @@ function seek(t) {
 }
 pv.addEventListener("seeked", () => { if (pending >= 0) seek(pending); });
 /* the still that stands until each second, by orientation: each changes between two systems' words, never under them */
-const STILLS = [[ADII - 0.6, "film/final-landscape.jpg", "film/final-portrait.jpg"],
+const STILLS = [[ADII - 0.6, "film/nightfall-landscape.jpg", "film/nightfall-portrait.jpg"],
   [12.9, "film/passage-adii-landscape.jpg", "film/passage-adii-portrait.jpg"],
   [15.75, "film/passage-awcos-landscape.jpg", "film/passage-awcos-portrait.jpg"],
   [21.5, "film/passage-cad-landscape.jpg", "film/passage-cad-portrait.jpg"],
@@ -121,12 +109,13 @@ function stand(t) {   // no passage: the film's element shows the still of the m
 function scrolled() {
   frame = 0;
   const y = scrollY, t = now = moment(y);
+  pv.style.setProperty("--passage-opacity", Math.max(0, Math.min(1, t)));
   if (body.dataset.state === "film" && y > innerHeight / 4) { still(); return; }   // scrolling on is past the film
   for (const s of says) {
     const [a, b] = span(s), o = Math.max(0, Math.min(1, (t - a) / FADE, (b - t) / FADE));
     s.style.opacity = o; s.classList.toggle("on", o > 0);
   }
-  if (body.dataset.state === "still") { if (ready) seek(Math.min(t, marks[marks.length - 1][1])); else stand(t); }
+  if (body.dataset.state === "still") { if (ready) { if (t < 1) stand(0); seek(Math.min(t, marks[marks.length - 1][1])); } else stand(t); }
 }
 addEventListener("scroll", () => { frame = frame || requestAnimationFrame(scrolled); }, { passive: true });
 /* a new viewport (a phone turned, a window resized) gives every stretch a new height, and the same offset names another

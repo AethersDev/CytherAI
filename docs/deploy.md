@@ -2708,6 +2708,37 @@ generator retired; `tools/render-mark.py` takes its place in the verification se
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_27F82D15E3D706F0`), 87 of 87 served paths matching the artifact.
 
+## 5ao. Nightfall on the English and Arabic homepages — 2026-11-23
+
+Build `8E38E5E2ACE1FAA2` (`#reading_ink_8E38E5E2ACE1FAA2`, `#film_settle_8E38E5E2ACE1FAA2`). It follows the live `27F82D15E3D706F0`; the first candidate, `4B8DDCAD234DE403`, carried the two locked masters as they are and was not published. The published statement and both routes stand over a silent journey from a rooftop room to the mast and back. Both films run 363 frames at 24 fps, 1440×900 and the separately composed 810×1440. The films are served under new paths so a cached range from the previous film cannot be mistaken for Nightfall. Each poster is the final decoded frame of its orientation’s locked master.
+
+The visitor can go straight to the systems or contact from the first screen. At rest the rooftop remains visible. The first half-screen of scrolling blends the original three-systems passage into view. Reduced-motion and low-data visitors see the rooftop and the systems’ stills. English and Arabic descriptions and link previews follow the new shot. The previous film and previews are archived in `backup/front-door-film-v1/`. Asset receipts IMG-027 through IMG-029 identify the replacement bytes.
+
+**How much a first visit downloads.** The first candidate served the locked masters, 6,826,522 and 5,559,950 bytes (3.61 and 2.94 Mbit/s). A fresh visit throttled in Chrome (90 ms latency) started both in about
+a second at 4 Mbit/s and played them through; at 2.4 Mbit/s the landscape film paused to buffer six times in its first 3.4 seconds and the page fell back to the rooftop still about 7 s after arrival, before the
+strike, and the portrait fell back too. The headline and its links stayed in view throughout. The return to the room is the film's point, so the films now served are a lighter encode of the same corrected frames
+(`out/master/assembled/`, `out/portrait-master/assembled/` in the Nightfall study): two-pass x264, 1,600 kbit/s with a 2,200 kbit/s ceiling over a 4,400 kbit buffer, the masters' other settings kept: 3,086,626 and
+3,068,849 bytes (1.63 and 1.62 Mbit/s), every one of the 363 frames. The locked masters stay in the study, unchanged.
+
+- **Playback, this build** (the same test, on `dist/`): at 4 Mbit/s the first frame at 0.93 s (landscape) and 0.90 s (portrait), each played to 15.13 s; at 2.4 Mbit/s the first frame at 1.29 s and 1.36 s, two short
+  waits at the start, each played to 15.13 s. Replay restarts both.
+- **Picture, against the source frames** (luma PSNR, master / served): the room 43.5 / 40.2 dB; the street and climb 42.3 / 38.4; the leader and flash 45.7 / 41.9; leaving the mast 41.4 / 37.2; the return 39.9 / 35.7;
+  the hold 41.3 / 37.0 (landscape; the portrait 2.6 to 3.2 dB under its master throughout, 38.0 to 40.9). Flicker added to the source's own frame-to-frame change, of 255: at most 2.18 / 3.43 (the landscape's return).
+  In stills at full size (the climb, the flash and its decay, leaving the mast, the return's windows, the lamp and the roof at rest) the channel is whole with its finest side branches softer, and the lamp and the
+  roof's reflections stand. Shimmer at speed was not judged here: frames were inspected, not playback.
+- **The posters** were kept as extracted from the locked masters (sharper than the served films' last frames): against those last frames 35.8 dB (landscape) and 38.2 dB (portrait). At its natural end the film
+  stands on its own last frame; the poster shows where no film plays, or one is stopped short.
+
+**Checked, on this build** (`dist/` built from the stamped tree; reports in the release's scratch folder, `build-8E38E5E2ACE1FAA2/`):
+- `./verify.sh` passes; `tools/test-assets.py` all pass (IMG-027's digests and sizes are the served films').
+- `tools/probe-arrival.py`: PASS, 213 rows. `tools/probe-passage.py`: PASS, 46 rows. `tools/probe-settle.py`: PASS (both pages settle to no frame, timer or playing media; the worker caches this build and serves it
+  offline). `tools/probe-return.py`: PASS, 31 rows. `tools/probe-ios.py`: PASS, 34 rows (iPhone 16 Pro Max in the iOS Simulator's WebKit, not a phone).
+- `tools/probe-ink.py`: PASS, 5,138 element samples over 24 profiles, worst 5.1:1 (Chrome/157.0.8103.79) (CY-SEM-003 PASS; CY-TEMP-001 PASS).
+- The first candidate passed the same probes with its heavier films (213, 46, 31 and 34 rows; 5,138 samples, worst 5.15:1).
+
+**Not observed.** A real phone; a real slow network (the throttle is Chrome's); a first-time viewer at normal speed on the served encode. The corpus's two automated receipts for the unpublished drafts
+(`5C1052AC9D085496`, `4B8DDCAD234DE403`) were provisional and were replaced by this build's one.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

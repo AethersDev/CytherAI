@@ -3,7 +3,7 @@
  * reads what is published; a file named by its bytes (?v=) from the cache. No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-27F82D15E3D706F0';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-8E38E5E2ACE1FAA2';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -24,10 +24,10 @@ var ASSETS = [
   // the front door: its script, its stylesheet, the final composition it stands on when the film
   // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
   // its type with (shared with adii/)
-  'js/film.js?v=d243bf8147ca',
-  'css/film.css?v=ee7ff29674b8',
-  'film/final-landscape.jpg',
-  'film/final-portrait.jpg',
+  'js/film.js?v=ea076bde536f',
+  'css/film.css?v=ffbfabdfaf59',
+  'film/nightfall-landscape.jpg',
+  'film/nightfall-portrait.jpg',
   'film/passage-adii-landscape.jpg',
   'film/passage-adii-portrait.jpg',
   'film/passage-awcos-landscape.jpg',

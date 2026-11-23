@@ -20,6 +20,45 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
+## NIGHTFALL — the homepage film and final-frame posters
+
+| | |
+|---|---|
+| Asset ID | IMG-027 |
+| Classification | **ILLUSTRATIVE** |
+| Source | The Nightfall study's corrected frames (`out/master/assembled/` and `out/portrait-master/assembled/`: 363 frames each at 24 fps, 1440×900 and 810×1440), the frames its two locked masters were encoded from. The delivered films are a lighter encode of those frames, made so that a first visit on a slow link reaches the ending (two-pass x264: `-preset veryslow -tune film -b:v 1600k -maxrate 2200k -bufsize 4400k -g 24 -keyint_min 24 -sc_threshold 0 -pix_fmt yuv420p -movflags +faststart`): 1.63 and 1.62 Mbit/s against the masters' 3.61 and 2.94. The locked masters stay in the study, unchanged (6,826,522 and 5,559,950 bytes; sha256 `e5f00551382617a4b430f82c04589ac06acd3d017c2829919dc7e6c8780b560b`, `3cf963b25fa3cb2d4269e3e8424e92cf81d8213807a5ef7f131bcd1f78434157`). The JPEGs are frame 362 of each locked master, extracted with FFmpeg at JPEG quality 2; against the delivered films' last decoded frames they stand at 35.8 dB (landscape) and 38.2 dB (portrait). |
+| Output | `film/nightfall-landscape.jpg` · 150,874 bytes · `film/nightfall-landscape.mp4` · 3,086,626 bytes · `film/nightfall-portrait.jpg` · 104,198 bytes · `film/nightfall-portrait.mp4` · 3,068,849 bytes |
+| SHA-256 | nightfall-landscape.jpg `8d731c172bc98a46571f0804b9b69269214e26b317de77ad00fe6c09473042b8` · nightfall-landscape.mp4 `845ad7dab68bb19141089d8e6948232296f939249337a35b8978d0dc70542784` · nightfall-portrait.jpg `9e7a6fa107298565016e590e011d4a79c35c642a68bc142770728c6a2b69dc47` · nightfall-portrait.mp4 `83144cc130f94039fa2b6764bb6cd0cd8782361488436451283ac0db419d9a78` |
+| Deployment | Listed in `deploy.paths`. |
+
+---
+
+## NIGHTFALL-CARD — English link preview
+
+| | |
+|---|---|
+| Asset ID | IMG-028 |
+| Classification | **ILLUSTRATIVE** |
+| Source | The landscape rooftop poster with the published mark and English statement. Run `python3 tools/render-og-film.py`. |
+| Output | `assets/og/og-card.jpg` · 163,456 bytes |
+| SHA-256 | og-card.jpg `aeec5c1d39124e5a02127ef74f12ed75fc3c5d2cfd4873c620dd4a45df6287f6` |
+| Deployment | Listed in `deploy.paths`. |
+
+---
+
+## NIGHTFALL-CARD-AR — Arabic link preview
+
+| | |
+|---|---|
+| Asset ID | IMG-029 |
+| Classification | **ILLUSTRATIVE** |
+| Source | The same rooftop poster with the published mark and Arabic statement. Run `python3 tools/render-og-film.py ar`. |
+| Output | `assets/og/og-card-ar.jpg` · 159,603 bytes |
+| SHA-256 | og-card-ar.jpg `cb1bfb6d33b232a04f886fdab7f1a7f4604b177113810a6b5d1b409f91ad78bc` |
+| Deployment | Listed in `deploy.paths`. |
+
+---
+
 ## ICON — the CytherAI mark as the site's icon
 
 | | |
@@ -65,11 +104,12 @@ state it records, and their Deployment lines describe the build identity of thei
 | | |
 |---|---|
 | Asset ID | IMG-023 |
+| Archive | The previous homepage film and previews are preserved in `backup/front-door-film-v1/` for the Nightfall release. |
 | Source | The film's card as IMG-008 composed it: `tools/og-card.html`, `film/final-landscape.jpg` and the statement, unchanged; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; every page that names it says so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py` (headless Chrome renders `tools/og-card.html` at 1200×630, device scale 1, from a local server on 127.0.0.1; `sips` makes the JPEG, quality 88) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`) are tracked files. |
-| Output | `assets/og/og-card.jpg` · 1200×630 · 186,363 bytes |
+| Output | `backup/front-door-film-v1/assets/og/og-card.jpg` · 1200×630 · 186,363 bytes |
 | SHA-256 | `48a78f293f81d39925bb1e4ae35d4c6480df3b01abc98e4e300b47afe4d6ee18` |
 | Determinism | Run twice on Google Chrome 157.0.8103.50 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-008's bytes. Another Chrome or machine may rasterize differently; the receipt binds these bytes, not the renderer. |
 | Acceptance checks | 1200×630 JPEG under 300 KB (the audit of 2026-11-05: IMG-008 was 612 KB, and link previews are commonly reported to drop an image over about 300 KB; that limit is reported, not documented by the services); the statement's edges clean on the dark frame at 100%, by eye. |
@@ -78,16 +118,18 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
+
 ## OG-CARD-AR — the Arabic link-preview plate
 
 | | |
 |---|---|
 | Asset ID | IMG-024 |
+| Archive | The previous homepage film and previews are preserved in `backup/front-door-film-v1/` for the Nightfall release. |
 | Source | The Arabic card as IMG-010 composed it: `tools/og-card-ar.html`, unchanged; the identity's lockup is now the CytherAI logo (IMG-022, `assets/logo/cytherai.svg`, 42 px high) where the Cyther Seal and the typed wordmark stood (2026-11-21) |
 | Classification | **ILLUSTRATIVE** — a frame of the film, a conceptual visualization; both Arabic pages say so in `og:image:alt` |
 | Command | `python3 tools/render-og-film.py ar` (as IMG-019) |
 | Canonical inputs | None — the composition, the frame and the fonts (`adii/fonts/`, `fonts/`) are tracked files. |
-| Output | `assets/og/og-card-ar.jpg` · 1200×630 · 181,107 bytes |
+| Output | `backup/front-door-film-v1/assets/og/og-card-ar.jpg` · 1200×630 · 181,107 bytes |
 | SHA-256 | `b9dd9d74f159ffa9bd4be1396e26813306d28bc5425c275b9877150304ceeb34` |
 | Determinism | Run twice on Google Chrome 157.0.8103.50 (macOS, Apple Silicon); byte-identical output both runs. Chrome's PNG on the way to it equals IMG-010's bytes. |
 | Acceptance checks | As IMG-019; the Arabic joined and its marks unclipped. |
@@ -96,6 +138,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
+
 ## OG-CARD-FLAT — Both looked flat's link-preview plate
 
 | | |
@@ -220,11 +263,12 @@ state it records, and their Deployment lines describe the build identity of thei
 | | |
 |---|---|
 | Asset ID | IMG-011 |
+| Archive | The previous homepage film and previews are preserved in `backup/front-door-film-v1/` for the Nightfall release. |
 | Source | `tools/render-film.py` (Blender 5.1, Cycles on the Apple GPU), rendered offline once per orientation |
 | Classification | **ILLUSTRATIVE** — a conceptual visualization; the page says so under the film (*A conceptual visualization. It measures no product.*) and claims no correspondence to a system event |
 | Command | `TL=24 blender -b -P tools/render-film.py -- l anim <dir> 1920x1080 64` and `TL=14 … -- p anim <dir> 1080x1920 64`; the frames encoded as the CRF 23 master (`ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p -movflags +faststart`), its last frame kept as the poster; the delivered film re-encoded from the master: `ffmpeg -i <master> [-vf scale=1440:810:flags=lanczos] -c:v libx264 -preset veryslow -tune film -crf 29 -pix_fmt yuv420p -movflags +faststart -an` (docs/architecture.md, docs/deploy.md §5n) |
 | Canonical inputs | None — the scene is the script. |
-| Output | `film/film-landscape.mp4` · 1440×810, 12 s, H.264 High · 4,081,008 bytes; `film/film-portrait.mp4` · 810×1440, 12 s · 3,502,599 bytes; `film/final-landscape.jpg` · 1920×1080 · 273,896 bytes; `film/final-portrait.jpg` · 810×1440 · 155,883 bytes |
+| Output | `backup/front-door-film-v1/film/film-landscape.mp4` · 1440×810, 12 s, H.264 High · 4,081,008 bytes; `backup/front-door-film-v1/film/film-portrait.mp4` · 810×1440, 12 s · 3,502,599 bytes; `backup/front-door-film-v1/film/final-landscape.jpg` · 1920×1080 · 273,896 bytes; `backup/front-door-film-v1/film/final-portrait.jpg` · 810×1440 · 155,883 bytes |
 | SHA-256 | film-landscape.mp4 `fb5d1ce53e76e96846418b9f4be21b067be43bc89412ec3a281ba02494899972` · film-portrait.mp4 `cfddb2b23d1019ae487a08db4a2bb59323c99bc6ad4771748ddd620ef6bb9d37` · final-landscape.jpg `a070f7443f547eead2ec1ed8ebddc80c9b3bf561cb3587e7ebed0fc1750c8c7c` · final-portrait.jpg `2682827ce8a62f83e93c31fc39a339f0b192993415bba80354cf724dab3e78bf` |
 | Determinism | **Not reproducible byte for byte.** Cycles sampled under a wall-clock limit (`TL`, seconds per frame), so another machine or load samples differently; the render frames were not kept. The CRF 23 masters are `git show e40fa72:film/film-<orientation>.mp4`, and the delivered films are reproducible from them by the command above, given the same x264. The receipt binds these bytes, not the renderer. |
 | Acceptance checks | Every `moov` before its `mdat` (faststart); each poster is its film's last frame (PSNR of the poster, scaled to the film, against the film's decoded last frame: 39.1 dB landscape, 39.3 dB portrait; 2026-10-18). Reading ink over the film is the browser obligation CY-SEM-003, re-observed on every build. |
@@ -233,6 +277,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Owner sign-off | PENDING |
 
 ---
+
 ## SYSTEMS — the three sequences
 
 | | |

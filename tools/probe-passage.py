@@ -121,6 +121,15 @@ with tempfile.TemporaryDirectory() as profile:
         for name, first, turns in (("phone", UPRIGHT, (SIDE, UPRIGHT)), ("phone-sized window", TALL, (WIDE, TALL)),
                                    ("desktop", DESK, (NARROW, DESK))):
             open_past_the_film(tab, origin, page, first)
+            # The paused passage used to cover the rooftop as soon as its download finished.
+            for t, opacity in ((0, 0), (0.5, 0.5), (1, 1), (0, 0)):
+                tab.js(GO + f"({t})")
+                time.sleep(0.65)
+                shown = float(tab.js("getComputedStyle(document.getElementById('passage')).opacity"))
+                poster = tab.js("document.getElementById('film').poster.split('/').pop()")
+                expected = "nightfall-portrait.jpg" if first[1] > first[0] else "nightfall-landscape.jpg"
+                record(probe="rooftop", page=page, view=name, moment=t, opacity=shown, poster=poster,
+                       **{"pass": abs(shown - opacity) < 0.02 and poster == expected})
             for target in ("adii-evidence", "awc-os-evidence", "cythercad-evidence"):
                 size(tab, *first)
                 ps.until(tab, "document.body.classList.contains('scrub')", 20)

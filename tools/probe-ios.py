@@ -131,11 +131,11 @@ with tempfile.TemporaryDirectory() as t:
     for lang, base in (("en", "/"), ("ar", "/ar/")):
         for trial in range(TRIALS):
             tag = f"{lang}-film{trial}"
-            got = visit(origin, device["udid"], f"{base}?t={tag}&at=2,6,14,18", tag, ("2", "6", "14", "18"))
-            first, mid, end = got.get("2"), got.get("6"), got.get("14")
+            got = visit(origin, device["udid"], f"{base}?t={tag}&at=2,6,18,22", tag, ("2", "6", "18", "22"))
+            first, mid, end = got.get("2"), got.get("6"), got.get("18")
             passed = first and mid and end and first["statement"] and first["bar"] == "fixed" and first["talk"] and abs(mid["film"] - 6) < 1.5 and end["state"] == "still" and not end["errors"] and end["overflow"] <= 0
-            record("film", passed, page=base, at_2s=first and {k: first[k] for k in ("state", "statement", "bar", "talk", "film")}, film_at_6s=mid and mid["film"], at_14s=end and end["state"], errors=end and end["errors"])
-            moved = drift(OUT / f"{tag}-14.png", OUT / f"{tag}-18.png") if "14" in got and "18" in got else None
+            record("film", passed, page=base, at_2s=first and {k: first[k] for k in ("state", "statement", "bar", "talk", "film")}, film_at_6s=mid and mid["film"], at_18s=end and end["state"], errors=end and end["errors"])
+            moved = drift(OUT / f"{tag}-18.png", OUT / f"{tag}-22.png") if "18" in got and "22" in got else None
             record("rest", moved is not None and moved <= HOLD, page=base, trial=trial, moved_levels=moved, bound=HOLD)
         for frag, want in (("principle", 0), ("systems", 0), ("adii", 1), ("awc-os", 5), ("cythercad", 6)):
             tag = f"{lang}-{frag}"

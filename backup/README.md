@@ -56,3 +56,7 @@ The studies reached the live site by relative links from `prototype/` (`../../pa
 it was, check out its last commit before the move. `prototype/compare/v3.html` also loaded the owner's untracked
 `prototype/unhappened-3/`, which was never committed; it lives with the owner's other studies, outside the
 repository.
+
+## Front door before Nightfall
+
+`front-door-film-v1/` holds the two twelve-second masters, their final-frame posters and the English and Arabic link previews from build `27F82D15E3D706F0`. The systems passage continues to use its original footage.

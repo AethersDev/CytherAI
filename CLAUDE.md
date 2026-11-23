@@ -219,19 +219,9 @@ the mailboxes, monitoring, restoring a build, and what only the owner can settle
 
 ## Architecture — the film
 
-The homepage opens on its statement, *Let AI change things. Keep control of what changes.*, with **The three systems ↓** and **Talk to us →**: they stand from the first paint, where they stand at the film's end (the audit of 2026-11-05; until then they waited for its 10.6th second, LCP 11.3 s: `docs/deploy.md` §5ad, §5ag). Behind them plays a twelve-second film, rendered offline in Blender (Cycles on the Apple GPU, `tools/render-film.py`), silent, with its sentences as HTML subtitles in the dark band under the statement: *AI can change everything.* · *Not everything should be allowed to change.* · *CytherAI builds the part of AI that decides what is allowed to happen.* One continuous shot: an exact structure of glass fins, ceramic plates and machined frames around a warm
-current rebuilds itself; a wave of change runs to a hairline plane; one pale slab stops a
-fraction short of it and stays while the current runs on through the plane; a fitting group
-passes, then the rest settle and pass; the camera emerges to a still composition, which stays
-as the setting of what follows. Phones get a separately composed vertical film (the structure
-as a tower). The line *A conceptual visualization. It measures no product.* sits under the
-film: its sentences are positioning, and no motion on the page claims to correspond to a
-system event (CY-TEMP-002 was superseded with THE UNHAPPENED).
+The homepage opens on its statement, *Let AI change things. Keep control of what changes.*, with **The three systems ↓** and **Talk to us →**: they stand from the first paint, where they stand at the film's end (the audit of 2026-11-05; until then they waited for its 10.6th second, LCP 11.3 s: `docs/deploy.md` §5ad, §5ag). Nightfall plays once behind the statement. The camera leaves a rooftop room, follows a street up to a lightning mast and returns to the lit window. The landscape and separately composed portrait masters each run 15.125 seconds. Both keep the words in HTML. The line *A conceptual visualization. It measures no product.* sits under the film.
 
-Below it, the passage (2026-10-20, from the owner's direction *The Shape of Permission*): under the visitor's scroll
-the film's final composition opens into the three systems' scenes and returns to the film's world, twenty-five seconds
-rendered from the film's own scene (`tools/render-passage.py`, `film/passage-*.mp4`), scrubbed by the scroll and never
-played. The camera moves into the plane of the ring the refused slab never crossed, so the ring narrows to a line that
+On scroll the rooftop gives way to the twenty-five-second systems passage (`tools/render-passage.py`, `film/passage-*.mp4`). The camera moves into the plane of the ring the refused slab never crossed, so the ring narrows to a line that
 stays where it stood; the structure parts around it and leaves a run of its ceramic tiles standing, which come forward
 as a row of values, one visibly wrong (the recorded run's last day). A correction arrives from the proposing side and
 stops a fraction short of the line, as the refused slab did; the authorizer's check lights the one slot it may change,
@@ -270,7 +260,7 @@ same final frame — stands, nothing more downloads, and a late download cannot 
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
 still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment (without that, in the iOS Simulator, 8 of 10 loads reported it paused at 0 while the screen went on showing it run, behind the statement; a seek to where it says it is does nothing: §5ag); until 2026-10-22 the video element downloaded it itself, and a paused
 clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. It shows
-once whole: its first frame is the film's last, so nothing changes where it takes over. A new viewport (a phone turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll offset (until 2026-10-22 a turned window landed past the passage), by the window's `resize` and by the boxes themselves (`ResizeObserver`: in the iOS Simulator `svh` settled with no `resize` event, and every moment stood 8% early until 2026-11-05; both, since an observer alone answers after the frame's scroll has named the moment by the old map), and a turned phone stands on the moment's still
+once whole: the first second of passage scroll blends its opening over Nightfall’s rooftop. A new viewport (a phone turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll offset (until 2026-10-22 a turned window landed past the passage), by the window's `resize` and by the boxes themselves (`ResizeObserver`: in the iOS Simulator `svh` settled with no `resize` event, and every moment stood 8% early until 2026-11-05; both, since an observer alone answers after the frame's scroll has named the moment by the old map), and a turned phone stands on the moment's still
 until the other orientation's clip is whole. Until then,
 under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
 on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:

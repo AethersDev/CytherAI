@@ -23,7 +23,8 @@ HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 BUST = f"origin-check-{int(time.time())}"
 paths = [p.strip() for p in (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if p.strip()]
 # what must never be served: the record, the retired front doors and their modules, the tools, the studies, what was withdrawn
-HIDDEN = ("backup/newC3/epoch04-preimage.txt", "backup/graphite-v2/index.html", "backup/drawing-set-v1/index.html",
+HIDDEN = ("film/film-landscape.mp4", "film/film-portrait.mp4", "film/final-landscape.jpg", "film/final-portrait.jpg",
+          "backup/front-door-film-v1/film/film-landscape.mp4", "backup/newC3/epoch04-preimage.txt", "backup/graphite-v2/index.html", "backup/drawing-set-v1/index.html",
           "backup/unhappened-v1/index.html", "backup/exception-v1/exception/index.html", "backup/PRODUCTION_PLAN.md",
           "backup/trajectory-engine/pages/runner.html", "backup/og-card-v1/og-card.png", "backup/icon-v1/icon.svg",
           "newC3/epoch04-preimage.txt", "PRODUCTION_PLAN.md", "prototype/unhappened-4/index.html", "prototype/exception/index.html",
@@ -74,8 +75,8 @@ if not styled_404:
     defects.append("404 body is not the styled 404.html")
 
 mime = {p: head(f"https://{HOST}/{p}?{BUST}")[2] for p in
-        ("index.html", "manifest.webmanifest", "js/film.js", "css/film.css", "film/film-landscape.mp4", "film/final-portrait.jpg", "sw.js")}
-for p, want in (("film/film-landscape.mp4", "video/mp4"), ("js/film.js", "javascript"), ("css/film.css", "text/css"),
+        ("index.html", "manifest.webmanifest", "js/film.js", "css/film.css", "film/nightfall-landscape.mp4", "film/nightfall-portrait.jpg", "sw.js")}
+for p, want in (("film/nightfall-landscape.mp4", "video/mp4"), ("js/film.js", "javascript"), ("css/film.css", "text/css"),
                 ("manifest.webmanifest", "manifest+json")):
     if want not in mime[p]:
         defects.append(f"mime {p}: {mime[p]}")
