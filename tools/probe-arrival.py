@@ -261,7 +261,7 @@ def lean(origin):
                 state, films = tab.js("document.body.dataset.state"), [u for u in tab.requests if u.endswith(".mp4")]
                 workers = tab.js("navigator.serviceWorker.getRegistrations().then(r => r.length)")
                 if plays:
-                    passed = state == "film" and any("film-landscape" in u for u in films)
+                    passed = state == "film" and any("nightfall-landscape" in u for u in films)
                     record("lean", passed, page=lang, link=name, state=state, films=len(films))
                 else:
                     tab.js(PLACE % 1); time.sleep(0.5)

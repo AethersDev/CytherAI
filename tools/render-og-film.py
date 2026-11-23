@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """render-og-film.py — the link-preview card: the film's final frame with its statement.
 
-Classification: ILLUSTRATIVE. The composition is tools/og-card.html: film/final-landscape.jpg (the last frame of the
+Classification: ILLUSTRATIVE. The composition is tools/og-card.html: film/nightfall-landscape.jpg (the last frame of the
 front door's film, a conceptual visualization), the darkening the front door sets behind its statement, the wordmark
 and the statement in the front door's own type. Headless Chrome renders it at 1200×630, device scale 1, served from
 the repository root by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes

@@ -40,8 +40,13 @@ def harness(last, path):
 profiles = {k: v for k, v in ink.items() if " · " in k}
 samples = sum(p["elements_measured"] for p in profiles.values()); worst = min(p["worst"]["min"] for p in profiles.values())
 last = latest("reading_ink_")
+# Describe the seconds that actually ran. A new film can outlast its predecessor.
+film_seconds = [k[1:] for k in next(iter(profiles.values()))["samples"] if k.startswith("t")]
 ledger["observations"][ink_name] = {
     **{k: last[k] for k in ("surface", "method", "samples", "bound", "domain")},
+    "surface": "Nightfall, its HTML statement, links, header, note and Replay, followed by the systems passage, close and footer on the English and Arabic homepages.",
+    "samples": "film seconds " + ", ".join(film_seconds) + "; " + last["samples"].split("; ", 1)[1],
+    "method": "Chrome holds playback at each requested film second and confirms the seek within 0.05 s. The probe samples the statement, the final still, each passage caption at its midpoint and the close. Paired transparent and magenta glyph captures identify the ground beneath the text for the WCAG contrast measurement.",
     "artifact_build": build, "observed_at": day, "runtime": runtime(ink["chrome"]), "harness": harness(last, "tools/probe-ink.py"),
     "result": "PASS", "elements_measured": samples, "worst_min": worst, "history": history,
     "profiles": {k: {"elements_measured": p["elements_measured"], "below_4_5": p["below_4_5"], "worst": p["worst"]} for k, p in profiles.items()}}
@@ -56,7 +61,7 @@ ledger["artifact_builds"].append(build)
 BIND = {k: candidate[k] for k in ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash")}
 for oid, name, path, chrome, method in (
     ("CY-SEM-003", ink_name, "tools/probe-ink.py", ink["chrome"], lambda m: {
-        "measurement": m["measurement"].rsplit("; ", 1)[0] + f"; {samples} element samples",
+        "measurement": f"WCAG contrast of each measured reading element at glyph support across {len(film_seconds)} film times, the still, eight passage captions and the close on both homepages in both theme settings; {samples} element samples",
         "threshold": f"minimum ≥ 4.5:1 at every glyph-support pixel; observed worst {worst}:1", "units": m["units"]}),
     ("CY-TEMP-001", settle_name, "tools/probe-settle.py", settle["chrome"], lambda m: m)):
     row = next(r for r in corpus["obligations"] if r["id"] == oid)

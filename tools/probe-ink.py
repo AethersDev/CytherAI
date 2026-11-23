@@ -32,7 +32,7 @@ import websocket   # websocket-client, the one module outside the standard libra
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PAGES = (("/", ""), ("/ar/", "ar/"))
 VIEWPORTS = ((1440, 900, 1, False), (1280, 720, 1, False), (844, 390, 2, True), (390, 844, 3, True), (375, 667, 2, True), (320, 844, 2, True))
-SECONDS = (1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 9.0, 9.9, 11.0, 11.9)
+SECONDS = (1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 197 / 24, 205 / 24, 9.0, 9.9, 11.0, 12.0, 13.0, 15.0)
 BOUND, SUPPORT, INF = 4.5, 64, float("inf")
 
 HOLD = ("HTMLMediaElement.prototype.play = function () { return Promise.resolve(); };"
