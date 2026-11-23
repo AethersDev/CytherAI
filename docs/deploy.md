@@ -2739,6 +2739,13 @@ strike, and the portrait fell back too. The headline and its links stayed in vie
 **Not observed.** A real phone; a real slow network (the throttle is Chrome's); a first-time viewer at normal speed on the served encode. The corpus's two automated receipts for the unpublished drafts
 (`5C1052AC9D085496`, `4B8DDCAD234DE403`) were provisional and were replaced by this build's one.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_8E38E5E2ACE1FAA2`), 87 of 87 served paths matching the artifact.
+
+**Publishing, 2026-11-23.** The owner's reviewer fetched both homepages and both films from the public site and found all four byte for byte this build's, and reports that a second publish of the same build
+landed while `publish.sh` was verifying the first, the two published trees compared and identical. Seen from this repository afterwards: one publish commit on `origin/gh-pages` (`3977e6a`, *publish 8E38E5E2ACE1FAA2
+(45f9977)*), so the comparison itself is the reviewer's observation; a second, read-only run of `tools/probe-origin.py` (no `--record`) passed with the worker's cache named for this build; the rollback to the previous
+film is the local branch `rollback/27F82D15E3D706F0`.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
