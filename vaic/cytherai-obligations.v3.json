@@ -11,7 +11,7 @@
     "grammar_hash": "a048ac450206cf12e9513aef7a6d4c022264b9a93d1e377f9cc71efb6fe345e0",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
     "artifact_manifest_hash": "7d63b7c590315bcc46c56e905f0e67ae7ee29bce5e3c1d67e36b85fcccfc9233",
-    "verification_identity": "d66b14bad92abcf0e789277445b6613fab9c52ef9bfc30389521958394876de4"
+    "verification_identity": "f4b26f79396236cd35c59ae0b5e3008f68d084e1bead2cc0d0dff6b558e9e298"
   },
   "semantics": {
     "result_values": [
@@ -8362,6 +8362,37 @@
             "grammar_hash": "a048ac450206cf12e9513aef7a6d4c022264b9a93d1e377f9cc71efb6fe345e0",
             "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
             "verification_identity": "d66b14bad92abcf0e789277445b6613fab9c52ef9bfc30389521958394876de4",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "2A08C6343A217562",
+            "method": {
+              "measurement": "deploy.sh builds the artifact into a temporary directory; its files are compared with deploy.paths, each byte for byte with its source; the allowlist is checked for forbidden trees, the project pages' reviewed sets and the worker's precache",
+              "threshold": "exactly the 87 deploy.paths files, each byte-identical to its source; no backup/, docs/ or awc-os/live/; every precached asset shipped",
+              "units": "files and bytes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_declared_deploy_set_is_exactly_what_deploy_ships",
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-11-24"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "2A08C6343A217562",
+            "artifact_manifest_hash": "7d63b7c590315bcc46c56e905f0e67ae7ee29bce5e3c1d67e36b85fcccfc9233",
+            "record_hash": "224319ec7b35cedce85f9a3ac5b885b6c28b708f365e7b2eb635880be61cd8cc",
+            "grammar_hash": "a048ac450206cf12e9513aef7a6d4c022264b9a93d1e377f9cc71efb6fe345e0",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "f4b26f79396236cd35c59ae0b5e3008f68d084e1bead2cc0d0dff6b558e9e298",
             "environment": {
               "capability_profile": "release_artifact",
               "device": "local_host",

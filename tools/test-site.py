@@ -16,7 +16,6 @@ import copy
 import hashlib
 import importlib.util
 import json
-import os
 import posixpath
 import re
 import shutil
@@ -57,6 +56,8 @@ DEPLOY_FILES = [line.strip() for line in
                 (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if line.strip()]
 DEPLOYED = set(DEPLOY_FILES)
 HTML_FILES = [path for path in DEPLOY_FILES if path.endswith(".html")]
+# the link-preview cards the site renders itself, each from a composition in tools/ (the English card is the identity kit's own image since 2026-11-23)
+CARDS = ["tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]
 HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 # the register rules in CLAUDE.md: the retired gold register, the document register (any document number: the brief's
 # DOC-2026-002 retired with the cold-paper pages, 2026-10-21), fake meters and the retired
@@ -539,8 +540,7 @@ class SiteContractTests(unittest.TestCase):
             home = re.findall(r'<a class="wordmark"[^>]*>(.*?)</a>', html, re.S)
             if page.startswith("tools/"): return None if len(card.findall(html)) == 1 else f"{page}: the card shows no logo"
             return None if len(home) == 1 and logo.fullmatch(home[0]) else f"{page}: the home link is not the logo"
-        cards = ["tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]   # the English card is the identity kit's own image since 2026-11-23
-        for page in HTML_FILES + cards:
+        for page in HTML_FILES + CARDS:
             self.assertIsNone(defect(page, (ROOT / page).read_text(encoding="utf-8")))
         # The Arabic card stands on the identity kit's rendering of the part, which is the mark (2026-11-24): beside it the logo is seen
         # at its name alone, as the kit's English card sets it. The view must hold the name whole and none of the mark's square (0 to 100).
@@ -560,6 +560,17 @@ class SiteContractTests(unittest.TestCase):
         about = (ROOT / "ar/about.html").read_text(encoding="utf-8")   # the Seal beside a correct logo, its class one of two
         self.assertIsNotNone(defect("ar/about.html", about.replace("</header>", '<svg class="seal decorative"></svg></header>', 1)))
         self.assertIn("rect", seal, "the retired Seal stands in backup/seal-v1/")
+
+    def test_a_card_draws_only_with_files_in_the_tree(self) -> None:
+        """A link-preview card is rendered from a composition (tools/render-og-film.py). Headless Chrome renders a composition
+        whose picture is missing all the same, the right size (the audit of 2026-11-24: the Arabic card without its plate, 33,842
+        bytes for 74,718, and every check passed), so each file a composition names must be in the tree; the renderer refuses
+        one that is not, or that did not reach the page."""
+        for card in CARDS:
+            named = re.findall(r'(?:url\(|src=")([^)"#]+)', (ROOT / card).read_text(encoding="utf-8"))
+            self.assertTrue(named, card)
+            for url in named:
+                self.assertTrue((ROOT / "tools" / url).is_file(), f"{card} names {url}, which is not in the tree")
 
     def test_the_front_door_is_one_environment(self) -> None:
         """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light
@@ -1008,8 +1019,7 @@ class SiteContractTests(unittest.TestCase):
         """One declaration feeds both operations, so the two cannot drift apart."""
         with tempfile.TemporaryDirectory() as tmp:
             dist = Path(tmp) / "artifact"
-            run = subprocess.run(["./deploy.sh"], cwd=ROOT, capture_output=True, text=True,
-                                 env={**os.environ, "DIST": str(dist)})
+            run = subprocess.run(["./deploy.sh", str(dist)], cwd=ROOT, capture_output=True, text=True)
             self.assertEqual(run.returncode, 0, run.stderr)
             shipped = sorted(path.relative_to(dist).as_posix()
                              for path in dist.rglob("*") if path.is_file())

@@ -5,7 +5,8 @@ must move together when the site changes. The repository is a zero-dependency
 static site: source HTML, CSS, and JavaScript are served directly. There is no
 framework, package graph, bundle, or server application.
 
-The homepage is **the film** (since 2026-10-12): a twelve-second film, rendered offline and
+The homepage is **the film** (since 2026-10-12; since 2026-11-23 Nightfall, 15.125 seconds, where a twelve-second film
+stood: `backup/front-door-film-v1/`), rendered offline and
 silent, with its sentences as HTML over it; then **the passage** (since 2026-10-20), which the
 scroll moves through: the film's final composition opens into ADII's scene, then AWC-OS's and
 CytherCAD's, each with its words at its moments and one route into its evidence, and returns to
@@ -25,7 +26,7 @@ flowchart TD
   I --> F["js/film.js — the film, its cues, the passage, its stills, the worker"]
   F --> MED["film/ — two films, the passage, their posters and stills"]
   F --> SW["sw.js registration"]
-  RF["tools/render-film.py · tools/render-passage.py (Blender, offline)"] -.-> MED
+  RF["Nightfall: the study, outside the repository · the passage: tools/render-film.py (its scene), tools/render-passage.py (Blender, offline)"] -.-> MED
 
   RM["the rooms: adii/, awc-os/, cythercad/, their ar/ counterparts, the contact pages, pages/*.html, 404.html"] --> ROOM["css/room.css"]
 
@@ -69,7 +70,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `ar/index.html`, `ar/contact.html`, `ar/adii.html`, `ar/awc-os.html`, `ar/cythercad.html` | The front door, the contact page and each system's evidence, in Arabic (AWC-OS with its Arabic film and text; ADII's run and CytherCAD's record in their original English) | Yes | Every HTML byte moves the build identity; the Arabic front door keeps the English one's cues, sections and figures (`tools/test-site.py`) |
 | `fonts/` | IBM Plex Sans Arabic 300 and 400, with its licence | Yes | Shipped unmodified (the licence reserves the name "Plex"); precached |
 | `css/film.css`, `js/film.js` | The front door's style and its script | Yes | Hashed (SRI); a change requires `./generate-integrity.sh` and re-stamping; reading ink over the film is a browser observation (CY-SEM-003) |
-| `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Rendered by `tools/render-film.py` and `tools/render-passage.py` (from the film's own scene); every file the page names ships and every shipped file is named (`tools/test-site.py`) |
+| `film/` | The two films with their final-frame posters, the passage in both orientations with its stills | Yes | Nightfall is encoded from its study's frames, outside the repository (`docs/asset-promotion-log.md`, IMG-027); the passage is rendered by `tools/render-passage.py` from the scene `tools/render-film.py` builds, the film the front door showed until 2026-11-23; every file the page names ships and every shipped file is named (`tools/test-site.py`) |
 | `flat/`, `css/flat.css`, `js/flat.js` | Both looked flat (2026-10-25): its page, its sequence in both orientations, the stills that stand in for it and the instrument's plates; the Arabic page is `ar/flat.html` | Yes (the reviewed set) | Rendered by `tools/render-flat.py` (the scene is the script) and joined by `tools/encode-flat.py`, which reads the stills from `js/flat.js`; a new file under `flat/` ships once named in `REVIEWED_PUBLICATION`, and every media file the script names ships, and back (`tools/test-site.py`); the stylesheet and the script are hashed (SRI); `tools/probe-flat.py` is its browser check |
 | `js/manifest.js`, `js/instrument.js` | The record and the boundary engine | No | Loaded by no page; the corpus binds their paths (`record_hash`, `kernel_hash`), so a change re-stamps |
 | `css/room.css` | The rooms (2026-10-21): the front door's type, tokens, lockup and footer for the pages a visitor reaches from it | Yes | Hashed (SRI) and precached; its tokens must stay the front door's and its inks hold (`tools/test-site.py`, the rooms law) |
@@ -92,8 +93,8 @@ run them under jsc, the manifest first. Their public surface is an inventory
 1. It removes `no-js`. The statement and its two links need no script: the markup shows them (`.landing.on`) from the first paint, over the film, the `h1` and its links exposed to everyone from the start (until 2026-11-05 they waited for the film's 10.6th second). The film's text alternative is
    a `.sr` paragraph before it. The header's mark is the CytherAI logo, one image of
    `assets/logo/cytherai-ink.svg`, on the paper header (`tools/render-mark.py`; `cytherai.svg`, in the sheet's Ink, is the cards'); `tools/test-site.py` holds every header to it and it to the computed mark.
-2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
-   `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G or estimates under 1 Mbit/s, skip straight to the still state with *Play the film* and download no film (the latter three no passage and no worker either: never "3g" by itself, `docs/deploy.md` §5ag, §5ai); a refused play, a media error, or no
+2. It picks the film and its poster by orientation (`film/nightfall-landscape.mp4` or
+   `film/nightfall-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G or estimates under 1 Mbit/s, skip straight to the still state with *Play the film* and download no film (the latter three no passage and no worker either: never "3g" by itself, `docs/deploy.md` §5ag, §5ai); a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.
 3. While the film plays, an 80 ms interval reads `currentTime` and shows each sentence in its
    window (`data-from`/`data-to`), as subtitles under the statement. It also adds up how far
@@ -171,16 +172,21 @@ The release flow is fail-closed:
    over every `deploy.paths` byte, stamped into every HTML file and the worker cache
    name), then `python3 tools/vaic_restamp.py` once per transaction.
 3. Run `./verify.sh`.
-4. `./deploy.sh` deletes and rebuilds `dist/` from `deploy.paths`; it rejects a precached
-   asset missing from the artifact and rejects the historical directories.
+4. `./deploy.sh` builds `dist/` from `deploy.paths`: a whole new artifact beside the old one, which it replaces only once
+   the new one has passed (a precached asset missing from it, or a historical directory in it, stops the build with the old
+   artifact standing); it replaces nothing that is not an artifact (`./deploy.sh <dir>` builds elsewhere).
 5. Observe the build in a browser: `.venv/bin/python tools/probe-ink.py dist <dir>` (CY-SEM-003) and
-   `.venv/bin/python tools/probe-settle.py dist <dir>` (CY-TEMP-001), and append their receipts.
-6. `./publish.sh` pushes the contents of `dist/` as the single-commit `gh-pages` branch
-   GitHub Pages serves at `cytherai.com` (`CNAME`, `.nojekyll` are in the artifact), keeping the
-   artifact it replaces as the local branch `rollback/<its build>`. It refuses any uncommitted
-   change, a HEAD not on `master`, and a failing `./verify.sh`. Then `python3 tools/probe-origin.py
-   dist <out.json>` observes the live origin (CY-ORIGIN-001). The origin contract and Pages'
-   recorded limits are `docs/deploy.md` §1–§4, §7.
+   `.venv/bin/python tools/probe-settle.py dist <dir>` (CY-TEMP-001), then record them:
+   `python3 tools/vaic_record.py <dir>/ink.json <dir>/settle.json "<what changed>"` (each result carries the probe, the day and
+   the machine it came from; run again, it finishes an append that was interrupted).
+6. Commit, and merge into `master`: the merge admits the record. `./publish.sh` then builds the artifact in a directory of
+   its own and pushes it as the single-commit `gh-pages` branch GitHub Pages serves at `cytherai.com` (`CNAME`, `.nojekyll`
+   are in the artifact), keeping the artifact it replaces as the branch `rollback/<its build>`, here and at origin. It refuses
+   any uncommitted change, a HEAD not on `master`, a failing `./verify.sh`, a record with no current PASS for the two browser
+   observations of step 5 (`./verify.sh` passes on any well-formed record), and a `gh-pages` that moved since it fetched it
+   (another publisher). Then `./deploy.sh && python3 tools/probe-origin.py dist <out.json> --record` observes the live
+   origin (CY-ORIGIN-001) and records it; commit that. `./publish.sh --restore <build>` serves a kept artifact again
+   (`docs/operations.md`). The origin contract and Pages' recorded limits are `docs/deploy.md` §1–§4, §7.
 
 The service worker precaches the pages, the front door's script and stylesheet, the two
 final-frame posters it stands on when the film cannot play (offline included), and the three
@@ -236,20 +242,14 @@ muted inline autoplay and VoiceOver.
   figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Neither
   link-preview card carries the statement since 2026-11-24: the English is the identity kit's image and the Arabic its line in Arabic.
 - Add a token: give it a value in `:root` in `css/film.css`; the ink law reads it. The front door has one theme.
-- Re-render a film: `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> anim <dir> …`
-  (usage in the script's header; the published films used 64
-  samples with `TL=24`/`TL=14` landscape/portrait), encode with
-  `ffmpeg -framerate 24 -i <dir>/f%04d.png -c:v libx264 -preset slow -crf 23 -pix_fmt yuv420p
-  -movflags +faststart <out>.mp4` (the master) and the last frame as its poster. The films are
-  delivered lighter than their masters, because Safari starts a film only once it expects to play
-  through: `ffmpeg -i <master> [-vf scale=1440:810:flags=lanczos] -c:v libx264 -preset veryslow
-  -tune film -crf 29 -pix_fmt yuv420p -movflags +faststart -an film/film-<orientation>.mp4`
-  (landscape scaled to 1440×810, about 2.7 Mbit/s; portrait at 810×1440, about 2.3 Mbit/s). The
-  render frames of the published films were not kept; their CRF 23 masters are
-  `git show e40fa72:film/film-<orientation>.mp4`. Replace the files under
-  `film/`, regenerate integrity, and observe reading ink again: the ground under every caption
-  has changed.
-- Re-render the passage: it is rendered from the film's own scene, so its first frame stays the film's last. Build the
+- Change the film: Nightfall is not rendered here. Its scene, its two locked masters and their frames are the study's
+  (`~/Desktop/cyther-studies/cyther-rod/nightfall/`, outside the repository); what `film/` serves is a lighter encode of those
+  frames, made so that a first visit on a slow link reaches the ending, with the masters' last frames as posters
+  (`docs/asset-promotion-log.md`, IMG-027, gives the encoder's settings; `docs/deploy.md` §5ao, the playback it was chosen on).
+  Replace `film/nightfall-<orientation>.mp4` and its poster together, record their digests, regenerate integrity, and observe
+  reading ink again: the ground under the statement has changed. The film the front door showed until 2026-11-23 is
+  `backup/front-door-film-v1/`; `tools/render-film.py`, which rendered it, stays because the passage is rendered from its scene.
+- Re-render the passage: it is rendered from the scene of the film Nightfall replaced, whose last frame is its first (over Nightfall's rooftop its opening blends in by the scroll). Build the
   scene, `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> blend <dir> 1920x1080`
   (`1080x1920` portrait) `64`, then `TL=24` (`TL=14` portrait) `blender -b --factory-startup <dir>/film-<l|p>.blend
   --python-exit-code 1 -P tools/render-passage.py -- <l|p> anim <dir> 1920x1080 64` (`FROM=12` renders only what follows

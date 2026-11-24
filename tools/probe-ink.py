@@ -23,11 +23,16 @@ Bound: >= 4.5:1 at every glyph-support pixel of every fully opaque reading eleme
 writes <out>/ink.json (with --shots, each sample's two captures too). Exit 0 PASS, 1 FAIL; 2 when the run could not
 measure (the page not held where the method needs it, a capture it cannot read): no verdict, and no ink.json."""
 
-import argparse, base64, functools, http.server, itertools, json, re, shutil, struct, subprocess, sys, tempfile
+import argparse, base64, functools, hashlib, http.server, itertools, json, platform, re, shutil, struct, subprocess, sys, tempfile
 import threading, time, urllib.request, zlib
 from pathlib import Path
 
 import websocket   # websocket-client, the one module outside the standard library (.venv)
+
+# what a run says of itself, for the record (tools/vaic_record.py): the probe that ran, the day it ran and the machine it ran on, taken
+# as it starts. Until the audit of 2026-11-24 the recorder supplied all three when the result was imported, from wherever that was.
+SAID = {"harness_version": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12], "observed_at": time.strftime("%Y-%m-%d"),
+        "host": f"macOS {platform.mac_ver()[0]}, {'Apple Silicon' if platform.machine() == 'arm64' else platform.machine()}"}
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PAGES = (("/", ""), ("/ar/", "ar/"))
@@ -291,7 +296,7 @@ def main():
         chrome.wait()
         shutil.rmtree(home)
     result = "FAIL" if any(p["below_4_5"] for p in profiles.values()) else "PASS"
-    report = {"artifact_build": build, "chrome": version, "result": result, **profiles}
+    report = {"artifact_build": build, "chrome": version, "result": result, **SAID, **profiles}
     (out / "ink.json").write_text(json.dumps(report, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"{result}: build {build}, {sum(p['elements_measured'] for p in profiles.values())} element samples over "
           f"{len(profiles)} profiles, worst {min(p['worst']['min'] for p in profiles.values())}:1 ({version})")

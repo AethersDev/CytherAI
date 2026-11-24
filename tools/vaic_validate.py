@@ -94,7 +94,7 @@ IDENTITY_COVERAGE = {
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
-        "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/vaic_restamp.py",
+        "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/test-release.py", "tools/test-record.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
         "tools/test-api.py", "tools/test-boundary.js", "tools/render-mark.py", "tools/canon.py",
     ),
@@ -715,6 +715,8 @@ def validate(corpus: dict[str, Any], matrix: dict[str, Any], root: Path = ROOT) 
         "current_evidence": "COMPLETE" if licensed and not expired else "INCOMPLETE",
         "expired_bindings": expired,
         "projection": "VALID" if projection_valid else "INVALID",
+        # what a publisher must see observed before it pushes: the projection's obligations with no current PASS (publish.sh)
+        "projection_open": sorted(row["id"] for row in projection_rows if effective.get(row["id"]) != "PASS") if licensed else [],
         "origin": "VALID" if origin_valid else "NOT_CERTIFIED",
         "release": "CERTIFIED" if projection_valid and origin_valid else "NOT_CERTIFIED",
         "superseded": sorted(superseded),
