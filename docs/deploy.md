@@ -2789,6 +2789,8 @@ wording yet.
 
 **Not observed.** A real phone; a screen reader; how each service crops the new card.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B777DA2C301E811D`), 87 of 87 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
