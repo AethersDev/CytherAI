@@ -8,13 +8,18 @@
 # digest the retired floor printed as PREIMAGE SEALED. Publishing is therefore an
 # explicit allowlist, never "upload the tree".
 #
-# POSIX/BSD. Run from anywhere: ./deploy.sh
+# Nothing is removed until a whole new artifact stands beside the old one, and only an
+# artifact is ever removed (the audit of 2026-11-24). Until then the destination was
+# removed first: a missing source left no artifact at all, and the destination came from
+# the environment (DIST), so a value inherited from another tool named what was removed.
+#
+# POSIX/BSD. Run from anywhere: ./deploy.sh [destination]
+#   destination   where to build, for a test or a publish that must not touch ./dist
 
 set -eu
 
 ROOT=$(cd "$(dirname "$0")" && pwd)
-# overridable so a test can build the artifact without touching the working tree
-DIST="${DIST:-$ROOT/dist}"
+DIST="${1:-$ROOT/dist}"
 
 # The allowlist is DECLARED ONCE, in deploy.paths, and is read by both operations
 # that depend on it: this copy, and the artifact identity in tools/vaic_validate.py.
@@ -22,27 +27,46 @@ DIST="${DIST:-$ROOT/dist}"
 # EVIDENCE: artifact-source-allowlist
 FILES=$(cat "$ROOT/deploy.paths")
 
-echo "[deploy] Building $DIST"
-rm -rf "$DIST"
-
 for f in $FILES; do
     [ -f "$ROOT/$f" ] || { echo "  ERROR: allowlisted $f not found" >&2; exit 1; }
-    mkdir -p "$DIST/$(dirname "$f")"
-    cp "$ROOT/$f" "$DIST/$f"
+done
+
+# The destination is this script's to replace only if it is an artifact: absent, or a
+# directory holding nothing deploy.paths does not declare (the Finder's .DS_Store aside). Anything else is left whole.
+if [ -e "$DIST" ] || [ -L "$DIST" ]; then
+    [ -d "$DIST" ] && [ ! -L "$DIST" ] || { echo "  ERROR: $DIST is not a directory; it is left as it is" >&2; exit 1; }
+    STRAY=$(cd "$DIST" && find . ! -type d ! -name .DS_Store | sed 's|^\./||' | grep -v -x -F -e "$FILES" | head -3 || true)
+    [ -z "$STRAY" ] || { echo "  ERROR: $DIST holds what deploy.paths does not declare, so it is not an artifact to replace, and is left as it is:" >&2
+                         echo "$STRAY" | sed 's/^/    /' >&2; exit 1; }
+fi
+
+echo "[deploy] Building $DIST"
+mkdir -p "$(dirname "$DIST")"
+NEW="$DIST.new.$$"
+mkdir "$NEW"
+trap 'rm -rf "$NEW"' EXIT
+
+for f in $FILES; do
+    mkdir -p "$NEW/$(dirname "$f")"
+    cp "$ROOT/$f" "$NEW/$f"
 done
 
 # Every precached asset must exist in the artifact, or install fails atomically.
 MISSING=0
 for a in $(sed -n '/^var ASSETS = \[/,/^\];/p' "$ROOT/sw.js" | sed -n "s/.*'\([^']*\)'.*/\1/p"); do
-    [ -f "$DIST/${a%%\?*}" ] || { echo "  ERROR: sw.js precaches $a, absent from the artifact" >&2; MISSING=1; }   # ?v= names the bytes, not the path
+    [ -f "$NEW/${a%%\?*}" ] || { echo "  ERROR: sw.js precaches $a, absent from the artifact" >&2; MISSING=1; }   # ?v= names the bytes, not the path
 done
 [ "$MISSING" -eq 0 ] || { echo "  ERROR: allowlist and sw.js ASSETS have drifted" >&2; exit 1; }
 
 # The record must never be in the artifact, nor the AWC-OS live-MVP redirect (an ephemeral
 # tunnel). The project pages ship only their reviewed set, pinned in tools/test-site.py.
 for d in backup docs awc-os/live; do
-    [ ! -e "$DIST/$d" ] || { echo "  ERROR: $d reached the artifact" >&2; exit 1; }
+    [ ! -e "$NEW/$d" ] || { echo "  ERROR: $d reached the artifact" >&2; exit 1; }
 done
+
+rm -rf "$DIST"
+mv "$NEW" "$DIST"
+trap - EXIT
 
 echo "[deploy] $(find "$DIST" -type f | wc -l | tr -d ' ') files · $(du -sh "$DIST" | cut -f1)"
 echo "[deploy] Publish the CONTENTS of dist/ as the origin root. Headers: docs/deploy.md"

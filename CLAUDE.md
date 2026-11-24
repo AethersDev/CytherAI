@@ -18,7 +18,7 @@ Pages does, and so does the system Ruby's: `./deploy.sh && ruby -run -e httpd di
 
 One check at a time: a jsc regression takes the modules it needs before it, in load
 order, exactly as `verify.sh` lists them (`$JSC js/manifest.js js/instrument.js
-tools/test-boundary.js`). `tools/test-site.py` and `tools/test-vaic.py` are `unittest`
+tools/test-boundary.js`). `tools/test-site.py`, `tools/test-vaic.py`, `tools/test-release.py` (the build and the publish, in sites of their own under a temporary directory) and `tools/test-record.py` (the recorder) are `unittest`
 (`python3 tools/test-vaic.py VaicCorpusTests.test_<name>`); the other `tools/test-*.py`
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
@@ -176,7 +176,7 @@ one commit produce the same identity **without building anything**; a stray
 hashed beside their bytes, so moving a file is a different artifact. No commit id, dirty
 flag, or timestamp enters it: git says where bytes came from, artifact identity says
 which bytes constitute the candidate. `./verify.sh` is therefore **read-only** — it no
-longer runs `./deploy.sh`; a test builds into a temp directory instead (`DIST=` override).
+longer runs `./deploy.sh`; a test builds into a temp directory instead (`./deploy.sh <dir>`; until 2026-11-24 the destination came from the environment, `DIST`, and was removed before anything was checked).
 
 **Release policy consumes effective verdicts; the validator never reads policy.** The
 validator says what a verdict *is*; `vaic/release-dispositions.v0.json` records what the
@@ -200,7 +200,7 @@ After changing any served file (anything in `deploy.paths`, HTML included — th
 identity is the served-artifact manifest), re-run `./generate-integrity.sh` (SRI + the
 `build-hash` meta + the worker cache name), then `python3 tools/vaic_restamp.py` (re-stamps
 the VAIC candidate, appends the automated-set receipts; existing receipts are never edited). Once `tools/probe-ink.py` and
-`tools/probe-settle.py` pass on that candidate, `python3 tools/vaic_record.py <ink.json> <settle.json> <day> "<what changed>"` appends their
+`tools/probe-settle.py` pass on that candidate, `python3 tools/vaic_record.py <ink.json> <settle.json> "<what changed>"` appends their
 observations and receipts (the origin's follow the publish: `tools/probe-origin.py --record`). A scratchpad goes with its session, so a release tool lives in `tools/`.
 
 The figures the pages print — CytherCAD's validation record on `pages/brief.html` and in CytherCAD's rooms
@@ -454,8 +454,8 @@ worker can answer a newer page from its cache: it did, to the Arabic front door'
 stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte, stamped into every `.html`
 `deploy.paths` declares: there is no second page list), `deploy.sh` (allowlist → `dist/`),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
-admitted states only, from a tree with no uncommitted change; the artifact it replaces is kept as the local
-branch `rollback/<its build>`, the rollback (`docs/deploy.md` §7); headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
+admitted states only, from a tree with no uncommitted change, and only with a current PASS for the two browser observations judged before publication, which `./verify.sh` does not ask for; it builds in a directory of its own, leases its push to the `gh-pages` it fetched, so two publishers cannot replace each other unseen, and keeps the artifact it replaces as the
+branch `rollback/<its build>`, here and at origin, which `./publish.sh --restore <build>` serves again from any checkout (`docs/deploy.md` §7, §5ar); headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on
 2026-10-04 and registered in `vaic/release-dispositions.v0.json`, in §7; HTTPS enforcement is not one of them).
 
 **Retired front doors** live whole in `backup/`, each a verbatim snapshot with every verifier

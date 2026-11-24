@@ -142,14 +142,18 @@ ended, or every tab of the site is closed, they are on the new one.
 
 ## How to restore it
 
-`./publish.sh` keeps the artifact it replaces as the local branch `rollback/<build>`. To serve the previous build again:
+`./publish.sh` keeps the artifact it replaces as the branch `rollback/<build>`, in the checkout that published and, since
+2026-11-24, at origin, so any checkout can restore it. To serve a kept build again:
 
 ```sh
-git branch --list 'rollback/*'
-git push --force origin rollback/<build>:gh-pages
+git ls-remote origin 'refs/heads/rollback/*'   # what origin keeps (git branch --list 'rollback/*': what this checkout keeps)
+./publish.sh --restore <build>
 ```
 
-Then run the origin check above against that build's commit. **Rehearsed 2026-10-21, outside production**:
+It pushes the very commit that was served, leased to the `gh-pages` it found: if someone publishes in the meantime it
+stops and replaces nothing. The artifact it replaces is kept in its turn. It builds and verifies nothing, so it runs from
+any state of the tree. An artifact replaced before 2026-11-24 is kept only in the checkout that published it; run the
+restore there. Then run the origin check above against that build's commit. **Rehearsed 2026-10-21, outside production**:
 `rollback/16109F1BC4218636`, the newest kept artifact, was restored from its branch into a local origin (`git archive`).
 Both front doors played and settled in every profile, and its worker installed that build's cache and served an offline
 reload (`tools/probe-settle.py`: PASS). The force-push itself was not rehearsed, since the owner runs every push. If

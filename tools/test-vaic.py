@@ -114,11 +114,18 @@ class VaicCorpusTests(unittest.TestCase):
         canonical ref rather than HEAD also means a bogus receipt committed on a branch
         that is never merged creates no institutional history at all. A missing ref is
         an error, never an empty history: a fresh clone has origin/main and no master,
-        and a walk over nothing passes every guard (git branch master origin/main).
+        and a walk over nothing passes every guard (git branch master origin/main). So is
+        a shallow checkout: it holds the newest commits only, and until 2026-11-24 a
+        depth-one clone passed both history guards on one commit of 260. Both are raised,
+        never asserted: python -O drops an assert.
         """
         exists = subprocess.run(["git", "rev-parse", "--verify", "--quiet", f"{ref}^{{commit}}"],
                                 cwd=root, capture_output=True)
-        assert exists.returncode == 0, f"{ref} must exist to serve as the admission lineage"
+        if exists.returncode != 0:
+            raise AssertionError(f"{ref} must exist to serve as the admission lineage")
+        shallow = subprocess.run(["git", "rev-parse", "--is-shallow-repository"], cwd=root, capture_output=True, text=True)
+        if shallow.stdout.strip() != "false":
+            raise AssertionError(f"{root} is a shallow checkout: the admission lineage must be walked whole (git fetch --unshallow)")
         states = []
         for path in lineage:
             # --full-history: a merge that kept one parent's corpus still shows the other's
@@ -221,6 +228,15 @@ class VaicCorpusTests(unittest.TestCase):
             commit(corpus([r1, r2]), "admit r2")
             commit(corpus([r1, r3]), "drop r2, admit r3")
             self.assertEqual(len(self.history_violations(root, corpus([r1, r3]), ref="HEAD", lineage=(CORPUS,))), 1)
+
+            # a checkout holding only the newest commit holds no history to guard: a whole clone still sees the deletion,
+            # a depth-one clone is refused by name, where it used to find nothing wrong
+            with tempfile.TemporaryDirectory() as clones:
+                for name, depth in (("whole", []), ("shallow", ["--depth", "1"])):
+                    subprocess.run(["git", "clone", "-q", *depth, root.resolve().as_uri(), name], cwd=clones, capture_output=True, check=True)
+                self.assertEqual(len(self.history_violations(Path(clones) / "whole", corpus([r1, r3]), ref="HEAD", lineage=(CORPUS,))), 1)
+                with self.assertRaisesRegex(AssertionError, "shallow checkout"):
+                    self.history_violations(Path(clones) / "shallow", corpus([r1, r3]), ref="HEAD", lineage=(CORPUS,))
 
     def test_an_admitted_receipt_can_never_be_reclassified_as_a_draft(self) -> None:
         """"It was only intermediate" must be knowable at the time, not asserted later."""
@@ -333,6 +349,8 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["projection"] == "VALID", holds("projection", "mandatory"))
         self.assertEqual(result["origin"] == "VALID", holds("origin", "release_mandatory"))
         self.assertEqual(result["release"] == "CERTIFIED", result["projection"] == "VALID" and result["origin"] == "VALID")
+        # what publish.sh refuses on: the projection holds exactly when none of its obligations is left open
+        self.assertEqual(result["projection_open"] == [], result["projection"] == "VALID")
 
     def test_effective_verdicts_are_derived_not_declared(self) -> None:
         """The validator's aggregation must equal an independent derivation.
@@ -404,6 +422,7 @@ class VaicCorpusTests(unittest.TestCase):
         self.assertEqual(result["effective"]["CY-ART-001"], "FAIL")
         self.assertEqual(self.counts(result)["FAIL"], 1)
         self.assertEqual(result["projection"], "INVALID")
+        self.assertIn("CY-ART-001", result["projection_open"])
         self.assertEqual([r["result"] for r in row["evaluation"]["receipts"]], ["PASS"] * history + ["FAIL"])
 
     def test_a_fix_appended_after_a_failure_passes_and_the_failure_stands_as_history(self) -> None:

@@ -16,10 +16,12 @@ byte for byte (docs/asset-promotion-log.md, IMG-031); the composition that rende
 backup/nightfall-card-v1/tools/og-card.html.
 
 Run twice; the output SHA-256 must be identical (same Chrome, same machine): the script prints the digest, size and
-the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero if Chrome or sips fails or
-Chrome's output is not a 1200×630 PNG.
+the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero, the card it would have replaced
+left as it was, if Chrome or sips fails, if Chrome's output is not a 1200×630 PNG, or if a file the composition names is not in
+the tree or was not served to the page: until the audit of 2026-11-24 a composition with its picture missing rendered all the
+same, the right size, and this script reported success (the Arabic card without its plate: 33,842 bytes for 74,718).
 """
-import hashlib, http.server, os, struct, subprocess, sys, tempfile, threading
+import hashlib, http.server, os, re, struct, subprocess, sys, tempfile, threading
 from functools import partial
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,19 +31,29 @@ if len(sys.argv) != 2 or sys.argv[1] not in CARDS:   # no default: the English c
 CARD = CARDS["".join(sys.argv[1:])]
 OUT = os.path.join(ROOT, "assets/og/%s.%s" % (CARD, "png" if "flat" in CARD else "jpg"))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+PAGE = "tools/%s.html" % CARD
+# what the composition draws with: every file its stylesheet and its markup name
+INPUTS = sorted({os.path.normpath(os.path.join("tools", u)) for u in re.findall(r'(?:url\(|src=")([^)"#]+)', open(os.path.join(ROOT, PAGE), encoding="utf-8").read())})
+absent = [p for p in INPUTS if not os.path.isfile(os.path.join(ROOT, p))]
+if absent: sys.exit("%s names what is not in the tree: %s" % (PAGE, ", ".join(absent)))
+ANSWERED = {}   # path -> the status the page was answered with
 
 class Quiet(http.server.SimpleHTTPRequestHandler):
     def log_message(self, *a): pass
+    def log_request(self, code="-", size="-"): ANSWERED[self.path.split("?")[0].lstrip("/")] = int(code)
 
 srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), partial(Quiet, directory=ROOT))
 threading.Thread(target=srv.serve_forever, daemon=True).start()
-url = "http://127.0.0.1:%d/tools/%s.html" % (srv.server_address[1], CARD)
+url = "http://127.0.0.1:%d/%s" % (srv.server_address[1], PAGE)
 with tempfile.TemporaryDirectory() as profile:
     shot = os.path.join(profile, "card.png")   # not OUT: the tracked card exists already, so its presence proves nothing
     run = subprocess.run([CHROME, "--headless=new", "--user-data-dir=" + profile, "--hide-scrollbars", "--force-device-scale-factor=1",
                           "--window-size=1200,630", "--virtual-time-budget=6000", "--screenshot=" + shot, url], capture_output=True, text=True)
     srv.shutdown()
     if run.returncode != 0 or not os.path.isfile(shot): sys.exit("chrome failed: " + run.stderr[-400:])
+    # a font no glyph on the card needs is the browser's not to fetch; everything else it names must have reached the page
+    unloaded = [p for p in [PAGE] + INPUTS if ANSWERED.get(p, 200) != 200] + [p for p in INPUTS if p not in ANSWERED and not p.endswith(".woff2")]
+    if unloaded: sys.exit("the composition did not load: " + ", ".join(unloaded))
     data = open(shot, "rb").read()
     w, h = struct.unpack(">II", data[16:24])
     if data[:8] != b"\x89PNG\r\n\x1a\n" or (w, h) != (1200, 630): sys.exit("not a 1200x630 PNG: %dx%d" % (w, h))

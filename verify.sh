@@ -27,11 +27,17 @@ python3 tools/test-projection.py
 echo "[verify] site/release integration"
 python3 tools/test-site.py
 
+echo "[verify] the build and the publish, against what goes wrong round them"
+python3 tools/test-release.py
+
 echo "[verify] derived asset receipts"
 python3 tools/test-assets.py
 
 echo "[verify] VAIC-0 corpus structure and fail-closed controls"
 python3 tools/vaic_validate.py
 python3 tools/test-vaic.py
+
+echo "[verify] the recorder: what enters the record, and how"
+python3 tools/test-record.py
 
 echo "[verify] all non-browser checks pass"

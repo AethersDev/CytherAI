@@ -18,6 +18,13 @@
 
 ## Certification status
 
+> **History, not the current status.** The block below was written in September 2026 of instrument-v1, three front doors ago;
+> the build it calls current, `F1FF314DEC2C4717`, is not the one served. The current status is never written in this
+> document: it is derived, by `python3 tools/vaic_validate.py` (the stamped candidate's verdict for each obligation, and
+> whether the release is certified) from `vaic/cytherai-obligations.v3.json` and the observations in
+> `vaic/evidence/current-browser-observations.v0.json`. The build records are §5 onward, in order; the newest is the last
+> before §5e, and each is the record of its own day.
+
 ```
 Engineering implementation       COMPLETE (incl. performance-audit remediation)
 Current-candidate browser check  PARTIAL — in-app browser: engine 33/33,
@@ -2835,6 +2842,77 @@ for a time. An Arabic reader's eye on the line as set. A real phone; a screen re
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_2A08C6343A217562`), 87 of 87 served paths matching the artifact.
 
+## 5ar. The release tooling after the maintainability audit: a publish that can be attempted twice — 2026-11-24
+
+No served byte changed: the build stays `2A08C6343A217562` (§5aq), and nothing was published for this. The verifier's identity moved
+(`deploy.sh`, `publish.sh`, `verify.sh`, the validator, the tests), so the automated receipt was appended for it; the browser and origin
+receipts of §5aq are bound to the build, which did not move.
+
+**The audit.** `docs/maintainability-audit-2026-11-24.md`, the owner's reviewer's, eleven findings. Each of the eight acted on here was
+first confirmed against the code. Two are left, for the reasons at the end.
+
+**What changed, by finding.**
+1. *A publish could go ahead on expired browser observations.* `./verify.sh` passes on any well-formed record, whatever it says, and
+   `publish.sh` asked only for its exit status. `publish.sh` now also asks the validator for its verdict and refuses unless the
+   projection holds, naming the obligations with no current PASS (`projection_open`, new in the validator's summary). The origin's own
+   obligation is still judged after the publish.
+2. *A failed build erased the last artifact, and the environment named what was erased.* `deploy.sh` removed its destination, which
+   came from `DIST`, before it had checked one source. It now checks every source first, builds a whole artifact beside the old one,
+   and replaces the old one only when the new one has passed; it replaces only an artifact (a directory holding nothing `deploy.paths`
+   does not declare) and takes its destination as an argument, never from the environment. An artifact of an older allowlist, holding a
+   file since retired, is therefore refused too: remove it by hand.
+3. *Two publishers could replace each other unseen.* `publish.sh` builds in a directory of its own, keeps the artifact it replaces as
+   `rollback/<build>` at origin as well as locally, and leases its push to the `gh-pages` commit it fetched. `./publish.sh --restore
+   <build>` serves a kept artifact again under the same lease, from any checkout.
+4. *The history guards passed in a depth-one clone.* They refuse a shallow checkout by name.
+5. *A browser result was recorded under the probe, day and machine of whoever imported it.* `tools/probe-ink.py` and
+   `tools/probe-settle.py` now write the digest of the probe that ran, the day and the machine into their results;
+   `tools/vaic_record.py` records those and takes no day on its command line. Its refusals are raises, where they were asserts,
+   which `python -O` drops.
+6. *An interrupted recording left a state the next run refused.* One append (`record` in `tools/vaic_record.py`, which the origin's
+   `--record` now calls too) holds a lock, stages every file beside itself before any is put in place, and passes over what is
+   already recorded where it is the same; what differs is refused, never written over.
+7. *The origin check ranged four of nine MP4s and judged only the status.* It asks every MP4 the site ships and compares the interval
+   and total the answer names, and its bytes, with the artifact's. A fetch of the worker that returns nothing is now a defect of the
+   run: on 2026-11-24 it was a traceback, once, and the next run passed.
+8. *The Arabic card rendered without its picture and reported success.* `tools/render-og-film.py` refuses a composition that names a
+   file not in the tree, or one that was not served to the page, and leaves the card it would have replaced; `tools/test-site.py`
+   holds every card's inputs to the tree.
+11. *The entry documents pointed at a retired site.* `README.md` (the film, the range-capable preview, the probes' one dependency, the
+   release and restore commands, where each guide is), the architecture guide (the film's files and where it is made; the release
+   steps), and the head of this document's certification block, which is history and now says so.
+
+**Checked.**
+- `tools/test-release.py`, new: nine tests on three-file sites of their own, `publish.sh` against its own bare remote. Run against the
+  scripts as they were, eight of the nine fail; with the lease alone taken out, only the two-publishers test fails; with the gate
+  alone taken out, only the gate's.
+- `tools/test-record.py`, new: five tests on copies of the ledger and the corpus. Without the lock the two-appends test fails; with
+  the old refusal of any recorded name, the interruption and the retry tests fail; with one refusal turned back into an assert, the
+  optimized run records what it should refuse.
+- The history guards: a fixture, and this repository cloned at depth one (one commit of its history), where both now fail by name.
+- The card renderer, in a copy of its inputs: without the plate, exit 1 and the last card untouched; with the plate unreadable, the
+  same; with it restored, the recorded card to the byte. All three cards re-render to their recorded bytes (Chrome 158.0.8127.37).
+- The origin check, unrecorded, against the live site: PASS, nine MP4s, each 206 with its interval, its total and the artifact's bytes.
+- The two browser probes, edited to say what ran, on the live build: `tools/probe-settle.py` PASS and `tools/probe-ink.py` PASS, 5,142
+  element samples over 24 profiles, worst 4.99:1, in Chrome/158.0.8127.37 (the build's recorded observation is Chrome 157's; this one
+  is not recorded, the build's observation being recorded already). Each result names its probe's digest, the day and the machine, and
+  the recorder took both, in a copy of the record stamped for the build and not yet holding it.
+- A rehearsal of the real scripts on a clone of this repository with these changes, its origin a bare repository holding the artifact
+  `B777DA2C301E811D`: `./publish.sh` ran the whole of `./verify.sh`, built in a directory of its own, kept the outgoing artifact at
+  that origin and published 87 files, each the source's bytes; `./publish.sh --restore B777DA2C301E811D` put the very commit back and
+  kept the one it replaced; and a further build, stamped and observed by no browser, passed `./verify.sh` and was refused by
+  `./publish.sh` for CY-SEM-003 and CY-TEMP-001, with nothing pushed.
+- `./verify.sh` passes with the two new suites in it.
+
+**Not done, and why.**
+- Finding 9 (a film download is known only by its URL, so an old request can pass for the current one after a phone is turned twice)
+  is in `js/film.js` and `js/flat.js`, served code: its fix is a build of its own, with the browser probes, not a tooling change.
+- Finding 10 (tests that compare source text) is left for when those subjects next change, as the audit's own order has it.
+- No CI workflow was added for finding 4: it would run on the owner's GitHub account, on a macOS runner (the suite needs
+  JavaScriptCore), and is the owner's to decide. The guard that makes such a job honest is in.
+- `publish.sh` and `--restore` were exercised against local remotes only. Nothing was pushed to GitHub for this. The first real publish
+  after it will create a `rollback/<build>` branch at origin.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
@@ -2982,9 +3060,10 @@ transitions (§5e), has not been run.
 **Rollback.** `./publish.sh` keeps the artifact it replaces: before it force-pushes, it fetches the live `gh-pages`
 and keeps it as the local branch `rollback/<the build it serves>` (from 2026-10-18; until then this section named
 `rollback/9236E6A692F915D4`, the drawing set's build of 2026-09-17, two front doors before the film, and kept no newer artifact).
-To restore the previous build: `git branch --list 'rollback/*'`, then
-`git push --force origin rollback/<build>:gh-pages`, then `tools/probe-origin.py` against a build of that
-commit. Re-running `./publish.sh` from an older release commit is refused: the history guard fails there, because
+Since 2026-11-24 the kept artifact is pushed to origin under the same name, so a second checkout can restore it, and every push
+of `gh-pages` is leased to the commit the run fetched: a publish in between stops the later one (§5ar). To restore a kept build:
+`./publish.sh --restore <build>` (`git ls-remote origin 'refs/heads/rollback/*'` lists what origin keeps), then
+`tools/probe-origin.py` against a build of that commit. Re-running `./publish.sh` from an older release commit is refused: the history guard fails there, because
 receipts admitted since are absent at that commit.
 
 **A fresh clone.** The admission lineage is the local `master` (`CANONICAL_REF`), which tracks `origin/main`; a

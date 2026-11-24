@@ -22,8 +22,10 @@ console logs no error. Writes <out-dir>/settle.json, the shape the
 evidence ledger records; exits 0 on PASS, 1 on FAIL.
 """
 
+import hashlib
 import io
 import json
+import platform
 import re
 import subprocess
 import sys
@@ -36,6 +38,11 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 import websocket   # websocket-client, the one module outside the standard library (.venv)
+
+# what a run says of itself, for the record (tools/vaic_record.py): the probe that ran, the day it ran and the machine it ran on, taken
+# as it starts. Until the audit of 2026-11-24 the recorder supplied all three when the result was imported, from wherever that was.
+SAID = {"harness_version": hashlib.sha256(Path(__file__).read_bytes()).hexdigest()[:12], "observed_at": time.strftime("%Y-%m-%d"),
+        "host": f"macOS {platform.mac_ver()[0]}, {'Apple Silicon' if platform.machine() == 'arm64' else platform.machine()}"}
 
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PROFILES = {   # label: width, height, device pixel ratio, mobile with touch, reduced motion
@@ -272,7 +279,7 @@ def whole(w, build):
 def main():
     dist, out = Path(sys.argv[1]).resolve(), Path(sys.argv[2])
     build = re.search(r'<meta name="build-hash" content="([0-9A-F]+)">', (dist / "index.html").read_text()).group(1)
-    report, port = {"artifact_build": build}, 0
+    report, port = {"artifact_build": build, **SAID}, 0
     for page in ("/", "/ar/"):
         httpd = serve(dist, port)   # the second page restarts the origin on the first one's port
         port = httpd.server_address[1]
