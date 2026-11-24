@@ -46,7 +46,7 @@ change: a page, the words, a card, the mark, the film, the passage). The working
 
 ```sh
 ./generate-integrity.sh && python3 tools/vaic_restamp.py && ./verify.sh     # after any change to a served file
-./deploy.sh
+./deploy.sh                                                                 # replaces only what it built: a dist/ it refuses is renamed aside (mv dist dist.aside)
 .venv/bin/python tools/probe-ink.py dist <dir>                              # the two observations judged before publication
 .venv/bin/python tools/probe-settle.py dist <dir>
 python3 tools/vaic_record.py <dir>/ink.json <dir>/settle.json "<what changed>"
@@ -54,6 +54,10 @@ python3 tools/vaic_record.py <dir>/ink.json <dir>/settle.json "<what changed>"
 ./publish.sh                                                                # refuses whatever is not ready, and says what
 ./deploy.sh && python3 tools/probe-origin.py dist <out.json> --record       # once Pages serves it; then commit that
 ```
+
+Every push to `main` also runs `./verify.sh` on GitHub (`.github/workflows/verify.yml`), on a clean checkout with the whole
+history: a second observer, which gates and publishes nothing. It is free while the repository is public and does not run if
+it is private. `gh run list --workflow verify` shows its runs.
 
 The steps in full, and what each refuses, are `docs/architecture.md` (*Integrity, deployment, and offline behavior*). Whether
 the stamped candidate is certified is never written down by hand: `python3 tools/vaic_validate.py` says. `docs/deploy.md`

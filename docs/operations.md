@@ -120,7 +120,12 @@ ended, or every tab of the site is closed, they are on the new one.
   - `https://cytherai.com/contact.html` contains `contact@cytherai.com`
   - `https://cytherai.com/no-such-page` answers 404
 
-  Alerts go by email and text to the operator. This is the only part that runs somewhere other than the owner's machines.
+  Alerts go by email and text to the operator. This and the verification on GitHub (below) are the only parts that run somewhere other than the owner's machines.
+- **On every push to `main` (the repository, not the site)**: GitHub runs `./verify.sh` on a clean checkout with the whole
+  history (`.github/workflows/verify.yml`; the runs are under the repository's Actions tab, `gh run list --workflow verify`,
+  and GitHub emails the owner when one fails). A red run says the repository's own checks do not pass away from the owner's
+  machine; it says nothing about the live site, and it blocks nothing. It costs nothing while the repository is public
+  (GitHub does not meter its standard runners there) and does not run if the repository is made private.
 - **After every publish, and weekly (integrity)**: the origin check against the released commit. Every served file must
   be byte-identical to the release, every page must answer over HTTPS, HTTP must redirect, the hidden paths must 404,
   and TLS and the worker must match:

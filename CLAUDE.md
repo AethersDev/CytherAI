@@ -10,7 +10,9 @@ logic regressions, the Python projection/integration tests, and the corpus valid
 Browser-only checks (layout, service worker, reading ink over the film, the settled state)
 remain in `docs/deploy.md`; the retired front doors' laws run against their snapshots,
 `backup/instrument-v1/verify.sh`, `backup/drawing-set-v1/verify.sh` and
-`backup/unhappened-v1/verify.sh`.
+`backup/unhappened-v1/verify.sh`. Every push to `main` runs `./verify.sh` again on GitHub (`.github/workflows/verify.yml`: a clean
+checkout with the whole history, on a macOS runner for jsc, Python 3.10 or later): a second observer that gates and publishes
+nothing, free while the repository is public and skipped if it is private (the owner, 2026-11-24: CI within the free tier).
 Serve with any static file server: `python3 -m http.server 8000` from the repo root — but
 `http.server` answers no byte ranges, so the films cannot seek there (and Safari plays no video
 from it); a browser observation that seeks a film needs a server that answers `Range` (GitHub
@@ -26,7 +28,11 @@ are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05 and its re-check of 2026-11-06, `tools/probe-return.py` (the same way; no obligation, run after any change to `sw.js`, to how `js/film.js` registers it or to how a page names its resources) holds a returning visitor with a publish between two visits, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
 obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
 2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
-turned or a window resized keeps the passage's moment, its words and its frame. `CANONICAL_REF` is local
+turned or a window resized keeps the passage's moment, its words and its frame. `tools/probe-turn.py` (the same way; no
+obligation, run after any change to how `js/film.js` or `js/flat.js` asks for its clip, drops it or holds it) holds the audit's
+finding 9 of 2026-11-24, on the front door and on Both looked flat, with the page's `fetch` answered in the order the probe
+chooses: a phone turned twice asks for the first clip's URL again, and the first download, answered late, changes nothing; a
+dropped download is cancelled and a displaced clip's blob URL released. `CANONICAL_REF` is local
 `master`, which tracks `origin/main`; there is no local `main`. A fresh clone has no `master`, and the
 guards fail rather than walk nothing: `git branch master origin/main`.
 
@@ -176,7 +182,9 @@ one commit produce the same identity **without building anything**; a stray
 hashed beside their bytes, so moving a file is a different artifact. No commit id, dirty
 flag, or timestamp enters it: git says where bytes came from, artifact identity says
 which bytes constitute the candidate. `./verify.sh` is therefore **read-only** — it no
-longer runs `./deploy.sh`; a test builds into a temp directory instead (`./deploy.sh <dir>`; until 2026-11-24 the destination came from the environment, `DIST`, and was removed before anything was checked).
+longer runs `./deploy.sh`; a test builds into a temp directory instead (`./deploy.sh <dir>`; until 2026-11-24 the destination came from the environment, `DIST`, and was removed before anything was checked). `deploy.sh` replaces only what it built: a destination that is not, to the byte, what it
+last built there (its record stands beside it, `<destination>.sha256`) is left whole, to be renamed aside (`mv dist dist.aside`),
+and the old artifact is removed only once the new one stands in its place.
 
 **Release policy consumes effective verdicts; the validator never reads policy.** The
 validator says what a verdict *is*; `vaic/release-dispositions.v0.json` records what the
@@ -259,7 +267,9 @@ The film plays once, muted, and never restarts on its own; Replay plays it again
 same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
 back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
 still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment (without that, in the iOS Simulator, 8 of 10 loads reported it paused at 0 while the screen went on showing it run, behind the statement; a seek to where it says it is does nothing: §5ag); until 2026-10-22 the video element downloaded it itself, and a paused
-clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. It shows
+clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. A download is known by itself, never by its URL, and one dropped (a phone turned) is cancelled: until
+2026-11-24 a phone turned twice asked for the first URL again, and the first download, completing late, passed for the third
+(arriving, it replaced the clip on show and left its blob held; failing, it took the clip away: `tools/probe-turn.py`). It shows
 once whole: the first second of passage scroll blends its opening over Nightfall’s rooftop. A new viewport (a phone turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll offset (until 2026-10-22 a turned window landed past the passage), by the window's `resize` and by the boxes themselves (`ResizeObserver`: in the iOS Simulator `svh` settled with no `resize` event, and every moment stood 8% early until 2026-11-05; both, since an observer alone answers after the frame's scroll has named the moment by the old map), and a turned phone stands on the moment's still
 until the other orientation's clip is whole. Until then,
 under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
@@ -452,7 +462,7 @@ film is still lets the waiting worker in (`take-over`), so the next load is new)
 (`?v=` the first 12 hex of their SHA-256) in the pages and in the worker's precache alike, so no older build's
 worker can answer a newer page from its cache: it did, to the Arabic front door's first visit, and the page lost its
 stylesheet to its own integrity check; + build-hash over every `deploy.paths` byte, stamped into every `.html`
-`deploy.paths` declares: there is no second page list), `deploy.sh` (allowlist → `dist/`),
+`deploy.paths` declares: there is no second page list), `deploy.sh` (allowlist → `dist/`, replacing only what it built there),
 `publish.sh` (`dist/` → the `gh-pages` branch GitHub Pages serves at `cytherai.com`;
 admitted states only, from a tree with no uncommitted change, and only with a current PASS for the two browser observations judged before publication, which `./verify.sh` does not ask for; it builds in a directory of its own, leases its push to the `gh-pages` it fetched, so two publishers cannot replace each other unseen, and keeps the artifact it replaces as the
 branch `rollback/<its build>`, here and at origin, which `./publish.sh --restore <build>` serves again from any checkout (`docs/deploy.md` §7, §5ar); headers contract in `docs/deploy.md` §1, and Pages' limits, accepted by the owner on

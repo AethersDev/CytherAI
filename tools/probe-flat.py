@@ -48,6 +48,12 @@ FULL = 0.55   # before a window's end, its words still in full (js/flat.js fades
 # outlasts the film under them lie under the instrument rising over it (until 2026-10-25 the conclusion did)
 UNDER = """(s => [...s.children].filter(c => { const r = c.getBoundingClientRect(),
   e = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !e || e.closest('.say') !== s; }).length)(document.querySelectorAll('.say')[%d])"""
+# the visitor's place past the film, as the page keeps it (js/flat.js keep): the block at the top of the view and how far into it
+# (block -1: the one at the top now; otherwise that block, wherever it now stands)
+PLACED = """(i => { const blocks = [...document.querySelectorAll('#bench, .close, .notes section, body > footer')],
+  b = i < 0 ? blocks.findLast(e => e.getBoundingClientRect().top <= 0) || blocks[0] : blocks[i];
+  return {block: blocks.indexOf(b), name: b.id || b.className || b.tagName, into: -b.getBoundingClientRect().top,
+          foot: scrollY >= document.documentElement.scrollHeight - innerHeight - 1}; })(%d)"""
 # what a pointer reaches at an element's centre
 AT = """(s => { const e = document.querySelector(s), r = e.getBoundingClientRect(), h = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
   return {x: r.left + r.width / 2, y: r.top + r.height / 2, top: r.top, bottom: r.bottom, on: !!h && (h === e || e.contains(h))}; })(%s)"""
@@ -108,14 +114,18 @@ def resized(key, w, h, dpr, mobile, fails):
         view(vw, vh); st = json.loads(ink.js(STATE)); out[f"11 s at {vw}x{vh}"] = st["want"]
         if abs(st["want"] - 11) > HALF_FRAME or abs(st["at"] - st["want"]) > HALF_FRAME:
             fails.append(f"{key}: resized to {vw}x{vh} at 11 s, the scroll names {st['want']:.3f} s, the sequence {st['at']:.3f} s")
+    # 120 px into each, or as far as the page goes: on the Arabic page at 1440 x 900 it ends 45 px short of the notes, the view's top
+    # in the gap after the close, and the block at the top is then the close. Until 2026-11-24 this measured from the block it had
+    # asked for whatever stood at the top, and failed there once the paper footer had moved the page's end (the build B777DA2C301E811D).
+    # The place is kept where the view is as far into that block as it was, or, where the page ends before that, at the page's foot
     for sel in ("#bench", ".close", "#method"):
-        top = f"document.querySelector('{sel}').getBoundingClientRect().top"
-        ink.js(f"scrollTo(0, {top} + scrollY + 120)"); time.sleep(0.6)
-        start = ink.js(top)   # 120 px into it, or less where the page ends first
+        ink.js(f"scrollTo(0, document.querySelector('{sel}').getBoundingClientRect().top + scrollY + 120)"); time.sleep(0.6)
+        start = ink.js(PLACED % -1)
         for vw, vh in sizes:
-            view(vw, vh); out[f"{sel} at {vw}x{vh}"] = got = ink.js(top)
-            if abs(got - start) > 2:
-                fails.append(f"{key}: resized to {vw}x{vh} {-start:.0f} px into {sel}, the view is now {-got:.0f} px into it")
+            view(vw, vh); out[f"{sel} at {vw}x{vh}"] = got = ink.js(PLACED % start["block"])
+            if not (abs(got["into"] - start["into"]) <= 2 or got["foot"] and got["into"] < start["into"]):
+                fails.append(f"{key}: resized to {vw}x{vh} {start['into']:.0f} px into {start['name']} (asked for {sel}), the view is now {got['into']:.0f} px into it"
+                             + (", at the page's foot" if got["foot"] else ""))
     return out
 
 

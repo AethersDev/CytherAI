@@ -149,13 +149,15 @@ document.addEventListener("click", e => { const a = e.target.closest('a[href^="#
    whole, and the stills stood for good. Asked to play and paused at once, as iOS shows a clip's frames only then; and then
    sought, since in the iOS Simulator a clip paused so can report itself paused at 0 and go on showing frames, behind the
    statement on a page at rest, until a seek stops it (2026-11-05: AWC-OS's at 14 s, CytherCAD's at 18 s, on 8 of 10 loads). A seek to
-   where it says it is does nothing, so it goes a frame past the moment, and the scroll names the moment once it lands */
-let wanted = "";   // the clip asked for, until it is dropped
+   where it says it is does nothing, so it goes a frame past the moment, and the scroll names the moment once it lands.
+   A download is known by itself, never by its URL: a phone turned twice asks for the first one's URL again, and until
+   2026-11-24 the first, completing late, passed for the third: arriving, it replaced the clip on show and left its blob
+   held; failing, it took the clip away. A download dropped is cancelled (tools/probe-turn.py) */
+let wanted = null;   // the download asked for, until it is dropped
 function passage() {
   if (stillMotion || wanted) return;
-  const file = wanted = new URL(portrait.matches ? "film/passage-portrait.mp4" : "film/passage-landscape.mp4", root).href;
-  const mine = () => wanted === file;
-  fetch(file).then(r => r.ok ? r.blob() : Promise.reject(r.status)).then(clip => {
+  const asked = wanted = new AbortController(), mine = () => wanted === asked;
+  fetch(new URL(portrait.matches ? "film/passage-portrait.mp4" : "film/passage-landscape.mp4", root), { signal: asked.signal }).then(r => r.ok ? r.blob() : Promise.reject(r.status)).then(clip => {
     if (!mine()) return;
     pv.preload = "auto"; pv.src = URL.createObjectURL(clip);
     pv.addEventListener("loadeddata", () => { if (mine()) { ready = true; body.classList.add("scrub"); scrolled(); } }, { once: true });
@@ -165,8 +167,9 @@ function passage() {
 }
 pv.addEventListener("error", () => { rest(); scrolled(); });
 function rest() {
-  const src = pv.src;
-  ready = false; wanted = ""; body.classList.remove("scrub"); pv.pause(); pv.removeAttribute("src"); pv.load();
+  const src = pv.src, dropped = wanted;
+  ready = false; wanted = null; body.classList.remove("scrub"); pv.pause(); pv.removeAttribute("src"); pv.load();
+  if (dropped) dropped.abort();
   if (src.startsWith("blob:")) URL.revokeObjectURL(src);
 }
 

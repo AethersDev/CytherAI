@@ -1,0 +1,33 @@
+# ./verify.sh on a clean checkout with the whole history, on a machine that is not the owner's: a second observer of
+# the repository's own verification (the audit of 2026-11-24, "run the existing verifier on a clean full-history
+# checkout"). It observes; it gates nothing, publishes nothing and holds no secret. Publishing stays by hand.
+#
+# Free of charge while the repository is public, and it runs only then (the owner, 2026-11-24: CI, as long as it stays
+# within the free tier). GitHub does not meter its standard hosted runners in a public repository, the macOS one
+# included, which this needs for jsc; in a private repository the same job is metered at the macOS rate, so there it
+# is skipped. No larger runner, no artifact, no cache: nothing here is billed in either.
+#
+# The suite needs Python 3.10 or later and the system's jsc; the runner's own python3 is used, and printed.
+name: verify
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: verify
+  cancel-in-progress: true
+jobs:
+  verify:
+    if: ${{ !github.event.repository.private }}
+    runs-on: macos-26
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1   # v7.0.1
+        with:
+          fetch-depth: 0   # the history guards walk every admitted state, and refuse a shallow checkout
+          persist-credentials: false
+      # the canonical admission lineage (CANONICAL_REF, refs/heads/master) is the branch origin holds as main
+      - run: git branch master "$GITHUB_SHA"
+      - run: python3 --version && ./verify.sh

@@ -14,7 +14,10 @@ that second, showing the cue data-from/data-to name. Then the film is ended (the
 stretches name for that scroll (their data-t, within a frame) under those words, shown; then the page is scrolled to
 its end, the close over the passage's last frame with the footer under it. Each sample is captured with every glyph's fill transparent (the ground composited
 beneath it, text-shadow and darkening included) and with every fill #FF00FF: glyph support = pixels differing by >= 64
-in a channel. The page's CSP is bypassed for the probe's capture style only.
+in a channel. The page's CSP is bypassed for the probe's capture style only. What the fixed header covers of an element is
+not on show, and its box starts where the header ends: until 2026-11-24 the header's own glyphs there were measured in the
+covered element's ink (against the dark header that passed; against the paper one a hidden paragraph read 1.45:1,
+tools/probe-flat.py).
 
 Bound: >= 4.5:1 at every glyph-support pixel of every fully opaque reading element, its ink alpha-composited.
 
@@ -53,13 +56,16 @@ CUE = """(T => { const cues = [...document.querySelectorAll('.line'), document.q
     cues.map(c => c.dataset.from === undefined || (T >= +c.dataset.from && T < +c.dataset.to) ? '1' : '0'),
     cues.map(c => getComputedStyle(c).opacity)]); })(%s)"""
 # leaf reading elements: their own text, visible, fully opaque through every ancestor, in the viewport (CSS px)
-ELEMENTS = r"""JSON.stringify([...document.querySelectorAll('body *')].flatMap(e => {
+ELEMENTS = r"""JSON.stringify((bar => [...document.querySelectorAll('body *')].flatMap(e => {
   if (['SCRIPT', 'STYLE', 'VIDEO'].includes(e.tagName) || ![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return [];
-  const cs = getComputedStyle(e), r = e.getBoundingClientRect();
+  const cs = getComputedStyle(e), r = e.getBoundingClientRect(), edge = bar && !bar.contains(e) ? bar.getBoundingClientRect().bottom : 0;
+  // the header covers the element where a pointer on the element's lowest row within the header's band reaches the header
+  const top = edge && r.top < edge && bar.contains(document.elementFromPoint(Math.max(0, Math.min(innerWidth - 1, r.left + r.width / 2)), Math.min(edge, r.bottom) - 1)) ? edge : r.top;
   let op = 1; for (let a = e; a; a = a.parentElement) op *= +getComputedStyle(a).opacity;
-  if (cs.visibility !== 'visible' || op < 0.99 || r.width < 1 || r.height < 1 || r.bottom < 0 || r.top > innerHeight || r.right < 0 || r.left > innerWidth) return [];
+  if (cs.visibility !== 'visible' || op < 0.99 || r.width < 1 || r.bottom - top < 1 || r.bottom < 0 || top > innerHeight || r.right < 0 || r.left > innerWidth) return [];
   return [{ element: e.tagName.toLowerCase() + (typeof e.className === 'string' && e.className ? '.' + e.className.split(' ')[0] : ''),
-            text: e.textContent.trim().slice(0, 40), ink: cs.color, x: r.left, y: r.top, w: r.width, h: r.height }]; }))"""
+            text: e.textContent.trim().slice(0, 40), ink: cs.color, x: r.left, y: top, w: r.width, h: r.bottom - top }]; }))(
+  [...document.querySelectorAll('.bar')].find(b => getComputedStyle(b).position === 'fixed')))"""
 # the passage's moments as the page computes them (js/film.js measure, moment, place): each stretch maps its top and foot
 # to its data-t; the scroll taken to the middle of the window of words i, then that moment, the passage's frame, the words' state
 PASSAGE = """const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
