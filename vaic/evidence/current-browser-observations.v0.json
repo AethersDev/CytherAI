@@ -48,7 +48,8 @@
     "C60A95AED2B10F6C",
     "27F82D15E3D706F0",
     "8E38E5E2ACE1FAA2",
-    "B777DA2C301E811D"
+    "B777DA2C301E811D",
+    "2A08C6343A217562"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -34056,6 +34057,763 @@
         21
       ],
       "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead"
+    },
+    "reading_ink_2A08C6343A217562": {
+      "surface": "Nightfall, its HTML statement, links, header, note and Replay, followed by the systems passage, close and footer on the English and Arabic homepages.",
+      "method": "Chrome holds playback at each requested film second and confirms the seek within 0.05 s. The probe samples the statement, the final still, each passage caption at its midpoint and the close. Paired transparent and magenta glyph captures identify the ground beneath the text for the WCAG contrast measurement.",
+      "samples": "film seconds 1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 8.208333333333334, 8.541666666666666, 9.0, 9.9, 11.0, 12.0, 13.0, 15.0; the still state; the passage at the middle of each of its eight words' windows (3.2, 6.0, 8.0, 9.9, 12.0, 14.325, 17.4 and 20.3 s); the page's end, the close with the footer; each in English and Arabic, under dark and light device settings, at six viewports",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "the declared seconds, moments, sections, two languages, two device settings and six viewports only; the passage between those moments is not sampled; a finite sweep licenses no universal proposition",
+      "artifact_build": "2A08C6343A217562",
+      "observed_at": "2026-11-24",
+      "runtime": "Headless Chrome/157.0.8103.79 (macOS 27.2.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-ink.py (committed 2026-10-18, extended 2026-10-20 to the passage, then to its timed words, then to the three systems' words and the close over the passage's last frame; on 2026-11-05 the statement names no cue and is measured at every second, at six viewports; sha256 e1be84197e51…)",
+      "result": "PASS",
+      "elements_measured": 5142,
+      "worst_min": 4.99,
+      "history": "The Arabic link-preview card is the identity kit's card with its line in Arabic (IMG-032), in place of the film's last frame with the statement; the five Arabic pages' og:image:alt say what it shows. No script, stylesheet or page body changed.",
+      "profiles": {
+        "/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 508,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 1280x720 · dpr 1": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 508,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 169,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1688,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 3565,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1676,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1676,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 508,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 1280x720 · dpr 1": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 508,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 169,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1688,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 3565,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1676,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 205,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · Riyadh",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1676,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 442,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 1280x720 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 442,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 192,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1402,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 3067,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1416,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1416,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 442,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 1280x720 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 442,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 192,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1402,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 3067,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1416,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "close",
+            "element": "span",
+            "text": "© 2026 CytherAI · الرياض",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1416,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        }
+      }
+    },
+    "film_settle_2A08C6343A217562": {
+      "surface": "both front doors, / and /ar/ (index.html, ar/index.html, js/film.js, css/film.css, film/)",
+      "method": "before any page script, requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire, and a video counts as playing if it played at any moment of the window; autoplay allowed; wait for the film's still state; scroll through the passage, to the middle of each of its words' windows (outside reduced motion, once the passage is whole: at the last words it must show the frame the page's stretches name there, within a frame; under reduced motion it must not load, and the film's element must stand on the still of CytherCAD's moment, where the last words are); scroll to the close and, once that scroll has been answered (0.5 s), reset the counts and wait 3 s; then scroll back into the passage, to CytherCAD's stretch (the stimulus: it must be answered with at least one frame and start no media and no timer, the passage sought, never played), wait for every video to stop, reset and count 3 s again. Each page then checks the worker's caches, control after reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).",
+      "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages; the passage follows the scroll (outside reduced motion); the stimulus is answered (a frame, no media, no timer) and the page settles again; no request leaves the origin and no console error",
+      "artifact_build": "2A08C6343A217562",
+      "build_identity": "2A08C6343A217562",
+      "observed_at": "2026-11-24",
+      "runtime": "Headless Chrome/158.0.8127.37 (macOS 27.2.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-settle.py (committed 2026-10-18, extended 2026-10-20 to the passage, then to its timed words, then to the passage as the only scene below the film: no sequence remains, and the stimulus is a scroll back into the passage; on 2026-10-22 a blob: of the origin counts as local, the passage now played from memory; sha256 5ed177cc2ac0…); film_settled_after_s is counted from navigation start (the film is 12.0 s)",
+      "result": "PASS",
+      "history": "The Arabic link-preview card is the identity kit's card with its line in Arabic (IMG-032), in place of the film's last frame with the statement; the five Arabic pages' og:image:alt say what it shows. No script, stylesheet or page body changed.",
+      "profiles": {
+        "/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.29,
+          "passage_at_last_words": {
+            "want": 20.3,
+            "at": 20.3,
+            "scrub": true,
+            "poster": "nightfall-landscape.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.25,
+          "passage_at_last_words": {
+            "want": 20.30094786729858,
+            "at": 20.300947,
+            "scrub": true,
+            "poster": "nightfall-portrait.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.2,
+          "passage_at_last_words": {
+            "want": 20.30094786729858,
+            "at": 20.300947,
+            "scrub": true,
+            "poster": "nightfall-portrait.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.08,
+          "passage_at_last_words": {
+            "want": 20.3,
+            "at": 0,
+            "scrub": false,
+            "poster": "passage-cad-landscape.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 16.77,
+          "passage_at_last_words": {
+            "want": 20.3,
+            "at": 20.3,
+            "scrub": true,
+            "poster": "nightfall-landscape.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.79,
+          "passage_at_last_words": {
+            "want": 20.30094786729858,
+            "at": 20.300947,
+            "scrub": true,
+            "poster": "nightfall-portrait.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.54,
+          "passage_at_last_words": {
+            "want": 20.30094786729858,
+            "at": 20.300947,
+            "scrub": true,
+            "poster": "nightfall-portrait.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.04,
+          "passage_at_last_words": {
+            "want": 20.3,
+            "at": 0,
+            "scrub": false,
+            "poster": "passage-cad-landscape.jpg"
+          },
+          "passage_followed": true,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 1,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 14,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        }
+      },
+      "worker": {
+        "/": {
+          "caches": [
+            "cytherai-substrate-2A08C6343A217562"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "2A08C6343A217562",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/nightfall-landscape.jpg",
+            "fonts_loaded": "News,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        },
+        "/ar/": {
+          "caches": [
+            "cytherai-substrate-2A08C6343A217562"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "2A08C6343A217562",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/nightfall-landscape.jpg",
+            "fonts_loaded": "Arabic,Arabic,Plex",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        }
+      }
     }
   }
 }

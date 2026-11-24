@@ -532,7 +532,7 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual((ROOT / "favicon.ico").read_bytes(), mark.favicon(), "favicon.ico is the computed icon")
         named = hashlib.sha256((ROOT / "assets/logo/cytherai-ink.svg").read_bytes()).hexdigest()[:12]   # generate-integrity.sh's NAMED
         logo = re.compile(r'<img class="logo" src="(?:\.\./|/)?assets/logo/cytherai-ink\.svg\?v=' + named + r'" width="131" height="34" alt="">')   # every header is on paper since 2026-11-23
-        card = re.compile(r'<div class="mark"><img src="\.\./assets/logo/cytherai\.svg" width="162" height="42" alt=""></div>')
+        card = re.compile(r'<div class="mark"><img src="\.\./assets/logo/cytherai(?:\.svg" width="162" height="42"|-ink\.svg#svgView\(viewBox\([\d.,]+\)\)" width="238" height="57") alt=""></div>')
         def defect(page: str, html: str) -> str | None:
             if any("seal" in names.split() for names in re.findall(r'class=["\']([^"\']*)["\']', html)) or "cyther<span>ai</span>" in html:
                 return f"{page}: the retired Seal lockup"     # a class among others counts: class="seal decorative" (the review of 2026-11-21)
@@ -542,6 +542,16 @@ class SiteContractTests(unittest.TestCase):
         cards = ["tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]   # the English card is the identity kit's own image since 2026-11-23
         for page in HTML_FILES + cards:
             self.assertIsNone(defect(page, (ROOT / page).read_text(encoding="utf-8")))
+        # The Arabic card stands on the identity kit's rendering of the part, which is the mark (2026-11-24): beside it the logo is seen
+        # at its name alone, as the kit's English card sets it. The view must hold the name whole and none of the mark's square (0 to 100).
+        nx, ny = ([float(v) for v in re.findall(pat, mark.NAME)] for pat in (r"[ML](-?[\d.]+) ", r"[ML]-?[\d.]+ (-?[\d.]+)"))
+        def name_alone(html: str) -> bool:
+            x, y, w, h = map(float, re.search(r"cytherai-ink\.svg#svgView\(viewBox\(([\d.,]+)\)\)", html).group(1).split(","))
+            return 100 <= x <= min(nx) and x + w >= max(nx) and y <= min(ny) and y + h >= max(ny)
+        ar_card = (ROOT / "tools/og-card-ar.html").read_text(encoding="utf-8")
+        self.assertTrue(name_alone(ar_card), "the Arabic card shows the name whole, without the mark")
+        self.assertFalse(name_alone(re.sub(r"viewBox\([\d.]+,", "viewBox(0,", ar_card)), "a view from the logo's edge shows the mark too")
+        self.assertFalse(name_alone(re.sub(r"viewBox\(([\d.]+,[\d.]+),[\d.]+,", r"viewBox(\1,200,", ar_card)), "a narrower view cuts the name")
         swapped = list(mark.SEQ); swapped[1], swapped[2] = swapped[2], swapped[1]
         self.assertNotEqual(mark.mark_path(tuple(swapped)), mark.DRAWN, "two positions swapped is not the mark")
         index = (ROOT / "index.html").read_text(encoding="utf-8"); seal = (ROOT / "backup/seal-v1/icon.svg").read_text(encoding="utf-8")

@@ -233,8 +233,8 @@ muted inline autoplay and VoiceOver.
   scripts, a `sha256-` source per inline script (the contact pages' form script: edit it, and the hash
   `tools/test-site.py` computes must be the one in the page's CSP), `'none'` for none.
 - Change the front door's words: change `index.html` and `ar/index.html` together. A cue, a section, a window or a
-  figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Re-render
-  both cards (`python3 tools/render-og-film.py`, `… ar`) if the statement moves, and record both digests.
+  figure in one and not the other fails `tools/test-site.py`; a figure is the projector's (`data-m`) on both. Neither
+  link-preview card carries the statement since 2026-11-24: the English is the identity kit's image and the Arabic its line in Arabic.
 - Add a token: give it a value in `:root` in `css/film.css`; the ink law reads it. The front door has one theme.
 - Re-render a film: `blender -b --factory-startup --python-exit-code 1 -P tools/render-film.py -- <l|p> anim <dir> …`
   (usage in the script's header; the published films used 64
@@ -264,7 +264,7 @@ muted inline autoplay and VoiceOver.
   script and move them with it, on both pages, keeping each stretch as tall as its seconds (50svh a second).
 - Change the mark: never by hand. `python3 tools/render-mark.py` writes the logo, the icon, the favicon and the app icons
   (and stops unless the computed mark is the drawn one); record the digests in `docs/asset-promotion-log.md` (IMG-021,
-  IMG-022), re-render the four cards (`tools/render-og-film.py`, `ar`, `flat`, `flat-ar`) and run `generate-integrity.sh`.
+  IMG-022), re-render the three cards the site renders (`tools/render-og-film.py ar`, `flat`, `flat-ar`) and run `generate-integrity.sh`.
 - Make a page a room: link `css/room.css` (with an `integrity` attribute for `generate-integrity.sh` to fill), open with
   the one header (the logo going home, What we build, About, Talk to us, the language: `tools/test-site.py`) and end with its
   footer; add it to `ROOMS` in `tools/test-site.py`, and an Arabic counterpart to the language-pair and `lang`/`dir`
