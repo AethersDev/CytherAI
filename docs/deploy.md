@@ -171,7 +171,8 @@ The whole check is `tools/probe-origin.py` (committed 2026-10-18; it was a scrat
 `./deploy.sh` build of the admitted commit; `/` against `index.html`; the hidden paths (404, styled body);
 MIME; a byte range on every film; the worker's generation; TLS; the `www` host; the headers on the root; the
 referrer meta on every page as served. `./deploy.sh && python3 tools/probe-origin.py dist <out.json>`; exit 0
-is PASS, and its observation is CY-ORIGIN-001's evidence.
+is PASS, and its observation is CY-ORIGIN-001's evidence. A request that fails its check leaves the very response it failed on beside
+`<out.json>` (status, headers, body as received, curl's exit: `<out.json>.failure-*`), listed in the report as `failed_responses`.
 
 ## 5. Browser matrix — Chrome observed, WebKit residual
 
@@ -3054,6 +3055,13 @@ So it was sampled before anything was recorded, the rule set first: five whole s
 did, 87 of 87 each. Beside them every served file was fetched twelve times over HTTPS, any wrong answer to be kept whole: 1,044 fetches,
 none wrong. The scan recorded below is a sixth. It licenses what CY-ORIGIN-001 says, the origin at the moment observed
 (`continuity_claimed: false`); it does not explain the first response or show that it cannot happen again.
+
+**Since: the probe keeps what it fails on** (2026-11-24, the reviewer's edit of `tools/probe-origin.py`, after the scan above was recorded:
+the recorded receipt stays with the probe that produced it, and recording this build again is refused). A failed request's response is
+saved whole and never fetched again; a check now asks for the status and for curl's success as well as the bytes. Reviewed here: on a
+clean server its report is the old probe's but for its own digest; a 200 with the wrong body (the case above), a refused connection, a
+hidden path served, a wrong redirect and an old worker each fail with the response kept, its digest right. Asking for curl's success
+closed a hole: a hidden path's 404 cut off in transfer passed before. Against the live site, unrecorded: PASS, 87 of 87.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_42BC6F2AF51A0AE2`), 87 of 87 served paths matching the artifact.
 
