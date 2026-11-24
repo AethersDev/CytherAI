@@ -3038,6 +3038,25 @@ full-history checkout", and the job §5ar left to the owner.
 - Finding 10 (tests that compare source text): the low-bandwidth rule and the worker test it names did not change here.
 - The lifecycle is not shared between the two controllers (above).
 
+**Since: published, 2026-11-24.** The owner published it from `78482bb`. The reviewer checked the publish and so did I, each against
+GitHub itself: `gh-pages` is `58dc468`, its 87 files those of a fresh build, and the artifact it replaced is kept there as
+`rollback/2A08C6343A217562` (`f0e303a`). It is the first publish by the new `publish.sh` against GitHub; `--restore` has still run
+against local remotes only. The workflow's first run passed (run 45390718732, 193 s, Python 3.15.2, the same 105 tests as here), and
+GitHub's timing for it reports no billable time.
+
+**One response of the origin is unexplained.** The reviewer's first scan (finished 13:04 UTC, some 50 minutes after Pages had the new
+files) matched 86 of 87: for the header's logo, `assets/logo/cytherai-ink.svg`, 19,912 bytes, it received a body of 54,887. Their direct fetches straight
+after, and their repeat of the whole scan, were right. Two causes are ruled out. It was not the build before this one: the logo's
+bytes are the same in both. And it was not a whole file of ours: no file in this repository's history, published artifacts included, is
+54,887 bytes long. What it was is not known, since the probe keeps a wrong answer's length and neither its status nor its bytes.
+
+So it was sampled before anything was recorded, the rule set first: five whole scans, and nothing recorded unless all five passed. They
+did, 87 of 87 each. Beside them every served file was fetched twelve times over HTTPS, any wrong answer to be kept whole: 1,044 fetches,
+none wrong. The scan recorded below is a sixth. It licenses what CY-ORIGIN-001 says, the origin at the moment observed
+(`continuity_claimed: false`); it does not explain the first response or show that it cannot happen again.
+
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_42BC6F2AF51A0AE2`), 87 of 87 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
