@@ -2833,6 +2833,8 @@ output path moved with the bytes).
 **Not observed.** How each service crops the card, and when it fetches it again: the address is the one the old card had, so a preview a service already holds may show the old picture
 for a time. An Arabic reader's eye on the line as set. A real phone; a screen reader.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_2A08C6343A217562`), 87 of 87 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
