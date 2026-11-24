@@ -62,7 +62,7 @@ class DeployTests(Fixture):
         return files(self.root / "dist")
 
     def leftovers(self) -> list[str]:
-        return sorted(path.name for path in self.root.iterdir() if path.name.startswith("dist."))
+        return sorted(path.name for path in self.root.iterdir() if path.name.startswith("dist.") and path.name != "dist.sha256")
 
     def test_a_missing_source_keeps_the_last_artifact(self) -> None:
         good = self.built()
@@ -90,23 +90,53 @@ class DeployTests(Fixture):
         self.assertEqual(self.built()["index.html"].decode(), page(OTHER))
         self.assertEqual(self.leftovers(), [])
 
-    def test_a_destination_that_is_not_an_artifact_is_left_whole(self) -> None:
-        notes = self.tmp / "notes"
-        notes.mkdir()
-        (notes / "thesis.txt").write_text("not the site's", encoding="utf-8")
-        (notes / "index.html").write_text("nor this", encoding="utf-8")
+    def test_only_what_this_script_built_is_replaced(self) -> None:
+        """Until the review of 2026-11-24 an artifact was known by its files' names: a directory holding only an index.html passed."""
+        def directory(name: str, **held: str) -> Path:
+            (self.tmp / name).mkdir()
+            for path, text in held.items():
+                (self.tmp / name / path).write_text(text, encoding="utf-8")
+            return self.tmp / name
+        def artifact(name: str) -> Path:
+            self.assertEqual(self.deploy(str(self.tmp / name)).returncode, 0)
+            return self.tmp / name
+        lone = directory("lone", **{"index.html": "another site's"})
+        notes = directory("notes", **{"index.html": "nor this", "thesis.txt": "not the site's"})
+        edited = artifact("edited")
+        (edited / "index.html").write_text("changed by hand since", encoding="utf-8")
+        added = artifact("added")
+        (added / "my notes.txt").write_text("put here since", encoding="utf-8")
+        unrecorded = artifact("unrecorded")
+        (self.tmp / "unrecorded.sha256").unlink()
         link = self.tmp / "link"
-        link.symlink_to(notes, target_is_directory=True)
+        link.symlink_to(artifact("linked"), target_is_directory=True)
         a_file = self.tmp / "a-file"
         a_file.write_text("a file", encoding="utf-8")
-        before = {target: files(target) for target in (notes, self.root)}
-        for target, said in ((notes, "thesis.txt"), (self.root, "deploy.paths"), (link, "not a directory"), (a_file, "not a directory")):
-            with self.subTest(target.name):
-                run = self.deploy(str(target))
-                self.assertNotEqual(run.returncode, 0)
-                self.assertIn(said, run.stderr)
-        self.assertEqual({target: files(target) for target in (notes, self.root)}, before)
+        kept = (lone, notes, edited, added, unrecorded, self.tmp / "linked", self.root)
+        before = {target: files(target) for target in kept}
+        for target in (lone, notes, edited, added, unrecorded, link, self.root, a_file):
+            for named in (str(target), str(target) + "/"):
+                with self.subTest(named):
+                    run = self.deploy(named)
+                    self.assertNotEqual(run.returncode, 0)
+                    self.assertIn("is left as it is", run.stderr)
+        self.assertEqual({target: files(target) for target in kept}, before)
         self.assertEqual(a_file.read_text(encoding="utf-8"), "a file")
+        self.assertEqual(sorted(path.name for path in self.tmp.iterdir() if ".new." in path.name or ".old." in path.name), [])
+
+    def test_a_failure_at_the_last_step_keeps_the_last_artifact(self) -> None:
+        """Until the review of 2026-11-24 the old artifact was removed and then the new one moved in: stopped between the two, neither stood."""
+        good = self.built()
+        (self.root / "index.html").write_text(page(OTHER), encoding="utf-8")
+        shim = self.tmp / "bin"
+        shim.mkdir()
+        (shim / "mv").write_text('#!/bin/sh\ncase "$1" in *.new.*) exit 1;; esac\nexec /bin/mv "$@"\n', encoding="utf-8")   # the new artifact cannot be moved in
+        (shim / "mv").chmod(0o755)
+        run = self.deploy(PATH=f"{shim}{os.pathsep}{os.environ['PATH']}")
+        self.assertNotEqual(run.returncode, 0)
+        self.assertEqual(files(self.root / "dist"), good, "the last good artifact stands, in its place")
+        self.assertEqual(self.leftovers(), [])
+        self.assertEqual(self.built()["index.html"].decode(), page(OTHER), "and the next build replaces it")
 
     def test_the_environment_names_no_destination(self) -> None:
         """Until 2026-11-24 the destination was $DIST, removed before anything was checked."""

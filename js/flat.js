@@ -17,7 +17,7 @@ const portrait = matchMedia("(orientation: portrait)"), stillMotion = lean || ma
 const media = new URL("../flat/media/", document.currentScript.src);   // the same from flat/ and from ar/
 const span = e => e.dataset.t.split(" ").map(Number), FADE = 0.5;    // the words fade over half a second of the sequence
 const END = span(parts[parts.length - 1])[1];   // a viewport past the sequence's end, its last frame held (css/flat.css)
-let marks = [], now = 0, frame = 0, ready = false, pending = -1, wanted = "", kept = null;
+let marks = [], now = 0, frame = 0, ready = false, pending = -1, wanted = null, kept = null;
 
 /* scroll position <-> the sequence's seconds, as the front door's passage: [a stretch's top, its first], [its foot, its last] */
 function measure() {
@@ -90,12 +90,12 @@ says.forEach(s => s.addEventListener("focusin", () => bring(s)));
 
 /* the sequence downloads whole by a request of its own and plays from memory, asked to play and paused at once (iOS shows
    a clip's frames only then) and then sought, or in the iOS Simulator it can run on while reporting itself paused (js/film.js,
-   2026-11-05); a paused clip's own download is the browser's to defer (js/film.js, 2026-10-22) */
+   2026-11-05); a paused clip's own download is the browser's to defer (js/film.js, 2026-10-22). A download is known by
+   itself, never by its URL, and one dropped is cancelled (js/film.js, 2026-11-24; tools/probe-turn.py) */
 function download() {
   if (stillMotion || wanted) return;
-  const file = wanted = new URL(portrait.matches ? "flat-portrait.mp4" : "flat-landscape.mp4", media).href;
-  const mine = () => wanted === file;
-  fetch(file).then(r => r.ok ? r.blob() : Promise.reject(r.status)).then(clip => {
+  const asked = wanted = new AbortController(), mine = () => wanted === asked;
+  fetch(new URL(portrait.matches ? "flat-portrait.mp4" : "flat-landscape.mp4", media), { signal: asked.signal }).then(r => r.ok ? r.blob() : Promise.reject(r.status)).then(clip => {
     if (!mine()) return;
     scene.preload = "auto"; scene.src = URL.createObjectURL(clip);
     scene.addEventListener("loadeddata", () => { if (mine()) { ready = true; body.classList.add("scrub"); scrolled(); } }, { once: true });
@@ -104,8 +104,9 @@ function download() {
 }
 scene.addEventListener("error", () => { if (scene.hasAttribute("src")) { rest(); scrolled(); } });
 function rest() {
-  const src = scene.src;
-  ready = false; wanted = ""; body.classList.remove("scrub"); scene.pause(); scene.removeAttribute("src"); scene.load();
+  const src = scene.src, dropped = wanted;
+  ready = false; wanted = null; body.classList.remove("scrub"); scene.pause(); scene.removeAttribute("src"); scene.load();
+  if (dropped) dropped.abort();
   if (src.startsWith("blob:")) URL.revokeObjectURL(src);
 }
 

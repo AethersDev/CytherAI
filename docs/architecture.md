@@ -84,7 +84,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 | `adii/` | ADII project page: the replay, its poster and fonts (shared with the homepage) | The reviewed set | Every URL its first publication served stays served but the team's CVs (withdrawn by the owner, 2026-10-30); a new file ships only once named in `REVIEWED_PUBLICATION` (`tools/test-site.py`) |
 | `awc-os/` | AWC-OS's evidence as a room (2026-10-21; the evaluation gateway it replaced is `backup/before-rooms/awc-os/`), its films and their posters | The reviewed set | As `adii/`; `awc-os/live/` redirects to an ephemeral tunnel, is gitignored, and never ships; no deployment is claimed (the Alinma plan, cancelled 2026-10-19) |
 | `cythercad/` | CytherCAD's evidence as a room (2026-10-21): its validation record, every figure a projection of `js/manifest.js` | The reviewed set | As `adii/`; the projector writes its figures and `tools/test-projection.py` holds it to print every validation identifier |
-| `dist/` | Generated allowlisted release artifact | Generated | Rebuilt destructively by `deploy.sh`; never hand-edit |
+| `dist/` | Generated allowlisted release artifact | Generated | Rebuilt by `deploy.sh`, which replaces only what it built there (its record is `dist.sha256`, beside it); never hand-edit: an edited one is refused, to be renamed aside |
 
 ## Homepage boot and steady state
 
@@ -109,7 +109,8 @@ run them under jsc, the manifest first. Their public surface is an inventory
    asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment, which stops the layer that in the iOS Simulator otherwise ran on), and it is shown once
    whole and the film still, under the film's element: its first frame is the film's last. (Asked
    of the video element, a paused clip's download is the browser's to defer: 2026-10-22,
-   `tools/probe-passage.py`.) From then on the scroll names a moment, evenly (each stretch,
+   `tools/probe-passage.py`.) (A download is known by itself, never by its URL, and one dropped, a phone turned, is
+   cancelled: 2026-11-24, `tools/probe-turn.py`.) From then on the scroll names a moment, evenly (each stretch,
    `.passage`, is as tall as its seconds, `data-t`: 2 s a viewport, the stage's own pace), and the
    passage seeks to it, one seek at a time; each of its words (`.say`) fades in and out with the
    scroll in its window of those seconds. Past its end it holds its last frame, under the
@@ -171,10 +172,13 @@ The release flow is fail-closed:
    `?v=` the first 12 hex of their SHA-256, in the pages and the worker's precache; the 16-hex build identity
    over every `deploy.paths` byte, stamped into every HTML file and the worker cache
    name), then `python3 tools/vaic_restamp.py` once per transaction.
-3. Run `./verify.sh`.
-4. `./deploy.sh` builds `dist/` from `deploy.paths`: a whole new artifact beside the old one, which it replaces only once
-   the new one has passed (a precached asset missing from it, or a historical directory in it, stops the build with the old
-   artifact standing); it replaces nothing that is not an artifact (`./deploy.sh <dir>` builds elsewhere).
+3. Run `./verify.sh`. (Every push to `main` runs it again on GitHub, on a clean checkout with the whole history:
+   `.github/workflows/verify.yml`. It observes; it gates nothing.)
+4. `./deploy.sh` builds `dist/` from `deploy.paths`: a whole new artifact beside the old one, which it replaces, by two
+   renames, only once the new one has passed (a precached asset missing from it, or a historical directory in it, stops the
+   build with the old artifact standing). It replaces only what it built: a destination that is not, to the byte, what it
+   last built there (`dist.sha256`, beside it, is its record) is left whole; rename it aside (`mv dist dist.aside`) and run
+   it again (`./deploy.sh <dir>` builds elsewhere).
 5. Observe the build in a browser: `.venv/bin/python tools/probe-ink.py dist <dir>` (CY-SEM-003) and
    `.venv/bin/python tools/probe-settle.py dist <dir>` (CY-TEMP-001), then record them:
    `python3 tools/vaic_record.py <dir>/ink.json <dir>/settle.json "<what changed>"` (each result carries the probe, the day and

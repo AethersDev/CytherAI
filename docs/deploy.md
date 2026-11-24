@@ -2913,6 +2913,131 @@ first confirmed against the code. Two are left, for the reasons at the end.
 - `publish.sh` and `--restore` were exercised against local remotes only. Nothing was pushed to GitHub for this. The first real publish
   after it will create a `rollback/<build>` branch at origin.
 
+**Since** (§5as, the same day). Item 2 above overstates what `deploy.sh` did: it knew an artifact by its files' names, and it removed the
+old one before the new one was in place; and a refused `dist/` is to be renamed aside, not removed. All three are corrected in §5as.
+Finding 9 and the workflow, listed above as not done, are done there.
+
+## 5as. A download is known by itself, not by its URL; the build replaces only what it built; `./verify.sh` on GitHub — 2026-11-24
+
+Build `42BC6F2AF51A0AE2` (`#reading_ink_42BC6F2AF51A0AE2`, `#film_settle_42BC6F2AF51A0AE2`). It follows the live `2A08C6343A217562`. Two served files changed,
+`js/film.js` and `js/flat.js`, and with them the stamps every page and the worker carry. The rest is the build script, a workflow and
+the record.
+
+**The audit's finding 9, as its own release** (the reviewer, 2026-11-24). Each media controller asks for its clip with `fetch`: the front
+doors' passage (`js/film.js`) and Both looked flat's sequence (`js/flat.js`). When the answer came, each took it for its own if the URL it
+had asked for was still the URL wanted. A phone turned upright, on its side, upright again asks for three clips, and the first and the
+third have one URL. So the first, completing late, passed for the third. Arriving, it replaced the clip on show with a second copy and
+left the first copy's blob held for the life of the page. Failing, it took the clip on show away, and the stills stood though the clip
+had arrived. And no superseded download was cancelled: each ran to its end (the clips are 1.6 to 3.4 MB).
+
+Each download is now known by itself, by the `AbortController` made for it, and a download dropped is cancelled. The release of a
+displaced clip's blob URL was there already; a check now holds it. Ten lines changed in `js/film.js`, eight in `js/flat.js`.
+
+**The two controllers still each carry that lifecycle.** The audit recommended sharing it where it is identical. It is about ten lines,
+and sharing it means a second script on the front door, which loads one script and reads no module: one more request before the film can
+start, on every first visit. So it is not shared (my decision; the owner's or the reviewer's to reverse), and what holds the two copies to
+one behaviour is the probe below, which puts both pages through the same cases.
+
+**The acceptance probe**, `tools/probe-turn.py`, new (no obligation; run after any change to how either controller asks for its clip, drops
+it or holds it). The page's `fetch` is its one seam: every request for a clip is held and answered when the probe chooses, with the real
+clip's bytes, in headless Chrome under mobile emulation, the phone turned by the emulated screen. On the front door (opened at `#adii`) and
+on `/flat/`, each in two cases, the first download answered late with its clip and the first failing late:
+1. Three clips are asked for, the first and the third by one URL, and the turn that superseded each of the first two cancelled it.
+2. The third is answered and is on show.
+3. The first is answered late, and nothing changes: the third on show, no second blob made, none released.
+4. The phone turns once more: the clip on show is displaced and its blob URL released, and the fourth takes its place.
+
+- On the live build `2A08C6343A217562` all four rows FAIL, as the finding says. Nothing was cancelled. The first arriving late made a second
+  blob, which was shown, and the blob it displaced was never released. The first failing late removed the clip on show, and the next turn
+  then asked for nothing.
+- On this build all four PASS.
+- In copies of this build: with a download known by its orientation again (which is by its URL), check 3 fails in all four rows; with the
+  cancelling taken out, only check 1 fails; with the release taken out, check 4 fails. The unchanged copy passes.
+
+What it does not show. A cancelled download is seen as the signal the page gave `fetch`, aborted, not as bytes saved on a phone's link.
+The late answer is delivered whatever that signal says (a cancelled `fetch` cannot otherwise be made to answer), so what the case holds is
+the page's own account of which download is its own. The turn is Chrome's emulated screen: the Simulator cannot be turned by a script,
+and no phone was used.
+
+**Checked, on this build.**
+- `tools/probe-ink.py` (CY-SEM-003): PASS, 5142 element samples over 24 profiles, worst 4.99:1 (Chrome/158.0.8127.37). `tools/probe-settle.py` (CY-TEMP-001): PASS. Both recorded.
+- `tools/probe-turn.py`: PASS, 4 rows. `tools/probe-passage.py`: PASS, 46 rows (the passage whole over a server that withholds the video
+  element's own download; a phone turned and a window resized keeping their moment, and the turned clip showing its frame).
+  `tools/probe-flat.py`: PASS, once two of its readings were corrected (below). `tools/probe-ios.py`: PASS, 34 rows in the iOS Simulator's
+  WebKit (iPhone 16 Pro Max; not a phone), where the passage and the sequence load and rest with the request made this way.
+- `./verify.sh` passes.
+- Not run: `tools/probe-arrival.py` and `tools/probe-return.py`. Neither subject moved: no statement, bar, anchor, edge or contact page; no
+  worker logic, and no change to how a page names its resources.
+
+**Two readings of `tools/probe-flat.py`, corrected; and a release that was not run through it.** Its first run on this build failed in
+four rows, none of them about the download. The live build `2A08C6343A217562` fails the same four, and so does `B777DA2C301E811D` before it
+(each artifact as it was served, from its `rollback/` branch); `8E38E5E2ACE1FAA2` passes. They came with the paper header and footer
+(§5ap). That release changed this page's header and footer and was not run through this probe: an omission of mine, and the reason
+§5ap's list of what ran does not name it. (§5aq changed nothing this probe holds, and did not run it either.) Neither reading is a fault
+a visitor meets.
+- *A paragraph under the header read 1.45:1* (three rows, on phones, at the page's foot). The ink method took an element's box whole.
+  Where the fixed header covers a paragraph's upper lines, the only glyphs in that part of its box are the header's own, and the method
+  measured them in the hidden paragraph's ink: against the dark header that passed, and against the paper one it reads 1.45:1, which is
+  that ink (207, 202, 192) on the paper. The covered lines are not on show: the header is opaque, and a pointer there reaches the
+  header. `tools/probe-ink.py` now starts an element's box where the fixed header ends, wherever the header covers it. The front doors'
+  reading is unchanged by it: run again on this build, 5142 element samples over 24 profiles, worst 4.99:1 (Chrome/158.0.8127.37), the figures recorded. (The observation recorded for
+  this build is the earlier method's; the second run is not recorded.)
+- *The place at the foot of the Arabic page* (one row, 1440 × 900). There the page ends 45 px before the notes reach the top of the
+  window, so the block at the top is the close, with the view 975 px into it; in the smaller window that place lies past the page's end,
+  and the page stands at its foot, 961 px into the close. The probe measured from the notes whatever stood at the top. It now holds the
+  page to its own rule (`keep` in `js/flat.js`): as far into the block that was at the top, or, where the page ends before that, at its
+  foot.
+- With both corrections the probe passes on this build, and still fails what it should: on a copy with the notes' text made faint
+  (`#3a3a40` on the ground), 27 rows at 1.78:1, paragraphs that reach under the header among them; on a copy that does not keep the place,
+  18 rows.
+
+**The build script: the audit's finding 2 was partly resolved, not resolved** (the reviewer, on the handover of §5ar). §5ar's item 2 says
+`deploy.sh` "replaces only an artifact". It knew an artifact by its files' names, so a directory holding only an unrelated `index.html`
+passed for one: reproduced here with the committed script, which replaced it. And its last step removed the old artifact and then moved
+the new one in: stopped between the two, neither stood. §5ar also says of a refused `dist/`, "remove it by hand". The review's advice is
+the right one: rename it aside, so that what it holds stays to be looked at.
+
+`deploy.sh` now replaces a destination only if it is, to the byte, what it last built there. It writes a record beside each artifact
+(`<destination>.sha256`, a line a file; for `dist/` that is `dist.sha256`, ignored by git and never in the artifact), and a destination
+that does not match its record, or has none, is left whole, with the command that renames it aside. The Finder's `.DS_Store` is the
+one thing overlooked. The swap is two renames, and the old artifact is removed only once the new one stands in its place; if the new one
+cannot be moved in, the old one is put back.
+
+- `tools/test-release.py`, ten tests now. A directory holding only an `index.html`, one that also holds a stranger's file, an artifact
+  edited since it was built, one with a file added (its name has a space in it), one whose record is gone, a symbolic link to an
+  artifact, the site's own folder and a plain file are each refused, named with and without a trailing slash, and left as they were.
+  With the new artifact unable to move in (a `mv` that fails there), the last one stands in its place and the next build replaces it.
+- Against the committed script both new tests fail. In copies of the new one: with the old artifact removed first, or not put back, the
+  last-step test fails; with a record of names without bytes, with no record needed, or with a trailing slash kept, the other does.
+  The unchanged copy passes.
+- A `dist/` built before this has no record and is refused, once. Here it was renamed aside and rebuilt, the two were the same file for
+  file, and the copy was removed.
+- What remains. Between the two renames the destination's name is absent for an instant, both artifacts whole beside it; a run killed
+  in that instant leaves the last good one as `dist.old.<pid>`. And the record says what this script built there, nothing more: a
+  directory made by hand to match a record beside it would be replaced.
+
+**`./verify.sh` on GitHub** (the owner, 2026-11-24: CI, as long as it stays within the free tier). `.github/workflows/verify.yml`: on every
+push to `main`, and by hand, a clean checkout with the whole history on a macOS runner (the suite needs jsc), `master` made at the pushed
+commit, then `./verify.sh`. One job, read-only permissions, no secret, no artifact or cache, a fifteen-minute limit, a newer push
+cancelling an older run. It observes; it gates nothing and publishes nothing. This is the audit's "run the existing verifier on a clean
+full-history checkout", and the job §5ar left to the owner.
+- *The free tier.* The repository is public (GitHub's API, 2026-11-24). GitHub's billing page says the use of standard GitHub-hosted
+  runners is free in public repositories, and its runners page lists the macOS ones among the standard runners for public repositories;
+  larger runners are billed there, and none is used. In a private repository the same job would draw on the account's included usage at
+  the macOS rate ($0.062 a minute against $12 a month, by the same page), so the job carries a condition: in a private repository it does
+  not run. (Read 2026-11-24: `docs.github.com/en/billing/concepts/product-billing/github-actions`,
+  `docs.github.com/en/actions/reference/runners/github-hosted-runners`, `docs.github.com/en/actions/reference/limits`.)
+- *Rehearsed here, not yet run there.* In a fresh clone with the whole history and this change, an empty environment and no home
+  directory, `./verify.sh` passes under Python 3.13.0, 3.14.7 and 3.15.0a7, and fails under 3.9.6 (a probe uses `match`): the suite needs
+  3.10 or later. The runner's image lists Python 3.15.2 and Git 2.56.1 (`macos-26-arm64`, 20261117). The first run on GitHub is the push
+  of this release; nothing here has seen it pass there.
+- `actions/checkout` is its one dependency, pinned to the commit of v7.0.1 (`3d3c42e`).
+
+**Not done.**
+- No phone, no screen reader, no first-time viewer: the three observations of the served build that the reviewer listed are still open.
+- Finding 10 (tests that compare source text): the low-bandwidth rule and the worker test it names did not change here.
+- The lifecycle is not shared between the two controllers (above).
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
