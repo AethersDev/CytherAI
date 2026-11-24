@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
-"""render-og-film.py — the link-preview card: the film's final frame with its statement.
+"""render-og-film.py — the link-preview cards the site renders itself: the film's final frame with its statement, in Arabic, and
+Both looked flat's two.
 
-Classification: ILLUSTRATIVE. The composition is tools/og-card.html: film/nightfall-landscape.jpg (the last frame of the
-front door's film, a conceptual visualization), the darkening the front door sets behind its statement, the wordmark
-and the statement in the front door's own type. Headless Chrome renders it at 1200×630, device scale 1, served from
-the repository root by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes
-assets/og/og-card.jpg, through sips: as a PNG this photographic frame was 612 KB, and link previews are commonly reported
-to drop an image over about 300 KB (the audit of 2026-11-05). The pages' og:image:alt states what it shows and that it
-is a conceptual visualization.
+Classification: ILLUSTRATIVE. `render-og-film.py ar` renders tools/og-card-ar.html: film/nightfall-landscape.jpg (the last frame of
+the front door's film, a conceptual visualization), the darkening the front door sets behind its statement, the logo and the
+statement in the front door's own type. Headless Chrome renders it at 1200×630, device scale 1, served from the repository root
+by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes assets/og/og-card-ar.jpg, through sips: as a
+PNG this photographic frame was 612 KB, and link previews are commonly reported to drop an image over about 300 KB (the audit of
+2026-11-05). The pages' og:image:alt states what it shows and that it is a conceptual visualization. `flat` and `flat-ar` render
+Both looked flat's (tools/og-card-flat.html, tools/og-card-flat-ar.html), a still of its sequence with its title, to
+assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png, which stay PNGs: they are dark, and under that size.
 
-`render-og-film.py ar` renders the Arabic card the same way: tools/og-card-ar.html to assets/og/og-card-ar.jpg; `flat` and
-`flat-ar` Both looked flat's (tools/og-card-flat.html, tools/og-card-flat-ar.html), a still of its sequence with its title,
-to assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png, which stay PNGs: they are dark, and under that size.
+The English card, assets/og/og-card.jpg, is not rendered here since 2026-11-23: it is the identity kit's Open Graph image, copied
+byte for byte (docs/asset-promotion-log.md, IMG-031); the composition that rendered it until then is
+backup/nightfall-card-v1/tools/og-card.html.
 
 Run twice; the output SHA-256 must be identical (same Chrome, same machine): the script prints the digest, size and
 the Chrome version, the inputs of the receipt in docs/asset-promotion-log.md. Exits nonzero if Chrome or sips fails or
@@ -21,9 +23,9 @@ import hashlib, http.server, os, struct, subprocess, sys, tempfile, threading
 from functools import partial
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CARDS = {"": "og-card", "ar": "og-card-ar", "flat": "og-card-flat", "flat-ar": "og-card-flat-ar"}
-if len(sys.argv) > 2 or "".join(sys.argv[1:]) not in CARDS:   # a typo must not render the English card
-    sys.exit("usage: render-og-film.py [ar|flat|flat-ar]")
+CARDS = {"ar": "og-card-ar", "flat": "og-card-flat", "flat-ar": "og-card-flat-ar"}
+if len(sys.argv) != 2 or sys.argv[1] not in CARDS:   # no default: the English card is the identity kit's, and is not rendered here
+    sys.exit("usage: render-og-film.py ar|flat|flat-ar")
 CARD = CARDS["".join(sys.argv[1:])]
 OUT = os.path.join(ROOT, "assets/og/%s.%s" % (CARD, "png" if "flat" in CARD else "jpg"))
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"

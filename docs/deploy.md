@@ -2746,6 +2746,49 @@ landed while `publish.sh` was verifying the first, the two published trees compa
 (45f9977)*), so the comparison itself is the reviewer's observation; a second, read-only run of `tools/probe-origin.py` (no `--record`) passed with the worker's cache named for this build; the rollback to the previous
 film is the local branch `rollback/27F82D15E3D706F0`.
 
+## 5ap. The identity's paper round the film: paper rooms, a paper header and footer — 2026-11-23
+
+Build `B777DA2C301E811D` (`#reading_ink_B777DA2C301E811D`, `#film_settle_B777DA2C301E811D`). It follows the live `8E38E5E2ACE1FAA2`. A first candidate, `19A026C4C91875DA`, carried the paper rooms, header and
+footer with the Night icons and the Nightfall card; it passed the same probes and was not published.
+
+**The direction.** The owner, 2026-11-23, of the identity kit (`~/Desktop/cyther-studies/cyther-rod/cytherai/identity`, outside the repository: the mark as STANDARD No. 001, Paper `#f4f1ea` and Ink `#16161a`,
+light banners): *Nightfall is the main while new identity would be merged, for example logo and vibe as light banners, so it should look like enterprise grade, not like a dark fully looking like startup*.
+Three mock-ups were made on copies of the Nightfall candidate's pages (`~/Desktop/cyther-studies/site-identity-mock/`): A, the rooms on paper; B, A with a paper header and footer round the film; C, B with the
+kit's Inter in place of the serif. The owner chose B and asked to see a liquid-glass header in place of the bar; it was mocked (a floating bar of blurred, tinted glass; over the film it turned mid-grey and its
+grey links fell to 4.2:1, a denser one with ink links read 11.2:1), and the owner's reviewer chose the plain paper header: on the phone the eye went from the wordmark to the lit window, where the glass bar was
+noticed first, and the check that keeps the navigation whole as the headline scrolls beneath it stays as it is.
+
+**Now.** Every room (About, the brief, the contact pages, the legal pages, the evidence rooms, the 404, in both languages) is on the kit's Paper in its Ink, with its graphite and slate as the softer inks; the
+accent is ink (the kit keeps amber for what is being checked and red for what was found false). The front doors and Both looked flat keep the dark film and passage, framed in paper: the header an opaque paper
+bar with a hairline under it, the footer paper. Every header shows the logo in the kit's ink (`assets/logo/cytherai-ink.svg`, written by `tools/render-mark.py`; the sheet's light logo stays for the cards and is
+no longer served). The browser's theme colour is paper on every page, as is the web manifest's.
+
+**What went, and what was decided against an earlier rule.** The rooms' dark ground, the owner's own choice of 2026-10-21, and the header's darkness over the film. The audit of 2026-11-05 ended the scene softly
+on a dark footer, with no line; the scene now ends at the paper footer's edge, a line meant to be there, as the header's is. `tools/probe-arrival.py`'s `edges` step is restated to match: the stage's foot still
+meets the scene with no hard line, and the footer must be the kit's paper, unbroken under its edge.
+
+**Checked** (the figures below are this build's; the failures told of were met on the first candidate, on the way).
+- `tools/test-site.py`: the rooms' law now holds them to the kit's Paper and Ink and the front door's header and footer to the same paper and inks, every ink at 4.5:1 or more on the ground and on the lifted
+  ground and a field's edge at 3:1 (the weakest: slate on the lifted ground, 4.56:1; the edge on it, 3.45:1); the front door's law holds its frame to opaque paper and its paper inks to 4.5:1; the mark's law holds
+  every header to the ink logo at a URL naming its bytes. `./verify.sh` passes; `tools/test-assets.py` all pass (IMG-022 now names both logos).
+- `tools/probe-arrival.py`: PASS, 213 rows (on its first run the four `edges` rows failed on the old rule: 176 to 191 levels at the footer's top, against 4). `tools/probe-settle.py`: PASS. `tools/probe-return.py`:
+  PASS, 31 rows (its test of a styled page asked for the dark ground's colour on every page; it now asks that the stylesheet's ground is defined). `tools/probe-ios.py`: PASS, 34 rows (the iOS Simulator's
+  WebKit, not a phone). `tools/probe-ink.py`: PASS, 5,142 element samples over 24 profiles, worst 4.99:1 (Chrome/157.0.8103.79).
+- `tools/probe-passage.py`: PASS, 46 rows, four runs of four, after a correction to the probe itself. Its `rooftop` row at 0.5 s failed on a phone in the first two runs on this build, and then in two runs
+  of two on the live build `8E38E5E2ACE1FAA2`, which had passed it twice that day. Followed to its cause: the probe scrolled past the film once, the moment the page's state said *film*; about one time in
+  three the page was not yet tall enough to scroll, the scroll did nothing, and the page stood in its film state, where a scroll of exactly a quarter of the window rightly shows the film and not the
+  passage (the page's rule is *more than* a quarter; on a 844 px phone the 0.5 s moment is 211 px, exactly a quarter). The page was right and the probe's set-up raced it; the set-up now asks for the scroll
+  until the page has left the film. No change to `js/film.js`.
+- By eye: the built pages against mock-up B, at 1440 px (the front door, its foot, About, contact, ADII's room) and at 390 px (the front door, About, the Arabic About).
+
+**The icons and the English card** (the owner, the same day: *yes*). `icon.svg`, `favicon.ico` and the app icons are the identity kit's: the mark in Ink on Paper at 0.80 of the square (0.86 under 64 px), written by
+`tools/render-mark.py` to the kit's rule; `icon.svg` is byte-identical to the kit's `favicon.svg` (the mark alone, Paper on a dark tab), and the rasters stand 33.7 to 39.9 dB from the kit's own, apart only at the marks'
+edges (IMG-030; the Night icons are `backup/mark-night-icons-v1/`). The English link preview is the kit's Open Graph image, copied byte for byte (IMG-031: the mark as STANDARD No. 001, a rendering of a design, with the
+kit's line *Every claim carries its check.*); the seven English pages' `og:image:alt` say what it is. The Arabic card and Both looked flat's two are unchanged: the kit has no Arabic card, and its line has no Arabic
+wording yet.
+
+**Not observed.** A real phone; a screen reader; how each service crops the new card.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

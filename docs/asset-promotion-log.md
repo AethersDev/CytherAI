@@ -33,14 +33,31 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## NIGHTFALL-CARD — English link preview
+## IDENTITY-CARD — English link preview, the identity kit's
 
 | | |
+|---|---|
+| Asset ID | IMG-031 |
+| Classification | **ILLUSTRATIVE** — a rendering of the mark designed as a part (STANDARD No. 001), a design and not a manufactured object; every page that names it says so in `og:image:alt` |
+| Source | The identity kit's Open Graph image, `deliver/web/og-1200x630.jpg` in `~/Desktop/cyther-studies/cyther-rod/cytherai/identity` (outside the repository): built by the kit's `make.py` from its checked CAD solids and their Blender rendering, measured by its `verify.py`. Copied byte for byte; nothing in this repository renders it. Its line, *Every claim carries its check.*, is the kit's. |
+| Output | `assets/og/og-card.jpg` · 1200×630 · 61,587 bytes |
+| SHA-256 | og-card.jpg `a74371a3090d0172ede2b55fda99ee1c9c2d2f6bd8de94f46febf3f54bd81085` |
+| Deployment | Listed in `deploy.paths`; named by the seven English pages that previewed IMG-028. The Arabic pages keep IMG-029 (the film's last frame with the Arabic statement): the kit has no Arabic card. |
+| Supersedes | IMG-028, retired to `backup/nightfall-card-v1/` on 2026-11-23 (below) |
+| Owner sign-off | The owner, 2026-11-23: *yes*, to the kit's paper icons and link-preview card in this release |
+
+---
+
+## NIGHTFALL-CARD-V1 — English link preview with the film's last frame, retired
+
+| | |
+|---|---|
+| Retired | 2026-11-23: served as `assets/og/og-card.jpg` until the identity kit's Open Graph image (IMG-031) replaced it; the bytes and the composition `tools/og-card.html` moved to `backup/nightfall-card-v1/`. The receipt below stands as written, its output path moved with the bytes. |
 |---|---|
 | Asset ID | IMG-028 |
 | Classification | **ILLUSTRATIVE** |
 | Source | The landscape rooftop poster with the published mark and English statement. Run `python3 tools/render-og-film.py`. |
-| Output | `assets/og/og-card.jpg` · 163,456 bytes |
+| Output | `backup/nightfall-card-v1/assets/og/og-card.jpg` · 163,456 bytes |
 | SHA-256 | og-card.jpg `aeec5c1d39124e5a02127ef74f12ed75fc3c5d2cfd4873c620dd4a45df6287f6` |
 | Deployment | Listed in `deploy.paths`. |
 
@@ -59,9 +76,31 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## ICON — the CytherAI mark as the site's icon
+## ICON — the mark on paper, the identity kit's icon
 
 | | |
+|---|---|
+| Asset ID | IMG-030 |
+| Source | The identity kit (`~/Desktop/cyther-studies/cyther-rod/cytherai/identity`, outside the repository): its `favicon.svg` and its `icon()` rule (`kit.py`): the mark in Ink `#16161a` on Paper `#f4f1ea` to the edges, about the centre, at 0.80 of the square, 0.86 under 64 px |
+| Classification | **COMPUTED** |
+| Command | `python3 tools/render-mark.py` |
+| Fixed input | As IMG-022: the figure `4 2 1 0 1 0 0 0`, the one of 8**8 that describes itself. |
+| Method | `icon.svg`: the computed mark alone, Ink, and Paper where the browser's theme is dark; byte-identical to the kit's `favicon.svg`. The rasters: the kit's rule drawn by this repository's own rasterizer (exact areas, 8 by 8 samples near an edge), not copies of the kit's files, which its browser drew: against them 39.9 dB (180 px, the kit's `apple-touch-icon.png`), 33.7 dB (192) and 38.0 dB (512), 0.4 to 1.2% of pixels apart by more than 16 levels, at the marks' edges; at 32 px 23.6 dB, the kit's mark standing a fraction of a pixel off its centre. `icon-512-maskable.png` is `icon-512.png`'s picture: the mark's outer radius is 36.8 of 100, inside the central 80% circle. `favicon.ico`: the icon at 16 and 32 px, 32-bit DIBs. |
+| Outputs | `favicon.ico` · 5,430 bytes · `icon.svg` · 448 bytes · `assets/icons/icon-180.png` · 1,949 bytes · `icon-192.png` · 2,044 bytes · `icon-512.png` · 6,698 bytes · `icon-512-maskable.png` · 6,698 bytes |
+| SHA-256 | ico `0486a1154c4eb78ef38261039caca6f14c9e13ce26ae34e7ea375fd9b4e1b95d` · svg `a43f6212fb39070b7fbe3083858fbf1ccc2389b48b1adc725e7f8c134eea73dd` · 180 `0be22fea868c2e120e600e42df4e6193f41290497c96939809ebcd4fcb90bb32` · 192 `8c79edd2279cf09e3e65dbcd6dd326657f8982645404c4dfc6370d5515310e98` · 512 `8a521ed02f1c2d262081d4ac45bd4e956c02dbd268de865371b3a7bef971d95f` · maskable `8a521ed02f1c2d262081d4ac45bd4e956c02dbd268de865371b3a7bef971d95f` |
+| Determinism | Run twice; all outputs byte-identical (fixed zlib through `tools/pngout.py`). |
+| Acceptance checks | The generator stops unless the computed mark is the drawn one; the icon and the favicon are what it writes (`tools/test-site.py`). |
+| Deployment | `deploy.sh` allowlist (paths unchanged). `sw.js` ASSETS keeps `icon.svg`, the favicon every page links; the rasters are fetched by the OS at install or pin time. |
+| Supersedes | IMG-021, the mark on a rounded Night square (the sheet's icon), retired to `backup/mark-night-icons-v1/` on 2026-11-23 (below) |
+| Owner sign-off | The owner, 2026-11-23: *yes*, to the kit's paper icons and link-preview card in this release |
+
+---
+
+## ICON-NIGHT — the mark on Night as the site's icon, retired
+
+| | |
+|---|---|
+| Retired | 2026-11-23: served as `favicon.ico`, `icon.svg` and `assets/icons/icon-{180,192,512,512-maskable}.png` until the identity kit's paper icons (IMG-030) replaced them; the bytes moved to `backup/mark-night-icons-v1/` at the paths they had. The receipt below stands as written, its output paths moved with the bytes. |
 |---|---|
 | Asset ID | IMG-021 |
 | Source | The owner's sheet "A mark that counts itself" (`~/Desktop/cyther-studies/sheet.html`, kept outside the repository), adopted 2026-11-21: its icon, the mark at 0.74 on a Night square with corners of radius 22 |
@@ -69,7 +108,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Command | `python3 tools/render-mark.py` |
 | Fixed input | The number eight: of the 8**8 = 16,777,216 fillings of eight positions with 0 to 7, the one in which position n is as thick as the number of positions n thick, `4 2 1 0 1 0 0 0` (found by enumeration). Drawn from the top, anticlockwise, 45° a position, on a 100-unit square: outer radius 46, 6.5 a unit, every end cut along a ray from the centre. Ink `#f0ece2`, Night `#09090b`, the sheet's. |
 | Method | `icon.svg`: the computed mark, byte-identical to the sheet's icon. The rasters: each pixel the shapes' exact area where it lies wholly in or out, 8 by 8 samples where an edge is within reach; `icon-192.png`, `icon-512.png` the icon with transparent corners (`any`); `icon-180.png` (apple-touch) and `icon-512-maskable.png` the mark at 0.74 on Night to the edges (the platform rounds them), the mark inside the central 80% circle (radius 34 of 40). `favicon.ico`: the icon at 16 and 32 px, 32-bit DIBs. |
-| Outputs | `favicon.ico` · 5,430 bytes · `icon.svg` · 530 bytes · `assets/icons/icon-180.png` · 1,838 bytes · `icon-192.png` · 2,763 bytes · `icon-512.png` · 8,827 bytes · `icon-512-maskable.png` · 6,245 bytes |
+| Outputs | `backup/mark-night-icons-v1/favicon.ico` · 5,430 bytes · `backup/mark-night-icons-v1/icon.svg` · 530 bytes · `backup/mark-night-icons-v1/assets/icons/icon-180.png` · 1,838 bytes · `icon-192.png` · 2,763 bytes · `icon-512.png` · 8,827 bytes · `icon-512-maskable.png` · 6,245 bytes |
 | SHA-256 | ico `b7efc5a9703590f0fc501563b4ef72c088ed488c53f80e2684ae101d7ecb4164` · svg `60ff285f4e60a4673c9c4056ba201dddff25ebe4feb67e9b66c9ac8061e48004` · 180 `96d56581528d824180e568171f7d5c6307e4314a47dc15d548ec9bc5459143a0` · 192 `a247d382e5ca7f8ad7a6eb4ff40dcb1d856313965a79fb7b322dbc20f88e131f` · 512 `f4cf4bdcc37d7f1e5bef643ae8a33321c3f3bd2ce631085a548fd9829f38e545` · maskable `ef7c9fcdbf8f082db37e803c9820c1ad01d61b03d9ddb77632f0f41af9fe6002` |
 | Determinism | Run twice; all outputs byte-identical (fixed zlib through `tools/pngout.py`). |
 | Acceptance checks | The generator stops unless the computed mark is the drawn one; the logo, the icon and the favicon are what it writes, every page's header shows the logo, and two positions swapped is refused (`tools/test-site.py`). At 16 px a unit is 0.77 px and the thinnest bands show grey: the sheet's icon at its own scale. |
@@ -88,12 +127,12 @@ state it records, and their Deployment lines describe the build identity of thei
 | Classification | **COMPUTED** (the mark) with the name **drawn**: the letters are the sheet's own drawing, carried verbatim in `tools/render-mark.py` (`NAME`), on the mark's terms (one stroke a unit wide), not computed |
 | Command | `python3 tools/render-mark.py` |
 | Fixed input | As IMG-021. |
-| Method | The computed mark and the drawn name in one SVG, Ink `#f0ece2`, viewBox 384.18 by 100; byte-identical to the sheet's horizontal logo. Every served page's header shows it as an image in the home link (34 px high, 30 px under 760 px wide), the four cards at 42 px. |
-| Output | `assets/logo/cytherai.svg` · 384.18×100 units · 19,912 bytes |
-| SHA-256 | `b6d98fce2e04827c5042b7b09a5c8efbd494bde093d43a583451599a7476bc2d` |
+| Method | The computed mark and the drawn name in one SVG, Ink `#f0ece2`, viewBox 384.18 by 100; byte-identical to the sheet's horizontal logo. Every served page's header shows it as an image in the home link (34 px high, 30 px under 760 px wide), the four cards at 42 px. Since 2026-11-23 (the identity's paper round the film) every header is on paper and shows `cytherai-ink.svg`, the same drawing in the identity kit's Ink `#16161a`; `cytherai.svg`, in the sheet's Ink, stays for the cards, over the film, and is no longer served. |
+| Outputs | `assets/logo/cytherai-ink.svg` · 384.18×100 units · 19,912 bytes · `assets/logo/cytherai.svg` · 19,912 bytes |
+| SHA-256 | cytherai-ink.svg `d84165ce30d691cf3e84c187a424e7734a1e6012d8b5562248a97305027db3e4` · cytherai.svg `b6d98fce2e04827c5042b7b09a5c8efbd494bde093d43a583451599a7476bc2d` |
 | Determinism | Run twice; byte-identical. |
 | Acceptance checks | As IMG-021. |
-| Deployment | `deploy.sh` allowlist; precached by `sw.js`; its URL names its bytes (`?v=`, `generate-integrity.sh`) in every page and in the precache. |
+| Deployment | `cytherai-ink.svg`: `deploy.sh` allowlist; precached by `sw.js`; its URL names its bytes (`?v=`, `generate-integrity.sh`'s `NAMED`) in every page and in the precache. `cytherai.svg`: in the tree for `tools/render-og-film.py`, not in `deploy.paths`. |
 | Supersedes | The typed wordmark (`cyther<span>ai</span>` in Public) beside the Seal in every header (IMG-009, retired) |
 | Owner sign-off | As IMG-021 |
 

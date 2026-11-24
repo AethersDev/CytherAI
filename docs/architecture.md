@@ -48,7 +48,7 @@ flowchart TD
 ```
 
 The front door loads one stylesheet and one deferred script, both with SRI; `js/film.js` reads no module and publishes
-nothing. It is dark whatever the device's theme: light mode (`js/theme.js` and the header's switch) retired on
+nothing. It is the same whatever the device's theme, a dark film framed in a paper header and footer (the identity's paper and ink, 2026-11-23; the rooms are on that paper whole): light mode (`js/theme.js` and the header's switch) retired on
 2026-10-20 to `backup/theme-switch-v1/`. No page loads the two record modules (THE EXCEPTION, the
 last that did, retired on 2026-10-16 to `backup/exception-v1/`): the projector and the verifiers
 run them under jsc, the manifest first. Their public surface is an inventory
@@ -91,7 +91,7 @@ run them under jsc, the manifest first. Their public surface is an inventory
 
 1. It removes `no-js`. The statement and its two links need no script: the markup shows them (`.landing.on`) from the first paint, over the film, the `h1` and its links exposed to everyone from the start (until 2026-11-05 they waited for the film's 10.6th second). The film's text alternative is
    a `.sr` paragraph before it. The header's mark is the CytherAI logo, one image of
-   `assets/logo/cytherai.svg` (`tools/render-mark.py`); `tools/test-site.py` holds every header to it and it to the computed mark.
+   `assets/logo/cytherai-ink.svg`, on the paper header (`tools/render-mark.py`; `cytherai.svg`, in the sheet's Ink, is the cards'); `tools/test-site.py` holds every header to it and it to the computed mark.
 2. It picks the film and its poster by orientation (`film/film-landscape.mp4` or
    `film/film-portrait.mp4`) and plays it muted. Reduced motion, and a request to save data or a connection the browser calls 2G or estimates under 1 Mbit/s, skip straight to the still state with *Play the film* and download no film (the latter three no passage and no worker either: never "3g" by itself, `docs/deploy.md` §5ag, §5ai); a refused play, a media error, or no
    start within `GUARD` (6 s) does the same with *Replay*.

@@ -138,7 +138,7 @@ check(live != v1 and [x for x in d if "current state is 0000:0000" in x] == ["LI
 d = audit(log + live, lfiles, [c + 1e-3 for c in CANON], CHECKSUM, required)
 check([x for x in d if "other canonical parameters" in x] == ["LIVE-DERIVED — the derived link-preview plate, retired: derived from other canonical parameters"],
       "D5 moved canonical parameters stale the live receipt that writes them, and no retired one")
-dropped = log.replace(" · 192 `a247d382e5ca7f8ad7a6eb4ff40dcb1d856313965a79fb7b322dbc20f88e131f`", "")   # the live icon receipt (IMG-021)
+dropped = log.replace(" · 192 `8c79edd2279cf09e3e65dbcd6dd326657f8982645404c4dfc6370d5515310e98`", "")   # the live icon receipt (IMG-021)
 check(dropped != log and any("icon-192.png is named" in x for x in audit(dropped, files, CANON, CHECKSUM, required)), "D6 an output dropped from the icon receipt is a coverage defect")
 bad = log.replace("bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d", "not-a-digest")
 dup = log + "\n## OG-CARD — the link-preview plate\n\n| SHA-256 | `bd59c137b1c5eb29bacf9347b149f73a703079c2b61d96233b6c418953ab1d9d` |\n| Output | `assets/og/og-card.jpg` |\n"
