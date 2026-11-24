@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""render-og-film.py — the link-preview cards the site renders itself: the film's final frame with its statement, in Arabic, and
-Both looked flat's two.
+"""render-og-film.py — the link-preview cards the site renders itself: the Arabic card and Both looked flat's two.
 
-Classification: ILLUSTRATIVE. `render-og-film.py ar` renders tools/og-card-ar.html: film/nightfall-landscape.jpg (the last frame of
-the front door's film, a conceptual visualization), the darkening the front door sets behind its statement, the logo and the
-statement in the front door's own type. Headless Chrome renders it at 1200×630, device scale 1, served from the repository root
-by a local server on 127.0.0.1 (fonts and the frame are same-origin there), and writes assets/og/og-card-ar.jpg, through sips: as a
-PNG this photographic frame was 612 KB, and link previews are commonly reported to drop an image over about 300 KB (the audit of
-2026-11-05). The pages' og:image:alt states what it shows and that it is a conceptual visualization. `flat` and `flat-ar` render
+Classification: ILLUSTRATIVE. `render-og-film.py ar` renders tools/og-card-ar.html: since 2026-11-24 the identity kit's English
+card with its line in Arabic (the kit's rendering of the mark as STANDARD No. 001 with nothing drawn on it,
+tools/og-plate-standard-001.jpg; the name; the line in the site's Arabic type), and until then the film's last frame with the front
+door's statement (backup/nightfall-card-v1/). Headless Chrome renders it at 1200×630, device scale 1, served from the repository
+root by a local server on 127.0.0.1 (the font, the logo and the plate are same-origin there), and writes assets/og/og-card-ar.jpg,
+through sips: link previews are commonly reported to drop an image over about 300 KB (the audit of 2026-11-05), and as a PNG the
+film's frame was 612 KB. The pages' og:image:alt states what it shows and that it is a design, not a manufactured object. `flat` and `flat-ar` render
 Both looked flat's (tools/og-card-flat.html, tools/og-card-flat-ar.html), a still of its sequence with its title, to
 assets/og/og-card-flat.png and assets/og/og-card-flat-ar.png, which stay PNGs: they are dark, and under that size.
 

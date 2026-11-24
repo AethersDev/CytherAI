@@ -17,7 +17,7 @@ Everything the site no longer uses lives here, whole: nothing is served, precach
 | `brand-studies/` | The identity and dossier drafts of July 2026 (commit `517070b`) |
 | `icon-v1/`, `og-card-v1/` | The orbit icon family and social plate, with their generators (replaced by the Cyther Seal and the film's card, 2026-10-13) |
 | `mark-night-icons-v1/` | The CytherAI mark's first icons (2026-11-21 to 2026-11-23): the mark on a rounded Night square, `icon.svg`, `favicon.ico` and the app icons at the paths they had; replaced by the identity kit's paper icons, which `tools/render-mark.py` now writes |
-| `nightfall-card-v1/` | The English link-preview card of 2026-11-23, Nightfall's last frame with the statement, and its composition `tools/og-card.html`; replaced the same day by the identity kit's Open Graph image |
+| `nightfall-card-v1/` | The link-preview cards of 2026-11-23, Nightfall's last frame with the statement, and their compositions `tools/og-card.html` and `tools/og-card-ar.html`; the English replaced the same day by the identity kit's Open Graph image, the Arabic on 2026-11-24 by that card with its line in Arabic |
 | `seal-v1/` | The Cyther Seal (2026-10-13 to 2026-11-21), whole: its generator `tools/render-seal.py`, the icons and favicon it wrote, and the four cards that carried its lockup, at the paths they had; replaced by the CytherAI mark (`tools/render-mark.py`); its own README |
 | `og-card-v2/` | The film's two cards as PNGs, 612 KB and 607 KB (replaced by the same cards as JPEGs, 2026-11-05) |
 | `project-pages/` | The ADII and AWC-OS pages as first published, before curation |

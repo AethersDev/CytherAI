@@ -42,7 +42,7 @@ state it records, and their Deployment lines describe the build identity of thei
 | Source | The identity kit's Open Graph image, `deliver/web/og-1200x630.jpg` in `~/Desktop/cyther-studies/cyther-rod/cytherai/identity` (outside the repository): built by the kit's `make.py` from its checked CAD solids and their Blender rendering, measured by its `verify.py`. Copied byte for byte; nothing in this repository renders it. Its line, *Every claim carries its check.*, is the kit's. |
 | Output | `assets/og/og-card.jpg` · 1200×630 · 61,587 bytes |
 | SHA-256 | og-card.jpg `a74371a3090d0172ede2b55fda99ee1c9c2d2f6bd8de94f46febf3f54bd81085` |
-| Deployment | Listed in `deploy.paths`; named by the seven English pages that previewed IMG-028. The Arabic pages keep IMG-029 (the film's last frame with the Arabic statement): the kit has no Arabic card. |
+| Deployment | Listed in `deploy.paths`; named by the seven English pages that previewed IMG-028. The Arabic pages kept IMG-029 (the film's last frame with the Arabic statement) until 2026-11-24, the kit having no Arabic card; IMG-032 is its line in Arabic on the kit's rendering. |
 | Supersedes | IMG-028, retired to `backup/nightfall-card-v1/` on 2026-11-23 (below) |
 | Owner sign-off | The owner, 2026-11-23: *yes*, to the kit's paper icons and link-preview card in this release |
 
@@ -63,14 +63,34 @@ state it records, and their Deployment lines describe the build identity of thei
 
 ---
 
-## NIGHTFALL-CARD-AR — Arabic link preview
+## IDENTITY-CARD-AR — Arabic link preview, the identity kit's card with its line in Arabic
 
 | | |
+|---|---|
+| Asset ID | IMG-032 |
+| Classification | **ILLUSTRATIVE** — a rendering of the mark designed as a part (STANDARD No. 001), a design and not a manufactured object; every page that names it says so in `og:image:alt` |
+| Source | The composition of the identity kit's English card (IMG-031; `social()` in the kit's `kit.py`) with its line in Arabic, `tools/og-card-ar.html`. The picture: the kit's rendering of the part with nothing drawn on it, `tools/og-plate-standard-001.jpg`, which is the kit's `deliver/standard/photos/social.jpg` byte for byte (45,420 bytes, sha256 `62f66269eac3ad60202575c55c13b4bd3df718f17e084c3edfb2cc3a507aee9b`; the kit lays its English card on the PNG that JPEG was written from, which it does not keep). The name: where the kit sets it (capitals 40 px high, from 72 px, on a baseline at 112 px), and it is `assets/logo/cytherai-ink.svg` seen at its name alone (IMG-022), the part beside it being the mark; the kit's wordmark is that drawing at 1/6.5 (the same 1,306 path commands, every point within 0.005 of a logo unit). The line: *مع كلّ ادّعاء طريقة للتحقّق منه.*, the wording handed over on 2026-11-24 for the kit's *Every claim carries its check.*, in the site's IBM Plex Sans Arabic 400 (`fonts/`) at 52 px, right-aligned from the kit's margin. The kit's descriptor (*AI research · Systems · Verification*) is not carried: it has no Arabic wording. |
+| Command | `python3 tools/render-og-film.py ar` (headless Chrome renders `tools/og-card-ar.html` at 1200×630, device scale 1, from a local server on 127.0.0.1; `sips` writes the JPEG at 88) |
+| Output | `assets/og/og-card-ar.jpg` · 1200×630 · 74,718 bytes |
+| SHA-256 | og-card-ar.jpg `efe59d8ac37e677987c2a742f1b0f959603ffb671577e2d42ff58090e0fb6bb8` |
+| Determinism | Run twice; byte-identical (Google Chrome 157.0.8103.79, the same machine). |
+| Acceptance checks | Measured against the plate and the kit's English card: the line's ink spans x 76 to 432 and y 196 to 322 (the English line's: 74 to 430, 212 to 295), 60 px short of the part's base at its nearest, and nothing is drawn below it; the name's ink box is the English card's to a pixel and its centre of darkness within 0.06 px across and 0.26 px down; right of the words the picture stands 54.6 dB from the plate and 41.1 dB from the English card (written from the PNG). `tools/test-site.py` holds the card to the logo file, seen at its name whole and without the mark. By eye, at full size and at 400 px wide: the letters join, each shadda sits on its letter, the full stop ends the line at its left. The line is lighter than the English card's, which is Inter 600: the site carries no Arabic weight above 400. |
+| Deployment | Listed in `deploy.paths` (the path IMG-029 had); named by the five Arabic pages that previewed IMG-029, whose `og:image:alt` now says what it shows. |
+| Supersedes | IMG-029, retired to `backup/nightfall-card-v1/` on 2026-11-24 (below) |
+| Owner sign-off | The wording: the handoff the owner passed on 2026-11-24, *Use this line on the Arabic paper card*. The built picture had not been seen by the owner when this entry was written. |
+
+---
+
+## NIGHTFALL-CARD-AR-V1 — Arabic link preview with the film's last frame, retired
+
+| | |
+|---|---|
+| Retired | 2026-11-24: served as `assets/og/og-card-ar.jpg` until the identity kit's card with its line in Arabic (IMG-032) replaced it; the bytes and the composition `tools/og-card-ar.html` moved to `backup/nightfall-card-v1/` at the paths they had. The receipt below stands as written, its output path moved with the bytes. |
 |---|---|
 | Asset ID | IMG-029 |
 | Classification | **ILLUSTRATIVE** |
 | Source | The same rooftop poster with the published mark and Arabic statement. Run `python3 tools/render-og-film.py ar`. |
-| Output | `assets/og/og-card-ar.jpg` · 159,603 bytes |
+| Output | `backup/nightfall-card-v1/assets/og/og-card-ar.jpg` · 159,603 bytes |
 | SHA-256 | og-card-ar.jpg `cb1bfb6d33b232a04f886fdab7f1a7f4604b177113810a6b5d1b409f91ad78bc` |
 | Deployment | Listed in `deploy.paths`. |
 

@@ -2791,6 +2791,48 @@ wording yet.
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_B777DA2C301E811D`), 87 of 87 served paths matching the artifact.
 
+## 5aq. The Arabic link preview: the identity's card with its line in Arabic — 2026-11-24
+
+Build `2A08C6343A217562` (`#reading_ink_2A08C6343A217562`, `#film_settle_2A08C6343A217562`). It follows the live `B777DA2C301E811D`.
+
+**The direction.** §5ap left the Arabic pages previewing with the film's last frame: the identity kit has no Arabic card, and its line, *Every claim carries its check.*, had no Arabic
+wording. On 2026-11-24 the owner passed on the wording, *مع كلّ ادّعاء طريقة للتحقّق منه.*, with its reason: it promises that each claim comes with a way to check it and leaves the outcome
+open, and its word for checking is the one the Arabic front door shows in *اقرأ سجلّ التحقق* (written there without the shadda the line carries).
+
+**Now.** `assets/og/og-card-ar.jpg` is the kit's English card with that line (IMG-032): the kit's own rendering of the mark as STANDARD No. 001 with nothing drawn on it
+(`tools/og-plate-standard-001.jpg`, the kit's `deliver/standard/photos/social.jpg` byte for byte), the name where the kit sets it, and the line in the site's IBM Plex Sans Arabic 400,
+right-aligned from the kit's margin. `tools/render-og-film.py ar` renders it from `tools/og-card-ar.html`, as it rendered the card before it. The five Arabic pages that name it (the front
+door, contact, About, privacy, terms) say what it shows in `og:image:alt`, in Arabic: a computer-generated picture of the mark designed as a precision reference part, a design and not a made
+object, beside the line. That sentence is a draft in Modern Standard Arabic, as the site's Arabic copy was, for the owner to refine. No page changed otherwise; the rest moved by their build
+stamp alone.
+
+**Decided in the building.**
+- The name is the logo file seen at its name alone (`#svgView`), not the logo whole: the part beside it is the mark, and the kit's card sets the name alone. The kit's wordmark and the site's
+  drawn name are one drawing (the same 1,306 path commands, every point within 0.005 of a logo unit at 1/6.5).
+- The picture is not mirrored for a right-to-left page: mirrored, the part would spell another figure. The words stay on its left, as on the English card, and the name stays left to right.
+- The kit's descriptor (*AI research · Systems · Verification*) is not on the Arabic card: it has no Arabic wording, and an English label would be a leftover on an Arabic card.
+- The line is weight 400, lighter than the English card's Inter 600: the site carries IBM Plex Sans Arabic at 300 and 400 only, and no heavier one is on the machine. It is set at 52 px, where
+  it spans what the English line spans.
+- The plate is the kit's JPEG (quality 93); the PNG it was written from is not kept. The card is therefore a second JPEG of the rendering, where the English card is a first.
+
+**What went.** The Arabic card with the film's last frame and the front door's statement, and its composition, to `backup/nightfall-card-v1/`, beside the English one (IMG-029 stands, its
+output path moved with the bytes).
+
+**Checked.**
+- The picture, against the plate and the kit's English card: the line's ink spans x 76 to 432 and y 196 to 322 (the English line's: 74 to 430, 212 to 295) and ends 60 px short of the
+  part's base; the name's ink box is the English card's to a pixel, its centre of darkness within 0.06 px across and 0.26 px down; right of the words the picture stands 54.6 dB from the
+  plate and 41.1 dB from the English card. Rendered twice, the same bytes (74,718; the card it replaces was 159,603). By eye, at full size and at 400 px wide
+  (`~/Desktop/cyther-studies/site-identity-mock/arabic-card-vs-english.jpg`): the letters join, each shadda sits on its letter, the full stop ends the line at its left.
+- `tools/test-site.py`: the mark's law now holds the Arabic card to the logo file seen at its name, whole and without the mark (a view from the logo's edge, and a narrower one, each fail).
+  `./verify.sh` passes; `tools/test-assets.py` all pass.
+- `tools/probe-ink.py`: PASS, 5,142 element samples over 24 profiles, worst 4.99:1 (Chrome/157.0.8103.79). `tools/probe-settle.py`: PASS. `tools/probe-arrival.py`: PASS, 213 rows (run because a
+  contact page is among the five whose `og:image:alt` moved).
+- Not run again: `tools/probe-passage.py`, `tools/probe-return.py`, `tools/probe-ios.py`. Nothing they hold moved: no script, no stylesheet, no page body, no worker logic (the worker's cache name
+  moved with the build, as at every build), and the card is not in the worker's precache.
+
+**Not observed.** How each service crops the card, and when it fetches it again: the address is the one the old card had, so a preview a service already holds may show the old picture
+for a time. An Arabic reader's eye on the line as set. A real phone; a screen reader.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
