@@ -4,21 +4,21 @@
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
 /* one lit environment, dark whatever the device's theme (the owner, 2026-10-20: light mode retired from the front door) */
-:root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff}
+:root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff;--paper:#f4f1ea;--pen:#16161a;--graphite:#4a4741;--slate:#6b675f;--hairline:#d4cec2}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
-a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offset:6px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--warm);outline-offset:6px}header :focus-visible,body>footer :focus-visible{outline-color:var(--pen)}
 .mono{font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 #film,#passage{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
 /* Keep the rooftop room in view until the visitor scrolls into the systems. */
 #passage{opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
 body.scrub[data-state=still] #passage{opacity:var(--passage-opacity,0);visibility:visible;transition:opacity .4s,visibility 0s}
-header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw}
+header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:var(--paper);border-bottom:1px solid var(--hairline)}
 .side{display:flex;align-items:center;gap:24px}
 .note{position:absolute;inset-inline-start:5vw;bottom:18px;margin:0;color:var(--dim)}
 .wordmark{display:inline-flex;align-items:center}.logo{display:block;height:34px;width:auto}
-.top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
+.top{font-size:14px;color:var(--graphite);border-bottom:1px solid #16161a24;padding-block:3px 4px}.top:hover{color:var(--pen);border-color:var(--pen)}
 /* the film's stage, one viewport tall; 100vh first for an engine without svh, which would drop the height and collapse it.
    --foot: how far above the frame's foot the statement stands, and below it the band its film's subtitles and the note share */
 .stage{--foot:17vh;position:relative;z-index:2;height:100vh;height:100svh;padding:0 5vw;overflow:hidden}
@@ -26,7 +26,7 @@ header{position:absolute;top:0;inset-inline:0;height:92px;z-index:3;display:flex
 /* the film's sentences are its subtitles, in the darkest band of every frame, centred between the statement and the note:
    the statement stands from the first paint, in the place it has at the film's end, and above it runs the current */
 .line{--note:33px;bottom:calc((var(--foot) + var(--note)) / 2);transform:translateY(50%);font-family:News,serif;font-size:clamp(19px,1.7vw,24px);line-height:1.25;text-shadow:0 2px 14px #07070a,0 0 2px #07070a}
-header::before{content:"";position:absolute;inset:0 0 -56px;z-index:-1;pointer-events:none;background:linear-gradient(#07070ae6,#07070ab3 55%,transparent)}
+
 /* the darkness under the frame's foot, and past the stage's own foot the same darkness going away (#systems::before): the
    stage scrolls up over the fixed film, and without it the scene began at a hard line (the audit of 2026-11-05) */
 .stage::after,#systems::before{content:"";position:absolute;inset-inline:0;height:max(150px,22vh);pointer-events:none}
@@ -46,12 +46,12 @@ body[data-state=still] .line{transition:none}
 @media(max-width:760px){header{height:70px;padding:0 20px}.side{gap:16px}.logo{height:30px}.top{font-size:13px;padding-block:4px 5px}.stage{--foot:14vh;padding:0 20px}.note{inset-inline-start:20px;max-width:calc(100% - 40px);bottom:14px}
  .line,.landing{inset-inline:20px;max-width:none}.line{--note:44px;font-size:17px}.landing h1{font-size:30px}.landing nav{gap:18px;margin-top:18px}.solid{font-size:14px;padding:13px 16px;min-height:46px}.plain{font-size:14px}
  #replay{inset-inline-end:20px;bottom:calc(14vh - 36px)}}
-/* the front door's header stays, slim, on its own darkness: a way to talk at every moment of a page ten screens long (the
+/* the front door's header stays, slim, on paper (the identity's, 2026-11-23; until then on its own darkness over the film): a way to talk at every moment of a page ten screens long (the
    audit of 2026-11-05: it scrolled away with the first), and Both looked flat's, as long (2026-11-06). It is every page's
    one header (2026-11-07: the rooms' is css/room.css's), and where its links do not fit beside the brand they take a second row. Where the window is too short to spare it, it scrolls away again,
    and the subtitles give way: the statement holds their sense, and .sr their words */
-.bar{position:fixed;height:auto;min-height:64px;flex-wrap:wrap;column-gap:24px;row-gap:10px;padding-block:10px}.bar::before{inset:0 0 -40px;background:linear-gradient(#07070a calc(100% - 40px),transparent)}
-.talk{color:var(--ink);border:1px solid #ffffff66;padding:6px 12px}
+.bar{position:fixed;height:auto;min-height:64px;flex-wrap:wrap;column-gap:24px;row-gap:10px;padding-block:10px}
+.talk{color:var(--pen);border:1px solid #16161a66;padding:6px 12px}
 @media(max-width:760px){.bar{min-height:56px}.bar .side{gap:12px}
  /* on the front door alone: the subtitles' band; and on a phone the statement crosses the whole width of the film, so its darkness does too */
  #film~main .stage{--foot:max(14vh,104px)}#film~main .landing::before{inset-block:-6vh -14vh;inset-inline:-20px;background:linear-gradient(transparent,#07070ab8 18%)}}
@@ -86,13 +86,13 @@ html:not(.no-js) #awc-os{scroll-margin-top:-116.25vh;scroll-margin-top:-116.25sv
 /* the close: the invitation over the passage's last frame, the film's world again, where the film's statement stood */
 .close{position:relative;z-index:2;height:100vh;height:100svh;overflow:hidden}.close>div{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw)}
 .close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}.mail{font:13px Plex,monospace;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:5px 4px}.mail:hover{color:var(--warm);border-color:var(--warm)}.close nav+.route{margin-top:36px;font-size:14px;color:var(--soft)}   /* Both looked flat (flat/), after the invitation */
-body>footer{position:relative;z-index:2;background:var(--ground);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:120px 5vw 40px;color:var(--dim)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--ink)}
-/* the scene ends softly on the footer's ground, not at a line through what stands there (the audit of 2026-11-05) */
-body>footer::before{content:"";position:absolute;inset-inline:0;bottom:100%;height:min(14vh,160px);pointer-events:none;background:linear-gradient(transparent,var(--ground))}
+body>footer{position:relative;z-index:2;background:var(--paper);border-top:1px solid var(--hairline);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding:40px 5vw 40px;color:var(--slate)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--pen)}
+/* the scene ends at the paper footer's edge (2026-11-23, the identity's paper round the film; from the audit of 2026-11-05 until then it faded into a dark footer's ground) */
+
 /* AWC-OS's words hold its condition and route throughout (the owner, 2026-10-21): on a phone wide enough, its headline
    takes one line so the words stay below the program waiting at the opening */
 @media(min-width:360px) and (max-width:760px){#awc-os .say h2 br{display:none}}
-@media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}body>footer{padding:72px 20px 32px}}
+@media(max-width:760px){.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say h2,.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}body>footer{padding:32px 20px 32px}}
 /* a window too short for a system's words (400% zoom; a small phone on its side): they scroll within themselves rather than
    reach past the top, where no scroll could bring their first lines back; their ground moves onto them, so the scroll clips none.
    The close, in the page's flow, grows to its words instead: Both looked flat's are taller than such a window, and the fixed

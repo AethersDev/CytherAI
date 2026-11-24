@@ -527,10 +527,11 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(mark.SEQ, (4, 2, 1, 0, 1, 0, 0, 0), "the figure that describes itself")
         self.assertEqual(mark.mark_path(), mark.DRAWN, "the computed mark is the drawn one")
         self.assertEqual((ROOT / "assets/logo/cytherai.svg").read_text(encoding="utf-8"), mark.logo_svg(), "the logo is the computed one")
+        self.assertEqual((ROOT / "assets/logo/cytherai-ink.svg").read_text(encoding="utf-8"), mark.logo_svg(mark.PEN), "the logo on paper is the computed one, in the identity's ink")
         self.assertEqual((ROOT / "icon.svg").read_text(encoding="utf-8"), mark.icon_svg(), "the icon is the computed one")
         self.assertEqual((ROOT / "favicon.ico").read_bytes(), mark.favicon(), "favicon.ico is the computed icon")
-        named = hashlib.sha256((ROOT / "assets/logo/cytherai.svg").read_bytes()).hexdigest()[:12]   # generate-integrity.sh's NAMED
-        logo = re.compile(r'<img class="logo" src="(?:\.\./|/)?assets/logo/cytherai\.svg\?v=' + named + r'" width="131" height="34" alt="">')
+        named = hashlib.sha256((ROOT / "assets/logo/cytherai-ink.svg").read_bytes()).hexdigest()[:12]   # generate-integrity.sh's NAMED
+        logo = re.compile(r'<img class="logo" src="(?:\.\./|/)?assets/logo/cytherai-ink\.svg\?v=' + named + r'" width="131" height="34" alt="">')   # every header is on paper since 2026-11-23
         card = re.compile(r'<div class="mark"><img src="\.\./assets/logo/cytherai\.svg" width="162" height="42" alt=""></div>')
         def defect(page: str, html: str) -> str | None:
             if any("seal" in names.split() for names in re.findall(r'class=["\']([^"\']*)["\']', html)) or "cyther<span>ai</span>" in html:
@@ -538,7 +539,7 @@ class SiteContractTests(unittest.TestCase):
             home = re.findall(r'<a class="wordmark"[^>]*>(.*?)</a>', html, re.S)
             if page.startswith("tools/"): return None if len(card.findall(html)) == 1 else f"{page}: the card shows no logo"
             return None if len(home) == 1 and logo.fullmatch(home[0]) else f"{page}: the home link is not the logo"
-        cards = ["tools/og-card.html", "tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]
+        cards = ["tools/og-card-ar.html", "tools/og-card-flat.html", "tools/og-card-flat-ar.html"]   # the English card is the identity kit's own image since 2026-11-23
         for page in HTML_FILES + cards:
             self.assertIsNone(defect(page, (ROOT / page).read_text(encoding="utf-8")))
         swapped = list(mark.SEQ); swapped[1], swapped[2] = swapped[2], swapped[1]
@@ -550,11 +551,13 @@ class SiteContractTests(unittest.TestCase):
         self.assertIsNotNone(defect("ar/about.html", about.replace("</header>", '<svg class="seal decorative"></svg></header>', 1)))
         self.assertIn("rect", seal, "the retired Seal stands in backup/seal-v1/")
 
-    def test_the_front_door_is_one_dark_environment(self) -> None:
+    def test_the_front_door_is_one_environment(self) -> None:
         """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light
         mode re-tokened only the footer by then, a promise the page did not keep, and retired): no switch, no theme on the
-        root, no light tokens and no colour-scheme query in css/film.css. Every ink holds 4.5:1 on its ground, tokens read
-        from css/film.css and never restated here. (Text over the film itself is measured in a browser: CY-SEM-003.)"""
+        root and no colour-scheme query in css/film.css. Since 2026-11-23 that environment is the dark film framed in the
+        identity's paper (the owner: Nightfall is the main piece, the identity's paper and ink are merged round it): the header
+        and the footer are on paper, in ink. Every ink holds 4.5:1 on its ground, dark and paper alike, tokens read from
+        css/film.css and never restated here. (Text over the film itself is measured in a browser: CY-SEM-003.)"""
         css = (ROOT / "css/film.css").read_text(encoding="utf-8")
         for absent in ("data-theme", "prefers-color-scheme", "#theme"):
             self.assertNotIn(absent, css, absent)
@@ -566,6 +569,11 @@ class SiteContractTests(unittest.TestCase):
         for ink in ("ink", "soft", "dim", "warm"):
             with self.subTest(ink=ink):
                 self.assertGreaterEqual(wcag(tok[ink], tok["ground"]), 4.5, f"--{ink} on --ground")
+        for ink in ("pen", "graphite", "slate"):
+            with self.subTest(ink=ink):
+                self.assertGreaterEqual(wcag(tok[ink], tok["paper"]), 4.5, f"--{ink} on --paper")
+        for rule in ("header{", "body>footer{"):                      # the frame is paper, and opaque: nothing of the film shows through it
+            self.assertIn("background:var(--paper)", re.search(re.escape(rule) + r"[^}]*\}", css).group(0), rule)
 
     def test_the_statement_stands_from_the_first_paint(self) -> None:
         """A visitor learns what the page says, and has its two links, at the first paint: the markup shows the statement, no
@@ -650,13 +658,17 @@ class SiteContractTests(unittest.TestCase):
 
     def test_the_rooms_are_of_the_front_door(self) -> None:
         """The pages a visitor reaches from the front door (2026-10-21) are rooms of it: each draws with css/room.css, opens
-        with the front door's lockup going home, and ends with its footer; the room's tokens are the front door's, and
-        every ink holds 4.5:1 on the ground and on the lifted ground under a field or an artifact, a field's edge 3:1."""
+        with the front door's lockup going home, and ends with its footer. Since 2026-11-23 a room is on the identity kit's
+        Paper, in its Ink (the owner: the site should read as an established company's, not as an all-dark page), the same
+        paper and ink as the front door's header and footer; until then its tokens were the front door's dark ones. Every
+        ink holds 4.5:1 on the ground and on the lifted ground under a field or an artifact, a field's edge 3:1."""
         film = (ROOT / "css/film.css").read_text(encoding="utf-8")
         room = (ROOT / "css/room.css").read_text(encoding="utf-8")
         hexes = lambda css: dict(re.findall(r"--([\w-]+):(#[0-9a-fA-F]{6})\b", re.search(r":root\{([^}]*)\}", css).group(1)))
         tok, front = hexes(room), hexes(film)
-        self.assertEqual({k: v for k, v in tok.items() if k in front}, front, "the front door's tokens, unchanged")
+        self.assertEqual((tok["ground"], tok["ink"]), ("#f4f1ea", "#16161a"), "the identity kit's Paper and Ink")
+        self.assertEqual((front["paper"], front["pen"], front["graphite"], front["slate"]), (tok["ground"], tok["ink"], tok["soft"], tok["dim"]),
+                         "the front door's header and footer are the rooms' paper and inks")
         for ground in ("ground", "lift"):
             for ink in ("ink", "soft", "dim", "warm"):
                 with self.subTest(ink=ink, ground=ground):
@@ -719,7 +731,7 @@ class SiteContractTests(unittest.TestCase):
                 meta = {a.get("property") or a.get("name"): a.get("content") for t, a in tags if t == "meta"}
                 front = page in ("index.html", "ar/index.html")
                 self.assertTrue(title.startswith("CytherAI — ") if front else title.endswith(" — CytherAI"), title)
-                self.assertEqual(meta.get("theme-color"), "#07070a")
+                self.assertEqual(meta.get("theme-color"), "#f4f1ea")   # the paper every page opens on (its header)
                 self.assertTrue(meta.get("description"))
                 if page == "404.html":
                     continue   # served at every missing path: a page no one shares

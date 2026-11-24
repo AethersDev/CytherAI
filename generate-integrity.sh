@@ -17,7 +17,7 @@ set -euo pipefail
 RESOURCES="css/film.css css/room.css js/film.js css/flat.css js/flat.js"
 # what a served page requests with no integrity attribute but by a URL that names its bytes all the same (?v=), in the pages
 # and in the worker's precache: the logo in every header (an <img> cannot carry an integrity attribute)
-NAMED="assets/logo/cytherai.svg"
+NAMED="assets/logo/cytherai-ink.svg"
 
 # HTML files to patch: every served page, read from the one declaration of what is served (a page added there is
 # stamped, and held to every per-page law in tools/test-site.py, with no second list to forget it in)

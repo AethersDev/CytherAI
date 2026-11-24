@@ -43,7 +43,7 @@ ARGS = ap.parse_args()
 DIST, OUT = Path(ARGS.dist).resolve(), Path(ARGS.out); OUT.mkdir(parents=True, exist_ok=True)
 FRONT, ROOMS = ("/", "/ar/"), ("/contact.html", "/ar/contact.html", "/pages/brief.html", "/pages/about.html", "/ar/privacy.html", "/adii/", "/ar/adii.html", "/flat/")
 CHANGED = ("css/film.css", "css/room.css", "css/flat.css", "js/film.js", "js/flat.js")
-WHOLE = """({build: (document.querySelector('meta[name=build-hash]') || {content: null}).content, styled: getComputedStyle(document.documentElement).getPropertyValue('--ground').trim() === '#07070a',
+WHOLE = """({build: (document.querySelector('meta[name=build-hash]') || {content: null}).content, styled: getComputedStyle(document.documentElement).getPropertyValue('--ground').trim() !== '',
   scripted: !document.documentElement.classList.contains('no-js'), controlled: !!(navigator.serviceWorker && navigator.serviceWorker.controller)})"""
 rows, ok = [], True
 SERVED = {"dir": DIST, "old": {}, "down": False}   # what the origin reads now; the paths still old; whether it answers at all
@@ -266,7 +266,7 @@ def upgrade(origin, older, was, new, next_dir):
 IOS = r"""addEventListener('load', function () { setTimeout(function () {
   var tag = (/[?&#]t=([\w-]+)/.exec(location.href) || [])[1]; if (!tag) return;
   var x = new XMLHttpRequest(); x.open('POST', '/__report', false); x.setRequestHeader('Content-Type', 'application/json');
-  x.send(JSON.stringify({tag: tag, path: location.pathname, build: document.querySelector('meta[name=build-hash]').content, styled: getComputedStyle(document.documentElement).getPropertyValue('--ground').trim() === '#07070a',
+  x.send(JSON.stringify({tag: tag, path: location.pathname, build: document.querySelector('meta[name=build-hash]').content, styled: getComputedStyle(document.documentElement).getPropertyValue('--ground').trim() !== '',
     scripted: !document.documentElement.classList.contains('no-js'), controlled: !!navigator.serviceWorker.controller}));
 }, 1500); });"""
 REPORTS = []

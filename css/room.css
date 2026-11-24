@@ -1,14 +1,17 @@
 /* The rooms: the pages a visitor reaches from the front door (an evidence page, the contact page). Quieter than the
-   front door and of the same company: its type, its tokens, its logo, its footer. Dark in either device theme, an
-   art-direction choice the owner kept (2026-10-21): the visitor stays in the passage's world after leaving it, and the
+   front door and of the same company: its type, its logo, its header and its footer. On paper, in ink, in either
+   device theme (the owner, 2026-11-23: Nightfall is the main piece and the identity's paper and ink are merged round it, so the
+   site reads as an established company's and not as an all-dark page; until then the rooms were dark, the passage's world). The
    quiet layout and the stillness give the change of pace. No motion; the artifact is the loudest thing in the room. */
 @font-face{font-family:Public;src:url(../adii/fonts/public-sans-variable.woff2) format("woff2");font-weight:100 900}
 @font-face{font-family:News;src:url(../adii/fonts/newsreader-variable.woff2) format("woff2");font-weight:200 800}
 @font-face{font-family:Plex;src:url(../adii/fonts/ibm-plex-mono-400.woff2) format("woff2")}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-300.woff2) format("woff2");font-weight:300}
 @font-face{font-family:Arabic;src:url(../fonts/ibm-plex-sans-arabic-400.woff2) format("woff2");font-weight:400}
-/* the front door's tokens, and two of the room's own: a lifted ground under a field or an artifact, and a field's edge */
-:root{color-scheme:dark;--ground:#07070a;--ink:#ece7dc;--dim:#8f8c99;--soft:#cfcac0;--warm:#ffad57;--rule:#ffffff22;--hover:#fff;--lift:#111118;--edge:#6c6976}
+/* the identity kit's Paper and Ink (cyther-studies/cyther-rod/cytherai/identity: #f4f1ea, #16161a), its graphite and slate as the softer inks;
+   the accent is ink (the kit keeps amber for what is being checked, red for what was found false); a lifted ground under a field or an
+   artifact, and a field's edge */
+:root{color-scheme:light;--ground:#f4f1ea;--ink:#16161a;--dim:#6b675f;--soft:#4a4741;--warm:#16161a;--rule:#16161a24;--hover:#000;--lift:#ebe7dd;--edge:#807a70}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
@@ -16,14 +19,14 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 .sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* the front door's header and lockup, the same links on every page (2026-11-07), kept in view on its own ground; where its links do not fit
    beside the brand they take a second row, and in a window too short to spare it, it scrolls away */
-header{position:sticky;top:0;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:24px;row-gap:10px;padding:10px 5vw;background:var(--ground)}
+header{position:sticky;top:0;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:24px;row-gap:10px;padding:10px 5vw;background:var(--ground);border-bottom:1px solid #d4cec2}
 html{scroll-padding-top:80px}@media(max-width:440px){html{scroll-padding-top:104px}}@media(max-height:480px){header{position:static}}
-.talk{color:var(--ink);border:1px solid #ffffff66;padding:6px 12px}.top[aria-current]{color:var(--ink);border-color:var(--ink)}
+.talk{color:var(--ink);border:1px solid #16161a66;padding:6px 12px}.top[aria-current]{color:var(--ink);border-color:var(--ink)}
 .side{display:flex;align-items:center;gap:24px}
 .wordmark{display:inline-flex;align-items:center}.logo{display:block;height:34px;width:auto}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
 main{max-width:1180px;margin:0 auto;padding:48px 5vw 0}
-.label{display:block;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm)}
+.label{display:block;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
 h1{font-family:News,serif;font-weight:300;font-size:clamp(32px,3.2vw,46px);line-height:1.06;letter-spacing:-.02em;margin:18px 0 0}
 .by{font-size:15px;margin-top:14px}.by a,.by [lang=en]{white-space:nowrap}   /* whose work the evidence is, under its headline; a name or its link kept whole */
 h2{font-family:News,serif;font-weight:300;font-size:clamp(26px,2.4vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0 0 20px}

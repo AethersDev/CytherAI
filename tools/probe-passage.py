@@ -93,7 +93,11 @@ def size(tab, w, h, dpr, mobile):
 def open_past_the_film(tab, origin, page, view):
     tab.load("about:blank"); size(tab, *view); tab.load(origin + page)
     ps.until(tab, "document.body.dataset.state === 'film'", 10)
-    tab.js("scrollTo(0, innerHeight)")   # the visitor scrolls on: the film gives way to its still and the passage loads
+    # the visitor scrolls on: the film gives way to its still and the passage loads. The scroll is asked again until the page has left
+    # the film: asked once, the moment the film's state appeared, it sometimes found a page not yet tall enough to scroll and did nothing,
+    # and the page then stood in its film state, where a quarter-window's scroll rightly shows the film and not the passage (the rooftop
+    # row at 0.5 s failed about one run in three on the live build 8E38E5E2ACE1FAA2 and on its successor alike, 2026-11-23)
+    ps.until(tab, "(scrollTo(0, innerHeight), document.body.dataset.state === 'still')", 20)
     ps.until(tab, "document.body.classList.contains('scrub')", 20)
 
 

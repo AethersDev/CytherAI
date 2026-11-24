@@ -20,8 +20,10 @@ lean     Save-Data, a connection the browser calls 2G, and one it estimates unde
          system's still stands; "3g", which Chrome reports on a loopback server, still plays the film.
 slow     The same under real throttling, where Chrome itself names the link and calls even 50 kbit/s "3g": Slow 3G and 2G fetch no
          film, Slow 4G does, and the statement stands on all three. Both films were fetched on the first two until 2026-11-06.
-edges    The scene meets the stage's foot and the footer's top with no hard line: the mean brightness of neighbouring pixel rows
-         stays within EDGE levels. It jumped there until this audit.
+edges    The scene meets the stage's foot with no hard line: the mean brightness of neighbouring pixel rows stays within EDGE
+         levels. It jumped there until this audit, and at the footer's top, which the audit softened into a dark footer's ground.
+         Since 2026-11-23 the footer is the identity's paper and its top is the frame's edge, a line meant to be there: what is
+         held now is that the paper under that edge is unbroken (no band of the scene left in it).
 contact  A draft of nothing opens nothing and asks again; a draft says what should be happening; a long one drops the links to
          webmail that would refuse it. The hand-off to the OS is the one seam stubbed: no email app opens.
 layout   At sixteen windows, 320×256 (400% zoom) to 2560×1440: the statement whole on its stage, the subtitles, the note and Replay
@@ -284,8 +286,9 @@ def edges(tab, origin):
             a = jump(tab, seam * spec[2])
             tab.js("scrollTo(0, document.documentElement.scrollHeight)"); time.sleep(1.2)
             foot = tab.js("Math.round(document.querySelector('body>footer').getBoundingClientRect().top)")
-            b = jump(tab, foot * spec[2])
-            record("edges", a <= EDGE and b <= EDGE, page=lang, device=name, stage_foot=a, footer_top=b, bound=EDGE)
+            b = jump(tab, (foot + 14) * spec[2])                      # inside the footer's own paper, clear of its edge and above its words
+            paper = tab.js("getComputedStyle(document.querySelector('body>footer')).backgroundColor")
+            record("edges", a <= EDGE and b <= EDGE and paper == "rgb(244, 241, 234)", page=lang, device=name, stage_foot=a, footer_paper=b, ground=paper, bound=EDGE)
 
 
 def contact(tab, origin):
