@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""A clip's download is itself, not its URL: a regression probe of both media controllers (js/film.js, js/flat.js).
+"""A clip's download is itself, not its URL: a regression probe of js/flat.js.
 
     .venv/bin/python tools/probe-turn.py <dist-dir> <out-dir>
 
 A phone turned upright, on its side, upright again asks for three clips, and the first and the third have one URL. Until
-2026-11-24 each controller knew a download by that URL (the audit of that day, finding 9), so the first, completing late,
+2026-11-24 the page knew a download by that URL (the audit of that day, finding 9; so did the front door's, whose passage
+retired on 2026-11-25: backup/passage-v1/), so the first, completing late,
 passed for the third: arriving, it replaced the clip on show and left that clip's blob held; failing, it took the clip
 away and the stills stood for good. And no superseded download was cancelled.
 
 The page's fetch is the one seam: every request for a clip is held here and answered when this probe chooses, with the
-real clip's bytes. On the front door and on Both looked flat, in two cases (the first arrives late; the first fails late):
+real clip's bytes. On Both looked flat, in two cases (the first arrives late; the first fails late):
   the three are asked for, and the turn that superseded each of the first two cancelled it;
   the third is answered and is on show;
   the first is answered late, and nothing changes: the third on show, no second blob made, none released;
@@ -30,7 +31,7 @@ spec = importlib.util.spec_from_file_location("settle", HERE / "probe-settle.py"
 ps = importlib.util.module_from_spec(spec); spec.loader.exec_module(ps)
 DIST, OUT = Path(sys.argv[1]), Path(sys.argv[2])
 UPRIGHT, SIDE = (390, 844), (844, 390)
-PAGES = (("/#adii", "passage"), ("/flat/", "scene"))   # each controller's page, opened where it asks for its clip at once, and its video
+PAGES = (("/flat/", "scene"), ("/ar/flat.html", "scene"))   # each page that asks for a clip, and its video
 
 HELD = """(() => {
   const real = fetch, bytes = {}, calls = [], made = [], released = [], make = URL.createObjectURL, free = URL.revokeObjectURL;

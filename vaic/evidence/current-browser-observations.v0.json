@@ -50,7 +50,8 @@
     "8E38E5E2ACE1FAA2",
     "B777DA2C301E811D",
     "2A08C6343A217562",
-    "42BC6F2AF51A0AE2"
+    "42BC6F2AF51A0AE2",
+    "A5959C81CF4FA717"
   ],
   "observed_at": "2026-08-14",
   "evaluator": {
@@ -35837,6 +35838,707 @@
         21
       ],
       "headers_note": "the absences are the limits accepted in §7; Referrer-Policy is carried by every page instead"
+    },
+    "reading_ink_A5959C81CF4FA717": {
+      "surface": "Nightfall, its HTML statement, links, header, note and Replay, and beneath it the principle, the three systems, the invitation and the footer on paper, on the English and Arabic homepages.",
+      "method": "Chrome holds playback at each requested film second and confirms the seek within 0.05 s. The probe samples the statement, the final still, each section on the paper and the page's foot. Paired transparent and magenta glyph captures identify the ground beneath the text for the WCAG contrast measurement.",
+      "samples": "film seconds 1.0, 2.0, 3.0, 4.2, 5.0, 5.8, 6.6, 8.0, 8.208333333333334, 8.541666666666666, 9.0, 9.9, 11.0, 12.0, 13.0, 15.0; still, principle, adii, awc-os, cythercad, talk, foot; each in English and Arabic, under dark and light device settings, at six viewports",
+      "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+      "domain": "the declared seconds, sections, two languages, two device settings and six viewports only; a finite sweep licenses no universal proposition",
+      "artifact_build": "A5959C81CF4FA717",
+      "observed_at": "2026-11-25",
+      "runtime": "Headless Chrome/158.0.8127.37 (macOS 27.2.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-ink.py (sha256 fd3980bf97c2…)",
+      "result": "PASS",
+      "elements_measured": 5952,
+      "worst_min": 4.99,
+      "history": "Observed on the build whose front doors are one film and then one page on paper (the owner, 2026-11-25): the systems passage retired, the three systems in the page's flow, the film's first frame shown until it plays; the contact pages say what is wrong at the first question. It follows the live 42BC6F2AF51A0AE2.",
+      "profiles": {
+        "/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 255,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 613,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 1280x720 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 613,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 173,
+          "below_4_5": [],
+          "worst": {
+            "sample": "principle",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2208,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 247,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 4557,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 232,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2135,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 243,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2135,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 255,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 613,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 1280x720 · dpr 1": {
+          "elements_measured": 237,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 613,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 173,
+          "below_4_5": [],
+          "worst": {
+            "sample": "principle",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2208,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 247,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 4557,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 232,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2135,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 243,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "One principle. Three systems.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2135,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 1440x900 · dpr 1": {
+          "elements_measured": 292,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 320,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 1280x720 · dpr 1": {
+          "elements_measured": 270,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 320,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 193,
+          "below_4_5": [],
+          "worst": {
+            "sample": "principle",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1015,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 286,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2180,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 265,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1029,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · dark · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 283,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1029,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 1440x900 · dpr 1": {
+          "elements_measured": 292,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 320,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 1280x720 · dpr 1": {
+          "elements_measured": 270,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 320,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 844x390 · dpr 2 · mobile, touch": {
+          "elements_measured": 193,
+          "below_4_5": [],
+          "worst": {
+            "sample": "principle",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1015,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 390x844 · dpr 3 · mobile, touch": {
+          "elements_measured": 286,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 2180,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 375x667 · dpr 2 · mobile, touch": {
+          "elements_measured": 265,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1029,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        },
+        "/ar/ · light · 320x844 · dpr 2 · mobile, touch": {
+          "elements_measured": 283,
+          "below_4_5": [],
+          "worst": {
+            "sample": "t1.0",
+            "element": "small.mono",
+            "text": "مبدأ واحد. ثلاثة أنظمة.",
+            "ink": [
+              107,
+              103,
+              95
+            ],
+            "glyph_px": 1029,
+            "min": 4.99,
+            "p01": 4.99
+          }
+        }
+      }
+    },
+    "film_settle_A5959C81CF4FA717": {
+      "surface": "both front doors, / and /ar/ (index.html, ar/index.html, js/film.js, css/film.css, film/)",
+      "method": "before any page script, requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire, and a video counts as playing if it played at any moment of the window; autoplay allowed; wait for the film's still state; read the page section by section to its foot, reset the counts and wait 3 s; then press Replay at the top (the stimulus) and, a second later, read on to the foot, where the film out of view must stop; reset and count 3 s again. Each page then checks the worker's caches, control after reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).",
+      "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages; the stimulus is answered (the film plays, and nothing else does) and the page settles again; no request leaves the origin and no console error",
+      "artifact_build": "A5959C81CF4FA717",
+      "build_identity": "A5959C81CF4FA717",
+      "observed_at": "2026-11-25",
+      "runtime": "Headless Chrome/158.0.8127.37 (macOS 27.2.1, Apple Silicon) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges",
+      "harness": "tools/probe-settle.py (sha256 8847031ee42c…); film_settled_after_s is counted from navigation start (the film is 15.125 s)",
+      "result": "PASS",
+      "history": "Observed on the build whose front doors are one film and then one page on paper (the owner, 2026-11-25): the systems passage retired, the three systems in the page's flow, the film's first frame shown until it plays; the contact pages say what is wrong at the first question. It follows the live 42BC6F2AF51A0AE2.",
+      "profiles": {
+        "/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.33,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.16,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.16,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.02,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · dpr 1": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.3,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 13,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 390x844 · dpr 3 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.18,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 390,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 320x844 · dpr 2 · mobile, touch": {
+          "state_at_1s": "film",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 15.18,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 320,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        },
+        "/ar/ · 1440x900 · reduced motion": {
+          "state_at_1s": "still",
+          "no_js_class_removed": true,
+          "film_settled_after_s": 0.03,
+          "settled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "after_stimulus": {
+            "raf": 0,
+            "timers": 12,
+            "playing": 1,
+            "state": "film"
+          },
+          "resettled_3s": {
+            "raf": 0,
+            "timers": 0,
+            "playing": 0,
+            "state": "still"
+          },
+          "doc_width": 1440,
+          "overflow_x": 0,
+          "requests_observed": 12,
+          "external_requests": [],
+          "console_errors": [],
+          "pass": true
+        }
+      },
+      "worker": {
+        "/": {
+          "caches": [
+            "cytherai-substrate-A5959C81CF4FA717"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "A5959C81CF4FA717",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/nightfall-landscape.jpg",
+            "fonts_loaded": "News,Plex,Public",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        },
+        "/ar/": {
+          "caches": [
+            "cytherai-substrate-A5959C81CF4FA717"
+          ],
+          "controlled_after_reload": true,
+          "offline_reload_with_the_server_stopped": {
+            "build": "A5959C81CF4FA717",
+            "state": "still",
+            "statement_visible": true,
+            "poster_shown": "film/nightfall-landscape.jpg",
+            "fonts_loaded": "Arabic,Arabic,Plex",
+            "console_errors_besides_the_unreachable_film": []
+          }
+        }
+      }
     }
   }
 }

@@ -85,25 +85,26 @@ def browser(root, ink, settle, history):
         candidate = stamped(corpus, (("tools/probe-ink.py", ink, "chrome", "host"), ("tools/probe-settle.py", settle, "chrome", "host")))
         build = candidate["build_identity"]; ink_name, settle_name = f"reading_ink_{build}", f"film_settle_{build}"
         runtime = lambda r: f"Headless {r['chrome']} ({r['host']}) driven over the Chrome DevTools Protocol, against dist/ served as an origin root by the probe's own static server, which answers byte ranges"
-        latest = lambda prefix, but: next(ledger["observations"][k] for k in reversed(list(ledger["observations"])) if k.startswith(prefix) and k != but)
-        harness = lambda last, r: re.sub(r"sha256 [0-9a-f]+", f"sha256 {r['harness_version']}", last["harness"], count=1)
         profiles = {k: v for k, v in ink.items() if " · " in k}
         samples = sum(p["elements_measured"] for p in profiles.values()); worst = min(p["worst"]["min"] for p in profiles.values())
-        last = latest("reading_ink_", ink_name)
-        # Describe the seconds that actually ran. A new film can outlast its predecessor.
-        film_seconds = [k[1:] for k in next(iter(profiles.values()))["samples"] if k.startswith("t")]
+        # what was sampled, as the run names it: the film's seconds, then the still, each section on the paper and the page's foot
+        sampled = list(next(iter(profiles.values()))["samples"]); film_seconds = [k[1:] for k in sampled if re.fullmatch(r"t[\d.]+", k)]
+        rest = ", ".join(k for k in sampled if not re.fullmatch(r"t[\d.]+", k))
         observe(ledger, ink_name, {
-            **{k: last[k] for k in ("surface", "method", "samples", "bound", "domain")},
-            "surface": "Nightfall, its HTML statement, links, header, note and Replay, followed by the systems passage, close and footer on the English and Arabic homepages.",
-            "samples": "film seconds " + ", ".join(film_seconds) + "; " + last["samples"].split("; ", 1)[1],
-            "method": "Chrome holds playback at each requested film second and confirms the seek within 0.05 s. The probe samples the statement, the final still, each passage caption at its midpoint and the close. Paired transparent and magenta glyph captures identify the ground beneath the text for the WCAG contrast measurement.",
-            "artifact_build": build, "observed_at": ink["observed_at"], "runtime": runtime(ink), "harness": harness(last, ink),
+            "surface": "Nightfall, its HTML statement, links, header, note and Replay, and beneath it the principle, the three systems, the invitation and the footer on paper, on the English and Arabic homepages.",
+            "method": "Chrome holds playback at each requested film second and confirms the seek within 0.05 s. The probe samples the statement, the final still, each section on the paper and the page's foot. Paired transparent and magenta glyph captures identify the ground beneath the text for the WCAG contrast measurement.",
+            "samples": f"film seconds {', '.join(film_seconds)}; {rest}; each in English and Arabic, under dark and light device settings, at six viewports",
+            "bound": "contrast_ratio_min 4.5 at every glyph-support pixel of every measured element",
+            "domain": "the declared seconds, sections, two languages, two device settings and six viewports only; a finite sweep licenses no universal proposition",
+            "artifact_build": build, "observed_at": ink["observed_at"], "runtime": runtime(ink), "harness": f"tools/probe-ink.py (sha256 {ink['harness_version']}…)",
             "result": "PASS", "elements_measured": samples, "worst_min": worst, "history": history,
             "profiles": {k: {"elements_measured": p["elements_measured"], "below_4_5": p["below_4_5"], "worst": p["worst"]} for k, p in profiles.items()}})
-        last = latest("film_settle_", settle_name)
         observe(ledger, settle_name, {
-            **{k: last[k] for k in ("surface", "method", "bound")},
-            "artifact_build": build, "build_identity": build, "observed_at": settle["observed_at"], "runtime": runtime(settle), "harness": harness(last, settle),
+            "surface": "both front doors, / and /ar/ (index.html, ar/index.html, js/film.js, css/film.css, film/)",
+            "method": "before any page script, requestAnimationFrame calls and setTimeout/setInterval callbacks are counted, the callbacks when they fire, and a video counts as playing if it played at any moment of the window; autoplay allowed; wait for the film's still state; read the page section by section to its foot, reset the counts and wait 3 s; then press Replay at the top (the stimulus) and, a second later, read on to the foot, where the film out of view must stop; reset and count 3 s again. Each page then checks the worker's caches, control after reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).",
+            "bound": "0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages; the stimulus is answered (the film plays, and nothing else does) and the page settles again; no request leaves the origin and no console error",
+            "artifact_build": build, "build_identity": build, "observed_at": settle["observed_at"], "runtime": runtime(settle),
+            "harness": f"tools/probe-settle.py (sha256 {settle['harness_version']}…); film_settled_after_s is counted from navigation start (the film is 15.125 s)",
             "result": "PASS", "history": history,
             "profiles": {p + " · " + k: v for p in ("/", "/ar/") for k, v in settle[p].items() if k != "worker"},
             "worker": {p: settle[p]["worker"] for p in ("/", "/ar/")}})
@@ -111,9 +112,12 @@ def browser(root, ink, settle, history):
         BIND = {k: candidate[k] for k in ("artifact_manifest_hash", "record_hash", "grammar_hash", "policy_hash")}
         for oid, name, path, result, method in (
             ("CY-SEM-003", ink_name, "tools/probe-ink.py", ink, lambda m: {
-                "measurement": f"WCAG contrast of each measured reading element at glyph support across {len(film_seconds)} film times, the still, eight passage captions and the close on both homepages in both theme settings; {samples} element samples",
+                "measurement": f"WCAG contrast of each measured reading element at glyph support across {len(film_seconds)} film times and {rest}, on both homepages in both theme settings; {samples} element samples",
                 "threshold": f"minimum ≥ 4.5:1 at every glyph-support pixel; observed worst {worst}:1", "units": m["units"]}),
-            ("CY-TEMP-001", settle_name, "tools/probe-settle.py", settle, lambda m: m)):
+            ("CY-TEMP-001", settle_name, "tools/probe-settle.py", settle, lambda m: {
+                "measurement": "frame requests, timer callbacks and playing media counted for 3 s once the film has ended and the page has been read to its foot, in four profiles (desktop, two phone widths, reduced motion) on both front doors (/ and /ar/); then Replay, left for the foot, and counted again",
+                "threshold": "0 frames, 0 timer callbacks, 0 media playing once settled in every profile of both pages; Replay plays the film and nothing else, and the page settles again once the film is out of view",
+                "units": m["units"]})):
             row = next(r for r in corpus["obligations"] if r["id"] == oid)
             receipt = copy.deepcopy(row["evaluation"]["receipts"][-1])     # the obligation's last receipt, re-bound to this observation
             if receipt["harness_identity"] != path or receipt["verification_identity"] != "EXTERNAL":

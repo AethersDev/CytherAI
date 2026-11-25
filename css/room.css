@@ -11,7 +11,7 @@
 /* the identity kit's Paper and Ink (cyther-studies/cyther-rod/cytherai/identity: #f4f1ea, #16161a), its graphite and slate as the softer inks;
    the accent is ink (the kit keeps amber for what is being checked, red for what was found false); a lifted ground under a field or an
    artifact, and a field's edge */
-:root{color-scheme:light;--ground:#f4f1ea;--ink:#16161a;--dim:#6b675f;--soft:#4a4741;--warm:#16161a;--rule:#16161a24;--hover:#000;--lift:#ebe7dd;--edge:#807a70}
+:root{color-scheme:light;--ground:#f4f1ea;--ink:#16161a;--dim:#6b675f;--soft:#4a4741;--warm:#16161a;--rule:#16161a24;--hover:#000;--lift:#ebe7dd;--edge:#807a70;--wrong:#b33a26}
 *{box-sizing:border-box}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:Public,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}[hidden]{display:none!important}
@@ -20,12 +20,12 @@ a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;backgroun
 /* the front door's header and lockup, the same links on every page (2026-11-07), kept in view on its own ground; where its links do not fit
    beside the brand they take a second row, and in a window too short to spare it, it scrolls away */
 header{position:sticky;top:0;z-index:5;min-height:64px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;column-gap:24px;row-gap:10px;padding:10px 5vw;background:var(--ground);border-bottom:1px solid #d4cec2}
-html{scroll-padding-top:80px}@media(max-width:440px){html{scroll-padding-top:104px}}@media(max-height:480px){header{position:static}}
+html{scroll-padding-top:80px}@media(max-width:460px){html{scroll-padding-top:104px}}@media(max-height:480px){header{position:static}}
 .talk{color:var(--ink);border:1px solid #16161a66;padding:6px 12px}.top[aria-current]{color:var(--ink);border-color:var(--ink)}
 .side{display:flex;align-items:center;gap:24px}
 .wordmark{display:inline-flex;align-items:center}.logo{display:block;height:34px;width:auto}
 .top{font-size:14px;color:var(--soft);border-bottom:1px solid var(--rule);padding-block:3px 4px}.top:hover{color:var(--warm);border-color:var(--warm)}
-main{max-width:1180px;margin:0 auto;padding:48px 5vw 0}
+main{max-width:calc(1296px + 10vw);padding:48px 5vw 0}   /* from the edge the header, the footer and the front door start at */
 .label{display:block;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
 h1{font-family:News,serif;font-weight:300;font-size:clamp(32px,3.2vw,46px);line-height:1.06;letter-spacing:-.02em;margin:18px 0 0}
 .by{font-size:15px;margin-top:14px}.by a,.by [lang=en]{white-space:nowrap}   /* whose work the evidence is, under its headline; a name or its link kept whole */
@@ -35,12 +35,12 @@ p{font-size:17px;line-height:1.55;color:var(--soft);margin:18px 0 0;max-width:48
 /* the arrival: what the evidence is, what it shows and its limit, beside the evidence itself; on a phone the evidence
    comes straight after its headline and its limit, and what it shows follows it */
 .arrival{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);grid-template-areas:"head fig" "body fig" "limit fig";column-gap:56px;align-items:start}
-.arrival .head{grid-area:head}.arrival .body{grid-area:body}.arrival .limit{grid-area:limit}.arrival figure{grid-area:fig;align-self:center}
+.arrival .head{grid-area:head}.arrival .body{grid-area:body}.arrival .limit{grid-area:limit}.arrival figure{grid-area:fig;margin-top:30px}
 figure{margin:0}video{display:block;width:100%;aspect-ratio:16/9;background:var(--lift);border:1px solid var(--rule)}
 figcaption{margin-top:12px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
 section{margin-top:96px;padding-top:40px;border-top:1px solid var(--rule)}
 /* the artifact as text, verbatim: quiet, opened on request */
-details{margin-top:24px;max-width:46rem}summary{cursor:pointer;display:inline-block;font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:4px}summary:hover{color:var(--warm);border-color:var(--warm)}
+details{margin-top:24px;max-width:46rem}summary{cursor:pointer;display:inline-block;font-size:15px;border-bottom:1px solid var(--edge);padding-bottom:4px}summary:hover{color:var(--warm);border-color:var(--warm)}
 details h3{font-family:Public,sans-serif;font-size:16px;font-weight:600;color:var(--ink);margin:32px 0 8px}
 details li,details p{font-size:15px;line-height:1.6;color:var(--soft);max-width:none}details ol,details ul{padding-inline-start:22px}
 pre,code,table{font-family:Plex,monospace;font-size:12.5px}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--soft);background:var(--lift);border:1px solid var(--rule);padding:12px 14px}
@@ -55,13 +55,13 @@ section>:is(ol,ul){max-width:46rem;padding-inline-start:22px;margin:16px 0 0;col
 /* the ways on: the front door's two, a solid one and a plain one */
 .next{display:flex;flex-wrap:wrap;align-items:center;gap:28px;margin-top:40px}
 .solid{display:inline-flex;align-items:center;background:var(--ink);color:var(--ground);font-size:15px;padding:16px 22px;min-height:52px}.solid:hover{background:var(--hover)}
-.plain{font-size:15px;border-bottom:1px solid var(--rule);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
+.plain{font-size:15px;border-bottom:1px solid var(--edge);padding-bottom:6px}.plain:hover{color:var(--warm);border-color:var(--warm)}
 /* a legal page's text as written, at a reading measure, with quiet headings; the brief's sections; the missing page */
 .legal{max-width:46rem}
 .legal h2{font:600 17px/1.4 Public,sans-serif;letter-spacing:0;color:var(--ink);margin:40px 0 0}
 .legal p,.legal li{font-size:16px;line-height:1.7;color:var(--soft);max-width:none}.legal p{margin-top:12px}
 .legal .dates{font-family:Plex,monospace;font-size:12px;color:var(--dim);margin-top:14px}.legal ul{margin:12px 0 0;padding-inline-start:22px}.legal li{margin-top:6px}.legal strong{color:var(--ink);font-weight:600}
-.legal a{border-bottom:1px solid var(--rule)}.legal a:hover{color:var(--warm);border-color:var(--warm)}
+.legal a{border-bottom:1px solid var(--edge)}.legal a:hover{color:var(--warm);border-color:var(--warm)}
 .box{background:var(--lift);border:1px solid var(--rule);padding:6px 20px 18px;margin-top:20px}
 .brief .record{max-width:46rem;margin-top:24px}.brief section>p{max-width:46rem}section>.label{margin-bottom:14px}cite{font-style:normal;color:var(--ink)}
 .missing section{margin-top:64px}
@@ -70,8 +70,10 @@ section>:is(ol,ul){max-width:46rem;padding-inline-start:22px;margin:16px 0 0;col
 .field{display:block;margin-top:32px}.field b{display:block;font-weight:600;font-size:16px}.field i{display:block;font-style:normal;font-size:14px;color:var(--dim);margin-top:4px}
 textarea{display:block;width:100%;min-height:96px;margin-top:12px;padding:12px 14px;background:var(--lift);color:var(--ink);border:1px solid var(--edge);font:16px/1.5 Public,sans-serif;resize:vertical}
 textarea:focus-visible{outline-offset:2px}
-.note{font-size:14px;color:var(--dim);margin-top:16px}.note a{color:var(--soft);border-bottom:1px solid var(--rule)}.note a:hover{color:var(--warm);border-color:var(--warm)}
-.also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--rule)}.also a:hover{color:var(--warm);border-color:var(--warm)}
+.error{font-size:15px;font-weight:600;color:var(--wrong);margin-top:10px;max-width:none}:is(.error,#status):empty{margin:0}textarea[aria-invalid]{border:2px solid var(--wrong);padding:11px 13px}
+#status{color:var(--ink);font-size:15px}.ways,.ways .webmail:not([hidden]){display:flex;flex-wrap:wrap;gap:8px 28px}.ways{margin-top:14px}.ways .plain{padding-block:8px 6px}
+.note{font-size:14px;color:var(--dim);margin-top:16px}.note a{color:var(--soft);border-bottom:1px solid var(--edge)}.note a:hover{color:var(--warm);border-color:var(--warm)}
+.also{list-style:none;padding:0;margin:20px 0 0;font-size:15px;color:var(--soft)}.also li{margin-top:10px}.also a{border-bottom:1px solid var(--edge)}.also a:hover{color:var(--warm);border-color:var(--warm)}
 body>footer{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:120px;padding:0 5vw 40px;font-family:Plex,monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}body>footer a{display:inline-block;padding:6px 3px}body>footer a:hover{color:var(--ink)}
 @media(max-width:860px){.arrival{grid-template-columns:1fr;grid-template-areas:"head" "limit" "fig" "body"}.arrival figure{margin-top:28px}}
 @media(max-width:760px){header{min-height:56px;padding:10px 20px}.side{gap:12px}.logo{height:30px}.top{font-size:13px;padding-block:4px 5px}main{padding:24px 20px 0}h1{font-size:32px}p{font-size:16px}section{margin-top:64px}body>footer{margin-top:80px;padding:0 20px 32px}}

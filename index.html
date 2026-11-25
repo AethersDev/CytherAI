@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <title>CytherAI — Let AI change things. Keep control of what changes.</title>
 <meta name="description" content="CytherAI builds the part of AI that decides what is allowed to happen.">
 <meta property="og:site_name" content="CytherAI">
@@ -14,8 +14,8 @@
 <link rel="canonical" href="https://cytherai.com/">
 <meta property="og:locale" content="en_US">
 <meta property="og:locale:alternate" content="ar_SA">
-<!-- og:image is metadata fetched by link scrapers, never by this page. The card is ILLUSTRATIVE: the film's
-     last frame with its statement (tools/render-og-film.py); docs/asset-promotion-log.md records it. -->
+<!-- og:image is metadata fetched by link scrapers, never by this page. The card is ILLUSTRATIVE:
+     docs/asset-promotion-log.md records it (IMG-031). -->
 <meta property="og:image" content="https://cytherai.com/assets/og/og-card.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -23,7 +23,7 @@
 <meta property="og:image:alt" content="A rendering of CytherAI’s mark designed as a precision reference part, STANDARD No. 001 (a design, not a manufactured object), beside the line Every claim carries its check.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#f4f1ea">
-<meta name="build-hash" content="42BC6F2AF51A0AE2">
+<meta name="build-hash" content="A5959C81CF4FA717">
 <meta name="referrer" content="no-referrer">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/">
@@ -31,54 +31,43 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<!-- the film's first frame, which waits for it to play: asked for here, not when the script runs (on a slow phone link 2.3 s, not 3.0) -->
+<link rel="preload" href="film/nightfall-landscape-open.jpg" as="image" media="(orientation: landscape) and (prefers-reduced-motion: no-preference)">
+<link rel="preload" href="film/nightfall-portrait-open.jpg" as="image" media="(orientation: portrait) and (prefers-reduced-motion: no-preference)">
 <link rel="preload" href="adii/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="adii/fonts/public-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CytherAI","url":"https://cytherai.com/","logo":"https://cytherai.com/assets/icons/icon-512.png","email":"contact@cytherai.com","address":{"@type":"PostalAddress","addressLocality":"Riyadh","addressCountry":"SA"}}</script>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; font-src 'self'; connect-src 'self'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
-<!-- Nightfall plays behind the statement. Scrolling reveals the three systems. -->
-<link rel="stylesheet" href="css/film.css?v=5cf458a47f88" integrity="sha384-vKOAAyxCDZIE708jzOIPpWBALwavpF1Pdu21+f834s6mwMX6EUH9CypN3bKqNwrz" crossorigin="anonymous">
-<script src="js/film.js?v=1149e54357eb" defer integrity="sha384-WElqasSQdhuLIl8qQ7il54XfDwI5cKohuzymt4YbiiFMcLqWTbOSyx/iNGkI0uek" crossorigin="anonymous"></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- Nightfall plays once, behind the statement. Under it the page is on paper: the principle, the three systems, the invitation. -->
+<link rel="stylesheet" href="css/film.css?v=45372368e5c2" integrity="sha384-tX2m3+WB9IOOKXUz66Ok/6p3s3hYZq2jLlplxNswMK/1XFDfHQtLkxBuHIzKcjDK" crossorigin="anonymous">
+<script src="js/film.js?v=34588b709edd" defer integrity="sha384-hHwxN5z0Mm8AUqhnDxfQvHU3k6XmDI7ahvIXrnRWKliTmhoC1MwUb27PesNriBGX" crossorigin="anonymous"></script>
 </head>
 <body data-state="film">
-<video id="film" muted playsinline preload="auto" aria-hidden="true"></video>
-<video id="passage" muted playsinline preload="none" aria-hidden="true"></video>
 <header class="bar"><a class="wordmark" href="./" aria-label="CytherAI home" dir="ltr"><img class="logo" src="assets/logo/cytherai-ink.svg?v=d84165ce30d6" width="131" height="34" alt=""></a><nav class="side" aria-label="Site"><a class="top" href="pages/brief.html">What we build</a><a class="top" href="pages/about.html">About</a><a class="top talk" href="contact.html">Talk to us</a><a class="top" href="ar/" hreflang="ar" lang="ar">العربية</a></nav></header>
 <main>
 <div class="stage">
+<video id="film" muted playsinline preload="auto" aria-hidden="true"></video>
 <p class="sr">Nightfall, a silent film. The camera passes a hanging lamp and leaves through an open window. It follows a wet street to a mast. Lightning strikes its tip. The camera returns to the rooftop room, where the lamp is still lit.</p>
-<section class="landing on"><h1>Let AI change things.<br>Keep control of what changes.</h1><nav><a class="solid" href="#principle">The three systems ↓</a><a class="plain" href="contact.html">Talk to us →</a></nav></section>
+<section class="landing on"><h1>Let AI change things.<br>Keep control of what changes.</h1><nav aria-label="Start here"><a class="solid" href="#principle">The three systems ↓</a><a class="plain" href="contact.html">Talk to us →</a></nav></section>
 <button id="replay" class="mono" data-play="Play the film" hidden>Replay</button>
 <p class="note mono">A conceptual visualization. It measures no product.</p>
 </div>
-<section class="passage" id="systems" data-t="2 5"><div class="say" id="principle" data-t="2 4.4"><small class="mono">One principle. Three systems.</small><h2>The model proposes.<br>The system decides.</h2></div></section>
-<section class="passage" id="adii" data-t="5 12">
-<p class="sr">The illustration, without sound: a structure parts around the line its ring makes and leaves a row of values standing, the last about half the others. A correction comes from the other side of the line and stops a fraction short of it; a light marks the one place it may change, a scan runs the whole row, and only then does it cross and take the wrong value's place.</p>
-<div class="say" data-t="5 7"><small class="mono">01 · ADII · A conceptual illustration</small><h2>A number looks wrong.</h2>
-<p>ADII investigates the number and answers: fix it, leave it, or escalate it.</p></div>
-<div class="say" data-t="7.4 8.6"><p class="big">Changing it is a separate decision.</p></div>
-<div class="say" data-t="9 10.8"><p>The AI that proposes a fix can’t approve it. Two programs outside the model decide whether the change is allowed and whether it holds.</p></div>
-<div class="say" id="adii-evidence" data-t="11.2 12.8"><p class="cond">Team research: a paper and a complete reference implementation that runs locally, not deployed in production.</p>
-<a class="route" href="adii/">See what this is based on →</a></div>
-</section>
-<section class="passage" id="awc-os" data-t="12 16">
-<p class="sr">The illustration, without sound: the view rises along the line to an opening in it, marked by two lights that never move. A program too tall for the opening stops a fraction short of it; its light goes out and it is set aside, and a lower one, its alternative, passes through the same opening; the refused one turns back.</p>
-<div class="say" id="awc-os-evidence" data-t="12.95 15.7"><small class="mono">02 · AWC-OS · A conceptual illustration</small><h2>Not every answer <br>is allowed.</h2>
-<p>The AI proposes a financial program; a separate engine runs it, refuses it with an allowed alternative, or blocks it.</p>
+<div class="paper">
+<section id="principle" aria-labelledby="principle-h"><small class="mono">One principle. Three systems.</small><h2 id="principle-h">The model proposes.<br>The system decides.</h2></section>
+<section class="system" id="adii" aria-labelledby="adii-h"><small class="mono">01 · ADII</small><h3 id="adii-h">A number looks wrong.<br>Changing it is a separate decision.</h3>
+<div><p>ADII investigates the number and answers: fix it, leave it, or escalate it. The AI that proposes a fix can’t approve it. Two programs outside the model decide whether the change is allowed and whether it holds.</p>
+<p class="cond">Team research: a paper and a complete reference implementation that runs locally, not deployed in production.</p>
+<a class="route" href="adii/">See what this is based on →</a></div></section>
+<section class="system" id="awc-os" aria-labelledby="awc-os-h"><small class="mono">02 · AWC-OS</small><h3 id="awc-os-h">Not every answer is allowed.</h3>
+<div><p>The AI proposes a financial program; a separate engine runs it, refuses it with an allowed alternative, or blocks it.</p>
 <p class="cond">Team demonstration: the MVP runs on an evaluation machine, not on deployed hosting.</p>
-<a class="route" href="awc-os/">See the demonstration →</a></div>
-</section>
-<section class="passage" id="cythercad" data-t="16 21">
-<p class="sr">The illustration, without sound: another application of the principle. Beyond the line, a shape is built into a part, a block with a step and a bore, and its dimensions are drawn on it: its length, its height and the bore's diameter.</p>
-<div class="say" data-t="15.8 19"><small class="mono">03 · CytherCAD · A conceptual illustration</small><h2>Language in.<br>Valid geometry out.</h2>
-<p>Describe a part. CytherCAD turns that description into instructions that build it, restricts invalid geometry during generation, and checks the result afterwards.</p></div>
-<div class="say" id="cythercad-evidence" data-t="19.2 21.4"><p>It runs on-prem, private and air-gapped.</p>
+<a class="route" href="awc-os/">See the demonstration →</a></div></section>
+<section class="system" id="cythercad" aria-labelledby="cythercad-h"><small class="mono">03 · CytherCAD</small><h3 id="cythercad-h">Language in.<br>Valid geometry out.</h3>
+<div><p>Describe a part. CytherCAD turns that description into instructions that build it, restricts invalid geometry during generation, and checks the result afterwards. It runs on-prem, private and air-gapped.</p>
 <p class="cond">CytherAI’s product: validated by CytherAI’s own test, with no deployment claimed.</p>
-<a class="route" href="cythercad/">Read the validation record →</a></div>
-</section>
-<section class="passage" id="return" data-t="21 25">
-<p class="sr">The illustration, without sound: the view returns to the ring. The structure closes back toward the ring with the three systems' work standing beside it, and one slab remains short of it.</p>
-</section>
-<section class="close"><div><h2>Tell us what must<br>never happen.</h2><nav><a class="solid" href="contact.html">Talk to us →</a><a class="mail" href="mailto:contact@cytherai.com">contact@cytherai.com</a></nav><a class="route" href="flat/">Looking right is not a test: a demonstration in light →</a></div></section>
+<a class="route" href="cythercad/">Read the validation record →</a></div></section>
+<section id="talk" aria-labelledby="talk-h"><h2 id="talk-h">Tell us what must<br>never happen.</h2><nav aria-label="Talk to us"><a class="solid" href="contact.html">Talk to us →</a><a class="mail" href="mailto:contact@cytherai.com">contact@cytherai.com</a></nav><a class="route" href="flat/">Looking right is not a test: a demonstration in light →</a></section>
+</div>
 </main>
 <footer class="mono"><span>© 2026 CytherAI · Riyadh</span><span><a href="pages/about.html">About</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a> · <a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a></span></footer>
 </body></html>

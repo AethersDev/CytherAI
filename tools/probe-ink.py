@@ -1,18 +1,16 @@
 #!/usr/bin/env python3
-"""CY-SEM-003, reading ink over the film and the passage: WCAG 2.1 contrast of each reading element's computed ink against
+"""CY-SEM-003, reading ink over the film and on the paper: WCAG 2.1 contrast of each reading element's computed ink against
 every ground pixel at its glyph support, on both front doors (/ and /ar/), under a dark and a light device setting (the
-front door is dark in both), at six viewports: the statement stands over every frame, and each frame's crop differs (a laptop's, a
+front door is the same in both), at six viewports: the statement stands over every frame, and each frame's crop differs (a laptop's, a
 short phone's and a phone on its side each put it over something bright, 2026-11-05).
 
 The built artifact is served as the origin root by a server that answers byte ranges (the films must seek) and opened in
 headless Chrome over the DevTools Protocol, no served file edited: play() is stubbed to resolve without playing, so
 js/film.js counts the film started (GUARD is cleared) and it holds where it is seeked, and the page reports itself
 hidden, whose time the stall rule (STALL) does not count. For each declared second the film is seeked (the seek must
-land within 0.05 s), then 1.0 s for the cue and its 0.6 s fade; the page must still be in its film state, the film at
-that second, showing the cue data-from/data-to name. Then the film is ended (the still state); once the passage is whole
-(body.scrub) the scroll is taken to the middle of each of its words' windows, and the passage must show the frame the page's own
-stretches name for that scroll (their data-t, within a frame) under those words, shown; then the page is scrolled to
-its end, the close over the passage's last frame with the footer under it. Each sample is captured with every glyph's fill transparent (the ground composited
+land within 0.05 s), then 1.0 s; the page must still be in its film state, the film at that second, the statement shown.
+Then the film is ended (the still state) and the page is read: each section on the paper brought to the top of the window,
+then the page's foot, with its footer. Each sample is captured with every glyph's fill transparent (the ground composited
 beneath it, text-shadow and darkening included) and with every fill #FF00FF: glyph support = pixels differing by >= 64
 in a channel. The page's CSP is bypassed for the probe's capture style only. What the fixed header covers of an element is
 not on show, and its box starts where the header ends: until 2026-11-24 the header's own glyphs there were measured in the
@@ -49,12 +47,9 @@ SEEK = """new Promise(done => { const v = document.getElementById('film');
   setTimeout(() => done(null), 10000);
   const go = () => { v.addEventListener('seeked', () => done(v.currentTime), { once: true }); v.currentTime = %s; };
   v.readyState >= 2 ? go() : v.addEventListener('loadeddata', go, { once: true }); })"""
-# the page's state, where the film stands, the cue the page's own data names for second T (film.js cue(): a line
-# from <= T < to; the statement names no moment, and stands at every one) and the cue shown, as each one's computed opacity
-CUE = """(T => { const cues = [...document.querySelectorAll('.line'), document.querySelector('.landing')];
-  return JSON.stringify([document.body.dataset.state, document.getElementById('film').currentTime,
-    cues.map(c => c.dataset.from === undefined || (T >= +c.dataset.from && T < +c.dataset.to) ? '1' : '0'),
-    cues.map(c => getComputedStyle(c).opacity)]); })(%s)"""
+# the page's state, where the film stands and the statement's opacity
+HELD = """JSON.stringify([document.body.dataset.state, document.getElementById('film').currentTime,
+  getComputedStyle(document.querySelector('.landing')).opacity])"""
 # leaf reading elements: their own text, visible, fully opaque through every ancestor, in the viewport (CSS px)
 ELEMENTS = r"""JSON.stringify((bar => [...document.querySelectorAll('body *')].flatMap(e => {
   if (['SCRIPT', 'STYLE', 'VIDEO'].includes(e.tagName) || ![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return [];
@@ -66,21 +61,8 @@ ELEMENTS = r"""JSON.stringify((bar => [...document.querySelectorAll('body *')].f
   return [{ element: e.tagName.toLowerCase() + (typeof e.className === 'string' && e.className ? '.' + e.className.split(' ')[0] : ''),
             text: e.textContent.trim().slice(0, 40), ink: cs.color, x: r.left, y: top, w: r.width, h: r.bottom - top }]; }))(
   [...document.querySelectorAll('.bar')].find(b => getComputedStyle(b).position === 'fixed')))"""
-# the passage's moments as the page computes them (js/film.js measure, moment, place): each stretch maps its top and foot
-# to its data-t; the scroll taken to the middle of the window of words i, then that moment, the passage's frame, the words' state
-PASSAGE = """const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
-  top = p.getBoundingClientRect().top + scrollY; marks.push([top, a], [top + p.offsetHeight, b]); }
-const moment = y => { for (let i = 1; i < marks.length; i++) { const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
-  if (y < y1) return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1); } return marks[marks.length - 1][1]; };
-const place = t => { for (let i = 1; i < marks.length; i++) { const [y0, t0] = marks[i - 1], [y1, t1] = marks[i];
-  if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1); } return marks[marks.length - 1][0]; };"""
-BEAT = """(i => { """ + PASSAGE + """ const say = document.querySelectorAll('.say')[i], [a, b] = say.dataset.t.split(' ').map(Number);
-  scrollTo(0, place((a + b) / 2));
-  return new Promise(done => setTimeout(() => done(JSON.stringify({want: moment(scrollY),
-    at: document.getElementById('passage').currentTime, seeking: document.getElementById('passage').seeking,
-    on: say.classList.contains('on'), opacity: getComputedStyle(say).opacity, state: document.body.dataset.state})), 1300)); })(%d)"""
 # the footer's text wholly in the viewport (its box may overhang it by a fraction of a pixel): its reading ink is
-# measured with the close
+# measured with the page's foot
 FOOTER = """(r => { r.selectNodeContents(document.querySelector('footer')); const b = r.getBoundingClientRect();
   return b.top >= 0 && b.bottom <= innerHeight; })(document.createRange())"""
 # the probe's capture style, after two frames so the capture shows it (a frame count, not a timed wait: the darkening
@@ -214,12 +196,11 @@ def measure(name, w, h, dpr, shots):
     return out
 
 def held(key, sample, t):
-    """the page holds the sample: the film state with the film at second t, or (t infinite) the still state; and the cue
-    shown is the one the page names for t"""
-    state, at, want, shown = json.loads(js(CUE % json.dumps(t)))
-    if state != ("film" if t < INF else "still") or (t < INF and abs(at - t) > 0.05) or want != shown:
-        broken(f"{key} {sample}: the page is {state!r} with the film at {at} s; its cue for {t} is {want}, "
-               f"the cues shown (opacity) {shown}")
+    """the page holds the sample: the film state with the film at second t, or (t infinite) the still state; and the
+    statement is shown"""
+    state, at, shown = json.loads(js(HELD))
+    if state != ("film" if t < INF else "still") or (t < INF and abs(at - t) > 0.05) or shown != "1":
+        broken(f"{key} {sample}: the page is {state!r} with the film at {at} s, not {t}; the statement's opacity is {shown}")
 
 
 def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
@@ -235,30 +216,24 @@ def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
         landed = js(SEEK % t)
         if landed is None or abs(landed - t) > 0.05:
             broken(f"{key}: the seek to {t} s landed at {landed}; the server must answer byte ranges")
-        time.sleep(1.0)   # the cue interval (80 ms), the 0.6 s fade, one decoded frame
+        time.sleep(1.0)   # one decoded frame, and the statement's 0.6 s of fade on the first
         held(key, f"t{t}", t)
         samples[f"t{t}"] = measure(f"{stem}t{t}", w, h, dpr, shots)
     js("document.getElementById('film').dispatchEvent(new Event('ended'))")
     time.sleep(0.6)
     held(key, "still", INF)
     samples["still"] = measure(f"{stem}still", w, h, dpr, shots)
-    for _ in range(300):   # the passage downloads once the film is still, and is shown once whole
-        if js("document.body.classList.contains('scrub')"):
-            break
-        time.sleep(0.1)
-    else:
-        broken(f"{key}: the passage was not whole 30 s after the film was still")
-    for i in range(js("document.querySelectorAll('.say').length")):
-        b = json.loads(js(BEAT % i))
-        if b["state"] != "still" or b["seeking"] or abs(b["at"] - b["want"]) > 1 / 24 or not b["on"] or b["opacity"] != "1":
-            broken(f"{key} beat {i}: {b}")
-        samples[f"beat{i}"] = measure(f"{stem}beat{i}", w, h, dpr, shots)
+    for name in json.loads(js("JSON.stringify([...document.querySelectorAll('.paper > section')].map(s => s.id))")):
+        js(f"document.getElementById({json.dumps(name)}).scrollIntoView({{block: 'start', behavior: 'instant'}})")
+        time.sleep(0.5)
+        held(key, name, INF)
+        samples[name] = measure(f"{stem}{name}", w, h, dpr, shots)
     js("scrollTo(0, document.documentElement.scrollHeight)")
-    time.sleep(1.2)   # the scroll answered, the passage at its last frame
-    held(key, "close", INF)
+    time.sleep(0.5)
+    held(key, "foot", INF)
     if not js(FOOTER):
-        broken(f"{key} close: the footer's text is not wholly in view")
-    samples["close"] = measure(stem + "close", w, h, dpr, shots)
+        broken(f"{key} foot: the footer's text is not wholly in view")
+    samples["foot"] = measure(stem + "foot", w, h, dpr, shots)
     flat = sorted(({"sample": k, **r} for k, rs in samples.items() for r in rs), key=lambda r: r["min"])
     below = [r for r in flat if r["min"] < BOUND]
     print(f"{key}: {len(flat)} elements, worst {flat[0]['min']} ({flat[0]['sample']} {flat[0]['element']} "
@@ -268,7 +243,7 @@ def profile(origin, page, path, scheme, w, h, dpr, mobile, shots):
 
 def main():
     global WS
-    ap = argparse.ArgumentParser(description="CY-SEM-003: reading ink over the film and the passage, at glyph support")
+    ap = argparse.ArgumentParser(description="CY-SEM-003: reading ink over the film and on the paper, at glyph support")
     ap.add_argument("dist"); ap.add_argument("out"); ap.add_argument("--shots", action="store_true", help="keep the captures")
     args = ap.parse_args()
     dist, out = Path(args.dist).resolve(), Path(args.out)

@@ -250,10 +250,10 @@ class SiteContractTests(unittest.TestCase):
         cold-paper pages retired, 2026-10-21), and
         its script-src is exactly what the page runs: 'self' if it loads same-origin scripts, a hash per inline
         script, 'none' if it runs nothing. A widened policy ('unsafe-inline' scripts, a scheme, a host) fails. The one
-        connections pages make are the front door's to its own passage, which js/film.js downloads whole and plays from
+        connections pages make are Both looked flat's to its own sequence, which js/flat.js downloads whole and plays from
         memory (connect-src 'self', media-src blob:): asked of the video element, a paused clip's download is the
-        browser's to defer, and Chrome left one short of its end for good (2026-10-22); and Both looked flat's to its own
-        sequence, the same way (js/flat.js, 2026-10-25). Every other page connects nowhere."""
+        browser's to defer, and Chrome left one short of its end for good (2026-10-22). Every other page connects nowhere
+        (the front doors until 2026-11-25, to their passage: backup/passage-v1/)."""
         for page in HTML_FILES:
             parsed = parse_page(page)
             csps = [a["content"] for t, a in parsed.tags if t == "meta" and a.get("http-equiv") == "Content-Security-Policy"]
@@ -264,7 +264,7 @@ class SiteContractTests(unittest.TestCase):
             script = (["'self'"] if any(t == "script" and a.get("src") for t, a in parsed.tags) else []) + \
                 ["'sha256-%s'" % base64.b64encode(hashlib.sha256(body.encode("utf-8")).digest()).decode() for body in inline]
             self.assertEqual(policy.get("script-src"), script or ["'none'"], page)
-            film = any(t == "script" and (a.get("src") or "").split("?")[0].endswith(("js/film.js", "js/flat.js")) for t, a in parsed.tags)
+            film = any(t == "script" and (a.get("src") or "").split("?")[0].endswith("js/flat.js") for t, a in parsed.tags)
             for directive, expected in (("default-src", ["'self'"]), ("object-src", ["'none'"]), ("base-uri", ["'self'"]),
                                         ("connect-src", ["'self'"] if film else ["'none'"]), ("frame-src", ["'none'"])):
                 self.assertEqual(policy.get(directive), expected, f"{page} {directive}")
@@ -323,7 +323,7 @@ class SiteContractTests(unittest.TestCase):
         self.assertTrue(BANNED.search("color:var(--brass)") and BANNED.search("−540 M"), "the pattern has teeth")
 
     def test_homepage_module_order_and_script_posture(self) -> None:
-        # each front door reads no module and runs one script: the film, its sentences, the passage and the worker are
+        # each front door reads no module and runs one script: the film and the worker are
         # js/film.js, deferred (js/theme.js retired with light mode, 2026-10-20). Their CSP forbids inline script.
         for page, up in (("index.html", ""), ("ar/index.html", "../")):
             # (the Organization block is data, which no browser runs and script-src does not govern)
@@ -497,19 +497,16 @@ class SiteContractTests(unittest.TestCase):
                 self.assertEqual((width, height), declared, relative)
 
     def test_every_film_the_front_door_names_ships(self) -> None:
-        """The page names its media in three places no resolver above reads: a <video>'s poster, a
-        sequence's data-src (assigned when it comes into view) and the paths js/film.js picks by orientation (the
-        film, the passage, and the stills that stand in for them). Each must be a deployed file, or the page shows a
-        black frame where the film was. The three systems are the passage (their sequences retired on 2026-10-20:
-        backup/system-sequences-v1/).
-        (THE UNHAPPENED's scene/section parity law retired with it: backup/unhappened-v1/.)"""
+        """js/film.js picks the film, its first frame and its last by orientation, and no resolver above reads those paths.
+        Each must be a deployed file, or the page shows a black frame where the film was. Each front door holds one film and
+        no other (the owner, 2026-11-25: *when you first enter you see the new film but when you scroll it changes to the old
+        one*; the passage that went on under the scroll is backup/passage-v1/). The frame that waits for the film to play is its
+        first: until that day it was its last, so its ending showed before its opening."""
         named = set(re.findall(r'"(film/[^"]+)"', (ROOT / "js/film.js").read_text(encoding="utf-8")))   # resolved at the site's root
         for page in ("index.html", "ar/index.html"):
-            index = parse_page(page)
-            named |= {posixpath.normpath(posixpath.join(posixpath.dirname(page), attrs[key]))
-                      for tag, attrs in index.tags if tag == "video" for key in ("poster", "data-src") if attrs.get(key)}
-            self.assertEqual([attrs.get("id") or attrs.get("class") for tag, attrs in index.tags if tag == "video"],
-                             ["film", "passage"], f"{page}: the film and the passage")
+            self.assertEqual([attrs.get("id") for tag, attrs in parse_page(page).tags if tag == "video"], ["film"], page)
+        for shape in ("landscape", "portrait"):
+            self.assertLessEqual({f"film/nightfall-{shape}{end}" for end in (".mp4", "-open.jpg", ".jpg")}, named, shape)
         self.assertTrue(named, "the page names no film")
         self.assertEqual(sorted(named - set(DEPLOY_FILES)), [], "named but not shipped")
         self.assertEqual(sorted(p for p in DEPLOY_FILES if p.startswith("film/") and p not in named), [],
@@ -575,9 +572,9 @@ class SiteContractTests(unittest.TestCase):
     def test_the_front_door_is_one_environment(self) -> None:
         """The front door keeps one deliberately lit environment whatever the device's theme (the owner, 2026-10-20: light
         mode re-tokened only the footer by then, a promise the page did not keep, and retired): no switch, no theme on the
-        root and no colour-scheme query in css/film.css. Since 2026-11-23 that environment is the dark film framed in the
-        identity's paper (the owner: Nightfall is the main piece, the identity's paper and ink are merged round it): the header
-        and the footer are on paper, in ink. Every ink holds 4.5:1 on its ground, dark and paper alike, tokens read from
+        root and no colour-scheme query in css/film.css. Since 2026-11-23 the header and the footer are on the identity's paper (the
+        owner: Nightfall is the main piece, the identity's paper and ink are merged round it), and since 2026-11-25 everything
+        under the film is. What stands on paper takes the rooms' inks, by the same names. Every ink holds 4.5:1 on its ground, dark and paper alike, tokens read from
         css/film.css and never restated here. (Text over the film itself is measured in a browser: CY-SEM-003.)"""
         css = (ROOT / "css/film.css").read_text(encoding="utf-8")
         for absent in ("data-theme", "prefers-color-scheme", "#theme"):
@@ -593,7 +590,10 @@ class SiteContractTests(unittest.TestCase):
         for ink in ("pen", "graphite", "slate"):
             with self.subTest(ink=ink):
                 self.assertGreaterEqual(wcag(tok[ink], tok["paper"]), 4.5, f"--{ink} on --paper")
-        for rule in ("header{", "body>footer{"):                      # the frame is paper, and opaque: nothing of the film shows through it
+        inks = dict(re.findall(r"--(\w+):(#[0-9a-fA-F]{6})", re.search(r"\.paper\{([^}]*)\}", css).group(1)))
+        room = dict(re.findall(r"--(\w+):(#[0-9a-fA-F]{6})", re.search(r":root\{([^}]*)\}", (ROOT / "css/room.css").read_text(encoding="utf-8")).group(1)))
+        self.assertEqual((inks["ink"], inks["soft"], inks["dim"], inks["rule"]), (room["ink"], room["soft"], room["dim"], room["edge"]), "a link's line is an edge, 3:1")
+        for rule in ("header{", "body>footer{", ".paper{"):           # the frame is paper, and opaque: nothing of the film shows through it
             self.assertIn("background:var(--paper)", re.search(re.escape(rule) + r"[^}]*\}", css).group(0), rule)
 
     def test_the_statement_stands_from_the_first_paint(self) -> None:
@@ -639,16 +639,14 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(rule("js/flat.js"), rule("js/film.js"))
 
     def test_every_same_page_link_lands_where_it_names(self) -> None:
-        """A link to a place on its own page names an element of that page, and on a front door the passage's words: their
-        moment is what js/film.js brings. A stretch's own top is its first second, before any words, and that is where the
-        front door's first link landed until the audit of 2026-11-05."""
+        """A link to a place on its own page names an element of that page, and on a front door a section of it that opens on
+        its own words (its first link landed on a wordless second of the passage until the audit of 2026-11-05)."""
         for page in HTML_FILES:
             parsed = parse_page(page)
             for target in (a["href"][1:] for t, a in parsed.tags if t == "a" and a.get("href", "").startswith("#")):
                 self.assertIn(target, parsed.ids, f"{page}: #{target}")
                 if page in ("index.html", "ar/index.html"):
-                    element = next(a for _, a in parsed.tags if a.get("id") == target)
-                    self.assertEqual(element.get("class"), "say", f"{page}: #{target}")
+                    self.assertRegex((ROOT / page).read_text(encoding="utf-8"), rf'<section [^>]*id="{target}"[^>]*><small [^>]*>[^<]+</small><h', f"{page}: #{target}")
 
     def test_every_address_a_page_prints_is_a_link(self) -> None:
         """An address on a page opens a draft to it (the audit of 2026-11-05 found the front door's was plain text)."""
@@ -691,7 +689,7 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual((front["paper"], front["pen"], front["graphite"], front["slate"]), (tok["ground"], tok["ink"], tok["soft"], tok["dim"]),
                          "the front door's header and footer are the rooms' paper and inks")
         for ground in ("ground", "lift"):
-            for ink in ("ink", "soft", "dim", "warm"):
+            for ink in ("ink", "soft", "dim", "warm", "wrong"):
                 with self.subTest(ink=ink, ground=ground):
                     self.assertGreaterEqual(wcag(tok[ink], tok[ground]), 4.5, f"--{ink} on --{ground}")
             self.assertGreaterEqual(wcag(tok["edge"], tok[ground]), 3, f"a field's edge on --{ground}")
@@ -710,8 +708,8 @@ class SiteContractTests(unittest.TestCase):
         page = lambda path: (ROOT / path).read_text(encoding="utf-8")
         words = lambda html: " ".join(re.sub(r"<[^>]+>", "", html).split())
         def status(door: str, system: str) -> str:
-            stretch = re.search(rf'<section class="passage" id="{system}".*?</section>', page(door), re.S).group(0)
-            found = re.findall(r'<p class="cond">(.*?)</p>', stretch, re.S)
+            row = re.search(rf'<section class="system" id="{system}".*?</section>', page(door), re.S).group(0)
+            found = re.findall(r'<p class="cond">(.*?)</p>', row, re.S)
             self.assertEqual(len(found), 1, (door, system))
             return words(found[0])
         limit = lambda room: words(re.search(r'<p class="limit">(.*?)</p>', page(room), re.S).group(1))
@@ -725,20 +723,52 @@ class SiteContractTests(unittest.TestCase):
                 self.assertEqual(words(row.group(1)), english, f"the brief's #{system}")
 
     def test_each_evidence_room_returns_to_the_words_that_led_to_it(self) -> None:
-        """An evidence room's way back to the passage returns to the evidence moment: every link from the room to its front
-        door names the passage's words (a .say, by id) that hold the route to this room, and js/film.js brings their moment,
-        the middle of their window (not the exact scroll the visitor left from). It landed on its stretch's first second,
-        before any words, until 2026-10-21 (the owner: restore the ADII position)."""
+        """An evidence room's way back lands on the system that led to it: every link from the room to its front door names
+        the system's row, whose route leads to this room (the owner, 2026-10-21: restore the ADII position)."""
         for room, door in EVIDENCE:
-            words = dict(re.findall(r'<div class="say" id="([\w-]+)"[^>]*>(.*?)</div>', (ROOT / door).read_text(encoding="utf-8"), re.S))
+            rows = dict(re.findall(r'<section class="system" id="([\w-]+)"[^>]*>(.*?)</section>', (ROOT / door).read_text(encoding="utf-8"), re.S))
             backs = [a["href"] for t, a in parse_page(room).tags
                      if t == "a" and "wordmark" not in a.get("class", "") and local_target(room, a["href"]) == door]
-            self.assertTrue(backs, f"{room} has a way back to the passage")
+            self.assertTrue(backs, f"{room} has a way back to its system")
             for href in backs:
                 fragment = urlsplit(href).fragment
-                self.assertIn(fragment, words, f"{room}: {href} names the passage's words")
-                routes = [local_target(door, u) for u in re.findall(r'<a class="route" href="([^"]+)"', words[fragment])]
+                self.assertIn(fragment, rows, f"{room}: {href} names a system")
+                routes = [local_target(door, u) for u in re.findall(r'<a class="route" href="([^"]+)"', rows[fragment])]
                 self.assertIn(room, routes, f"{room}: {href} lands on the words whose route leads to it")
+
+    def test_the_systems_stand_in_the_page(self) -> None:
+        """Each system's name, words, condition and route are in the page's own flow, on show whatever a script does. Under the
+        passage they were fixed words the scroll faded in and out, one system at a time over a page of 13.6 screens, and a
+        route could be pressed only within its own window of it (retired 2026-11-25). So: each row holds all four, no rule
+        takes it or what it holds out of the flow or out of sight, and js/film.js names nothing on the page but the film's."""
+        for page in ("index.html", "ar/index.html"):
+            rows = re.findall(r'<section class="system" id="([\w-]+)"[^>]*>(.*?)</section>', (ROOT / page).read_text(encoding="utf-8"), re.S)
+            self.assertEqual([i for i, _ in rows], ["adii", "awc-os", "cythercad"], page)
+            for system, row in rows:
+                self.assertEqual([len(re.findall(p, row)) for p in ("<small ", "<h3 ", '<p class="cond">', '<a class="route" ')], [1, 1, 1, 1], (page, system))
+        css = re.sub(r"/\*.*?\*/", "", (ROOT / "css/film.css").read_text(encoding="utf-8"), flags=re.S)
+        rules = re.findall(r"([^{}]*(?:\.paper|\.system|#principle|#talk|\.cond)[^{}]*)\{([^{}]*)\}", css)
+        self.assertGreater(len(rules), 10, "the rules are read")
+        for selector, body in rules:
+            if "::" not in selector:
+                self.assertNotRegex(body, r"position:(?:fixed|absolute|sticky)|opacity|visibility|display:none|z-index", selector)
+        js = re.sub(r"/\*.*?\*/|//[^\n]*", "", (ROOT / "js/film.js").read_text(encoding="utf-8"), flags=re.S)
+        self.assertEqual(set(re.findall(r'getElementById\("([^"]+)"\)', js)), {"film", "replay"})
+        self.assertEqual(set(re.findall(r'querySelector\("([^"]+)"\)', js)), {".bar"}, "and the header the film passes under")
+        self.assertNotRegex(js, r"querySelectorAll|scrollTo|\"scroll\"|fetch\(")
+
+    def test_a_mistake_is_said_where_it_was_made(self) -> None:
+        """A press with nothing written takes the visitor to the first question, and what is wrong is said there. Until 2026-11-25 it
+        was said under the button, out of view once the focus had moved, on a phone and a laptop alike, and tied to no field."""
+        for page in ("contact.html", "ar/contact.html"):
+            html = (ROOT / page).read_text(encoding="utf-8")
+            first = next(a for t, a in parse_page(page).tags if t == "textarea")
+            error = next(a for _, a in parse_page(page).tags if a.get("id") == first.get("aria-describedby"))
+            self.assertEqual(error.get("role"), "alert", page)
+            self.assertRegex(html, rf'<p class="error" id="{error["id"]}" role="alert"></p>\n<textarea id="{first["id"]}"', page)
+            self.assertRegex(html, r'say\("[^"]+", ""\); first\.focus\(\);', page)
+            self.assertIn('first.setAttribute("aria-invalid", "true")', html, page)
+            self.assertIn('function () { compose(); say("", ""); }', html, f"{page}: answered, it is no longer said")
 
     def test_every_page_names_itself_and_previews_deliberately(self) -> None:
         """One review of titles and link previews (2026-10-21): every page's title is "… — CytherAI" (the front doors lead
@@ -786,26 +816,14 @@ class SiteContractTests(unittest.TestCase):
         self.assertEqual(len(listed), len(set(listed)))
         self.assertEqual(set(listed), wanted)
 
-    def test_the_passage_moves_evenly(self) -> None:
-        """The scroll moves the passage at the stage's own pace, 2 s of it a viewport: each stretch is as tall as its seconds
-        at 50svh a second (css/film.css, vh first), and the stretches run on from one another, so no second is held or
-        skipped. The owner found a passage that held, then rushed, lagging (2026-10-20)."""
-        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
-        stretches = [(a["id"], *map(float, a["data-t"].split())) for t, a in parse_page("index.html").tags
-                     if "passage" in a.get("class", "").split()]
-        self.assertEqual([i for i, _, _ in stretches], ["systems", "adii", "awc-os", "cythercad", "return"])
-        self.assertEqual([b for _, _, b in stretches[:-1]], [a for _, a, _ in stretches[1:]], "each begins where the last ended")
-        for i, a, b in stretches:
-            h = round(50 * (b - a))
-            self.assertIn(f"#{i}{{height:{h}vh;height:{h}svh}}", css, f"#{i}: {b - a:g} s, {h}svh")
-
     def test_no_stretch_holds_its_words_beneath_the_next(self) -> None:
-        """The passage's words are fixed at the foot of the frame inside their stretch, with a z-index of their own. A
+        """Both looked flat's words are fixed at the foot of the frame inside their stretch, with a z-index of their own. A
         stretch that makes a stacking context holds them inside it, and the next stretch, transparent and later in the
-        page, lies over them: from 2026-10-20 to 2026-10-21 no system's link took a click or a tap, though keyboard focus
-        reached each one. So no rule for a stretch, by its class or its id, may make one."""
-        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
-        ids = [a["id"] for t, a in parse_page("index.html").tags if "passage" in a.get("class", "").split()]
+        page, lies over them: from 2026-10-20 to 2026-10-21 no system's link on the front door, whose passage moved the same
+        way until 2026-11-25, took a click or a tap, though keyboard focus reached each one. So no rule for a stretch, by its
+        class or its id, may make one."""
+        css = (ROOT / "css/flat.css").read_text(encoding="utf-8")
+        ids = [a["id"] for t, a in parse_page("flat/index.html").tags if "passage" in a.get("class", "").split()]
         stacking = re.compile(r"(?<![\w-])(z-index|transform|filter|opacity|isolation|contain|will-change|mix-blend-mode|perspective|clip-path|mask)\s*:")
         rules = re.findall(r"(?<![\w#-])(\.passage|#(?:%s))\{([^}]*)\}" % "|".join(map(re.escape, ids)), css)
         self.assertEqual({s for s, _ in rules}, {".passage"} | {"#" + i for i in ids}, "every stretch's rules are read")
@@ -814,19 +832,6 @@ class SiteContractTests(unittest.TestCase):
         say = re.search(r"(?<![\w-])\.say\{([^}]*)\}", css).group(1)
         self.assertTrue("position:fixed" in say and re.search(r"z-index:\d", say), "the words stand above the scene on their own")
         self.assertIn("transition:none", say, "the scroll fades the words, not a clock: .on's transition reached them until 2026-11-05")
-
-    def test_a_browsers_own_anchor_to_a_stretch_lands_on_its_first_words(self) -> None:
-        """A stretch's top is its first second, before any words. WebKit runs its anchor after the load, past the page's own
-        placing of the visitor (js/film.js), so each stretch's scroll-margin, at the stage's pace of 50svh a second, takes that
-        anchor to the middle of its first words' window (observed in the iOS Simulator, 2026-11-05)."""
-        css = (ROOT / "css/film.css").read_text(encoding="utf-8")
-        tags = parse_page("index.html").tags
-        stretches = [i for i, (t, a) in enumerate(tags) if "passage" in a.get("class", "").split()]
-        for at, end in zip(stretches, stretches[1:]):   # the return has no words of its own, and no margin
-            stretch, words = tags[at][1], next(a for _, a in tags[at:end] if a.get("class") == "say")
-            start, (a, b) = float(stretch["data-t"].split()[0]), map(float, words["data-t"].split())
-            margin = "%g" % (50 * ((a + b) / 2 - start))
-            self.assertIn("#%s{scroll-margin-top:-%svh;scroll-margin-top:-%ssvh}" % (stretch["id"], margin, margin), css, stretch["id"])
 
     def test_both_looked_flat_moves_evenly_and_ships_what_it_names(self) -> None:
         """Both looked flat (flat/, 2026-10-25) moves its sequence at one pace, 4 s a viewport: the stage's 100svh are its first
@@ -931,12 +936,11 @@ class SiteContractTests(unittest.TestCase):
         self.assertTrue(a + fade <= settled <= b - fade, "Rings. is up in full as the second flat settles (%g s)" % settled)
 
     def test_the_arabic_front_door_is_the_english_one_in_arabic(self) -> None:
-        """ar/index.html carries index.html's film, cues, the passage's seconds, sections and projected figures, only in
+        """ar/index.html carries index.html's film, sections, routes and projected figures, only in
         Arabic; one added to one page and not the other fails. Each Arabic page is lang=ar, dir=rtl."""
         def shape(page: str):
             tags = parse_page(page).tags
-            return ([(a.get("data-from"), a.get("data-to")) for t, a in tags if {"line", "landing"} & set(a.get("class", "").split())],
-                    [(t, a.get("id"), a["data-t"]) for t, a in tags if a.get("data-t")],   # the passage's stretches and its words' windows
+            return ([a["id"] for t, a in tags if t == "video"], [local_target(page, a["href"]).removeprefix("ar/").replace("/index", "") for t, a in tags if t == "a" and a.get("class") == "route"],
                     [a["id"] for t, a in tags if t == "section" and a.get("id")],
                     [a["data-m"] for t, a in tags if a.get("data-m")])
         self.assertEqual(shape("ar/index.html"), shape("index.html"))

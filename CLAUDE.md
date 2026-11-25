@@ -25,12 +25,9 @@ tools/test-boundary.js`). `tools/test-site.py`, `tools/test-vaic.py`, `tools/tes
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
 `tools/probe-ink.py` (CY-SEM-003) and `tools/probe-settle.py` (CY-TEMP-001), run as
-`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the statement, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05 and its re-check of 2026-11-06, `tools/probe-return.py` (the same way; no obligation, run after any change to `sw.js`, to how `js/film.js` registers it or to how a page names its resources) holds a returning visitor with a publish between two visits, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film or the passage) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see the passage's resting frame. `tools/probe-passage.py` (the same way; no
-obligation, run after any change to how `js/film.js` loads or measures the passage) holds two regressions of
-2026-10-22: the passage arrives whole over a server that withholds its video element's own download, and a phone
-turned or a window resized keeps the passage's moment, its words and its frame. `tools/probe-turn.py` (the same way; no
-obligation, run after any change to how `js/film.js` or `js/flat.js` asks for its clip, drops it or holds it) holds the audit's
-finding 9 of 2026-11-24, on the front door and on Both looked flat, with the page's `fetch` answered in the order the probe
+`.venv/bin/python tools/probe-<name>.py dist <out-dir>`, and `tools/probe-origin.py` for the live origin (CY-ORIGIN-001); their receipts are `EXTERNAL` and cite the ledger. `tools/probe-arrival.py` (the same way; no obligation, run after any change to the front door, the bar, the anchors, the page's edges or the contact pages) holds the audit of 2026-11-05, its re-check of 2026-11-06 and the front door's reading since 2026-11-25, `tools/probe-return.py` (the same way; no obligation, run after any change to `sw.js`, to how `js/film.js` registers it or to how a page names its resources) holds a returning visitor with a publish between two visits, and `tools/probe-ios.py` (the same way; no obligation, run after any change to how `js/film.js` loads or holds the film) holds the same in the iOS Simulator's WebKit, where a screenshot alone can see a resting frame. `tools/probe-turn.py` (the same way; no
+obligation, run after any change to how `js/flat.js` asks for its clip, drops it or holds it) holds the audit's
+finding 9 of 2026-11-24 on Both looked flat, with the page's `fetch` answered in the order the probe
 chooses: a phone turned twice asks for the first clip's URL again, and the first download, answered late, changes nothing; a
 dropped download is cancelled and a displaced clip's blob URL released. `CANONICAL_REF` is local
 `master`, which tracks `origin/main`; there is no local `main`. A fresh clone has no `master`, and the
@@ -229,58 +226,14 @@ the mailboxes, monitoring, restoring a build, and what only the owner can settle
 
 The homepage opens on its statement, *Let AI change things. Keep control of what changes.*, with **The three systems ↓** and **Talk to us →**: they stand from the first paint, where they stand at the film's end (the audit of 2026-11-05; until then they waited for its 10.6th second, LCP 11.3 s: `docs/deploy.md` §5ad, §5ag). Nightfall plays once behind the statement. The camera leaves a rooftop room, follows a street up to a lightning mast and returns to the lit window. The landscape and separately composed portrait masters each run 15.125 seconds. Both keep the words in HTML. The line *A conceptual visualization. It measures no product.* sits under the film.
 
-On scroll the rooftop gives way to the twenty-five-second systems passage (`tools/render-passage.py`, `film/passage-*.mp4`). The camera moves into the plane of the ring the refused slab never crossed, so the ring narrows to a line that
-stays where it stood; the structure parts around it and leaves a run of its ceramic tiles standing, which come forward
-as a row of values, one visibly wrong (the recorded run's last day). A correction arrives from the proposing side and
-stops a fraction short of the line, as the refused slab did; the authorizer's check lights the one slot it may change,
-the validator's scan runs the row, and only then does it cross; the wrong value steps back behind it, kept. Then AWC-OS,
-one fixed rule and one changed proposal: the camera rises along the line as ADII's row sinks away, to an opening on it,
-two lit jaws that never move; a program too tall for it stops a fraction short, its light goes out and it is set aside,
-and its alternative, lower, passes through the same opening. Then CytherCAD, the payoff: beyond the line the shape
-becomes a finished part, a block with a step and a bore, which turns while its length, height and bore are drawn; the
-refused program turns back out of the frame. The words make the change of subject unmistakable (the owner, 2026-10-20:
-a shared principle, not a product connection): AWC-OS's last words stay until its alternative is wholly through the
-opening (15.5 s) and leave as it clears it; CytherCAD's label and its description-to-shape sentence are shown by 16.05 s,
-as the shape comes to rest and before it takes any form (the step at 16.8 s). Then the camera returns to where the film ended: the structure closes back toward
-the ring with the three systems' work beside it, and the slab the film refused still stops short of it. Its words arrive
-at their moments at the foot of the frame, below the scene, each on a darkness of its own (fixed, with a z-index of
-their own; no stretch makes a stacking context, or the next stretch lies over its words and their link takes no click
-or tap, as from 2026-10-20 to 2026-10-21 while keyboard focus still reached it: `tools/test-site.py`; in a window too short
-for them, 400% zoom or a small phone on its side, they scroll within themselves, since fixed words that reach past the top
-cannot be scrolled back: `css/film.css`, 2026-10-21): *One principle. Three
-systems.* · *The model proposes. The system decides.*, then ADII's headline at its two moments (*A number looks wrong.*
-· *Changing it is a separate decision.*), the two sentences `adii/` states, its condition, and *See what this is based
-on →* (`adii/`, the recorded run's arrival); AWC-OS's headline (*Not every answer is allowed.*) and its explanation (its three
-outcomes: the engine runs the program, refuses it with an allowed alternative, or blocks it), with its condition and
-*See the demonstration →* (`awc-os/`) beneath them throughout, quiet but available, in one caption (2026-10-21: as a
-separate closing caption they showed for half a screen of scroll, too fleeting to notice, the owner found); CytherCAD's (*Language in. Valid geometry out.*) with its
-explanation, then *It runs on-prem, private and air-gapped.*, its status and *Read the validation record →* (`cythercad/`, CytherCAD's
-room; until 2026-10-21 its comparison with DeepCAD stood there, withdrawn with the record's correction). Each system after ADII is shorter (4 s and 5 s to its 7). The
-scroll moves the scene evenly, 2 s of it a viewport, the stage's own pace: each stretch (`.passage`, `data-t`) is as tall
-as its seconds (`tools/test-site.py`), and the words (`.say`, `data-t`: their window of the passage's seconds) fade in
-and out with the scroll itself, never with a timed transition (with one on these fixed captions WebKit missed 16–24
-frames a pass, without it 1–3). The owner found the first version, whose beats held the scene still while words were
-read and then rushed it, lagging and hard to follow (2026-10-20). The close, *Tell us what must never happen.* with the
-contact address, stands over the passage's last frame where the film's statement stood (`docs/deploy.md` §5x).
+Under the film the page is on the identity's paper, in its own flow (2026-11-25, the owner: *when you first enter you see the new film but when you scroll it changes to the old one … treat UX as part of engineering*): the principle (*One principle. Three systems.* · *The model proposes. The system decides.*), then a row for each system, its name, its headline, what it does, its condition and its one route (*See what this is based on →* to `adii/`, *See the demonstration →* to `awc-os/`, *Read the validation record →* to `cythercad/`), always on show; then the invitation, *Tell us what must never happen.*, with the contact address and the route to Both looked flat. The film leaves 92 px of that paper in the first window (`--peek`), with its label in it, so a first view never looks like the whole page. No script moves, fades or holds any of it: `js/film.js` names the film and Replay and nothing else (`tools/test-site.py`). Three systems under one principle, a shared principle, never a product connection.
 
-The film plays once, muted, and never restarts on its own; Replay plays it again. Reduced motion, a request to save data, or a connection the browser calls 2G or estimates under 1 Mbit/s (these three fetch no film, no passage and no worker either, under 1 MB; never "3g" by itself, which Chrome reports on a loopback server and at 50 kbit/s alike: §5ag, §5ai), a refused or failed play, a film not started within `GUARD` (6 s), or one that falls `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition (`still()`); a film stopped short of its end drops its source, so its poster — the
-same final frame — stands, nothing more downloads, and a late download cannot pull the visitor
-back; a visitor who scrolls on past the film ends it the same way. The passage downloads once the film is whole (or
-still), whole, by a request of its own (`fetch`), and the video plays it from memory (`blob:`), asked to play and paused at once, as iOS shows a clip's frames only then, and then sought a frame past its moment (without that, in the iOS Simulator, 8 of 10 loads reported it paused at 0 while the screen went on showing it run, behind the statement; a seek to where it says it is does nothing: §5ag); until 2026-10-22 the video element downloaded it itself, and a paused
-clip's download is the browser's to defer: Chrome left one at 17.7 of its 25 s and the stills stood for good. A download is known by itself, never by its URL, and one dropped (a phone turned) is cancelled: until
-2026-11-24 a phone turned twice asked for the first URL again, and the first download, completing late, passed for the third
-(arriving, it replaced the clip on show and left its blob held; failing, it took the clip away: `tools/probe-turn.py`). It shows
-once whole: the first second of passage scroll blends its opening over Nightfall’s rooftop. A new viewport (a phone turned, a window resized) gives every stretch a new height, so the page keeps the visitor's moment, not their scroll offset (until 2026-10-22 a turned window landed past the passage), by the window's `resize` and by the boxes themselves (`ResizeObserver`: in the iOS Simulator `svh` settled with no `resize` event, and every moment stood 8% early until 2026-11-05; both, since an observer alone answers after the frame's scroll has named the moment by the old map), and a turned phone stands on the moment's still
-until the other orientation's clip is whole. Until then,
-under reduced motion, or after a failed download, the film's final frame stands, and past it each system's part stands
-on one still of its moment and the return on the passage's last frame (`film/passage-*.jpg`; `STILLS` in `js/film.js`:
-each changes between two systems' words, never under them). A page that opens past the film (an anchor, a restored
-scroll, a return through the history even to the top: without its back-forward cache Chrome replayed the film to a visitor
-back from the contact page until 2026-10-21) never plays it; an anchor that names the passage's words (`#adii-evidence`), or their stretch (`#adii`: its first words, a stretch's own top being a wordless second), brings their moment, as keyboard focus does and as a link on the page does, pressed again or not: the page goes there itself as it opens, since Chrome lost its own anchor on the Arabic page under mobile emulation, and each stretch's `scroll-margin` takes WebKit's, which runs after the load, to the same words (*The three systems* names `#principle`; until 2026-11-05 it named `#systems` and landed on no words). AWC-OS's and CytherCAD's six-second sequences, on the page from 2026-10-12, retired with
-`tools/render-systems.py` to `backup/system-sequences-v1/` when the passage took their place. The English social card (`assets/og/og-card.jpg`) is the identity kit's Open Graph image since 2026-11-23, copied byte for byte: the mark as STANDARD No. 001, a rendering of a design, with the kit's line *Every claim carries its check.* (IMG-031; the Nightfall card it replaced is `backup/nightfall-card-v1/`); the Arabic card (`assets/og/og-card-ar.jpg`, IMG-032) is that composition since 2026-11-24, rendered here (`tools/render-og-film.py ar`) on the kit's rendering of the part with nothing drawn on it (`tools/og-plate-standard-001.jpg`): the name, and the line handed over that day for the kit's, *مع كلّ ادّعاء طريقة للتحقّق منه.*, without the kit's descriptor, which has no Arabic wording (until then the film's last frame with its statement, `backup/nightfall-card-v1/`; the orbit plate before that is `backup/og-card-v1/`, its own PNG of 612 KB `backup/og-card-v2/`). **When nothing is changing, nothing
-runs:** once the film has ended and the scroll has stopped (the passage seeks only as it scrolls, and is never played),
-the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by localized darkening only: along the film's lower edge (the same darkness going away past the stage's foot; the scene ends at the paper footer's edge since 2026-11-23, where from the audit of 2026-11-05 it faded into a dark footer), behind Replay, behind the statement, and under each of the passage's words and the close's (opaque there, soft at its edges: on a phone the current runs through their band, and while its words fade by the scroll their darkness fades with them). There is no sound. The statement is the page's `h1`, shown by its markup whatever the film or a script does; a screen-reader-only paragraph (`.sr`) is the silent film's text alternative and carries its three sentences; each stretch of the passage
-has its own.
+From 2026-10-20 to 2026-11-25 a twenty-five-second scene the scroll moved through, the passage, stood there. It had been rendered to open on the last frame of the film Nightfall replaced on 2026-11-23, so from that day the page dissolved from a rooftop into a machine it had never introduced; it took 13.6 screens to say about 210 words, each shown only in its own window of the scroll. It is whole in `backup/passage-v1/`, with its render scripts and its probe; its words are the ones on the paper.
+
+The film plays once, muted, and never restarts on its own; Replay plays it again. Until it plays its own first frame stands (`film/nightfall-*-open.jpg`, preloaded by the page for its orientation; until 2026-11-25 its last, so its ending showed before its opening). Reduced motion, a request to save data, or a connection the browser calls 2G or estimates under 1 Mbit/s (these three fetch no film and no worker either, under 1 MB; never "3g" by itself, which Chrome reports on a loopback server and at 50 kbit/s alike: §5ag, §5ai), a refused or failed play, a film not started within `GUARD` (6 s), or one that falls `STALL` (2 s) behind real time while the page is visible (short pauses count together) shows the final composition (`still()`); a film stopped short of its end drops its source, so its poster, the same final frame, stands, nothing more downloads, and a late download cannot pull the visitor
+back. It plays on while any of it shows under the header; a visitor who has scrolled past it is done with it (`IntersectionObserver`). A page that opens past the film (an anchor, a restored scroll, a return through the history even to the top: without its back-forward cache Chrome replayed the film to a visitor
+back from the contact page until 2026-10-21) never plays it. Where scripting is off the stylesheet shows its last frame. The English social card (`assets/og/og-card.jpg`) is the identity kit's Open Graph image since 2026-11-23, copied byte for byte: the mark as STANDARD No. 001, a rendering of a design, with the kit's line *Every claim carries its check.* (IMG-031; the Nightfall card it replaced is `backup/nightfall-card-v1/`); CytherCAD's rooms preview with their language's card since 2026-11-25 (until then a still of the passage); the Arabic card (`assets/og/og-card-ar.jpg`, IMG-032) is that composition since 2026-11-24, rendered here (`tools/render-og-film.py ar`) on the kit's rendering of the part with nothing drawn on it (`tools/og-plate-standard-001.jpg`): the name, and the line handed over that day for the kit's, *مع كلّ ادّعاء طريقة للتحقّق منه.*, without the kit's descriptor, which has no Arabic wording (until then the film's last frame with its statement, `backup/nightfall-card-v1/`; the orbit plate before that is `backup/og-card-v1/`, its own PNG of 612 KB `backup/og-card-v2/`). **When nothing is changing, nothing
+runs:** once the film has ended, or been scrolled past, the page requests no frame, plays nothing and fires no timer (CY-TEMP-001). Reading ink over the film holds ≥ 4.5:1 at glyph support (CY-SEM-003) by localized darkening only: along the film's lower edge, behind Replay and behind the statement; on the paper by its inks. There is no sound. The statement is the page's `h1`, shown by its markup whatever the film or a script does; a screen-reader-only paragraph (`.sr`) is the silent film's text alternative.
 
 **The mark is the CytherAI mark** (adopted 2026-11-21 from the owner's sheet *A mark that counts itself*, kept outside
 the repository in `~/Desktop/cyther-studies/sheet.html`): a C of eight positions round a ring, from the top anticlockwise,
@@ -300,11 +253,9 @@ are `backup/seal-v1/` (the Cyther Seal, 2026-10-13 to 2026-11-21, with its gener
 
 **`index.html`** — a CSP with no inline script or style; type from `adii/fonts/` (shared,
 precached); `css/film.css` and one script with SRI, `js/film.js` (`defer`).
-`js/film.js` reads no module and publishes nothing: the film, its cues, the still state, the passage (the scroll's
-moment through its stretches, one seek at a time, its words' windows, the stills), and `sw.js` registration once the film is still (its install would take the
+`js/film.js` reads no module and publishes nothing: the film, the still state and `sw.js` registration once the film is still (its install would take the
 link from the film on a first visit; it lets a waiting worker in with `take-over`); its DOM wiring sits behind `typeof document`, so it loads under jsc. The media
-live in `film/`: two films with their final-frame posters, the passage in both orientations with the stills that stand
-in for it (each system's moment and the return), all precached;
+live in `film/`: two films, each with its first frame and its last (the last precached);
 `tools/test-site.py` holds every file the page names to `deploy.paths`, and back.
 `js/manifest.js` (`CytherManifest`: `project` and the record, for the projector, the verifiers and
 the derived assets) and `js/instrument.js` (`CytherInstrument`: `biEngine`, `audit` and `judge`, for
@@ -316,24 +267,23 @@ each system's evidence has an Arabic room (2026-10-21): `ar/adii.html` and `ar/c
 CytherCAD's record, which stay in their original English, and `ar/awc-os.html` carries AWC-OS's own Arabic film and text;
 the brief and the security policy stay English and the Arabic pages mark their links to them (بالإنجليزية); the privacy policy and the terms have Arabic versions, `ar/privacy.html` and `ar/terms.html` (2026-11-06, drafted from the English and not yet reviewed by a lawyer; neither says which governs, the owner's decision), held by `tools/test-site.py` to the English's blocks, numbers, addresses and named providers. Each Arabic page is `lang="ar" dir="rtl"`; each pair declares
 both languages (`hreflang`) and links the other visibly. `tools/test-site.py` requires the Arabic front door to carry
-exactly the English one's cues, the passage's seconds, sections and projected figures (the projector writes its two figures too,
-Western digits). The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
+exactly the English one's film, sections, routes and projected figures. The styles are logical (`inset-inline`), so one stylesheet mirrors; Arabic is never letter-spaced
 or upper-cased (spacing breaks the joins), gets taller lines, and keeps a Latin name whole and in its own order
 (`[lang=en]`, isolated). Its type is IBM Plex Sans Arabic 300/400 (`fonts/`, OFL, shipped unmodified: the licence
 reserves the name "Plex", so it is not subset). The lockup stays left to right. The Arabic card is `assets/og/og-card-ar.jpg` (`tools/render-og-film.py ar`). The copy was drafted in Modern Standard Arabic and
 published for the owner to refine.
 
-**One lit environment** (2026-10-20, the owner's decision): the front door is the same whatever the device's theme. Since 2026-11-23 (the owner: *Nightfall is the main* and the new identity *merged* round it, so the site reads as enterprise-grade, *not like a dark fully looking like startup*) that environment is the dark film framed in the identity kit's paper: the header and the footer of the front doors and of Both looked flat are on Paper `#f4f1ea` in Ink `#16161a`, and the rooms are on it whole (`~/Desktop/cyther-studies/cyther-rod/cytherai/identity`, outside the repository; mock-ups A, B and C and a liquid-glass header were shown, B with the plain paper header chosen: `docs/deploy.md` §5ap). Until then the front door was dark throughout. Light
+**One lit environment** (2026-10-20, the owner's decision): the front door is the same whatever the device's theme. Since 2026-11-23 (the owner: *Nightfall is the main* and the new identity *merged* round it, so the site reads as enterprise-grade, *not like a dark fully looking like startup*) that environment is the dark film and the identity kit's paper, Paper `#f4f1ea` in Ink `#16161a` (`~/Desktop/cyther-studies/cyther-rod/cytherai/identity`, outside the repository; mock-ups A, B and C and a liquid-glass header were shown, B with the plain paper header chosen: `docs/deploy.md` §5ap): its header and footer from that day, everything under the film since 2026-11-25, the rooms whole, and the header and footer of Both looked flat, which stays dark for its own film. Until then the front door was dark throughout. Light
 mode (2026-10-14: `js/theme.js`, the header's switch `#theme`, light tokens for the sections below the film) retired to
-`backup/theme-switch-v1/` once the systems and the close moved over the passage and the switch changed only the footer,
-a promise of an alternate view the page did not keep. The front door's header (`.bar`) stays in view, slim, on paper (until 2026-11-23 on its own darkness), opaque under the statement as it scrolls by (it showed through by 40 levels of 255 until 2026-11-06: `tools/probe-arrival.py`) (the audit of 2026-11-05: *Talk to us* was otherwise ten screens away), and scrolls away only in a window at most 480 px tall: the brand going home, *What we build* (the brief), *About*, *Talk to us*, the language. It is every page's one header since 2026-11-07 (the owner, after comparing the site with Anthropic's, OpenAI's and Apple's: the brief and About were found in the footers alone), in view on every page (sticky on the rooms' ground), its links in a second row where they do not fit beside the brand, as on a phone; *The three systems* stays the opening's own link; `tools/test-site.py` holds the destinations, `tools/probe-arrival.py` (`nav`) that a pointer reaches them on every page, at its top and as it scrolls. The rooms share its paper (`css/room.css`). `tools/test-site.py` holds the front door
-to one environment (no switch, no theme on the root, no colour-scheme query in `css/film.css`; its header and footer on paper) and
+`backup/theme-switch-v1/` on 2026-10-20, when the switch changed only the footer,
+a promise of an alternate view the page did not keep. Every page starts at one edge, the header's, 5vw in (`css/room.css` `main`; the rooms were centred, 130 px in from their own header at 1440, until 2026-11-25), and a link in running text is told by a line of 3:1. The front door's header (`.bar`) stays in view, slim, on paper (until 2026-11-23 on its own darkness), opaque under the statement as it scrolls by (it showed through by 40 levels of 255 until 2026-11-06: `tools/probe-arrival.py`) (the audit of 2026-11-05), and scrolls away only in a window at most 480 px tall: the brand going home, *What we build* (the brief), *About*, *Talk to us*, the language. It is every page's one header since 2026-11-07 (the owner, after comparing the site with Anthropic's, OpenAI's and Apple's: the brief and About were found in the footers alone), in view on every page (sticky on the rooms' ground), its links in a second row where they do not fit beside the brand, as on a phone; *The three systems* stays the opening's own link; `tools/test-site.py` holds the destinations, `tools/probe-arrival.py` (`nav`) that a pointer reaches them on every page, at its top and as it scrolls. The rooms share its paper (`css/room.css`). `tools/test-site.py` holds the front door
+to one environment (no switch, no theme on the root, no colour-scheme query in `css/film.css`; all but the film on paper) and
 every ink to 4.5:1 on its ground, the dark and the paper alike.
 
 **The rooms** (2026-10-21, the owner's direction: finish the visitor's journey after the film, one route first,
 homepage → ADII evidence → contact → return, in both languages; then AWC-OS and CytherCAD): the pages a visitor reaches
 from the front door are rooms of it, `css/room.css` — quieter, with its type, logo, header and footer, no motion,
-and on the identity's paper, in ink, in either device theme (2026-11-23; until then dark, the passage's world, an art-direction
+and on the identity's paper, in ink, in either device theme (2026-11-23; until then dark, the film's world, an art-direction
 choice the owner had kept in review on 2026-10-21); the quiet layout and the stillness give the change of pace. `adii/` opens on its arrival: what
 the recorded run is, whose work it is (*Built by Group 05* and its four names, under the headline: the company's identity
 never hides the team's authorship), what decision it shows (from the run's own text) and what it does not claim, beside
@@ -359,12 +309,10 @@ of CytherCAD's two ways of reading each; a valid part builds and passes the kern
 described; the check tightened in May 2026 and the test not run since; figures published for other systems on the dataset
 are another test and not compared), beside the record; the record follows as the brief states it. The routes: *See what this is based on →* lands on ADII's arrival, *See the demonstration →* on
 AWC-OS's, *Read the validation record →* on CytherCAD's, each Arabic route on its Arabic room, and *Talk to us →* on the
-contact page. An evidence room returns to the evidence moment, the passage's words that led to it (`#adii-evidence`,
-`#awc-os-evidence`, `#cythercad-evidence`: that `.say`'s id, whose moment `js/film.js` brings, the middle of its window,
-not the exact scroll the visitor left from; until 2026-10-21 ADII's landed on its stretch's first, wordless second); the contact room, reached from many places, is left by the browser's own Back or the one header (until 2026-11-07 its
+contact page. An evidence room's way back, *← The three systems*, returns to the system that led to it (`#adii`, `#awc-os`, `#cythercad`); the contact room, reached from many places, is left by the browser's own Back or the one header (until 2026-11-07 its
 header's way back returned through the history, `navigation.canGoBack`, or to `#principle`). `tools/test-site.py` holds each room to its stylesheet, its home lockup and its footer, the room's
 paper and ink to the identity kit's and to the front door's header and footer (every ink ≥ 4.5:1 on the ground and on the lifted ground, a field's edge ≥ 3:1), and each
-evidence room's way back to the words whose route leads to it. The pages they replaced are `backup/before-rooms/` and
+evidence room's way back to the system whose route leads to it. The contact pages say what is wrong at the first question, where the focus goes, tied to its field (2026-11-25: until then under the button, out of view once the focus had moved), and offer the other ways to send a draft as a row of links under the button. The pages they replaced are `backup/before-rooms/` and
 `backup/cold-paper-v1/`.
 
 **The brief, the legal pages and the 404** are rooms too since 2026-10-21 (the owner: *do the brief, the legal pages
@@ -386,7 +334,7 @@ description, its own URL and language, the large card, and an image whose declar
 a page that asks not to be indexed (AWC-OS's rooms keep the `noindex` of the evaluation gateway they replaced, pending the
 owner's decision); `tools/test-site.py` holds the two to each other. Every page's CSP is least
 privilege: `script-src` exactly what the page runs, nothing fetched from another origin (the one connection any page
-makes is the front door's to its own passage: `connect-src 'self'` and `media-src blob:` on the two front doors alone,
+makes is Both looked flat's to its own sequence: `connect-src 'self'` and `media-src blob:` on its two pages alone,
 `connect-src 'none'` everywhere else), and everything a page or stylesheet fetches a shipped file (`tools/test-site.py` resolves references against `deploy.paths`, not the tree).
 `pages/privacy.html` and `ar/privacy.html` must name exactly what the site stores (today only the worker's cache; the light-mode choice the front door remembered until 2026-10-20 is no longer read); `tools/test-site.py` holds them to the served scripts.
 
@@ -412,7 +360,7 @@ under it; `tools/probe-flat.py` now finds words that anything covers); its words
 and is up in full as that flat settles (held by `tools/test-site.py`; until the review of 2026-10-25 it came over open bands
 and faded as the rings closed); a new viewport keeps the visitor's moment in the film and, past it, their place (the block at
 the top of the view, and how far into it); it
-downloads whole and plays from memory as the passage does (beside the front doors', its CSP is the only one that admits
+downloads whole, by a request of its own, and plays from memory (its CSP is the only one that admits
 `connect-src 'self'` and `media-src blob:`), and its stills stand in until then, under reduced motion, on a lean link or after a failed
 download. After the film, before the principle, the instrument (`#bench`, *Lift the glass. Press it back.*): both flats at
 rest from above, as pressed as they go, so the first gesture it invites lifts (until the review of 2026-10-25 it invited a
@@ -515,9 +463,9 @@ literals.
 - **The film** was built as an untracked study (`cyther-film/`, never committed, now in the studies folder) from pasted
   directions on 2026-10-11, revised once on a reviewer's critique (the one refused slab, the
   camera holding at the refusal), then extended into the site with three systems and
-  published on 2026-10-12; its render sources moved to `tools/render-film.py` and
-  `tools/render-systems.py` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header; the latter retired with
-  the sequences to `backup/system-sequences-v1/` on 2026-10-20, and the passage is `tools/render-passage.py`).
+  published on 2026-10-12; Nightfall replaced it on 2026-11-23. Its render sources are `backup/passage-v1/tools/`
+  (`render-film.py`, and `render-passage.py` for the scene that went on under it until 2026-11-25) and
+  `backup/system-sequences-v1/` (Blender 5.1, `blender -b -P <script> -- …`; usage in each header).
 - **`main`'s history was rewritten once** (2026-10-13, at the owner's request): the `Co-Authored-By:` lines were
   removed from every commit message on `main` and it was force-pushed; trees, order, authors and dates are unchanged.
   The original history, trailers included, remains on the backup branch `history/before-message-rewrite` (local and
@@ -539,6 +487,6 @@ literals.
   `drawing-set-demo.html` (the demo the drawing set was approved from, loading that
   snapshot's modules), `project-pages/` (the ADII and AWC-OS pages as first published,
   before curation), `exception-v1/` (THE EXCEPTION, whole), `adii-sequence-v1/` and `system-sequences-v1/` (the three
-  systems' six-second sequences, retired on 2026-10-20 for the passage) and `audit/` (the instrument-v1
+  systems' six-second sequences, retired on 2026-10-20 for the passage), `passage-v1/` (the passage, retired on 2026-11-25) and `audit/` (the instrument-v1
   audit record, 00–08, formerly `docs/audit/`).
   Supersede, never erase: retire into `backup/`, do not delete.

@@ -3,7 +3,7 @@
  * reads what is published; a file named by its bytes (?v=) from the cache. No install prompts. No app-store energy. Just offline capability.
  */
 
-var CACHE = 'cytherai-substrate-42BC6F2AF51A0AE2';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
+var CACHE = 'cytherai-substrate-A5959C81CF4FA717';   /* hash stamped by generate-integrity.sh; -rN = worker-logic revision at an unchanged build */
 
 /* "/" when the worker is served from the origin root, as docs/deploy.md requires. */
 var SCOPE = new URL('./', self.location).pathname;
@@ -22,27 +22,19 @@ var ASSETS = [
   'ar/privacy.html',
   'ar/terms.html',
   // the front door: its script, its stylesheet, the final composition it stands on when the film
-  // cannot play (offline included), the stills that stand in for the passage, and the fonts it draws
+  // cannot play (offline included), and the fonts it draws
   // its type with (shared with adii/)
-  'js/film.js?v=1149e54357eb',
-  'css/film.css?v=5cf458a47f88',
+  'js/film.js?v=34588b709edd',
+  'css/film.css?v=45372368e5c2',
   'film/nightfall-landscape.jpg',
   'film/nightfall-portrait.jpg',
-  'film/passage-adii-landscape.jpg',
-  'film/passage-adii-portrait.jpg',
-  'film/passage-awcos-landscape.jpg',
-  'film/passage-awcos-portrait.jpg',
-  'film/passage-cad-landscape.jpg',
-  'film/passage-cad-portrait.jpg',
-  'film/passage-close-landscape.jpg',
-  'film/passage-close-portrait.jpg',
   'adii/fonts/newsreader-variable.woff2',
   'adii/fonts/public-sans-variable.woff2',
   'adii/fonts/ibm-plex-mono-400.woff2',
   'fonts/ibm-plex-sans-arabic-300.woff2',
   'fonts/ibm-plex-sans-arabic-400.woff2',
   // the stylesheet of the rooms: the contact pages, the About pages, the brief and the legal pages above draw with it
-  'css/room.css?v=0541bacbd69b',
+  'css/room.css?v=247383ab29e1',
   'manifest.webmanifest',
   // the logo in every header (tools/render-mark.py), named by its bytes like the stylesheets
   'assets/logo/cytherai-ink.svg?v=d84165ce30d6',

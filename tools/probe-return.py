@@ -13,7 +13,7 @@ and no integrity check failed.
 first    Each page the visitor had read, on the first load after a publish, is the new build and whole; a reload too; and with every tab
          closed, a new one. Until 2026-11-06 a returning visitor's first load was the old build, and so was every reload until
          a front door's film had ended or every tab of the site was closed.
-anchor   Through the worker, an address naming a stretch still brings its words, and one with no trailing slash still lands.
+anchor   Through the worker, an address naming a section still lands on it, and one with no trailing slash still lands.
 offline  With the server gone, each page the worker holds stands whole, on whichever build it holds.
 window   A publish part way (Pages' CDN answers any ?v= from its one copy of the path, observed 2026-11-06): the new pages and worker, the old
          bytes at the stylesheets' and scripts' paths. A visitor returns in that moment and again after it. The page may fail for that load,
@@ -196,8 +196,8 @@ def anchor(origin, was, new, next_dir):
     v = Visitor(origin, ["/adii/"])
     publish(next_dir)
     v.open("/#adii"); time.sleep(0.5)
-    shown = v.tab.js("[...document.querySelectorAll('.say')].filter(s => getComputedStyle(s).opacity === '1').map(s => s.closest('section').id)")
-    record("anchor", "adii" in shown, address="/#adii", shown=shown)
+    top, edge = v.tab.js("[document.querySelector('#adii h3').getBoundingClientRect().top, document.querySelector('.bar').getBoundingClientRect().bottom]")
+    record("anchor", edge - 1 <= top < edge + 120, address="/#adii", heading_top=round(top), bar_foot=round(edge))
     w = v.open("/adii")
     record("anchor", v.tab.js("location.pathname") == "/adii/" and whole(w, new), address="/adii", landed=v.tab.js("location.pathname"), build=w["build"])
     v.close()
@@ -222,9 +222,11 @@ def window(origin, was, new, next_dir):
     publish(next_dir, {f: was["dir"] / f for f in CHANGED})   # part way: new pages and worker, old bytes at the changed paths
     v.gone(origin + "/#principle")                                                  # the worker installs if it can; the page, still, lets it in
     held = v.holds(new, 25); time.sleep(2)
+    v.tab.send("Page.setBypassCSP", enabled=True)   # the front door connects to nothing of its own (connect-src 'none'), so the probe's question is let past it
     during = v.open("/#principle")
     # and as an engine asks that gives the worker no integrity a fetch could refuse (WebKit did on 2026-10-04, and did not on 2026-11-06): nothing wrong may be kept
     v.tab.js("Promise.all([...document.querySelectorAll('link[rel=stylesheet], script[src]')].map(e => fetch(e.href || e.src).then(r => r.text())))")
+    v.tab.send("Page.setBypassCSP", enabled=False)
     publish(next_dir)                                                               # the publish finished
     record("window", not held, step="during it the new worker refuses to install; the page is not judged", new_worker_installed=held, page_build=during["build"], integrity=during["integrity"][:1])
     for page in ("/", "/pages/brief.html", "/ar/", "/", "/pages/brief.html"):
