@@ -3063,6 +3063,24 @@ clean server its report is the old probe's but for its own digest; a 200 with th
 hidden path served, a wrong redirect and an old worker each fail with the response kept, its digest right. Asking for curl's success
 closed a hole: a hidden path's 404 cut off in transfer passed before. Against the live site, unrecorded: PASS, 87 of 87.
 
+**Since: the origin check is tested** (2026-11-25, at the reviewer's direction). `tools/test-origin.py`, run by `./verify.sh` and so by CI,
+runs `tools/probe-origin.py` as it stands against a server of its own, with this machine's curl and no network: four tests, eight scans.
+- *A hidden path's 404 cut off in transfer*, a matched pair: one URL, one 404, one declared length; whole, it passes; cut off, it fails,
+  with the 404, the part that came and curl's exit kept. Were curl's exit forgotten on a 404 alone, no other test would see it.
+- *The response kept is the one that failed*: the logo answered 200 with the wrong body, then rightly. The first answer's headers, body
+  and digest are kept, it is asked for once a scan, and a later scan under the same report name leaves them.
+- *Each clause of each check fails by itself.* The cases of the reviewer's fixture and of mine reached 7 of the probe's 22 clauses: the
+  other 15, six of them statuses the edit had added, could be deleted unseen. Each has a wrong answer now.
+
+On the probe before the edit (with the interim `103` answers it never understood left out) the sound origin passes, and the cut-off 404,
+the logo and the clauses fail. 22 mutations of the probe, and each clause removed alone, are caught; the control passes. Found by them, in
+the test: on an overwritten capture unittest drew a diff of two 55 KB bodies, for ten minutes, when it was stopped, so CI would have timed out
+and named nothing; no body that size is compared that way now. TLS is not exercised, nor the recorder, which has its own test.
+
+The verification identity moved and nothing else: the build is `42BC6F2AF51A0AE2`, its ink, settle and origin observations stand as
+recorded, with the probes that made them, and one CY-ART-001 receipt is appended. (CI on `ac1259d`, the certification, ended red without
+running: *The job was not acquired by Runner of type hosted*, GitHub short of macOS machines; the next push, `3d0bae7`, passed.)
+
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_42BC6F2AF51A0AE2`), 87 of 87 served paths matching the artifact.
 
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)

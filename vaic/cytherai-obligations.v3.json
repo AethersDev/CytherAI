@@ -11,7 +11,7 @@
     "grammar_hash": "f925b086b2e49ba865376d820ea0ae627adffa0964a46e1f86f60ba7e1839146",
     "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
     "artifact_manifest_hash": "693ea90809ebad62516fee81f4077e27039bbca3758d486a51d232580147d14f",
-    "verification_identity": "52e09eea0dd854413d45799f079f596de7a9ee0a8fa0711b063af6f925512c96"
+    "verification_identity": "da30f5535ee3a60d4dd73403197c4bd1064fb5ef6508fe65adceee85bb9cece0"
   },
   "semantics": {
     "result_values": [
@@ -8474,6 +8474,37 @@
               "deploy.sh#artifact-source-allowlist"
             ],
             "observed_at": "2026-11-24"
+          },
+          {
+            "evaluator": "ARTIFACT_VERIFIER",
+            "coverage": "EXHAUSTIVE",
+            "artifact_build": "42BC6F2AF51A0AE2",
+            "artifact_manifest_hash": "693ea90809ebad62516fee81f4077e27039bbca3758d486a51d232580147d14f",
+            "record_hash": "224319ec7b35cedce85f9a3ac5b885b6c28b708f365e7b2eb635880be61cd8cc",
+            "grammar_hash": "f925b086b2e49ba865376d820ea0ae627adffa0964a46e1f86f60ba7e1839146",
+            "policy_hash": "23770bc176ecc06aa75a10d59944b501053bbf38cb73ead5f07c031a44dfafa5",
+            "verification_identity": "da30f5535ee3a60d4dd73403197c4bd1064fb5ef6508fe65adceee85bb9cece0",
+            "environment": {
+              "capability_profile": "release_artifact",
+              "device": "local_host",
+              "viewport": null,
+              "runtime": "POSIX shell and Python integration",
+              "accessibility_mode": null
+            },
+            "harness_identity": "deploy.sh plus tools/test-site.py",
+            "harness_version": "42BC6F2AF51A0AE2",
+            "method": {
+              "measurement": "deploy.sh builds the artifact into a temporary directory; its files are compared with deploy.paths, each byte for byte with its source; the allowlist is checked for forbidden trees, the project pages' reviewed sets and the worker's precache",
+              "threshold": "exactly the 87 deploy.paths files, each byte-identical to its source; no backup/, docs/ or awc-os/live/; every precached asset shipped",
+              "units": "files and bytes"
+            },
+            "result": "PASS",
+            "evidence": [
+              "tools/test-site.py#test_declared_deploy_set_is_exactly_what_deploy_ships",
+              "tools/test-site.py#test_deploy_allowlist_and_service_worker_cannot_drift",
+              "deploy.sh#artifact-source-allowlist"
+            ],
+            "observed_at": "2026-11-25"
           }
         ]
       },
