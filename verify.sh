@@ -40,4 +40,7 @@ python3 tools/test-vaic.py
 echo "[verify] the recorder: what enters the record, and how"
 python3 tools/test-record.py
 
+echo "[verify] the origin check, against answers that are wrong (offline)"
+python3 tools/test-origin.py
+
 echo "[verify] all non-browser checks pass"

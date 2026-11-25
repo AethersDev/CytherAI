@@ -94,7 +94,7 @@ IDENTITY_COVERAGE = {
     "policy_hash": ("vaic/evaluator-matrix.v0.json",),
     "verification_identity": (
         "verify.sh", "deploy.sh", "publish.sh", "generate-integrity.sh",
-        "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/test-release.py", "tools/test-record.py", "tools/vaic_restamp.py",
+        "tools/vaic_validate.py", "tools/test-vaic.py", "tools/test-site.py", "tools/test-release.py", "tools/test-record.py", "tools/test-origin.py", "tools/vaic_restamp.py",
         "tools/test-projection.py", "tools/project-manifest.py", "tools/test-assets.py",
         "tools/test-api.py", "tools/test-boundary.js", "tools/render-mark.py", "tools/canon.py",
     ),

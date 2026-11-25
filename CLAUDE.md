@@ -20,7 +20,7 @@ Pages does, and so does the system Ruby's: `./deploy.sh && ruby -run -e httpd di
 
 One check at a time: a jsc regression takes the modules it needs before it, in load
 order, exactly as `verify.sh` lists them (`$JSC js/manifest.js js/instrument.js
-tools/test-boundary.js`). `tools/test-site.py`, `tools/test-vaic.py`, `tools/test-release.py` (the build and the publish, in sites of their own under a temporary directory) and `tools/test-record.py` (the recorder) are `unittest`
+tools/test-boundary.js`). `tools/test-site.py`, `tools/test-vaic.py`, `tools/test-release.py` (the build and the publish, in sites of their own under a temporary directory), `tools/test-record.py` (the recorder) and `tools/test-origin.py` (the origin check, against a server of its own) are `unittest`
 (`python3 tools/test-vaic.py VaicCorpusTests.test_<name>`); the other `tools/test-*.py`
 are plain scripts. All Python tooling is stdlib `python3`; `.venv` holds only
 `websocket-client`, for driving Chrome over CDP: the committed browser probes
