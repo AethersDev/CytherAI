@@ -49,10 +49,17 @@ keep_outgoing() {
     git push -q --force "$REMOTE" "$TIP:refs/heads/rollback/$OUTGOING"
     echo "[publish] the outgoing artifact $OUTGOING is rollback/$OUTGOING, here and at origin"
 }
-# every push of gh-pages is leased to the commit keep_outgoing fetched: if it has moved since, someone else published
-moved() {
-    echo "[publish] REFUSED: gh-pages at origin is no longer $TIP, the artifact this run set out to replace: someone published since."
-    echo "[publish] nothing was replaced. Look at what is live, then run this again if it should still follow."; exit 1
+# every push of gh-pages is leased to the commit keep_outgoing fetched. One that fails says what origin holds now, read again, and not
+# what a failure might mean: on 2026-11-25 GitHub answered Internal Server Error, and this said someone else had published
+failed() {   # $1: the commit that was pushed
+    case "$(git ls-remote "$REMOTE" refs/heads/gh-pages | cut -f1)" in
+    "$1")   echo "[publish] the push reported an error (above), and landed all the same: gh-pages at origin is $1"; return 0;;
+    "$TIP") echo "[publish] FAILED: the push did not land (git's error is above). gh-pages at origin is still $TIP: nothing was replaced. Run this again.";;
+    "")     echo "[publish] FAILED: the push failed (git's error is above) and gh-pages at origin could not be read. Look at what is live before running this again.";;
+    *)      echo "[publish] REFUSED: gh-pages at origin is no longer $TIP, the artifact this run set out to replace: someone published since."
+            echo "[publish] nothing was replaced. Look at what is live, then run this again if it should still follow.";;
+    esac
+    exit 1
 }
 
 if [ "${1:-}" = --restore ]; then
@@ -61,7 +68,7 @@ if [ "${1:-}" = --restore ]; then
     else BACK=$(git rev-parse --verify --quiet "refs/heads/rollback/$2") || { echo "[publish] REFUSED: no rollback/$2 at origin or here"; exit 1; }
     fi
     keep_outgoing
-    git push --force-with-lease="gh-pages:$TIP" "$REMOTE" "$BACK:refs/heads/gh-pages" || moved
+    git push --force-with-lease="gh-pages:$TIP" "$REMOTE" "$BACK:refs/heads/gh-pages" || failed "$BACK"
     echo "[publish] $2 is gh-pages at $REMOTE again · check the origin against a build of its commit (tools/probe-origin.py)"
     exit 0
 fi
@@ -91,5 +98,5 @@ git checkout -q -b gh-pages
 git add -A
 git -c user.name="$(git -C "$ROOT" config user.name)" -c user.email="$(git -C "$ROOT" config user.email)" \
     commit -q -m "publish $BUILD ($(git -C "$ROOT" rev-parse --short HEAD)), replacing $OUTGOING"
-git push --force-with-lease="gh-pages:$TIP" "$REMOTE" gh-pages:gh-pages || moved
+git push --force-with-lease="gh-pages:$TIP" "$REMOTE" gh-pages:gh-pages || failed "$(git rev-parse HEAD)"
 echo "[publish] $BUILD is gh-pages at $REMOTE · https://$CNAME/ serves it once Pages rebuilds"
