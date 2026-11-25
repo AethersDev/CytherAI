@@ -22,8 +22,9 @@ Everything the site no longer uses lives here, whole: nothing is served, precach
 | `og-card-v2/` | The film's two cards as PNGs, 612 KB and 607 KB (replaced by the same cards as JPEGs, 2026-11-05) |
 | `project-pages/` | The ADII and AWC-OS pages as first published, before curation |
 | `awc-os-v1/` | The AWC-OS page, its script, its two films and its competition deck as served until 2026-10-19, when the Alinma plan was cancelled: the films then lost their closing production line and the deck left the site; its own README |
-| `adii-sequence-v1/` | ADII's six-second sequence and its poster, served from 2026-10-12 until 2026-10-20, when the passage (`tools/render-passage.py`) took its place; its own README |
+| `adii-sequence-v1/` | ADII's six-second sequence and its poster, served from 2026-10-12 until 2026-10-20, when the passage (`passage-v1/`) took its place; its own README |
 | `system-sequences-v1/` | AWC-OS's and CytherCAD's six-second sequences, their posters and their generator (`tools/render-systems.py`), served from 2026-10-12 until 2026-10-20, when the passage's extension took their place; its own README |
+| `passage-v1/` | The systems passage under the front door's film (2026-10-20 to 2026-11-25): its clips and stills, the two front doors with their script and stylesheet as it moved, its two render scripts and its probe; its own README |
 | `theme-switch-v1/` | The front door's light mode: `js/theme.js`, the header's switch and the light tokens, served from 2026-10-14 until 2026-10-20, when the owner retired it; its own README |
 | `before-rooms/` | ADII's page, the two contact pages and AWC-OS's evaluation gateway (with its language toggle) as served until 2026-10-21, when they became rooms of the front door (`css/room.css`); its own README |
 | `cold-paper-v1/` | The capability brief, the three legal pages, the 404 and their stylesheet `css/cytherai.css` (the cold-paper design and the document register), with the three figures only they showed and their generators, as served until 2026-10-21, when they became rooms of the front door; its own README |
@@ -61,4 +62,4 @@ repository.
 
 ## Front door before Nightfall
 
-`front-door-film-v1/` holds the two twelve-second masters, their final-frame posters and the English and Arabic link previews from build `27F82D15E3D706F0`. The systems passage continues to use its original footage.
+`front-door-film-v1/` holds the two twelve-second masters, their final-frame posters and the English and Arabic link previews from build `27F82D15E3D706F0`. The systems passage went on using its scene until 2026-11-25 (`passage-v1/`).

@@ -40,7 +40,7 @@ python3 -m venv .venv && .venv/bin/pip install websocket-client==1.9.2    # the 
 ## Changing something
 
 How the parts fit, and what else moves when one does, is `docs/architecture.md` (its last section is a recipe per kind of
-change: a page, the words, a card, the mark, the film, the passage). The working rules and their reasons are `CLAUDE.md`.
+change: a page, the words, a card, the mark, the film). The working rules and their reasons are `CLAUDE.md`.
 
 ## Releasing
 

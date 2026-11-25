@@ -96,8 +96,8 @@ No repository change settles these. Until each is done, the handover is complete
 13. **What the About page leaves out, by your direction** (2026-11-06): a photo, the company's stage and registration, and a
     careers section. An investor or candidate will ask for them, and only you can give them. The legal name also fills the
     first gap in item 12.
-14. **The film's order.** It shows ADII, AWC-OS, then CytherCAD, while the brief leads with CytherCAD. The page says which is
-    which in words (each system's status); changing the order means rendering the passage again.
+14. **The systems' order.** The home page shows ADII, AWC-OS, then CytherCAD, while the brief leads with CytherCAD. The page says which is
+    which in words (each system's status); changing the order was a re-render until 2026-11-25; it is now three sections moved on two pages and the rooms' numbers.
 15. **Both looked flat under your own finger** (`docs/deploy.md` §5ai). Nothing here has swiped it on WebKit or a real phone: try
     the glass, and a scroll past it, upright and on its side. A swipe that starts on the glass lifts it by design, and one beside it
     scrolls. If that catches people in practice, the alternatives are in §5ai; each costs new words on the page.

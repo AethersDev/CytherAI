@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <meta name="theme-color" content="#f4f1ea">
 <title>أخبرنا بما يجب ألّا يحدث أبدًا — CytherAI</title>
 <meta name="description" content="ثلاث إجابات قصيرة، تُكتب مسودةَ بريد في تطبيق البريد لديك: على أي نظام تعمل، وماذا تريد أن يفعل الذكاء الاصطناعي، وما الذي يجب ألّا يحدث أبدًا.">
@@ -23,14 +23,14 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="alternate" hreflang="en" href="https://cytherai.com/contact.html">
 <link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/contact.html">
-<meta name="build-hash" content="42BC6F2AF51A0AE2">
+<meta name="build-hash" content="A5959C81CF4FA717">
 <meta name="referrer" content="no-referrer">
 <!-- form-action is deliberately absent: without a script the form posts to mailto:, and browser handling of a mailto:
      source in form-action is inconsistent enough that adding it could break that path. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-Q3IZbu1R8Kg9anI9h4Xz6+FgegitC+6LffC0h/RlWUk='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-FlDaHoMkZcOAkVB0cglCIsw7ybhCQOPpgd4fRANzoDc='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self';">
 <link rel="icon" href="../icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="../assets/icons/icon-180.png">
-<link rel="stylesheet" href="../css/room.css?v=0541bacbd69b" integrity="sha384-pdSGbWoJMTjJuaZplmxj0Yrt69WIcFj02a+Oi1ncP7xMCe8dLx8v4A8JGXzpFLI6" crossorigin="anonymous">
+<link rel="stylesheet" href="../css/room.css?v=247383ab29e1" integrity="sha384-2LlGusFA9LKVNJb9fe9OpTW5XX0JkqRw5HZmuIKieJfJkVbvfZfMPz1bs40/PPyD" crossorigin="anonymous">
 </head>
 <body>
 <header class="bar"><a class="wordmark" href="./" aria-label="الصفحة الرئيسية لـ CytherAI" dir="ltr"><img class="logo" src="../assets/logo/cytherai-ink.svg?v=d84165ce30d6" width="131" height="34" alt=""></a><nav class="side" aria-label="الموقع"><a class="top" href="../pages/brief.html" hreflang="en">ما نبنيه <span lang="en">(EN)</span></a><a class="top" href="about.html">من نحن</a><a class="top talk" href="contact.html" aria-current="page">تحدّث معنا</a><a class="top" href="../contact.html" hreflang="en" lang="en">English</a></nav></header>
@@ -43,7 +43,8 @@
      visitor's email app and never claims a message was sent. Without the script the form posts its three answers to mailto:. -->
 <form id="ask" action="mailto:contact@cytherai.com" method="post" enctype="text/plain">
 <label class="field" for="system"><b>على أي نظام تعمل؟</b><i>مثلًا: سجلّ مدفوعات، أو محرّك تسعير، أو أنظمة تحكّم في منشأة.</i></label>
-<textarea id="system" name="system" rows="3"></textarea>
+<p class="error" id="error" role="alert"></p>
+<textarea id="system" name="system" rows="3" aria-describedby="error"></textarea>
 <label class="field" for="use"><b>ماذا تريد أن يفعل الذكاء الاصطناعي؟</b></label>
 <textarea id="use" name="use" rows="3"></textarea>
 <label class="field" for="never"><b>ما الذي يجب ألّا يحدث أبدًا؟</b></label>
@@ -52,7 +53,8 @@
 <p class="note">سيفتح تطبيق البريد لديك وفيه هذه الإجابات. راجع المسودة وأرسلها من هناك.</p>
 </form>
 <p class="note" id="status" role="status"></p>
-<p class="note">إن لم يُفتح تطبيق بريد، فانسخ الرسالة وأرسلها إلى <a href="mailto:contact@cytherai.com" lang="en">contact@cytherai.com</a> من أي حساب<span id="webmail" hidden>، أو افتح المسودة في <a id="gmail" target="_blank" rel="noopener" lang="en">Gmail</a> أو <a id="outlook-live" target="_blank" rel="noopener" lang="en">Outlook.com</a> أو <a id="outlook" target="_blank" rel="noopener" lang="en">Outlook</a> لحساب العمل أو المؤسسة التعليمية</span>. <button class="plain" id="copy" type="button" hidden>انسخ الرسالة</button></p>
+<p class="note">إن لم يُفتح تطبيق بريد، فانسخ الرسالة وأرسلها إلى <a href="mailto:contact@cytherai.com" lang="en">contact@cytherai.com</a> من أي حساب<span class="webmail" hidden>، أو افتح المسودة على الويب</span>.</p>
+<div class="ways"><button class="plain" id="copy" type="button" hidden>انسخ الرسالة</button><span class="webmail" hidden><a class="plain" id="gmail" target="_blank" rel="noopener" lang="en">Gmail</a><a class="plain" id="outlook-live" target="_blank" rel="noopener" lang="en">Outlook.com</a><a class="plain" id="outlook" target="_blank" rel="noopener"><span lang="en">Outlook</span> لحساب العمل أو المؤسسة التعليمية</a></span></div>
 <section aria-labelledby="also-h">
 <h2 id="also-h">عناوين أخرى</h2>
 <ul class="also">
@@ -73,8 +75,8 @@
 (function () {
   "use strict";
   var form = document.getElementById("ask"), write = document.getElementById("write"), copy = document.getElementById("copy");
-  var gmail = document.getElementById("gmail"), outlook = document.getElementById("outlook"), live = document.getElementById("outlook-live"), webmail = document.getElementById("webmail");
-  var status = document.getElementById("status"), to = "contact@cytherai.com", subject = "", body = "";
+  var gmail = document.getElementById("gmail"), outlook = document.getElementById("outlook"), live = document.getElementById("outlook-live"), webmail = document.querySelectorAll(".webmail");
+  var status = document.getElementById("status"), error = document.getElementById("error"), first = form.elements.system, to = "contact@cytherai.com", subject = "", body = "";
   var asked = [["system", "على أي نظام تعمل؟"], ["use", "ماذا تريد أن يفعل الذكاء الاصطناعي؟"], ["never", "ما الذي يجب ألّا يحدث أبدًا؟"]];
   function compose() {
     var system = Array.from(form.elements.system.value.trim().split("\n")[0]).slice(0, 60).join("");   /* by character: half an emoji cannot be encoded */
@@ -85,24 +87,28 @@
     gmail.href = "https://mail.google.com/mail/?tf=cm&to=" + to + "&su=" + s + "&body=" + b;
     outlook.href = "https://outlook.office.com/mail/deeplink/compose?to=" + to + "&subject=" + s + "&body=" + b;   /* work or school */
     live.href = "https://outlook.live.com/mail/0/deeplink/compose?to=" + to + "&subject=" + s + "&body=" + b;   /* personal: Outlook.com, its own host (2026-11-08) */
-    webmail.hidden = gmail.href.length > 8000;   /* Gmail refuses a much longer link (400 at 9,800 characters, 2026-11-05); the copy route carries any length */
+    webmail.forEach(function (e) { e.hidden = gmail.href.length > 8000; });   /* Gmail refuses a much longer link (400 at 9,800 characters, 2026-11-05); the copy route carries any length */
   }
-  function empty(e) {   /* a draft of nothing opens nothing: the first question asks again */
+  function say(wrong, done) {   /* what is wrong, at the first question, where the focus goes; what was done, at the button */
+    error.textContent = wrong; status.textContent = done;
+    if (wrong) first.setAttribute("aria-invalid", "true"); else first.removeAttribute("aria-invalid");
+  }
+  function empty(e) {   /* a draft of nothing opens nothing: the first question asks again (contact.html) */
     if (asked.some(function (a) { return form.elements[a[0]].value.trim(); })) return false;
-    e.preventDefault(); status.textContent = "اكتب إجابة واحدة على الأقل أولًا."; form.elements.system.focus();
+    e.preventDefault(); say("اكتب إجابة واحدة على الأقل أولًا.", ""); first.focus();
     return true;
   }
   document.getElementById("send").hidden = true; write.hidden = false; compose();
-  form.addEventListener("input", compose);
-  write.addEventListener("click", function (e) { if (!empty(e)) status.textContent = "من المفترض أن يفتح تطبيق البريد الآن وفيه هذه المسودة. إن لم يُفتح، فاستخدم إحدى الطرق أدناه."; });
+  form.addEventListener("input", function () { compose(); say("", ""); });
+  write.addEventListener("click", function (e) { if (!empty(e)) say("", "من المفترض أن يفتح تطبيق البريد الآن وفيه هذه المسودة. إن لم يُفتح، فاستخدم إحدى الطرق أدناه."); });
   gmail.addEventListener("click", empty); outlook.addEventListener("click", empty); live.addEventListener("click", empty);
   if (navigator.clipboard) {
     copy.hidden = false;
     copy.addEventListener("click", function (e) {
       if (empty(e)) return;
       navigator.clipboard.writeText("إلى: " + to + "\nالموضوع: " + subject + "\n\n" + body).then(
-        function () { status.textContent = "نُسخت الرسالة. الصقها في رسالة بريد جديدة إلى " + to + "."; },
-        function () { status.textContent = "لم تُنسخ: حدّد إجاباتك أعلاه وانسخها."; });
+        function () { say("", "نُسخت الرسالة. الصقها في رسالة بريد جديدة إلى " + to + "."); },
+        function () { say("", "لم تُنسخ: حدّد إجاباتك أعلاه وانسخها."); });
     });
   }
 })();

@@ -3083,6 +3083,75 @@ running: *The job was not acquired by Runner of type hosted*, GitHub short of ma
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_42BC6F2AF51A0AE2`), 87 of 87 served paths matching the artifact.
 
+## 5at. One film, then one page on paper: the passage retires; the contact page says what is wrong where it is — 2026-11-25
+
+Build `A5959C81CF4FA717` (`#reading_ink_A5959C81CF4FA717`, `#film_settle_A5959C81CF4FA717`). It follows the live `42BC6F2AF51A0AE2`.
+
+**The owner:** *the website is confusing rn, when you first enter you see the new film but when you scroll it changes to the old one and
+the whole user experince isn't excellent. Treat UX as part of engineering … every screen, abstraction, and dependency must earn its place.*
+
+**What was wrong, observed on the live build.** The passage was rendered on 2026-10-20 to open on the last frame of the film Nightfall
+replaced on 2026-11-23. From that day a quarter of a screen of scroll dissolved the rooftop into the old film's machine, which the page had
+never introduced. The page was 13.6 screens tall (12,258 px at 1440 × 900) and held about 210 words under its film; each system's words
+and its one route showed only in their own window of the scroll. Research on pages that take the scroll (Nielsen Norman Group,
+*Scrolljacking 101*, read in search excerpts) finds them worst where they change its pace and ask for reading at once, which this did.
+
+**What replaces it.** Nightfall, once; then the identity's paper, in the page's own flow: the principle, a row for each system (name, headline,
+what it does, condition, route), the invitation. Every word is one the page already carried, in both languages; only where they stand has
+changed, with `01 · ADII` where `01 · ADII · A conceptual illustration` labelled the retired picture. 3.0 screens at 1440 × 900. The other way, rendering
+the three scenes again in Nightfall's world, was not taken: it keeps the scroll holding the words. The passage is whole in
+`backup/passage-v1/`; `js/film.js` goes from 210 lines to 82
+(18 added, 146 removed), and the artifact loses the passage's ten files (3.7 MB) and gains two first frames (114 KB): 79 files, from 87.
+- The film plays while any of it shows under the header and stops once none does (until now it stopped a quarter of a screen down). The
+  first window leaves 92 px of the paper in view, with its label. Replay takes the brighter of the film's inks: in the dimmer one the Arabic read 4.34:1
+  over lit windows at 1280 × 720, on the build before this one, which was not recorded.
+- Until the film plays its own first frame stands. Its last did, so on a first visit the ending showed before the opening (seen in frames
+  taken every 0.15 s on a 9 Mbit/s link). Preloaded, the largest paint on a slow phone link is 2.3 to 2.5 s (2.9 to 3.0 s without the preload), and 0.3 s on a desktop
+  one; the statement and its links stand at the first paint, as before. It was the statement that was measured, at 1.6 s, until now: the film filled
+  the window, and Chrome leaves out an image that does.
+- With scripting off the stylesheet shows the film's last frame; nothing under the film needs a script. The front doors connect to
+  nothing of their own now (`connect-src 'none'`).
+- CytherCAD's rooms previewed with a still of the passage; they preview with their language's card.
+
+**The contact page.** Pressing *Open email draft* with nothing written took the page up to the first question and said why under the button, out of
+view: 6 of 6, on a phone, a phone with its keyboard up and a laptop, in both languages. It is now said at that question, in view in all six, tied to the field
+(`aria-describedby`, `aria-invalid`, `role="alert"`) and gone once an answer is written. The other ways to send a draft, four links in a sentence of small
+print, are a row under the button. The answers still stay in the browser; what the privacy policy says of the page is unchanged.
+
+**Every page starts at one edge.** The rooms were centred, so at 1440 their words began at 202 px and their own header at 72. All begin at the header's
+now, and an evidence room's artifact is 723 px wide where it was 572. A link in running text was told by a line of 1.3:1; it is 3.8:1. The rooms' way back
+said *Back to the passage*; it says *The three systems* (the words the 404 and the front door already use) and lands on the system.
+Every page but Both looked flat declares a light colour scheme, which it has been since 2026-11-23.
+
+**Both looked flat is unchanged to a visitor**: the words' rules it shared moved from `css/film.css` to `css/flat.css`, and at 120 views (two
+languages, three windows, twenty places each) it differs from the live page by at most 1 level of 255, the gradients' dither.
+
+**Checked, on this build.**
+- `tools/probe-ink.py` (CY-SEM-003): PASS, 5,952 element samples over 24 profiles, worst 4.99:1 (Chrome/158.0.8127.37). `tools/probe-settle.py` (CY-TEMP-001): PASS; its
+  stimulus is Replay, left for the page's foot. Both recorded.
+- `tools/probe-arrival.py`: PASS, 229 rows. `tools/probe-turn.py`: PASS, 4 rows (Both looked flat, in both languages). `tools/probe-flat.py`: PASS. `tools/probe-return.py`:
+  PASS, 31 rows, the iOS Simulator's among them. `tools/probe-ios.py`: PASS, 30 rows (iPhone 16 Pro Max, the Simulator's WebKit; not a phone).
+- `./verify.sh` passes.
+- `tools/probe-ios.py` found what Chrome's two phones had not: on a window 440 px wide the Arabic header takes one row, and *The three systems* stopped with
+  28 px of the film, and its clipped note, under it. The offset had assumed a header's height from the window's width; it now holds for either, and
+  `tools/probe-arrival.py` holds it at nineteen windows. On the build it was found on (`AA8D7EA7502860B6`, not recorded) that check fails in twelve rows: the 441 px English window, whose label lay under the header, and the
+  short windows, whose header scrolls away, among them.
+
+**What the checks were made to catch.** Each new or rewritten step of `tools/probe-arrival.py` was run on a copy broken the way it names: the last
+frame first, a film that plays on out of view or stops early, a header not discounted, words hidden, covered or over a fixed film, anchors under the
+header, a dark band under the film, the error under the button or never cleared, columns that collide: 12 caught, and the unchanged copy passes. So for the
+site tests: 18 caught, the unchanged copy passes. One of them had first been written to strip a comment to the end of the file, and held nothing.
+
+**Found on the way.** The recorder carried each observation's description forward from the last, so it would have said of this page that its passage was
+scrolled through (and it had gone on saying the film is 12.0 s since it became 15.125). It now says what the probes do. Two probes asked questions of the
+front door with the page's own `fetch`, which its policy now refuses; they ask past it. `tools/probe-return.py --from` the live build reads one row FAIL: it expects a
+worker older than 2026-11-06, which answers the first load from its cache; the live build's fetches, so the first load after the publish is the new
+build, whole.
+
+**Not done, and not claimed.** No real phone, no screen reader, no first-time viewer. The systems' order (ADII, AWC-OS, CytherCAD) is as it was; the brief
+leads with CytherCAD, and changing it no longer means rendering (`docs/operations.md`). Both looked flat keeps its own scroll-moved film: it is
+optional, and the owner approved it on 2026-10-25. The Arabic words are the page's own, moved; *على الويب* is the only new phrase.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

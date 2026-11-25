@@ -7,18 +7,14 @@ Serves <dist-dir> as the origin root (byte ranges answered, so the films seek) a
 DevTools Protocol, a fresh profile per page. Before any page script, requestAnimationFrame calls are counted and
 setTimeout/setInterval callbacks are counted when they fire; a video counts as playing if it played at any moment of
 the window. Autoplay is allowed. In each profile: wait for the film's still state (body[data-state=still]); scroll
-through the passage, to each of its words' windows (once the passage is whole it must follow the scroll: at the last
-words, CytherCAD's, it shows the frame the page's stretches name there; under reduced motion it never loads, and the
-still of CytherCAD's moment stands); scroll to the close and, once its scroll has been answered (0.5 s: the page
-answers a scroll with one frame), reset the counts and wait 3 s; then scroll back into the passage (the stimulus), wait
-for every video to stop, reset and count 3 s again. Each page then reads the worker's caches, its control after a
+through the page, section by section, to its foot, reset the counts and wait 3 s; then press Replay at the top (the
+stimulus: a visitor may ask for the film again, under reduced motion too) and, a second later, read on to the foot: the
+film, out of view, stops; reset and count 3 s again. Each page then reads the worker's caches, its control after a
 reload, and a reload with the server stopped (from /ar/ the worker registers at the site's root).
 
 Bound: 0 frames requested, 0 timer callbacks and 0 media playing for 3 s once settled, in every profile of both pages;
-the stimulus is answered (at least one frame, and no media and no timer: the passage is sought, never played) and the
-page settles again; the passage follows the scroll once whole (under reduced motion it never loads, and the still
-stands). No request leaves the local origin (a blob: of the origin is memory the page made, not a request) and the
-console logs no error. Writes <out-dir>/settle.json, the shape the
+the stimulus is answered (the film plays, and is the only thing that does) and the page settles again. No request leaves
+the local origin and the console logs no error. Writes <out-dir>/settle.json, the shape the
 evidence ledger records; exits 0 on PASS, 1 on FAIL.
 """
 
@@ -51,18 +47,6 @@ PROFILES = {   # label: width, height, device pixel ratio, mobile with touch, re
     "320x844 · dpr 2 · mobile, touch": (320, 844, 2, True, False),
     "1440x900 · reduced motion": (1440, 900, 1, False, True),
 }
-# the scroll taken to the middle of the window of words i, after 1.5 s: the moment the page's stretches name there (js/film.js
-# measure, moment, place), the passage's frame, whether it is shown (body.scrub), and the poster the film's element stands on
-BEAT = """(i => { const marks = [[0, 0]]; for (const p of document.querySelectorAll('.passage')) { const [a, b] = p.dataset.t.split(' ').map(Number),
-  top = p.getBoundingClientRect().top + scrollY; marks.push([top, a], [top + p.offsetHeight, b]); }
-const moment = y => { for (let k = 1; k < marks.length; k++) { const [y0, t0] = marks[k - 1], [y1, t1] = marks[k];
-  if (y < y1) return t0 + (t1 - t0) * Math.max(0, y - y0) / ((y1 - y0) || 1); } return marks[marks.length - 1][1]; };
-const place = t => { for (let k = 1; k < marks.length; k++) { const [y0, t0] = marks[k - 1], [y1, t1] = marks[k];
-  if (t <= t1) return y0 + (y1 - y0) * (t - t0) / ((t1 - t0) || 1); } return marks[marks.length - 1][0]; };
-  const [a, b] = document.querySelectorAll('.say')[i].dataset.t.split(' ').map(Number); scrollTo(0, place((a + b) / 2));
-  return new Promise(done => setTimeout(() => done({want: moment(scrollY),
-    at: document.getElementById('passage').currentTime, scrub: document.body.classList.contains('scrub'),
-    poster: document.getElementById('film').poster.split('/').pop()}), 1500)); })(%d)"""
 # Before any page script: frame requests are counted as they are made, timer callbacks as they fire; every video that
 # plays is kept, and the moment the body first turns still is stamped in page time (from navigation start).
 COUNT = """(() => {
@@ -84,6 +68,8 @@ RESET = f"__settle.raf = __settle.timers = 0; __settle.moving = new Set({PLAYING
 READ = f"({{raf: __settle.raf, timers: __settle.timers, playing: new Set([...__settle.moving, ...{PLAYING}]).size, state: document.body.dataset.state}})"
 STILL = "document.body.dataset.state === 'still'"
 STATEMENT = "(l => l.matches('.on') && getComputedStyle(l).opacity === '1')(document.querySelector('.landing'))"
+
+FOOT = "scrollTo({top: document.documentElement.scrollHeight, behavior: 'instant'})"
 
 
 class Files(SimpleHTTPRequestHandler):
@@ -220,29 +206,25 @@ def observe(tab, origin, page, width, height, dpr, mobile, reduced):
     until(tab, STILL, 30)
     still = tab.js("__settle.still")
     row["film_settled_after_s"] = None if still is None else round(still / 1000, 2)
-    if not reduced:
-        until(tab, "document.body.classList.contains('scrub')", 30)
-    words = [tab.js(BEAT % i) for i in range(tab.js("document.querySelectorAll('.say').length"))]
-    last = words[-1]
-    row["passage_at_last_words"] = last
-    row["passage_followed"] = (not last["scrub"] and last["poster"].startswith("passage-cad-")) if reduced else \
-        (last["scrub"] and abs(last["at"] - last["want"]) <= 1 / 24)
-    tab.js("document.querySelector('.close').scrollIntoView({block: 'end', behavior: 'instant'})")
-    time.sleep(0.5)   # the scroll is input: the page answers it with one frame, before the settled window begins
+    for i in range(tab.js("document.querySelectorAll('.paper > section').length")):
+        tab.js(f"document.querySelectorAll('.paper > section')[{i}].scrollIntoView({{block: 'start', behavior: 'instant'}})")
+        time.sleep(0.2)
+    tab.js(FOOT)
+    time.sleep(0.5)   # the scroll is input: whatever answers it does, before the settled window begins
     row["settled_3s"] = window(tab, 3)
-    row["after_stimulus"] = window(tab, 1, "document.querySelector('#cythercad').scrollIntoView({block: 'center', behavior: 'instant'})")
-    until(tab, f"{PLAYING}.length === 0", 20)
+    row["after_stimulus"] = window(tab, 1, "scrollTo(0, 0); document.getElementById('replay').click()")
+    tab.js(FOOT)
+    until(tab, f"{PLAYING}.length === 0 && " + STILL, 5)
     row["resettled_3s"] = window(tab, 3)
     row["doc_width"] = tab.js("document.documentElement.scrollWidth")
     row["overflow_x"] = max(0, row["doc_width"] - width)   # the emulated width: mobile emulation widens innerWidth to the content
     row["requests_observed"] = len(tab.requests)
-    # a blob: of this origin is memory the page made (the passage, downloaded whole: js/film.js), never a request out
-    row["external_requests"] = [u for u in tab.requests if not u.startswith((origin + "/", "blob:" + origin + "/"))]
+    row["external_requests"] = [u for u in tab.requests if not u.startswith(origin + "/")]
     row["console_errors"] = tab.errors
     quiet = {"raf": 0, "timers": 0, "playing": 0, "state": "still"}
     row["pass"] = (row["settled_3s"] == quiet and row["resettled_3s"] == quiet
-                   and row["after_stimulus"]["raf"] >= 1 and row["after_stimulus"]["playing"] == row["after_stimulus"]["timers"] == 0
-                   and row["state_at_1s"] == ("still" if reduced else "film") and row["no_js_class_removed"] and row["passage_followed"]
+                   and row["after_stimulus"]["state"] == "film" and row["after_stimulus"]["playing"] == 1 and row["after_stimulus"]["raf"] == 0
+                   and row["state_at_1s"] == ("still" if reduced else "film") and row["no_js_class_removed"]
                    and not row["external_requests"] and not row["console_errors"])
     return row
 
