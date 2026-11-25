@@ -239,6 +239,35 @@ class PublishTests(Fixture):
         self.assertEqual(self.remote("gh-pages"), other, "the newer artifact was not replaced")
         self.assertEqual(self.live(), page(OTHER).strip())
 
+    def test_a_push_that_fails_says_what_origin_holds(self) -> None:
+        """GitHub answered a push with Internal Server Error on 2026-11-25, and publish.sh said someone else had published. The refusal
+        is the origin's here, as it was; an error after a push that landed, and an origin no one can read, are a git ahead on PATH."""
+        hook = self.origin / "hooks/update"
+        hook.parent.mkdir(exist_ok=True)
+        hook.write_text('#!/bin/sh\n[ "$1" != refs/heads/gh-pages ] || { echo "Internal Server Error" >&2; exit 1; }\n', encoding="utf-8")
+        hook.chmod(0o755)
+        run = self.publish()
+        self.assertNotEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn(f"gh-pages at origin is still {self.old}", run.stdout)
+        self.assertNotIn("someone published", run.stdout)
+        self.assertEqual(self.remote("gh-pages"), self.old)
+        hook.unlink()
+        shim = self.tmp / "bin"
+        shim.mkdir()
+        def ahead(then: str) -> dict[str, str]:
+            (shim / "git").write_text(f'#!/bin/sh\ncase "$*" in\n{then}\nesac\nexec "{shutil.which("git")}" "$@"\n', encoding="utf-8")
+            (shim / "git").chmod(0o755)
+            return {"PATH": f"{shim}{os.pathsep}{os.environ['PATH']}"}
+        run = self.publish(**ahead("push*with-lease*|ls-remote*) exit 1;;"))
+        self.assertNotEqual(run.returncode, 0, run.stdout + run.stderr)
+        self.assertIn("could not be read", run.stdout)
+        self.assertNotIn("someone published", run.stdout)
+        self.assertEqual(self.remote("gh-pages"), self.old)
+        run = self.publish(**ahead(f'push*with-lease*) "{shutil.which("git")}" "$@"; exit 1;;'))
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)   # the same run again, and the artifact is live
+        self.assertIn("landed all the same", run.stdout)
+        self.assertEqual(self.live(), page(NEW).strip())
+
     def test_another_checkout_restores_the_artifact_that_was_replaced(self) -> None:
         self.assertEqual(self.publish().returncode, 0)
         second = self.tmp / "second"                            # a second machine: a clone that never saw the first publish

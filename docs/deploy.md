@@ -3154,6 +3154,17 @@ optional, and the owner approved it on 2026-10-25. The Arabic words are the page
 
 The live origin: CY-ORIGIN-001 PASS (`#origin_closure_A5959C81CF4FA717`), 79 of 79 served paths matching the artifact.
 
+**Since: a push that fails says what origin holds** (2026-11-25). The first publish of this build ended in GitHub's *Internal Server Error*, and
+`publish.sh` said *REFUSED: gh-pages at origin is no longer `58dc468` … someone published since*. It was still `58dc468`: every push that failed, for
+any reason, was read as a lost lease. The second run published. Now, after a failed push, `publish.sh` asks origin for `gh-pages` and says which it was:
+it landed all the same (the run goes on); it did not land, and nothing was replaced; origin could not be read; or someone published since. A
+`--restore` says the same. The new test in `tools/test-release.py` fails on the script as it was and passes now; three mutations are caught, and the
+control passes. GitHub's error itself is not explained.
+
+`tools/probe-origin.py` run without its report's path prints its usage; it ended in a traceback (seen run, no test of its own). The verification
+identity moved and nothing else: the build is `A5959C81CF4FA717`, its ink, settle and origin observations stand as recorded, with the probes that made
+them, and one CY-ART-001 receipt is appended.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
