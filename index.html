@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>CytherAI — Let AI change things. Keep control of what changes.</title>
+<meta name="description" content="CytherAI builds the part of AI that decides what is allowed to happen.">
+<meta property="og:site_name" content="CytherAI">
+<meta property="og:title" content="CytherAI — Let AI change things. Keep control of what changes.">
+<meta property="og:description" content="CytherAI builds the part of AI that decides what is allowed to happen.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://cytherai.com/">
+<link rel="canonical" href="https://cytherai.com/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="ar_SA">
+<!-- og:image is metadata fetched by link scrapers, never by this page. The card is ILLUSTRATIVE:
+     docs/asset-promotion-log.md records it (IMG-031). -->
+<meta property="og:image" content="https://cytherai.com/assets/og/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="A rendering of CytherAI’s mark designed as a precision reference part, STANDARD No. 001 (a design, not a manufactured object), beside the line Every claim carries its check.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f4f1ea">
+<meta name="build-hash" content="A5959C81CF4FA717">
+<meta name="referrer" content="no-referrer">
+<link rel="alternate" hreflang="en" href="https://cytherai.com/">
+<link rel="alternate" hreflang="ar" href="https://cytherai.com/ar/">
+<link rel="alternate" hreflang="x-default" href="https://cytherai.com/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png">
+<!-- the film's first frame, which waits for it to play: asked for here, not when the script runs (on a slow phone link 2.3 s, not 3.0) -->
+<link rel="preload" href="film/nightfall-landscape-open.jpg" as="image" media="(orientation: landscape) and (prefers-reduced-motion: no-preference)">
+<link rel="preload" href="film/nightfall-portrait-open.jpg" as="image" media="(orientation: portrait) and (prefers-reduced-motion: no-preference)">
+<link rel="preload" href="adii/fonts/newsreader-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="adii/fonts/public-sans-variable.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"CytherAI","url":"https://cytherai.com/","logo":"https://cytherai.com/assets/icons/icon-512.png","email":"contact@cytherai.com","address":{"@type":"PostalAddress","addressLocality":"Riyadh","addressCountry":"SA"}}</script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self'; font-src 'self'; connect-src 'none'; frame-src 'none'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+<!-- Nightfall plays once, behind the statement. Under it the page is on paper: the principle, the three systems, the invitation. -->
+<link rel="stylesheet" href="css/film.css?v=45372368e5c2" integrity="sha384-tX2m3+WB9IOOKXUz66Ok/6p3s3hYZq2jLlplxNswMK/1XFDfHQtLkxBuHIzKcjDK" crossorigin="anonymous">
+<script src="js/film.js?v=34588b709edd" defer integrity="sha384-hHwxN5z0Mm8AUqhnDxfQvHU3k6XmDI7ahvIXrnRWKliTmhoC1MwUb27PesNriBGX" crossorigin="anonymous"></script>
+</head>
+<body data-state="film">
+<header class="bar"><a class="wordmark" href="./" aria-label="CytherAI home" dir="ltr"><img class="logo" src="assets/logo/cytherai-ink.svg?v=d84165ce30d6" width="131" height="34" alt=""></a><nav class="side" aria-label="Site"><a class="top" href="pages/brief.html">What we build</a><a class="top" href="pages/about.html">About</a><a class="top talk" href="contact.html">Talk to us</a><a class="top" href="ar/" hreflang="ar" lang="ar">العربية</a></nav></header>
+<main>
+<div class="stage">
+<video id="film" muted playsinline preload="auto" aria-hidden="true"></video>
+<p class="sr">Nightfall, a silent film. The camera passes a hanging lamp and leaves through an open window. It follows a wet street to a mast. Lightning strikes its tip. The camera returns to the rooftop room, where the lamp is still lit.</p>
+<section class="landing on"><h1>Let AI change things.<br>Keep control of what changes.</h1><nav aria-label="Start here"><a class="solid" href="#principle">The three systems ↓</a><a class="plain" href="contact.html">Talk to us →</a></nav></section>
+<button id="replay" class="mono" data-play="Play the film" hidden>Replay</button>
+<p class="note mono">A conceptual visualization. It measures no product.</p>
+</div>
+<div class="paper">
+<section id="principle" aria-labelledby="principle-h"><small class="mono">One principle. Three systems.</small><h2 id="principle-h">The model proposes.<br>The system decides.</h2></section>
+<section class="system" id="adii" aria-labelledby="adii-h"><small class="mono">01 · ADII</small><h3 id="adii-h">A number looks wrong.<br>Changing it is a separate decision.</h3>
+<div><p>ADII investigates the number and answers: fix it, leave it, or escalate it. The AI that proposes a fix can’t approve it. Two programs outside the model decide whether the change is allowed and whether it holds.</p>
+<p class="cond">Team research: a paper and a complete reference implementation that runs locally, not deployed in production.</p>
+<a class="route" href="adii/">See what this is based on →</a></div></section>
+<section class="system" id="awc-os" aria-labelledby="awc-os-h"><small class="mono">02 · AWC-OS</small><h3 id="awc-os-h">Not every answer is allowed.</h3>
+<div><p>The AI proposes a financial program; a separate engine runs it, refuses it with an allowed alternative, or blocks it.</p>
+<p class="cond">Team demonstration: the MVP runs on an evaluation machine, not on deployed hosting.</p>
+<a class="route" href="awc-os/">See the demonstration →</a></div></section>
+<section class="system" id="cythercad" aria-labelledby="cythercad-h"><small class="mono">03 · CytherCAD</small><h3 id="cythercad-h">Language in.<br>Valid geometry out.</h3>
+<div><p>Describe a part. CytherCAD turns that description into instructions that build it, restricts invalid geometry during generation, and checks the result afterwards. It runs on-prem, private and air-gapped.</p>
+<p class="cond">CytherAI’s product: validated by CytherAI’s own test, with no deployment claimed.</p>
+<a class="route" href="cythercad/">Read the validation record →</a></div></section>
+<section id="talk" aria-labelledby="talk-h"><h2 id="talk-h">Tell us what must<br>never happen.</h2><nav aria-label="Talk to us"><a class="solid" href="contact.html">Talk to us →</a><a class="mail" href="mailto:contact@cytherai.com">contact@cytherai.com</a></nav><a class="route" href="flat/">Looking right is not a test: a demonstration in light →</a></section>
+</div>
+</main>
+<footer class="mono"><span>© 2026 CytherAI · Riyadh</span><span><a href="pages/about.html">About</a> · <a href="pages/brief.html">Brief</a> · <a href="contact.html">Contact</a> · <a href="pages/security.html">Security</a> · <a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a></span></footer>
+</body></html>

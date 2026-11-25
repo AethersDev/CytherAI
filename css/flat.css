@@ -1,0 +1,65 @@
+/* Both looked flat (flat/, ar/flat.html), over the front door's stage, header and footer (css/film.css), in the dark its film
+   needs: a sequence the scroll moves (js/flat.js) through three stretches at one pace, 4 s of it a viewport (25svh a second; the
+   stage's 100svh are its first 4), each as tall as its seconds; the last runs a viewport past the sequence's 32 s, its last frame
+   held, so its words are read before the instrument rises over the film (until 2026-10-25 they lay under it); then the
+   notes on the ground. */
+:root{color-scheme:dark}body{background:var(--ground)}
+#scene{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:var(--ground)}
+/* its words are fixed at the foot of the frame, below the scene, each shown in its window of the sequence's seconds (data-t), faded in
+   and out by the scroll itself (with a timed fade on fixed words WebKit missed 16–24 frames a pass, without it 1–3); one not shown
+   takes no pointer. A stretch is no stacking context: one with a z-index held its fixed words inside it, and the next stretch,
+   transparent and later, lay over them, so from 2026-10-20 to 2026-10-21 no link of the front door's took a click (tools/test-site.py) */
+.passage{position:relative}
+.say{position:fixed;z-index:2;inset-inline-start:5vw;bottom:10vh;width:fit-content;max-width:min(640px,90vw);opacity:0;pointer-events:none;transition:none}
+.say.on{pointer-events:auto}.say:focus-within{opacity:1!important;pointer-events:auto}   /* focus never lands on words unseen, whatever the scroll set */
+.no-js .say{position:relative;inset:auto;margin:0 5vw;opacity:1;pointer-events:auto}
+/* behind the words and the close's, a darkness opaque under them and soft at its edges (a shadow, not a filter: nothing to
+   recompute as the page scrolls) */
+:is(.say,.close>div)::before{content:"";position:absolute;inset:-14px -22px;z-index:-1;pointer-events:none;background:#07070a;box-shadow:0 0 28px 22px #07070a}
+.say .big{font-family:News,serif;font-weight:300;font-size:clamp(30px,3.6vw,54px);line-height:1.08;letter-spacing:-.02em;color:var(--ink);text-shadow:0 2px 28px #07070a,0 0 2px #07070a}
+.say p{font-size:17px;line-height:1.55;color:var(--soft);margin:14px 0 0;max-width:48ch;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
+.say p.big{margin:0}.say .route{margin-top:14px}
+/* the close: the principle, over the sequence's last frame, where the opening's words stood */
+.close{position:relative;z-index:2;height:100vh;height:100svh;overflow:hidden}.close>div{position:absolute;inset-inline-start:5vw;bottom:17vh;max-width:min(860px,90vw)}
+.close h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:0}
+.close nav{display:flex;gap:28px;align-items:center;margin-top:32px;flex-wrap:wrap}
+#lay{height:225vh;height:225svh}#other{height:325vh;height:325svh}#both{height:250vh;height:250svh}
+/* the opening, over the first frame */
+.landing small{display:block;color:var(--warm);margin-bottom:18px}
+.landing p{font-size:17px;line-height:1.55;color:var(--soft);max-width:44ch;margin:20px 0 0;text-shadow:0 1px 14px #07070a,0 0 2px #07070a}
+/* the instrument: in the page's flow, on the ground; the plates blended at the computed reflectance (js/flat.js) */
+#bench{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 96px}
+#bench small{display:block;color:var(--warm)}
+#bench h2{font-family:News,serif;font-weight:300;font-size:clamp(34px,4.4vw,66px);line-height:1.04;letter-spacing:-.02em;margin:16px 0 0}
+#bench p{font-size:17px;line-height:1.55;color:var(--soft);max-width:52ch;margin:18px 0 0}#bench .cond{font-size:14px;color:var(--dim)}
+/* centred, and never taller than the window less 140 px: the glass takes a finger's every swipe that starts on it (touch-action,
+   since the gesture its words ask for is up and down), so there is always a margin to scroll the page by. On a phone on its
+   side it stood 427 px tall in a 390 px window, with 42 px beside it (the review of 2026-11-06). 280 px: a floor at 400% zoom */
+#bench figure{margin:40px auto 0;width:min(100%,1180px,max(280px,(100vh - 140px)*16/9));width:min(100%,1180px,max(280px,(100svh - 140px)*16/9))}
+#press,#bench .fallback{display:block;width:100%;aspect-ratio:16/9;background:var(--lift,#111118);touch-action:none;cursor:grab}
+#press:active{cursor:grabbing}#press:focus-visible{outline:2px solid var(--warm);outline-offset:6px}#bench .fallback{display:none;height:auto}
+.no-press #press{display:none}.no-press #bench .fallback{display:block}
+/* the reading stays in view while any of the glass does, over its foot on its own ground; never upper-cased: µm is not MM */
+#bench figcaption{position:sticky;bottom:0;margin-top:4px;padding-block:10px;background:var(--ground);color:var(--soft);font-size:12px;text-transform:none;letter-spacing:.02em}
+/* the close carries a sentence before its statement and one after it */
+.close p{font-size:17px;line-height:1.55;color:var(--soft);max-width:50ch;margin:0}.close p+h2{margin-top:22px}.close h2+p{margin-top:20px}
+.lost{display:none}.no-press .lost{display:inline}
+/* how it was made and what it is not: on the ground, a reading measure */
+.notes{position:relative;z-index:2;background:var(--ground);padding:120px 5vw 0;display:flow-root}   /* its last margin stays on the ground */
+.notes section{max-width:46rem;margin:0 0 72px}
+.notes h2{font-family:News,serif;font-weight:300;font-size:clamp(26px,2.4vw,36px);line-height:1.1;letter-spacing:-.01em;margin:0 0 6px}
+.notes p{font-size:16px;line-height:1.7;color:var(--soft);margin:14px 0 0}
+@media(max-width:760px){.stage{--foot:14vh}.say{inset-inline-start:20px;max-width:calc(100vw - 40px)}.no-js .say{margin:0 20px}.say .big{font-size:28px}.say p{font-size:16px}.close>div{inset-inline:20px;bottom:14vh;max-width:none}.close h2{font-size:30px}.close nav{gap:18px;margin-top:18px}
+ #bench{padding:80px 20px 64px}#bench h2{font-size:30px}#bench p{font-size:16px}.landing p,.close p{font-size:16px}.notes{padding:80px 20px 0}.notes section{margin-bottom:56px}}
+/* a window too short for the words (400% zoom; a small phone on its side): they scroll within themselves rather than reach past the
+   top, where no scroll could bring their first lines back; their ground moves onto them, so the scroll clips none. The close, in the
+   page's flow, grows to its words instead: the fixed box cut its first sentence and its statement (the audit of 2026-10-29) */
+@media(max-height:300px),(max-width:359px) and (max-height:360px){html:not(.no-js) .say{max-height:calc(90vh - 14px);max-height:calc(90svh - 14px);overflow-y:auto;background:#07070a;box-shadow:0 0 28px 22px #07070a}html:not(.no-js) .say::before{display:none}.close{height:auto;min-height:100vh;min-height:100svh;display:flex;align-items:flex-end}.close>div{position:relative;inset:auto;margin:14px max(20px,5vw) 14vh}}
+/* Arabic: its type and taller lines (css/film.css sets the stage's) */
+:lang(ar) :is(.say .big,.close h2){font-family:Arabic,sans-serif;font-weight:300;letter-spacing:0;line-height:1.45;text-wrap:balance}
+@media(max-width:760px){:lang(ar) .close h2{font-size:26px}}
+:lang(ar) .say p:not(.big){line-height:1.85}
+:lang(ar) :is(.landing p,.close p,.notes p,#bench p){line-height:1.85}
+:lang(ar) #bench h2{font-family:Arabic,sans-serif;letter-spacing:0;line-height:1.45}
+:lang(ar) #bench figcaption{font-size:12px}
+:lang(ar) .notes h2{font-family:Arabic,sans-serif;letter-spacing:0;line-height:1.45}
