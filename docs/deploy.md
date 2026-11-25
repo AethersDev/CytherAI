@@ -3152,6 +3152,8 @@ build, whole.
 leads with CytherCAD, and changing it no longer means rendering (`docs/operations.md`). Both looked flat keeps its own scroll-moved film: it is
 optional, and the owner approved it on 2026-10-25. The Arabic words are the page's own, moved; *على الويب* is the only new phrase.
 
+The live origin: CY-ORIGIN-001 PASS (`#origin_closure_A5959C81CF4FA717`), 79 of 79 served paths matching the artifact.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
