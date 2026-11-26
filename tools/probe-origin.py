@@ -24,8 +24,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-if [a.startswith("-") for a in sys.argv[1:3]] != [False, False] or sys.argv[3:] not in ([], ["--record"]): sys.exit(__doc__)
+if [not a or a.startswith("-") for a in sys.argv[1:3]] != [False, False] or sys.argv[3:] not in ([], ["--record"]): sys.exit(__doc__)
 DIST, OUT = Path(sys.argv[1]), Path(sys.argv[2])
+if OUT.is_dir() or not OUT.parent.is_dir(): sys.exit(f"no report can be written at {OUT}: the origin was not asked anything")
 HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 BUST = f"origin-check-{int(time.time())}"
 paths = [p.strip() for p in (ROOT / "deploy.paths").read_text(encoding="utf-8").splitlines() if p.strip()]

@@ -94,6 +94,7 @@ class OriginTests(unittest.TestCase):
         curl, shim = shutil.which("curl"), self.root / "bin/curl"
         for path, data in {
                 **{"dist/" + path: data for path, data in SITE.items()},
+                "index.html": PAGE,   # as in the repository's root: an empty path names the working directory, which must not pass for a build
                 "deploy.paths": "".join(path + "\n" for path in SITE).encode(), "CNAME": HOST.encode() + b"\n",
                 "tools/probe-origin.py": (ROOT / "tools/probe-origin.py").read_bytes(),
                 # the recorder's one call; what it does with a report is tools/test-record.py's
@@ -140,14 +141,18 @@ exec '{curl}' -q "$@" --noproxy '*' -H "X-Fixture-URL: $url" http://127.0.0.1:{s
         n = len(SITE)
         self.assertEqual(report["closure"], {"served_files": n, "http_301_to_same_https_path": n, "https_bytes_identical_to_artifact": n, "root_serves_index": True})
 
-    def test_arguments_it_cannot_place_print_the_usage_and_nothing_else_happens(self) -> None:
-        """`dist --record` took --record for the report's name: the check ran, passed, and recorded nothing (the review of 2026-11-25)."""
-        for args in ((), ("dist",), ("dist", "--record"), ("dist", "--recrod"), ("--record", "dist"),
-                     ("dist", "--record", "report.json"), ("dist", "report.json", "--recrod"), ("dist", "report.json", "--record", "again")):
+    def test_arguments_it_cannot_use_stop_it_before_it_asks_anything(self) -> None:
+        """`dist --record` took --record for the report's name: the check ran, passed, and recorded nothing (the review of 2026-11-25). An
+        empty path, or a report that cannot be written, ran the whole check and then failed (the review of 2026-11-26)."""
+        usage, nowhere = "dist <out.json> [--record]", "no report can be written at"
+        for args, says in (*(((args, usage) for args in (
+                (), ("dist",), ("dist", "--record"), ("dist", "--recrod"), ("--record", "dist"), ("dist", "--record", "report.json"),
+                ("dist", "report.json", "--recrod"), ("dist", "report.json", "--record", "again"), ("", "report.json"), ("dist", "")))),
+                (("dist", "dist"), nowhere), (("dist", "nowhere/report.json"), nowhere)):
             with self.subTest(args=args):
                 before, asked = sorted(self.root.rglob("*")), self.server.asked.copy()
                 run = self.probe(*args)
-                self.assertEqual((run.returncode, "dist <out.json> [--record]" in run.stderr), (1, True), run.stdout + run.stderr)
+                self.assertEqual((run.returncode, says in run.stderr), (1, True), run.stdout + run.stderr)
                 self.assertEqual((sorted(self.root.rglob("*")), self.server.asked), (before, asked))
 
     def test_not_told_to_record_it_checks_and_records_nothing(self) -> None:
