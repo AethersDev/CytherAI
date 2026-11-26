@@ -3172,6 +3172,13 @@ nothing. Two tests in `tools/test-origin.py` hold it: six of the eight cases fai
 passes. That a run not told to record records nothing had no test either. Again the verification identity alone moved; no receipt of this build came
 from such a run, and one CY-ART-001 receipt is appended.
 
+**Since: a path it cannot use stops it before it asks anything** (2026-11-26, at the reviewer's direction). An empty path passed the guard above. As the
+report's (a wrapper's empty `"$REPORT"`) the whole check ran, 85 requests, and then failed to write; so it did for a report in a folder that does not
+exist, or named as a directory. As the build's, it named the working directory, which in the repository's root holds every served file's source and
+passes for a build. An empty path now prints the usage; a report that cannot be written there says so; neither asks the origin anything. Four cases are
+added to the test, which fail on the probe as it was; its site has an `index.html` at its root, as the repository does; 10 mutations are caught and the
+control passes. A report in a folder this user may not write is not checked. The verification identity alone moved, and one CY-ART-001 receipt is appended.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that
