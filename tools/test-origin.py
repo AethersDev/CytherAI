@@ -112,12 +112,15 @@ exec '{curl}' -q "$@" --noproxy '*' -H "X-Fixture-URL: $url" http://127.0.0.1:{s
     def captures(self) -> dict:
         return {d.name: {f.name: f.read_bytes() for f in d.iterdir()} for d in self.root.glob("report.json.failure-*")}
 
+    def probe(self, *args: str) -> subprocess.CompletedProcess:
+        return subprocess.run([sys.executable, "tools/probe-origin.py", *args], cwd=self.root,
+                              env={**os.environ, "PATH": f"{self.root / 'bin'}:{os.environ['PATH']}"}, capture_output=True, text=True)
+
     def scan(self, passes: bool) -> tuple[dict, list]:
         """One run of the probe, told to record: its report, and (metadata, headers, body) of each response it kept."""
         (self.root / "recorded").unlink(missing_ok=True)
         before = self.captures()
-        run = subprocess.run([sys.executable, "tools/probe-origin.py", "dist", "report.json", "--record"], cwd=self.root,
-                             env={**os.environ, "PATH": f"{self.root / 'bin'}:{os.environ['PATH']}"}, capture_output=True, text=True)
+        run = self.probe("dist", "report.json", "--record")
         self.assertEqual((run.returncode, (self.root / "recorded").exists()), (0, True) if passes else (1, False), run.stdout + run.stderr)
         report, after = json.loads((self.root / "report.json").read_text(encoding="utf-8")), self.captures()
         self.assertEqual(report["result"], "PASS" if passes else "FAIL")
@@ -136,6 +139,20 @@ exec '{curl}' -q "$@" --noproxy '*' -H "X-Fixture-URL: $url" http://127.0.0.1:{s
         self.assertEqual((report["defects"], kept, "failed_responses" in report), ([], [], False))
         n = len(SITE)
         self.assertEqual(report["closure"], {"served_files": n, "http_301_to_same_https_path": n, "https_bytes_identical_to_artifact": n, "root_serves_index": True})
+
+    def test_arguments_it_cannot_place_print_the_usage_and_nothing_else_happens(self) -> None:
+        """`dist --record` took --record for the report's name: the check ran, passed, and recorded nothing (the review of 2026-11-25)."""
+        for args in ((), ("dist",), ("dist", "--record"), ("dist", "--recrod"), ("--record", "dist"),
+                     ("dist", "--record", "report.json"), ("dist", "report.json", "--recrod"), ("dist", "report.json", "--record", "again")):
+            with self.subTest(args=args):
+                before, asked = sorted(self.root.rglob("*")), self.server.asked.copy()
+                run = self.probe(*args)
+                self.assertEqual((run.returncode, "dist <out.json> [--record]" in run.stderr), (1, True), run.stdout + run.stderr)
+                self.assertEqual((sorted(self.root.rglob("*")), self.server.asked), (before, asked))
+
+    def test_not_told_to_record_it_checks_and_records_nothing(self) -> None:
+        run = self.probe("dist", "report.json")
+        self.assertEqual((run.returncode, (self.root / "report.json").exists(), (self.root / "recorded").exists()), (0, True, False), run.stderr)
 
     def test_a_hidden_path_s_404_cut_off_in_transfer_fails(self) -> None:
         """A matched pair: one hidden URL, one 404 of one declared length; only the transfer's end differs, so only curl's exit can tell."""
