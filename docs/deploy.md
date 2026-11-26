@@ -3165,6 +3165,13 @@ control passes. GitHub's error itself is not explained.
 identity moved and nothing else: the build is `A5959C81CF4FA717`, its ink, settle and origin observations stand as recorded, with the probes that made
 them, and one CY-ART-001 receipt is appended.
 
+**Since: the origin check refuses arguments it cannot place** (2026-11-26, at the reviewer's direction). `probe-origin.py dist --record` took
+`--record` for the report's name: the check ran, passed, and recorded nothing. So did a misspelt option, before or after the report's name, and
+the two in the wrong order. It takes two paths, then `--record` or nothing; anything else prints the usage, exits 1, asks the origin nothing and writes
+nothing. Two tests in `tools/test-origin.py` hold it: six of the eight cases fail on the probe as it was, 13 mutations are caught, and the control
+passes. That a run not told to record records nothing had no test either. Again the verification identity alone moved; no receipt of this build came
+from such a run, and one CY-ART-001 receipt is appended.
+
 ## 5e. CY-TEMP-002 — the unfamiliar-viewer review (protocol)
 
 > **Superseded on 2026-10-12 with THE UNHAPPENED.** CY-TEMP-002 governed motion that

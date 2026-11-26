@@ -24,7 +24,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-if len(sys.argv) < 3: sys.exit(__doc__)
+if [a.startswith("-") for a in sys.argv[1:3]] != [False, False] or sys.argv[3:] not in ([], ["--record"]): sys.exit(__doc__)
 DIST, OUT = Path(sys.argv[1]), Path(sys.argv[2])
 HOST = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
 BUST = f"origin-check-{int(time.time())}"
